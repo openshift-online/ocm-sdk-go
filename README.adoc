@@ -1,5 +1,12 @@
 = UHC SDK
 
+ifdef::env-github[]
+image:https://godoc.org/github.com/openshift-online/uhc-sdk-go?status.svg[GoDoc,
+link=https://godoc.org/github.com/openshift-online/uhc-sdk-go/pkg/client]
+image:https://img.shields.io/badge/License-Apache%202.0-blue.svg[License,
+link=https://opensource.org/licenses/Apache-2.0]
+endif::[]
+
 This project contains a Go library that simplifies the use of the _UHC_
 API, available in `api.openshift.com`.
 
