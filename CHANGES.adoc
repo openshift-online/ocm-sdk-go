@@ -1,7 +1,11 @@
 = Changes
 
-This document describes the relevant changes between releases of the _Unified
-Hybrid Cloud_ API SDK.
+This document describes the relevant changes between releases of the UHC API
+SDK.
+
+== 0.1.5 Apr 17 2019
+
+- Changed package path to `github.com/openshift-online/uhc-sdk-go`.
 
 == 0.1.4 Apr 3 2019
 
