@@ -1,0 +1,56 @@
+= Changes
+
+This document describes the relevant changes between releases of the _Unified
+Hybrid Cloud_ API SDK.
+
+== 0.1.4 Apr 3 2019
+
+- Don't panic when no refresh token is provided.
+
+== 0.1.3 Mar 27 2019
+
+- Don't close body in round tripper.
+
+== 0.1.2 Mar 23 2019
+
+- Add support for offline access tokens.
+
+== 0.1.1 Jan 25 2019
+
+- Change the `glog` logger so that it uses `--v=0` for errors, warnings and
+  information messages and `--v=1` for debug messages.
+
+== 0.1.0 Jan 24 2019
+
+- Renamed the project from `api-client` to `uhc-sdk`.
+
+- Moved the command line tool to a new `uhc-cli` project.
+
+== 0.0.13 Jan 24 2019
+
+- Add `context` and `timeout` parameters to all requests.
+
+- Scrub password from debug log.
+
+== 0.0.12 Dec 19 2018
+
+- Add `TrustedCAs` parameter to the connection builder.
+
+== 0.0.11 Dec 17 2018
+
+- Check that `T` is passed to the testing logger.
+
+== 0.0.10 Nov 27 2018
+
+- Implement terminal check correctly for _macOS_.
+
+== 0.0.9 Nov 22 2018
+
+- Don't include the testing logger in the binary.
+
+- Added support for printing refresh tokens.
+
+- Added support for setting the _OpenID_ scopes.
+
+- Added a new `StdLogger` that sends log messages to the standard output and
+  error streams.
