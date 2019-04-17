@@ -32,7 +32,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
-	"gitlab.cee.redhat.com/service/uhc-sdk/pkg/client/internal"
+	"github.com/openshift-online/uhc-sdk-go/pkg/client/internal"
 )
 
 // Tokens returns the access and refresh tokens that is currently in use by the connection. If it is

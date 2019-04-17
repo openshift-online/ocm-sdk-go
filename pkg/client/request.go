@@ -27,7 +27,7 @@ import (
 	"net/url"
 	"time"
 
-	"gitlab.cee.redhat.com/service/uhc-sdk/pkg/client/internal"
+	"github.com/openshift-online/uhc-sdk-go/pkg/client/internal"
 )
 
 // Request contains the information and logic needed to perform an HTTP request.
