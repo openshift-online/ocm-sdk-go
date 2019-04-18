@@ -68,3 +68,7 @@ func main() {
 ----
 
 There are more examples in the link:examples[examples] directory.
+
+== CLI
+
+See also the command-line tool https://github.com/openshift-online/uhc-cli built on top of this SDK.
