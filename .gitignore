@@ -1,2 +1,4 @@
+!/examples/*.go
 /.gopath/
+/examples/*
 /vendor/

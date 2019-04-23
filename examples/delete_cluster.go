@@ -20,7 +20,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client"
@@ -32,7 +31,7 @@ func main() {
 		Debug(true).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build logger: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
 	}
 
 	// Create the connection, and remember to close it:
@@ -42,19 +41,21 @@ func main() {
 		Tokens(token).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't create connection: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
 	}
 	defer connection.Close()
 
-	// Send a request to delete a cluster:
-	response, err := connection.Delete().
-		Path("/api/clusters_mgmt/v1/clusters/1BDFg66jv2kDfBh6bBog3IsZWVH").
-		Send()
-	if err != nil {
-		log.Fatalf("Can't delete cluster: %s", err)
-	}
+	// Get the client for the resource that manages the collection of clusters:
+	collection := connection.ClustersMgmt().V1().Clusters()
 
-	// Print the result:
-	fmt.Printf("%d\n", response.Status())
-	fmt.Printf("%s\n", response.String())
+	// Get the client for the resource that manages the cluster that we want to delete. Note
+	// that this will not send any request to the server yet, so it will succeed even if the
+	// cluster doesn't exist.
+	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
+
+	// Send the request to delete the cluster:
+	_, err = resource.Delete().Send()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't delete cluster: %v\n", err)
+	}
 }
