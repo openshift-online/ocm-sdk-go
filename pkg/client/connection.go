@@ -28,6 +28,9 @@ import (
 	"sync"
 
 	"github.com/dgrijalva/jwt-go"
+
+	"github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt"
+	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt"
 )
 
 // Default values:
@@ -398,6 +401,16 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 	connection.tokenMutex = &sync.Mutex{}
 
 	return
+}
+
+// AccountsMgmt returns the client for the accounts management service.
+func (c *Connection) AccountsMgmt() *accountsmgmt.Client {
+	return accountsmgmt.NewClient(c, "/api/accounts_mgmt")
+}
+
+// ClustersMgmt returns the client for the clusters management service.
+func (c *Connection) ClustersMgmt() *clustersmgmt.Client {
+	return clustersmgmt.NewClient(c, "/api/clusters_mgmt")
 }
 
 // Close releases all the resources used by the connection. It is very important to allways close it

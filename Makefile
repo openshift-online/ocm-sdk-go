@@ -40,6 +40,10 @@ lint: vendor
 		--no-config \
 		--issues-exit-code=1 \
 		--deadline=15m \
+		--skip-dirs=pkg/client/accountsmgmt \
+		--skip-dirs=pkg/client/clustersmgmt \
+		--skip-dirs=pkg/client/errors \
+		--skip-dirs=pkg/client/helpers \
 		--disable-all \
 		--enable=deadcode \
 		--enable=gas \
@@ -58,9 +62,19 @@ lint: vendor
 		--enable=varcheck \
 		$(NULL)
 
-
 vendor: Gopkg.lock
 	dep ensure -vendor-only -v
+
+generate:
+	rm -rf \
+		pkg/client/accountsmgmt \
+		pkg/client/clustersmgmt \
+		pkg/client/errors \
+		pkg/client/helpers
+	uhc-metamodel-tool generate \
+		--model=/files/go/src/github.com/openshift-online/uhc-api-model/model \
+		--base=github.com/openshift-online/uhc-sdk-go/pkg/client \
+		--output=pkg/client
 
 clean:
 	rm -rf \

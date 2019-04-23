@@ -47,16 +47,22 @@ func main() {
 	}
 	defer connection.Close()
 
-	// Retrieve the cluster:
-	response, err := connection.Get().
-		Path("/api/clusters_mgmt/v1/clusters/1BDFg66jv2kDfBh6bBog3IsZWVH").
-		Send()
+	// Get the client for the resource that manages the collection of clusters:
+	collection := connection.ClustersMgmt().V1().Clusters()
+
+	// Get the client for the resource that manages the cluster that we are looking for. Note
+	// that this will not send any request to the server yet, so it will succeed even if that
+	// cluster doesn't exist.
+	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
+
+	// Send the request to retrieve the cluster:
+	response, err := resource.Get().Send()
 	if err != nil {
 		logger.Error("Can't retrieve cluster: %s", err)
 		os.Exit(1)
 	}
 
 	// Print the result:
-	fmt.Printf("%d\n", response.Status())
-	fmt.Printf("%s\n", response.String())
+	cluster := response.Body()
+	fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
 }

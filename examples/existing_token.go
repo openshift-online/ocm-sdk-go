@@ -22,9 +22,10 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
+	"os"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client"
+	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
 )
 
 func main() {
@@ -33,18 +34,21 @@ func main() {
 		Debug(true).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build logger: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Get the tokens, maybe receiving it from some other part of the application, or reading
 	// them from a file where they have been previously saved:
 	accessToken, err := ioutil.ReadFile("access.token")
 	if err != nil {
-		log.Fatalf("Can't read access token: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't read access token: %v\n", err)
+		os.Exit(1)
 	}
 	refreshToken, err := ioutil.ReadFile("refresh.token")
 	if err != nil {
-		log.Fatalf("Can't read refresh token: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't read refresh token: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Create the connection, and remember to close it. Note that this connection will stop
@@ -55,22 +59,28 @@ func main() {
 		Tokens(string(accessToken), string(refreshToken)).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build client: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
+		os.Exit(1)
 	}
 	defer connection.Close()
 
+	// Get the client for the resource that manages the collection of clusters:
+	collection := connection.ClustersMgmt().V1().Clusters()
+
 	// Retrieve the collection of clusters:
-	response, err := connection.Get().
-		Path("/api/clusters_mgmt/v1/clusters").
-		Parameter("search", "name like 'my%'").
-		Parameter("page", 1).
-		Parameter("size", 10).
+	response, err := collection.List().
+		Search("name like 'my%'").
+		Page(1).
+		Size(10).
 		Send()
 	if err != nil {
-		log.Fatalf("Can't retrieve clusters: %s", err)
+		fmt.Fprintf(os.Stderr, "Can't retrieve clusters: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Print the result:
-	fmt.Printf("%d\n", response.Status())
-	fmt.Printf("%s\n", response.String())
+	response.Items().Each(func(cluster *v1.Cluster) bool {
+		fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
+		return false
+	})
 }

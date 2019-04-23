@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This examaple shows how to update the display name of a cluster.
+// This example shows how to update the display name of a cluster.
 
 package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client"
+	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
 )
 
 func main() {
@@ -32,7 +32,8 @@ func main() {
 		Debug(true).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build logger: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Create the connection, and remember to close it:
@@ -42,22 +43,34 @@ func main() {
 		Tokens(token).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build connection: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
+		os.Exit(1)
 	}
 	defer connection.Close()
 
-	// Send a request to update the cluster:
-	response, err := connection.Patch().
-		Path("/api/clusters_mgmt/v1/clusters/1BDFg66jv2kDfBh6bBog3IsZWVH").
-		String(`{
-			"display_name": "My cluster"
-		}`).
-		Send()
+	// Get the client for the resource that manages the collection of clusters:
+	collection := connection.ClustersMgmt().V1().Clusters()
+
+	// Get the client for the resource that manages the cluster that we want to update. Note
+	// that this will not yet send any request to the server, so it will succeed even if the
+	// cluster doesn't exist.
+	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
+
+	// Prepare the patch to send:
+	patch, err := v1.NewCluster().
+		DisplayName("My cluster").
+		Build()
 	if err != nil {
-		log.Fatalf("Can't update cluster: %s", err)
+		fmt.Fprintf(os.Stderr, "Can't create cluster patch: %v\n", err)
+		os.Exit(1)
 	}
 
-	// Print the result:
-	fmt.Printf("%d\n", response.Status())
-	fmt.Printf("%s\n", response.String())
+	// Send the request to update the cluster:
+	_, err = resource.Update().
+		Body(patch).
+		Send()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't update cluster: %v\n", err)
+		os.Exit(1)
+	}
 }

@@ -18,10 +18,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client"
+	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
 )
 
 func main() {
@@ -30,7 +30,8 @@ func main() {
 		Debug(true).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build logger: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Create the connection, and remember to close it:
@@ -40,33 +41,46 @@ func main() {
 		Tokens(token).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build connection: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
+		os.Exit(1)
 	}
 	defer connection.Close()
 
-	// Send a request to create a cluster:
-	response, err := connection.Post().
-		Path("/api/clusters_mgmt/v1/clusters").
-		Parameter("provision", true).
-		String(`{
-			"name": "mycluster"
-			"flavour": {
-				"id": "4"
-			}
-			"region": {
-				"id": "us-east-1",
-			},
-			"aws": {
-				"access_key_id": "...",
-				"secret_access_key": "..."
-			}
-		}`).
+	// Get the client for the resource that manages the collection of clusters:
+	collection := connection.ClustersMgmt().V1().Clusters()
+
+	// Prepare the description of the cluster to create:
+	cluster, err := v1.NewCluster().
+		Name("mycluster").
+		Flavour(
+			v1.NewFlavour().
+				ID("4"),
+		).
+		Region(
+			v1.NewCloudRegion().
+				ID("us-east-1"),
+		).
+		AWS(
+			v1.NewAWS().
+				AccessKeyID("...").
+				SecretAccessKey("..."),
+		).
+		Build()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't create cluster description: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Send a request to create the cluster:
+	response, err := collection.Add().
+		Body(cluster).
 		Send()
 	if err != nil {
-		log.Fatalf("Can't create cluster: %s", err)
+		fmt.Fprintf(os.Stderr, "Can't create cluster: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Print the result:
-	fmt.Printf("%d\n", response.Status())
-	fmt.Printf("%s\n", response.String())
+	cluster = response.Body()
+	fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
 }
