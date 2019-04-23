@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.6 Apr 23 2019
+
+- Add typed interface.
+
 == 0.1.5 Apr 17 2019
 
 - Changed package path to `github.com/openshift-online/uhc-sdk-go`.
