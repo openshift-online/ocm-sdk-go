@@ -60,10 +60,18 @@ func main() {
 			v1.NewCloudRegion().
 				ID("us-east-1"),
 		).
+		DNS(
+			v1.NewDNS().
+				BaseDomain("example.com"),
+		).
 		AWS(
 			v1.NewAWS().
 				AccessKeyID("...").
 				SecretAccessKey("..."),
+		).
+		Version(
+			v1.NewVersion().
+				ID("openshift-v4.0-beta4"),
 		).
 		Build()
 	if err != nil {
