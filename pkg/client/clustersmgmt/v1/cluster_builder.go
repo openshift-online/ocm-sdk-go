@@ -68,9 +68,7 @@ type ClusterBuilder struct {
 	link              bool
 	name              *string
 	flavour           *FlavourBuilder
-	osVersion         *string
 	console           *ClusterConsoleBuilder
-	runtimeVersion    *string
 	multiAZ           *bool
 	nodes             *ClusterNodesBuilder
 	api               *ClusterAPIBuilder
@@ -89,6 +87,11 @@ type ClusterBuilder struct {
 	creationTimestamp *time.Time
 	cloudProvider     *CloudProviderBuilder
 	openshiftVersion  *string
+	subscription      *SubscriptionBuilder
+	groups            []*GroupBuilder
+	creator           *string
+	version           *VersionBuilder
+	identityProviders []*IdentityProviderBuilder
 }
 
 // NewCluster creates a new builder of 'cluster' objects.
@@ -133,30 +136,12 @@ func (b *ClusterBuilder) Flavour(value *FlavourBuilder) *ClusterBuilder {
 	return b
 }
 
-// OsVersion sets the value of the 'os_version' attribute
-// to the given value.
-//
-//
-func (b *ClusterBuilder) OsVersion(value string) *ClusterBuilder {
-	b.osVersion = &value
-	return b
-}
-
 // Console sets the value of the 'console' attribute
 // to the given value.
 //
 // Information about the console of a cluster.
 func (b *ClusterBuilder) Console(value *ClusterConsoleBuilder) *ClusterBuilder {
 	b.console = value
-	return b
-}
-
-// RuntimeVersion sets the value of the 'runtime_version' attribute
-// to the given value.
-//
-//
-func (b *ClusterBuilder) RuntimeVersion(value string) *ClusterBuilder {
-	b.runtimeVersion = &value
 	return b
 }
 
@@ -325,6 +310,33 @@ func (b *ClusterBuilder) OpenshiftVersion(value string) *ClusterBuilder {
 	return b
 }
 
+// Subscription sets the value of the 'subscription' attribute
+// to the given value.
+//
+// Definition of a subscription.
+func (b *ClusterBuilder) Subscription(value *SubscriptionBuilder) *ClusterBuilder {
+	b.subscription = value
+	return b
+}
+
+// Creator sets the value of the 'creator' attribute
+// to the given value.
+//
+//
+func (b *ClusterBuilder) Creator(value string) *ClusterBuilder {
+	b.creator = &value
+	return b
+}
+
+// Version sets the value of the 'version' attribute
+// to the given value.
+//
+// Representation of an _OpenShift_ version.
+func (b *ClusterBuilder) Version(value *VersionBuilder) *ClusterBuilder {
+	b.version = value
+	return b
+}
+
 // Build creates a 'cluster' object using the configuration stored in the builder.
 func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	object = new(Cluster)
@@ -340,17 +352,11 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			return
 		}
 	}
-	if b.osVersion != nil {
-		object.osVersion = b.osVersion
-	}
 	if b.console != nil {
 		object.console, err = b.console.Build()
 		if err != nil {
 			return
 		}
-	}
-	if b.runtimeVersion != nil {
-		object.runtimeVersion = b.runtimeVersion
 	}
 	if b.multiAZ != nil {
 		object.multiAZ = b.multiAZ
@@ -435,6 +441,41 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	if b.openshiftVersion != nil {
 		object.openshiftVersion = b.openshiftVersion
+	}
+	if b.subscription != nil {
+		object.subscription, err = b.subscription.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.groups != nil {
+		object.groups = new(GroupList)
+		object.groups.items = make([]*Group, len(b.groups))
+		for i, item := range b.groups {
+			object.groups.items[i], err = item.Build()
+			if err != nil {
+				return
+			}
+		}
+	}
+	if b.creator != nil {
+		object.creator = b.creator
+	}
+	if b.version != nil {
+		object.version, err = b.version.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.identityProviders != nil {
+		object.identityProviders = new(IdentityProviderList)
+		object.identityProviders.items = make([]*IdentityProvider, len(b.identityProviders))
+		for i, item := range b.identityProviders {
+			object.identityProviders.items[i], err = item.Build()
+			if err != nil {
+				return
+			}
+		}
 	}
 	return
 }

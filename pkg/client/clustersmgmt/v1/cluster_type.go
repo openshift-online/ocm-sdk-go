@@ -80,9 +80,7 @@ type Cluster struct {
 	link              bool
 	name              *string
 	flavour           *Flavour
-	osVersion         *string
 	console           *ClusterConsole
-	runtimeVersion    *string
 	multiAZ           *bool
 	nodes             *ClusterNodes
 	api               *ClusterAPI
@@ -101,6 +99,11 @@ type Cluster struct {
 	creationTimestamp *time.Time
 	cloudProvider     *CloudProvider
 	openshiftVersion  *string
+	subscription      *Subscription
+	groups            *GroupList
+	creator           *string
+	version           *Version
+	identityProviders *IdentityProviderList
 }
 
 // Kind returns the name of the type of the object.
@@ -203,41 +206,6 @@ func (o *Cluster) GetFlavour() (value *Flavour, ok bool) {
 	return
 }
 
-// OsVersion returns the value of the 'os_version' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Version of the operating system that is installed in the primary
-// master node of the cluster. For example `RHEL Server 7.5 (Maipo)'.
-//
-// When retrieving a cluster this will always be reported.
-//
-// When creating a cluster this will be ignored, as the the version of
-// the operating system will be determined internally.
-func (o *Cluster) OsVersion() string {
-	if o != nil && o.osVersion != nil {
-		return *o.osVersion
-	}
-	return ""
-}
-
-// GetOsVersion returns the value of the 'os_version' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Version of the operating system that is installed in the primary
-// master node of the cluster. For example `RHEL Server 7.5 (Maipo)'.
-//
-// When retrieving a cluster this will always be reported.
-//
-// When creating a cluster this will be ignored, as the the version of
-// the operating system will be determined internally.
-func (o *Cluster) GetOsVersion() (value string, ok bool) {
-	ok = o != nil && o.osVersion != nil
-	if ok {
-		value = *o.osVersion
-	}
-	return
-}
-
 // Console returns the value of the 'console' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -257,31 +225,6 @@ func (o *Cluster) GetConsole() (value *ClusterConsole, ok bool) {
 	ok = o != nil && o.console != nil
 	if ok {
 		value = o.console
-	}
-	return
-}
-
-// RuntimeVersion returns the value of the 'runtime_version' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Version of the container runtime that is installed in the primary
-// master node of the cluster. For example `CRI-O 1.11.6`.
-func (o *Cluster) RuntimeVersion() string {
-	if o != nil && o.runtimeVersion != nil {
-		return *o.runtimeVersion
-	}
-	return ""
-}
-
-// GetRuntimeVersion returns the value of the 'runtime_version' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Version of the container runtime that is installed in the primary
-// master node of the cluster. For example `CRI-O 1.11.6`.
-func (o *Cluster) GetRuntimeVersion() (value string, ok bool) {
-	ok = o != nil && o.runtimeVersion != nil
-	if ok {
-		value = *o.runtimeVersion
 	}
 	return
 }
@@ -716,6 +659,123 @@ func (o *Cluster) GetOpenshiftVersion() (value string, ok bool) {
 	ok = o != nil && o.openshiftVersion != nil
 	if ok {
 		value = *o.openshiftVersion
+	}
+	return
+}
+
+// Subscription returns the value of the 'subscription' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the subscription that comes from the account management service when the cluster
+// is registered.
+func (o *Cluster) Subscription() *Subscription {
+	if o == nil {
+		return nil
+	}
+	return o.subscription
+}
+
+// GetSubscription returns the value of the 'subscription' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the subscription that comes from the account management service when the cluster
+// is registered.
+func (o *Cluster) GetSubscription() (value *Subscription, ok bool) {
+	ok = o != nil && o.subscription != nil
+	if ok {
+		value = o.subscription
+	}
+	return
+}
+
+// Groups returns the value of the 'groups' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the collection of groups of user of the cluster.
+func (o *Cluster) Groups() *GroupList {
+	if o == nil {
+		return nil
+	}
+	return o.groups
+}
+
+// GetGroups returns the value of the 'groups' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the collection of groups of user of the cluster.
+func (o *Cluster) GetGroups() (value *GroupList, ok bool) {
+	ok = o != nil && o.groups != nil
+	if ok {
+		value = o.groups
+	}
+	return
+}
+
+// Creator returns the value of the 'creator' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Mail address of the user that created the cluster.
+func (o *Cluster) Creator() string {
+	if o != nil && o.creator != nil {
+		return *o.creator
+	}
+	return ""
+}
+
+// GetCreator returns the value of the 'creator' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Mail address of the user that created the cluster.
+func (o *Cluster) GetCreator() (value string, ok bool) {
+	ok = o != nil && o.creator != nil
+	if ok {
+		value = *o.creator
+	}
+	return
+}
+
+// Version returns the value of the 'version' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the version of _OpenShift_ that will be used to install the cluster.
+func (o *Cluster) Version() *Version {
+	if o == nil {
+		return nil
+	}
+	return o.version
+}
+
+// GetVersion returns the value of the 'version' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the version of _OpenShift_ that will be used to install the cluster.
+func (o *Cluster) GetVersion() (value *Version, ok bool) {
+	ok = o != nil && o.version != nil
+	if ok {
+		value = o.version
+	}
+	return
+}
+
+// IdentityProviders returns the value of the 'identity_providers' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the collection of identity providers of the cluster.
+func (o *Cluster) IdentityProviders() *IdentityProviderList {
+	if o == nil {
+		return nil
+	}
+	return o.identityProviders
+}
+
+// GetIdentityProviders returns the value of the 'identity_providers' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the collection of identity providers of the cluster.
+func (o *Cluster) GetIdentityProviders() (value *IdentityProviderList, ok bool) {
+	ok = o != nil && o.identityProviders != nil
+	if ok {
+		value = o.identityProviders
 	}
 	return
 }

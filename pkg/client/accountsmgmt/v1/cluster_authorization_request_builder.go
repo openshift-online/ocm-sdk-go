@@ -91,16 +91,6 @@ func (b *ClusterAuthorizationRequestBuilder) AvailabilityZone(value string) *Clu
 	return b
 }
 
-// Resources sets the value of the 'resources' attribute
-// to the given values.
-//
-//
-func (b *ClusterAuthorizationRequestBuilder) Resources(values ...*ReservedResourceBuilder) *ClusterAuthorizationRequestBuilder {
-	b.resources = make([]*ReservedResourceBuilder, len(values))
-	copy(b.resources, values)
-	return b
-}
-
 // Build creates a 'cluster_authorization_request' object using the configuration stored in the builder.
 func (b *ClusterAuthorizationRequestBuilder) Build() (object *ClusterAuthorizationRequest, err error) {
 	object = new(ClusterAuthorizationRequest)

@@ -62,10 +62,6 @@ func (o *ClusterAuthorizationRequest) wrap() (data *clusterAuthorizationRequestD
 	data.Reserve = o.reserve
 	data.BYOC = o.byoc
 	data.AvailabilityZone = o.availabilityZone
-	data.Resources, err = o.resources.wrap()
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -98,9 +94,5 @@ func (d *clusterAuthorizationRequestData) unwrap() (object *ClusterAuthorization
 	object.reserve = d.Reserve
 	object.byoc = d.BYOC
 	object.availabilityZone = d.AvailabilityZone
-	object.resources, err = d.Resources.unwrap()
-	if err != nil {
-		return
-	}
 	return
 }
