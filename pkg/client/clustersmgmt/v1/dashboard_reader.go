@@ -63,10 +63,6 @@ func (o *Dashboard) wrap() (data *dashboardData, err error) {
 	} else {
 		*data.Kind = DashboardKind
 	}
-	data.Metrics, err = o.metrics.wrap()
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -110,10 +106,6 @@ func (d *dashboardData) unwrap() (object *Dashboard, err error) {
 			)
 			return
 		}
-	}
-	object.metrics, err = d.Metrics.unwrap()
-	if err != nil {
-		return
 	}
 	return
 }

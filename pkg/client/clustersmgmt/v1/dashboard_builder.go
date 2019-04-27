@@ -52,16 +52,6 @@ func (b *DashboardBuilder) Link(value bool) *DashboardBuilder {
 	return b
 }
 
-// Metrics sets the value of the 'metrics' attribute
-// to the given values.
-//
-//
-func (b *DashboardBuilder) Metrics(values ...*MetricBuilder) *DashboardBuilder {
-	b.metrics = make([]*MetricBuilder, len(values))
-	copy(b.metrics, values)
-	return b
-}
-
 // Build creates a 'dashboard' object using the configuration stored in the builder.
 func (b *DashboardBuilder) Build() (object *Dashboard, err error) {
 	object = new(Dashboard)

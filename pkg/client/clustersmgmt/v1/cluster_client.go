@@ -84,9 +84,23 @@ func (c *ClusterClient) Delete() *ClusterDeleteRequest {
 
 // Status returns the target 'cluster_status' resource.
 //
-// Reference to the service that manages the detailed status of the cluster.
+// Reference to the resource that manages the detailed status of the cluster.
 func (c *ClusterClient) Status() *ClusterStatusClient {
 	return NewClusterStatusClient(c.transport, path.Join(c.path, "status"))
+}
+
+// Groups returns the target 'groups' resource.
+//
+// Reference to the resource that manages the collection of groups.
+func (c *ClusterClient) Groups() *GroupsClient {
+	return NewGroupsClient(c.transport, path.Join(c.path, "groups"))
+}
+
+// IdentityProviders returns the target 'identity_providers' resource.
+//
+// Reference to the resource that manages the collection of identity providers.
+func (c *ClusterClient) IdentityProviders() *IdentityProvidersClient {
+	return NewIdentityProvidersClient(c.transport, path.Join(c.path, "identity_providers"))
 }
 
 // ClusterGetRequest is the request for the 'get' method.

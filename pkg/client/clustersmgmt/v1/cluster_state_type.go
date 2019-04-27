@@ -29,6 +29,8 @@ const (
 	ClusterStateInstalling ClusterState = "installing"
 	// The cluster is waiting to be provisioned.
 	ClusterStatePending ClusterState = "pending"
+	// Creation of the cluster is waiting for the creation of an account in the cloud provider.
+	ClusterStatePendingAccount ClusterState = "pending_account"
 	// The cluster is ready to use.
 	ClusterStateReady ClusterState = "ready"
 	// The cluster is being uninstalled.

@@ -41,16 +41,6 @@ func (b *MetricBuilder) Name(value string) *MetricBuilder {
 	return b
 }
 
-// Vector sets the value of the 'vector' attribute
-// to the given values.
-//
-//
-func (b *MetricBuilder) Vector(values ...*SampleBuilder) *MetricBuilder {
-	b.vector = make([]*SampleBuilder, len(values))
-	copy(b.vector, values)
-	return b
-}
-
 // Build creates a 'metric' object using the configuration stored in the builder.
 func (b *MetricBuilder) Build() (object *Metric, err error) {
 	object = new(Metric)

@@ -62,16 +62,6 @@ func (b *RoleBuilder) Name(value string) *RoleBuilder {
 	return b
 }
 
-// Permissions sets the value of the 'permissions' attribute
-// to the given values.
-//
-//
-func (b *RoleBuilder) Permissions(values ...*PermissionBuilder) *RoleBuilder {
-	b.permissions = make([]*PermissionBuilder, len(values))
-	copy(b.permissions, values)
-	return b
-}
-
 // Build creates a 'role' object using the configuration stored in the builder.
 func (b *RoleBuilder) Build() (object *Role, err error) {
 	object = new(Role)

@@ -52,10 +52,6 @@ func (o *Metric) wrap() (data *metricData, err error) {
 	}
 	data = new(metricData)
 	data.Name = o.name
-	data.Vector, err = o.vector.wrap()
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -83,9 +79,5 @@ func (d *metricData) unwrap() (object *Metric, err error) {
 	}
 	object = new(Metric)
 	object.name = d.Name
-	object.vector, err = d.Vector.unwrap()
-	if err != nil {
-		return
-	}
 	return
 }
