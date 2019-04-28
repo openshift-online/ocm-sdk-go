@@ -51,20 +51,36 @@ func main() {
 	// Get the client for the resource that manages the collection of clusters:
 	collection := connection.ClustersMgmt().V1().Clusters()
 
-	// Retrieve the collection of clusters:
-	response, err := collection.List().
-		Search("name like 'my%'").
-		Page(1).
-		Size(10).
-		Send()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't retrieve clusters: %s", err)
-		os.Exit(1)
+	// Retrieve the list of clusters using pages of ten items, till we get a page that has less
+	// items than requests, as that marks the end of the collection:
+	size := 10
+	page := 1
+	for {
+		// Retrieve the page:
+		response, err := collection.List().
+			Search("name like 'my%'").
+			Size(size).
+			Page(page).
+			Send()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Can't retrieve page %d: %s", page, err)
+			os.Exit(1)
+		}
+
+		// Display the page:
+		response.Items().Each(func(cluster *v1.Cluster) bool {
+			fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
+			return true
+		})
+
+		// Break the loop if the size of the page is less than requested, otherwise go to
+		// the next page:
+		if response.Size() < size {
+			break
+		}
+		page++
 	}
 
-	// Print the result:
-	response.Items().Each(func(cluster *v1.Cluster) bool {
-		fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
-		return true
-	})
+	// Bye:
+	os.Exit(1)
 }
