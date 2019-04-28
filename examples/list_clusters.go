@@ -80,7 +80,4 @@ func main() {
 		}
 		page++
 	}
-
-	// Bye:
-	os.Exit(1)
 }
