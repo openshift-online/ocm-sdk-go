@@ -46,12 +46,12 @@ func UnmarshalAWSList(source interface{}) (list *AWSList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'AWS' value to a JSON document.
-func (o *AWSList) wrap() (data awsListData, err error) {
-	if o == nil {
+func (l *AWSList) wrap() (data awsListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(awsListData, len(o.items))
-	for i, item := range o.items {
+	data = make(awsListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

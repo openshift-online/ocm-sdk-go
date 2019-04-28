@@ -46,12 +46,12 @@ func UnmarshalCloudProviderList(source interface{}) (list *CloudProviderList, er
 
 // wrap is the method used internally to convert a list of values of the
 // 'cloud_provider' value to a JSON document.
-func (o *CloudProviderList) wrap() (data cloudProviderListData, err error) {
-	if o == nil {
+func (l *CloudProviderList) wrap() (data cloudProviderListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(cloudProviderListData, len(o.items))
-	for i, item := range o.items {
+	data = make(cloudProviderListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

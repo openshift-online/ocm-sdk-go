@@ -46,12 +46,12 @@ func UnmarshalMetricList(source interface{}) (list *MetricList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'metric' value to a JSON document.
-func (o *MetricList) wrap() (data metricListData, err error) {
-	if o == nil {
+func (l *MetricList) wrap() (data metricListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(metricListData, len(o.items))
-	for i, item := range o.items {
+	data = make(metricListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

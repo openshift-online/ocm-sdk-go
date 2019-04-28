@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalResourceQuotaList(source interface{}) (list *ResourceQuotaList, er
 
 // wrap is the method used internally to convert a list of values of the
 // 'resource_quota' value to a JSON document.
-func (o *ResourceQuotaList) wrap() (data resourceQuotaListData, err error) {
-	if o == nil {
+func (l *ResourceQuotaList) wrap() (data resourceQuotaListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(resourceQuotaListData, len(o.items))
-	for i, item := range o.items {
+	data = make(resourceQuotaListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d resourceQuotaListData) unwrap() (list *ResourceQuotaList, err error) {
 	}
 	list = new(ResourceQuotaList)
 	list.items = items
+	return
+}
+
+// resourceQuotaListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'resource_quota'.
+type resourceQuotaListLinkData struct {
+	Kind  *string              "json:\"kind,omitempty\""
+	HREF  *string              "json:\"href,omitempty\""
+	Items []*resourceQuotaData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'resource_quota' value to a link.
+func (l *ResourceQuotaList) wrapLink() (data *resourceQuotaListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*resourceQuotaData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(resourceQuotaListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = ResourceQuotaListLinkKind
+	} else {
+		*data.Kind = ResourceQuotaListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'resource_quota' type to a list.
+func (d *resourceQuotaListLinkData) unwrapLink() (list *ResourceQuotaList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*ResourceQuota, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(ResourceQuotaList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case ResourceQuotaListKind:
+			list.link = false
+		case ResourceQuotaListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				ResourceQuotaListKind,
+				ResourceQuotaListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

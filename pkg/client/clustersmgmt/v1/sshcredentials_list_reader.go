@@ -46,12 +46,12 @@ func UnmarshalSshcredentialsList(source interface{}) (list *SshcredentialsList, 
 
 // wrap is the method used internally to convert a list of values of the
 // 'sshcredentials' value to a JSON document.
-func (o *SshcredentialsList) wrap() (data sshcredentialsListData, err error) {
-	if o == nil {
+func (l *SshcredentialsList) wrap() (data sshcredentialsListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(sshcredentialsListData, len(o.items))
-	for i, item := range o.items {
+	data = make(sshcredentialsListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

@@ -92,9 +92,57 @@ func (o *Subscription) GetHREF() (value string, ok bool) {
 	return
 }
 
+// SubscriptionListKind is the name of the type used to represent list of
+// objects of type 'subscription'.
+const SubscriptionListKind = "SubscriptionList"
+
+// SubscriptionListLinkKind is the name of the type used to represent links
+// to list of objects of type 'subscription'.
+const SubscriptionListLinkKind = "SubscriptionListLink"
+
+// SubscriptionNilKind is the name of the type used to nil lists of
+// objects of type 'subscription'.
+const SubscriptionListNilKind = "SubscriptionListNil"
+
 // SubscriptionList is a list of values of the 'subscription' type.
 type SubscriptionList struct {
+	href  *string
+	link  bool
 	items []*Subscription
+}
+
+// Kind returns the name of the type of the object.
+func (l *SubscriptionList) Kind() string {
+	if l == nil {
+		return SubscriptionListNilKind
+	}
+	if l.link {
+		return SubscriptionListLinkKind
+	}
+	return SubscriptionListKind
+}
+
+// Link returns true iif this is a link.
+func (l *SubscriptionList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *SubscriptionList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *SubscriptionList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

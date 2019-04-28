@@ -46,12 +46,12 @@ func UnmarshalGoogleIdentityProviderList(source interface{}) (list *GoogleIdenti
 
 // wrap is the method used internally to convert a list of values of the
 // 'google_identity_provider' value to a JSON document.
-func (o *GoogleIdentityProviderList) wrap() (data googleIdentityProviderListData, err error) {
-	if o == nil {
+func (l *GoogleIdentityProviderList) wrap() (data googleIdentityProviderListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(googleIdentityProviderListData, len(o.items))
-	for i, item := range o.items {
+	data = make(googleIdentityProviderListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

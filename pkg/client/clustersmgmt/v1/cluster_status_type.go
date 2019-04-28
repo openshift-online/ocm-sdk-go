@@ -140,9 +140,57 @@ func (o *ClusterStatus) GetDescription() (value string, ok bool) {
 	return
 }
 
+// ClusterStatusListKind is the name of the type used to represent list of
+// objects of type 'cluster_status'.
+const ClusterStatusListKind = "ClusterStatusList"
+
+// ClusterStatusListLinkKind is the name of the type used to represent links
+// to list of objects of type 'cluster_status'.
+const ClusterStatusListLinkKind = "ClusterStatusListLink"
+
+// ClusterStatusNilKind is the name of the type used to nil lists of
+// objects of type 'cluster_status'.
+const ClusterStatusListNilKind = "ClusterStatusListNil"
+
 // ClusterStatusList is a list of values of the 'cluster_status' type.
 type ClusterStatusList struct {
+	href  *string
+	link  bool
 	items []*ClusterStatus
+}
+
+// Kind returns the name of the type of the object.
+func (l *ClusterStatusList) Kind() string {
+	if l == nil {
+		return ClusterStatusListNilKind
+	}
+	if l.link {
+		return ClusterStatusListLinkKind
+	}
+	return ClusterStatusListKind
+}
+
+// Link returns true iif this is a link.
+func (l *ClusterStatusList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *ClusterStatusList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *ClusterStatusList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

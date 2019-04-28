@@ -46,12 +46,12 @@ func UnmarshalClusterRegistrationRequestList(source interface{}) (list *ClusterR
 
 // wrap is the method used internally to convert a list of values of the
 // 'cluster_registration_request' value to a JSON document.
-func (o *ClusterRegistrationRequestList) wrap() (data clusterRegistrationRequestListData, err error) {
-	if o == nil {
+func (l *ClusterRegistrationRequestList) wrap() (data clusterRegistrationRequestListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(clusterRegistrationRequestListData, len(o.items))
-	for i, item := range o.items {
+	data = make(clusterRegistrationRequestListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

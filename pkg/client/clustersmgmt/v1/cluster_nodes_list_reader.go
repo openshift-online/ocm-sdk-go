@@ -46,12 +46,12 @@ func UnmarshalClusterNodesList(source interface{}) (list *ClusterNodesList, err 
 
 // wrap is the method used internally to convert a list of values of the
 // 'cluster_nodes' value to a JSON document.
-func (o *ClusterNodesList) wrap() (data clusterNodesListData, err error) {
-	if o == nil {
+func (l *ClusterNodesList) wrap() (data clusterNodesListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(clusterNodesListData, len(o.items))
-	for i, item := range o.items {
+	data = make(clusterNodesListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

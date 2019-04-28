@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalClusterList(source interface{}) (list *ClusterList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'cluster' value to a JSON document.
-func (o *ClusterList) wrap() (data clusterListData, err error) {
-	if o == nil {
+func (l *ClusterList) wrap() (data clusterListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(clusterListData, len(o.items))
-	for i, item := range o.items {
+	data = make(clusterListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d clusterListData) unwrap() (list *ClusterList, err error) {
 	}
 	list = new(ClusterList)
 	list.items = items
+	return
+}
+
+// clusterListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'cluster'.
+type clusterListLinkData struct {
+	Kind  *string        "json:\"kind,omitempty\""
+	HREF  *string        "json:\"href,omitempty\""
+	Items []*clusterData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'cluster' value to a link.
+func (l *ClusterList) wrapLink() (data *clusterListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*clusterData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(clusterListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = ClusterListLinkKind
+	} else {
+		*data.Kind = ClusterListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'cluster' type to a list.
+func (d *clusterListLinkData) unwrapLink() (list *ClusterList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Cluster, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(ClusterList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case ClusterListKind:
+			list.link = false
+		case ClusterListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				ClusterListKind,
+				ClusterListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

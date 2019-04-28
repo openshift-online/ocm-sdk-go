@@ -46,12 +46,12 @@ func UnmarshalReservedResourceList(source interface{}) (list *ReservedResourceLi
 
 // wrap is the method used internally to convert a list of values of the
 // 'reserved_resource' value to a JSON document.
-func (o *ReservedResourceList) wrap() (data reservedResourceListData, err error) {
-	if o == nil {
+func (l *ReservedResourceList) wrap() (data reservedResourceListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(reservedResourceListData, len(o.items))
-	for i, item := range o.items {
+	data = make(reservedResourceListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

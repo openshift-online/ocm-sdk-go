@@ -170,9 +170,57 @@ func (o *CloudRegion) GetCloudProvider() (value *CloudProvider, ok bool) {
 	return
 }
 
+// CloudRegionListKind is the name of the type used to represent list of
+// objects of type 'cloud_region'.
+const CloudRegionListKind = "CloudRegionList"
+
+// CloudRegionListLinkKind is the name of the type used to represent links
+// to list of objects of type 'cloud_region'.
+const CloudRegionListLinkKind = "CloudRegionListLink"
+
+// CloudRegionNilKind is the name of the type used to nil lists of
+// objects of type 'cloud_region'.
+const CloudRegionListNilKind = "CloudRegionListNil"
+
 // CloudRegionList is a list of values of the 'cloud_region' type.
 type CloudRegionList struct {
+	href  *string
+	link  bool
 	items []*CloudRegion
+}
+
+// Kind returns the name of the type of the object.
+func (l *CloudRegionList) Kind() string {
+	if l == nil {
+		return CloudRegionListNilKind
+	}
+	if l.link {
+		return CloudRegionListLinkKind
+	}
+	return CloudRegionListKind
+}
+
+// Link returns true iif this is a link.
+func (l *CloudRegionList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *CloudRegionList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *CloudRegionList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

@@ -166,9 +166,57 @@ func (o *ClusterCredentials) GetAdmin() (value *AdminCredentials, ok bool) {
 	return
 }
 
+// ClusterCredentialsListKind is the name of the type used to represent list of
+// objects of type 'cluster_credentials'.
+const ClusterCredentialsListKind = "ClusterCredentialsList"
+
+// ClusterCredentialsListLinkKind is the name of the type used to represent links
+// to list of objects of type 'cluster_credentials'.
+const ClusterCredentialsListLinkKind = "ClusterCredentialsListLink"
+
+// ClusterCredentialsNilKind is the name of the type used to nil lists of
+// objects of type 'cluster_credentials'.
+const ClusterCredentialsListNilKind = "ClusterCredentialsListNil"
+
 // ClusterCredentialsList is a list of values of the 'cluster_credentials' type.
 type ClusterCredentialsList struct {
+	href  *string
+	link  bool
 	items []*ClusterCredentials
+}
+
+// Kind returns the name of the type of the object.
+func (l *ClusterCredentialsList) Kind() string {
+	if l == nil {
+		return ClusterCredentialsListNilKind
+	}
+	if l.link {
+		return ClusterCredentialsListLinkKind
+	}
+	return ClusterCredentialsListKind
+}
+
+// Link returns true iif this is a link.
+func (l *ClusterCredentialsList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *ClusterCredentialsList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *ClusterCredentialsList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

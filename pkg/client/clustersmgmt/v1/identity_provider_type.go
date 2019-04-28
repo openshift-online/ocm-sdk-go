@@ -342,9 +342,57 @@ func (o *IdentityProvider) GetOpenID() (value *OpenIdidentityProvider, ok bool) 
 	return
 }
 
+// IdentityProviderListKind is the name of the type used to represent list of
+// objects of type 'identity_provider'.
+const IdentityProviderListKind = "IdentityProviderList"
+
+// IdentityProviderListLinkKind is the name of the type used to represent links
+// to list of objects of type 'identity_provider'.
+const IdentityProviderListLinkKind = "IdentityProviderListLink"
+
+// IdentityProviderNilKind is the name of the type used to nil lists of
+// objects of type 'identity_provider'.
+const IdentityProviderListNilKind = "IdentityProviderListNil"
+
 // IdentityProviderList is a list of values of the 'identity_provider' type.
 type IdentityProviderList struct {
+	href  *string
+	link  bool
 	items []*IdentityProvider
+}
+
+// Kind returns the name of the type of the object.
+func (l *IdentityProviderList) Kind() string {
+	if l == nil {
+		return IdentityProviderListNilKind
+	}
+	if l.link {
+		return IdentityProviderListLinkKind
+	}
+	return IdentityProviderListKind
+}
+
+// Link returns true iif this is a link.
+func (l *IdentityProviderList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *IdentityProviderList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *IdentityProviderList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

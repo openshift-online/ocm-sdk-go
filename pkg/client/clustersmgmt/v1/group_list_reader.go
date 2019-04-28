@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalGroupList(source interface{}) (list *GroupList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'group' value to a JSON document.
-func (o *GroupList) wrap() (data groupListData, err error) {
-	if o == nil {
+func (l *GroupList) wrap() (data groupListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(groupListData, len(o.items))
-	for i, item := range o.items {
+	data = make(groupListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d groupListData) unwrap() (list *GroupList, err error) {
 	}
 	list = new(GroupList)
 	list.items = items
+	return
+}
+
+// groupListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'group'.
+type groupListLinkData struct {
+	Kind  *string      "json:\"kind,omitempty\""
+	HREF  *string      "json:\"href,omitempty\""
+	Items []*groupData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'group' value to a link.
+func (l *GroupList) wrapLink() (data *groupListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*groupData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(groupListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = GroupListLinkKind
+	} else {
+		*data.Kind = GroupListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'group' type to a list.
+func (d *groupListLinkData) unwrapLink() (list *GroupList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Group, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(GroupList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case GroupListKind:
+			list.link = false
+		case GroupListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				GroupListKind,
+				GroupListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

@@ -116,9 +116,57 @@ func (o *Organization) GetName() (value string, ok bool) {
 	return
 }
 
+// OrganizationListKind is the name of the type used to represent list of
+// objects of type 'organization'.
+const OrganizationListKind = "OrganizationList"
+
+// OrganizationListLinkKind is the name of the type used to represent links
+// to list of objects of type 'organization'.
+const OrganizationListLinkKind = "OrganizationListLink"
+
+// OrganizationNilKind is the name of the type used to nil lists of
+// objects of type 'organization'.
+const OrganizationListNilKind = "OrganizationListNil"
+
 // OrganizationList is a list of values of the 'organization' type.
 type OrganizationList struct {
+	href  *string
+	link  bool
 	items []*Organization
+}
+
+// Kind returns the name of the type of the object.
+func (l *OrganizationList) Kind() string {
+	if l == nil {
+		return OrganizationListNilKind
+	}
+	if l.link {
+		return OrganizationListLinkKind
+	}
+	return OrganizationListKind
+}
+
+// Link returns true iif this is a link.
+func (l *OrganizationList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *OrganizationList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *OrganizationList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

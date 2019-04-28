@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalPermissionList(source interface{}) (list *PermissionList, err erro
 
 // wrap is the method used internally to convert a list of values of the
 // 'permission' value to a JSON document.
-func (o *PermissionList) wrap() (data permissionListData, err error) {
-	if o == nil {
+func (l *PermissionList) wrap() (data permissionListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(permissionListData, len(o.items))
-	for i, item := range o.items {
+	data = make(permissionListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d permissionListData) unwrap() (list *PermissionList, err error) {
 	}
 	list = new(PermissionList)
 	list.items = items
+	return
+}
+
+// permissionListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'permission'.
+type permissionListLinkData struct {
+	Kind  *string           "json:\"kind,omitempty\""
+	HREF  *string           "json:\"href,omitempty\""
+	Items []*permissionData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'permission' value to a link.
+func (l *PermissionList) wrapLink() (data *permissionListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*permissionData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(permissionListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = PermissionListLinkKind
+	} else {
+		*data.Kind = PermissionListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'permission' type to a list.
+func (d *permissionListLinkData) unwrapLink() (list *PermissionList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Permission, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(PermissionList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case PermissionListKind:
+			list.link = false
+		case PermissionListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				PermissionListKind,
+				PermissionListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

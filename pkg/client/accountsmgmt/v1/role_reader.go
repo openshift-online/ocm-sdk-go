@@ -65,6 +65,10 @@ func (o *Role) wrap() (data *roleData, err error) {
 		*data.Kind = RoleKind
 	}
 	data.Name = o.name
+	data.Permissions, err = o.permissions.wrap()
+	if err != nil {
+		return
+	}
 	return
 }
 
@@ -110,5 +114,9 @@ func (d *roleData) unwrap() (object *Role, err error) {
 		}
 	}
 	object.name = d.Name
+	object.permissions, err = d.Permissions.unwrap()
+	if err != nil {
+		return
+	}
 	return
 }

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalRoleBindingList(source interface{}) (list *RoleBindingList, err er
 
 // wrap is the method used internally to convert a list of values of the
 // 'role_binding' value to a JSON document.
-func (o *RoleBindingList) wrap() (data roleBindingListData, err error) {
-	if o == nil {
+func (l *RoleBindingList) wrap() (data roleBindingListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(roleBindingListData, len(o.items))
-	for i, item := range o.items {
+	data = make(roleBindingListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d roleBindingListData) unwrap() (list *RoleBindingList, err error) {
 	}
 	list = new(RoleBindingList)
 	list.items = items
+	return
+}
+
+// roleBindingListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'role_binding'.
+type roleBindingListLinkData struct {
+	Kind  *string            "json:\"kind,omitempty\""
+	HREF  *string            "json:\"href,omitempty\""
+	Items []*roleBindingData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'role_binding' value to a link.
+func (l *RoleBindingList) wrapLink() (data *roleBindingListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*roleBindingData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(roleBindingListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = RoleBindingListLinkKind
+	} else {
+		*data.Kind = RoleBindingListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'role_binding' type to a list.
+func (d *roleBindingListLinkData) unwrapLink() (list *RoleBindingList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*RoleBinding, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(RoleBindingList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case RoleBindingListKind:
+			list.link = false
+		case RoleBindingListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				RoleBindingListKind,
+				RoleBindingListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

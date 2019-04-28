@@ -780,9 +780,57 @@ func (o *Cluster) GetIdentityProviders() (value *IdentityProviderList, ok bool) 
 	return
 }
 
+// ClusterListKind is the name of the type used to represent list of
+// objects of type 'cluster'.
+const ClusterListKind = "ClusterList"
+
+// ClusterListLinkKind is the name of the type used to represent links
+// to list of objects of type 'cluster'.
+const ClusterListLinkKind = "ClusterListLink"
+
+// ClusterNilKind is the name of the type used to nil lists of
+// objects of type 'cluster'.
+const ClusterListNilKind = "ClusterListNil"
+
 // ClusterList is a list of values of the 'cluster' type.
 type ClusterList struct {
+	href  *string
+	link  bool
 	items []*Cluster
+}
+
+// Kind returns the name of the type of the object.
+func (l *ClusterList) Kind() string {
+	if l == nil {
+		return ClusterListNilKind
+	}
+	if l.link {
+		return ClusterListLinkKind
+	}
+	return ClusterListKind
+}
+
+// Link returns true iif this is a link.
+func (l *ClusterList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *ClusterList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *ClusterList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

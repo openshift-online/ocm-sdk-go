@@ -28,10 +28,10 @@ import (
 // groupData is the data structure used internally to marshal and unmarshal
 // objects of type 'group'.
 type groupData struct {
-	Kind  *string      "json:\"kind,omitempty\""
-	ID    *string      "json:\"id,omitempty\""
-	HREF  *string      "json:\"href,omitempty\""
-	Users userListData "json:\"users,omitempty\""
+	Kind  *string           "json:\"kind,omitempty\""
+	ID    *string           "json:\"id,omitempty\""
+	HREF  *string           "json:\"href,omitempty\""
+	Users *userListLinkData "json:\"users,omitempty\""
 }
 
 // MarshalGroup writes a value of the 'group' to the given target,
@@ -62,6 +62,10 @@ func (o *Group) wrap() (data *groupData, err error) {
 		*data.Kind = GroupLinkKind
 	} else {
 		*data.Kind = GroupKind
+	}
+	data.Users, err = o.users.wrapLink()
+	if err != nil {
+		return
 	}
 	return
 }
@@ -106,6 +110,10 @@ func (d *groupData) unwrap() (object *Group, err error) {
 			)
 			return
 		}
+	}
+	object.users, err = d.Users.unwrapLink()
+	if err != nil {
+		return
 	}
 	return
 }

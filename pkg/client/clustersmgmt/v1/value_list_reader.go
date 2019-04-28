@@ -46,12 +46,12 @@ func UnmarshalValueList(source interface{}) (list *ValueList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'value' value to a JSON document.
-func (o *ValueList) wrap() (data valueListData, err error) {
-	if o == nil {
+func (l *ValueList) wrap() (data valueListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(valueListData, len(o.items))
-	for i, item := range o.items {
+	data = make(valueListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
