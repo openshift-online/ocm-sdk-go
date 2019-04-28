@@ -46,12 +46,12 @@ func UnmarshalAccessTokenList(source interface{}) (list *AccessTokenList, err er
 
 // wrap is the method used internally to convert a list of values of the
 // 'access_token' value to a JSON document.
-func (o *AccessTokenList) wrap() (data accessTokenListData, err error) {
-	if o == nil {
+func (l *AccessTokenList) wrap() (data accessTokenListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(accessTokenListData, len(o.items))
-	for i, item := range o.items {
+	data = make(accessTokenListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

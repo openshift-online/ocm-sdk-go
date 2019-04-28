@@ -29,35 +29,35 @@ import (
 // clusterData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster'.
 type clusterData struct {
-	Kind              *string                  "json:\"kind,omitempty\""
-	ID                *string                  "json:\"id,omitempty\""
-	HREF              *string                  "json:\"href,omitempty\""
-	Name              *string                  "json:\"name,omitempty\""
-	Flavour           *flavourData             "json:\"flavour,omitempty\""
-	Console           *clusterConsoleData      "json:\"console,omitempty\""
-	MultiAZ           *bool                    "json:\"multi_az,omitempty\""
-	Nodes             *clusterNodesData        "json:\"nodes,omitempty\""
-	API               *clusterAPIData          "json:\"api,omitempty\""
-	Region            *cloudRegionData         "json:\"region,omitempty\""
-	DisplayName       *string                  "json:\"display_name,omitempty\""
-	DNS               *dnsData                 "json:\"dns,omitempty\""
-	Properties        map[string]string        "json:\"properties,omitempty\""
-	State             *ClusterState            "json:\"state,omitempty\""
-	Managed           *bool                    "json:\"managed,omitempty\""
-	Memory            *clusterMetricData       "json:\"memory,omitempty\""
-	CPU               *clusterMetricData       "json:\"cpu,omitempty\""
-	Storage           *clusterMetricData       "json:\"storage,omitempty\""
-	ExternalID        *string                  "json:\"external_id,omitempty\""
-	AWS               *awsData                 "json:\"aws,omitempty\""
-	Network           *networkData             "json:\"network,omitempty\""
-	CreationTimestamp *time.Time               "json:\"creation_timestamp,omitempty\""
-	CloudProvider     *cloudProviderData       "json:\"cloud_provider,omitempty\""
-	OpenshiftVersion  *string                  "json:\"openshift_version,omitempty\""
-	Subscription      *subscriptionData        "json:\"subscription,omitempty\""
-	Groups            groupListData            "json:\"groups,omitempty\""
-	Creator           *string                  "json:\"creator,omitempty\""
-	Version           *versionData             "json:\"version,omitempty\""
-	IdentityProviders identityProviderListData "json:\"identity_providers,omitempty\""
+	Kind              *string                       "json:\"kind,omitempty\""
+	ID                *string                       "json:\"id,omitempty\""
+	HREF              *string                       "json:\"href,omitempty\""
+	Name              *string                       "json:\"name,omitempty\""
+	Flavour           *flavourData                  "json:\"flavour,omitempty\""
+	Console           *clusterConsoleData           "json:\"console,omitempty\""
+	MultiAZ           *bool                         "json:\"multi_az,omitempty\""
+	Nodes             *clusterNodesData             "json:\"nodes,omitempty\""
+	API               *clusterAPIData               "json:\"api,omitempty\""
+	Region            *cloudRegionData              "json:\"region,omitempty\""
+	DisplayName       *string                       "json:\"display_name,omitempty\""
+	DNS               *dnsData                      "json:\"dns,omitempty\""
+	Properties        map[string]string             "json:\"properties,omitempty\""
+	State             *ClusterState                 "json:\"state,omitempty\""
+	Managed           *bool                         "json:\"managed,omitempty\""
+	Memory            *clusterMetricData            "json:\"memory,omitempty\""
+	CPU               *clusterMetricData            "json:\"cpu,omitempty\""
+	Storage           *clusterMetricData            "json:\"storage,omitempty\""
+	ExternalID        *string                       "json:\"external_id,omitempty\""
+	AWS               *awsData                      "json:\"aws,omitempty\""
+	Network           *networkData                  "json:\"network,omitempty\""
+	CreationTimestamp *time.Time                    "json:\"creation_timestamp,omitempty\""
+	CloudProvider     *cloudProviderData            "json:\"cloud_provider,omitempty\""
+	OpenshiftVersion  *string                       "json:\"openshift_version,omitempty\""
+	Subscription      *subscriptionData             "json:\"subscription,omitempty\""
+	Groups            *groupListLinkData            "json:\"groups,omitempty\""
+	Creator           *string                       "json:\"creator,omitempty\""
+	Version           *versionData                  "json:\"version,omitempty\""
+	IdentityProviders *identityProviderListLinkData "json:\"identity_providers,omitempty\""
 }
 
 // MarshalCluster writes a value of the 'cluster' to the given target,
@@ -150,8 +150,16 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 	if err != nil {
 		return
 	}
+	data.Groups, err = o.groups.wrapLink()
+	if err != nil {
+		return
+	}
 	data.Creator = o.creator
 	data.Version, err = o.version.wrap()
+	if err != nil {
+		return
+	}
+	data.IdentityProviders, err = o.identityProviders.wrapLink()
 	if err != nil {
 		return
 	}
@@ -260,8 +268,16 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 	if err != nil {
 		return
 	}
+	object.groups, err = d.Groups.unwrapLink()
+	if err != nil {
+		return
+	}
 	object.creator = d.Creator
 	object.version, err = d.Version.unwrap()
+	if err != nil {
+		return
+	}
+	object.identityProviders, err = d.IdentityProviders.unwrapLink()
 	if err != nil {
 		return
 	}

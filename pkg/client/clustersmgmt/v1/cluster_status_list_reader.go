@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalClusterStatusList(source interface{}) (list *ClusterStatusList, er
 
 // wrap is the method used internally to convert a list of values of the
 // 'cluster_status' value to a JSON document.
-func (o *ClusterStatusList) wrap() (data clusterStatusListData, err error) {
-	if o == nil {
+func (l *ClusterStatusList) wrap() (data clusterStatusListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(clusterStatusListData, len(o.items))
-	for i, item := range o.items {
+	data = make(clusterStatusListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d clusterStatusListData) unwrap() (list *ClusterStatusList, err error) {
 	}
 	list = new(ClusterStatusList)
 	list.items = items
+	return
+}
+
+// clusterStatusListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'cluster_status'.
+type clusterStatusListLinkData struct {
+	Kind  *string              "json:\"kind,omitempty\""
+	HREF  *string              "json:\"href,omitempty\""
+	Items []*clusterStatusData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'cluster_status' value to a link.
+func (l *ClusterStatusList) wrapLink() (data *clusterStatusListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*clusterStatusData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(clusterStatusListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = ClusterStatusListLinkKind
+	} else {
+		*data.Kind = ClusterStatusListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'cluster_status' type to a list.
+func (d *clusterStatusListLinkData) unwrapLink() (list *ClusterStatusList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*ClusterStatus, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(ClusterStatusList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case ClusterStatusListKind:
+			list.link = false
+		case ClusterStatusListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				ClusterStatusListKind,
+				ClusterStatusListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

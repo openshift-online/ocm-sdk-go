@@ -46,12 +46,12 @@ func UnmarshalOpenIdidentityProviderList(source interface{}) (list *OpenIdidenti
 
 // wrap is the method used internally to convert a list of values of the
 // 'open_ididentity_provider' value to a JSON document.
-func (o *OpenIdidentityProviderList) wrap() (data openIdidentityProviderListData, err error) {
-	if o == nil {
+func (l *OpenIdidentityProviderList) wrap() (data openIdidentityProviderListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(openIdidentityProviderListData, len(o.items))
-	for i, item := range o.items {
+	data = make(openIdidentityProviderListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

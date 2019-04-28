@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalVersionList(source interface{}) (list *VersionList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'version' value to a JSON document.
-func (o *VersionList) wrap() (data versionListData, err error) {
-	if o == nil {
+func (l *VersionList) wrap() (data versionListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(versionListData, len(o.items))
-	for i, item := range o.items {
+	data = make(versionListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d versionListData) unwrap() (list *VersionList, err error) {
 	}
 	list = new(VersionList)
 	list.items = items
+	return
+}
+
+// versionListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'version'.
+type versionListLinkData struct {
+	Kind  *string        "json:\"kind,omitempty\""
+	HREF  *string        "json:\"href,omitempty\""
+	Items []*versionData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'version' value to a link.
+func (l *VersionList) wrapLink() (data *versionListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*versionData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(versionListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = VersionListLinkKind
+	} else {
+		*data.Kind = VersionListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'version' type to a list.
+func (d *versionListLinkData) unwrapLink() (list *VersionList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Version, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(VersionList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case VersionListKind:
+			list.link = false
+		case VersionListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				VersionListKind,
+				VersionListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

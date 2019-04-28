@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalCloudRegionList(source interface{}) (list *CloudRegionList, err er
 
 // wrap is the method used internally to convert a list of values of the
 // 'cloud_region' value to a JSON document.
-func (o *CloudRegionList) wrap() (data cloudRegionListData, err error) {
-	if o == nil {
+func (l *CloudRegionList) wrap() (data cloudRegionListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(cloudRegionListData, len(o.items))
-	for i, item := range o.items {
+	data = make(cloudRegionListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d cloudRegionListData) unwrap() (list *CloudRegionList, err error) {
 	}
 	list = new(CloudRegionList)
 	list.items = items
+	return
+}
+
+// cloudRegionListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'cloud_region'.
+type cloudRegionListLinkData struct {
+	Kind  *string            "json:\"kind,omitempty\""
+	HREF  *string            "json:\"href,omitempty\""
+	Items []*cloudRegionData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'cloud_region' value to a link.
+func (l *CloudRegionList) wrapLink() (data *cloudRegionListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*cloudRegionData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(cloudRegionListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = CloudRegionListLinkKind
+	} else {
+		*data.Kind = CloudRegionListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'cloud_region' type to a list.
+func (d *cloudRegionListLinkData) unwrapLink() (list *CloudRegionList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*CloudRegion, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(CloudRegionList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case CloudRegionListKind:
+			list.link = false
+		case CloudRegionListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				CloudRegionListKind,
+				CloudRegionListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

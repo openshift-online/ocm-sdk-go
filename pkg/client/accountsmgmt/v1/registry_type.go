@@ -236,9 +236,57 @@ func (o *Registry) GetCloudAlias() (value bool, ok bool) {
 	return
 }
 
+// RegistryListKind is the name of the type used to represent list of
+// objects of type 'registry'.
+const RegistryListKind = "RegistryList"
+
+// RegistryListLinkKind is the name of the type used to represent links
+// to list of objects of type 'registry'.
+const RegistryListLinkKind = "RegistryListLink"
+
+// RegistryNilKind is the name of the type used to nil lists of
+// objects of type 'registry'.
+const RegistryListNilKind = "RegistryListNil"
+
 // RegistryList is a list of values of the 'registry' type.
 type RegistryList struct {
+	href  *string
+	link  bool
 	items []*Registry
+}
+
+// Kind returns the name of the type of the object.
+func (l *RegistryList) Kind() string {
+	if l == nil {
+		return RegistryListNilKind
+	}
+	if l.link {
+		return RegistryListLinkKind
+	}
+	return RegistryListKind
+}
+
+// Link returns true iif this is a link.
+func (l *RegistryList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *RegistryList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *RegistryList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

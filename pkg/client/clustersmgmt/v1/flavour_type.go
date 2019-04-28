@@ -233,9 +233,57 @@ func (o *Flavour) GetNetwork() (value *Network, ok bool) {
 	return
 }
 
+// FlavourListKind is the name of the type used to represent list of
+// objects of type 'flavour'.
+const FlavourListKind = "FlavourList"
+
+// FlavourListLinkKind is the name of the type used to represent links
+// to list of objects of type 'flavour'.
+const FlavourListLinkKind = "FlavourListLink"
+
+// FlavourNilKind is the name of the type used to nil lists of
+// objects of type 'flavour'.
+const FlavourListNilKind = "FlavourListNil"
+
 // FlavourList is a list of values of the 'flavour' type.
 type FlavourList struct {
+	href  *string
+	link  bool
 	items []*Flavour
+}
+
+// Kind returns the name of the type of the object.
+func (l *FlavourList) Kind() string {
+	if l == nil {
+		return FlavourListNilKind
+	}
+	if l.link {
+		return FlavourListLinkKind
+	}
+	return FlavourListKind
+}
+
+// Link returns true iif this is a link.
+func (l *FlavourList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *FlavourList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *FlavourList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

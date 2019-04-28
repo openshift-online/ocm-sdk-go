@@ -46,12 +46,12 @@ func UnmarshalClusterMetricList(source interface{}) (list *ClusterMetricList, er
 
 // wrap is the method used internally to convert a list of values of the
 // 'cluster_metric' value to a JSON document.
-func (o *ClusterMetricList) wrap() (data clusterMetricListData, err error) {
-	if o == nil {
+func (l *ClusterMetricList) wrap() (data clusterMetricListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(clusterMetricListData, len(o.items))
-	for i, item := range o.items {
+	data = make(clusterMetricListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

@@ -46,12 +46,12 @@ func UnmarshalSampleList(source interface{}) (list *SampleList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'sample' value to a JSON document.
-func (o *SampleList) wrap() (data sampleListData, err error) {
-	if o == nil {
+func (l *SampleList) wrap() (data sampleListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(sampleListData, len(o.items))
-	for i, item := range o.items {
+	data = make(sampleListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

@@ -46,12 +46,12 @@ func UnmarshalLdapidentityProviderList(source interface{}) (list *LdapidentityPr
 
 // wrap is the method used internally to convert a list of values of the
 // 'ldapidentity_provider' value to a JSON document.
-func (o *LdapidentityProviderList) wrap() (data ldapidentityProviderListData, err error) {
-	if o == nil {
+func (l *LdapidentityProviderList) wrap() (data ldapidentityProviderListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(ldapidentityProviderListData, len(o.items))
-	for i, item := range o.items {
+	data = make(ldapidentityProviderListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

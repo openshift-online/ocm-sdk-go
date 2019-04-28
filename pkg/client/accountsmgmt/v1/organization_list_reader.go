@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalOrganizationList(source interface{}) (list *OrganizationList, err 
 
 // wrap is the method used internally to convert a list of values of the
 // 'organization' value to a JSON document.
-func (o *OrganizationList) wrap() (data organizationListData, err error) {
-	if o == nil {
+func (l *OrganizationList) wrap() (data organizationListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(organizationListData, len(o.items))
-	for i, item := range o.items {
+	data = make(organizationListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d organizationListData) unwrap() (list *OrganizationList, err error) {
 	}
 	list = new(OrganizationList)
 	list.items = items
+	return
+}
+
+// organizationListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'organization'.
+type organizationListLinkData struct {
+	Kind  *string             "json:\"kind,omitempty\""
+	HREF  *string             "json:\"href,omitempty\""
+	Items []*organizationData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'organization' value to a link.
+func (l *OrganizationList) wrapLink() (data *organizationListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*organizationData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(organizationListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = OrganizationListLinkKind
+	} else {
+		*data.Kind = OrganizationListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'organization' type to a list.
+func (d *organizationListLinkData) unwrapLink() (list *OrganizationList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Organization, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(OrganizationList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case OrganizationListKind:
+			list.link = false
+		case OrganizationListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				OrganizationListKind,
+				OrganizationListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

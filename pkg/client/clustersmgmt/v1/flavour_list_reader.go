@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalFlavourList(source interface{}) (list *FlavourList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'flavour' value to a JSON document.
-func (o *FlavourList) wrap() (data flavourListData, err error) {
-	if o == nil {
+func (l *FlavourList) wrap() (data flavourListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(flavourListData, len(o.items))
-	for i, item := range o.items {
+	data = make(flavourListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d flavourListData) unwrap() (list *FlavourList, err error) {
 	}
 	list = new(FlavourList)
 	list.items = items
+	return
+}
+
+// flavourListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'flavour'.
+type flavourListLinkData struct {
+	Kind  *string        "json:\"kind,omitempty\""
+	HREF  *string        "json:\"href,omitempty\""
+	Items []*flavourData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'flavour' value to a link.
+func (l *FlavourList) wrapLink() (data *flavourListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*flavourData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(flavourListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = FlavourListLinkKind
+	} else {
+		*data.Kind = FlavourListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'flavour' type to a list.
+func (d *flavourListLinkData) unwrapLink() (list *FlavourList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Flavour, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(FlavourList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case FlavourListKind:
+			list.link = false
+		case FlavourListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				FlavourListKind,
+				FlavourListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

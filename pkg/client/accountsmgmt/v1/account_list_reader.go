@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalAccountList(source interface{}) (list *AccountList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'account' value to a JSON document.
-func (o *AccountList) wrap() (data accountListData, err error) {
-	if o == nil {
+func (l *AccountList) wrap() (data accountListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(accountListData, len(o.items))
-	for i, item := range o.items {
+	data = make(accountListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d accountListData) unwrap() (list *AccountList, err error) {
 	}
 	list = new(AccountList)
 	list.items = items
+	return
+}
+
+// accountListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'account'.
+type accountListLinkData struct {
+	Kind  *string        "json:\"kind,omitempty\""
+	HREF  *string        "json:\"href,omitempty\""
+	Items []*accountData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'account' value to a link.
+func (l *AccountList) wrapLink() (data *accountListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*accountData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(accountListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = AccountListLinkKind
+	} else {
+		*data.Kind = AccountListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'account' type to a list.
+func (d *accountListLinkData) unwrapLink() (list *AccountList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Account, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(AccountList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case AccountListKind:
+			list.link = false
+		case AccountListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				AccountListKind,
+				AccountListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

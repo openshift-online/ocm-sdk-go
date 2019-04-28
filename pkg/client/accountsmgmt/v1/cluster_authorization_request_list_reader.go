@@ -46,12 +46,12 @@ func UnmarshalClusterAuthorizationRequestList(source interface{}) (list *Cluster
 
 // wrap is the method used internally to convert a list of values of the
 // 'cluster_authorization_request' value to a JSON document.
-func (o *ClusterAuthorizationRequestList) wrap() (data clusterAuthorizationRequestListData, err error) {
-	if o == nil {
+func (l *ClusterAuthorizationRequestList) wrap() (data clusterAuthorizationRequestListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(clusterAuthorizationRequestListData, len(o.items))
-	for i, item := range o.items {
+	data = make(clusterAuthorizationRequestListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

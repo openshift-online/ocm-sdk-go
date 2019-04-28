@@ -46,12 +46,12 @@ func UnmarshalAdminCredentialsList(source interface{}) (list *AdminCredentialsLi
 
 // wrap is the method used internally to convert a list of values of the
 // 'admin_credentials' value to a JSON document.
-func (o *AdminCredentialsList) wrap() (data adminCredentialsListData, err error) {
-	if o == nil {
+func (l *AdminCredentialsList) wrap() (data adminCredentialsListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(adminCredentialsListData, len(o.items))
-	for i, item := range o.items {
+	data = make(adminCredentialsListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalClusterCredentialsList(source interface{}) (list *ClusterCredentia
 
 // wrap is the method used internally to convert a list of values of the
 // 'cluster_credentials' value to a JSON document.
-func (o *ClusterCredentialsList) wrap() (data clusterCredentialsListData, err error) {
-	if o == nil {
+func (l *ClusterCredentialsList) wrap() (data clusterCredentialsListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(clusterCredentialsListData, len(o.items))
-	for i, item := range o.items {
+	data = make(clusterCredentialsListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d clusterCredentialsListData) unwrap() (list *ClusterCredentialsList, err 
 	}
 	list = new(ClusterCredentialsList)
 	list.items = items
+	return
+}
+
+// clusterCredentialsListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'cluster_credentials'.
+type clusterCredentialsListLinkData struct {
+	Kind  *string                   "json:\"kind,omitempty\""
+	HREF  *string                   "json:\"href,omitempty\""
+	Items []*clusterCredentialsData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'cluster_credentials' value to a link.
+func (l *ClusterCredentialsList) wrapLink() (data *clusterCredentialsListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*clusterCredentialsData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(clusterCredentialsListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = ClusterCredentialsListLinkKind
+	} else {
+		*data.Kind = ClusterCredentialsListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'cluster_credentials' type to a list.
+func (d *clusterCredentialsListLinkData) unwrapLink() (list *ClusterCredentialsList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*ClusterCredentials, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(ClusterCredentialsList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case ClusterCredentialsListKind:
+			list.link = false
+		case ClusterCredentialsListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				ClusterCredentialsListKind,
+				ClusterCredentialsListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

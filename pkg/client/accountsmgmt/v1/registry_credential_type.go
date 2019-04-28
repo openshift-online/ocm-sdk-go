@@ -188,9 +188,57 @@ func (o *RegistryCredential) GetAccount() (value *Account, ok bool) {
 	return
 }
 
+// RegistryCredentialListKind is the name of the type used to represent list of
+// objects of type 'registry_credential'.
+const RegistryCredentialListKind = "RegistryCredentialList"
+
+// RegistryCredentialListLinkKind is the name of the type used to represent links
+// to list of objects of type 'registry_credential'.
+const RegistryCredentialListLinkKind = "RegistryCredentialListLink"
+
+// RegistryCredentialNilKind is the name of the type used to nil lists of
+// objects of type 'registry_credential'.
+const RegistryCredentialListNilKind = "RegistryCredentialListNil"
+
 // RegistryCredentialList is a list of values of the 'registry_credential' type.
 type RegistryCredentialList struct {
+	href  *string
+	link  bool
 	items []*RegistryCredential
+}
+
+// Kind returns the name of the type of the object.
+func (l *RegistryCredentialList) Kind() string {
+	if l == nil {
+		return RegistryCredentialListNilKind
+	}
+	if l.link {
+		return RegistryCredentialListLinkKind
+	}
+	return RegistryCredentialListKind
+}
+
+// Link returns true iif this is a link.
+func (l *RegistryCredentialList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *RegistryCredentialList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *RegistryCredentialList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

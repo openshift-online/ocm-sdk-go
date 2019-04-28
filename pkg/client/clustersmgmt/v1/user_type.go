@@ -92,9 +92,57 @@ func (o *User) GetHREF() (value string, ok bool) {
 	return
 }
 
+// UserListKind is the name of the type used to represent list of
+// objects of type 'user'.
+const UserListKind = "UserList"
+
+// UserListLinkKind is the name of the type used to represent links
+// to list of objects of type 'user'.
+const UserListLinkKind = "UserListLink"
+
+// UserNilKind is the name of the type used to nil lists of
+// objects of type 'user'.
+const UserListNilKind = "UserListNil"
+
 // UserList is a list of values of the 'user' type.
 type UserList struct {
+	href  *string
+	link  bool
 	items []*User
+}
+
+// Kind returns the name of the type of the object.
+func (l *UserList) Kind() string {
+	if l == nil {
+		return UserListNilKind
+	}
+	if l.link {
+		return UserListLinkKind
+	}
+	return UserListKind
+}
+
+// Link returns true iif this is a link.
+func (l *UserList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *UserList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *UserList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

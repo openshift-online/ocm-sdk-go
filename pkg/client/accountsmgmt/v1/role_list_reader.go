@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -46,12 +48,12 @@ func UnmarshalRoleList(source interface{}) (list *RoleList, err error) {
 
 // wrap is the method used internally to convert a list of values of the
 // 'role' value to a JSON document.
-func (o *RoleList) wrap() (data roleListData, err error) {
-	if o == nil {
+func (l *RoleList) wrap() (data roleListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(roleListData, len(o.items))
-	for i, item := range o.items {
+	data = make(roleListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return
@@ -75,5 +77,73 @@ func (d roleListData) unwrap() (list *RoleList, err error) {
 	}
 	list = new(RoleList)
 	list.items = items
+	return
+}
+
+// roleListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'role'.
+type roleListLinkData struct {
+	Kind  *string     "json:\"kind,omitempty\""
+	HREF  *string     "json:\"href,omitempty\""
+	Items []*roleData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'role' value to a link.
+func (l *RoleList) wrapLink() (data *roleListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*roleData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(roleListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = RoleListLinkKind
+	} else {
+		*data.Kind = RoleListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'role' type to a list.
+func (d *roleListLinkData) unwrapLink() (list *RoleList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*Role, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(RoleList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case RoleListKind:
+			list.link = false
+		case RoleListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				RoleListKind,
+				RoleListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

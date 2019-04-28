@@ -92,9 +92,57 @@ func (o *Plan) GetHREF() (value string, ok bool) {
 	return
 }
 
+// PlanListKind is the name of the type used to represent list of
+// objects of type 'plan'.
+const PlanListKind = "PlanList"
+
+// PlanListLinkKind is the name of the type used to represent links
+// to list of objects of type 'plan'.
+const PlanListLinkKind = "PlanListLink"
+
+// PlanNilKind is the name of the type used to nil lists of
+// objects of type 'plan'.
+const PlanListNilKind = "PlanListNil"
+
 // PlanList is a list of values of the 'plan' type.
 type PlanList struct {
+	href  *string
+	link  bool
 	items []*Plan
+}
+
+// Kind returns the name of the type of the object.
+func (l *PlanList) Kind() string {
+	if l == nil {
+		return PlanListNilKind
+	}
+	if l.link {
+		return PlanListLinkKind
+	}
+	return PlanListKind
+}
+
+// Link returns true iif this is a link.
+func (l *PlanList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *PlanList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *PlanList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

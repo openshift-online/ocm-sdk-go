@@ -46,12 +46,12 @@ func UnmarshalGithubIdentityProviderList(source interface{}) (list *GithubIdenti
 
 // wrap is the method used internally to convert a list of values of the
 // 'github_identity_provider' value to a JSON document.
-func (o *GithubIdentityProviderList) wrap() (data githubIdentityProviderListData, err error) {
-	if o == nil {
+func (l *GithubIdentityProviderList) wrap() (data githubIdentityProviderListData, err error) {
+	if l == nil {
 		return
 	}
-	data = make(githubIdentityProviderListData, len(o.items))
-	for i, item := range o.items {
+	data = make(githubIdentityProviderListData, len(l.items))
+	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
 			return

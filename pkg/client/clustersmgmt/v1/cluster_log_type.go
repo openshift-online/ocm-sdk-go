@@ -116,9 +116,57 @@ func (o *ClusterLog) GetContent() (value string, ok bool) {
 	return
 }
 
+// ClusterLogListKind is the name of the type used to represent list of
+// objects of type 'cluster_log'.
+const ClusterLogListKind = "ClusterLogList"
+
+// ClusterLogListLinkKind is the name of the type used to represent links
+// to list of objects of type 'cluster_log'.
+const ClusterLogListLinkKind = "ClusterLogListLink"
+
+// ClusterLogNilKind is the name of the type used to nil lists of
+// objects of type 'cluster_log'.
+const ClusterLogListNilKind = "ClusterLogListNil"
+
 // ClusterLogList is a list of values of the 'cluster_log' type.
 type ClusterLogList struct {
+	href  *string
+	link  bool
 	items []*ClusterLog
+}
+
+// Kind returns the name of the type of the object.
+func (l *ClusterLogList) Kind() string {
+	if l == nil {
+		return ClusterLogListNilKind
+	}
+	if l.link {
+		return ClusterLogListLinkKind
+	}
+	return ClusterLogListKind
+}
+
+// Link returns true iif this is a link.
+func (l *ClusterLogList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *ClusterLogList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *ClusterLogList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

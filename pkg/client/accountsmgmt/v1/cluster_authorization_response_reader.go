@@ -53,6 +53,10 @@ func (o *ClusterAuthorizationResponse) wrap() (data *clusterAuthorizationRespons
 	}
 	data = new(clusterAuthorizationResponseData)
 	data.Allowed = o.allowed
+	data.ExcessResources, err = o.excessResources.wrap()
+	if err != nil {
+		return
+	}
 	data.Subscription, err = o.subscription.wrap()
 	if err != nil {
 		return
@@ -84,6 +88,10 @@ func (d *clusterAuthorizationResponseData) unwrap() (object *ClusterAuthorizatio
 	}
 	object = new(ClusterAuthorizationResponse)
 	object.allowed = d.Allowed
+	object.excessResources, err = d.ExcessResources.unwrap()
+	if err != nil {
+		return
+	}
 	object.subscription, err = d.Subscription.unwrap()
 	if err != nil {
 		return

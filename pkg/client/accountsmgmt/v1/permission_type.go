@@ -164,9 +164,57 @@ func (o *Permission) GetRoleID() (value string, ok bool) {
 	return
 }
 
+// PermissionListKind is the name of the type used to represent list of
+// objects of type 'permission'.
+const PermissionListKind = "PermissionList"
+
+// PermissionListLinkKind is the name of the type used to represent links
+// to list of objects of type 'permission'.
+const PermissionListLinkKind = "PermissionListLink"
+
+// PermissionNilKind is the name of the type used to nil lists of
+// objects of type 'permission'.
+const PermissionListNilKind = "PermissionListNil"
+
 // PermissionList is a list of values of the 'permission' type.
 type PermissionList struct {
+	href  *string
+	link  bool
 	items []*Permission
+}
+
+// Kind returns the name of the type of the object.
+func (l *PermissionList) Kind() string {
+	if l == nil {
+		return PermissionListNilKind
+	}
+	if l.link {
+		return PermissionListLinkKind
+	}
+	return PermissionListKind
+}
+
+// Link returns true iif this is a link.
+func (l *PermissionList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *PermissionList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *PermissionList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

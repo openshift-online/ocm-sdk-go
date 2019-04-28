@@ -236,9 +236,57 @@ func (o *Account) GetOrganization() (value *Organization, ok bool) {
 	return
 }
 
+// AccountListKind is the name of the type used to represent list of
+// objects of type 'account'.
+const AccountListKind = "AccountList"
+
+// AccountListLinkKind is the name of the type used to represent links
+// to list of objects of type 'account'.
+const AccountListLinkKind = "AccountListLink"
+
+// AccountNilKind is the name of the type used to nil lists of
+// objects of type 'account'.
+const AccountListNilKind = "AccountListNil"
+
 // AccountList is a list of values of the 'account' type.
 type AccountList struct {
+	href  *string
+	link  bool
 	items []*Account
+}
+
+// Kind returns the name of the type of the object.
+func (l *AccountList) Kind() string {
+	if l == nil {
+		return AccountListNilKind
+	}
+	if l.link {
+		return AccountListLinkKind
+	}
+	return AccountListKind
+}
+
+// Link returns true iif this is a link.
+func (l *AccountList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *AccountList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *AccountList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.
