@@ -169,9 +169,9 @@ closed when no longer needed.
 The Go types that correspond to the API data types live in the
 `pkg/client/accountsmgmt/v1` and `pkg/client/clustersmgmt/v1` packages. These
 types are pure data containers, they don't have any logic or operation.
-Instances can be created and modified at will.
+Instances can be created at will.
 
-Creating or objects of these types does *not* have any effect in the server
+Creating of objects of these types does *not* have any effect in the server
 side, unless the object is explicitly passed to a call to one of the resource
 methods described below. Changes in the server side are *not* automatically
 reflected in the instances that already exist in memory.
@@ -214,7 +214,7 @@ if err != nil {
 }
 ----
 
-Once create objects are immutable.
+Once created objects are immutable.
 
 The fields containing the values of the attributes of these types are private.
 To read them use the _access methods_. For example, to read the value of the
@@ -282,7 +282,7 @@ groups.Range(func(int i, group *v1.Group) bool {
 })
 ----
 
-It is also possible to convert the list of an slice, using the `Slice` method,
+It is also possible to convert the list to an slice, using the `Slice` method,
 and the process it as usual:
 
 [source,go]
