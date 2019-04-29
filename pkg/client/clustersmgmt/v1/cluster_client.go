@@ -89,6 +89,13 @@ func (c *ClusterClient) Status() *ClusterStatusClient {
 	return NewClusterStatusClient(c.transport, path.Join(c.path, "status"))
 }
 
+// Logs returns the target 'logs' resource.
+//
+// Reference to the resource that manages the collection of logs of the cluster.
+func (c *ClusterClient) Logs() *LogsClient {
+	return NewLogsClient(c.transport, path.Join(c.path, "logs"))
+}
+
 // Groups returns the target 'groups' resource.
 //
 // Reference to the resource that manages the collection of groups.

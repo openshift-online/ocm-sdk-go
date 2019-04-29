@@ -25,18 +25,18 @@ import (
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
-// clusterLogData is the data structure used internally to marshal and unmarshal
-// objects of type 'cluster_log'.
-type clusterLogData struct {
+// logData is the data structure used internally to marshal and unmarshal
+// objects of type 'log'.
+type logData struct {
 	Kind    *string "json:\"kind,omitempty\""
 	ID      *string "json:\"id,omitempty\""
 	HREF    *string "json:\"href,omitempty\""
 	Content *string "json:\"content,omitempty\""
 }
 
-// MarshalClusterLog writes a value of the 'cluster_log' to the given target,
+// MarshalLog writes a value of the 'log' to the given target,
 // which can be a writer or a JSON encoder.
-func MarshalClusterLog(object *ClusterLog, target interface{}) error {
+func MarshalLog(object *Log, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
 	if err != nil {
 		return err
@@ -48,33 +48,33 @@ func MarshalClusterLog(object *ClusterLog, target interface{}) error {
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'cluster_log'
+// wrap is the method used internally to convert a value of the 'log'
 // value to a JSON document.
-func (o *ClusterLog) wrap() (data *clusterLogData, err error) {
+func (o *Log) wrap() (data *logData, err error) {
 	if o == nil {
 		return
 	}
-	data = new(clusterLogData)
+	data = new(logData)
 	data.ID = o.id
 	data.HREF = o.href
 	data.Kind = new(string)
 	if o.link {
-		*data.Kind = ClusterLogLinkKind
+		*data.Kind = LogLinkKind
 	} else {
-		*data.Kind = ClusterLogKind
+		*data.Kind = LogKind
 	}
 	data.Content = o.content
 	return
 }
 
-// UnmarshalClusterLog reads a value of the 'cluster_log' type from the given
+// UnmarshalLog reads a value of the 'log' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
-func UnmarshalClusterLog(source interface{}) (object *ClusterLog, err error) {
+func UnmarshalLog(source interface{}) (object *Log, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	data := new(clusterLogData)
+	data := new(logData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return
@@ -84,25 +84,25 @@ func UnmarshalClusterLog(source interface{}) (object *ClusterLog, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'cluster_log' type.
-func (d *clusterLogData) unwrap() (object *ClusterLog, err error) {
+// value of the 'log' type.
+func (d *logData) unwrap() (object *Log, err error) {
 	if d == nil {
 		return
 	}
-	object = new(ClusterLog)
+	object = new(Log)
 	object.id = d.ID
 	object.href = d.HREF
 	if d.Kind != nil {
 		switch *d.Kind {
-		case ClusterLogKind:
+		case LogKind:
 			object.link = false
-		case ClusterLogLinkKind:
+		case LogLinkKind:
 			object.link = true
 		default:
 			err = fmt.Errorf(
 				"expected kind '%s' or '%s' but got '%s'",
-				ClusterLogKind,
-				ClusterLogLinkKind,
+				LogKind,
+				LogLinkKind,
 				*d.Kind,
 			)
 			return

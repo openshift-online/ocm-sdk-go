@@ -19,35 +19,35 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
-// ClusterLogListBuilder contains the data and logic needed to build
-// 'cluster_log' objects.
-type ClusterLogListBuilder struct {
-	items []*ClusterLogBuilder
+// LogListBuilder contains the data and logic needed to build
+// 'log' objects.
+type LogListBuilder struct {
+	items []*LogBuilder
 }
 
-// NewClusterLogList creates a new builder of 'cluster_log' objects.
-func NewClusterLogList() *ClusterLogListBuilder {
-	return new(ClusterLogListBuilder)
+// NewLogList creates a new builder of 'log' objects.
+func NewLogList() *LogListBuilder {
+	return new(LogListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *ClusterLogListBuilder) Items(values ...*ClusterLogBuilder) *ClusterLogListBuilder {
-	b.items = make([]*ClusterLogBuilder, len(values))
+func (b *LogListBuilder) Items(values ...*LogBuilder) *LogListBuilder {
+	b.items = make([]*LogBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
-// Build creates a list of 'cluster_log' objects using the
+// Build creates a list of 'log' objects using the
 // configuration stored in the builder.
-func (b *ClusterLogListBuilder) Build() (list *ClusterLogList, err error) {
-	items := make([]*ClusterLog, len(b.items))
+func (b *LogListBuilder) Build() (list *LogList, err error) {
+	items := make([]*Log, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(ClusterLogList)
+	list = new(LogList)
 	list.items = items
 	return
 }
