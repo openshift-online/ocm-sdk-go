@@ -19,35 +19,35 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
-// ClusterLogBuilder contains the data and logic needed to build 'cluster_log' objects.
+// LogBuilder contains the data and logic needed to build 'log' objects.
 //
-// Logs of the cluster.
-type ClusterLogBuilder struct {
+// Log of the cluster.
+type LogBuilder struct {
 	id      *string
 	href    *string
 	link    bool
 	content *string
 }
 
-// NewClusterLog creates a new builder of 'cluster_log' objects.
-func NewClusterLog() *ClusterLogBuilder {
-	return new(ClusterLogBuilder)
+// NewLog creates a new builder of 'log' objects.
+func NewLog() *LogBuilder {
+	return new(LogBuilder)
 }
 
 // ID sets the identifier of the object.
-func (b *ClusterLogBuilder) ID(value string) *ClusterLogBuilder {
+func (b *LogBuilder) ID(value string) *LogBuilder {
 	b.id = &value
 	return b
 }
 
 // HREF sets the link to the object.
-func (b *ClusterLogBuilder) HREF(value string) *ClusterLogBuilder {
+func (b *LogBuilder) HREF(value string) *LogBuilder {
 	b.href = &value
 	return b
 }
 
 // Link sets the flag that indicates if this is a link.
-func (b *ClusterLogBuilder) Link(value bool) *ClusterLogBuilder {
+func (b *LogBuilder) Link(value bool) *LogBuilder {
 	b.link = value
 	return b
 }
@@ -56,14 +56,14 @@ func (b *ClusterLogBuilder) Link(value bool) *ClusterLogBuilder {
 // to the given value.
 //
 //
-func (b *ClusterLogBuilder) Content(value string) *ClusterLogBuilder {
+func (b *LogBuilder) Content(value string) *LogBuilder {
 	b.content = &value
 	return b
 }
 
-// Build creates a 'cluster_log' object using the configuration stored in the builder.
-func (b *ClusterLogBuilder) Build() (object *ClusterLog, err error) {
-	object = new(ClusterLog)
+// Build creates a 'log' object using the configuration stored in the builder.
+func (b *LogBuilder) Build() (object *Log, err error) {
+	object = new(Log)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link

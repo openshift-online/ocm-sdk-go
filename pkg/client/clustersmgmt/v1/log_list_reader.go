@@ -25,19 +25,19 @@ import (
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
-// clusterLogListData is type used internally to marshal and unmarshal lists of objects
-// of type 'cluster_log'.
-type clusterLogListData []*clusterLogData
+// logListData is type used internally to marshal and unmarshal lists of objects
+// of type 'log'.
+type logListData []*logData
 
-// UnmarshalClusterLogList reads a list of values of the 'cluster_log'
+// UnmarshalLogList reads a list of values of the 'log'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
-func UnmarshalClusterLogList(source interface{}) (list *ClusterLogList, err error) {
+func UnmarshalLogList(source interface{}) (list *LogList, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	var data clusterLogListData
+	var data logListData
 	err = decoder.Decode(&data)
 	if err != nil {
 		return
@@ -47,12 +47,12 @@ func UnmarshalClusterLogList(source interface{}) (list *ClusterLogList, err erro
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'cluster_log' value to a JSON document.
-func (l *ClusterLogList) wrap() (data clusterLogListData, err error) {
+// 'log' value to a JSON document.
+func (l *LogList) wrap() (data logListData, err error) {
 	if l == nil {
 		return
 	}
-	data = make(clusterLogListData, len(l.items))
+	data = make(logListData, len(l.items))
 	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
@@ -63,83 +63,83 @@ func (l *ClusterLogList) wrap() (data clusterLogListData, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'cluster_log' type.
-func (d clusterLogListData) unwrap() (list *ClusterLogList, err error) {
+// list of values of the 'log' type.
+func (d logListData) unwrap() (list *LogList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*ClusterLog, len(d))
+	items := make([]*Log, len(d))
 	for i, item := range d {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(ClusterLogList)
+	list = new(LogList)
 	list.items = items
 	return
 }
 
-// clusterLogListLinkData is type used internally to marshal and unmarshal links
-// to lists of objects of type 'cluster_log'.
-type clusterLogListLinkData struct {
-	Kind  *string           "json:\"kind,omitempty\""
-	HREF  *string           "json:\"href,omitempty\""
-	Items []*clusterLogData "json:\"items,omitempty\""
+// logListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'log'.
+type logListLinkData struct {
+	Kind  *string    "json:\"kind,omitempty\""
+	HREF  *string    "json:\"href,omitempty\""
+	Items []*logData "json:\"items,omitempty\""
 }
 
 // wrapLink is the method used internally to convert a list of values of the
-// 'cluster_log' value to a link.
-func (l *ClusterLogList) wrapLink() (data *clusterLogListLinkData, err error) {
+// 'log' value to a link.
+func (l *LogList) wrapLink() (data *logListLinkData, err error) {
 	if l == nil {
 		return
 	}
-	items := make([]*clusterLogData, len(l.items))
+	items := make([]*logData, len(l.items))
 	for i, item := range l.items {
 		items[i], err = item.wrap()
 		if err != nil {
 			return
 		}
 	}
-	data = new(clusterLogListLinkData)
+	data = new(logListLinkData)
 	data.Items = items
 	data.HREF = l.href
 	data.Kind = new(string)
 	if l.link {
-		*data.Kind = ClusterLogListLinkKind
+		*data.Kind = LogListLinkKind
 	} else {
-		*data.Kind = ClusterLogListKind
+		*data.Kind = LogListKind
 	}
 	return
 }
 
 // unwrapLink is the function used internally to convert a JSON link to a list
-// of values of the 'cluster_log' type to a list.
-func (d *clusterLogListLinkData) unwrapLink() (list *ClusterLogList, err error) {
+// of values of the 'log' type to a list.
+func (d *logListLinkData) unwrapLink() (list *LogList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*ClusterLog, len(d.Items))
+	items := make([]*Log, len(d.Items))
 	for i, item := range d.Items {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(ClusterLogList)
+	list = new(LogList)
 	list.items = items
 	list.href = d.HREF
 	if d.Kind != nil {
 		switch *d.Kind {
-		case ClusterLogListKind:
+		case LogListKind:
 			list.link = false
-		case ClusterLogListLinkKind:
+		case LogListLinkKind:
 			list.link = true
 		default:
 			err = fmt.Errorf(
 				"expected kind '%s' or '%s' but got '%s'",
-				ClusterLogListKind,
-				ClusterLogListLinkKind,
+				LogListKind,
+				LogListLinkKind,
 				*d.Kind,
 			)
 			return

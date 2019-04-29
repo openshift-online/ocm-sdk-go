@@ -19,22 +19,22 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
-// ClusterLogKind is the name of the type used to represent objects
-// of type 'cluster_log'.
-const ClusterLogKind = "ClusterLog"
+// LogKind is the name of the type used to represent objects
+// of type 'log'.
+const LogKind = "Log"
 
-// ClusterLogLinkKind is the name of the type used to represent links
-// to objects of type 'cluster_log'.
-const ClusterLogLinkKind = "ClusterLogLink"
+// LogLinkKind is the name of the type used to represent links
+// to objects of type 'log'.
+const LogLinkKind = "LogLink"
 
-// ClusterLogNilKind is the name of the type used to nil references
-// to objects of type 'cluster_log'.
-const ClusterLogNilKind = "ClusterLogNil"
+// LogNilKind is the name of the type used to nil references
+// to objects of type 'log'.
+const LogNilKind = "LogNil"
 
-// ClusterLog represents the values of the 'cluster_log' type.
+// Log represents the values of the 'log' type.
 //
-// Logs of the cluster.
-type ClusterLog struct {
+// Log of the cluster.
+type Log struct {
 	id      *string
 	href    *string
 	link    bool
@@ -42,18 +42,18 @@ type ClusterLog struct {
 }
 
 // Kind returns the name of the type of the object.
-func (o *ClusterLog) Kind() string {
+func (o *Log) Kind() string {
 	if o == nil {
-		return ClusterLogNilKind
+		return LogNilKind
 	}
 	if o.link {
-		return ClusterLogLinkKind
+		return LogLinkKind
 	}
-	return ClusterLogKind
+	return LogKind
 }
 
 // ID returns the identifier of the object.
-func (o *ClusterLog) ID() string {
+func (o *Log) ID() string {
 	if o != nil && o.id != nil {
 		return *o.id
 	}
@@ -62,7 +62,7 @@ func (o *ClusterLog) ID() string {
 
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
-func (o *ClusterLog) GetID() (value string, ok bool) {
+func (o *Log) GetID() (value string, ok bool) {
 	ok = o != nil && o.id != nil
 	if ok {
 		value = *o.id
@@ -71,12 +71,12 @@ func (o *ClusterLog) GetID() (value string, ok bool) {
 }
 
 // Link returns true iif this is a link.
-func (o *ClusterLog) Link() bool {
+func (o *Log) Link() bool {
 	return o != nil && o.link
 }
 
 // HREF returns the link to the object.
-func (o *ClusterLog) HREF() string {
+func (o *Log) HREF() string {
 	if o != nil && o.href != nil {
 		return *o.href
 	}
@@ -85,7 +85,7 @@ func (o *ClusterLog) HREF() string {
 
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
-func (o *ClusterLog) GetHREF() (value string, ok bool) {
+func (o *Log) GetHREF() (value string, ok bool) {
 	ok = o != nil && o.href != nil
 	if ok {
 		value = *o.href
@@ -97,7 +97,7 @@ func (o *ClusterLog) GetHREF() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Content of the log.
-func (o *ClusterLog) Content() string {
+func (o *Log) Content() string {
 	if o != nil && o.content != nil {
 		return *o.content
 	}
@@ -108,7 +108,7 @@ func (o *ClusterLog) Content() string {
 // a flag indicating if the attribute has a value.
 //
 // Content of the log.
-func (o *ClusterLog) GetContent() (value string, ok bool) {
+func (o *Log) GetContent() (value string, ok bool) {
 	ok = o != nil && o.content != nil
 	if ok {
 		value = *o.content
@@ -116,43 +116,43 @@ func (o *ClusterLog) GetContent() (value string, ok bool) {
 	return
 }
 
-// ClusterLogListKind is the name of the type used to represent list of
-// objects of type 'cluster_log'.
-const ClusterLogListKind = "ClusterLogList"
+// LogListKind is the name of the type used to represent list of
+// objects of type 'log'.
+const LogListKind = "LogList"
 
-// ClusterLogListLinkKind is the name of the type used to represent links
-// to list of objects of type 'cluster_log'.
-const ClusterLogListLinkKind = "ClusterLogListLink"
+// LogListLinkKind is the name of the type used to represent links
+// to list of objects of type 'log'.
+const LogListLinkKind = "LogListLink"
 
-// ClusterLogNilKind is the name of the type used to nil lists of
-// objects of type 'cluster_log'.
-const ClusterLogListNilKind = "ClusterLogListNil"
+// LogNilKind is the name of the type used to nil lists of
+// objects of type 'log'.
+const LogListNilKind = "LogListNil"
 
-// ClusterLogList is a list of values of the 'cluster_log' type.
-type ClusterLogList struct {
+// LogList is a list of values of the 'log' type.
+type LogList struct {
 	href  *string
 	link  bool
-	items []*ClusterLog
+	items []*Log
 }
 
 // Kind returns the name of the type of the object.
-func (l *ClusterLogList) Kind() string {
+func (l *LogList) Kind() string {
 	if l == nil {
-		return ClusterLogListNilKind
+		return LogListNilKind
 	}
 	if l.link {
-		return ClusterLogListLinkKind
+		return LogListLinkKind
 	}
-	return ClusterLogListKind
+	return LogListKind
 }
 
 // Link returns true iif this is a link.
-func (l *ClusterLogList) Link() bool {
+func (l *LogList) Link() bool {
 	return l != nil && l.link
 }
 
 // HREF returns the link to the list.
-func (l *ClusterLogList) HREF() string {
+func (l *LogList) HREF() string {
 	if l != nil && l.href != nil {
 		return *l.href
 	}
@@ -161,7 +161,7 @@ func (l *ClusterLogList) HREF() string {
 
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
-func (l *ClusterLogList) GetHREF() (value string, ok bool) {
+func (l *LogList) GetHREF() (value string, ok bool) {
 	ok = l != nil && l.href != nil
 	if ok {
 		value = *l.href
@@ -170,7 +170,7 @@ func (l *ClusterLogList) GetHREF() (value string, ok bool) {
 }
 
 // Len returns the length of the list.
-func (l *ClusterLogList) Len() int {
+func (l *LogList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -183,12 +183,12 @@ func (l *ClusterLogList) Len() int {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *ClusterLogList) Slice() []*ClusterLog {
-	var slice []*ClusterLog
+func (l *LogList) Slice() []*Log {
+	var slice []*Log
 	if l == nil {
-		slice = make([]*ClusterLog, 0)
+		slice = make([]*Log, 0)
 	} else {
-		slice = make([]*ClusterLog, len(l.items))
+		slice = make([]*Log, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -197,7 +197,7 @@ func (l *ClusterLogList) Slice() []*ClusterLog {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *ClusterLogList) Each(f func(item *ClusterLog) bool) {
+func (l *LogList) Each(f func(item *Log) bool) {
 	if l == nil {
 		return
 	}
@@ -211,7 +211,7 @@ func (l *ClusterLogList) Each(f func(item *ClusterLog) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *ClusterLogList) Range(f func(index int, item *ClusterLog) bool) {
+func (l *LogList) Range(f func(index int, item *Log) bool) {
 	if l == nil {
 		return
 	}
