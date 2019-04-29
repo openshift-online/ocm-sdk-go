@@ -241,7 +241,7 @@ name, ok := cluster.GetName()
 if !ok {
 	fmt.Printf("Cluster has no name\n")
 } else {
-	fmt.Printf("Cluster name is '%s'\n")
+	fmt.Printf("Cluster name is '%s'\n", name)
 }
 ----
 
