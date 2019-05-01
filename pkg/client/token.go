@@ -141,6 +141,7 @@ func (c *Connection) sendTokenForm(ctx context.Context, form url.Values) error {
 	// Create the HTTP request:
 	body := []byte(form.Encode())
 	request, err := http.NewRequest(http.MethodPost, c.tokenURL.String(), bytes.NewReader(body))
+	request.Close = true
 	header := request.Header
 	if c.agent != "" {
 		header.Set("User-Agent", c.agent)
