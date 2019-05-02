@@ -97,6 +97,17 @@ func (o *RoleBinding) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *RoleBinding) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.type_ == nil &&
+		o.subscription == nil &&
+		o.account == nil &&
+		o.organization == nil &&
+		o.role == nil &&
+		true)
+}
+
 // Type returns the value of the 'type' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -271,6 +282,11 @@ func (l *RoleBindingList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *RoleBindingList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

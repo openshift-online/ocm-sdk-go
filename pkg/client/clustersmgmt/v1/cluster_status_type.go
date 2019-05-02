@@ -94,6 +94,14 @@ func (o *ClusterStatus) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *ClusterStatus) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.state == nil &&
+		o.description == nil &&
+		true)
+}
+
 // State returns the value of the 'state' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -199,6 +207,11 @@ func (l *ClusterStatusList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *ClusterStatusList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

@@ -44,6 +44,13 @@ type Value struct {
 	unit  *string
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *Value) Empty() bool {
+	return o == nil || (o.value == nil &&
+		o.unit == nil &&
+		true)
+}
+
 // Value returns the value of the 'value' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -101,6 +108,11 @@ func (l *ValueList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *ValueList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

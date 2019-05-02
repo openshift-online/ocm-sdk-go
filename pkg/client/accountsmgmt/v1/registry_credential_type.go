@@ -96,6 +96,16 @@ func (o *RegistryCredential) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *RegistryCredential) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.username == nil &&
+		o.token == nil &&
+		o.registry == nil &&
+		o.account == nil &&
+		true)
+}
+
 // Username returns the value of the 'username' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -247,6 +257,11 @@ func (l *RegistryCredentialList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *RegistryCredentialList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

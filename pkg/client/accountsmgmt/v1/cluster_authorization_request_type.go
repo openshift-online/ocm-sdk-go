@@ -32,6 +32,18 @@ type ClusterAuthorizationRequest struct {
 	resources        *ReservedResourceList
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *ClusterAuthorizationRequest) Empty() bool {
+	return o == nil || (o.clusterID == nil &&
+		o.accountUsername == nil &&
+		o.managed == nil &&
+		o.reserve == nil &&
+		o.byoc == nil &&
+		o.availabilityZone == nil &&
+		o.resources.Empty() &&
+		true)
+}
+
 // ClusterID returns the value of the 'cluster_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -204,6 +216,11 @@ func (l *ClusterAuthorizationRequestList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *ClusterAuthorizationRequestList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

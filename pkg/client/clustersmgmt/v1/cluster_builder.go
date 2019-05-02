@@ -78,9 +78,6 @@ type ClusterBuilder struct {
 	properties        map[string]string
 	state             *ClusterState
 	managed           *bool
-	memory            *ClusterMetricBuilder
-	cpu               *ClusterMetricBuilder
-	storage           *ClusterMetricBuilder
 	externalID        *string
 	aws               *AWSBuilder
 	network           *NetworkBuilder
@@ -92,6 +89,7 @@ type ClusterBuilder struct {
 	creator           *string
 	version           *VersionBuilder
 	identityProviders []*IdentityProviderBuilder
+	metrics           *ClusterMetricsBuilder
 }
 
 // NewCluster creates a new builder of 'cluster' objects.
@@ -226,36 +224,6 @@ func (b *ClusterBuilder) Managed(value bool) *ClusterBuilder {
 	return b
 }
 
-// Memory sets the value of the 'memory' attribute
-// to the given value.
-//
-// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
-// a cluster.
-func (b *ClusterBuilder) Memory(value *ClusterMetricBuilder) *ClusterBuilder {
-	b.memory = value
-	return b
-}
-
-// CPU sets the value of the 'CPU' attribute
-// to the given value.
-//
-// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
-// a cluster.
-func (b *ClusterBuilder) CPU(value *ClusterMetricBuilder) *ClusterBuilder {
-	b.cpu = value
-	return b
-}
-
-// Storage sets the value of the 'storage' attribute
-// to the given value.
-//
-// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
-// a cluster.
-func (b *ClusterBuilder) Storage(value *ClusterMetricBuilder) *ClusterBuilder {
-	b.storage = value
-	return b
-}
-
 // ExternalID sets the value of the 'external_ID' attribute
 // to the given value.
 //
@@ -337,6 +305,15 @@ func (b *ClusterBuilder) Version(value *VersionBuilder) *ClusterBuilder {
 	return b
 }
 
+// Metrics sets the value of the 'metrics' attribute
+// to the given value.
+//
+// Cluster metrics received via telemetry.
+func (b *ClusterBuilder) Metrics(value *ClusterMetricsBuilder) *ClusterBuilder {
+	b.metrics = value
+	return b
+}
+
 // Build creates a 'cluster' object using the configuration stored in the builder.
 func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	object = new(Cluster)
@@ -396,24 +373,6 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	if b.managed != nil {
 		object.managed = b.managed
-	}
-	if b.memory != nil {
-		object.memory, err = b.memory.Build()
-		if err != nil {
-			return
-		}
-	}
-	if b.cpu != nil {
-		object.cpu, err = b.cpu.Build()
-		if err != nil {
-			return
-		}
-	}
-	if b.storage != nil {
-		object.storage, err = b.storage.Build()
-		if err != nil {
-			return
-		}
 	}
 	if b.externalID != nil {
 		object.externalID = b.externalID
@@ -475,6 +434,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			if err != nil {
 				return
 			}
+		}
+	}
+	if b.metrics != nil {
+		object.metrics, err = b.metrics.Build()
+		if err != nil {
+			return
 		}
 	}
 	return

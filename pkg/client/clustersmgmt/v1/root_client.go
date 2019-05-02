@@ -33,7 +33,7 @@ type RootClient struct {
 }
 
 // NewRootClient creates a new client for the 'root'
-// resource using the given transport to send the requests and receive the
+// resource using the given transport to sned the requests and receive the
 // responses.
 func NewRootClient(transport http.RoundTripper, path string) *RootClient {
 	client := new(RootClient)

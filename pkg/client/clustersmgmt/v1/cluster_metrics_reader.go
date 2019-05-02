@@ -20,22 +20,21 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
-	time "time"
-
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
-// clusterMetricData is the data structure used internally to marshal and unmarshal
-// objects of type 'cluster_metric'.
-type clusterMetricData struct {
-	UpdatedTimestamp *time.Time "json:\"updated_timestamp,omitempty\""
-	Total            *valueData "json:\"total,omitempty\""
-	Used             *valueData "json:\"used,omitempty\""
+// clusterMetricsData is the data structure used internally to marshal and unmarshal
+// objects of type 'cluster_metrics'.
+type clusterMetricsData struct {
+	CPU     *clusterMetricData "json:\"cpu,omitempty\""
+	Memory  *clusterMetricData "json:\"memory,omitempty\""
+	Storage *clusterMetricData "json:\"storage,omitempty\""
+	Nodes   *clusterNodesData  "json:\"nodes,omitempty\""
 }
 
-// MarshalClusterMetric writes a value of the 'cluster_metric' to the given target,
+// MarshalClusterMetrics writes a value of the 'cluster_metrics' to the given target,
 // which can be a writer or a JSON encoder.
-func MarshalClusterMetric(object *ClusterMetric, target interface{}) error {
+func MarshalClusterMetrics(object *ClusterMetrics, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
 	if err != nil {
 		return err
@@ -47,33 +46,40 @@ func MarshalClusterMetric(object *ClusterMetric, target interface{}) error {
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'cluster_metric'
+// wrap is the method used internally to convert a value of the 'cluster_metrics'
 // value to a JSON document.
-func (o *ClusterMetric) wrap() (data *clusterMetricData, err error) {
+func (o *ClusterMetrics) wrap() (data *clusterMetricsData, err error) {
 	if o == nil {
 		return
 	}
-	data = new(clusterMetricData)
-	data.UpdatedTimestamp = o.updatedTimestamp
-	data.Total, err = o.total.wrap()
+	data = new(clusterMetricsData)
+	data.CPU, err = o.cpu.wrap()
 	if err != nil {
 		return
 	}
-	data.Used, err = o.used.wrap()
+	data.Memory, err = o.memory.wrap()
+	if err != nil {
+		return
+	}
+	data.Storage, err = o.storage.wrap()
+	if err != nil {
+		return
+	}
+	data.Nodes, err = o.nodes.wrap()
 	if err != nil {
 		return
 	}
 	return
 }
 
-// UnmarshalClusterMetric reads a value of the 'cluster_metric' type from the given
+// UnmarshalClusterMetrics reads a value of the 'cluster_metrics' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
-func UnmarshalClusterMetric(source interface{}) (object *ClusterMetric, err error) {
+func UnmarshalClusterMetrics(source interface{}) (object *ClusterMetrics, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	data := new(clusterMetricData)
+	data := new(clusterMetricsData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return
@@ -83,18 +89,25 @@ func UnmarshalClusterMetric(source interface{}) (object *ClusterMetric, err erro
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'cluster_metric' type.
-func (d *clusterMetricData) unwrap() (object *ClusterMetric, err error) {
+// value of the 'cluster_metrics' type.
+func (d *clusterMetricsData) unwrap() (object *ClusterMetrics, err error) {
 	if d == nil {
 		return
 	}
-	object = new(ClusterMetric)
-	object.updatedTimestamp = d.UpdatedTimestamp
-	object.total, err = d.Total.unwrap()
+	object = new(ClusterMetrics)
+	object.cpu, err = d.CPU.unwrap()
 	if err != nil {
 		return
 	}
-	object.used, err = d.Used.unwrap()
+	object.memory, err = d.Memory.unwrap()
+	if err != nil {
+		return
+	}
+	object.storage, err = d.Storage.unwrap()
+	if err != nil {
+		return
+	}
+	object.nodes, err = d.Nodes.unwrap()
 	if err != nil {
 		return
 	}

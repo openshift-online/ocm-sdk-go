@@ -33,6 +33,15 @@ type ClusterRegistrationResponse struct {
 	expiresAt          *time.Time
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *ClusterRegistrationResponse) Empty() bool {
+	return o == nil || (o.clusterID == nil &&
+		o.authorizationToken == nil &&
+		o.accountID == nil &&
+		o.expiresAt == nil &&
+		true)
+}
+
 // ClusterID returns the value of the 'cluster_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -136,6 +145,11 @@ func (l *ClusterRegistrationResponseList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *ClusterRegistrationResponseList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a
