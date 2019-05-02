@@ -25,6 +25,11 @@ package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 type AccessToken struct {
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *AccessToken) Empty() bool {
+	return o == nil || (true)
+}
+
 // AccessTokenList is a list of values of the 'access_token' type.
 type AccessTokenList struct {
 	items []*AccessToken
@@ -36,6 +41,11 @@ func (l *AccessTokenList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *AccessTokenList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

@@ -19,124 +19,128 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
-// Ldapattributes represents the values of the 'ldapattributes' type.
+// ClusterMetrics represents the values of the 'cluster_metrics' type.
 //
-// LDAP attributes used to configure the LDAP identity provider.
-type Ldapattributes struct {
-	email             []string
-	id                []string
-	name              []string
-	preferredUsername []string
+// Cluster metrics received via telemetry.
+type ClusterMetrics struct {
+	cpu     *ClusterMetric
+	memory  *ClusterMetric
+	storage *ClusterMetric
+	nodes   *ClusterNodes
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *Ldapattributes) Empty() bool {
-	return o == nil || (o.email == nil &&
-		o.id == nil &&
-		o.name == nil &&
-		o.preferredUsername == nil &&
+func (o *ClusterMetrics) Empty() bool {
+	return o == nil || (o.cpu == nil &&
+		o.memory == nil &&
+		o.storage == nil &&
+		o.nodes == nil &&
 		true)
 }
 
-// Email returns the value of the 'email' attribute, or
+// CPU returns the value of the 'CPU' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// List of attributes to use as the mail address.
-func (o *Ldapattributes) Email() []string {
+// The amount of CPU provisioned and used in the cluster.
+func (o *ClusterMetrics) CPU() *ClusterMetric {
 	if o == nil {
 		return nil
 	}
-	return o.email
+	return o.cpu
 }
 
-// GetEmail returns the value of the 'email' attribute and
+// GetCPU returns the value of the 'CPU' attribute and
 // a flag indicating if the attribute has a value.
 //
-// List of attributes to use as the mail address.
-func (o *Ldapattributes) GetEmail() (value []string, ok bool) {
-	ok = o != nil && o.email != nil
+// The amount of CPU provisioned and used in the cluster.
+func (o *ClusterMetrics) GetCPU() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.cpu != nil
 	if ok {
-		value = o.email
+		value = o.cpu
 	}
 	return
 }
 
-// ID returns the value of the 'ID' attribute, or
+// Memory returns the value of the 'memory' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// List of attributes to use as the identity.
-func (o *Ldapattributes) ID() []string {
+// The amount of memory provisioned and used in the cluster.
+func (o *ClusterMetrics) Memory() *ClusterMetric {
 	if o == nil {
 		return nil
 	}
-	return o.id
+	return o.memory
 }
 
-// GetID returns the value of the 'ID' attribute and
+// GetMemory returns the value of the 'memory' attribute and
 // a flag indicating if the attribute has a value.
 //
-// List of attributes to use as the identity.
-func (o *Ldapattributes) GetID() (value []string, ok bool) {
-	ok = o != nil && o.id != nil
+// The amount of memory provisioned and used in the cluster.
+func (o *ClusterMetrics) GetMemory() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.memory != nil
 	if ok {
-		value = o.id
+		value = o.memory
 	}
 	return
 }
 
-// Name returns the value of the 'name' attribute, or
+// Storage returns the value of the 'storage' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// List of attributes to use as the display name.
-func (o *Ldapattributes) Name() []string {
+// The amount of storage provisioned and used in the cluster.
+//
+// WARNING: This isn't currently populated.
+func (o *ClusterMetrics) Storage() *ClusterMetric {
 	if o == nil {
 		return nil
 	}
-	return o.name
+	return o.storage
 }
 
-// GetName returns the value of the 'name' attribute and
+// GetStorage returns the value of the 'storage' attribute and
 // a flag indicating if the attribute has a value.
 //
-// List of attributes to use as the display name.
-func (o *Ldapattributes) GetName() (value []string, ok bool) {
-	ok = o != nil && o.name != nil
+// The amount of storage provisioned and used in the cluster.
+//
+// WARNING: This isn't currently populated.
+func (o *ClusterMetrics) GetStorage() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.storage != nil
 	if ok {
-		value = o.name
+		value = o.storage
 	}
 	return
 }
 
-// PreferredUsername returns the value of the 'preferred_username' attribute, or
+// Nodes returns the value of the 'nodes' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// List of attributes to use as the preferred user name when provisioning a user.
-func (o *Ldapattributes) PreferredUsername() []string {
+// The number of nodes provisioned for the cluster.
+func (o *ClusterMetrics) Nodes() *ClusterNodes {
 	if o == nil {
 		return nil
 	}
-	return o.preferredUsername
+	return o.nodes
 }
 
-// GetPreferredUsername returns the value of the 'preferred_username' attribute and
+// GetNodes returns the value of the 'nodes' attribute and
 // a flag indicating if the attribute has a value.
 //
-// List of attributes to use as the preferred user name when provisioning a user.
-func (o *Ldapattributes) GetPreferredUsername() (value []string, ok bool) {
-	ok = o != nil && o.preferredUsername != nil
+// The number of nodes provisioned for the cluster.
+func (o *ClusterMetrics) GetNodes() (value *ClusterNodes, ok bool) {
+	ok = o != nil && o.nodes != nil
 	if ok {
-		value = o.preferredUsername
+		value = o.nodes
 	}
 	return
 }
 
-// LdapattributesList is a list of values of the 'ldapattributes' type.
-type LdapattributesList struct {
-	items []*Ldapattributes
+// ClusterMetricsList is a list of values of the 'cluster_metrics' type.
+type ClusterMetricsList struct {
+	items []*ClusterMetrics
 }
 
 // Len returns the length of the list.
-func (l *LdapattributesList) Len() int {
+func (l *ClusterMetricsList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -144,7 +148,7 @@ func (l *LdapattributesList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *LdapattributesList) Empty() bool {
+func (l *ClusterMetricsList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
@@ -154,12 +158,12 @@ func (l *LdapattributesList) Empty() bool {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *LdapattributesList) Slice() []*Ldapattributes {
-	var slice []*Ldapattributes
+func (l *ClusterMetricsList) Slice() []*ClusterMetrics {
+	var slice []*ClusterMetrics
 	if l == nil {
-		slice = make([]*Ldapattributes, 0)
+		slice = make([]*ClusterMetrics, 0)
 	} else {
-		slice = make([]*Ldapattributes, len(l.items))
+		slice = make([]*ClusterMetrics, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -168,7 +172,7 @@ func (l *LdapattributesList) Slice() []*Ldapattributes {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *LdapattributesList) Each(f func(item *Ldapattributes) bool) {
+func (l *ClusterMetricsList) Each(f func(item *ClusterMetrics) bool) {
 	if l == nil {
 		return
 	}
@@ -182,7 +186,7 @@ func (l *LdapattributesList) Each(f func(item *Ldapattributes) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *LdapattributesList) Range(f func(index int, item *Ldapattributes) bool) {
+func (l *ClusterMetricsList) Range(f func(index int, item *ClusterMetrics) bool) {
 	if l == nil {
 		return
 	}

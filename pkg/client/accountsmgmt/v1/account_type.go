@@ -98,6 +98,18 @@ func (o *Account) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *Account) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.name == nil &&
+		o.username == nil &&
+		o.email == nil &&
+		o.banned == nil &&
+		o.banDescription == nil &&
+		o.organization == nil &&
+		true)
+}
+
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -295,6 +307,11 @@ func (l *AccountList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *AccountList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

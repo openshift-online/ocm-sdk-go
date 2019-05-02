@@ -90,9 +90,6 @@ type Cluster struct {
 	properties        map[string]string
 	state             *ClusterState
 	managed           *bool
-	memory            *ClusterMetric
-	cpu               *ClusterMetric
-	storage           *ClusterMetric
 	externalID        *string
 	aws               *AWS
 	network           *Network
@@ -104,6 +101,7 @@ type Cluster struct {
 	creator           *string
 	version           *Version
 	identityProviders *IdentityProviderList
+	metrics           *ClusterMetrics
 }
 
 // Kind returns the name of the type of the object.
@@ -156,6 +154,36 @@ func (o *Cluster) GetHREF() (value string, ok bool) {
 		value = *o.href
 	}
 	return
+}
+
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *Cluster) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.name == nil &&
+		o.flavour == nil &&
+		o.console == nil &&
+		o.multiAZ == nil &&
+		o.nodes == nil &&
+		o.api == nil &&
+		o.region == nil &&
+		o.displayName == nil &&
+		o.dns == nil &&
+		o.properties == nil &&
+		o.state == nil &&
+		o.managed == nil &&
+		o.externalID == nil &&
+		o.aws == nil &&
+		o.network == nil &&
+		o.creationTimestamp == nil &&
+		o.cloudProvider == nil &&
+		o.openshiftVersion == nil &&
+		o.subscription == nil &&
+		o.groups.Empty() &&
+		o.creator == nil &&
+		o.version == nil &&
+		o.identityProviders.Empty() &&
+		o.metrics == nil &&
+		true)
 }
 
 // Name returns the value of the 'name' attribute, or
@@ -444,75 +472,6 @@ func (o *Cluster) GetManaged() (value bool, ok bool) {
 	return
 }
 
-// Memory returns the value of the 'memory' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Information about the memory of the cluster.
-func (o *Cluster) Memory() *ClusterMetric {
-	if o == nil {
-		return nil
-	}
-	return o.memory
-}
-
-// GetMemory returns the value of the 'memory' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Information about the memory of the cluster.
-func (o *Cluster) GetMemory() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.memory != nil
-	if ok {
-		value = o.memory
-	}
-	return
-}
-
-// CPU returns the value of the 'CPU' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Information about the CPU of the cluster.
-func (o *Cluster) CPU() *ClusterMetric {
-	if o == nil {
-		return nil
-	}
-	return o.cpu
-}
-
-// GetCPU returns the value of the 'CPU' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Information about the CPU of the cluster.
-func (o *Cluster) GetCPU() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.cpu != nil
-	if ok {
-		value = o.cpu
-	}
-	return
-}
-
-// Storage returns the value of the 'storage' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Information about the storage of the cluster.
-func (o *Cluster) Storage() *ClusterMetric {
-	if o == nil {
-		return nil
-	}
-	return o.storage
-}
-
-// GetStorage returns the value of the 'storage' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Information about the storage of the cluster.
-func (o *Cluster) GetStorage() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.storage != nil
-	if ok {
-		value = o.storage
-	}
-	return
-}
-
 // ExternalID returns the value of the 'external_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -780,6 +739,33 @@ func (o *Cluster) GetIdentityProviders() (value *IdentityProviderList, ok bool) 
 	return
 }
 
+// Metrics returns the value of the 'metrics' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Cluster metrics received from telemetry.
+//
+// When provisioning a cluster this will be ignored.
+func (o *Cluster) Metrics() *ClusterMetrics {
+	if o == nil {
+		return nil
+	}
+	return o.metrics
+}
+
+// GetMetrics returns the value of the 'metrics' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Cluster metrics received from telemetry.
+//
+// When provisioning a cluster this will be ignored.
+func (o *Cluster) GetMetrics() (value *ClusterMetrics, ok bool) {
+	ok = o != nil && o.metrics != nil
+	if ok {
+		value = o.metrics
+	}
+	return
+}
+
 // ClusterListKind is the name of the type used to represent list of
 // objects of type 'cluster'.
 const ClusterListKind = "ClusterList"
@@ -839,6 +825,11 @@ func (l *ClusterList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *ClusterList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

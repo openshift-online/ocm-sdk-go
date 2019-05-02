@@ -101,13 +101,13 @@ func (r *ClustersListRequest) Context(value context.Context) *ClustersListReques
 	return r
 }
 
-// Timeout sets a timeout for the complete request.
+// Timeout sets a timeout for the completete request.
 func (r *ClustersListRequest) Timeout(value time.Duration) *ClustersListRequest {
 	helpers.SetTimeout(&r.context, &r.cancel, value)
 	return r
 }
 
-// Deadline sets a deadline for the complete request.
+// Deadline sets a deadline for the completete request.
 func (r *ClustersListRequest) Deadline(value time.Time) *ClustersListRequest {
 	helpers.SetDeadline(&r.context, &r.cancel, value)
 	return r

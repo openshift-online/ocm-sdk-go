@@ -27,6 +27,13 @@ type ClusterRegistrationRequest struct {
 	authorizationToken *string
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *ClusterRegistrationRequest) Empty() bool {
+	return o == nil || (o.clusterID == nil &&
+		o.authorizationToken == nil &&
+		true)
+}
+
 // ClusterID returns the value of the 'cluster_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -84,6 +91,11 @@ func (l *ClusterRegistrationRequestList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *ClusterRegistrationRequestList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

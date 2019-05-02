@@ -95,6 +95,15 @@ func (o *CloudRegion) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *CloudRegion) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.name == nil &&
+		o.displayName == nil &&
+		o.cloudProvider == nil &&
+		true)
+}
+
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -229,6 +238,11 @@ func (l *CloudRegionList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *CloudRegionList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

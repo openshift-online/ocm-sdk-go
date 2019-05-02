@@ -93,6 +93,13 @@ func (o *Log) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *Log) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.content == nil &&
+		true)
+}
+
 // Content returns the value of the 'content' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -175,6 +182,11 @@ func (l *LogList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *LogList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

@@ -44,9 +44,6 @@ type clusterData struct {
 	Properties        map[string]string             "json:\"properties,omitempty\""
 	State             *ClusterState                 "json:\"state,omitempty\""
 	Managed           *bool                         "json:\"managed,omitempty\""
-	Memory            *clusterMetricData            "json:\"memory,omitempty\""
-	CPU               *clusterMetricData            "json:\"cpu,omitempty\""
-	Storage           *clusterMetricData            "json:\"storage,omitempty\""
 	ExternalID        *string                       "json:\"external_id,omitempty\""
 	AWS               *awsData                      "json:\"aws,omitempty\""
 	Network           *networkData                  "json:\"network,omitempty\""
@@ -58,6 +55,7 @@ type clusterData struct {
 	Creator           *string                       "json:\"creator,omitempty\""
 	Version           *versionData                  "json:\"version,omitempty\""
 	IdentityProviders *identityProviderListLinkData "json:\"identity_providers,omitempty\""
+	Metrics           *clusterMetricsData           "json:\"metrics,omitempty\""
 }
 
 // MarshalCluster writes a value of the 'cluster' to the given target,
@@ -119,18 +117,6 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 	data.Properties = o.properties
 	data.State = o.state
 	data.Managed = o.managed
-	data.Memory, err = o.memory.wrap()
-	if err != nil {
-		return
-	}
-	data.CPU, err = o.cpu.wrap()
-	if err != nil {
-		return
-	}
-	data.Storage, err = o.storage.wrap()
-	if err != nil {
-		return
-	}
 	data.ExternalID = o.externalID
 	data.AWS, err = o.aws.wrap()
 	if err != nil {
@@ -160,6 +146,10 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 		return
 	}
 	data.IdentityProviders, err = o.identityProviders.wrapLink()
+	if err != nil {
+		return
+	}
+	data.Metrics, err = o.metrics.wrap()
 	if err != nil {
 		return
 	}
@@ -237,18 +227,6 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 	object.properties = d.Properties
 	object.state = d.State
 	object.managed = d.Managed
-	object.memory, err = d.Memory.unwrap()
-	if err != nil {
-		return
-	}
-	object.cpu, err = d.CPU.unwrap()
-	if err != nil {
-		return
-	}
-	object.storage, err = d.Storage.unwrap()
-	if err != nil {
-		return
-	}
 	object.externalID = d.ExternalID
 	object.aws, err = d.AWS.unwrap()
 	if err != nil {
@@ -278,6 +256,10 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 		return
 	}
 	object.identityProviders, err = d.IdentityProviders.unwrapLink()
+	if err != nil {
+		return
+	}
+	object.metrics, err = d.Metrics.unwrap()
 	if err != nil {
 		return
 	}

@@ -26,6 +26,12 @@ type DNS struct {
 	baseDomain *string
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *DNS) Empty() bool {
+	return o == nil || (o.baseDomain == nil &&
+		true)
+}
+
 // BaseDomain returns the value of the 'base_domain' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -146,6 +152,11 @@ func (l *DNSList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *DNSList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a

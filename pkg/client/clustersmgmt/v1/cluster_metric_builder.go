@@ -19,18 +19,32 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
+import (
+	time "time"
+)
+
 // ClusterMetricBuilder contains the data and logic needed to build 'cluster_metric' objects.
 //
 // Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
 // a cluster.
 type ClusterMetricBuilder struct {
-	total *ValueBuilder
-	used  *ValueBuilder
+	updatedTimestamp *time.Time
+	total            *ValueBuilder
+	used             *ValueBuilder
 }
 
 // NewClusterMetric creates a new builder of 'cluster_metric' objects.
 func NewClusterMetric() *ClusterMetricBuilder {
 	return new(ClusterMetricBuilder)
+}
+
+// UpdatedTimestamp sets the value of the 'updated_timestamp' attribute
+// to the given value.
+//
+//
+func (b *ClusterMetricBuilder) UpdatedTimestamp(value time.Time) *ClusterMetricBuilder {
+	b.updatedTimestamp = &value
+	return b
 }
 
 // Total sets the value of the 'total' attribute
@@ -88,6 +102,9 @@ func (b *ClusterMetricBuilder) Used(value *ValueBuilder) *ClusterMetricBuilder {
 // Build creates a 'cluster_metric' object using the configuration stored in the builder.
 func (b *ClusterMetricBuilder) Build() (object *ClusterMetric, err error) {
 	object = new(ClusterMetric)
+	if b.updatedTimestamp != nil {
+		object.updatedTimestamp = b.updatedTimestamp
+	}
 	if b.total != nil {
 		object.total, err = b.total.Build()
 		if err != nil {

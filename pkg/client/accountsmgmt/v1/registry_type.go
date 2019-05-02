@@ -98,6 +98,18 @@ func (o *Registry) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Empty returns true if the object is empty, i.e. no attribute has a value.
+func (o *Registry) Empty() bool {
+	return o == nil || (o.id == nil &&
+		o.name == nil &&
+		o.url == nil &&
+		o.teamName == nil &&
+		o.orgName == nil &&
+		o.type_ == nil &&
+		o.cloudAlias == nil &&
+		true)
+}
+
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -295,6 +307,11 @@ func (l *RegistryList) Len() int {
 		return 0
 	}
 	return len(l.items)
+}
+
+// Empty returns true if the list is empty.
+func (l *RegistryList) Empty() bool {
+	return l == nil || len(l.items) == 0
 }
 
 // Slice returns an slice containing the items of the list. The returned slice is a
