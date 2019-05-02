@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.8 May 2 2019
+
+- Moved basic cluster metrics to the `metrics` attribute.
+
+- Added `Empty` method to lists and struct typess.
+
 == 0.1.7 May 1 2019
 
 - Always close connections used to request access tokens.
