@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.9 May 3 2019
+
+- Added cluster credentials resource.
+
 == 0.1.8 May 2 2019
 
 - Moved basic cluster metrics to the `metrics` attribute.
