@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.10 May 8 2019
+
+- Improved support for contexts, adding the `BuildContext`, `TokensContext` and
+  `SendContext` methods.
+
+IMPORTANT: This version breaks backwards compatibility in the `Logger`
+interface, as all the methods require now a first `ctx` parameter.
+
 == 0.1.9 May 3 2019
 
 - Added cluster credentials resource.
