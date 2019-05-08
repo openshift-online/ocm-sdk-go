@@ -19,6 +19,7 @@ limitations under the License.
 package client
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
@@ -241,7 +242,17 @@ func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 // Build uses the configuration stored in the builder to create a new connection. The builder can be
 // reused to create multiple connections with the same configuration. It returns a pointer to the
 // connection, and an error if something fails when trying to create it.
+//
+// This operation is potentially lengthy, as it may require network communications. Consider using a
+// context and the BuildContext method.
 func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
+	return b.BuildContext(context.Background())
+}
+
+// BuildContext uses the configuration stored in the builder to create a new connection. The builder
+// can be reused to create multiple connections with the same configuration. It returns a pointer to
+// the connection, and an error if something fails when trying to create it.
+func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Connection, err error) {
 	// Check that we have some kind of credentials or a token:
 	haveTokens := len(b.tokens) > 0
 	havePassword := b.user != "" && b.password != ""
@@ -306,7 +317,7 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 			err = fmt.Errorf("can't create default logger: %v", err)
 			return
 		}
-		logger.Debug("Logger wasn't provided, will use Go log")
+		logger.Debug(ctx, "Logger wasn't provided, will use Go log")
 	}
 
 	// Set the default authentication details, if needed:
@@ -314,6 +325,7 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 	if rawTokenURL == "" {
 		rawTokenURL = DefaultTokenURL
 		logger.Debug(
+			ctx,
 			"OpenID token URL wasn't provided, will use '%s'",
 			rawTokenURL,
 		)
@@ -327,6 +339,7 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 	if clientID == "" {
 		clientID = DefaultClientID
 		logger.Debug(
+			ctx,
 			"OpenID client identifier wasn't provided, will use '%s'",
 			clientID,
 		)
@@ -335,6 +348,7 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 	if clientSecret == "" {
 		clientSecret = DefaultClientSecret
 		logger.Debug(
+			ctx,
 			"OpenID client secret wasn't provided, will use '%s'",
 			clientSecret,
 		)
@@ -355,7 +369,7 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 	rawAPIURL := b.apiURL
 	if rawAPIURL == "" {
 		rawAPIURL = DefaultURL
-		logger.Debug("URL wasn't provided, will use the default '%s'", rawAPIURL)
+		logger.Debug(ctx, "URL wasn't provided, will use the default '%s'", rawAPIURL)
 	}
 	apiURL, err := url.Parse(rawAPIURL)
 	if err != nil {

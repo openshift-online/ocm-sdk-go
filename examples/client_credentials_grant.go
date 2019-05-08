@@ -20,6 +20,7 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -28,6 +29,9 @@ import (
 )
 
 func main() {
+	// Create a context:
+	ctx := context.Background()
+
 	// Create a logger that has the debug level enabled:
 	logger, err := client.NewGoLoggerBuilder().
 		Debug(true).
@@ -41,7 +45,7 @@ func main() {
 	connection, err := client.NewConnectionBuilder().
 		Logger(logger).
 		Client("myclientid", "myclientsecret").
-		Build()
+		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
 		os.Exit(1)
@@ -56,7 +60,7 @@ func main() {
 		Search("name like 'my%'").
 		Page(1).
 		Size(10).
-		Send()
+		SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't retrieve clusters: %v\n", err)
 		os.Exit(1)

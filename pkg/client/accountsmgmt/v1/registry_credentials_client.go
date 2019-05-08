@@ -28,7 +28,6 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -83,31 +82,11 @@ func (c *RegistryCredentialsClient) RegistryCredential(id string) *RegistryCrede
 type RegistryCredentialsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	page      *int
 	size      *int
 	total     *int
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RegistryCredentialsListRequest) Context(value context.Context) *RegistryCredentialsListRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RegistryCredentialsListRequest) Timeout(value time.Duration) *RegistryCredentialsListRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RegistryCredentialsListRequest) Deadline(value time.Time) *RegistryCredentialsListRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -152,7 +131,16 @@ func (r *RegistryCredentialsListRequest) Total(value int) *RegistryCredentialsLi
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RegistryCredentialsListRequest) Send() (result *RegistryCredentialsListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RegistryCredentialsListRequest) SendContext(ctx context.Context) (result *RegistryCredentialsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -172,6 +160,9 @@ func (r *RegistryCredentialsListRequest) Send() (result *RegistryCredentialsList
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -297,29 +288,9 @@ type registryCredentialsListResponseData struct {
 type RegistryCredentialsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      *RegistryCredential
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RegistryCredentialsAddRequest) Context(value context.Context) *RegistryCredentialsAddRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RegistryCredentialsAddRequest) Timeout(value time.Duration) *RegistryCredentialsAddRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RegistryCredentialsAddRequest) Deadline(value time.Time) *RegistryCredentialsAddRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -343,7 +314,16 @@ func (r *RegistryCredentialsAddRequest) Body(value *RegistryCredential) *Registr
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RegistryCredentialsAddRequest) Send() (result *RegistryCredentialsAddResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result *RegistryCredentialsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -360,6 +340,9 @@ func (r *RegistryCredentialsAddRequest) Send() (result *RegistryCredentialsAddRe
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

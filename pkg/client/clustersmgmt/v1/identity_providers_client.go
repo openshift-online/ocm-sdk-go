@@ -28,7 +28,6 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -83,28 +82,8 @@ func (c *IdentityProvidersClient) IdentityProvider(id string) *IdentityProviderC
 type IdentityProvidersListRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
-}
-
-// Context sets the context that will be used to send the request.
-func (r *IdentityProvidersListRequest) Context(value context.Context) *IdentityProvidersListRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *IdentityProvidersListRequest) Timeout(value time.Duration) *IdentityProvidersListRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *IdentityProvidersListRequest) Deadline(value time.Time) *IdentityProvidersListRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -120,7 +99,16 @@ func (r *IdentityProvidersListRequest) Header(name string, value interface{}) *I
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *IdentityProvidersListRequest) Send() (result *IdentityProvidersListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *IdentityProvidersListRequest) SendContext(ctx context.Context) (result *IdentityProvidersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -131,6 +119,9 @@ func (r *IdentityProvidersListRequest) Send() (result *IdentityProvidersListResp
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -251,29 +242,9 @@ type identityProvidersListResponseData struct {
 type IdentityProvidersAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      *IdentityProvider
-}
-
-// Context sets the context that will be used to send the request.
-func (r *IdentityProvidersAddRequest) Context(value context.Context) *IdentityProvidersAddRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *IdentityProvidersAddRequest) Timeout(value time.Duration) *IdentityProvidersAddRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *IdentityProvidersAddRequest) Deadline(value time.Time) *IdentityProvidersAddRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -297,7 +268,16 @@ func (r *IdentityProvidersAddRequest) Body(value *IdentityProvider) *IdentityPro
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *IdentityProvidersAddRequest) Send() (result *IdentityProvidersAddResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *IdentityProvidersAddRequest) SendContext(ctx context.Context) (result *IdentityProvidersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -314,6 +294,9 @@ func (r *IdentityProvidersAddRequest) Send() (result *IdentityProvidersAddRespon
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

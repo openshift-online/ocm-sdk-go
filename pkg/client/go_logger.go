@@ -19,6 +19,7 @@ limitations under the License.
 package client
 
 import (
+	"context"
 	"fmt"
 	"log"
 )
@@ -114,7 +115,7 @@ func (l *GoLogger) ErrorEnabled() bool {
 
 // Debug sends to the log a debug message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *GoLogger) Debug(format string, args ...interface{}) {
+func (l *GoLogger) Debug(ctx context.Context, format string, args ...interface{}) {
 	if l.debugEnabled {
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104
@@ -124,7 +125,7 @@ func (l *GoLogger) Debug(format string, args ...interface{}) {
 
 // Info sends to the log an information message formatted using the fmt.Sprintf function and the
 // given format and arguments.
-func (l *GoLogger) Info(format string, args ...interface{}) {
+func (l *GoLogger) Info(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104
@@ -134,7 +135,7 @@ func (l *GoLogger) Info(format string, args ...interface{}) {
 
 // Warn sends to the log a warning message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *GoLogger) Warn(format string, args ...interface{}) {
+func (l *GoLogger) Warn(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104
@@ -144,7 +145,7 @@ func (l *GoLogger) Warn(format string, args ...interface{}) {
 
 // Error sends to the log an error message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *GoLogger) Error(format string, args ...interface{}) {
+func (l *GoLogger) Error(ctx context.Context, format string, args ...interface{}) {
 	if l.errorEnabled {
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104

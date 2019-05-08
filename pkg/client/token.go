@@ -39,25 +39,20 @@ import (
 // necessary to request a new token because it wasn't requested yet, or because it is expired, this
 // method will do it and will return an error if it fails.
 //
-// The context is optional, and at most one is allowed.
-func (c *Connection) Tokens(ctxs ...context.Context) (access, refresh string, err error) {
+// This operation is potentially lengthy, as it may require network communication. Consider using a
+// context and the TokensContext method.
+func (c *Connection) Tokens() (access, refresh string, err error) {
+	return c.TokensContext(context.Background())
+}
+
+// TokensContext returns the access and refresh tokens that is currently in use by the connection.
+// If it is necessary to request a new token because it wasn't requested yet, or because it is
+// expired, this method will do it and will return an error if it fails.
+func (c *Connection) TokensContext(ctx context.Context) (access, refresh string, err error) {
 	// We need to make sure that this method isn't execute concurrently, as we will be updating
 	// multiple attributes of the connection:
 	c.tokenMutex.Lock()
 	defer c.tokenMutex.Unlock()
-
-	// Check that there is at most one context:
-	if len(ctxs) > 1 {
-		err = fmt.Errorf(
-			"at most one context is allowed, but %d have been provided",
-			len(ctxs),
-		)
-		return
-	}
-	var ctx context.Context
-	if len(ctxs) > 0 {
-		ctx = ctxs[0]
-	}
 
 	// If the access token is expired, then check the refresh token and either refresh it or
 	// request a new one:
@@ -65,7 +60,7 @@ func (c *Connection) Tokens(ctxs ...context.Context) (access, refresh string, er
 	var accessExpires bool
 	var accessLeft time.Duration
 	if c.accessToken != nil {
-		accessExpires, accessLeft, err = c.tokenExpiry(c.accessToken, now)
+		accessExpires, accessLeft, err = c.tokenExpiry(ctx, c.accessToken, now)
 		if err != nil {
 			return
 		}
@@ -73,24 +68,24 @@ func (c *Connection) Tokens(ctxs ...context.Context) (access, refresh string, er
 	var refreshExpires bool
 	var refreshLeft time.Duration
 	if c.refreshToken != nil {
-		refreshExpires, refreshLeft, err = c.tokenExpiry(c.refreshToken, now)
+		refreshExpires, refreshLeft, err = c.tokenExpiry(ctx, c.refreshToken, now)
 		if err != nil {
 			return
 		}
 	}
 	if c.logger.DebugEnabled() {
-		c.debugExpiry("Bearer", c.accessToken, accessExpires, accessLeft)
-		c.debugExpiry("Refresh", c.refreshToken, refreshExpires, refreshLeft)
+		c.debugExpiry(ctx, "Bearer", c.accessToken, accessExpires, accessLeft)
+		c.debugExpiry(ctx, "Refresh", c.refreshToken, refreshExpires, refreshLeft)
 	}
 	if c.accessToken == nil || (accessExpires && accessLeft < 5*time.Second) {
 		if c.refreshToken == nil || (refreshExpires && refreshLeft < 10*time.Second) {
-			c.logger.Debug("Requesting new token")
+			c.logger.Debug(ctx, "Requesting new token")
 			err = c.sendRequestTokenForm(ctx)
 			if err != nil {
 				return
 			}
 		} else {
-			c.logger.Debug("Refreshing token")
+			c.logger.Debug(ctx, "Refreshing token")
 			err = c.sendRefreshTokenForm(ctx)
 			if err != nil {
 				return
@@ -178,7 +173,7 @@ func (c *Connection) sendTokenForm(ctx context.Context, form url.Values) error {
 				}
 			}
 		}
-		c.dumpRequest(request, censoredBody.Bytes())
+		c.dumpRequest(ctx, request, censoredBody.Bytes())
 	}
 	response, err := c.client.Do(request)
 	if err != nil {
@@ -192,7 +187,7 @@ func (c *Connection) sendTokenForm(ctx context.Context, form url.Values) error {
 		return fmt.Errorf("can't read response: %v", err)
 	}
 	if c.logger.DebugEnabled() {
-		c.dumpResponse(response, body)
+		c.dumpResponse(ctx, response, body)
 	}
 
 	// Check the response status and content type:
@@ -243,8 +238,8 @@ func (c *Connection) sendTokenForm(ctx context.Context, form url.Values) error {
 }
 
 // tokenExpiry determines if the given token expires, and the time that remains till it expires.
-func (c *Connection) tokenExpiry(token *jwt.Token, now time.Time) (expires bool,
-	left time.Duration, err error) {
+func (c *Connection) tokenExpiry(ctx context.Context, token *jwt.Token,
+	now time.Time) (expires bool, left time.Duration, err error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		err = fmt.Errorf("expected map claims bug got %T", claims)
@@ -271,19 +266,19 @@ func (c *Connection) tokenExpiry(token *jwt.Token, now time.Time) (expires bool,
 }
 
 // debugExpiry sends to the log information about the expiration of the given token.
-func (c *Connection) debugExpiry(typ string, token *jwt.Token, expires bool,
+func (c *Connection) debugExpiry(ctx context.Context, typ string, token *jwt.Token, expires bool,
 	left time.Duration) {
 	if token != nil {
 		if expires {
 			if left < 0 {
-				c.logger.Debug("%s token expired %s ago", typ, -left)
+				c.logger.Debug(ctx, "%s token expired %s ago", typ, -left)
 			} else if left > 0 {
-				c.logger.Debug("%s token expires in %s", typ, left)
+				c.logger.Debug(ctx, "%s token expires in %s", typ, left)
 			} else {
-				c.logger.Debug("%s token expired just now", typ)
+				c.logger.Debug(ctx, "%s token expired just now", typ)
 			}
 		}
 	} else {
-		c.logger.Debug("%s token isn't available", typ)
+		c.logger.Debug(ctx, "%s token isn't available", typ)
 	}
 }

@@ -25,7 +25,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/internal"
 )
@@ -35,29 +34,9 @@ type Request struct {
 	transport http.RoundTripper
 	method    string
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      []byte
-}
-
-// Context sets the context that will be used to control the lifetime of the request.
-func (r *Request) Context(value context.Context) *Request {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *Request) Timeout(value time.Duration) *Request {
-	internal.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *Request) Deadline(value time.Time) *Request {
-	internal.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Path defines the request path, for example `/api/clusters_mgmt/v1/lusters`. This is mandatory; an
@@ -100,7 +79,18 @@ func (r *Request) String(value string) *Request {
 // something fails. Note that any HTTP status code returned by the server is considered a valid
 // response, and will not be translated into an error. It is up to the caller to check the status
 // code and handle it.
+//
+// This operation is potentially lengthy, as it requires network communication. Consider using a
+// context and the SendContext method.
 func (r *Request) Send() (result *Response, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request to the server and returns the corresponding response, or an error
+// if something fails. Note that any HTTP status code returned by the server is considered a valid
+// response, and will not be translated into an error. It is up to the caller to check the status
+// code and handle it.
+func (r *Request) SendContext(ctx context.Context) (result *Response, err error) {
 	query := internal.CopyQuery(r.query)
 	header := internal.CopyHeader(r.header)
 	uri := &url.URL{
@@ -116,6 +106,9 @@ func (r *Request) Send() (result *Response, err error) {
 		URL:    uri,
 		Header: header,
 		Body:   body,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

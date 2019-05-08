@@ -19,6 +19,7 @@ package main
 // This example shows how to delete a cluster.
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -26,6 +27,9 @@ import (
 )
 
 func main() {
+	// Create a context:
+	ctx := context.Background()
+
 	// Create a logger that has the debug level enabled:
 	logger, err := client.NewGoLoggerBuilder().
 		Debug(true).
@@ -39,7 +43,7 @@ func main() {
 	connection, err := client.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
-		Build()
+		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
 	}
@@ -54,7 +58,7 @@ func main() {
 	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
 
 	// Send the request to delete the cluster:
-	_, err = resource.Delete().Send()
+	_, err = resource.Delete().SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't delete cluster: %v\n", err)
 	}

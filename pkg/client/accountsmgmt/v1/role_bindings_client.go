@@ -28,7 +28,6 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -83,31 +82,11 @@ func (c *RoleBindingsClient) RoleBinding(id string) *RoleBindingClient {
 type RoleBindingsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	page      *int
 	size      *int
 	total     *int
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RoleBindingsListRequest) Context(value context.Context) *RoleBindingsListRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RoleBindingsListRequest) Timeout(value time.Duration) *RoleBindingsListRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RoleBindingsListRequest) Deadline(value time.Time) *RoleBindingsListRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -152,7 +131,16 @@ func (r *RoleBindingsListRequest) Total(value int) *RoleBindingsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RoleBindingsListRequest) Send() (result *RoleBindingsListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleBindingsListRequest) SendContext(ctx context.Context) (result *RoleBindingsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -172,6 +160,9 @@ func (r *RoleBindingsListRequest) Send() (result *RoleBindingsListResponse, err 
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -297,29 +288,9 @@ type roleBindingsListResponseData struct {
 type RoleBindingsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      *RoleBinding
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RoleBindingsAddRequest) Context(value context.Context) *RoleBindingsAddRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RoleBindingsAddRequest) Timeout(value time.Duration) *RoleBindingsAddRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RoleBindingsAddRequest) Deadline(value time.Time) *RoleBindingsAddRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -343,7 +314,16 @@ func (r *RoleBindingsAddRequest) Body(value *RoleBinding) *RoleBindingsAddReques
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RoleBindingsAddRequest) Send() (result *RoleBindingsAddResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleBindingsAddRequest) SendContext(ctx context.Context) (result *RoleBindingsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -360,6 +340,9 @@ func (r *RoleBindingsAddRequest) Send() (result *RoleBindingsAddResponse, err er
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

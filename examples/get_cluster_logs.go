@@ -19,6 +19,7 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -28,6 +29,9 @@ import (
 )
 
 func main() {
+	// Create a context:
+	ctx := context.Background()
+
 	// Create a logger that has the debug level enabled:
 	logger, err := client.NewGoLoggerBuilder().
 		Debug(true).
@@ -41,7 +45,7 @@ func main() {
 	connection, err := client.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
-		Build()
+		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
 		os.Exit(1)
@@ -57,7 +61,7 @@ func main() {
 	logsCollection := clustersResource.Cluster("1Jam7Ejgpm7AbZshbgaA9TsM1SQ").Logs()
 
 	// Send the request to retrieve the collection of logs:
-	listResponse, err := logsCollection.List().Send()
+	listResponse, err := logsCollection.List().SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't retrieve list of logs: %v\n", err)
 		os.Exit(1)
@@ -69,7 +73,7 @@ func main() {
 	listResponse.Items().Each(func(log *v1.Log) bool {
 		logID := log.ID()
 		logResource := logsCollection.Log(logID)
-		getResponse, err := logResource.Get().Send()
+		getResponse, err := logResource.Get().SendContext(ctx)
 		if err != nil {
 			fmt.Fprintf(
 				os.Stderr,

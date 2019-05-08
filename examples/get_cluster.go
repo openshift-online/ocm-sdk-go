@@ -19,20 +19,24 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client"
 )
 
 func main() {
+	// Create a context:
+	ctx := context.Background()
+
 	// Create a logger that has the debug level enabled:
 	logger, err := client.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {
-		log.Fatalf("Can't build logger: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Create the connection, and remember to close it:
@@ -42,7 +46,7 @@ func main() {
 		Tokens(token).
 		Build()
 	if err != nil {
-		logger.Error("Can't build client: %v", err)
+		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
 		os.Exit(1)
 	}
 	defer connection.Close()
@@ -56,9 +60,9 @@ func main() {
 	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
 
 	// Send the request to retrieve the cluster:
-	response, err := resource.Get().Send()
+	response, err := resource.Get().SendContext(ctx)
 	if err != nil {
-		logger.Error("Can't retrieve cluster: %s", err)
+		fmt.Fprintf(os.Stderr, "Can't retrieve cluster: %v\n", err)
 		os.Exit(1)
 	}
 

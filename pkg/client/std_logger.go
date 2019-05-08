@@ -19,6 +19,7 @@ limitations under the License.
 package client
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -134,7 +135,7 @@ func (l *StdLogger) ErrorEnabled() bool {
 
 // Debug sends to the log a debug message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *StdLogger) Debug(format string, args ...interface{}) {
+func (l *StdLogger) Debug(ctx context.Context, format string, args ...interface{}) {
 	if l.debugEnabled {
 		fmt.Fprintf(l.outStream, format+"\n", args...)
 	}
@@ -142,7 +143,7 @@ func (l *StdLogger) Debug(format string, args ...interface{}) {
 
 // Info sends to the log an information message formatted using the fmt.Sprintf function and the
 // given format and arguments.
-func (l *StdLogger) Info(format string, args ...interface{}) {
+func (l *StdLogger) Info(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
 		fmt.Fprintf(l.outStream, format+"\n", args...)
 	}
@@ -150,7 +151,7 @@ func (l *StdLogger) Info(format string, args ...interface{}) {
 
 // Warn sends to the log a warning message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *StdLogger) Warn(format string, args ...interface{}) {
+func (l *StdLogger) Warn(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
 		fmt.Fprintf(l.outStream, format+"\n", args...)
 	}
@@ -158,7 +159,7 @@ func (l *StdLogger) Warn(format string, args ...interface{}) {
 
 // Error sends to the log an error message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *StdLogger) Error(format string, args ...interface{}) {
+func (l *StdLogger) Error(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
 		fmt.Fprintf(l.errStream, format+"\n", args...)
 	}

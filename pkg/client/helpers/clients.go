@@ -20,11 +20,9 @@ limitations under the License.
 package helpers // github.com/openshift-online/uhc-sdk-go/pkg/client/helpers
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 )
 
 // AddValue creates the given set of query parameters if needed, an then adds
@@ -77,20 +75,4 @@ func CopyValues(values []string) []string {
 	result := make([]string, len(values))
 	copy(result, values)
 	return result
-}
-
-// SetTimeout creates the given context, if needed, and sets the given timeout.
-func SetTimeout(ctx *context.Context, cancel *context.CancelFunc, timeout time.Duration) {
-	if *ctx == nil {
-		*ctx = context.Background()
-	}
-	*ctx, *cancel = context.WithTimeout(*ctx, timeout)
-}
-
-// SetDeadline creates the given context, if needed, and sets the given deadline.
-func SetDeadline(ctx *context.Context, cancel *context.CancelFunc, deadline time.Time) {
-	if *ctx == nil {
-		*ctx = context.Background()
-	}
-	*ctx, *cancel = context.WithDeadline(*ctx, deadline)
 }
