@@ -19,6 +19,7 @@ limitations under the License.
 package client
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/golang/glog"
@@ -128,7 +129,7 @@ func (l *GlogLogger) ErrorEnabled() bool {
 
 // Debug sends to the log a debug message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *GlogLogger) Debug(format string, args ...interface{}) {
+func (l *GlogLogger) Debug(ctx context.Context, format string, args ...interface{}) {
 	if glog.V(l.debugV) {
 		msg := fmt.Sprintf(format, args...)
 		glog.InfoDepth(1, msg)
@@ -137,7 +138,7 @@ func (l *GlogLogger) Debug(format string, args ...interface{}) {
 
 // Info sends to the log an information message formatted using the fmt.Sprintf function and the
 // given format and arguments.
-func (l *GlogLogger) Info(format string, args ...interface{}) {
+func (l *GlogLogger) Info(ctx context.Context, format string, args ...interface{}) {
 	if glog.V(l.infoV) {
 		msg := fmt.Sprintf(format, args...)
 		glog.InfoDepth(1, msg)
@@ -146,7 +147,7 @@ func (l *GlogLogger) Info(format string, args ...interface{}) {
 
 // Warn sends to the log a warning message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *GlogLogger) Warn(format string, args ...interface{}) {
+func (l *GlogLogger) Warn(ctx context.Context, format string, args ...interface{}) {
 	if glog.V(l.warnV) {
 		msg := fmt.Sprintf(format, args...)
 		glog.WarningDepth(1, msg)
@@ -155,7 +156,7 @@ func (l *GlogLogger) Warn(format string, args ...interface{}) {
 
 // Error sends to the log an error message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *GlogLogger) Error(format string, args ...interface{}) {
+func (l *GlogLogger) Error(ctx context.Context, format string, args ...interface{}) {
 	if glog.V(l.errorV) {
 		msg := fmt.Sprintf(format, args...)
 		glog.ErrorDepth(1, msg)

@@ -27,7 +27,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -65,29 +64,9 @@ func (c *ClusterAuthorizationsClient) Post() *ClusterAuthorizationsPostRequest {
 type ClusterAuthorizationsPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	request   *ClusterAuthorizationRequest
-}
-
-// Context sets the context that will be used to send the request.
-func (r *ClusterAuthorizationsPostRequest) Context(value context.Context) *ClusterAuthorizationsPostRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *ClusterAuthorizationsPostRequest) Timeout(value time.Duration) *ClusterAuthorizationsPostRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *ClusterAuthorizationsPostRequest) Deadline(value time.Time) *ClusterAuthorizationsPostRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -111,7 +90,16 @@ func (r *ClusterAuthorizationsPostRequest) Request(value *ClusterAuthorizationRe
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *ClusterAuthorizationsPostRequest) Send() (result *ClusterAuthorizationsPostResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ClusterAuthorizationsPostRequest) SendContext(ctx context.Context) (result *ClusterAuthorizationsPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -128,6 +116,9 @@ func (r *ClusterAuthorizationsPostRequest) Send() (result *ClusterAuthorizations
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

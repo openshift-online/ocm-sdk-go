@@ -18,9 +18,17 @@ limitations under the License.
 
 package client
 
+import (
+	"context"
+)
+
 // Logger is the interface that must be implemented by objects that are used for logging by the
 // client. By default the client uses a logger based on the `glog` package, but that can be changed
 // using the `Logger` method of the builder.
+//
+// Note that the context is optional in most of the methods of the SDK, so implementations of this
+// interface must accept and handle smoothly calls to the Debug, Info, Warn and Error methods where
+// the ctx parameter is nil.
 type Logger interface {
 	// DebugEnabled returns true iff the debug level is enabled.
 	DebugEnabled() bool
@@ -36,17 +44,17 @@ type Logger interface {
 
 	// Debug sends to the log a debug message formatted using the fmt.Sprintf function and the
 	// given format and arguments.
-	Debug(format string, args ...interface{})
+	Debug(ctx context.Context, format string, args ...interface{})
 
 	// Info sends to the log an information message formatted using the fmt.Sprintf function and
 	// the given format and arguments.
-	Info(format string, args ...interface{})
+	Info(ctx context.Context, format string, args ...interface{})
 
 	// Warn sends to the log a warning message formatted using the fmt.Sprintf function and the
 	// given format and arguments.
-	Warn(format string, args ...interface{})
+	Warn(ctx context.Context, format string, args ...interface{})
 
 	// Error sends to the log an error message formatted using the fmt.Sprintf function and the
 	// given format and arguments.
-	Error(format string, args ...interface{})
+	Error(ctx context.Context, format string, args ...interface{})
 }

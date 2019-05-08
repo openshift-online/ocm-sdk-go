@@ -21,6 +21,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -35,6 +36,9 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 		return
 	}
 
+	// Get the context from the request:
+	ctx := request.Context()
+
 	// Measure the time that it takes to send the request and receive the resposne, and report
 	// it in the log:
 	var before time.Time
@@ -43,16 +47,17 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	if c.logger.DebugEnabled() {
 		before = time.Now()
 	}
-	response, err = c.send(request)
+	response, err = c.send(ctx, request)
 	if c.logger.DebugEnabled() {
 		after = time.Now()
 		elapsed = after.Sub(before)
-		c.logger.Debug("Response received in %s", elapsed)
+		c.logger.Debug(ctx, "Response received in %s", elapsed)
 	}
 	return
 }
 
-func (c *Connection) send(request *http.Request) (response *http.Response, err error) {
+func (c *Connection) send(ctx context.Context, request *http.Request) (response *http.Response,
+	err error) {
 	// Check that the request URL:
 	if request.URL.Path == "" {
 		err = fmt.Errorf("request path is mandatory")
@@ -90,7 +95,7 @@ func (c *Connection) send(request *http.Request) (response *http.Response, err e
 	}
 
 	// Get the access token:
-	token, _, err := c.Tokens(request.Context())
+	token, _, err := c.TokensContext(ctx)
 	if err != nil {
 		err = fmt.Errorf("can't get access token: %v", err)
 		return
@@ -127,10 +132,10 @@ func (c *Connection) send(request *http.Request) (response *http.Response, err e
 				err = fmt.Errorf("can't close request body: %v", err)
 				return
 			}
-			c.dumpRequest(request, body)
+			c.dumpRequest(ctx, request, body)
 			request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 		} else {
-			c.dumpRequest(request, nil)
+			c.dumpRequest(ctx, request, nil)
 		}
 	}
 
@@ -157,10 +162,10 @@ func (c *Connection) send(request *http.Request) (response *http.Response, err e
 				err = fmt.Errorf("can't close response body: %v", err)
 				return
 			}
-			c.dumpResponse(response, body)
+			c.dumpResponse(ctx, response, body)
 			response.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 		} else {
-			c.dumpResponse(response, nil)
+			c.dumpResponse(ctx, response, nil)
 		}
 	}
 

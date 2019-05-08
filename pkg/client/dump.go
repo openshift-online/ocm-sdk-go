@@ -20,6 +20,7 @@ limitations under the License.
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"sort"
@@ -27,9 +28,9 @@ import (
 )
 
 // dumpRequest dumps to the log, in debug level, the details of the given HTTP request.
-func (c *Connection) dumpRequest(request *http.Request, body []byte) {
-	c.logger.Debug("Request method is %s", request.Method)
-	c.logger.Debug("Request URL is '%s'", request.URL)
+func (c *Connection) dumpRequest(ctx context.Context, request *http.Request, body []byte) {
+	c.logger.Debug(ctx, "Request method is %s", request.Method)
+	c.logger.Debug(ctx, "Request URL is '%s'", request.URL)
 	header := request.Header
 	names := make([]string, len(header))
 	i := 0
@@ -42,22 +43,22 @@ func (c *Connection) dumpRequest(request *http.Request, body []byte) {
 		values := header[name]
 		for _, value := range values {
 			if strings.ToLower(name) == "authorization" {
-				c.logger.Debug("Request header '%s' is omitted", name)
+				c.logger.Debug(ctx, "Request header '%s' is omitted", name)
 			} else {
-				c.logger.Debug("Request header '%s' is '%s'", name, value)
+				c.logger.Debug(ctx, "Request header '%s' is '%s'", name, value)
 			}
 		}
 	}
 	if body != nil {
-		c.logger.Debug("Request body follows")
-		c.dumpBody(header, body)
+		c.logger.Debug(ctx, "Request body follows")
+		c.dumpBody(ctx, header, body)
 	}
 }
 
 // dumpResponse dumps to the log, in debug level, the details of the given HTTP response.
-func (c *Connection) dumpResponse(response *http.Response, body []byte) {
-	c.logger.Debug("Response status is '%s'", response.Status)
-	c.logger.Debug("Response status code %d", response.StatusCode)
+func (c *Connection) dumpResponse(ctx context.Context, response *http.Response, body []byte) {
+	c.logger.Debug(ctx, "Response status is '%s'", response.Status)
+	c.logger.Debug(ctx, "Response status code %d", response.StatusCode)
 	header := response.Header
 	names := make([]string, len(header))
 	i := 0
@@ -69,44 +70,44 @@ func (c *Connection) dumpResponse(response *http.Response, body []byte) {
 	for _, name := range names {
 		values := header[name]
 		for _, value := range values {
-			c.logger.Debug("Response header '%s' is '%s'", name, value)
+			c.logger.Debug(ctx, "Response header '%s' is '%s'", name, value)
 		}
 	}
 	if body != nil {
-		c.logger.Debug("Response body follows")
-		c.dumpBody(header, body)
+		c.logger.Debug(ctx, "Response body follows")
+		c.dumpBody(ctx, header, body)
 	}
 }
 
 // dumpBody checks the content type used in the given header and then it dumps the given body in a
 // format suitable for that content type.
-func (c *Connection) dumpBody(header http.Header, body []byte) {
+func (c *Connection) dumpBody(ctx context.Context, header http.Header, body []byte) {
 	switch header.Get("Content-Type") {
 	case "application/json", "":
-		c.dumpJSON(body)
+		c.dumpJSON(ctx, body)
 	default:
-		c.dumpBytes(body)
+		c.dumpBytes(ctx, body)
 	}
 }
 
 // dumpJSON tries to parse the given data as a JSON document. If that works, then it dumps it
 // indented, otherwise dumps it as is.
-func (c *Connection) dumpJSON(data []byte) {
+func (c *Connection) dumpJSON(ctx context.Context, data []byte) {
 	var parsed map[string]interface{}
 	err := json.Unmarshal(data, &parsed)
 	if err != nil {
-		c.logger.Debug("%s", data)
+		c.logger.Debug(ctx, "%s", data)
 	} else {
 		indented, err := json.MarshalIndent(parsed, "", "  ")
 		if err != nil {
-			c.logger.Debug("%s", data)
+			c.logger.Debug(ctx, "%s", data)
 		} else {
-			c.logger.Debug("%s", indented)
+			c.logger.Debug(ctx, "%s", indented)
 		}
 	}
 }
 
 // dumpBytes dump the given data as an array of bytes.
-func (c *Connection) dumpBytes(data []byte) {
-	c.logger.Debug("%s", data)
+func (c *Connection) dumpBytes(ctx context.Context, data []byte) {
+	c.logger.Debug(ctx, "%s", data)
 }

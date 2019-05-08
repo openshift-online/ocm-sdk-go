@@ -28,7 +28,6 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -83,32 +82,12 @@ func (c *FlavoursClient) Flavour(id string) *FlavourClient {
 type FlavoursListRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	page      *int
 	size      *int
 	search    *string
 	total     *int
-}
-
-// Context sets the context that will be used to send the request.
-func (r *FlavoursListRequest) Context(value context.Context) *FlavoursListRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *FlavoursListRequest) Timeout(value time.Duration) *FlavoursListRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *FlavoursListRequest) Deadline(value time.Time) *FlavoursListRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -174,7 +153,16 @@ func (r *FlavoursListRequest) Total(value int) *FlavoursListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *FlavoursListRequest) Send() (result *FlavoursListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *FlavoursListRequest) SendContext(ctx context.Context) (result *FlavoursListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -197,6 +185,9 @@ func (r *FlavoursListRequest) Send() (result *FlavoursListResponse, err error) {
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -322,29 +313,9 @@ type flavoursListResponseData struct {
 type FlavoursAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      *Flavour
-}
-
-// Context sets the context that will be used to send the request.
-func (r *FlavoursAddRequest) Context(value context.Context) *FlavoursAddRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *FlavoursAddRequest) Timeout(value time.Duration) *FlavoursAddRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *FlavoursAddRequest) Deadline(value time.Time) *FlavoursAddRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -368,7 +339,16 @@ func (r *FlavoursAddRequest) Body(value *Flavour) *FlavoursAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *FlavoursAddRequest) Send() (result *FlavoursAddResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *FlavoursAddRequest) SendContext(ctx context.Context) (result *FlavoursAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -385,6 +365,9 @@ func (r *FlavoursAddRequest) Send() (result *FlavoursAddResponse, err error) {
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

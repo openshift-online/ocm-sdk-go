@@ -27,7 +27,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -85,28 +84,8 @@ func (c *RoleClient) Delete() *RoleDeleteRequest {
 type RoleGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RoleGetRequest) Context(value context.Context) *RoleGetRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RoleGetRequest) Timeout(value time.Duration) *RoleGetRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RoleGetRequest) Deadline(value time.Time) *RoleGetRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -122,7 +101,16 @@ func (r *RoleGetRequest) Header(name string, value interface{}) *RoleGetRequest 
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RoleGetRequest) Send() (result *RoleGetResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleGetRequest) SendContext(ctx context.Context) (result *RoleGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -133,6 +121,9 @@ func (r *RoleGetRequest) Send() (result *RoleGetResponse, err error) {
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -208,29 +199,9 @@ func (r *RoleGetResponse) unmarshal(reader io.Reader) error {
 type RoleUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      *Role
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RoleUpdateRequest) Context(value context.Context) *RoleUpdateRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RoleUpdateRequest) Timeout(value time.Duration) *RoleUpdateRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RoleUpdateRequest) Deadline(value time.Time) *RoleUpdateRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -254,7 +225,16 @@ func (r *RoleUpdateRequest) Body(value *Role) *RoleUpdateRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RoleUpdateRequest) Send() (result *RoleUpdateResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleUpdateRequest) SendContext(ctx context.Context) (result *RoleUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -271,6 +251,9 @@ func (r *RoleUpdateRequest) Send() (result *RoleUpdateResponse, err error) {
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -359,28 +342,8 @@ func (r *RoleUpdateResponse) unmarshal(reader io.Reader) error {
 type RoleDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RoleDeleteRequest) Context(value context.Context) *RoleDeleteRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RoleDeleteRequest) Timeout(value time.Duration) *RoleDeleteRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RoleDeleteRequest) Deadline(value time.Time) *RoleDeleteRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -396,7 +359,16 @@ func (r *RoleDeleteRequest) Header(name string, value interface{}) *RoleDeleteRe
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleDeleteRequest) SendContext(ctx context.Context) (result *RoleDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -407,6 +379,9 @@ func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
 		Method: http.MethodDelete,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

@@ -25,7 +25,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -73,28 +72,8 @@ func (c *RoleBindingClient) Delete() *RoleBindingDeleteRequest {
 type RoleBindingGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RoleBindingGetRequest) Context(value context.Context) *RoleBindingGetRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RoleBindingGetRequest) Timeout(value time.Duration) *RoleBindingGetRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RoleBindingGetRequest) Deadline(value time.Time) *RoleBindingGetRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -110,7 +89,16 @@ func (r *RoleBindingGetRequest) Header(name string, value interface{}) *RoleBind
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RoleBindingGetRequest) Send() (result *RoleBindingGetResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleBindingGetRequest) SendContext(ctx context.Context) (result *RoleBindingGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -121,6 +109,9 @@ func (r *RoleBindingGetRequest) Send() (result *RoleBindingGetResponse, err erro
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -196,28 +187,8 @@ func (r *RoleBindingGetResponse) unmarshal(reader io.Reader) error {
 type RoleBindingDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RoleBindingDeleteRequest) Context(value context.Context) *RoleBindingDeleteRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RoleBindingDeleteRequest) Timeout(value time.Duration) *RoleBindingDeleteRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RoleBindingDeleteRequest) Deadline(value time.Time) *RoleBindingDeleteRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -233,7 +204,16 @@ func (r *RoleBindingDeleteRequest) Header(name string, value interface{}) *RoleB
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RoleBindingDeleteRequest) Send() (result *RoleBindingDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleBindingDeleteRequest) SendContext(ctx context.Context) (result *RoleBindingDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -244,6 +224,9 @@ func (r *RoleBindingDeleteRequest) Send() (result *RoleBindingDeleteResponse, er
 		Method: http.MethodDelete,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

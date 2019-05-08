@@ -28,7 +28,6 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -83,31 +82,11 @@ func (c *ResourceQuotasClient) ResourceQuota(id string) *ResourceQuotaClient {
 type ResourceQuotasListRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	page      *int
 	size      *int
 	total     *int
-}
-
-// Context sets the context that will be used to send the request.
-func (r *ResourceQuotasListRequest) Context(value context.Context) *ResourceQuotasListRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *ResourceQuotasListRequest) Timeout(value time.Duration) *ResourceQuotasListRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *ResourceQuotasListRequest) Deadline(value time.Time) *ResourceQuotasListRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -152,7 +131,16 @@ func (r *ResourceQuotasListRequest) Total(value int) *ResourceQuotasListRequest 
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *ResourceQuotasListRequest) Send() (result *ResourceQuotasListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ResourceQuotasListRequest) SendContext(ctx context.Context) (result *ResourceQuotasListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -172,6 +160,9 @@ func (r *ResourceQuotasListRequest) Send() (result *ResourceQuotasListResponse, 
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -297,29 +288,9 @@ type resourceQuotasListResponseData struct {
 type ResourceQuotasAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      *ResourceQuota
-}
-
-// Context sets the context that will be used to send the request.
-func (r *ResourceQuotasAddRequest) Context(value context.Context) *ResourceQuotasAddRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *ResourceQuotasAddRequest) Timeout(value time.Duration) *ResourceQuotasAddRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *ResourceQuotasAddRequest) Deadline(value time.Time) *ResourceQuotasAddRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -343,7 +314,16 @@ func (r *ResourceQuotasAddRequest) Body(value *ResourceQuota) *ResourceQuotasAdd
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *ResourceQuotasAddRequest) Send() (result *ResourceQuotasAddResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ResourceQuotasAddRequest) SendContext(ctx context.Context) (result *ResourceQuotasAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -360,6 +340,9 @@ func (r *ResourceQuotasAddRequest) Send() (result *ResourceQuotasAddResponse, er
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

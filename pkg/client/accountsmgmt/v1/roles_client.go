@@ -28,7 +28,6 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -83,31 +82,11 @@ func (c *RolesClient) Role(id string) *RoleClient {
 type RolesListRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	page      *int
 	size      *int
 	total     *int
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RolesListRequest) Context(value context.Context) *RolesListRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RolesListRequest) Timeout(value time.Duration) *RolesListRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RolesListRequest) Deadline(value time.Time) *RolesListRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -152,7 +131,16 @@ func (r *RolesListRequest) Total(value int) *RolesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RolesListRequest) Send() (result *RolesListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RolesListRequest) SendContext(ctx context.Context) (result *RolesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -172,6 +160,9 @@ func (r *RolesListRequest) Send() (result *RolesListResponse, err error) {
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
@@ -297,29 +288,9 @@ type rolesListResponseData struct {
 type RolesAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	body      *Role
-}
-
-// Context sets the context that will be used to send the request.
-func (r *RolesAddRequest) Context(value context.Context) *RolesAddRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *RolesAddRequest) Timeout(value time.Duration) *RolesAddRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *RolesAddRequest) Deadline(value time.Time) *RolesAddRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -343,7 +314,16 @@ func (r *RolesAddRequest) Body(value *Role) *RolesAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *RolesAddRequest) Send() (result *RolesAddResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RolesAddRequest) SendContext(ctx context.Context) (result *RolesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := new(bytes.Buffer)
@@ -360,6 +340,9 @@ func (r *RolesAddRequest) Send() (result *RolesAddResponse, err error) {
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

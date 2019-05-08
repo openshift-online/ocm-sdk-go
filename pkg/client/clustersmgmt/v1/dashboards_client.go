@@ -26,7 +26,6 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -71,32 +70,12 @@ func (c *DashboardsClient) Dashboard(id string) *DashboardClient {
 type DashboardsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
 	page      *int
 	size      *int
 	search    *string
 	total     *int
-}
-
-// Context sets the context that will be used to send the request.
-func (r *DashboardsListRequest) Context(value context.Context) *DashboardsListRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *DashboardsListRequest) Timeout(value time.Duration) *DashboardsListRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *DashboardsListRequest) Deadline(value time.Time) *DashboardsListRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -164,7 +143,16 @@ func (r *DashboardsListRequest) Total(value int) *DashboardsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *DashboardsListRequest) Send() (result *DashboardsListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *DashboardsListRequest) SendContext(ctx context.Context) (result *DashboardsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -187,6 +175,9 @@ func (r *DashboardsListRequest) Send() (result *DashboardsListResponse, err erro
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {

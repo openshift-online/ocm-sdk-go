@@ -25,7 +25,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	time "time"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/errors"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
@@ -63,28 +62,8 @@ func (c *ClusterStatusClient) Get() *ClusterStatusGetRequest {
 type ClusterStatusGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	context   context.Context
-	cancel    context.CancelFunc
 	query     url.Values
 	header    http.Header
-}
-
-// Context sets the context that will be used to send the request.
-func (r *ClusterStatusGetRequest) Context(value context.Context) *ClusterStatusGetRequest {
-	r.context = value
-	return r
-}
-
-// Timeout sets a timeout for the completete request.
-func (r *ClusterStatusGetRequest) Timeout(value time.Duration) *ClusterStatusGetRequest {
-	helpers.SetTimeout(&r.context, &r.cancel, value)
-	return r
-}
-
-// Deadline sets a deadline for the completete request.
-func (r *ClusterStatusGetRequest) Deadline(value time.Time) *ClusterStatusGetRequest {
-	helpers.SetDeadline(&r.context, &r.cancel, value)
-	return r
 }
 
 // Parameter adds a query parameter.
@@ -100,7 +79,16 @@ func (r *ClusterStatusGetRequest) Header(name string, value interface{}) *Cluste
 }
 
 // Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method. If you don't provide a
+// context then a new background context will be created.
 func (r *ClusterStatusGetRequest) Send() (result *ClusterStatusGetResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ClusterStatusGetRequest) SendContext(ctx context.Context) (result *ClusterStatusGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -111,6 +99,9 @@ func (r *ClusterStatusGetRequest) Send() (result *ClusterStatusGetResponse, err 
 		Method: http.MethodGet,
 		URL:    uri,
 		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
 	}
 	response, err := r.transport.RoundTrip(request)
 	if err != nil {
