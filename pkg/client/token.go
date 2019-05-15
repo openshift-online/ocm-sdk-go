@@ -77,8 +77,8 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 		c.debugExpiry(ctx, "Bearer", c.accessToken, accessExpires, accessLeft)
 		c.debugExpiry(ctx, "Refresh", c.refreshToken, refreshExpires, refreshLeft)
 	}
-	if c.accessToken == nil || (accessExpires && accessLeft < 5*time.Second) {
-		if c.refreshToken == nil || (refreshExpires && refreshLeft < 10*time.Second) {
+	if c.accessToken == nil || (accessExpires && accessLeft < 1*time.Minute) {
+		if c.refreshToken == nil || (refreshExpires && refreshLeft < 1*time.Minute) {
 			c.logger.Debug(ctx, "Requesting new token")
 			err = c.sendRequestTokenForm(ctx)
 			if err != nil {

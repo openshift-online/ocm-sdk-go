@@ -152,9 +152,9 @@ var _ = Describe("Tokens", func() {
 			Expect(returnedAccess).To(Equal(validAccess))
 		})
 
-		It("Refreshes the access token if it expires in less than 5 seconds", func() {
+		It("Refreshes the access token if it expires in less than one minute", func() {
 			// Generate the tokens:
-			firstAccess := Token("Bearer", 1*time.Second)
+			firstAccess := Token("Bearer", 50*time.Second)
 			secondAccess := Token("Bearer", 5*time.Minute)
 			refreshToken := Token("Refresh", 10*time.Hour)
 
