@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.11 May 15 2019
+
+- Increase token slack to one minute.
+
 == 0.1.10 May 8 2019
 
 - Improved support for contexts, adding the `BuildContext`, `TokensContext` and
