@@ -39,15 +39,17 @@ import (
 type RolesClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewRolesClient creates a new client for the 'roles'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRolesClient(transport http.RoundTripper, path string) *RolesClient {
+func NewRolesClient(transport http.RoundTripper, path string, metric string) *RolesClient {
 	client := new(RolesClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *RolesClient) List() *RolesListRequest {
 	request := new(RolesListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *RolesClient) Add() *RolesAddRequest {
 	request := new(RolesAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *RolesClient) Add() *RolesAddRequest {
 //
 // Reference to the service that manages a specific role.
 func (c *RolesClient) Role(id string) *RoleClient {
-	return NewRoleClient(c.transport, path.Join(c.path, id))
+	return NewRoleClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // RolesListRequest is the request for the 'list' method.
 type RolesListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -133,8 +142,7 @@ func (r *RolesListRequest) Total(value int) *RolesListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RolesListRequest) Send() (result *RolesListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -151,7 +159,7 @@ func (r *RolesListRequest) SendContext(ctx context.Context) (result *RolesListRe
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -288,6 +296,7 @@ type rolesListResponseData struct {
 type RolesAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Role
@@ -316,8 +325,7 @@ func (r *RolesAddRequest) Body(value *Role) *RolesAddRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RolesAddRequest) Send() (result *RolesAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -325,7 +333,7 @@ func (r *RolesAddRequest) Send() (result *RolesAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RolesAddRequest) SendContext(ctx context.Context) (result *RolesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

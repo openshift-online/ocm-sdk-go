@@ -36,15 +36,17 @@ import (
 type CurrentAccountClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewCurrentAccountClient creates a new client for the 'current_account'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewCurrentAccountClient(transport http.RoundTripper, path string) *CurrentAccountClient {
+func NewCurrentAccountClient(transport http.RoundTripper, path string, metric string) *CurrentAccountClient {
 	client := new(CurrentAccountClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *CurrentAccountClient) Get() *CurrentAccountGetRequest {
 	request := new(CurrentAccountGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -62,6 +65,7 @@ func (c *CurrentAccountClient) Get() *CurrentAccountGetRequest {
 type CurrentAccountGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -81,8 +85,7 @@ func (r *CurrentAccountGetRequest) Header(name string, value interface{}) *Curre
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *CurrentAccountGetRequest) Send() (result *CurrentAccountGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -90,7 +93,7 @@ func (r *CurrentAccountGetRequest) Send() (result *CurrentAccountGetResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CurrentAccountGetRequest) SendContext(ctx context.Context) (result *CurrentAccountGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

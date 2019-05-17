@@ -39,15 +39,17 @@ import (
 type RegistryCredentialsClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewRegistryCredentialsClient creates a new client for the 'registry_credentials'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRegistryCredentialsClient(transport http.RoundTripper, path string) *RegistryCredentialsClient {
+func NewRegistryCredentialsClient(transport http.RoundTripper, path string, metric string) *RegistryCredentialsClient {
 	client := new(RegistryCredentialsClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *RegistryCredentialsClient) List() *RegistryCredentialsListRequest {
 	request := new(RegistryCredentialsListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *RegistryCredentialsClient) Add() *RegistryCredentialsAddRequest {
 	request := new(RegistryCredentialsAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *RegistryCredentialsClient) Add() *RegistryCredentialsAddRequest {
 //
 // Reference to the service that manages an specific registry credential.
 func (c *RegistryCredentialsClient) RegistryCredential(id string) *RegistryCredentialClient {
-	return NewRegistryCredentialClient(c.transport, path.Join(c.path, id))
+	return NewRegistryCredentialClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // RegistryCredentialsListRequest is the request for the 'list' method.
 type RegistryCredentialsListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -133,8 +142,7 @@ func (r *RegistryCredentialsListRequest) Total(value int) *RegistryCredentialsLi
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RegistryCredentialsListRequest) Send() (result *RegistryCredentialsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -151,7 +159,7 @@ func (r *RegistryCredentialsListRequest) SendContext(ctx context.Context) (resul
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -288,6 +296,7 @@ type registryCredentialsListResponseData struct {
 type RegistryCredentialsAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *RegistryCredential
@@ -316,8 +325,7 @@ func (r *RegistryCredentialsAddRequest) Body(value *RegistryCredential) *Registr
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RegistryCredentialsAddRequest) Send() (result *RegistryCredentialsAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -325,7 +333,7 @@ func (r *RegistryCredentialsAddRequest) Send() (result *RegistryCredentialsAddRe
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result *RegistryCredentialsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

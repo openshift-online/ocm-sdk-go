@@ -36,15 +36,17 @@ import (
 type CredentialsClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewCredentialsClient creates a new client for the 'credentials'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewCredentialsClient(transport http.RoundTripper, path string) *CredentialsClient {
+func NewCredentialsClient(transport http.RoundTripper, path string, metric string) *CredentialsClient {
 	client := new(CredentialsClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *CredentialsClient) Get() *CredentialsGetRequest {
 	request := new(CredentialsGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -62,6 +65,7 @@ func (c *CredentialsClient) Get() *CredentialsGetRequest {
 type CredentialsGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -81,8 +85,7 @@ func (r *CredentialsGetRequest) Header(name string, value interface{}) *Credenti
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *CredentialsGetRequest) Send() (result *CredentialsGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -90,7 +93,7 @@ func (r *CredentialsGetRequest) Send() (result *CredentialsGetResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CredentialsGetRequest) SendContext(ctx context.Context) (result *CredentialsGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -39,15 +39,17 @@ import (
 type UsersClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewUsersClient creates a new client for the 'users'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewUsersClient(transport http.RoundTripper, path string) *UsersClient {
+func NewUsersClient(transport http.RoundTripper, path string, metric string) *UsersClient {
 	client := new(UsersClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *UsersClient) List() *UsersListRequest {
 	request := new(UsersListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *UsersClient) Add() *UsersAddRequest {
 	request := new(UsersAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *UsersClient) Add() *UsersAddRequest {
 //
 // Reference to the service that manages an specific user.
 func (c *UsersClient) User(id string) *UserClient {
-	return NewUserClient(c.transport, path.Join(c.path, id))
+	return NewUserClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // UsersListRequest is the request for the 'list' method.
 type UsersListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -101,8 +110,7 @@ func (r *UsersListRequest) Header(name string, value interface{}) *UsersListRequ
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *UsersListRequest) Send() (result *UsersListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -110,7 +118,7 @@ func (r *UsersListRequest) Send() (result *UsersListResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UsersListRequest) SendContext(ctx context.Context) (result *UsersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -242,6 +250,7 @@ type usersListResponseData struct {
 type UsersAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *User
@@ -270,8 +279,7 @@ func (r *UsersAddRequest) Body(value *User) *UsersAddRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *UsersAddRequest) Send() (result *UsersAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -279,7 +287,7 @@ func (r *UsersAddRequest) Send() (result *UsersAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UsersAddRequest) SendContext(ctx context.Context) (result *UsersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

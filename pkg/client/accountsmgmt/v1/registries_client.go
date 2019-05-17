@@ -37,15 +37,17 @@ import (
 type RegistriesClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewRegistriesClient creates a new client for the 'registries'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRegistriesClient(transport http.RoundTripper, path string) *RegistriesClient {
+func NewRegistriesClient(transport http.RoundTripper, path string, metric string) *RegistriesClient {
 	client := new(RegistriesClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -56,6 +58,7 @@ func (c *RegistriesClient) List() *RegistriesListRequest {
 	request := new(RegistriesListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -63,13 +66,18 @@ func (c *RegistriesClient) List() *RegistriesListRequest {
 //
 // Reference to the service that manages a specific registry.
 func (c *RegistriesClient) Registry(id string) *RegistryClient {
-	return NewRegistryClient(c.transport, path.Join(c.path, id))
+	return NewRegistryClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // RegistriesListRequest is the request for the 'list' method.
 type RegistriesListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -121,8 +129,7 @@ func (r *RegistriesListRequest) Total(value int) *RegistriesListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RegistriesListRequest) Send() (result *RegistriesListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -139,7 +146,7 @@ func (r *RegistriesListRequest) SendContext(ctx context.Context) (result *Regist
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

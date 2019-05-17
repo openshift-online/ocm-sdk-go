@@ -37,15 +37,17 @@ import (
 type DashboardsClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewDashboardsClient creates a new client for the 'dashboards'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewDashboardsClient(transport http.RoundTripper, path string) *DashboardsClient {
+func NewDashboardsClient(transport http.RoundTripper, path string, metric string) *DashboardsClient {
 	client := new(DashboardsClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -56,6 +58,7 @@ func (c *DashboardsClient) List() *DashboardsListRequest {
 	request := new(DashboardsListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -63,13 +66,18 @@ func (c *DashboardsClient) List() *DashboardsListRequest {
 //
 // Reference to the resource that manages a specific dashboard.
 func (c *DashboardsClient) Dashboard(id string) *DashboardClient {
-	return NewDashboardClient(c.transport, path.Join(c.path, id))
+	return NewDashboardClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // DashboardsListRequest is the request for the 'list' method.
 type DashboardsListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -145,8 +153,7 @@ func (r *DashboardsListRequest) Total(value int) *DashboardsListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *DashboardsListRequest) Send() (result *DashboardsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -166,7 +173,7 @@ func (r *DashboardsListRequest) SendContext(ctx context.Context) (result *Dashbo
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

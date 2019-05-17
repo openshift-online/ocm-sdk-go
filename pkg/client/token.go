@@ -27,6 +27,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -133,6 +134,30 @@ func (c *Connection) sendRefreshTokenForm(ctx context.Context) error {
 }
 
 func (c *Connection) sendTokenForm(ctx context.Context, form url.Values) error {
+	// Measure the time that it takes to send the request and receive the response:
+	before := time.Now()
+	code, err := c.sendTokenFormTimed(ctx, form)
+	after := time.Now()
+	elapsed := after.Sub(before)
+
+	// Update the metrics:
+	if c.tokenCountMetric != nil || c.tokenDurationMetric != nil {
+		labels := map[string]string{
+			metricsCodeLabel: strconv.Itoa(code),
+		}
+		if c.tokenCountMetric != nil {
+			c.tokenCountMetric.With(labels).Inc()
+		}
+		if c.tokenDurationMetric != nil {
+			c.tokenDurationMetric.With(labels).Observe(elapsed.Seconds())
+		}
+	}
+
+	// Return the original error:
+	return err
+}
+
+func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (code int, err error) {
 	// Create the HTTP request:
 	body := []byte(form.Encode())
 	request, err := http.NewRequest(http.MethodPost, c.tokenURL.String(), bytes.NewReader(body))
@@ -144,7 +169,8 @@ func (c *Connection) sendTokenForm(ctx context.Context, form url.Values) error {
 	header.Set("Content-Type", "application/x-www-form-urlencoded")
 	header.Set("Accept", "application/json")
 	if err != nil {
-		return fmt.Errorf("can't create request: %v", err)
+		err = fmt.Errorf("can't create request: %v", err)
+		return
 	}
 
 	// Set the context:
@@ -177,64 +203,75 @@ func (c *Connection) sendTokenForm(ctx context.Context, form url.Values) error {
 	}
 	response, err := c.client.Do(request)
 	if err != nil {
-		return fmt.Errorf("can't send request: %v", err)
+		err = fmt.Errorf("can't send request: %v", err)
+		return
 	}
 	defer response.Body.Close()
 
 	// Read the response body:
 	body, err = ioutil.ReadAll(response.Body)
 	if err != nil {
-		return fmt.Errorf("can't read response: %v", err)
+		err = fmt.Errorf("can't read response: %v", err)
+		return
 	}
 	if c.logger.DebugEnabled() {
 		c.dumpResponse(ctx, response, body)
 	}
 
 	// Check the response status and content type:
+	code = response.StatusCode
 	if response.StatusCode != http.StatusOK {
-		return fmt.Errorf("token response status is: %s", response.Status)
+		err = fmt.Errorf("token response status is: %s", response.Status)
+		return
 	}
 	header = response.Header
 	content := header.Get("Content-Type")
 	if content != "application/json" {
-		return fmt.Errorf("expected 'application/json' but got '%s'", content)
+		err = fmt.Errorf("expected 'application/json' but got '%s'", content)
+		return
 	}
 
 	// Parse the response body:
 	var msg internal.TokenResponse
 	err = json.Unmarshal(body, &msg)
 	if err != nil {
-		return fmt.Errorf("can't parse JSON response: %v", err)
+		err = fmt.Errorf("can't parse JSON response: %v", err)
+		return
 	}
 	if msg.Error != nil {
 		if msg.ErrorDescription != nil {
-			return fmt.Errorf("%s: %s", *msg.Error, *msg.ErrorDescription)
+			err = fmt.Errorf("%s: %s", *msg.Error, *msg.ErrorDescription)
+			return
 		}
-		return fmt.Errorf("%s", *msg.Error)
+		err = fmt.Errorf("%s", *msg.Error)
+		return
 	}
 	if msg.TokenType != nil && *msg.TokenType != "bearer" {
-		return fmt.Errorf("expected 'bearer' token type but got '%s", *msg.TokenType)
+		err = fmt.Errorf("expected 'bearer' token type but got '%s", *msg.TokenType)
+		return
 	}
 	if msg.AccessToken == nil {
-		return fmt.Errorf("no access token was received")
+		err = fmt.Errorf("no access token was received")
+		return
 	}
 	accessToken, _, err := c.tokenParser.ParseUnverified(*msg.AccessToken, jwt.MapClaims{})
 	if err != nil {
-		return err
+		return
 	}
 	if msg.RefreshToken == nil {
-		return fmt.Errorf("no refresh token was received")
+		err = fmt.Errorf("no refresh token was received")
+		return
 	}
 	refreshToken, _, err := c.tokenParser.ParseUnverified(*msg.RefreshToken, jwt.MapClaims{})
 	if err != nil {
-		return err
+		return
 	}
 
 	// Save the new tokens:
 	c.accessToken = accessToken
 	c.refreshToken = refreshToken
 
-	return nil
+	return
 }
 
 // tokenExpiry determines if the given token expires, and the time that remains till it expires.

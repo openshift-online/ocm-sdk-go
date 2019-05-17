@@ -55,15 +55,14 @@ func AddHeader(header *http.Header, name string, value interface{}) {
 	header.Add(name, fmt.Sprintf("%v", value))
 }
 
-// CopyHeader creates a copy of the given set of headers.
-func CopyHeader(header http.Header) http.Header {
-	if header == nil {
-		return nil
-	}
+// SetHeader creates a copy of the given set of headers, and adds the header
+// containing the given metrics path.
+func SetHeader(header http.Header, metric string) http.Header {
 	result := make(http.Header)
 	for name, values := range header {
 		result[name] = CopyValues(values)
 	}
+	result.Set(metricHeader, metric)
 	return result
 }
 
@@ -76,3 +75,6 @@ func CopyValues(values []string) []string {
 	copy(result, values)
 	return result
 }
+
+// Name of the header used to contain the metrics path:
+const metricHeader = "X-Metric"

@@ -29,6 +29,7 @@ import (
 	"sync"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt"
@@ -53,6 +54,7 @@ var DefaultScopes = []string{
 // `api.openshift.com`. Don't create instances of this type directly, use the NewConnectionBuilder
 // function instead.
 type ConnectionBuilder struct {
+	// Basic attributes:
 	logger       Logger
 	trustedCAs   *x509.CertPool
 	insecure     bool
@@ -65,11 +67,15 @@ type ConnectionBuilder struct {
 	password     string
 	tokens       []string
 	scopes       []string
+
+	// Metrics:
+	subsystem string
 }
 
 // Connection contains the data needed to connect to the `api.openshift.com`. Don't create instances
 // of this type directly, use the builder instead.
 type Connection struct {
+	// Basic attributes:
 	closed       bool
 	logger       Logger
 	client       *http.Client
@@ -85,6 +91,12 @@ type Connection struct {
 	accessToken  *jwt.Token
 	refreshToken *jwt.Token
 	scopes       []string
+
+	// Metrics:
+	tokenCountMetric    *prometheus.CounterVec
+	tokenDurationMetric *prometheus.HistogramVec
+	callCountMetric     *prometheus.CounterVec
+	callDurationMetric  *prometheus.HistogramVec
 }
 
 // NewConnectionBuilder creates an builder that knows how to create connections with the default
@@ -236,6 +248,60 @@ func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder 
 // certificates and host names and it isn't recommended for a production environment.
 func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 	b.insecure = flag
+	return b
+}
+
+// Metrics sets the name of the subsystem that will be used by the connection to register metrics
+// with Prometheus. If this isn't explicitly specified, or if it is an empty string, then no metrics
+// will be registered. For example, if the value is `api_outbound` then the following metrics will
+// be registered:
+//
+//	api_outbound_request_count - Number of API requests sent.
+//	api_outbound_request_duration_sum - Total time to send API requests, in seconds.
+//	api_outbound_request_duration_count - Total number of API requests measured.
+//	api_outbound_request_duration_bucket - Number of API requests organized in buckets.
+//	api_outbound_token_request_count - Number of token requests sent.
+//	api_outbound_token_request_duration_sum - Total time to send token requests, in seconds.
+//	api_outbound_token_request_duration_count - Total number of token requests measured.
+//	api_outbound_token_request_duration_bucket - Number of token requests organized in buckets.
+//
+// The duration buckets metrics contain an `le` label that indicates the upper bound. For example if
+// the `le` label is `1` then the value will be the number of requests that were processed in less
+// than one second.
+//
+// The API request metrics have the following labels:
+//
+//	method - Name of the HTTP method, for example GET or POST.
+//	path - Request path, for example /api/clusters_mgmt/v1/clusters.
+//	code - HTTP response code, for example 200 or 500.
+//
+// To calculate the average request duration during the last 10 minutes, for example, use a
+// Prometheus expression like this:
+//
+//      rate(api_outbound_request_duration_sum[10m]) / rate(api_outbound_request_duration_count[10m])
+//
+// In order to reduce the cardinality of the metrics the path label is modified to remove the
+// identifiers of the objects. For example, if the original path is .../clusters/123 then it will
+// be replaced by .../clusters/-, and the values will be accumulated. The line returned by the
+// metrics server will be like this:
+//
+//      api_outbound_request_count{code="200",method="GET",path="/api/clusters_mgmt/v1/clusters/-"} 56
+//
+// The meaning of that is that there were a total of 56 requests to get specific clusters,
+// independently of the specific identifier of the cluster.
+//
+// The token request metrics will contain the following labels:
+//
+//      code - HTTP response code, for example 200 or 500.
+//
+// The value of the `code` label will be zero when sending the request failed without a response
+// code, for example if it wasn't possible to open the connection, or if there was a timeout waiting
+// for the response.
+//
+// Note that setting this attribute is not enougth to have metrics published, you also need to
+// create and start a metrics server, as described in the documentation of the Prometheus library.
+func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
+	b.subsystem = value
 	return b
 }
 
@@ -414,17 +480,26 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	// Create the mutex that protects token manipulations:
 	connection.tokenMutex = &sync.Mutex{}
 
+	// Register metrics:
+	if b.subsystem != "" {
+		err = connection.registerMetrics(b.subsystem)
+		if err != nil {
+			err = fmt.Errorf("can't register metrics: %v", err)
+			return
+		}
+	}
+
 	return
 }
 
 // AccountsMgmt returns the client for the accounts management service.
 func (c *Connection) AccountsMgmt() *accountsmgmt.Client {
-	return accountsmgmt.NewClient(c, "/api/accounts_mgmt")
+	return accountsmgmt.NewClient(c, "/api/accounts_mgmt", "/api/accounts_mgmt")
 }
 
 // ClustersMgmt returns the client for the clusters management service.
 func (c *Connection) ClustersMgmt() *clustersmgmt.Client {
-	return clustersmgmt.NewClient(c, "/api/clusters_mgmt")
+	return clustersmgmt.NewClient(c, "/api/clusters_mgmt", "/api/clusters_mgmt")
 }
 
 // Close releases all the resources used by the connection. It is very important to allways close it

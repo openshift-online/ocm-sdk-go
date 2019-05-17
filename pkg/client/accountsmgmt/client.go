@@ -30,14 +30,16 @@ import (
 type Client struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewClient creates a new client for the service 'accounts_mgmt' using the
 // given transport to send the requests and receive the responses.
-func NewClient(transport http.RoundTripper, path string) *Client {
+func NewClient(transport http.RoundTripper, path string, metric string) *Client {
 	client := new(Client)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -46,5 +48,6 @@ func (c *Client) V1() *v1.RootClient {
 	return v1.NewRootClient(
 		c.transport,
 		path.Join(c.path, "v1"),
+		path.Join(c.metric, "v1"),
 	)
 }

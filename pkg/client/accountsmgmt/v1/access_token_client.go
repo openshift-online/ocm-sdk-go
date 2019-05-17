@@ -36,15 +36,17 @@ import (
 type AccessTokenClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewAccessTokenClient creates a new client for the 'access_token'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewAccessTokenClient(transport http.RoundTripper, path string) *AccessTokenClient {
+func NewAccessTokenClient(transport http.RoundTripper, path string, metric string) *AccessTokenClient {
 	client := new(AccessTokenClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *AccessTokenClient) Post() *AccessTokenPostRequest {
 	request := new(AccessTokenPostRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -62,6 +65,7 @@ func (c *AccessTokenClient) Post() *AccessTokenPostRequest {
 type AccessTokenPostRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -81,8 +85,7 @@ func (r *AccessTokenPostRequest) Header(name string, value interface{}) *AccessT
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *AccessTokenPostRequest) Send() (result *AccessTokenPostResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -90,7 +93,7 @@ func (r *AccessTokenPostRequest) Send() (result *AccessTokenPostResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccessTokenPostRequest) SendContext(ctx context.Context) (result *AccessTokenPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

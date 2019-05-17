@@ -39,15 +39,17 @@ import (
 type OrganizationsClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewOrganizationsClient creates a new client for the 'organizations'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewOrganizationsClient(transport http.RoundTripper, path string) *OrganizationsClient {
+func NewOrganizationsClient(transport http.RoundTripper, path string, metric string) *OrganizationsClient {
 	client := new(OrganizationsClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *OrganizationsClient) List() *OrganizationsListRequest {
 	request := new(OrganizationsListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *OrganizationsClient) Add() *OrganizationsAddRequest {
 	request := new(OrganizationsAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *OrganizationsClient) Add() *OrganizationsAddRequest {
 //
 // Reference to the service that manages a specific organization.
 func (c *OrganizationsClient) Organization(id string) *OrganizationClient {
-	return NewOrganizationClient(c.transport, path.Join(c.path, id))
+	return NewOrganizationClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // OrganizationsListRequest is the request for the 'list' method.
 type OrganizationsListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -133,8 +142,7 @@ func (r *OrganizationsListRequest) Total(value int) *OrganizationsListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *OrganizationsListRequest) Send() (result *OrganizationsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -151,7 +159,7 @@ func (r *OrganizationsListRequest) SendContext(ctx context.Context) (result *Org
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -288,6 +296,7 @@ type organizationsListResponseData struct {
 type OrganizationsAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Organization
@@ -316,8 +325,7 @@ func (r *OrganizationsAddRequest) Body(value *Organization) *OrganizationsAddReq
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *OrganizationsAddRequest) Send() (result *OrganizationsAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -325,7 +333,7 @@ func (r *OrganizationsAddRequest) Send() (result *OrganizationsAddResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *OrganizationsAddRequest) SendContext(ctx context.Context) (result *OrganizationsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

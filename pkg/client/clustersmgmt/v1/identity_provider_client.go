@@ -36,15 +36,17 @@ import (
 type IdentityProviderClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewIdentityProviderClient creates a new client for the 'identity_provider'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewIdentityProviderClient(transport http.RoundTripper, path string) *IdentityProviderClient {
+func NewIdentityProviderClient(transport http.RoundTripper, path string, metric string) *IdentityProviderClient {
 	client := new(IdentityProviderClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *IdentityProviderClient) Get() *IdentityProviderGetRequest {
 	request := new(IdentityProviderGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -65,6 +68,7 @@ func (c *IdentityProviderClient) Delete() *IdentityProviderDeleteRequest {
 	request := new(IdentityProviderDeleteRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -72,6 +76,7 @@ func (c *IdentityProviderClient) Delete() *IdentityProviderDeleteRequest {
 type IdentityProviderGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -91,8 +96,7 @@ func (r *IdentityProviderGetRequest) Header(name string, value interface{}) *Ide
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *IdentityProviderGetRequest) Send() (result *IdentityProviderGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -100,7 +104,7 @@ func (r *IdentityProviderGetRequest) Send() (result *IdentityProviderGetResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IdentityProviderGetRequest) SendContext(ctx context.Context) (result *IdentityProviderGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -187,6 +191,7 @@ func (r *IdentityProviderGetResponse) unmarshal(reader io.Reader) error {
 type IdentityProviderDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -206,8 +211,7 @@ func (r *IdentityProviderDeleteRequest) Header(name string, value interface{}) *
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *IdentityProviderDeleteRequest) Send() (result *IdentityProviderDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -215,7 +219,7 @@ func (r *IdentityProviderDeleteRequest) Send() (result *IdentityProviderDeleteRe
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IdentityProviderDeleteRequest) SendContext(ctx context.Context) (result *IdentityProviderDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -37,15 +37,17 @@ import (
 type SubscriptionsClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewSubscriptionsClient creates a new client for the 'subscriptions'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewSubscriptionsClient(transport http.RoundTripper, path string) *SubscriptionsClient {
+func NewSubscriptionsClient(transport http.RoundTripper, path string, metric string) *SubscriptionsClient {
 	client := new(SubscriptionsClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -56,6 +58,7 @@ func (c *SubscriptionsClient) List() *SubscriptionsListRequest {
 	request := new(SubscriptionsListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -63,13 +66,18 @@ func (c *SubscriptionsClient) List() *SubscriptionsListRequest {
 //
 // Reference to the service that manages a specific subscription.
 func (c *SubscriptionsClient) Subscription(id string) *SubscriptionClient {
-	return NewSubscriptionClient(c.transport, path.Join(c.path, id))
+	return NewSubscriptionClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // SubscriptionsListRequest is the request for the 'list' method.
 type SubscriptionsListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -121,8 +129,7 @@ func (r *SubscriptionsListRequest) Total(value int) *SubscriptionsListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *SubscriptionsListRequest) Send() (result *SubscriptionsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -139,7 +146,7 @@ func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *Sub
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
