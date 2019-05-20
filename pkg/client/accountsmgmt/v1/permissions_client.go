@@ -39,15 +39,17 @@ import (
 type PermissionsClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewPermissionsClient creates a new client for the 'permissions'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewPermissionsClient(transport http.RoundTripper, path string) *PermissionsClient {
+func NewPermissionsClient(transport http.RoundTripper, path string, metric string) *PermissionsClient {
 	client := new(PermissionsClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *PermissionsClient) List() *PermissionsListRequest {
 	request := new(PermissionsListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *PermissionsClient) Add() *PermissionsAddRequest {
 	request := new(PermissionsAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *PermissionsClient) Add() *PermissionsAddRequest {
 //
 // Reference to the service that manages an specific permission.
 func (c *PermissionsClient) Permission(id string) *PermissionClient {
-	return NewPermissionClient(c.transport, path.Join(c.path, id))
+	return NewPermissionClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // PermissionsListRequest is the request for the 'list' method.
 type PermissionsListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -133,8 +142,7 @@ func (r *PermissionsListRequest) Total(value int) *PermissionsListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *PermissionsListRequest) Send() (result *PermissionsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -151,7 +159,7 @@ func (r *PermissionsListRequest) SendContext(ctx context.Context) (result *Permi
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -288,6 +296,7 @@ type permissionsListResponseData struct {
 type PermissionsAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Permission
@@ -316,8 +325,7 @@ func (r *PermissionsAddRequest) Body(value *Permission) *PermissionsAddRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *PermissionsAddRequest) Send() (result *PermissionsAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -325,7 +333,7 @@ func (r *PermissionsAddRequest) Send() (result *PermissionsAddResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *PermissionsAddRequest) SendContext(ctx context.Context) (result *PermissionsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

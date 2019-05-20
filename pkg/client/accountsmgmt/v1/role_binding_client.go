@@ -36,15 +36,17 @@ import (
 type RoleBindingClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewRoleBindingClient creates a new client for the 'role_binding'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRoleBindingClient(transport http.RoundTripper, path string) *RoleBindingClient {
+func NewRoleBindingClient(transport http.RoundTripper, path string, metric string) *RoleBindingClient {
 	client := new(RoleBindingClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *RoleBindingClient) Get() *RoleBindingGetRequest {
 	request := new(RoleBindingGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -65,6 +68,7 @@ func (c *RoleBindingClient) Delete() *RoleBindingDeleteRequest {
 	request := new(RoleBindingDeleteRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -72,6 +76,7 @@ func (c *RoleBindingClient) Delete() *RoleBindingDeleteRequest {
 type RoleBindingGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -91,8 +96,7 @@ func (r *RoleBindingGetRequest) Header(name string, value interface{}) *RoleBind
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RoleBindingGetRequest) Send() (result *RoleBindingGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -100,7 +104,7 @@ func (r *RoleBindingGetRequest) Send() (result *RoleBindingGetResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleBindingGetRequest) SendContext(ctx context.Context) (result *RoleBindingGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -187,6 +191,7 @@ func (r *RoleBindingGetResponse) unmarshal(reader io.Reader) error {
 type RoleBindingDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -206,8 +211,7 @@ func (r *RoleBindingDeleteRequest) Header(name string, value interface{}) *RoleB
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RoleBindingDeleteRequest) Send() (result *RoleBindingDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -215,7 +219,7 @@ func (r *RoleBindingDeleteRequest) Send() (result *RoleBindingDeleteResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleBindingDeleteRequest) SendContext(ctx context.Context) (result *RoleBindingDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

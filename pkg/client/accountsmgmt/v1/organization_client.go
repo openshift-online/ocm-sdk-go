@@ -39,15 +39,17 @@ import (
 type OrganizationClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewOrganizationClient creates a new client for the 'organization'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewOrganizationClient(transport http.RoundTripper, path string) *OrganizationClient {
+func NewOrganizationClient(transport http.RoundTripper, path string, metric string) *OrganizationClient {
 	client := new(OrganizationClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *OrganizationClient) Get() *OrganizationGetRequest {
 	request := new(OrganizationGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *OrganizationClient) Update() *OrganizationUpdateRequest {
 	request := new(OrganizationUpdateRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -76,13 +80,18 @@ func (c *OrganizationClient) Update() *OrganizationUpdateRequest {
 // Reference to the service that manages the resource quotas for this
 // organization.
 func (c *OrganizationClient) ResourceQuota() *ResourceQuotasClient {
-	return NewResourceQuotasClient(c.transport, path.Join(c.path, "resource_quota"))
+	return NewResourceQuotasClient(
+		c.transport,
+		path.Join(c.path, "resource_quota"),
+		path.Join(c.metric, "resource_quota"),
+	)
 }
 
 // OrganizationGetRequest is the request for the 'get' method.
 type OrganizationGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -102,8 +111,7 @@ func (r *OrganizationGetRequest) Header(name string, value interface{}) *Organiz
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *OrganizationGetRequest) Send() (result *OrganizationGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -111,7 +119,7 @@ func (r *OrganizationGetRequest) Send() (result *OrganizationGetResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *OrganizationGetRequest) SendContext(ctx context.Context) (result *OrganizationGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -198,6 +206,7 @@ func (r *OrganizationGetResponse) unmarshal(reader io.Reader) error {
 type OrganizationUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Organization
@@ -226,8 +235,7 @@ func (r *OrganizationUpdateRequest) Body(value *Organization) *OrganizationUpdat
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *OrganizationUpdateRequest) Send() (result *OrganizationUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -235,7 +243,7 @@ func (r *OrganizationUpdateRequest) Send() (result *OrganizationUpdateResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *OrganizationUpdateRequest) SendContext(ctx context.Context) (result *OrganizationUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

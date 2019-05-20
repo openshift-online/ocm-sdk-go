@@ -36,15 +36,17 @@ import (
 type UserClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewUserClient creates a new client for the 'user'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewUserClient(transport http.RoundTripper, path string) *UserClient {
+func NewUserClient(transport http.RoundTripper, path string, metric string) *UserClient {
 	client := new(UserClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *UserClient) Get() *UserGetRequest {
 	request := new(UserGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -65,6 +68,7 @@ func (c *UserClient) Delete() *UserDeleteRequest {
 	request := new(UserDeleteRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -72,6 +76,7 @@ func (c *UserClient) Delete() *UserDeleteRequest {
 type UserGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -91,8 +96,7 @@ func (r *UserGetRequest) Header(name string, value interface{}) *UserGetRequest 
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *UserGetRequest) Send() (result *UserGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -100,7 +104,7 @@ func (r *UserGetRequest) Send() (result *UserGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UserGetRequest) SendContext(ctx context.Context) (result *UserGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -187,6 +191,7 @@ func (r *UserGetResponse) unmarshal(reader io.Reader) error {
 type UserDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -206,8 +211,7 @@ func (r *UserDeleteRequest) Header(name string, value interface{}) *UserDeleteRe
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *UserDeleteRequest) Send() (result *UserDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -215,7 +219,7 @@ func (r *UserDeleteRequest) Send() (result *UserDeleteResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UserDeleteRequest) SendContext(ctx context.Context) (result *UserDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

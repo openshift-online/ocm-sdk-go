@@ -38,15 +38,17 @@ import (
 type ResourceQuotaClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewResourceQuotaClient creates a new client for the 'resource_quota'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewResourceQuotaClient(transport http.RoundTripper, path string) *ResourceQuotaClient {
+func NewResourceQuotaClient(transport http.RoundTripper, path string, metric string) *ResourceQuotaClient {
 	client := new(ResourceQuotaClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -57,6 +59,7 @@ func (c *ResourceQuotaClient) Get() *ResourceQuotaGetRequest {
 	request := new(ResourceQuotaGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -67,6 +70,7 @@ func (c *ResourceQuotaClient) Update() *ResourceQuotaUpdateRequest {
 	request := new(ResourceQuotaUpdateRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -74,6 +78,7 @@ func (c *ResourceQuotaClient) Update() *ResourceQuotaUpdateRequest {
 type ResourceQuotaGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -93,8 +98,7 @@ func (r *ResourceQuotaGetRequest) Header(name string, value interface{}) *Resour
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ResourceQuotaGetRequest) Send() (result *ResourceQuotaGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -102,7 +106,7 @@ func (r *ResourceQuotaGetRequest) Send() (result *ResourceQuotaGetResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ResourceQuotaGetRequest) SendContext(ctx context.Context) (result *ResourceQuotaGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -189,6 +193,7 @@ func (r *ResourceQuotaGetResponse) unmarshal(reader io.Reader) error {
 type ResourceQuotaUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *ResourceQuota
@@ -217,8 +222,7 @@ func (r *ResourceQuotaUpdateRequest) Body(value *ResourceQuota) *ResourceQuotaUp
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ResourceQuotaUpdateRequest) Send() (result *ResourceQuotaUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -226,7 +230,7 @@ func (r *ResourceQuotaUpdateRequest) Send() (result *ResourceQuotaUpdateResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ResourceQuotaUpdateRequest) SendContext(ctx context.Context) (result *ResourceQuotaUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

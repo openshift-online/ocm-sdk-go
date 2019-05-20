@@ -39,15 +39,17 @@ import (
 type AccountsClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewAccountsClient creates a new client for the 'accounts'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewAccountsClient(transport http.RoundTripper, path string) *AccountsClient {
+func NewAccountsClient(transport http.RoundTripper, path string, metric string) *AccountsClient {
 	client := new(AccountsClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *AccountsClient) List() *AccountsListRequest {
 	request := new(AccountsListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *AccountsClient) Add() *AccountsAddRequest {
 	request := new(AccountsAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *AccountsClient) Add() *AccountsAddRequest {
 //
 // Reference to the service that manages an specific account.
 func (c *AccountsClient) Account(id string) *AccountClient {
-	return NewAccountClient(c.transport, path.Join(c.path, id))
+	return NewAccountClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // AccountsListRequest is the request for the 'list' method.
 type AccountsListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -133,8 +142,7 @@ func (r *AccountsListRequest) Total(value int) *AccountsListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *AccountsListRequest) Send() (result *AccountsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -151,7 +159,7 @@ func (r *AccountsListRequest) SendContext(ctx context.Context) (result *Accounts
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -288,6 +296,7 @@ type accountsListResponseData struct {
 type AccountsAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Account
@@ -316,8 +325,7 @@ func (r *AccountsAddRequest) Body(value *Account) *AccountsAddRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *AccountsAddRequest) Send() (result *AccountsAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -325,7 +333,7 @@ func (r *AccountsAddRequest) Send() (result *AccountsAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccountsAddRequest) SendContext(ctx context.Context) (result *AccountsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

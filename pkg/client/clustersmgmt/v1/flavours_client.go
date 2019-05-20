@@ -39,15 +39,17 @@ import (
 type FlavoursClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewFlavoursClient creates a new client for the 'flavours'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewFlavoursClient(transport http.RoundTripper, path string) *FlavoursClient {
+func NewFlavoursClient(transport http.RoundTripper, path string, metric string) *FlavoursClient {
 	client := new(FlavoursClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *FlavoursClient) List() *FlavoursListRequest {
 	request := new(FlavoursListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *FlavoursClient) Add() *FlavoursAddRequest {
 	request := new(FlavoursAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *FlavoursClient) Add() *FlavoursAddRequest {
 //
 // Reference to the resource that manages a specific flavour.
 func (c *FlavoursClient) Flavour(id string) *FlavourClient {
-	return NewFlavourClient(c.transport, path.Join(c.path, id))
+	return NewFlavourClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // FlavoursListRequest is the request for the 'list' method.
 type FlavoursListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -155,8 +164,7 @@ func (r *FlavoursListRequest) Total(value int) *FlavoursListRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *FlavoursListRequest) Send() (result *FlavoursListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -176,7 +184,7 @@ func (r *FlavoursListRequest) SendContext(ctx context.Context) (result *Flavours
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -313,6 +321,7 @@ type flavoursListResponseData struct {
 type FlavoursAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Flavour
@@ -341,8 +350,7 @@ func (r *FlavoursAddRequest) Body(value *Flavour) *FlavoursAddRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *FlavoursAddRequest) Send() (result *FlavoursAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -350,7 +358,7 @@ func (r *FlavoursAddRequest) Send() (result *FlavoursAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *FlavoursAddRequest) SendContext(ctx context.Context) (result *FlavoursAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

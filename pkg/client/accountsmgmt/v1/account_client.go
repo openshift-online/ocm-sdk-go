@@ -38,15 +38,17 @@ import (
 type AccountClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewAccountClient creates a new client for the 'account'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewAccountClient(transport http.RoundTripper, path string) *AccountClient {
+func NewAccountClient(transport http.RoundTripper, path string, metric string) *AccountClient {
 	client := new(AccountClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -57,6 +59,7 @@ func (c *AccountClient) Get() *AccountGetRequest {
 	request := new(AccountGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -67,6 +70,7 @@ func (c *AccountClient) Update() *AccountUpdateRequest {
 	request := new(AccountUpdateRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -74,6 +78,7 @@ func (c *AccountClient) Update() *AccountUpdateRequest {
 type AccountGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -93,8 +98,7 @@ func (r *AccountGetRequest) Header(name string, value interface{}) *AccountGetRe
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *AccountGetRequest) Send() (result *AccountGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -102,7 +106,7 @@ func (r *AccountGetRequest) Send() (result *AccountGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccountGetRequest) SendContext(ctx context.Context) (result *AccountGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -189,6 +193,7 @@ func (r *AccountGetResponse) unmarshal(reader io.Reader) error {
 type AccountUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Account
@@ -217,8 +222,7 @@ func (r *AccountUpdateRequest) Body(value *Account) *AccountUpdateRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *AccountUpdateRequest) Send() (result *AccountUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -226,7 +230,7 @@ func (r *AccountUpdateRequest) Send() (result *AccountUpdateResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccountUpdateRequest) SendContext(ctx context.Context) (result *AccountUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

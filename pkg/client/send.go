@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path"
+	"strconv"
 	"time"
 )
 
@@ -39,20 +40,40 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	// Get the context from the request:
 	ctx := request.Context()
 
-	// Measure the time that it takes to send the request and receive the resposne, and report
+	// Get and delete the header that contains the anonymized path that should be used to
+	// report metrics:
+	var metric string
+	header := request.Header
+	if header != nil {
+		metric = header.Get(metricHeader)
+		header.Del(metricHeader)
+	}
+	if metric == "" {
+		metric = "/-"
+	}
+
+	// Measure the time that it takes to send the request and receive the resposne:
 	// it in the log:
-	var before time.Time
-	var after time.Time
-	var elapsed time.Duration
-	if c.logger.DebugEnabled() {
-		before = time.Now()
-	}
+	before := time.Now()
 	response, err = c.send(ctx, request)
-	if c.logger.DebugEnabled() {
-		after = time.Now()
-		elapsed = after.Sub(before)
-		c.logger.Debug(ctx, "Response received in %s", elapsed)
+	after := time.Now()
+	elapsed := after.Sub(before)
+
+	// Update the metrics:
+	if c.callCountMetric != nil || c.callDurationMetric != nil {
+		labels := map[string]string{
+			metricsMethodLabel: request.Method,
+			metricsPathLabel:   metric,
+			metricsCodeLabel:   strconv.Itoa(response.StatusCode),
+		}
+		if c.callCountMetric != nil {
+			c.callCountMetric.With(labels).Inc()
+		}
+		if c.callDurationMetric != nil {
+			c.callDurationMetric.With(labels).Observe(elapsed.Seconds())
+		}
 	}
+
 	return
 }
 

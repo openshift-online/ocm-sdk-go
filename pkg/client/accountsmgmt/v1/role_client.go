@@ -38,15 +38,17 @@ import (
 type RoleClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewRoleClient creates a new client for the 'role'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRoleClient(transport http.RoundTripper, path string) *RoleClient {
+func NewRoleClient(transport http.RoundTripper, path string, metric string) *RoleClient {
 	client := new(RoleClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -57,6 +59,7 @@ func (c *RoleClient) Get() *RoleGetRequest {
 	request := new(RoleGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -67,6 +70,7 @@ func (c *RoleClient) Update() *RoleUpdateRequest {
 	request := new(RoleUpdateRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -77,6 +81,7 @@ func (c *RoleClient) Delete() *RoleDeleteRequest {
 	request := new(RoleDeleteRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -84,6 +89,7 @@ func (c *RoleClient) Delete() *RoleDeleteRequest {
 type RoleGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -103,8 +109,7 @@ func (r *RoleGetRequest) Header(name string, value interface{}) *RoleGetRequest 
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RoleGetRequest) Send() (result *RoleGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -112,7 +117,7 @@ func (r *RoleGetRequest) Send() (result *RoleGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleGetRequest) SendContext(ctx context.Context) (result *RoleGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -199,6 +204,7 @@ func (r *RoleGetResponse) unmarshal(reader io.Reader) error {
 type RoleUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Role
@@ -227,8 +233,7 @@ func (r *RoleUpdateRequest) Body(value *Role) *RoleUpdateRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RoleUpdateRequest) Send() (result *RoleUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -236,7 +241,7 @@ func (r *RoleUpdateRequest) Send() (result *RoleUpdateResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleUpdateRequest) SendContext(ctx context.Context) (result *RoleUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {
@@ -342,6 +347,7 @@ func (r *RoleUpdateResponse) unmarshal(reader io.Reader) error {
 type RoleDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -361,8 +367,7 @@ func (r *RoleDeleteRequest) Header(name string, value interface{}) *RoleDeleteRe
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -370,7 +375,7 @@ func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleDeleteRequest) SendContext(ctx context.Context) (result *RoleDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -39,15 +39,17 @@ import (
 type ClusterClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewClusterClient creates a new client for the 'cluster'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewClusterClient(transport http.RoundTripper, path string) *ClusterClient {
+func NewClusterClient(transport http.RoundTripper, path string, metric string) *ClusterClient {
 	client := new(ClusterClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *ClusterClient) Get() *ClusterGetRequest {
 	request := new(ClusterGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *ClusterClient) Update() *ClusterUpdateRequest {
 	request := new(ClusterUpdateRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -78,6 +82,7 @@ func (c *ClusterClient) Delete() *ClusterDeleteRequest {
 	request := new(ClusterDeleteRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -85,41 +90,62 @@ func (c *ClusterClient) Delete() *ClusterDeleteRequest {
 //
 // Reference to the resource that manages the detailed status of the cluster.
 func (c *ClusterClient) Status() *ClusterStatusClient {
-	return NewClusterStatusClient(c.transport, path.Join(c.path, "status"))
+	return NewClusterStatusClient(
+		c.transport,
+		path.Join(c.path, "status"),
+		path.Join(c.metric, "status"),
+	)
 }
 
 // Credentials returns the target 'credentials' resource.
 //
 // Reference to the resource that manages the credentials of the cluster.
 func (c *ClusterClient) Credentials() *CredentialsClient {
-	return NewCredentialsClient(c.transport, path.Join(c.path, "credentials"))
+	return NewCredentialsClient(
+		c.transport,
+		path.Join(c.path, "credentials"),
+		path.Join(c.metric, "credentials"),
+	)
 }
 
 // Logs returns the target 'logs' resource.
 //
 // Reference to the resource that manages the collection of logs of the cluster.
 func (c *ClusterClient) Logs() *LogsClient {
-	return NewLogsClient(c.transport, path.Join(c.path, "logs"))
+	return NewLogsClient(
+		c.transport,
+		path.Join(c.path, "logs"),
+		path.Join(c.metric, "logs"),
+	)
 }
 
 // Groups returns the target 'groups' resource.
 //
 // Reference to the resource that manages the collection of groups.
 func (c *ClusterClient) Groups() *GroupsClient {
-	return NewGroupsClient(c.transport, path.Join(c.path, "groups"))
+	return NewGroupsClient(
+		c.transport,
+		path.Join(c.path, "groups"),
+		path.Join(c.metric, "groups"),
+	)
 }
 
 // IdentityProviders returns the target 'identity_providers' resource.
 //
 // Reference to the resource that manages the collection of identity providers.
 func (c *ClusterClient) IdentityProviders() *IdentityProvidersClient {
-	return NewIdentityProvidersClient(c.transport, path.Join(c.path, "identity_providers"))
+	return NewIdentityProvidersClient(
+		c.transport,
+		path.Join(c.path, "identity_providers"),
+		path.Join(c.metric, "identity_providers"),
+	)
 }
 
 // ClusterGetRequest is the request for the 'get' method.
 type ClusterGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -139,8 +165,7 @@ func (r *ClusterGetRequest) Header(name string, value interface{}) *ClusterGetRe
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ClusterGetRequest) Send() (result *ClusterGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -148,7 +173,7 @@ func (r *ClusterGetRequest) Send() (result *ClusterGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -235,6 +260,7 @@ func (r *ClusterGetResponse) unmarshal(reader io.Reader) error {
 type ClusterUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Cluster
@@ -263,8 +289,7 @@ func (r *ClusterUpdateRequest) Body(value *Cluster) *ClusterUpdateRequest {
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ClusterUpdateRequest) Send() (result *ClusterUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -272,7 +297,7 @@ func (r *ClusterUpdateRequest) Send() (result *ClusterUpdateResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *ClusterUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {
@@ -378,6 +403,7 @@ func (r *ClusterUpdateResponse) unmarshal(reader io.Reader) error {
 type ClusterDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -397,8 +423,7 @@ func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDe
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -406,7 +431,7 @@ func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

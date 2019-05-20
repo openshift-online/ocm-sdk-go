@@ -36,15 +36,17 @@ import (
 type SubscriptionClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewSubscriptionClient creates a new client for the 'subscription'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewSubscriptionClient(transport http.RoundTripper, path string) *SubscriptionClient {
+func NewSubscriptionClient(transport http.RoundTripper, path string, metric string) *SubscriptionClient {
 	client := new(SubscriptionClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
 	request := new(SubscriptionGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -65,6 +68,7 @@ func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
 	request := new(SubscriptionDeleteRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -72,6 +76,7 @@ func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
 type SubscriptionGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -91,8 +96,7 @@ func (r *SubscriptionGetRequest) Header(name string, value interface{}) *Subscri
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *SubscriptionGetRequest) Send() (result *SubscriptionGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -100,7 +104,7 @@ func (r *SubscriptionGetRequest) Send() (result *SubscriptionGetResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *SubscriptionGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -187,6 +191,7 @@ func (r *SubscriptionGetResponse) unmarshal(reader io.Reader) error {
 type SubscriptionDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -206,8 +211,7 @@ func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *Subs
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *SubscriptionDeleteRequest) Send() (result *SubscriptionDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -215,7 +219,7 @@ func (r *SubscriptionDeleteRequest) Send() (result *SubscriptionDeleteResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *SubscriptionDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

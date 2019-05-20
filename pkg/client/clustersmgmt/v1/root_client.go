@@ -30,15 +30,17 @@ import (
 type RootClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewRootClient creates a new client for the 'root'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRootClient(transport http.RoundTripper, path string) *RootClient {
+func NewRootClient(transport http.RoundTripper, path string, metric string) *RootClient {
 	client := new(RootClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -46,19 +48,31 @@ func NewRootClient(transport http.RoundTripper, path string) *RootClient {
 //
 // Reference to the resource that manages the collection of clusters.
 func (c *RootClient) Clusters() *ClustersClient {
-	return NewClustersClient(c.transport, path.Join(c.path, "clusters"))
+	return NewClustersClient(
+		c.transport,
+		path.Join(c.path, "clusters"),
+		path.Join(c.metric, "clusters"),
+	)
 }
 
 // Dashboards returns the target 'dashboards' resource.
 //
 // Reference to the resource that manages the collection of dashboards.
 func (c *RootClient) Dashboards() *DashboardsClient {
-	return NewDashboardsClient(c.transport, path.Join(c.path, "dashboards"))
+	return NewDashboardsClient(
+		c.transport,
+		path.Join(c.path, "dashboards"),
+		path.Join(c.metric, "dashboards"),
+	)
 }
 
 // Flavours returns the target 'flavours' resource.
 //
 // Reference to the service that manages the collection of flavours.
 func (c *RootClient) Flavours() *FlavoursClient {
-	return NewFlavoursClient(c.transport, path.Join(c.path, "flavours"))
+	return NewFlavoursClient(
+		c.transport,
+		path.Join(c.path, "flavours"),
+		path.Join(c.metric, "flavours"),
+	)
 }

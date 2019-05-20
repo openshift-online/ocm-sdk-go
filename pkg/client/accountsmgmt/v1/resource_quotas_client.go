@@ -39,15 +39,17 @@ import (
 type ResourceQuotasClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewResourceQuotasClient creates a new client for the 'resource_quotas'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewResourceQuotasClient(transport http.RoundTripper, path string) *ResourceQuotasClient {
+func NewResourceQuotasClient(transport http.RoundTripper, path string, metric string) *ResourceQuotasClient {
 	client := new(ResourceQuotasClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -58,6 +60,7 @@ func (c *ResourceQuotasClient) List() *ResourceQuotasListRequest {
 	request := new(ResourceQuotasListRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -68,6 +71,7 @@ func (c *ResourceQuotasClient) Add() *ResourceQuotasAddRequest {
 	request := new(ResourceQuotasAddRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -75,13 +79,18 @@ func (c *ResourceQuotasClient) Add() *ResourceQuotasAddRequest {
 //
 // Reference to the service that manages an specific resource quota.
 func (c *ResourceQuotasClient) ResourceQuota(id string) *ResourceQuotaClient {
-	return NewResourceQuotaClient(c.transport, path.Join(c.path, id))
+	return NewResourceQuotaClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
 // ResourceQuotasListRequest is the request for the 'list' method.
 type ResourceQuotasListRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -133,8 +142,7 @@ func (r *ResourceQuotasListRequest) Total(value int) *ResourceQuotasListRequest 
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ResourceQuotasListRequest) Send() (result *ResourceQuotasListResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -151,7 +159,7 @@ func (r *ResourceQuotasListRequest) SendContext(ctx context.Context) (result *Re
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
 	}
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -288,6 +296,7 @@ type resourceQuotasListResponseData struct {
 type ResourceQuotasAddRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 	body      *ResourceQuota
@@ -316,8 +325,7 @@ func (r *ResourceQuotasAddRequest) Body(value *ResourceQuota) *ResourceQuotasAdd
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ResourceQuotasAddRequest) Send() (result *ResourceQuotasAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -325,7 +333,7 @@ func (r *ResourceQuotasAddRequest) Send() (result *ResourceQuotasAddResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ResourceQuotasAddRequest) SendContext(ctx context.Context) (result *ResourceQuotasAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	buffer := new(bytes.Buffer)
 	err = r.marshal(buffer)
 	if err != nil {

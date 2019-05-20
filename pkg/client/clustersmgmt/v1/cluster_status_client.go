@@ -36,15 +36,17 @@ import (
 type ClusterStatusClient struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 }
 
 // NewClusterStatusClient creates a new client for the 'cluster_status'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewClusterStatusClient(transport http.RoundTripper, path string) *ClusterStatusClient {
+func NewClusterStatusClient(transport http.RoundTripper, path string, metric string) *ClusterStatusClient {
 	client := new(ClusterStatusClient)
 	client.transport = transport
 	client.path = path
+	client.metric = metric
 	return client
 }
 
@@ -55,6 +57,7 @@ func (c *ClusterStatusClient) Get() *ClusterStatusGetRequest {
 	request := new(ClusterStatusGetRequest)
 	request.transport = c.transport
 	request.path = c.path
+	request.metric = c.metric
 	return request
 }
 
@@ -62,6 +65,7 @@ func (c *ClusterStatusClient) Get() *ClusterStatusGetRequest {
 type ClusterStatusGetRequest struct {
 	transport http.RoundTripper
 	path      string
+	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -81,8 +85,7 @@ func (r *ClusterStatusGetRequest) Header(name string, value interface{}) *Cluste
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method. If you don't provide a
-// context then a new background context will be created.
+// Consider using a context and the SendContext method.
 func (r *ClusterStatusGetRequest) Send() (result *ClusterStatusGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
@@ -90,7 +93,7 @@ func (r *ClusterStatusGetRequest) Send() (result *ClusterStatusGetResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterStatusGetRequest) SendContext(ctx context.Context) (result *ClusterStatusGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.CopyHeader(r.header)
+	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
