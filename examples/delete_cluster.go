@@ -36,6 +36,7 @@ func main() {
 		Build()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Create the connection, and remember to close it:
@@ -46,6 +47,7 @@ func main() {
 		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
+		os.Exit(1)
 	}
 	defer connection.Close()
 
@@ -61,5 +63,6 @@ func main() {
 	_, err = resource.Delete().SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't delete cluster: %v\n", err)
+		os.Exit(1)
 	}
 }
