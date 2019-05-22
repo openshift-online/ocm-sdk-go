@@ -42,6 +42,16 @@ func (b *ClusterAuthorizationResponseBuilder) Allowed(value bool) *ClusterAuthor
 	return b
 }
 
+// ExcessResources sets the value of the 'excess_resources' attribute
+// to the given values.
+//
+//
+func (b *ClusterAuthorizationResponseBuilder) ExcessResources(values ...*ReservedResourceBuilder) *ClusterAuthorizationResponseBuilder {
+	b.excessResources = make([]*ReservedResourceBuilder, len(values))
+	copy(b.excessResources, values)
+	return b
+}
+
 // Subscription sets the value of the 'subscription' attribute
 // to the given value.
 //

@@ -52,6 +52,16 @@ func (b *GroupBuilder) Link(value bool) *GroupBuilder {
 	return b
 }
 
+// Users sets the value of the 'users' attribute
+// to the given values.
+//
+//
+func (b *GroupBuilder) Users(values ...*UserBuilder) *GroupBuilder {
+	b.users = make([]*UserBuilder, len(values))
+	copy(b.users, values)
+	return b
+}
+
 // Build creates a 'group' object using the configuration stored in the builder.
 func (b *GroupBuilder) Build() (object *Group, err error) {
 	object = new(Group)

@@ -287,6 +287,16 @@ func (b *ClusterBuilder) Subscription(value *SubscriptionBuilder) *ClusterBuilde
 	return b
 }
 
+// Groups sets the value of the 'groups' attribute
+// to the given values.
+//
+//
+func (b *ClusterBuilder) Groups(values ...*GroupBuilder) *ClusterBuilder {
+	b.groups = make([]*GroupBuilder, len(values))
+	copy(b.groups, values)
+	return b
+}
+
 // Creator sets the value of the 'creator' attribute
 // to the given value.
 //
@@ -302,6 +312,16 @@ func (b *ClusterBuilder) Creator(value string) *ClusterBuilder {
 // Representation of an _OpenShift_ version.
 func (b *ClusterBuilder) Version(value *VersionBuilder) *ClusterBuilder {
 	b.version = value
+	return b
+}
+
+// IdentityProviders sets the value of the 'identity_providers' attribute
+// to the given values.
+//
+//
+func (b *ClusterBuilder) IdentityProviders(values ...*IdentityProviderBuilder) *ClusterBuilder {
+	b.identityProviders = make([]*IdentityProviderBuilder, len(values))
+	copy(b.identityProviders, values)
 	return b
 }
 
