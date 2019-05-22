@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.13 May 22 2019
+
+- Added support for building objects with attributes that are lists of structs.
+
 == 0.1.12 May 20 2019
 
 - Added support for deleting subscriptions.
