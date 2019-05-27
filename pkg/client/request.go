@@ -39,8 +39,8 @@ type Request struct {
 	body      []byte
 }
 
-// Path defines the request path, for example `/api/clusters_mgmt/v1/lusters`. This is mandatory; an
-// error will be returned inmediately when calling the Send method if this isn't provided.
+// Path defines the request path, for example `/api/clusters_mgmt/v1/clusters`. This is mandatory; an
+// error will be returned immediately when calling the Send method if this isn't provided.
 func (r *Request) Path(value string) *Request {
 	r.path = value
 	return r
