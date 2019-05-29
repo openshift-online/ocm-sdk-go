@@ -27,6 +27,22 @@ import (
 	"strings"
 )
 
+const (
+	// redactionStr replaces sensitive values in output.
+	redactionStr = "***"
+)
+
+// redactFields are removed from log output when dumped.
+var redactFields = []string{
+	"access_token",
+	"id_token",
+	"refresh_token",
+	"password",
+	"client_secret",
+	"kubeconfig",
+	"ssh",
+}
+
 // dumpRequest dumps to the log, in debug level, the details of the given HTTP request.
 func (c *Connection) dumpRequest(ctx context.Context, request *http.Request, body []byte) {
 	c.logger.Debug(ctx, "Request method is %s", request.Method)
@@ -98,6 +114,9 @@ func (c *Connection) dumpJSON(ctx context.Context, data []byte) {
 	if err != nil {
 		c.logger.Debug(ctx, "%s", data)
 	} else {
+		// remove sensitive information
+		c.redactSensitive(parsed)
+
 		indented, err := json.MarshalIndent(parsed, "", "  ")
 		if err != nil {
 			c.logger.Debug(ctx, "%s", data)
@@ -110,4 +129,23 @@ func (c *Connection) dumpJSON(ctx context.Context, data []byte) {
 // dumpBytes dump the given data as an array of bytes.
 func (c *Connection) dumpBytes(ctx context.Context, data []byte) {
 	c.logger.Debug(ctx, "%s", data)
+}
+
+// redactSensitive replaces sensitive fields within a response with redactionStr.
+func (c *Connection) redactSensitive(body map[string]interface{}) {
+	for _, field := range redactFields {
+		if _, ok := body[field]; ok {
+			body[field] = redactionStr
+		}
+	}
+}
+
+// isRedactField checks if f is a field that should be redacted.
+func isRedactField(f string) bool {
+	for _, redactField := range redactFields {
+		if f == redactField {
+			return true
+		}
+	}
+	return false
 }
