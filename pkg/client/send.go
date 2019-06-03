@@ -52,7 +52,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 		metric = "/-"
 	}
 
-	// Measure the time that it takes to send the request and receive the resposne:
+	// Measure the time that it takes to send the request and receive the response:
 	// it in the log:
 	before := time.Now()
 	response, err = c.send(ctx, request)
