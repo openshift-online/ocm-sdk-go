@@ -191,9 +191,8 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 				}
 				censoredBody.WriteString(url.QueryEscape(name) + "=") // #nosec G104
 
-				if name == "password" || name == "client_secret" {
-					censoredBody.WriteString("***") // #nosec G104
-
+				if isRedactField(name) {
+					censoredBody.WriteString(redactionStr) // #nosec G104
 				} else {
 					censoredBody.WriteString(url.QueryEscape(value)) // #nosec G104
 				}
