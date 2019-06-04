@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.14 Jun 4 2019
+
+- Redact sensitive fields in debug logs.
+
+- Don't crash when there is no response.
+
 == 0.1.13 May 22 2019
 
 - Added support for building objects with attributes that are lists of structs.
