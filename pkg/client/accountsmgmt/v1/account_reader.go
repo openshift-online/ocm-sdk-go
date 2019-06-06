@@ -34,6 +34,8 @@ type accountData struct {
 	Name           *string           "json:\"name,omitempty\""
 	Username       *string           "json:\"username,omitempty\""
 	Email          *string           "json:\"email,omitempty\""
+	FirstName      *string           "json:\"first_name,omitempty\""
+	LastName       *string           "json:\"last_name,omitempty\""
 	Banned         *bool             "json:\"banned,omitempty\""
 	BanDescription *string           "json:\"ban_description,omitempty\""
 	Organization   *organizationData "json:\"organization,omitempty\""
@@ -71,6 +73,8 @@ func (o *Account) wrap() (data *accountData, err error) {
 	data.Name = o.name
 	data.Username = o.username
 	data.Email = o.email
+	data.FirstName = o.firstName
+	data.LastName = o.lastName
 	data.Banned = o.banned
 	data.BanDescription = o.banDescription
 	data.Organization, err = o.organization.wrap()
@@ -124,6 +128,8 @@ func (d *accountData) unwrap() (object *Account, err error) {
 	object.name = d.Name
 	object.username = d.Username
 	object.email = d.Email
+	object.firstName = d.FirstName
+	object.lastName = d.LastName
 	object.banned = d.Banned
 	object.banDescription = d.BanDescription
 	object.organization, err = d.Organization.unwrap()

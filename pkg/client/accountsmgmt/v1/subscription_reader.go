@@ -38,6 +38,7 @@ type subscriptionData struct {
 	ExternalClusterID  *string                 "json:\"external_cluster_id,omitempty\""
 	OrganizationID     *string                 "json:\"organization_id,omitempty\""
 	LastTelemetryDate  *time.Time              "json:\"last_telemetry_date,omitempty\""
+	Creator            *accountData            "json:\"creator,omitempty\""
 }
 
 // MarshalSubscription writes a value of the 'subscription' to the given target,
@@ -81,6 +82,10 @@ func (o *Subscription) wrap() (data *subscriptionData, err error) {
 	data.ExternalClusterID = o.externalClusterID
 	data.OrganizationID = o.organizationID
 	data.LastTelemetryDate = o.lastTelemetryDate
+	data.Creator, err = o.creator.wrap()
+	if err != nil {
+		return
+	}
 	return
 }
 
@@ -137,5 +142,9 @@ func (d *subscriptionData) unwrap() (object *Subscription, err error) {
 	object.externalClusterID = d.ExternalClusterID
 	object.organizationID = d.OrganizationID
 	object.lastTelemetryDate = d.LastTelemetryDate
+	object.creator, err = d.Creator.unwrap()
+	if err != nil {
+		return
+	}
 	return
 }

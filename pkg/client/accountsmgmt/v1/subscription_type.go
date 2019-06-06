@@ -48,6 +48,7 @@ type Subscription struct {
 	externalClusterID  *string
 	organizationID     *string
 	lastTelemetryDate  *time.Time
+	creator            *Account
 }
 
 // Kind returns the name of the type of the object.
@@ -111,6 +112,7 @@ func (o *Subscription) Empty() bool {
 		o.externalClusterID == nil &&
 		o.organizationID == nil &&
 		o.lastTelemetryDate == nil &&
+		o.creator == nil &&
 		true)
 }
 
@@ -248,6 +250,29 @@ func (o *Subscription) GetLastTelemetryDate() (value time.Time, ok bool) {
 	ok = o != nil && o.lastTelemetryDate != nil
 	if ok {
 		value = *o.lastTelemetryDate
+	}
+	return
+}
+
+// Creator returns the value of the 'creator' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the account that created the subscription.
+func (o *Subscription) Creator() *Account {
+	if o == nil {
+		return nil
+	}
+	return o.creator
+}
+
+// GetCreator returns the value of the 'creator' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the account that created the subscription.
+func (o *Subscription) GetCreator() (value *Account, ok bool) {
+	ok = o != nil && o.creator != nil
+	if ok {
+		value = o.creator
 	}
 	return
 }

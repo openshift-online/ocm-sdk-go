@@ -41,6 +41,8 @@ type Account struct {
 	name           *string
 	username       *string
 	email          *string
+	firstName      *string
+	lastName       *string
 	banned         *bool
 	banDescription *string
 	organization   *Organization
@@ -104,6 +106,8 @@ func (o *Account) Empty() bool {
 		o.name == nil &&
 		o.username == nil &&
 		o.email == nil &&
+		o.firstName == nil &&
+		o.lastName == nil &&
 		o.banned == nil &&
 		o.banDescription == nil &&
 		o.organization == nil &&
@@ -175,6 +179,52 @@ func (o *Account) GetEmail() (value string, ok bool) {
 	ok = o != nil && o.email != nil
 	if ok {
 		value = *o.email
+	}
+	return
+}
+
+// FirstName returns the value of the 'first_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Account) FirstName() string {
+	if o != nil && o.firstName != nil {
+		return *o.firstName
+	}
+	return ""
+}
+
+// GetFirstName returns the value of the 'first_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Account) GetFirstName() (value string, ok bool) {
+	ok = o != nil && o.firstName != nil
+	if ok {
+		value = *o.firstName
+	}
+	return
+}
+
+// LastName returns the value of the 'last_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Account) LastName() string {
+	if o != nil && o.lastName != nil {
+		return *o.lastName
+	}
+	return ""
+}
+
+// GetLastName returns the value of the 'last_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Account) GetLastName() (value string, ok bool) {
+	ok = o != nil && o.lastName != nil
+	if ok {
+		value = *o.lastName
 	}
 	return
 }
