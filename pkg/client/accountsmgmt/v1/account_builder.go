@@ -29,6 +29,8 @@ type AccountBuilder struct {
 	name           *string
 	username       *string
 	email          *string
+	firstName      *string
+	lastName       *string
 	banned         *bool
 	banDescription *string
 	organization   *OrganizationBuilder
@@ -84,6 +86,24 @@ func (b *AccountBuilder) Email(value string) *AccountBuilder {
 	return b
 }
 
+// FirstName sets the value of the 'first_name' attribute
+// to the given value.
+//
+//
+func (b *AccountBuilder) FirstName(value string) *AccountBuilder {
+	b.firstName = &value
+	return b
+}
+
+// LastName sets the value of the 'last_name' attribute
+// to the given value.
+//
+//
+func (b *AccountBuilder) LastName(value string) *AccountBuilder {
+	b.lastName = &value
+	return b
+}
+
 // Banned sets the value of the 'banned' attribute
 // to the given value.
 //
@@ -125,6 +145,12 @@ func (b *AccountBuilder) Build() (object *Account, err error) {
 	}
 	if b.email != nil {
 		object.email = b.email
+	}
+	if b.firstName != nil {
+		object.firstName = b.firstName
+	}
+	if b.lastName != nil {
+		object.lastName = b.lastName
 	}
 	if b.banned != nil {
 		object.banned = b.banned

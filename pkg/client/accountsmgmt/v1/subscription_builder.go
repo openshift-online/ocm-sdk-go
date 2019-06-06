@@ -36,6 +36,7 @@ type SubscriptionBuilder struct {
 	externalClusterID  *string
 	organizationID     *string
 	lastTelemetryDate  *time.Time
+	creator            *AccountBuilder
 }
 
 // NewSubscription creates a new builder of 'subscription' objects.
@@ -115,6 +116,15 @@ func (b *SubscriptionBuilder) LastTelemetryDate(value time.Time) *SubscriptionBu
 	return b
 }
 
+// Creator sets the value of the 'creator' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) Creator(value *AccountBuilder) *SubscriptionBuilder {
+	b.creator = value
+	return b
+}
+
 // Build creates a 'subscription' object using the configuration stored in the builder.
 func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	object = new(Subscription)
@@ -144,6 +154,12 @@ func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	}
 	if b.lastTelemetryDate != nil {
 		object.lastTelemetryDate = b.lastTelemetryDate
+	}
+	if b.creator != nil {
+		object.creator, err = b.creator.Build()
+		if err != nil {
+			return
+		}
 	}
 	return
 }
