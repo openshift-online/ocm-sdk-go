@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.16 Juan 19 2019
+
+- Added to response types getter methods that return the value of the parameter
+  and a boolean flag that indicates if there is actually a value.
+
 == 0.1.15 Jun 19 2019
 
 - Add support for the `versions` collection.
