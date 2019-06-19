@@ -241,6 +241,15 @@ func (l *ClusterCredentialsList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
+// Get returns the item of the list with the given index. If there is no item with
+// that index it returns nil.
+func (l *ClusterCredentialsList) Get(i int) *ClusterCredentials {
+	if l == nil || i < 0 || i >= len(l.items) {
+		return nil
+	}
+	return l.items[i]
+}
+
 // Slice returns an slice containing the items of the list. The returned slice is a
 // copy of the one used internally, so it can be modified without affecting the
 // internal representation.
