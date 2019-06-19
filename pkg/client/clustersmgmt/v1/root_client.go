@@ -76,3 +76,14 @@ func (c *RootClient) Flavours() *FlavoursClient {
 		path.Join(c.metric, "flavours"),
 	)
 }
+
+// Versions returns the target 'versions' resource.
+//
+// Reference to the resource that manage the collection of versions.
+func (c *RootClient) Versions() *VersionsClient {
+	return NewVersionsClient(
+		c.transport,
+		path.Join(c.path, "versions"),
+		path.Join(c.metric, "versions"),
+	)
+}
