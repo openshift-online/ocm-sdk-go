@@ -156,7 +156,22 @@ func (r *ClusterStatusGetResponse) Error() *errors.Error {
 //
 //
 func (r *ClusterStatusGetResponse) Status_() *ClusterStatus {
+	if r == nil {
+		return nil
+	}
 	return r.status_
+}
+
+// GetStatus_ returns the value of the 'status' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *ClusterStatusGetResponse) GetStatus_() (value *ClusterStatus, ok bool) {
+	ok = r != nil && r.status_ != nil
+	if ok {
+		value = r.status_
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

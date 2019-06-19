@@ -186,7 +186,22 @@ func (r *ClusterAuthorizationsPostResponse) Error() *errors.Error {
 //
 //
 func (r *ClusterAuthorizationsPostResponse) Response() *ClusterAuthorizationResponse {
+	if r == nil {
+		return nil
+	}
 	return r.response
+}
+
+// GetResponse returns the value of the 'response' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *ClusterAuthorizationsPostResponse) GetResponse() (value *ClusterAuthorizationResponse, ok bool) {
+	ok = r != nil && r.response != nil
+	if ok {
+		value = r.response
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

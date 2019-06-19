@@ -168,7 +168,22 @@ func (r *GroupGetResponse) Error() *errors.Error {
 //
 //
 func (r *GroupGetResponse) Body() *Group {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *GroupGetResponse) GetBody() (value *Group, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

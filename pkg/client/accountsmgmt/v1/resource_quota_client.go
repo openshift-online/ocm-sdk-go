@@ -169,7 +169,22 @@ func (r *ResourceQuotaGetResponse) Error() *errors.Error {
 //
 //
 func (r *ResourceQuotaGetResponse) Body() *ResourceQuota {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *ResourceQuotaGetResponse) GetBody() (value *ResourceQuota, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the
@@ -312,7 +327,22 @@ func (r *ResourceQuotaUpdateResponse) Error() *errors.Error {
 //
 //
 func (r *ResourceQuotaUpdateResponse) Body() *ResourceQuota {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *ResourceQuotaUpdateResponse) GetBody() (value *ResourceQuota, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

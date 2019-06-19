@@ -167,7 +167,22 @@ func (r *PermissionGetResponse) Error() *errors.Error {
 //
 //
 func (r *PermissionGetResponse) Body() *Permission {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *PermissionGetResponse) GetBody() (value *Permission, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

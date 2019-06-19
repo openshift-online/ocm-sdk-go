@@ -239,10 +239,24 @@ func (r *VersionsListResponse) Error() *errors.Error {
 //
 // Default value is `1`.
 func (r *VersionsListResponse) Page() int {
-	if r.page != nil {
+	if r != nil && r.page != nil {
 		return *r.page
 	}
 	return 0
+}
+
+// GetPage returns the value of the 'page' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *VersionsListResponse) GetPage() (value int, ok bool) {
+	ok = r != nil && r.page != nil
+	if ok {
+		value = *r.page
+	}
+	return
 }
 
 // Size returns the value of the 'size' parameter.
@@ -251,10 +265,24 @@ func (r *VersionsListResponse) Page() int {
 //
 // Default value is `100`.
 func (r *VersionsListResponse) Size() int {
-	if r.size != nil {
+	if r != nil && r.size != nil {
 		return *r.size
 	}
 	return 0
+}
+
+// GetSize returns the value of the 'size' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *VersionsListResponse) GetSize() (value int, ok bool) {
+	ok = r != nil && r.size != nil
+	if ok {
+		value = *r.size
+	}
+	return
 }
 
 // Total returns the value of the 'total' parameter.
@@ -262,17 +290,45 @@ func (r *VersionsListResponse) Size() int {
 // Total number of items of the collection that match the search criteria,
 // regardless of the size of the page.
 func (r *VersionsListResponse) Total() int {
-	if r.total != nil {
+	if r != nil && r.total != nil {
 		return *r.total
 	}
 	return 0
+}
+
+// GetTotal returns the value of the 'total' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Total number of items of the collection that match the search criteria,
+// regardless of the size of the page.
+func (r *VersionsListResponse) GetTotal() (value int, ok bool) {
+	ok = r != nil && r.total != nil
+	if ok {
+		value = *r.total
+	}
+	return
 }
 
 // Items returns the value of the 'items' parameter.
 //
 // Retrieved list of versions.
 func (r *VersionsListResponse) Items() *VersionList {
+	if r == nil {
+		return nil
+	}
 	return r.items
+}
+
+// GetItems returns the value of the 'items' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Retrieved list of versions.
+func (r *VersionsListResponse) GetItems() (value *VersionList, ok bool) {
+	ok = r != nil && r.items != nil
+	if ok {
+		value = r.items
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the
