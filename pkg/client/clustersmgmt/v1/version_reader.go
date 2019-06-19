@@ -28,9 +28,11 @@ import (
 // versionData is the data structure used internally to marshal and unmarshal
 // objects of type 'version'.
 type versionData struct {
-	Kind *string "json:\"kind,omitempty\""
-	ID   *string "json:\"id,omitempty\""
-	HREF *string "json:\"href,omitempty\""
+	Kind    *string "json:\"kind,omitempty\""
+	ID      *string "json:\"id,omitempty\""
+	HREF    *string "json:\"href,omitempty\""
+	Enabled *bool   "json:\"enabled,omitempty\""
+	Default *bool   "json:\"default,omitempty\""
 }
 
 // MarshalVersion writes a value of the 'version' to the given target,
@@ -62,6 +64,8 @@ func (o *Version) wrap() (data *versionData, err error) {
 	} else {
 		*data.Kind = VersionKind
 	}
+	data.Enabled = o.enabled
+	data.Default = o.default_
 	return
 }
 
@@ -106,5 +110,7 @@ func (d *versionData) unwrap() (object *Version, err error) {
 			return
 		}
 	}
+	object.enabled = d.Enabled
+	object.default_ = d.Default
 	return
 }

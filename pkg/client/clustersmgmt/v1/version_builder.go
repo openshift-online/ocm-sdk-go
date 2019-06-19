@@ -23,9 +23,11 @@ package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 //
 // Representation of an _OpenShift_ version.
 type VersionBuilder struct {
-	id   *string
-	href *string
-	link bool
+	id       *string
+	href     *string
+	link     bool
+	enabled  *bool
+	default_ *bool
 }
 
 // NewVersion creates a new builder of 'version' objects.
@@ -51,11 +53,35 @@ func (b *VersionBuilder) Link(value bool) *VersionBuilder {
 	return b
 }
 
+// Enabled sets the value of the 'enabled' attribute
+// to the given value.
+//
+//
+func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
+	b.enabled = &value
+	return b
+}
+
+// Default sets the value of the 'default' attribute
+// to the given value.
+//
+//
+func (b *VersionBuilder) Default(value bool) *VersionBuilder {
+	b.default_ = &value
+	return b
+}
+
 // Build creates a 'version' object using the configuration stored in the builder.
 func (b *VersionBuilder) Build() (object *Version, err error) {
 	object = new(Version)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	if b.enabled != nil {
+		object.enabled = b.enabled
+	}
+	if b.default_ != nil {
+		object.default_ = b.default_
+	}
 	return
 }
