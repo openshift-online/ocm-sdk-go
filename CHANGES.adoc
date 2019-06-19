@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.15 Jun 19 2019
+
+- Add support for the `versions` collection.
+
 == 0.1.14 Jun 4 2019
 
 - Redact sensitive fields in debug logs.
