@@ -156,7 +156,22 @@ func (r *CredentialsGetResponse) Error() *errors.Error {
 //
 //
 func (r *CredentialsGetResponse) Body() *ClusterCredentials {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *CredentialsGetResponse) GetBody() (value *ClusterCredentials, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

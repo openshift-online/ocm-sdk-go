@@ -156,7 +156,22 @@ func (r *LogGetResponse) Error() *errors.Error {
 //
 //
 func (r *LogGetResponse) Body() *Log {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *LogGetResponse) GetBody() (value *Log, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

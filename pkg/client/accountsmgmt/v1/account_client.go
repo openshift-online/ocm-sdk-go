@@ -169,7 +169,22 @@ func (r *AccountGetResponse) Error() *errors.Error {
 //
 //
 func (r *AccountGetResponse) Body() *Account {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *AccountGetResponse) GetBody() (value *Account, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the
@@ -312,7 +327,22 @@ func (r *AccountUpdateResponse) Error() *errors.Error {
 //
 //
 func (r *AccountUpdateResponse) Body() *Account {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *AccountUpdateResponse) GetBody() (value *Account, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the

@@ -180,7 +180,22 @@ func (r *RoleGetResponse) Error() *errors.Error {
 //
 //
 func (r *RoleGetResponse) Body() *Role {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *RoleGetResponse) GetBody() (value *Role, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the
@@ -323,7 +338,22 @@ func (r *RoleUpdateResponse) Error() *errors.Error {
 //
 //
 func (r *RoleUpdateResponse) Body() *Role {
+	if r == nil {
+		return nil
+	}
 	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *RoleUpdateResponse) GetBody() (value *Role, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // unmarshal is the method used internally to unmarshal responses to the
