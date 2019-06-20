@@ -26,6 +26,7 @@ type DashboardBuilder struct {
 	id      *string
 	href    *string
 	link    bool
+	name    *string
 	metrics []*MetricBuilder
 }
 
@@ -52,6 +53,15 @@ func (b *DashboardBuilder) Link(value bool) *DashboardBuilder {
 	return b
 }
 
+// Name sets the value of the 'name' attribute
+// to the given value.
+//
+//
+func (b *DashboardBuilder) Name(value string) *DashboardBuilder {
+	b.name = &value
+	return b
+}
+
 // Metrics sets the value of the 'metrics' attribute
 // to the given values.
 //
@@ -68,6 +78,9 @@ func (b *DashboardBuilder) Build() (object *Dashboard, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	if b.name != nil {
+		object.name = b.name
+	}
 	if b.metrics != nil {
 		object.metrics = new(MetricList)
 		object.metrics.items = make([]*Metric, len(b.metrics))

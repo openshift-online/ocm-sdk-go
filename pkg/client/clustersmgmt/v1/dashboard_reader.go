@@ -31,6 +31,7 @@ type dashboardData struct {
 	Kind    *string        "json:\"kind,omitempty\""
 	ID      *string        "json:\"id,omitempty\""
 	HREF    *string        "json:\"href,omitempty\""
+	Name    *string        "json:\"name,omitempty\""
 	Metrics metricListData "json:\"metrics,omitempty\""
 }
 
@@ -63,6 +64,7 @@ func (o *Dashboard) wrap() (data *dashboardData, err error) {
 	} else {
 		*data.Kind = DashboardKind
 	}
+	data.Name = o.name
 	data.Metrics, err = o.metrics.wrap()
 	if err != nil {
 		return
@@ -111,6 +113,7 @@ func (d *dashboardData) unwrap() (object *Dashboard, err error) {
 			return
 		}
 	}
+	object.name = d.Name
 	object.metrics, err = d.Metrics.unwrap()
 	if err != nil {
 		return
