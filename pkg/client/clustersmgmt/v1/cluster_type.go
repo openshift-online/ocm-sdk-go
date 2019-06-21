@@ -75,33 +75,34 @@ const ClusterNilKind = "ClusterNil"
 // attributes are mandatory when creation a cluster with your own Amazon Web
 // Services account.
 type Cluster struct {
-	id                *string
-	href              *string
-	link              bool
-	name              *string
-	flavour           *Flavour
-	console           *ClusterConsole
-	multiAZ           *bool
-	nodes             *ClusterNodes
-	api               *ClusterAPI
-	region            *CloudRegion
-	displayName       *string
-	dns               *DNS
-	properties        map[string]string
-	state             *ClusterState
-	managed           *bool
-	externalID        *string
-	aws               *AWS
-	network           *Network
-	creationTimestamp *time.Time
-	cloudProvider     *CloudProvider
-	openshiftVersion  *string
-	subscription      *Subscription
-	groups            *GroupList
-	creator           *string
-	version           *Version
-	identityProviders *IdentityProviderList
-	metrics           *ClusterMetrics
+	id                  *string
+	href                *string
+	link                bool
+	name                *string
+	flavour             *Flavour
+	console             *ClusterConsole
+	multiAZ             *bool
+	nodes               *ClusterNodes
+	api                 *ClusterAPI
+	region              *CloudRegion
+	displayName         *string
+	dns                 *DNS
+	properties          map[string]string
+	state               *ClusterState
+	managed             *bool
+	externalID          *string
+	aws                 *AWS
+	network             *Network
+	creationTimestamp   *time.Time
+	expirationTimestamp *time.Time
+	cloudProvider       *CloudProvider
+	openshiftVersion    *string
+	subscription        *Subscription
+	groups              *GroupList
+	creator             *string
+	version             *Version
+	identityProviders   *IdentityProviderList
+	metrics             *ClusterMetrics
 }
 
 // Kind returns the name of the type of the object.
@@ -175,6 +176,7 @@ func (o *Cluster) Empty() bool {
 		o.aws == nil &&
 		o.network == nil &&
 		o.creationTimestamp == nil &&
+		o.expirationTimestamp == nil &&
 		o.cloudProvider == nil &&
 		o.openshiftVersion == nil &&
 		o.subscription == nil &&
@@ -562,6 +564,33 @@ func (o *Cluster) GetCreationTimestamp() (value time.Time, ok bool) {
 	ok = o != nil && o.creationTimestamp != nil
 	if ok {
 		value = *o.creationTimestamp
+	}
+	return
+}
+
+// ExpirationTimestamp returns the value of the 'expiration_timestamp' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Date and time when the cluster will be automatically deleted, using the format defined in
+// https://www.ietf.org/rfc/rfc3339.txt[RFC3339]. If no timestamp is provided, the cluster
+// will never expire.
+func (o *Cluster) ExpirationTimestamp() time.Time {
+	if o != nil && o.expirationTimestamp != nil {
+		return *o.expirationTimestamp
+	}
+	return time.Time{}
+}
+
+// GetExpirationTimestamp returns the value of the 'expiration_timestamp' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Date and time when the cluster will be automatically deleted, using the format defined in
+// https://www.ietf.org/rfc/rfc3339.txt[RFC3339]. If no timestamp is provided, the cluster
+// will never expire.
+func (o *Cluster) GetExpirationTimestamp() (value time.Time, ok bool) {
+	ok = o != nil && o.expirationTimestamp != nil
+	if ok {
+		value = *o.expirationTimestamp
 	}
 	return
 }

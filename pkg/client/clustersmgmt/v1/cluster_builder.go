@@ -63,33 +63,34 @@ import (
 // attributes are mandatory when creation a cluster with your own Amazon Web
 // Services account.
 type ClusterBuilder struct {
-	id                *string
-	href              *string
-	link              bool
-	name              *string
-	flavour           *FlavourBuilder
-	console           *ClusterConsoleBuilder
-	multiAZ           *bool
-	nodes             *ClusterNodesBuilder
-	api               *ClusterAPIBuilder
-	region            *CloudRegionBuilder
-	displayName       *string
-	dns               *DNSBuilder
-	properties        map[string]string
-	state             *ClusterState
-	managed           *bool
-	externalID        *string
-	aws               *AWSBuilder
-	network           *NetworkBuilder
-	creationTimestamp *time.Time
-	cloudProvider     *CloudProviderBuilder
-	openshiftVersion  *string
-	subscription      *SubscriptionBuilder
-	groups            []*GroupBuilder
-	creator           *string
-	version           *VersionBuilder
-	identityProviders []*IdentityProviderBuilder
-	metrics           *ClusterMetricsBuilder
+	id                  *string
+	href                *string
+	link                bool
+	name                *string
+	flavour             *FlavourBuilder
+	console             *ClusterConsoleBuilder
+	multiAZ             *bool
+	nodes               *ClusterNodesBuilder
+	api                 *ClusterAPIBuilder
+	region              *CloudRegionBuilder
+	displayName         *string
+	dns                 *DNSBuilder
+	properties          map[string]string
+	state               *ClusterState
+	managed             *bool
+	externalID          *string
+	aws                 *AWSBuilder
+	network             *NetworkBuilder
+	creationTimestamp   *time.Time
+	expirationTimestamp *time.Time
+	cloudProvider       *CloudProviderBuilder
+	openshiftVersion    *string
+	subscription        *SubscriptionBuilder
+	groups              []*GroupBuilder
+	creator             *string
+	version             *VersionBuilder
+	identityProviders   []*IdentityProviderBuilder
+	metrics             *ClusterMetricsBuilder
 }
 
 // NewCluster creates a new builder of 'cluster' objects.
@@ -260,6 +261,15 @@ func (b *ClusterBuilder) CreationTimestamp(value time.Time) *ClusterBuilder {
 	return b
 }
 
+// ExpirationTimestamp sets the value of the 'expiration_timestamp' attribute
+// to the given value.
+//
+//
+func (b *ClusterBuilder) ExpirationTimestamp(value time.Time) *ClusterBuilder {
+	b.expirationTimestamp = &value
+	return b
+}
+
 // CloudProvider sets the value of the 'cloud_provider' attribute
 // to the given value.
 //
@@ -411,6 +421,9 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	if b.creationTimestamp != nil {
 		object.creationTimestamp = b.creationTimestamp
+	}
+	if b.expirationTimestamp != nil {
+		object.expirationTimestamp = b.expirationTimestamp
 	}
 	if b.cloudProvider != nil {
 		object.cloudProvider, err = b.cloudProvider.Build()
