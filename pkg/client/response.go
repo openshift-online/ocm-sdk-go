@@ -44,3 +44,11 @@ func (r *Response) Bytes() []byte {
 func (r *Response) String() string {
 	return string(r.body)
 }
+
+// Header returns the header value. In case there's no value for the header, an empty string ("") will be returned.
+func (r *Response) Header(name string) string {
+	if r.header == nil {
+		return ""
+	}
+	return r.header.Get(name)
+}
