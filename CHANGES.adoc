@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.19 Jun 25 2019
+
+- Added `GetMethod` and `GetPath` methods to HTTP requests.
+
+- Added `Header` method to HTTP responses.
+
 == 0.1.18 Jun 21 2019
 
 - Added support for the `expiration_timestamp` attribute of the `Cluster` type.
