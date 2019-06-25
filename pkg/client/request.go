@@ -39,11 +39,21 @@ type Request struct {
 	body      []byte
 }
 
+// GetMethod returns the request method (GET/POST/PATCH/DELETE).
+func (r *Request) GetMethod() string {
+	return r.method
+}
+
 // Path defines the request path, for example `/api/clusters_mgmt/v1/clusters`. This is mandatory; an
 // error will be returned immediately when calling the Send method if this isn't provided.
 func (r *Request) Path(value string) *Request {
 	r.path = value
 	return r
+}
+
+// GetPath returns the request path.
+func (r *Request) GetPath() string {
+	return r.path
 }
 
 // Parameter adds a query parameter.
