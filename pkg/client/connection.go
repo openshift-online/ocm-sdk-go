@@ -87,6 +87,8 @@ type Connection struct {
 	// Basic attributes:
 	closed       bool
 	logger       Logger
+	trustedCAs   *x509.CertPool
+	insecure     bool
 	client       *http.Client
 	tokenURL     *url.URL
 	clientID     string
@@ -502,6 +504,8 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	// Allocate and populate the connection object:
 	connection = &Connection{
 		logger:       logger,
+		trustedCAs:   b.trustedCAs,
+		insecure:     b.insecure,
 		client:       client,
 		tokenURL:     tokenURL,
 		clientID:     clientID,
@@ -529,6 +533,55 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 
 	return
+}
+
+// Logger returns the logger that is used by the connection.
+func (c *Connection) Logger() Logger {
+	return c.logger
+}
+
+// TokenURL returns the URL that the connectionis using request OpenID access tokens.
+func (c *Connection) TokenURL() string {
+	return c.tokenURL.String()
+}
+
+// Client returns OpenID client identifier and secret that the connection is using to request OpenID
+// access tokens.
+func (c *Connection) Client() (id, secret string) {
+	return c.clientID, c.clientSecret
+}
+
+// URL returns the base URL of the API gateway.
+func (c *Connection) URL() string {
+	return c.apiURL.String()
+}
+
+// Agent returns the `User-Agent` header that the client is using for all HTTP requests.
+func (c *Connection) Agent() string {
+	return c.agent
+}
+
+// User returns the user name and password that the is using to request OpenID access tokens.
+func (c *Connection) User() (user, password string) {
+	return c.user, c.password
+}
+
+// Scopes returns the OpenID scopes that the connection is using to request OpenID access tokens.
+func (c *Connection) Scopes() []string {
+	result := make([]string, len(c.scopes))
+	copy(result, c.scopes)
+	return result
+}
+
+// TrustedCAs sets returns the certificate pool that contains the certificate authorities that are
+// trusted by the connection.
+func (c *Connection) TrustedCAs() *x509.CertPool {
+	return c.trustedCAs
+}
+
+// Insecure returns the flag that indicates if insecure communication with the server is enabled.
+func (c *Connection) Insecure() bool {
+	return c.insecure
 }
 
 // AccountsMgmt returns the client for the accounts management service.
