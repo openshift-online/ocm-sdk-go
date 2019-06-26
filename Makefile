@@ -53,7 +53,6 @@ lint: vendor
 		--enable=ineffassign \
 		--enable=interfacer \
 		--enable=lll \
-		--enable=maligned \
 		--enable=megacheck \
 		--enable=misspell \
 		--enable=structcheck \
