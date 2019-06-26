@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.21 Jun 26 2019
+
+- Added methods to get connection attributes like token URL, client identifier,
+  etc.
+
 == 0.1.20 Jun 26 2019
 
 - Switch from `developers.redhat.com` to `sso.redhat.com`.
