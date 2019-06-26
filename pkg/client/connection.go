@@ -38,11 +38,20 @@ import (
 // Default values:
 const (
 	// #nosec G101
-	DefaultTokenURL     = "https://developers.redhat.com/auth/realms/rhd/protocol/openid-connect/token"
-	DefaultClientID     = "uhc"
+	DefaultTokenURL     = "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token"
+	DefaultClientID     = "cloud-services"
 	DefaultClientSecret = ""
 	DefaultURL          = "https://api.openshift.com"
 	DefaultAgent        = "UHC/" + Version
+)
+
+// Alternative default values used in combination with the now deprecated `developers.redhat.com`:
+const (
+	// #nosec G101
+	deprecatedTokenURL     = "https://developers.redhat.com/auth/realms/rhd/protocol/openid-connect/token"
+	deprecatedClientID     = "uhc"
+	deprecatedClientSecret = ""
+	deprecatedIssuer       = "developers.redhat.com"
 )
 
 // DefaultScopes is the ser of scopes used by default:
@@ -132,15 +141,15 @@ func (b *ConnectionBuilder) Logger(logger Logger) *ConnectionBuilder {
 }
 
 // TokenURL sets the URL that will be used to request OpenID access tokens. The default is
-// `https://developers.redhat.com/auth/realms/rhd/protocol/openid-connect/token`.
+// `https://sso.redhat.com/auth/realms/cloud-services/protocol/openid-connect/token`.
 func (b *ConnectionBuilder) TokenURL(url string) *ConnectionBuilder {
 	b.tokenURL = url
 	return b
 }
 
 // Client sets OpenID client identifier and secret that will be used to request OpenID tokens. The
-// default identifier is `uhc` and the default secret is the empty string. When these two values are
-// provided and no user name and password is provided, the connection will use the client
+// default identifier is `cloud-services` and the default secret is the empty string. When these two
+// values are provided and no user name and password is provided, the connection will use the client
 // credentials grant to obtain the token. For example, to create a connection using the client
 // credentials grant do the following:
 //
@@ -386,10 +395,40 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		logger.Debug(ctx, "Logger wasn't provided, will use Go log")
 	}
 
+	// Find the URL of the issuer of the tokens:
+	var issuerURL *url.URL
+	if accessToken != nil {
+		issuerURL, err = tokenIssuer(accessToken)
+		if err != nil {
+			return
+		}
+	} else if refreshToken != nil {
+		issuerURL, err = tokenIssuer(refreshToken)
+		if err != nil {
+			return
+		}
+	}
+	if issuerURL != nil {
+		logger.Debug(ctx, "Token issuer is '%s'", issuerURL)
+	} else {
+		logger.Warn(ctx, "Can't extract issuer URL from tokens")
+	}
+
+	// Select the defaults for the authentication details according to the issuer of the tokens:
+	defaultTokenURL := DefaultTokenURL
+	defaultClientID := DefaultClientID
+	defaultClientSecret := DefaultClientSecret
+	if issuerURL != nil && strings.EqualFold(issuerURL.Hostname(), deprecatedIssuer) {
+		logger.Warn(ctx, "Tokens are issued by '%s' which is deprecated", deprecatedIssuer)
+		defaultTokenURL = deprecatedTokenURL
+		defaultClientID = deprecatedClientID
+		defaultClientSecret = deprecatedClientSecret
+	}
+
 	// Set the default authentication details, if needed:
 	rawTokenURL := b.tokenURL
 	if rawTokenURL == "" {
-		rawTokenURL = DefaultTokenURL
+		rawTokenURL = defaultTokenURL
 		logger.Debug(
 			ctx,
 			"OpenID token URL wasn't provided, will use '%s'",
@@ -403,7 +442,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 	clientID := b.clientID
 	if clientID == "" {
-		clientID = DefaultClientID
+		clientID = defaultClientID
 		logger.Debug(
 			ctx,
 			"OpenID client identifier wasn't provided, will use '%s'",
@@ -412,7 +451,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 	clientSecret := b.clientSecret
 	if clientSecret == "" {
-		clientSecret = DefaultClientSecret
+		clientSecret = defaultClientSecret
 		logger.Debug(
 			ctx,
 			"OpenID client secret wasn't provided, will use '%s'",

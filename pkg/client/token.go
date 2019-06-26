@@ -61,7 +61,7 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 	var accessExpires bool
 	var accessLeft time.Duration
 	if c.accessToken != nil {
-		accessExpires, accessLeft, err = c.tokenExpiry(ctx, c.accessToken, now)
+		accessExpires, accessLeft, err = tokenExpiry(c.accessToken, now)
 		if err != nil {
 			return
 		}
@@ -69,7 +69,7 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 	var refreshExpires bool
 	var refreshLeft time.Duration
 	if c.refreshToken != nil {
-		refreshExpires, refreshLeft, err = c.tokenExpiry(ctx, c.refreshToken, now)
+		refreshExpires, refreshLeft, err = tokenExpiry(c.refreshToken, now)
 		if err != nil {
 			return
 		}
@@ -273,9 +273,27 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	return
 }
 
+// debugExpiry sends to the log information about the expiration of the given token.
+func (c *Connection) debugExpiry(ctx context.Context, typ string, token *jwt.Token, expires bool,
+	left time.Duration) {
+	if token != nil {
+		if expires {
+			if left < 0 {
+				c.logger.Debug(ctx, "%s token expired %s ago", typ, -left)
+			} else if left > 0 {
+				c.logger.Debug(ctx, "%s token expires in %s", typ, left)
+			} else {
+				c.logger.Debug(ctx, "%s token expired just now", typ)
+			}
+		}
+	} else {
+		c.logger.Debug(ctx, "%s token isn't available", typ)
+	}
+}
+
 // tokenExpiry determines if the given token expires, and the time that remains till it expires.
-func (c *Connection) tokenExpiry(ctx context.Context, token *jwt.Token,
-	now time.Time) (expires bool, left time.Duration, err error) {
+func tokenExpiry(token *jwt.Token, now time.Time) (expires bool,
+	left time.Duration, err error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		err = fmt.Errorf("expected map claims bug got %T", claims)
@@ -301,20 +319,23 @@ func (c *Connection) tokenExpiry(ctx context.Context, token *jwt.Token,
 	return
 }
 
-// debugExpiry sends to the log information about the expiration of the given token.
-func (c *Connection) debugExpiry(ctx context.Context, typ string, token *jwt.Token, expires bool,
-	left time.Duration) {
-	if token != nil {
-		if expires {
-			if left < 0 {
-				c.logger.Debug(ctx, "%s token expired %s ago", typ, -left)
-			} else if left > 0 {
-				c.logger.Debug(ctx, "%s token expires in %s", typ, left)
-			} else {
-				c.logger.Debug(ctx, "%s token expired just now", typ)
-			}
-		}
-	} else {
-		c.logger.Debug(ctx, "%s token isn't available", typ)
+// tokenIssuer extracts the URL of the issuer of the token from the `iss` claim. Returns nil if
+// there is no such claim.
+func tokenIssuer(token *jwt.Token) (issuer *url.URL, err error) {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		err = fmt.Errorf("expected map claims bug got %T", claims)
+		return
 	}
+	claim, ok := claims["iss"]
+	if !ok {
+		return
+	}
+	value, ok := claim.(string)
+	if !ok {
+		err = fmt.Errorf("expected string 'iss' but got %T", claim)
+		return
+	}
+	issuer, err = url.Parse(value)
+	return
 }
