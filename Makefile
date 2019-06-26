@@ -48,7 +48,6 @@ lint: vendor
 		--enable=deadcode \
 		--enable=gas \
 		--enable=goconst \
-		--enable=gocyclo \
 		--enable=gofmt \
 		--enable=golint \
 		--enable=ineffassign \

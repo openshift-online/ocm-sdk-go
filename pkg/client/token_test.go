@@ -471,7 +471,7 @@ func VerifyPasswordGrant(user, password string) http.HandlerFunc {
 		VerifyRequest(http.MethodPost, "/"),
 		VerifyContentType("application/x-www-form-urlencoded"),
 		VerifyFormKV("grant_type", "password"),
-		VerifyFormKV("client_id", "uhc"),
+		VerifyFormKV("client_id", "cloud-services"),
 		VerifyFormKV("username", user),
 		VerifyFormKV("password", password),
 	)
@@ -482,7 +482,7 @@ func VerifyRefreshGrant(refreshToken string) http.HandlerFunc {
 		VerifyRequest(http.MethodPost, "/"),
 		VerifyContentType("application/x-www-form-urlencoded"),
 		VerifyFormKV("grant_type", "refresh_token"),
-		VerifyFormKV("client_id", "uhc"),
+		VerifyFormKV("client_id", "cloud-services"),
 		VerifyFormKV("refresh_token", refreshToken),
 	)
 }

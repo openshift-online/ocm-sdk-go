@@ -130,6 +130,7 @@ func Token(typ string, life time.Duration) string {
 	iat := time.Now()
 	exp := iat.Add(life)
 	claims := jwt.MapClaims{
+		"iss": "https://sso.redhat.com/auth/realms/redhat-external",
 		"iat": iat.Unix(),
 		"typ": typ,
 		"exp": exp.Unix(),

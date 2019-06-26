@@ -67,7 +67,7 @@ func main() {
 			Page(page).
 			SendContext(ctx)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Can't retrieve page %d: %s", page, err)
+			fmt.Fprintf(os.Stderr, "Can't retrieve page %d: %s\n", page, err)
 			os.Exit(1)
 		}
 
