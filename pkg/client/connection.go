@@ -412,7 +412,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 	if issuerURL != nil {
 		logger.Debug(ctx, "Token issuer is '%s'", issuerURL)
-	} else {
+	} else if accessToken != nil || refreshToken != nil {
 		logger.Warn(ctx, "Can't extract issuer URL from tokens")
 	}
 
