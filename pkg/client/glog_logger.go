@@ -78,13 +78,13 @@ func (b *GlogLoggerBuilder) DebugV(v glog.Level) *GlogLoggerBuilder {
 }
 
 // InfoV sets the V value that will be used for info messages.
-func (b *GlogLoggerBuilder) Info(v glog.Level) *GlogLoggerBuilder {
+func (b *GlogLoggerBuilder) InfoV(v glog.Level) *GlogLoggerBuilder {
 	b.infoV = v
 	return b
 }
 
 // WarnV sets the V value that will be used for warn messages.
-func (b *GlogLoggerBuilder) Warn(v glog.Level) *GlogLoggerBuilder {
+func (b *GlogLoggerBuilder) WarnV(v glog.Level) *GlogLoggerBuilder {
 	b.warnV = v
 	return b
 }
