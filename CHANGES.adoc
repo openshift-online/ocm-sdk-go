@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.22 Jun 27 2019
+
+- Don't send warnings about toke issuer when no tokens are used.
+
+- Fix the names of the methods used to set the V values of the `glog` logger.
+
 == 0.1.21 Jun 26 2019
 
 - Added methods to get connection attributes like token URL, client identifier,
