@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.13 Jun 27 2019
+
+- Don't show cluster admin credentials in the debug log.
+
 == 0.1.22 Jun 27 2019
 
 - Don't send warnings about toke issuer when no tokens are used.
