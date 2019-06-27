@@ -35,6 +35,7 @@ const (
 // redactFields are removed from log output when dumped.
 var redactFields = []string{
 	"access_token",
+	"admin",
 	"id_token",
 	"refresh_token",
 	"password",
