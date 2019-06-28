@@ -3,7 +3,12 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
-== 0.1.13 Jun 27 2019
+== 0.1.24 Jun 28 2019
+
+- Automatically select the deprecated _OpenID_ server when authenticating with
+  user name and password.
+
+== 0.1.23 Jun 27 2019
 
 - Don't show cluster admin credentials in the debug log.
 
