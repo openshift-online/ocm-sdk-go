@@ -123,14 +123,28 @@ func RespondWithJSONTemplate(statusCode int, source string, args ...interface{})
 	)
 }
 
-// Token generates a token of the given type and with the given life. If the life is zero the token
-// will never expire. If the life is positive the token will be valid, and expire after that time.
-// If the life is negative the token will be already expired that time ago.
-func Token(typ string, life time.Duration) string {
+// DefaultToken generates a token issued by the default OpenID server and with the given type and
+// with the given life. If the life is zero the token will never expire. If the life is positive the
+// token will be valid, and expire after that time.  If the life is negative the token will be
+// already expired that time ago.
+func DefaultToken(typ string, life time.Duration) string {
+	return issueToken("https://sso.redhat.com/auth/realms/redhat-external", typ, life)
+}
+
+// DeprecatedToken generates a token issued by the deprecated OpenID server and with of the given
+// type and with the given life. If the life is zero the token will never expire. If the life is
+// positive the token will be valid, and expire after that time.  If the life is negative the token
+// will be already expired that time ago.
+func DeprecatedToken(typ string, life time.Duration) string {
+	return issueToken("https://developers.redhat.com/auth/realms/rhd", typ, life)
+}
+
+// issueToken generates a token issued by the given issuer, the given type and the given life time.
+func issueToken(issuer string, typ string, life time.Duration) string {
 	iat := time.Now()
 	exp := iat.Add(life)
 	claims := jwt.MapClaims{
-		"iss": "https://sso.redhat.com/auth/realms/redhat-external",
+		"iss": issuer,
 		"iat": iat.Unix(),
 		"typ": typ,
 		"exp": exp.Unix(),
