@@ -29,7 +29,7 @@ import (
 
 var _ = Describe("Connection", func() {
 	It("Can be created with access token", func() {
-		accessToken := Token("Bearer", 5*time.Minute)
+		accessToken := DefaultToken("Bearer", 5*time.Minute)
 		connection, err := NewConnectionBuilder().
 			Tokens(accessToken).
 			Build()
@@ -39,7 +39,7 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Can be created with refresh token", func() {
-		refreshToken := Token("Refresh", 10*time.Hour)
+		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 		connection, err := NewConnectionBuilder().
 			Tokens(refreshToken).
 			Build()
@@ -49,7 +49,7 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Can be created with offline access token", func() {
-		offlineToken := Token("Offline", 0)
+		offlineToken := DefaultToken("Offline", 0)
 		connection, err := NewConnectionBuilder().
 			Tokens(offlineToken).
 			Build()
@@ -59,8 +59,8 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Can be created with access and refresh tokens", func() {
-		accessToken := Token("Bearer", 5*time.Minute)
-		refreshToken := Token("Refresh", 10*time.Hour)
+		accessToken := DefaultToken("Bearer", 5*time.Minute)
+		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 		connection, err := NewConnectionBuilder().
 			Tokens(accessToken, refreshToken).
 			Build()
@@ -70,8 +70,8 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Can be created with access and offline tokens", func() {
-		accessToken := Token("Bearer", 5*time.Minute)
-		offlineToken := Token("Offline", 10*time.Hour)
+		accessToken := DefaultToken("Bearer", 5*time.Minute)
+		offlineToken := DefaultToken("Offline", 10*time.Hour)
 		connection, err := NewConnectionBuilder().
 			Tokens(accessToken, offlineToken).
 			Build()
@@ -96,5 +96,133 @@ var _ = Describe("Connection", func() {
 		Expect(err).ToNot(HaveOccurred())
 		defer connection.Close()
 		Expect(connection).ToNot(BeNil())
+	})
+
+	It("Selects default OpenID server with default access token", func() {
+		accessToken := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Tokens(accessToken).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(DefaultTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(DefaultClientID))
+		Expect(clientSecret).To(Equal(DefaultClientSecret))
+	})
+
+	It("Selects default OpenID server with default refresh token", func() {
+		refreshToken := DefaultToken("Refresh", 10*time.Hour)
+		connection, err := NewConnectionBuilder().
+			Tokens(refreshToken).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(DefaultTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(DefaultClientID))
+		Expect(clientSecret).To(Equal(DefaultClientSecret))
+	})
+
+	It("Selects default OpenID server with default offline access token", func() {
+		offlineToken := DefaultToken("Offline", 0)
+		connection, err := NewConnectionBuilder().
+			Tokens(offlineToken).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(DefaultTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(DefaultClientID))
+		Expect(clientSecret).To(Equal(DefaultClientSecret))
+	})
+
+	It("Selects deprecated OpenID with user name and password", func() {
+		connection, err := NewConnectionBuilder().
+			User("myuser", "mypassword").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(deprecatedTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(deprecatedClientID))
+		Expect(clientSecret).To(Equal(deprecatedClientSecret))
+	})
+
+	It("Selects deprecated OpenID server with deprecated access token", func() {
+		accessToken := DeprecatedToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Tokens(accessToken).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(deprecatedTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(deprecatedClientID))
+		Expect(clientSecret).To(Equal(deprecatedClientSecret))
+	})
+
+	It("Selects deprecated OpenID server with deprecated refresh token", func() {
+		refreshToken := DeprecatedToken("Refresh", 10*time.Hour)
+		connection, err := NewConnectionBuilder().
+			Tokens(refreshToken).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(deprecatedTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(deprecatedClientID))
+		Expect(clientSecret).To(Equal(deprecatedClientSecret))
+	})
+
+	It("Selects deprecated OpenID server with deprecated offline access token", func() {
+		offlineToken := DeprecatedToken("Offline", 0)
+		connection, err := NewConnectionBuilder().
+			Tokens(offlineToken).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(deprecatedTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(deprecatedClientID))
+		Expect(clientSecret).To(Equal(deprecatedClientSecret))
+	})
+
+	It("Honours explicitly provided OpenID server with user name and password", func() {
+		connection, err := NewConnectionBuilder().
+			User("myuser", "mypassword").
+			TokenURL(DefaultTokenURL).
+			Client(DefaultClientID, DefaultClientSecret).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(DefaultTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(DefaultClientID))
+		Expect(clientSecret).To(Equal(DefaultClientSecret))
+	})
+
+	It("Honours explicitly provided OpenID server with deprecated token", func() {
+		offlineToken := DeprecatedToken("Offline", 0)
+		connection, err := NewConnectionBuilder().
+			Tokens(offlineToken).
+			TokenURL(DefaultTokenURL).
+			Client(DefaultClientID, DefaultClientSecret).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		tokenURL := connection.TokenURL()
+		Expect(tokenURL).To(Equal(DefaultTokenURL))
+		clientID, clientSecret := connection.Client()
+		Expect(clientID).To(Equal(DefaultClientID))
+		Expect(clientSecret).To(Equal(DefaultClientSecret))
 	})
 })

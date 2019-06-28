@@ -45,8 +45,8 @@ var _ = Describe("Get", func() {
 		var err error
 
 		// Create the tokens:
-		accessToken := Token("Bearer", 5*time.Minute)
-		refreshToken := Token("Refresh", 10*time.Hour)
+		accessToken := DefaultToken("Bearer", 5*time.Minute)
+		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
 		oidServer = NewServer()
