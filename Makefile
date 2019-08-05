@@ -70,7 +70,7 @@ generate:
 		pkg/client/errors \
 		pkg/client/helpers
 	uhc-metamodel-tool generate \
-		--model=/files/go/src/github.com/openshift-online/uhc-api-model/model \
+		--model=/files/go/src/gitlab.cee.redhat.com/service/ocm-api-model/model \
 		--base=github.com/openshift-online/uhc-sdk-go/pkg/client \
 		--output=pkg/client
 
