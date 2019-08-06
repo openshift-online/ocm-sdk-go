@@ -64,7 +64,7 @@ func (c *LogsClient) List() *LogsListRequest {
 
 // Log returns the target 'log' resource for the given identifier.
 //
-// Retursn a reference to the service that manages an specific log.
+// Returns a reference to the service that manages an specific log.
 func (c *LogsClient) Log(id string) *LogClient {
 	return NewLogClient(
 		c.transport,

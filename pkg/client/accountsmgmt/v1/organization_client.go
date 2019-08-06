@@ -87,6 +87,18 @@ func (c *OrganizationClient) ResourceQuota() *ResourceQuotasClient {
 	)
 }
 
+// QuotaSummary returns the target 'quota_summary' resource.
+//
+// Reference to the service that returns the summary of the resource quota for this
+// organization.
+func (c *OrganizationClient) QuotaSummary() *QuotaSummaryClient {
+	return NewQuotaSummaryClient(
+		c.transport,
+		path.Join(c.path, "quota_summary"),
+		path.Join(c.metric, "quota_summary"),
+	)
+}
+
 // OrganizationGetRequest is the request for the 'get' method.
 type OrganizationGetRequest struct {
 	transport http.RoundTripper

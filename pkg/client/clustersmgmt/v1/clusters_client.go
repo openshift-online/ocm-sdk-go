@@ -79,7 +79,7 @@ func (c *ClustersClient) Add() *ClustersAddRequest {
 
 // Cluster returns the target 'cluster' resource for the given identifier.
 //
-// Retursn a reference to the service that manages an specific cluster.
+// Returns a reference to the service that manages an specific cluster.
 func (c *ClustersClient) Cluster(id string) *ClusterClient {
 	return NewClusterClient(
 		c.transport,
