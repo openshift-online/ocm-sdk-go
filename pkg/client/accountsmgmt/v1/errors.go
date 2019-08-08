@@ -18,3 +18,5 @@ limitations under the License.
 // your changes will be lost when the file is generated again.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
+
+const ()
