@@ -18,21 +18,12 @@
 # This script is executed by a Jenkins job for each change request. If it
 # doesn't succeed the change won't be merged.
 
-# Set the Go path:
-export GOPATH="${PWD}/.gopath"
-export PATH="${PATH}:${GOPATH}/bin"
+# Set the `GOBIN` environment variable so that dependencies will be installed
+# always in the same place, regardless of the value of `GOPATH`:
+export GOBIN="${PWD}/.gobin"
+export PATH="${GOBIN}:${PATH}"
 
-# Create the project directory inside the Go path and copy all the files of
-# the project:
-PROJECT="${GOPATH}/src/github.com/openshift-online/uhc-sdk-go"
-mkdir -p "${PROJECT}"
-rsync -ap \
-  --exclude=.gopath \
-  --exclude=.git \
-  . "${PROJECT}"
-cd "${PROJECT}"
-
-# Install dependencies:
+# Install Go tools:
 go get github.com/onsi/ginkgo/ginkgo
 
 # Run the checks:

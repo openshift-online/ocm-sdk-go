@@ -14,28 +14,27 @@
 # limitations under the License.
 #
 
-.PHONY: \
-	clean \
-	examples \
-	$(NULL)
-
-examples: vendor
+.PHONY: examples
+examples:
 	cd examples && \
 	for i in *.go; do \
-		go build $${i} || exit 1; \
+		go build -mod=readonly $${i} || exit 1; \
 	done
 
-test: vendor
+.PHONY: test
+test:
 	ginkgo -r pkg \
 		$(NULL)
 
+.PHONY: fmt
 fmt:
 	gofmt -s -l -w \
 		pkg \
 		examples \
 		$(NULL)
 
-lint: vendor
+.PHONY: lint
+lint:
 	golangci-lint run \
 		--no-config \
 		--issues-exit-code=1 \
@@ -60,9 +59,7 @@ lint: vendor
 		--enable=varcheck \
 		$(NULL)
 
-vendor: Gopkg.lock
-	dep ensure -vendor-only -v
-
+.PHONY: generate
 generate:
 	rm -rf \
 		pkg/client/accountsmgmt \
@@ -73,8 +70,3 @@ generate:
 		--model=/files/go/src/gitlab.cee.redhat.com/service/ocm-api-model/model \
 		--base=github.com/openshift-online/uhc-sdk-go/pkg/client \
 		--output=pkg/client
-
-clean:
-	rm -rf \
-		vendor \
-		$(NULL)
