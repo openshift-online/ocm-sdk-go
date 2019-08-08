@@ -1,9 +1,0 @@
-[prune]
-  go-tests = true
-  unused-packages = true
-
-# This is needed to avoid a crash in `dep ensure`, see here for more details:
-# https://github.com/golang/dep/issues/1799
-[[override]]
-  name = "gopkg.in/fsnotify.v1"
-  source = "gopkg.in/fsnotify/fsnotify.v1"
