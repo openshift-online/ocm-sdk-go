@@ -18,4 +18,4 @@ limitations under the License.
 
 package client
 
-const Version = "0.1.24"
+const Version = "0.1.25"
