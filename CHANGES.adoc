@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.25 Aug 11 2019
+
+- Add support for quota summary.
+
+- Fix the data type of the cluster registration expiration date.
+
 == 0.1.24 Jun 28 2019
 
 - Automatically select the deprecated _OpenID_ server when authenticating with
