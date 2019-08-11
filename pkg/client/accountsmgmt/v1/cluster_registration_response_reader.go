@@ -20,18 +20,16 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
-	time "time"
-
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
 // clusterRegistrationResponseData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_registration_response'.
 type clusterRegistrationResponseData struct {
-	ClusterID          *string    "json:\"cluster_id,omitempty\""
-	AuthorizationToken *string    "json:\"authorization_token,omitempty\""
-	AccountID          *string    "json:\"account_id,omitempty\""
-	ExpiresAt          *time.Time "json:\"expires_at,omitempty\""
+	ClusterID          *string "json:\"cluster_id,omitempty\""
+	AuthorizationToken *string "json:\"authorization_token,omitempty\""
+	AccountID          *string "json:\"account_id,omitempty\""
+	ExpiresAt          *int64  "json:\"expires_at,omitempty\""
 }
 
 // MarshalClusterRegistrationResponse writes a value of the 'cluster_registration_response' to the given target,
