@@ -19,10 +19,6 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
-import (
-	time "time"
-)
-
 // ClusterRegistrationResponse represents the values of the 'cluster_registration_response' type.
 //
 //
@@ -30,7 +26,7 @@ type ClusterRegistrationResponse struct {
 	clusterID          *string
 	authorizationToken *string
 	accountID          *string
-	expiresAt          *time.Time
+	expiresAt          *int64
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -115,18 +111,18 @@ func (o *ClusterRegistrationResponse) GetAccountID() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Cluster registration expiration.
-func (o *ClusterRegistrationResponse) ExpiresAt() time.Time {
+func (o *ClusterRegistrationResponse) ExpiresAt() int64 {
 	if o != nil && o.expiresAt != nil {
 		return *o.expiresAt
 	}
-	return time.Time{}
+	return 0
 }
 
 // GetExpiresAt returns the value of the 'expires_at' attribute and
 // a flag indicating if the attribute has a value.
 //
 // Cluster registration expiration.
-func (o *ClusterRegistrationResponse) GetExpiresAt() (value time.Time, ok bool) {
+func (o *ClusterRegistrationResponse) GetExpiresAt() (value int64, ok bool) {
 	ok = o != nil && o.expiresAt != nil
 	if ok {
 		value = *o.expiresAt

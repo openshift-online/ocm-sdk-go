@@ -19,10 +19,6 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
-import (
-	time "time"
-)
-
 // ClusterRegistrationResponseBuilder contains the data and logic needed to build 'cluster_registration_response' objects.
 //
 //
@@ -30,7 +26,7 @@ type ClusterRegistrationResponseBuilder struct {
 	clusterID          *string
 	authorizationToken *string
 	accountID          *string
-	expiresAt          *time.Time
+	expiresAt          *int64
 }
 
 // NewClusterRegistrationResponse creates a new builder of 'cluster_registration_response' objects.
@@ -69,7 +65,7 @@ func (b *ClusterRegistrationResponseBuilder) AccountID(value string) *ClusterReg
 // to the given value.
 //
 //
-func (b *ClusterRegistrationResponseBuilder) ExpiresAt(value time.Time) *ClusterRegistrationResponseBuilder {
+func (b *ClusterRegistrationResponseBuilder) ExpiresAt(value int64) *ClusterRegistrationResponseBuilder {
 	b.expiresAt = &value
 	return b
 }

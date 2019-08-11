@@ -14,6 +14,9 @@
 # limitations under the License.
 #
 
+# Directory containing the model:
+model:=/files/projects/ocm-api-model/model
+
 .PHONY: examples
 examples:
 	cd examples && \
@@ -67,6 +70,6 @@ generate:
 		pkg/client/errors \
 		pkg/client/helpers
 	ocm-metamodel-tool generate \
-		--model=/files/go/src/gitlab.cee.redhat.com/service/ocm-api-model/model \
+		--model=$(model) \
 		--base=github.com/openshift-online/uhc-sdk-go/pkg/client \
 		--output=pkg/client
