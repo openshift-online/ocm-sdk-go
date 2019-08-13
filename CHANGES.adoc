@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the UHC API
 SDK.
 
+== 0.1.26 Aug 13 2019
+
+- Add support for the `compute_nodes_cpu` and `compute_nodes_memory` metrics.
+
 == 0.1.25 Aug 11 2019
 
 - Add support for quota summary.
