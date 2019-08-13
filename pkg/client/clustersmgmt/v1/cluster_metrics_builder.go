@@ -23,10 +23,12 @@ package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 //
 // Cluster metrics received via telemetry.
 type ClusterMetricsBuilder struct {
-	cpu     *ClusterMetricBuilder
-	memory  *ClusterMetricBuilder
-	storage *ClusterMetricBuilder
-	nodes   *ClusterNodesBuilder
+	cpu                *ClusterMetricBuilder
+	memory             *ClusterMetricBuilder
+	storage            *ClusterMetricBuilder
+	computeNodesCPU    *ClusterMetricBuilder
+	computeNodesMemory *ClusterMetricBuilder
+	nodes              *ClusterNodesBuilder
 }
 
 // NewClusterMetrics creates a new builder of 'cluster_metrics' objects.
@@ -64,6 +66,26 @@ func (b *ClusterMetricsBuilder) Storage(value *ClusterMetricBuilder) *ClusterMet
 	return b
 }
 
+// ComputeNodesCPU sets the value of the 'compute_nodes_CPU' attribute
+// to the given value.
+//
+// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
+// a cluster.
+func (b *ClusterMetricsBuilder) ComputeNodesCPU(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
+	b.computeNodesCPU = value
+	return b
+}
+
+// ComputeNodesMemory sets the value of the 'compute_nodes_memory' attribute
+// to the given value.
+//
+// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
+// a cluster.
+func (b *ClusterMetricsBuilder) ComputeNodesMemory(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
+	b.computeNodesMemory = value
+	return b
+}
+
 // Nodes sets the value of the 'nodes' attribute
 // to the given value.
 //
@@ -90,6 +112,18 @@ func (b *ClusterMetricsBuilder) Build() (object *ClusterMetrics, err error) {
 	}
 	if b.storage != nil {
 		object.storage, err = b.storage.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.computeNodesCPU != nil {
+		object.computeNodesCPU, err = b.computeNodesCPU.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.computeNodesMemory != nil {
+		object.computeNodesMemory, err = b.computeNodesMemory.Build()
 		if err != nil {
 			return
 		}

@@ -23,10 +23,12 @@ package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 //
 // Cluster metrics received via telemetry.
 type ClusterMetrics struct {
-	cpu     *ClusterMetric
-	memory  *ClusterMetric
-	storage *ClusterMetric
-	nodes   *ClusterNodes
+	cpu                *ClusterMetric
+	memory             *ClusterMetric
+	storage            *ClusterMetric
+	computeNodesCPU    *ClusterMetric
+	computeNodesMemory *ClusterMetric
+	nodes              *ClusterNodes
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -34,6 +36,8 @@ func (o *ClusterMetrics) Empty() bool {
 	return o == nil || (o.cpu == nil &&
 		o.memory == nil &&
 		o.storage == nil &&
+		o.computeNodesCPU == nil &&
+		o.computeNodesMemory == nil &&
 		o.nodes == nil &&
 		true)
 }
@@ -107,6 +111,52 @@ func (o *ClusterMetrics) GetStorage() (value *ClusterMetric, ok bool) {
 	ok = o != nil && o.storage != nil
 	if ok {
 		value = o.storage
+	}
+	return
+}
+
+// ComputeNodesCPU returns the value of the 'compute_nodes_CPU' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The amount of CPU provisioned and used in the cluster by compute nodes.
+func (o *ClusterMetrics) ComputeNodesCPU() *ClusterMetric {
+	if o == nil {
+		return nil
+	}
+	return o.computeNodesCPU
+}
+
+// GetComputeNodesCPU returns the value of the 'compute_nodes_CPU' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The amount of CPU provisioned and used in the cluster by compute nodes.
+func (o *ClusterMetrics) GetComputeNodesCPU() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.computeNodesCPU != nil
+	if ok {
+		value = o.computeNodesCPU
+	}
+	return
+}
+
+// ComputeNodesMemory returns the value of the 'compute_nodes_memory' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The amount of memory provisioned and used in the cluster by compute nodes.
+func (o *ClusterMetrics) ComputeNodesMemory() *ClusterMetric {
+	if o == nil {
+		return nil
+	}
+	return o.computeNodesMemory
+}
+
+// GetComputeNodesMemory returns the value of the 'compute_nodes_memory' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The amount of memory provisioned and used in the cluster by compute nodes.
+func (o *ClusterMetrics) GetComputeNodesMemory() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.computeNodesMemory != nil
+	if ok {
+		value = o.computeNodesMemory
 	}
 	return
 }
