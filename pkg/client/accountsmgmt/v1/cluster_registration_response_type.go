@@ -26,7 +26,7 @@ type ClusterRegistrationResponse struct {
 	clusterID          *string
 	authorizationToken *string
 	accountID          *string
-	expiresAt          *int64
+	expiresAt          *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -111,18 +111,18 @@ func (o *ClusterRegistrationResponse) GetAccountID() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Cluster registration expiration.
-func (o *ClusterRegistrationResponse) ExpiresAt() int64 {
+func (o *ClusterRegistrationResponse) ExpiresAt() string {
 	if o != nil && o.expiresAt != nil {
 		return *o.expiresAt
 	}
-	return 0
+	return ""
 }
 
 // GetExpiresAt returns the value of the 'expires_at' attribute and
 // a flag indicating if the attribute has a value.
 //
 // Cluster registration expiration.
-func (o *ClusterRegistrationResponse) GetExpiresAt() (value int64, ok bool) {
+func (o *ClusterRegistrationResponse) GetExpiresAt() (value string, ok bool) {
 	ok = o != nil && o.expiresAt != nil
 	if ok {
 		value = *o.expiresAt

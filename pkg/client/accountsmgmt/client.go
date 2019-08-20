@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1"
+	v1 "github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1"
 )
 
 // Client is the client for service 'accounts_mgmt'.

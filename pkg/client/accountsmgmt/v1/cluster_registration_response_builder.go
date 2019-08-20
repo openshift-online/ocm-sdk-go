@@ -26,7 +26,7 @@ type ClusterRegistrationResponseBuilder struct {
 	clusterID          *string
 	authorizationToken *string
 	accountID          *string
-	expiresAt          *int64
+	expiresAt          *string
 }
 
 // NewClusterRegistrationResponse creates a new builder of 'cluster_registration_response' objects.
@@ -65,7 +65,7 @@ func (b *ClusterRegistrationResponseBuilder) AccountID(value string) *ClusterReg
 // to the given value.
 //
 //
-func (b *ClusterRegistrationResponseBuilder) ExpiresAt(value int64) *ClusterRegistrationResponseBuilder {
+func (b *ClusterRegistrationResponseBuilder) ExpiresAt(value string) *ClusterRegistrationResponseBuilder {
 	b.expiresAt = &value
 	return b
 }
