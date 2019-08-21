@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
+	v1 "github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
 )
 
 // Client is the client for service 'clusters_mgmt'.

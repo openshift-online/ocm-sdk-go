@@ -21,7 +21,10 @@ package errors // github.com/openshift-online/uhc-sdk-go/pkg/client/errors
 
 import (
 	"fmt"
+	"net/http"
+	"strconv"
 
+	"github.com/golang/glog"
 	"github.com/openshift-online/uhc-sdk-go/pkg/client/helpers"
 )
 
@@ -31,12 +34,59 @@ const ErrorKind = "Error"
 // ErrorNilKind is the name of the type used to nil errors.
 const ErrorNilKind = "ErrorNil"
 
+// ErrorBuilder is a builder for the error type.
+type ErrorBuilder struct {
+	id     *string
+	href   *string
+	code   *string
+	reason *string
+}
+
 // Error represents errors.
 type Error struct {
 	id     *string
 	href   *string
 	code   *string
 	reason *string
+}
+
+// NewError returns a new ErrorBuilder
+func NewError() *ErrorBuilder {
+	return new(ErrorBuilder)
+}
+
+// ID sets the id field for the ErrorBuilder
+func (e *ErrorBuilder) ID(id string) *ErrorBuilder {
+	e.id = &id
+	return e
+}
+
+// HREF sets the href field for the ErrorBuilder
+func (e *ErrorBuilder) HREF(href string) *ErrorBuilder {
+	e.href = &href
+	return e
+}
+
+// Code sets the cpde field for the ErrorBuilder
+func (e *ErrorBuilder) Code(code string) *ErrorBuilder {
+	e.code = &code
+	return e
+}
+
+// Reason sets the reason field for the ErrorBuilder
+func (e *ErrorBuilder) Reason(reason string) *ErrorBuilder {
+	e.reason = &reason
+	return e
+}
+
+// Build builds a new error type or returns an error.
+func (e *ErrorBuilder) Build() (*Error, error) {
+	err := new(Error)
+	err.reason = e.reason
+	err.code = e.code
+	err.id = e.id
+	err.href = e.href
+	return err, nil
 }
 
 // Kind returns the name of the type of the error.
@@ -149,6 +199,24 @@ func UnmarshalError(source interface{}) (object *Error, err error) {
 	return
 }
 
+// MarshalError writes an error to the given destination which can be an slice of bytes, a
+// string, a reader or a JSON decoder.
+func (e *Error) MarshalError(destination interface{}) error {
+	encoder, err := helpers.NewEncoder(destination)
+	if err != nil {
+		return err
+	}
+	object, err := e.wrap()
+	if err != nil {
+		return err
+	}
+	err = encoder.Encode(object)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // errorData is the data structure used internally to marshal and unmarshal errors.
 type errorData struct {
 	Kind   *string "json:\"kind,omitempty\""
@@ -177,4 +245,65 @@ func (d *errorData) unwrap() (object *Error, err error) {
 	object.code = d.Code
 	object.reason = d.Reason
 	return
+}
+
+// wrap is the method used internally to convert the JSON unmarshalled data to an
+// error.
+func (d *Error) wrap() (object *errorData, err error) {
+	if d == nil {
+		return
+	}
+	object = new(errorData)
+	if d.Kind() != "" && d.Kind() != ErrorKind {
+		err = fmt.Errorf(
+			"expected kind '%s' but got '%s'",
+			ErrorKind, d.Kind(),
+		)
+		return
+	}
+	object.ID = d.id
+	object.HREF = d.href
+	object.Code = d.code
+	object.Reason = d.reason
+	return
+}
+
+var panicID = "1000"
+var panicError, _ = NewError().
+	ID(panicID).
+	Reason("An unexpected error happened, please check the log of the service " +
+		"for details").
+	Build()
+
+// SendError writes a given error and status code to a response writer.
+// if an error occured it will log the error and exit.
+// This methods is used internaly and no backwards compatibily is guaranteed.
+func SendError(w http.ResponseWriter, r *http.Request, error *Error) {
+	w.Header().Set("Content-Type", "application/json")
+	status, err := strconv.Atoi(error.ID())
+	if err != nil {
+		SendPanic(w, r)
+		return
+	}
+	w.WriteHeader(status)
+	err = error.MarshalError(w)
+	if err != nil {
+		glog.Errorf("Can't send response body for request '%s'", r.URL.Path)
+		return
+	}
+}
+
+// SendPanic sends a panic error response to the client, but it doesn't end the process.
+// This methods is used internaly and no backwards compatibily is guaranteed.
+func SendPanic(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	// Convert it to JSON:
+	err := panicError.MarshalError(w)
+	if err != nil {
+		glog.Errorf(
+			"Can't send panic response for request '%s': %s",
+			r.URL.Path,
+			err.Error(),
+		)
+	}
 }
