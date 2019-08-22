@@ -23,8 +23,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client"
-	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
+	"github.com/openshift-online/uhc-sdk-go"
+	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger that has the debug level enabled:
-	logger, err := client.NewGoLoggerBuilder().
+	logger, err := sdk.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {
@@ -42,7 +42,7 @@ func main() {
 
 	// Create the connection, and remember to close it:
 	token := os.Getenv("UHC_TOKEN")
-	connection, err := client.NewConnectionBuilder().
+	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
 		BuildContext(ctx)
@@ -61,7 +61,7 @@ func main() {
 	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
 
 	// Prepare the patch to send:
-	patch, err := v1.NewCluster().
+	patch, err := cmv1.NewCluster().
 		DisplayName("My cluster").
 		Build()
 	if err != nil {

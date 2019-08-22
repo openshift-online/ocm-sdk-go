@@ -27,8 +27,8 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client"
-	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
+	"github.com/openshift-online/uhc-sdk-go"
+	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 	go http.ListenAndServe(":8000", promhttp.Handler())
 
 	// Create a logger that has the debug level enabled:
-	logger, err := client.NewGoLoggerBuilder().
+	logger, err := sdk.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {
@@ -51,13 +51,13 @@ func main() {
 	// Create the connection, specifying the `api_outbound` subsystem so that metrics are
 	// enabled and available with the `api_outbound_` prefix.
 	token := os.Getenv("UHC_TOKEN")
-	connection, err := client.NewConnectionBuilder().
+	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
 		Metrics("my").
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
 		os.Exit(1)
 	}
 	defer connection.Close()
@@ -77,7 +77,7 @@ func main() {
 		}
 
 		// For each cluster:
-		clustersListResponse.Items().Each(func(cluster *v1.Cluster) bool {
+		clustersListResponse.Items().Each(func(cluster *cmv1.Cluster) bool {
 			// Get the details:
 			clusterResource := clustersCollection.Cluster(cluster.ID())
 			clusterResource.Get().SendContext(ctx)

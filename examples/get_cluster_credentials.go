@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client"
+	"github.com/openshift-online/uhc-sdk-go"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger that has the debug level enabled:
-	logger, err := client.NewGoLoggerBuilder().
+	logger, err := sdk.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {
@@ -41,12 +41,12 @@ func main() {
 
 	// Create the connection, and remember to close it:
 	token := os.Getenv("UHC_TOKEN")
-	connection, err := client.NewConnectionBuilder().
+	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
 		os.Exit(1)
 	}
 	defer connection.Close()
