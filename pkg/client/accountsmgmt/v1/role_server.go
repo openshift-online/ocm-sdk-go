@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,17 +37,17 @@ type RoleServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the role.
-	Get(request *RoleGetServerRequest, response *RoleGetServerResponse) error
+	Get(ctx context.Context, request *RoleGetServerRequest, response *RoleGetServerResponse) error
 
 	// Update handles a request for the 'update' method.
 	//
 	// Updates the role.
-	Update(request *RoleUpdateServerRequest, response *RoleUpdateServerResponse) error
+	Update(ctx context.Context, request *RoleUpdateServerRequest, response *RoleUpdateServerResponse) error
 
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the role.
-	Delete(request *RoleDeleteServerRequest, response *RoleDeleteServerResponse) error
+	Delete(ctx context.Context, request *RoleDeleteServerRequest, response *RoleDeleteServerResponse) error
 }
 
 // RoleGetServerRequest is the request for the 'get' method.
@@ -229,7 +230,7 @@ func (a *RoleServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := new(RoleGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -278,7 +279,7 @@ func (a *RoleServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 	resp := new(RoleUpdateServerResponse)
-	err = a.server.Update(req, resp)
+	err = a.server.Update(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
 		errorBody, _ := errors.NewError().
@@ -319,7 +320,7 @@ func (a *RoleServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 	resp := new(RoleDeleteServerResponse)
-	err = a.server.Delete(req, resp)
+	err = a.server.Delete(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
 		errorBody, _ := errors.NewError().

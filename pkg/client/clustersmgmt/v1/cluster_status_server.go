@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type ClusterStatusServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	//
-	Get(request *ClusterStatusGetServerRequest, response *ClusterStatusGetServerResponse) error
+	Get(ctx context.Context, request *ClusterStatusGetServerRequest, response *ClusterStatusGetServerResponse) error
 }
 
 // ClusterStatusGetServerRequest is the request for the 'get' method.
@@ -119,7 +120,7 @@ func (a *ClusterStatusServerAdapter) getHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 	resp := new(ClusterStatusGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().

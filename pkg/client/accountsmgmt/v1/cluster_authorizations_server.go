@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type ClusterAuthorizationsServer interface {
 	// Post handles a request for the 'post' method.
 	//
 	// Authorizes new cluster creation against an existing subscription.
-	Post(request *ClusterAuthorizationsPostServerRequest, response *ClusterAuthorizationsPostServerResponse) error
+	Post(ctx context.Context, request *ClusterAuthorizationsPostServerRequest, response *ClusterAuthorizationsPostServerResponse) error
 }
 
 // ClusterAuthorizationsPostServerRequest is the request for the 'post' method.
@@ -163,7 +164,7 @@ func (a *ClusterAuthorizationsServerAdapter) postHandler(w http.ResponseWriter, 
 		return
 	}
 	resp := new(ClusterAuthorizationsPostServerResponse)
-	err = a.server.Post(req, resp)
+	err = a.server.Post(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
 		errorBody, _ := errors.NewError().

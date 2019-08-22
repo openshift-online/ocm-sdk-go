@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type ResourceQuotaServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the resource quota.
-	Get(request *ResourceQuotaGetServerRequest, response *ResourceQuotaGetServerResponse) error
+	Get(ctx context.Context, request *ResourceQuotaGetServerRequest, response *ResourceQuotaGetServerResponse) error
 
 	// Update handles a request for the 'update' method.
 	//
 	// Updates the resource quota.
-	Update(request *ResourceQuotaUpdateServerRequest, response *ResourceQuotaUpdateServerResponse) error
+	Update(ctx context.Context, request *ResourceQuotaUpdateServerRequest, response *ResourceQuotaUpdateServerResponse) error
 }
 
 // ResourceQuotaGetServerRequest is the request for the 'get' method.
@@ -205,7 +206,7 @@ func (a *ResourceQuotaServerAdapter) getHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 	resp := new(ResourceQuotaGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -254,7 +255,7 @@ func (a *ResourceQuotaServerAdapter) updateHandler(w http.ResponseWriter, r *htt
 		return
 	}
 	resp := new(ResourceQuotaUpdateServerResponse)
-	err = a.server.Update(req, resp)
+	err = a.server.Update(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
 		errorBody, _ := errors.NewError().

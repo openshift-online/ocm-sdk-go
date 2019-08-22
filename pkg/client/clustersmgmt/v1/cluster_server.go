@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,17 +37,17 @@ type ClusterServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the cluster.
-	Get(request *ClusterGetServerRequest, response *ClusterGetServerResponse) error
+	Get(ctx context.Context, request *ClusterGetServerRequest, response *ClusterGetServerResponse) error
 
 	// Update handles a request for the 'update' method.
 	//
 	// Updates the cluster.
-	Update(request *ClusterUpdateServerRequest, response *ClusterUpdateServerResponse) error
+	Update(ctx context.Context, request *ClusterUpdateServerRequest, response *ClusterUpdateServerResponse) error
 
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the cluster.
-	Delete(request *ClusterDeleteServerRequest, response *ClusterDeleteServerResponse) error
+	Delete(ctx context.Context, request *ClusterDeleteServerRequest, response *ClusterDeleteServerResponse) error
 
 	// Status returns the target 'cluster_status' resource.
 	//
@@ -289,7 +290,7 @@ func (a *ClusterServerAdapter) getHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 	resp := new(ClusterGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -338,7 +339,7 @@ func (a *ClusterServerAdapter) updateHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	resp := new(ClusterUpdateServerResponse)
-	err = a.server.Update(req, resp)
+	err = a.server.Update(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
 		errorBody, _ := errors.NewError().
@@ -379,7 +380,7 @@ func (a *ClusterServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	resp := new(ClusterDeleteServerResponse)
-	err = a.server.Delete(req, resp)
+	err = a.server.Delete(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
 		errorBody, _ := errors.NewError().

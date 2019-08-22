@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type OrganizationServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the organization.
-	Get(request *OrganizationGetServerRequest, response *OrganizationGetServerResponse) error
+	Get(ctx context.Context, request *OrganizationGetServerRequest, response *OrganizationGetServerResponse) error
 
 	// Update handles a request for the 'update' method.
 	//
 	// Updates the organization.
-	Update(request *OrganizationUpdateServerRequest, response *OrganizationUpdateServerResponse) error
+	Update(ctx context.Context, request *OrganizationUpdateServerRequest, response *OrganizationUpdateServerResponse) error
 
 	// ResourceQuota returns the target 'resource_quotas' resource.
 	//
@@ -231,7 +232,7 @@ func (a *OrganizationServerAdapter) getHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 	resp := new(OrganizationGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -280,7 +281,7 @@ func (a *OrganizationServerAdapter) updateHandler(w http.ResponseWriter, r *http
 		return
 	}
 	resp := new(OrganizationUpdateServerResponse)
-	err = a.server.Update(req, resp)
+	err = a.server.Update(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
 		errorBody, _ := errors.NewError().

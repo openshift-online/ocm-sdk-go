@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type SubscriptionServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the subscription.
-	Get(request *SubscriptionGetServerRequest, response *SubscriptionGetServerResponse) error
+	Get(ctx context.Context, request *SubscriptionGetServerRequest, response *SubscriptionGetServerResponse) error
 
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the subscription.
-	Delete(request *SubscriptionDeleteServerRequest, response *SubscriptionDeleteServerResponse) error
+	Delete(ctx context.Context, request *SubscriptionDeleteServerRequest, response *SubscriptionDeleteServerResponse) error
 }
 
 // SubscriptionGetServerRequest is the request for the 'get' method.
@@ -143,7 +144,7 @@ func (a *SubscriptionServerAdapter) getHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 	resp := new(SubscriptionGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -184,7 +185,7 @@ func (a *SubscriptionServerAdapter) deleteHandler(w http.ResponseWriter, r *http
 		return
 	}
 	resp := new(SubscriptionDeleteServerResponse)
-	err = a.server.Delete(req, resp)
+	err = a.server.Delete(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
 		errorBody, _ := errors.NewError().

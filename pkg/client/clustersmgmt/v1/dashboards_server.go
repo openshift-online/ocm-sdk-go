@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type DashboardsServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves a list of dashboards.
-	List(request *DashboardsListServerRequest, response *DashboardsListServerResponse) error
+	List(ctx context.Context, request *DashboardsListServerRequest, response *DashboardsListServerResponse) error
 
 	// Dashboard returns the target 'dashboard' server for the given identifier.
 	//
@@ -309,7 +310,7 @@ func (a *DashboardsServerAdapter) listHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 	resp := new(DashboardsListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().

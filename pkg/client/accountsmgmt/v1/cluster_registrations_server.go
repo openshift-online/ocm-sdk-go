@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -37,7 +38,7 @@ type ClusterRegistrationsServer interface {
 	//
 	// Finds or creates a cluster registration with a registry credential
 	// token and cluster identifier.
-	Post(request *ClusterRegistrationsPostServerRequest, response *ClusterRegistrationsPostServerResponse) error
+	Post(ctx context.Context, request *ClusterRegistrationsPostServerRequest, response *ClusterRegistrationsPostServerResponse) error
 }
 
 // ClusterRegistrationsPostServerRequest is the request for the 'post' method.
@@ -164,7 +165,7 @@ func (a *ClusterRegistrationsServerAdapter) postHandler(w http.ResponseWriter, r
 		return
 	}
 	resp := new(ClusterRegistrationsPostServerResponse)
-	err = a.server.Post(req, resp)
+	err = a.server.Post(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
 		errorBody, _ := errors.NewError().
