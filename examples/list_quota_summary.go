@@ -24,8 +24,8 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client"
-	amsv1 "github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1"
+	"github.com/openshift-online/uhc-sdk-go"
+	amv1 "github.com/openshift-online/uhc-sdk-go/accountsmgmt/v1"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger that has the debug level enabled:
-	logger, err := client.NewGoLoggerBuilder().
+	logger, err := sdk.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {
@@ -43,12 +43,12 @@ func main() {
 
 	// Create the connection, and remember to close it:
 	token := os.Getenv("UHC_TOKEN")
-	connection, err := client.NewConnectionBuilder().
+	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
 		os.Exit(1)
 	}
 	defer connection.Close()
@@ -89,7 +89,7 @@ func main() {
 	// Print the results. Note that this will print only the first page of results. To print all
 	// the results this will need to be repeated using the paging mechanism until the returned
 	// page has less items than requested. See the `list_clusters.go` example for more details.
-	summaryResponse.Items().Each(func(item *amsv1.QuotaSummary) bool {
+	summaryResponse.Items().Each(func(item *amv1.QuotaSummary) bool {
 		fmt.Fprintf(
 			writer,
 			"%s\t%s\t%d\t%d\n",

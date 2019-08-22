@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client"
-	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
+	"github.com/openshift-online/uhc-sdk-go"
+	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger that has the debug level enabled:
-	logger, err := client.NewGoLoggerBuilder().
+	logger, err := sdk.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {
@@ -40,7 +40,7 @@ func main() {
 
 	// Create the connection, and remember to close it:
 	token := os.Getenv("UHC_TOKEN")
-	connection, err := client.NewConnectionBuilder().
+	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
 		BuildContext(ctx)
@@ -54,27 +54,27 @@ func main() {
 	collection := connection.ClustersMgmt().V1().Clusters()
 
 	// Prepare the description of the cluster to create:
-	cluster, err := v1.NewCluster().
+	cluster, err := cmv1.NewCluster().
 		Name("mycluster").
 		Flavour(
-			v1.NewFlavour().
+			cmv1.NewFlavour().
 				ID("4"),
 		).
 		Region(
-			v1.NewCloudRegion().
+			cmv1.NewCloudRegion().
 				ID("us-east-1"),
 		).
 		DNS(
-			v1.NewDNS().
+			cmv1.NewDNS().
 				BaseDomain("example.com"),
 		).
 		AWS(
-			v1.NewAWS().
+			cmv1.NewAWS().
 				AccessKeyID("...").
 				SecretAccessKey("..."),
 		).
 		Version(
-			v1.NewVersion().
+			cmv1.NewVersion().
 				ID("openshift-v4.0-beta4"),
 		).
 		Build()

@@ -24,8 +24,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client"
-	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
+	"github.com/openshift-online/uhc-sdk-go"
+	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger that has the debug level enabled:
-	logger, err := client.NewGoLoggerBuilder().
+	logger, err := sdk.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {
@@ -42,12 +42,12 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	connection, err := client.NewConnectionBuilder().
+	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Client("myclientid", "myclientsecret").
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
 		os.Exit(1)
 	}
 	defer connection.Close()
@@ -67,7 +67,7 @@ func main() {
 	}
 
 	// Print the result:
-	response.Items().Each(func(cluster *v1.Cluster) bool {
+	response.Items().Each(func(cluster *cmv1.Cluster) bool {
 		fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
 		return true
 	})

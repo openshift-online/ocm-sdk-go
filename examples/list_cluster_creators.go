@@ -24,8 +24,8 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/openshift-online/uhc-sdk-go/pkg/client"
-	"github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1"
+	"github.com/openshift-online/uhc-sdk-go"
+	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger:
-	logger, err := client.NewGoLoggerBuilder().
+	logger, err := sdk.NewGoLoggerBuilder().
 		Debug(false).
 		Build()
 	if err != nil {
@@ -43,12 +43,12 @@ func main() {
 
 	// Create the connection, and remember to close it:
 	token := os.Getenv("UHC_TOKEN")
-	connection, err := client.NewConnectionBuilder().
+	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build client: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
 		os.Exit(1)
 	}
 	defer connection.Close()
@@ -80,7 +80,7 @@ func main() {
 		}
 
 		// Process the page:
-		listClustersResponse.Items().Each(func(cluster *v1.Cluster) bool {
+		listClustersResponse.Items().Each(func(cluster *cmv1.Cluster) bool {
 			// Get the cluster data:
 			clusterID := cluster.ID()
 			clusterName := cluster.Name()

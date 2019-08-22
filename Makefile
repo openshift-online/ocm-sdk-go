@@ -26,15 +26,11 @@ examples:
 
 .PHONY: test
 test:
-	ginkgo -r pkg \
-		$(NULL)
+	ginkgo -r .
 
 .PHONY: fmt
 fmt:
-	gofmt -s -l -w \
-		pkg \
-		examples \
-		$(NULL)
+	gofmt -s -l -w .
 
 .PHONY: lint
 lint:
@@ -42,10 +38,10 @@ lint:
 		--no-config \
 		--issues-exit-code=1 \
 		--deadline=15m \
-		--skip-dirs=pkg/client/accountsmgmt \
-		--skip-dirs=pkg/client/clustersmgmt \
-		--skip-dirs=pkg/client/errors \
-		--skip-dirs=pkg/client/helpers \
+		--skip-dirs=accountsmgmt \
+		--skip-dirs=clustersmgmt \
+		--skip-dirs=errors \
+		--skip-dirs=helpers \
 		--disable-all \
 		--enable=deadcode \
 		--enable=gas \
@@ -65,11 +61,11 @@ lint:
 .PHONY: generate
 generate:
 	rm -rf \
-		pkg/client/accountsmgmt \
-		pkg/client/clustersmgmt \
-		pkg/client/errors \
-		pkg/client/helpers
+		accountsmgmt \
+		clustersmgmt \
+		errors \
+		helpers
 	ocm-metamodel-tool generate \
 		--model=$(model) \
-		--base=github.com/openshift-online/uhc-sdk-go/pkg/client \
-		--output=pkg/client
+		--base=github.com/openshift-online/uhc-sdk-go \
+		--output=.
