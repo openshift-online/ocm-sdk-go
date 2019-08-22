@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type IdentityProviderServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the identity provider.
-	Get(request *IdentityProviderGetServerRequest, response *IdentityProviderGetServerResponse) error
+	Get(ctx context.Context, request *IdentityProviderGetServerRequest, response *IdentityProviderGetServerResponse) error
 
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the identity provider.
-	Delete(request *IdentityProviderDeleteServerRequest, response *IdentityProviderDeleteServerResponse) error
+	Delete(ctx context.Context, request *IdentityProviderDeleteServerRequest, response *IdentityProviderDeleteServerResponse) error
 }
 
 // IdentityProviderGetServerRequest is the request for the 'get' method.
@@ -143,7 +144,7 @@ func (a *IdentityProviderServerAdapter) getHandler(w http.ResponseWriter, r *htt
 		return
 	}
 	resp := new(IdentityProviderGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -184,7 +185,7 @@ func (a *IdentityProviderServerAdapter) deleteHandler(w http.ResponseWriter, r *
 		return
 	}
 	resp := new(IdentityProviderDeleteServerResponse)
-	err = a.server.Delete(req, resp)
+	err = a.server.Delete(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
 		errorBody, _ := errors.NewError().

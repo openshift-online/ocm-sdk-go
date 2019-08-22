@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type PermissionServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the permission.
-	Get(request *PermissionGetServerRequest, response *PermissionGetServerResponse) error
+	Get(ctx context.Context, request *PermissionGetServerRequest, response *PermissionGetServerResponse) error
 
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the permission.
-	Delete(request *PermissionDeleteServerRequest, response *PermissionDeleteServerResponse) error
+	Delete(ctx context.Context, request *PermissionDeleteServerRequest, response *PermissionDeleteServerResponse) error
 }
 
 // PermissionGetServerRequest is the request for the 'get' method.
@@ -143,7 +144,7 @@ func (a *PermissionServerAdapter) getHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	resp := new(PermissionGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -184,7 +185,7 @@ func (a *PermissionServerAdapter) deleteHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 	resp := new(PermissionDeleteServerResponse)
-	err = a.server.Delete(req, resp)
+	err = a.server.Delete(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
 		errorBody, _ := errors.NewError().

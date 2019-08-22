@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type RolesServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves a list of roles.
-	List(request *RolesListServerRequest, response *RolesListServerResponse) error
+	List(ctx context.Context, request *RolesListServerRequest, response *RolesListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new role.
-	Add(request *RolesAddServerRequest, response *RolesAddServerResponse) error
+	Add(ctx context.Context, request *RolesAddServerRequest, response *RolesAddServerResponse) error
 
 	// Role returns the target 'role' server for the given identifier.
 	//
@@ -342,7 +343,7 @@ func (a *RolesServerAdapter) listHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	resp := new(RolesListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -391,7 +392,7 @@ func (a *RolesServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	resp := new(RolesAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().

@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type RegistryCredentialServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the registry credential.
-	Get(request *RegistryCredentialGetServerRequest, response *RegistryCredentialGetServerResponse) error
+	Get(ctx context.Context, request *RegistryCredentialGetServerRequest, response *RegistryCredentialGetServerResponse) error
 }
 
 // RegistryCredentialGetServerRequest is the request for the 'get' method.
@@ -119,7 +120,7 @@ func (a *RegistryCredentialServerAdapter) getHandler(w http.ResponseWriter, r *h
 		return
 	}
 	resp := new(RegistryCredentialGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().

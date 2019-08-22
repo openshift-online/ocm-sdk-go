@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type FlavourServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the cluster flavour.
-	Get(request *FlavourGetServerRequest, response *FlavourGetServerResponse) error
+	Get(ctx context.Context, request *FlavourGetServerRequest, response *FlavourGetServerResponse) error
 }
 
 // FlavourGetServerRequest is the request for the 'get' method.
@@ -119,7 +120,7 @@ func (a *FlavourServerAdapter) getHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 	resp := new(FlavourGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().

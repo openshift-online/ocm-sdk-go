@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type GroupServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the group.
-	Get(request *GroupGetServerRequest, response *GroupGetServerResponse) error
+	Get(ctx context.Context, request *GroupGetServerRequest, response *GroupGetServerResponse) error
 
 	// Users returns the target 'users' resource.
 	//
@@ -131,7 +132,7 @@ func (a *GroupServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	resp := new(GroupGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().

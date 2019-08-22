@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type RoleBindingsServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves a list of role bindings.
-	List(request *RoleBindingsListServerRequest, response *RoleBindingsListServerResponse) error
+	List(ctx context.Context, request *RoleBindingsListServerRequest, response *RoleBindingsListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new role binding.
-	Add(request *RoleBindingsAddServerRequest, response *RoleBindingsAddServerResponse) error
+	Add(ctx context.Context, request *RoleBindingsAddServerRequest, response *RoleBindingsAddServerResponse) error
 
 	// RoleBinding returns the target 'role_binding' server for the given identifier.
 	//
@@ -342,7 +343,7 @@ func (a *RoleBindingsServerAdapter) listHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 	resp := new(RoleBindingsListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -391,7 +392,7 @@ func (a *RoleBindingsServerAdapter) addHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 	resp := new(RoleBindingsAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().

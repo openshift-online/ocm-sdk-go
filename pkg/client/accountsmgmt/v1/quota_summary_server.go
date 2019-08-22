@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type QuotaSummaryServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the Quota summary.
-	List(request *QuotaSummaryListServerRequest, response *QuotaSummaryListServerResponse) error
+	List(ctx context.Context, request *QuotaSummaryListServerRequest, response *QuotaSummaryListServerResponse) error
 }
 
 // QuotaSummaryListServerRequest is the request for the 'list' method.
@@ -294,7 +295,7 @@ func (a *QuotaSummaryServerAdapter) listHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 	resp := new(QuotaSummaryListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().

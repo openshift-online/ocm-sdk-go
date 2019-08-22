@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type UserServer interface {
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the user.
-	Get(request *UserGetServerRequest, response *UserGetServerResponse) error
+	Get(ctx context.Context, request *UserGetServerRequest, response *UserGetServerResponse) error
 
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the user.
-	Delete(request *UserDeleteServerRequest, response *UserDeleteServerResponse) error
+	Delete(ctx context.Context, request *UserDeleteServerRequest, response *UserDeleteServerResponse) error
 }
 
 // UserGetServerRequest is the request for the 'get' method.
@@ -143,7 +144,7 @@ func (a *UserServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := new(UserGetServerResponse)
-	err = a.server.Get(req, resp)
+	err = a.server.Get(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
 		errorBody, _ := errors.NewError().
@@ -184,7 +185,7 @@ func (a *UserServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 	resp := new(UserDeleteServerResponse)
-	err = a.server.Delete(req, resp)
+	err = a.server.Delete(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
 		errorBody, _ := errors.NewError().

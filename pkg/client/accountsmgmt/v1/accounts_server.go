@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type AccountsServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of accounts.
-	List(request *AccountsListServerRequest, response *AccountsListServerResponse) error
+	List(ctx context.Context, request *AccountsListServerRequest, response *AccountsListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new account.
-	Add(request *AccountsAddServerRequest, response *AccountsAddServerResponse) error
+	Add(ctx context.Context, request *AccountsAddServerRequest, response *AccountsAddServerResponse) error
 
 	// Account returns the target 'account' server for the given identifier.
 	//
@@ -342,7 +343,7 @@ func (a *AccountsServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	resp := new(AccountsListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -391,7 +392,7 @@ func (a *AccountsServerAdapter) addHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	resp := new(AccountsAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().

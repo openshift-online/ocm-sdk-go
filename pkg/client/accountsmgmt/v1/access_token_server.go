@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ type AccessTokenServer interface {
 	// Post handles a request for the 'post' method.
 	//
 	// Returns access token generated from registries in docker format.
-	Post(request *AccessTokenPostServerRequest, response *AccessTokenPostServerResponse) error
+	Post(ctx context.Context, request *AccessTokenPostServerRequest, response *AccessTokenPostServerResponse) error
 }
 
 // AccessTokenPostServerRequest is the request for the 'post' method.
@@ -119,7 +120,7 @@ func (a *AccessTokenServerAdapter) postHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 	resp := new(AccessTokenPostServerResponse)
-	err = a.server.Post(req, resp)
+	err = a.server.Post(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
 		errorBody, _ := errors.NewError().

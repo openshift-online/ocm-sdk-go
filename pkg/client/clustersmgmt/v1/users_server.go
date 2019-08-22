@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type UsersServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of users.
-	List(request *UsersListServerRequest, response *UsersListServerResponse) error
+	List(ctx context.Context, request *UsersListServerRequest, response *UsersListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Adds a new user to the group.
-	Add(request *UsersAddServerRequest, response *UsersAddServerResponse) error
+	Add(ctx context.Context, request *UsersAddServerRequest, response *UsersAddServerResponse) error
 
 	// User returns the target 'user' server for the given identifier.
 	//
@@ -258,7 +259,7 @@ func (a *UsersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	resp := new(UsersListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -307,7 +308,7 @@ func (a *UsersServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	resp := new(UsersAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().

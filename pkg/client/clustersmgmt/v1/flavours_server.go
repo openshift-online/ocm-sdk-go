@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type FlavoursServer interface {
 	// List handles a request for the 'list' method.
 	//
 	//
-	List(request *FlavoursListServerRequest, response *FlavoursListServerResponse) error
+	List(ctx context.Context, request *FlavoursListServerRequest, response *FlavoursListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Adds a new cluster flavour.
-	Add(request *FlavoursAddServerRequest, response *FlavoursAddServerResponse) error
+	Add(ctx context.Context, request *FlavoursAddServerRequest, response *FlavoursAddServerResponse) error
 
 	// Flavour returns the target 'flavour' server for the given identifier.
 	//
@@ -391,7 +392,7 @@ func (a *FlavoursServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	resp := new(FlavoursListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -440,7 +441,7 @@ func (a *FlavoursServerAdapter) addHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	resp := new(FlavoursAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().

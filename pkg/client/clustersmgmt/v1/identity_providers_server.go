@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type IdentityProvidersServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of identity providers.
-	List(request *IdentityProvidersListServerRequest, response *IdentityProvidersListServerResponse) error
+	List(ctx context.Context, request *IdentityProvidersListServerRequest, response *IdentityProvidersListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Adds a new identity provider to the cluster.
-	Add(request *IdentityProvidersAddServerRequest, response *IdentityProvidersAddServerResponse) error
+	Add(ctx context.Context, request *IdentityProvidersAddServerRequest, response *IdentityProvidersAddServerResponse) error
 
 	// IdentityProvider returns the target 'identity_provider' server for the given identifier.
 	//
@@ -258,7 +259,7 @@ func (a *IdentityProvidersServerAdapter) listHandler(w http.ResponseWriter, r *h
 		return
 	}
 	resp := new(IdentityProvidersListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -307,7 +308,7 @@ func (a *IdentityProvidersServerAdapter) addHandler(w http.ResponseWriter, r *ht
 		return
 	}
 	resp := new(IdentityProvidersAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().

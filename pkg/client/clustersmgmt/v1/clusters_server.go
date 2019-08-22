@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/clustersmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,14 +37,14 @@ type ClustersServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of clusters.
-	List(request *ClustersListServerRequest, response *ClustersListServerResponse) error
+	List(ctx context.Context, request *ClustersListServerRequest, response *ClustersListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Provision a new cluster and add it to the collection of clusters.
 	//
 	// See the `register_cluster` method for adding an existing cluster.
-	Add(request *ClustersAddServerRequest, response *ClustersAddServerResponse) error
+	Add(ctx context.Context, request *ClustersAddServerRequest, response *ClustersAddServerResponse) error
 
 	// Cluster returns the target 'cluster' server for the given identifier.
 	//
@@ -395,7 +396,7 @@ func (a *ClustersServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	resp := new(ClustersListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -444,7 +445,7 @@ func (a *ClustersServerAdapter) addHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	resp := new(ClustersAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().

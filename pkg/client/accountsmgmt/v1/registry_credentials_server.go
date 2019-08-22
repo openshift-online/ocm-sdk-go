@@ -20,6 +20,7 @@ limitations under the License.
 package v1 // github.com/openshift-online/uhc-sdk-go/pkg/client/accountsmgmt/v1
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,12 +37,12 @@ type RegistryCredentialsServer interface {
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of accounts.
-	List(request *RegistryCredentialsListServerRequest, response *RegistryCredentialsListServerResponse) error
+	List(ctx context.Context, request *RegistryCredentialsListServerRequest, response *RegistryCredentialsListServerResponse) error
 
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new registry credential.
-	Add(request *RegistryCredentialsAddServerRequest, response *RegistryCredentialsAddServerResponse) error
+	Add(ctx context.Context, request *RegistryCredentialsAddServerRequest, response *RegistryCredentialsAddServerResponse) error
 
 	// RegistryCredential returns the target 'registry_credential' server for the given identifier.
 	//
@@ -342,7 +343,7 @@ func (a *RegistryCredentialsServerAdapter) listHandler(w http.ResponseWriter, r 
 		return
 	}
 	resp := new(RegistryCredentialsListServerResponse)
-	err = a.server.List(req, resp)
+	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
 		errorBody, _ := errors.NewError().
@@ -391,7 +392,7 @@ func (a *RegistryCredentialsServerAdapter) addHandler(w http.ResponseWriter, r *
 		return
 	}
 	resp := new(RegistryCredentialsAddServerResponse)
-	err = a.server.Add(req, resp)
+	err = a.server.Add(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
 		errorBody, _ := errors.NewError().
