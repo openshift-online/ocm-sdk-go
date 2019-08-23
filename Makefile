@@ -14,8 +14,9 @@
 # limitations under the License.
 #
 
-# Directory containing the model:
-model:=/files/projects/ocm-api-model/model
+# Details of the model to use:
+model_version:=v0.0.1
+model_url:=https://gitlab.cee.redhat.com/service/ocm-api-model.git
 
 .PHONY: examples
 examples:
@@ -59,13 +60,26 @@ lint:
 		$(NULL)
 
 .PHONY: generate
-generate:
+generate: model
 	rm -rf \
 		accountsmgmt \
 		clustersmgmt \
 		errors \
 		helpers
 	ocm-metamodel-tool generate \
-		--model=$(model) \
+		--model=model/model \
 		--base=github.com/openshift-online/uhc-sdk-go \
 		--output=.
+
+.PHONY: model
+model:
+	[ -d "$@" ] || git clone "$(model_url)" "$@"
+	cd "$@" && git fetch origin
+	cd "$@" && git checkout -B build "$(model_version)"
+
+.PHONY: clean
+clean:
+	rm -rf \
+		.gobin \
+		model \
+		$(NULL)

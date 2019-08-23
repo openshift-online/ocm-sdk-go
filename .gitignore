@@ -1,4 +1,5 @@
-/.gopath/
+/.gobin/
 /examples/*
+/model/
 /vendor/
 !/examples/*.go
