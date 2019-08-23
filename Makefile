@@ -18,6 +18,10 @@
 model_version:=v0.0.1
 model_url:=https://gitlab.cee.redhat.com/service/ocm-api-model.git
 
+# Details of the metamodel to use:
+metamodel_version:=v0.0.1
+metamodel_url:=https://gitlab.cee.redhat.com/service/ocm-api-metamodel.git
+
 .PHONY: examples
 examples:
 	cd examples && \
@@ -60,13 +64,14 @@ lint:
 		$(NULL)
 
 .PHONY: generate
-generate: model
+generate: model metamodel
 	rm -rf \
 		accountsmgmt \
 		clustersmgmt \
 		errors \
 		helpers
-	ocm-metamodel-tool generate \
+	metamodel/ocm-metamodel-tool \
+		generate \
 		--model=model/model \
 		--base=github.com/openshift-online/uhc-sdk-go \
 		--output=.
@@ -77,9 +82,17 @@ model:
 	cd "$@" && git fetch origin
 	cd "$@" && git checkout -B build "$(model_version)"
 
+.PHONY: metamodel
+metamodel:
+	[ -d "$@" ] || git clone "$(metamodel_url)" "$@"
+	cd "$@" && git fetch origin
+	cd "$@" && git checkout -B build "$(metamodel_version)"
+	make -C "$@"
+
 .PHONY: clean
 clean:
 	rm -rf \
 		.gobin \
+		metamodel \
 		model \
 		$(NULL)
