@@ -224,43 +224,43 @@ func NewClusterServerAdapter(server ClusterServer, router *mux.Router) *ClusterS
 	adapter := new(ClusterServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/status/").HandlerFunc(adapter.statusHandler)
-	adapter.router.PathPrefix("/credentials/").HandlerFunc(adapter.credentialsHandler)
-	adapter.router.PathPrefix("/logs/").HandlerFunc(adapter.logsHandler)
-	adapter.router.PathPrefix("/groups/").HandlerFunc(adapter.groupsHandler)
-	adapter.router.PathPrefix("/identity_providers/").HandlerFunc(adapter.identityProvidersHandler)
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.updateHandler).Methods("PATCH")
-	adapter.router.HandleFunc("/", adapter.deleteHandler).Methods("DELETE")
+	adapter.router.PathPrefix("/status").HandlerFunc(adapter.statusHandler)
+	adapter.router.PathPrefix("/credentials").HandlerFunc(adapter.credentialsHandler)
+	adapter.router.PathPrefix("/logs").HandlerFunc(adapter.logsHandler)
+	adapter.router.PathPrefix("/groups").HandlerFunc(adapter.groupsHandler)
+	adapter.router.PathPrefix("/identity_providers").HandlerFunc(adapter.identityProvidersHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *ClusterServerAdapter) statusHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Status()
-	targetAdapter := NewClusterStatusServerAdapter(target, a.router.PathPrefix("/status/").Subrouter())
+	targetAdapter := NewClusterStatusServerAdapter(target, a.router.PathPrefix("/status").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *ClusterServerAdapter) credentialsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Credentials()
-	targetAdapter := NewCredentialsServerAdapter(target, a.router.PathPrefix("/credentials/").Subrouter())
+	targetAdapter := NewCredentialsServerAdapter(target, a.router.PathPrefix("/credentials").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *ClusterServerAdapter) logsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Logs()
-	targetAdapter := NewLogsServerAdapter(target, a.router.PathPrefix("/logs/").Subrouter())
+	targetAdapter := NewLogsServerAdapter(target, a.router.PathPrefix("/logs").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *ClusterServerAdapter) groupsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Groups()
-	targetAdapter := NewGroupsServerAdapter(target, a.router.PathPrefix("/groups/").Subrouter())
+	targetAdapter := NewGroupsServerAdapter(target, a.router.PathPrefix("/groups").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *ClusterServerAdapter) identityProvidersHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.IdentityProviders()
-	targetAdapter := NewIdentityProvidersServerAdapter(target, a.router.PathPrefix("/identity_providers/").Subrouter())
+	targetAdapter := NewIdentityProvidersServerAdapter(target, a.router.PathPrefix("/identity_providers").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

@@ -114,8 +114,8 @@ func NewRoleBindingServerAdapter(server RoleBindingServer, router *mux.Router) *
 	adapter := new(RoleBindingServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.deleteHandler).Methods("DELETE")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *RoleBindingServerAdapter) readRoleBindingGetServerRequest(r *http.Request) (*RoleBindingGetServerRequest, error) {

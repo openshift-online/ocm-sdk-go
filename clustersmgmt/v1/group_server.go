@@ -96,13 +96,13 @@ func NewGroupServerAdapter(server GroupServer, router *mux.Router) *GroupServerA
 	adapter := new(GroupServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/users/").HandlerFunc(adapter.usersHandler)
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.PathPrefix("/users").HandlerFunc(adapter.usersHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *GroupServerAdapter) usersHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Users()
-	targetAdapter := NewUsersServerAdapter(target, a.router.PathPrefix("/users/").Subrouter())
+	targetAdapter := NewUsersServerAdapter(target, a.router.PathPrefix("/users").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

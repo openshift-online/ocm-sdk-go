@@ -305,15 +305,15 @@ func NewRegistryCredentialsServerAdapter(server RegistryCredentialsServer, route
 	adapter := new(RegistryCredentialsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.registryCredentialHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.addHandler).Methods("POST")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.registryCredentialHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *RegistryCredentialsServerAdapter) registryCredentialHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.RegistryCredential(id)
-	targetAdapter := NewRegistryCredentialServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewRegistryCredentialServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

@@ -91,7 +91,7 @@ func NewAccessTokenServerAdapter(server AccessTokenServer, router *mux.Router) *
 	adapter := new(AccessTokenServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.postHandler).Methods("POST")
+	adapter.router.Methods("POST").HandlerFunc(adapter.postHandler)
 	return adapter
 }
 func (a *AccessTokenServerAdapter) readAccessTokenPostServerRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {

@@ -176,8 +176,8 @@ func NewResourceQuotaServerAdapter(server ResourceQuotaServer, router *mux.Route
 	adapter := new(ResourceQuotaServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.updateHandler).Methods("PATCH")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
 	return adapter
 }
 func (a *ResourceQuotaServerAdapter) readResourceQuotaGetServerRequest(r *http.Request) (*ResourceQuotaGetServerRequest, error) {

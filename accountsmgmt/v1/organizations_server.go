@@ -305,15 +305,15 @@ func NewOrganizationsServerAdapter(server OrganizationsServer, router *mux.Route
 	adapter := new(OrganizationsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.organizationHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.addHandler).Methods("POST")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.organizationHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *OrganizationsServerAdapter) organizationHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Organization(id)
-	targetAdapter := NewOrganizationServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewOrganizationServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

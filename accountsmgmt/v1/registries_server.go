@@ -220,14 +220,14 @@ func NewRegistriesServerAdapter(server RegistriesServer, router *mux.Router) *Re
 	adapter := new(RegistriesServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.registryHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.registryHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *RegistriesServerAdapter) registryHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Registry(id)
-	targetAdapter := NewRegistryServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewRegistryServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

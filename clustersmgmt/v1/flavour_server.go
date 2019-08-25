@@ -91,7 +91,7 @@ func NewFlavourServerAdapter(server FlavourServer, router *mux.Router) *FlavourS
 	adapter := new(FlavourServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *FlavourServerAdapter) readFlavourGetServerRequest(r *http.Request) (*FlavourGetServerRequest, error) {

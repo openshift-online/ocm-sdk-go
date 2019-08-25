@@ -114,8 +114,8 @@ func NewIdentityProviderServerAdapter(server IdentityProviderServer, router *mux
 	adapter := new(IdentityProviderServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.deleteHandler).Methods("DELETE")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *IdentityProviderServerAdapter) readIdentityProviderGetServerRequest(r *http.Request) (*IdentityProviderGetServerRequest, error) {

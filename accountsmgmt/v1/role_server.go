@@ -199,9 +199,9 @@ func NewRoleServerAdapter(server RoleServer, router *mux.Router) *RoleServerAdap
 	adapter := new(RoleServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.updateHandler).Methods("PATCH")
-	adapter.router.HandleFunc("/", adapter.deleteHandler).Methods("DELETE")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *RoleServerAdapter) readRoleGetServerRequest(r *http.Request) (*RoleGetServerRequest, error) {

@@ -136,14 +136,14 @@ func NewLogsServerAdapter(server LogsServer, router *mux.Router) *LogsServerAdap
 	adapter := new(LogsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.logHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.logHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *LogsServerAdapter) logHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Log(id)
-	targetAdapter := NewLogServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewLogServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

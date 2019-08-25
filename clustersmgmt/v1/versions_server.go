@@ -269,14 +269,14 @@ func NewVersionsServerAdapter(server VersionsServer, router *mux.Router) *Versio
 	adapter := new(VersionsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.versionHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.versionHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *VersionsServerAdapter) versionHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Version(id)
-	targetAdapter := NewVersionServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewVersionServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

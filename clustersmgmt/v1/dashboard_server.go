@@ -91,7 +91,7 @@ func NewDashboardServerAdapter(server DashboardServer, router *mux.Router) *Dash
 	adapter := new(DashboardServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *DashboardServerAdapter) readDashboardGetServerRequest(r *http.Request) (*DashboardGetServerRequest, error) {

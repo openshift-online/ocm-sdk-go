@@ -273,14 +273,14 @@ func NewDashboardsServerAdapter(server DashboardsServer, router *mux.Router) *Da
 	adapter := new(DashboardsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.dashboardHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.dashboardHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *DashboardsServerAdapter) dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Dashboard(id)
-	targetAdapter := NewDashboardServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewDashboardServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

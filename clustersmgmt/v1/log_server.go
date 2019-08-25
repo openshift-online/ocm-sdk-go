@@ -91,7 +91,7 @@ func NewLogServerAdapter(server LogServer, router *mux.Router) *LogServerAdapter
 	adapter := new(LogServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *LogServerAdapter) readLogGetServerRequest(r *http.Request) (*LogGetServerRequest, error) {

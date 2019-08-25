@@ -305,15 +305,15 @@ func NewRoleBindingsServerAdapter(server RoleBindingsServer, router *mux.Router)
 	adapter := new(RoleBindingsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.roleBindingHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.addHandler).Methods("POST")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleBindingHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *RoleBindingsServerAdapter) roleBindingHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.RoleBinding(id)
-	targetAdapter := NewRoleBindingServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewRoleBindingServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

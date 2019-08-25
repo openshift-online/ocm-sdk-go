@@ -60,33 +60,33 @@ func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdap
 	adapter := new(RootServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/clusters/").HandlerFunc(adapter.clustersHandler)
-	adapter.router.PathPrefix("/dashboards/").HandlerFunc(adapter.dashboardsHandler)
-	adapter.router.PathPrefix("/flavours/").HandlerFunc(adapter.flavoursHandler)
-	adapter.router.PathPrefix("/versions/").HandlerFunc(adapter.versionsHandler)
+	adapter.router.PathPrefix("/clusters").HandlerFunc(adapter.clustersHandler)
+	adapter.router.PathPrefix("/dashboards").HandlerFunc(adapter.dashboardsHandler)
+	adapter.router.PathPrefix("/flavours").HandlerFunc(adapter.flavoursHandler)
+	adapter.router.PathPrefix("/versions").HandlerFunc(adapter.versionsHandler)
 	return adapter
 }
 func (a *RootServerAdapter) clustersHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Clusters()
-	targetAdapter := NewClustersServerAdapter(target, a.router.PathPrefix("/clusters/").Subrouter())
+	targetAdapter := NewClustersServerAdapter(target, a.router.PathPrefix("/clusters").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *RootServerAdapter) dashboardsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Dashboards()
-	targetAdapter := NewDashboardsServerAdapter(target, a.router.PathPrefix("/dashboards/").Subrouter())
+	targetAdapter := NewDashboardsServerAdapter(target, a.router.PathPrefix("/dashboards").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *RootServerAdapter) flavoursHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Flavours()
-	targetAdapter := NewFlavoursServerAdapter(target, a.router.PathPrefix("/flavours/").Subrouter())
+	targetAdapter := NewFlavoursServerAdapter(target, a.router.PathPrefix("/flavours").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *RootServerAdapter) versionsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Versions()
-	targetAdapter := NewVersionsServerAdapter(target, a.router.PathPrefix("/versions/").Subrouter())
+	targetAdapter := NewVersionsServerAdapter(target, a.router.PathPrefix("/versions").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

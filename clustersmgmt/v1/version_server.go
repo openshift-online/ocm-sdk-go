@@ -91,7 +91,7 @@ func NewVersionServerAdapter(server VersionServer, router *mux.Router) *VersionS
 	adapter := new(VersionServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *VersionServerAdapter) readVersionGetServerRequest(r *http.Request) (*VersionGetServerRequest, error) {
