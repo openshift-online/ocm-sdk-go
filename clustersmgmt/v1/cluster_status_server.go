@@ -91,7 +91,7 @@ func NewClusterStatusServerAdapter(server ClusterStatusServer, router *mux.Route
 	adapter := new(ClusterStatusServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *ClusterStatusServerAdapter) readClusterStatusGetServerRequest(r *http.Request) (*ClusterStatusGetServerRequest, error) {

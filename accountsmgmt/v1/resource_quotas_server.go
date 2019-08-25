@@ -305,15 +305,15 @@ func NewResourceQuotasServerAdapter(server ResourceQuotasServer, router *mux.Rou
 	adapter := new(ResourceQuotasServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.resourceQuotaHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.addHandler).Methods("POST")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.resourceQuotaHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *ResourceQuotasServerAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.ResourceQuota(id)
-	targetAdapter := NewResourceQuotaServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewResourceQuotaServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

@@ -132,7 +132,7 @@ func NewClusterRegistrationsServerAdapter(server ClusterRegistrationsServer, rou
 	adapter := new(ClusterRegistrationsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.postHandler).Methods("POST")
+	adapter.router.Methods("POST").HandlerFunc(adapter.postHandler)
 	return adapter
 }
 func (a *ClusterRegistrationsServerAdapter) readClusterRegistrationsPostServerRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {

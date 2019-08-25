@@ -354,15 +354,15 @@ func NewFlavoursServerAdapter(server FlavoursServer, router *mux.Router) *Flavou
 	adapter := new(FlavoursServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.flavourHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.addHandler).Methods("POST")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.flavourHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *FlavoursServerAdapter) flavourHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Flavour(id)
-	targetAdapter := NewFlavourServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewFlavourServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

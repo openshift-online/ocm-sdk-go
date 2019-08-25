@@ -188,21 +188,21 @@ func NewOrganizationServerAdapter(server OrganizationServer, router *mux.Router)
 	adapter := new(OrganizationServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/resource_quota/").HandlerFunc(adapter.resourceQuotaHandler)
-	adapter.router.PathPrefix("/quota_summary/").HandlerFunc(adapter.quotaSummaryHandler)
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.updateHandler).Methods("PATCH")
+	adapter.router.PathPrefix("/resource_quota").HandlerFunc(adapter.resourceQuotaHandler)
+	adapter.router.PathPrefix("/quota_summary").HandlerFunc(adapter.quotaSummaryHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
 	return adapter
 }
 func (a *OrganizationServerAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.ResourceQuota()
-	targetAdapter := NewResourceQuotasServerAdapter(target, a.router.PathPrefix("/resource_quota/").Subrouter())
+	targetAdapter := NewResourceQuotasServerAdapter(target, a.router.PathPrefix("/resource_quota").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *OrganizationServerAdapter) quotaSummaryHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.QuotaSummary()
-	targetAdapter := NewQuotaSummaryServerAdapter(target, a.router.PathPrefix("/quota_summary/").Subrouter())
+	targetAdapter := NewQuotaSummaryServerAdapter(target, a.router.PathPrefix("/quota_summary").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

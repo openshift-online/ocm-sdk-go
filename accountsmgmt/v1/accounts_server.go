@@ -305,15 +305,15 @@ func NewAccountsServerAdapter(server AccountsServer, router *mux.Router) *Accoun
 	adapter := new(AccountsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.accountHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
-	adapter.router.HandleFunc("/", adapter.addHandler).Methods("POST")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.accountHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *AccountsServerAdapter) accountHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Account(id)
-	targetAdapter := NewAccountServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewAccountServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

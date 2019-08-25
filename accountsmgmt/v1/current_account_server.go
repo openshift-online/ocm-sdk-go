@@ -91,7 +91,7 @@ func NewCurrentAccountServerAdapter(server CurrentAccountServer, router *mux.Rou
 	adapter := new(CurrentAccountServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *CurrentAccountServerAdapter) readCurrentAccountGetServerRequest(r *http.Request) (*CurrentAccountGetServerRequest, error) {

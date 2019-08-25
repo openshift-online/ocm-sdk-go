@@ -266,7 +266,7 @@ func NewQuotaSummaryServerAdapter(server QuotaSummaryServer, router *mux.Router)
 	adapter := new(QuotaSummaryServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *QuotaSummaryServerAdapter) readQuotaSummaryListServerRequest(r *http.Request) (*QuotaSummaryListServerRequest, error) {

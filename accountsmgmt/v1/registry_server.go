@@ -91,7 +91,7 @@ func NewRegistryServerAdapter(server RegistryServer, router *mux.Router) *Regist
 	adapter := new(RegistryServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *RegistryServerAdapter) readRegistryGetServerRequest(r *http.Request) (*RegistryGetServerRequest, error) {

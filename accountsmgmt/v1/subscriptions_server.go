@@ -220,14 +220,14 @@ func NewSubscriptionsServerAdapter(server SubscriptionsServer, router *mux.Route
 	adapter := new(SubscriptionsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.subscriptionHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.subscriptionHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *SubscriptionsServerAdapter) subscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Subscription(id)
-	targetAdapter := NewSubscriptionServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewSubscriptionServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

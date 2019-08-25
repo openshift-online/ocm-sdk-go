@@ -136,14 +136,14 @@ func NewGroupsServerAdapter(server GroupsServer, router *mux.Router) *GroupsServ
 	adapter := new(GroupsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}/").HandlerFunc(adapter.groupHandler)
-	adapter.router.HandleFunc("/", adapter.listHandler).Methods("GET")
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.groupHandler)
+	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *GroupsServerAdapter) groupHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Group(id)
-	targetAdapter := NewGroupServerAdapter(target, a.router.PathPrefix("/{id}/").Subrouter())
+	targetAdapter := NewGroupServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

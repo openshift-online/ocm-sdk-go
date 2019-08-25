@@ -91,7 +91,7 @@ func NewRegistryCredentialServerAdapter(server RegistryCredentialServer, router 
 	adapter := new(RegistryCredentialServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.getHandler).Methods("GET")
+	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *RegistryCredentialServerAdapter) readRegistryCredentialGetServerRequest(r *http.Request) (*RegistryCredentialGetServerRequest, error) {

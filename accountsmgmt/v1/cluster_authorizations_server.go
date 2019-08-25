@@ -131,7 +131,7 @@ func NewClusterAuthorizationsServerAdapter(server ClusterAuthorizationsServer, r
 	adapter := new(ClusterAuthorizationsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.HandleFunc("/", adapter.postHandler).Methods("POST")
+	adapter.router.Methods("POST").HandlerFunc(adapter.postHandler)
 	return adapter
 }
 func (a *ClusterAuthorizationsServerAdapter) readClusterAuthorizationsPostServerRequest(r *http.Request) (*ClusterAuthorizationsPostServerRequest, error) {
