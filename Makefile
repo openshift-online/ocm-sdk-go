@@ -16,11 +16,11 @@
 
 # Details of the model to use:
 model_version:=v0.0.1
-model_url:=https://gitlab.cee.redhat.com/service/ocm-api-model.git
+model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
 metamodel_version:=v0.0.1
-metamodel_url:=https://gitlab.cee.redhat.com/service/ocm-api-metamodel.git
+metamodel_url:=https://github.com/openshift-online/ocm-api-metamodel.git
 
 .PHONY: examples
 examples:
@@ -73,7 +73,7 @@ generate: model metamodel
 	metamodel/ocm-metamodel-tool \
 		generate \
 		--model=model/model \
-		--base=github.com/openshift-online/uhc-sdk-go \
+		--base=github.com/openshift-online/ocm-sdk-go \
 		--output=.
 
 .PHONY: model

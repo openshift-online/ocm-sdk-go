@@ -24,8 +24,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/uhc-sdk-go"
-	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
+	"github.com/openshift-online/ocm-sdk-go"
+	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 )
 
 func main() {

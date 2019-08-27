@@ -24,8 +24,8 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/openshift-online/uhc-sdk-go"
-	amv1 "github.com/openshift-online/uhc-sdk-go/accountsmgmt/v1"
+	"github.com/openshift-online/ocm-sdk-go"
+	amv1 "github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1"
 )
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	token := os.Getenv("UHC_TOKEN")
+	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).

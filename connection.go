@@ -31,8 +31,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/openshift-online/uhc-sdk-go/accountsmgmt"
-	"github.com/openshift-online/uhc-sdk-go/clustersmgmt"
+	"github.com/openshift-online/ocm-sdk-go/accountsmgmt"
+	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
 )
 
 // Default values:
@@ -42,7 +42,7 @@ const (
 	DefaultClientID     = "cloud-services"
 	DefaultClientSecret = ""
 	DefaultURL          = "https://api.openshift.com"
-	DefaultAgent        = "UHC/" + Version
+	DefaultAgent        = "OCM/" + Version
 )
 
 // Alternative default values used in combination with the now deprecated `developers.redhat.com`:
@@ -189,7 +189,7 @@ func (b *ConnectionBuilder) URL(url string) *ConnectionBuilder {
 }
 
 // Agent sets the `User-Agent` header that the client will use in all the HTTP requests. The default
-// is `UHC` followed by an slash and the version of the client, for example `UHC/0.0.0`.
+// is `OCM` followed by an slash and the version of the client, for example `OCM/0.0.0`.
 func (b *ConnectionBuilder) Agent(agent string) *ConnectionBuilder {
 	b.agent = agent
 	return b

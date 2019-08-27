@@ -33,7 +33,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/openshift-online/uhc-sdk-go/internal"
+	"github.com/openshift-online/ocm-sdk-go/internal"
 )
 
 // Tokens returns the access and refresh tokens that is currently in use by the connection. If it is

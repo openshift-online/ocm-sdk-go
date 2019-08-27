@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package errors // github.com/openshift-online/uhc-sdk-go/errors
+package errors // github.com/openshift-online/ocm-sdk-go/errors
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ import (
 	"strconv"
 
 	"github.com/golang/glog"
-	"github.com/openshift-online/uhc-sdk-go/helpers"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // Error kind is the name of the type used to represent errors.

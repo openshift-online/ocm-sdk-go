@@ -27,8 +27,8 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/openshift-online/uhc-sdk-go"
-	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
+	"github.com/openshift-online/ocm-sdk-go"
+	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -50,7 +50,7 @@ func main() {
 
 	// Create the connection, specifying the `api_outbound` subsystem so that metrics are
 	// enabled and available with the `api_outbound_` prefix.
-	token := os.Getenv("UHC_TOKEN")
+	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
