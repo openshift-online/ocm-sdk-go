@@ -1,4 +1,4 @@
-module github.com/openshift-online/uhc-sdk-go
+module github.com/openshift-online/ocm-sdk-go
 
 go 1.12
 

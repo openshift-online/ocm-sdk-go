@@ -1,8 +1,8 @@
-= UHC SDK
+= OCM SDK
 
 ifdef::env-github[]
-image:https://godoc.org/github.com/openshift-online/uhc-sdk-go?status.svg[GoDoc,
-link=https://godoc.org/github.com/openshift-online/uhc-sdk-go/pkg/client]
+image:https://godoc.org/github.com/openshift-online/ocm-sdk-go?status.svg[GoDoc,
+link=https://godoc.org/github.com/openshift-online/ocm-sdk-go/pkg/client]
 image:https://img.shields.io/badge/License-Apache%202.0-blue.svg[License,
 link=https://opensource.org/licenses/Apache-2.0]
 endif::[]
@@ -12,10 +12,10 @@ API, available in `api.openshift.com`.
 
 == Usage
 
-To use it import the `github.com/openshift-online/uhc-sdk-go` package, and then
+To use it import the `github.com/openshift-online/ocm-sdk-go` package, and then
 use it to send requests to the API.
 
-Note that the name of the directory is `uhc-sdk-go` but the name of the package
+Note that the name of the directory is `ocm-sdk-go` but the name of the package
 is just `sdk`, so to use it you will have to import it and then use `sdk` as
 the package selector.
 
@@ -29,8 +29,8 @@ import (
         "fmt"
         "os"
 
-        "github.com/openshift-online/uhc-sdk-go"
-	cmv1 "github.com/openshift-online/uhc-sdk-go/clustersmgmt/v1"
+        "github.com/openshift-online/ocm-sdk-go"
+	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -44,7 +44,7 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	token := os.Getenv("UHC_TOKEN")
+	token := os.Getenv("OCM_TOKEN")
 	connection, err := client.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
@@ -143,7 +143,7 @@ the clients for the services that are part of the API:
 [source,go]
 ----
 import (
-	"github.com/openshift-online/uhc-sdk-go"
+	"github.com/openshift-online/ocm-sdk-go"
 )
 
 // Create the connection:

@@ -1,6 +1,6 @@
 = Changes
 
-This document describes the relevant changes between releases of the UHC API
+This document describes the relevant changes between releases of the OCM API
 SDK.
 
 == 0.1.29 Aug 26 2019
