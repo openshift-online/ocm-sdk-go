@@ -190,8 +190,8 @@ func NewOrganizationServerAdapter(server OrganizationServer, router *mux.Router)
 	adapter.router = router
 	adapter.router.PathPrefix("/resource_quota").HandlerFunc(adapter.resourceQuotaHandler)
 	adapter.router.PathPrefix("/quota_summary").HandlerFunc(adapter.quotaSummaryHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
 	return adapter
 }
 func (a *OrganizationServerAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
@@ -213,6 +213,7 @@ func (a *OrganizationServerAdapter) readOrganizationGetServerRequest(r *http.Req
 	return result, nil
 }
 func (a *OrganizationServerAdapter) writeOrganizationGetServerResponse(w http.ResponseWriter, r *OrganizationGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -262,6 +263,7 @@ func (a *OrganizationServerAdapter) readOrganizationUpdateServerRequest(r *http.
 	return result, nil
 }
 func (a *OrganizationServerAdapter) writeOrganizationUpdateServerResponse(w http.ResponseWriter, r *OrganizationUpdateServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

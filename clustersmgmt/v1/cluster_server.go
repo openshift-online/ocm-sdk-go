@@ -229,9 +229,9 @@ func NewClusterServerAdapter(server ClusterServer, router *mux.Router) *ClusterS
 	adapter.router.PathPrefix("/logs").HandlerFunc(adapter.logsHandler)
 	adapter.router.PathPrefix("/groups").HandlerFunc(adapter.groupsHandler)
 	adapter.router.PathPrefix("/identity_providers").HandlerFunc(adapter.identityProvidersHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
-	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *ClusterServerAdapter) statusHandler(w http.ResponseWriter, r *http.Request) {
@@ -271,6 +271,7 @@ func (a *ClusterServerAdapter) readClusterGetServerRequest(r *http.Request) (*Cl
 	return result, nil
 }
 func (a *ClusterServerAdapter) writeClusterGetServerResponse(w http.ResponseWriter, r *ClusterGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -320,6 +321,7 @@ func (a *ClusterServerAdapter) readClusterUpdateServerRequest(r *http.Request) (
 	return result, nil
 }
 func (a *ClusterServerAdapter) writeClusterUpdateServerResponse(w http.ResponseWriter, r *ClusterUpdateServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -365,6 +367,7 @@ func (a *ClusterServerAdapter) readClusterDeleteServerRequest(r *http.Request) (
 	return result, nil
 }
 func (a *ClusterServerAdapter) writeClusterDeleteServerResponse(w http.ResponseWriter, r *ClusterDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }

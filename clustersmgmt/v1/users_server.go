@@ -222,8 +222,8 @@ func NewUsersServerAdapter(server UsersServer, router *mux.Router) *UsersServerA
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.userHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *UsersServerAdapter) userHandler(w http.ResponseWriter, r *http.Request) {
@@ -240,6 +240,7 @@ func (a *UsersServerAdapter) readUsersListServerRequest(r *http.Request) (*Users
 	return result, nil
 }
 func (a *UsersServerAdapter) writeUsersListServerResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -289,6 +290,7 @@ func (a *UsersServerAdapter) readUsersAddServerRequest(r *http.Request) (*UsersA
 	return result, nil
 }
 func (a *UsersServerAdapter) writeUsersAddServerResponse(w http.ResponseWriter, r *UsersAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

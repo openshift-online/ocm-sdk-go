@@ -91,7 +91,7 @@ func NewAccessTokenServerAdapter(server AccessTokenServer, router *mux.Router) *
 	adapter := new(AccessTokenServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("POST").HandlerFunc(adapter.postHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.postHandler)
 	return adapter
 }
 func (a *AccessTokenServerAdapter) readAccessTokenPostServerRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {
@@ -101,6 +101,7 @@ func (a *AccessTokenServerAdapter) readAccessTokenPostServerRequest(r *http.Requ
 	return result, nil
 }
 func (a *AccessTokenServerAdapter) writeAccessTokenPostServerResponse(w http.ResponseWriter, r *AccessTokenPostServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

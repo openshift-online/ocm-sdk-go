@@ -114,8 +114,8 @@ func NewUserServerAdapter(server UserServer, router *mux.Router) *UserServerAdap
 	adapter := new(UserServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *UserServerAdapter) readUserGetServerRequest(r *http.Request) (*UserGetServerRequest, error) {
@@ -125,6 +125,7 @@ func (a *UserServerAdapter) readUserGetServerRequest(r *http.Request) (*UserGetS
 	return result, nil
 }
 func (a *UserServerAdapter) writeUserGetServerResponse(w http.ResponseWriter, r *UserGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -170,6 +171,7 @@ func (a *UserServerAdapter) readUserDeleteServerRequest(r *http.Request) (*UserD
 	return result, nil
 }
 func (a *UserServerAdapter) writeUserDeleteServerResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }

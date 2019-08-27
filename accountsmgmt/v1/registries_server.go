@@ -221,7 +221,7 @@ func NewRegistriesServerAdapter(server RegistriesServer, router *mux.Router) *Re
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.registryHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *RegistriesServerAdapter) registryHandler(w http.ResponseWriter, r *http.Request) {
@@ -238,6 +238,7 @@ func (a *RegistriesServerAdapter) readRegistriesListServerRequest(r *http.Reques
 	return result, nil
 }
 func (a *RegistriesServerAdapter) writeRegistriesListServerResponse(w http.ResponseWriter, r *RegistriesListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

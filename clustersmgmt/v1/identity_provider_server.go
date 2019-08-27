@@ -114,8 +114,8 @@ func NewIdentityProviderServerAdapter(server IdentityProviderServer, router *mux
 	adapter := new(IdentityProviderServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *IdentityProviderServerAdapter) readIdentityProviderGetServerRequest(r *http.Request) (*IdentityProviderGetServerRequest, error) {
@@ -125,6 +125,7 @@ func (a *IdentityProviderServerAdapter) readIdentityProviderGetServerRequest(r *
 	return result, nil
 }
 func (a *IdentityProviderServerAdapter) writeIdentityProviderGetServerResponse(w http.ResponseWriter, r *IdentityProviderGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -170,6 +171,7 @@ func (a *IdentityProviderServerAdapter) readIdentityProviderDeleteServerRequest(
 	return result, nil
 }
 func (a *IdentityProviderServerAdapter) writeIdentityProviderDeleteServerResponse(w http.ResponseWriter, r *IdentityProviderDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }

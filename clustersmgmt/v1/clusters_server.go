@@ -359,8 +359,8 @@ func NewClustersServerAdapter(server ClustersServer, router *mux.Router) *Cluste
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.clusterHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *ClustersServerAdapter) clusterHandler(w http.ResponseWriter, r *http.Request) {
@@ -377,6 +377,7 @@ func (a *ClustersServerAdapter) readClustersListServerRequest(r *http.Request) (
 	return result, nil
 }
 func (a *ClustersServerAdapter) writeClustersListServerResponse(w http.ResponseWriter, r *ClustersListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -426,6 +427,7 @@ func (a *ClustersServerAdapter) readClustersAddServerRequest(r *http.Request) (*
 	return result, nil
 }
 func (a *ClustersServerAdapter) writeClustersAddServerResponse(w http.ResponseWriter, r *ClustersAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

@@ -97,7 +97,7 @@ func NewGroupServerAdapter(server GroupServer, router *mux.Router) *GroupServerA
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/users").HandlerFunc(adapter.usersHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *GroupServerAdapter) usersHandler(w http.ResponseWriter, r *http.Request) {
@@ -113,6 +113,7 @@ func (a *GroupServerAdapter) readGroupGetServerRequest(r *http.Request) (*GroupG
 	return result, nil
 }
 func (a *GroupServerAdapter) writeGroupGetServerResponse(w http.ResponseWriter, r *GroupGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

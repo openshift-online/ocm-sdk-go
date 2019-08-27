@@ -221,7 +221,7 @@ func NewSubscriptionsServerAdapter(server SubscriptionsServer, router *mux.Route
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.subscriptionHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *SubscriptionsServerAdapter) subscriptionHandler(w http.ResponseWriter, r *http.Request) {
@@ -238,6 +238,7 @@ func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.
 	return result, nil
 }
 func (a *SubscriptionsServerAdapter) writeSubscriptionsListServerResponse(w http.ResponseWriter, r *SubscriptionsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

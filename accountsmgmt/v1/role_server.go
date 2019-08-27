@@ -199,9 +199,9 @@ func NewRoleServerAdapter(server RoleServer, router *mux.Router) *RoleServerAdap
 	adapter := new(RoleServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
-	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *RoleServerAdapter) readRoleGetServerRequest(r *http.Request) (*RoleGetServerRequest, error) {
@@ -211,6 +211,7 @@ func (a *RoleServerAdapter) readRoleGetServerRequest(r *http.Request) (*RoleGetS
 	return result, nil
 }
 func (a *RoleServerAdapter) writeRoleGetServerResponse(w http.ResponseWriter, r *RoleGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -260,6 +261,7 @@ func (a *RoleServerAdapter) readRoleUpdateServerRequest(r *http.Request) (*RoleU
 	return result, nil
 }
 func (a *RoleServerAdapter) writeRoleUpdateServerResponse(w http.ResponseWriter, r *RoleUpdateServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -305,6 +307,7 @@ func (a *RoleServerAdapter) readRoleDeleteServerRequest(r *http.Request) (*RoleD
 	return result, nil
 }
 func (a *RoleServerAdapter) writeRoleDeleteServerResponse(w http.ResponseWriter, r *RoleDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }

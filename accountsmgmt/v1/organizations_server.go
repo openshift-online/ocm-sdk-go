@@ -306,8 +306,8 @@ func NewOrganizationsServerAdapter(server OrganizationsServer, router *mux.Route
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.organizationHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *OrganizationsServerAdapter) organizationHandler(w http.ResponseWriter, r *http.Request) {
@@ -324,6 +324,7 @@ func (a *OrganizationsServerAdapter) readOrganizationsListServerRequest(r *http.
 	return result, nil
 }
 func (a *OrganizationsServerAdapter) writeOrganizationsListServerResponse(w http.ResponseWriter, r *OrganizationsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -373,6 +374,7 @@ func (a *OrganizationsServerAdapter) readOrganizationsAddServerRequest(r *http.R
 	return result, nil
 }
 func (a *OrganizationsServerAdapter) writeOrganizationsAddServerResponse(w http.ResponseWriter, r *OrganizationsAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

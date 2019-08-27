@@ -222,8 +222,8 @@ func NewIdentityProvidersServerAdapter(server IdentityProvidersServer, router *m
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.identityProviderHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *IdentityProvidersServerAdapter) identityProviderHandler(w http.ResponseWriter, r *http.Request) {
@@ -240,6 +240,7 @@ func (a *IdentityProvidersServerAdapter) readIdentityProvidersListServerRequest(
 	return result, nil
 }
 func (a *IdentityProvidersServerAdapter) writeIdentityProvidersListServerResponse(w http.ResponseWriter, r *IdentityProvidersListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -289,6 +290,7 @@ func (a *IdentityProvidersServerAdapter) readIdentityProvidersAddServerRequest(r
 	return result, nil
 }
 func (a *IdentityProvidersServerAdapter) writeIdentityProvidersAddServerResponse(w http.ResponseWriter, r *IdentityProvidersAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

@@ -270,7 +270,7 @@ func NewVersionsServerAdapter(server VersionsServer, router *mux.Router) *Versio
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.versionHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *VersionsServerAdapter) versionHandler(w http.ResponseWriter, r *http.Request) {
@@ -287,6 +287,7 @@ func (a *VersionsServerAdapter) readVersionsListServerRequest(r *http.Request) (
 	return result, nil
 }
 func (a *VersionsServerAdapter) writeVersionsListServerResponse(w http.ResponseWriter, r *VersionsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

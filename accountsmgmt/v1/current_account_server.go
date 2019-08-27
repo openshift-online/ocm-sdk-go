@@ -91,7 +91,7 @@ func NewCurrentAccountServerAdapter(server CurrentAccountServer, router *mux.Rou
 	adapter := new(CurrentAccountServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *CurrentAccountServerAdapter) readCurrentAccountGetServerRequest(r *http.Request) (*CurrentAccountGetServerRequest, error) {
@@ -101,6 +101,7 @@ func (a *CurrentAccountServerAdapter) readCurrentAccountGetServerRequest(r *http
 	return result, nil
 }
 func (a *CurrentAccountServerAdapter) writeCurrentAccountGetServerResponse(w http.ResponseWriter, r *CurrentAccountGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

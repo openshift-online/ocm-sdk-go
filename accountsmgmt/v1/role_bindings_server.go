@@ -306,8 +306,8 @@ func NewRoleBindingsServerAdapter(server RoleBindingsServer, router *mux.Router)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleBindingHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *RoleBindingsServerAdapter) roleBindingHandler(w http.ResponseWriter, r *http.Request) {
@@ -324,6 +324,7 @@ func (a *RoleBindingsServerAdapter) readRoleBindingsListServerRequest(r *http.Re
 	return result, nil
 }
 func (a *RoleBindingsServerAdapter) writeRoleBindingsListServerResponse(w http.ResponseWriter, r *RoleBindingsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -373,6 +374,7 @@ func (a *RoleBindingsServerAdapter) readRoleBindingsAddServerRequest(r *http.Req
 	return result, nil
 }
 func (a *RoleBindingsServerAdapter) writeRoleBindingsAddServerResponse(w http.ResponseWriter, r *RoleBindingsAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
