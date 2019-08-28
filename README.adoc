@@ -308,5 +308,5 @@ and copying the internal representation into it.
 
 == CLI
 
-See also the command-line tool https://github.com/openshift-online/uhc-cli built
+See also the command-line tool https://github.com/openshift-online/ocm-cli built
 on top of this SDK.
