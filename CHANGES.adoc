@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+
+== 0.1.31 Aug 28 2019
+
+- Generated servers enforce no trailing slashes as well send 'Content-Type` header.
+
 == 0.1.30 Aug 27 2019
 
 - Renamed package to `github.com/openshift-online/ocm-sdk-go`.
