@@ -114,8 +114,8 @@ func NewPermissionServerAdapter(server PermissionServer, router *mux.Router) *Pe
 	adapter := new(PermissionServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *PermissionServerAdapter) readPermissionGetServerRequest(r *http.Request) (*PermissionGetServerRequest, error) {
@@ -125,6 +125,7 @@ func (a *PermissionServerAdapter) readPermissionGetServerRequest(r *http.Request
 	return result, nil
 }
 func (a *PermissionServerAdapter) writePermissionGetServerResponse(w http.ResponseWriter, r *PermissionGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -170,6 +171,7 @@ func (a *PermissionServerAdapter) readPermissionDeleteServerRequest(r *http.Requ
 	return result, nil
 }
 func (a *PermissionServerAdapter) writePermissionDeleteServerResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }

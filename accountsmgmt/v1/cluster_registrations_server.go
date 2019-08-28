@@ -132,7 +132,7 @@ func NewClusterRegistrationsServerAdapter(server ClusterRegistrationsServer, rou
 	adapter := new(ClusterRegistrationsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("POST").HandlerFunc(adapter.postHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.postHandler)
 	return adapter
 }
 func (a *ClusterRegistrationsServerAdapter) readClusterRegistrationsPostServerRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {
@@ -146,6 +146,7 @@ func (a *ClusterRegistrationsServerAdapter) readClusterRegistrationsPostServerRe
 	return result, nil
 }
 func (a *ClusterRegistrationsServerAdapter) writeClusterRegistrationsPostServerResponse(w http.ResponseWriter, r *ClusterRegistrationsPostServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

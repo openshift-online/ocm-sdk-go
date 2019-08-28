@@ -91,7 +91,7 @@ func NewCredentialsServerAdapter(server CredentialsServer, router *mux.Router) *
 	adapter := new(CredentialsServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *CredentialsServerAdapter) readCredentialsGetServerRequest(r *http.Request) (*CredentialsGetServerRequest, error) {
@@ -101,6 +101,7 @@ func (a *CredentialsServerAdapter) readCredentialsGetServerRequest(r *http.Reque
 	return result, nil
 }
 func (a *CredentialsServerAdapter) writeCredentialsGetServerResponse(w http.ResponseWriter, r *CredentialsGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

@@ -114,8 +114,8 @@ func NewRoleBindingServerAdapter(server RoleBindingServer, router *mux.Router) *
 	adapter := new(RoleBindingServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *RoleBindingServerAdapter) readRoleBindingGetServerRequest(r *http.Request) (*RoleBindingGetServerRequest, error) {
@@ -125,6 +125,7 @@ func (a *RoleBindingServerAdapter) readRoleBindingGetServerRequest(r *http.Reque
 	return result, nil
 }
 func (a *RoleBindingServerAdapter) writeRoleBindingGetServerResponse(w http.ResponseWriter, r *RoleBindingGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -170,6 +171,7 @@ func (a *RoleBindingServerAdapter) readRoleBindingDeleteServerRequest(r *http.Re
 	return result, nil
 }
 func (a *RoleBindingServerAdapter) writeRoleBindingDeleteServerResponse(w http.ResponseWriter, r *RoleBindingDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }

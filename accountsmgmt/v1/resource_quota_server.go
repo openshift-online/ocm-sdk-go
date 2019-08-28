@@ -176,8 +176,8 @@ func NewResourceQuotaServerAdapter(server ResourceQuotaServer, router *mux.Route
 	adapter := new(ResourceQuotaServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
 	return adapter
 }
 func (a *ResourceQuotaServerAdapter) readResourceQuotaGetServerRequest(r *http.Request) (*ResourceQuotaGetServerRequest, error) {
@@ -187,6 +187,7 @@ func (a *ResourceQuotaServerAdapter) readResourceQuotaGetServerRequest(r *http.R
 	return result, nil
 }
 func (a *ResourceQuotaServerAdapter) writeResourceQuotaGetServerResponse(w http.ResponseWriter, r *ResourceQuotaGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -236,6 +237,7 @@ func (a *ResourceQuotaServerAdapter) readResourceQuotaUpdateServerRequest(r *htt
 	return result, nil
 }
 func (a *ResourceQuotaServerAdapter) writeResourceQuotaUpdateServerResponse(w http.ResponseWriter, r *ResourceQuotaUpdateServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

@@ -306,8 +306,8 @@ func NewAccountsServerAdapter(server AccountsServer, router *mux.Router) *Accoun
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.accountHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *AccountsServerAdapter) accountHandler(w http.ResponseWriter, r *http.Request) {
@@ -324,6 +324,7 @@ func (a *AccountsServerAdapter) readAccountsListServerRequest(r *http.Request) (
 	return result, nil
 }
 func (a *AccountsServerAdapter) writeAccountsListServerResponse(w http.ResponseWriter, r *AccountsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -373,6 +374,7 @@ func (a *AccountsServerAdapter) readAccountsAddServerRequest(r *http.Request) (*
 	return result, nil
 }
 func (a *AccountsServerAdapter) writeAccountsAddServerResponse(w http.ResponseWriter, r *AccountsAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

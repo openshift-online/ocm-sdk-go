@@ -266,7 +266,7 @@ func NewQuotaSummaryServerAdapter(server QuotaSummaryServer, router *mux.Router)
 	adapter := new(QuotaSummaryServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *QuotaSummaryServerAdapter) readQuotaSummaryListServerRequest(r *http.Request) (*QuotaSummaryListServerRequest, error) {
@@ -276,6 +276,7 @@ func (a *QuotaSummaryServerAdapter) readQuotaSummaryListServerRequest(r *http.Re
 	return result, nil
 }
 func (a *QuotaSummaryServerAdapter) writeQuotaSummaryListServerResponse(w http.ResponseWriter, r *QuotaSummaryListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

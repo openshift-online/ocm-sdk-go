@@ -274,7 +274,7 @@ func NewDashboardsServerAdapter(server DashboardsServer, router *mux.Router) *Da
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.dashboardHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *DashboardsServerAdapter) dashboardHandler(w http.ResponseWriter, r *http.Request) {
@@ -291,6 +291,7 @@ func (a *DashboardsServerAdapter) readDashboardsListServerRequest(r *http.Reques
 	return result, nil
 }
 func (a *DashboardsServerAdapter) writeDashboardsListServerResponse(w http.ResponseWriter, r *DashboardsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

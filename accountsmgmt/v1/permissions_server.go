@@ -306,8 +306,8 @@ func NewPermissionsServerAdapter(server PermissionsServer, router *mux.Router) *
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.permissionHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *PermissionsServerAdapter) permissionHandler(w http.ResponseWriter, r *http.Request) {
@@ -324,6 +324,7 @@ func (a *PermissionsServerAdapter) readPermissionsListServerRequest(r *http.Requ
 	return result, nil
 }
 func (a *PermissionsServerAdapter) writePermissionsListServerResponse(w http.ResponseWriter, r *PermissionsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -373,6 +374,7 @@ func (a *PermissionsServerAdapter) readPermissionsAddServerRequest(r *http.Reque
 	return result, nil
 }
 func (a *PermissionsServerAdapter) writePermissionsAddServerResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

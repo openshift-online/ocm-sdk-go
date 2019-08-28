@@ -176,8 +176,8 @@ func NewAccountServerAdapter(server AccountServer, router *mux.Router) *AccountS
 	adapter := new(AccountServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
 	return adapter
 }
 func (a *AccountServerAdapter) readAccountGetServerRequest(r *http.Request) (*AccountGetServerRequest, error) {
@@ -187,6 +187,7 @@ func (a *AccountServerAdapter) readAccountGetServerRequest(r *http.Request) (*Ac
 	return result, nil
 }
 func (a *AccountServerAdapter) writeAccountGetServerResponse(w http.ResponseWriter, r *AccountGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -236,6 +237,7 @@ func (a *AccountServerAdapter) readAccountUpdateServerRequest(r *http.Request) (
 	return result, nil
 }
 func (a *AccountServerAdapter) writeAccountUpdateServerResponse(w http.ResponseWriter, r *AccountUpdateServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

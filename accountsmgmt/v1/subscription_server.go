@@ -114,8 +114,8 @@ func NewSubscriptionServerAdapter(server SubscriptionServer, router *mux.Router)
 	adapter := new(SubscriptionServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("DELETE").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
 }
 func (a *SubscriptionServerAdapter) readSubscriptionGetServerRequest(r *http.Request) (*SubscriptionGetServerRequest, error) {
@@ -125,6 +125,7 @@ func (a *SubscriptionServerAdapter) readSubscriptionGetServerRequest(r *http.Req
 	return result, nil
 }
 func (a *SubscriptionServerAdapter) writeSubscriptionGetServerResponse(w http.ResponseWriter, r *SubscriptionGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -170,6 +171,7 @@ func (a *SubscriptionServerAdapter) readSubscriptionDeleteServerRequest(r *http.
 	return result, nil
 }
 func (a *SubscriptionServerAdapter) writeSubscriptionDeleteServerResponse(w http.ResponseWriter, r *SubscriptionDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }

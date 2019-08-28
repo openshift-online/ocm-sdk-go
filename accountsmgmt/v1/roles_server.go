@@ -306,8 +306,8 @@ func NewRolesServerAdapter(server RolesServer, router *mux.Router) *RolesServerA
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *RolesServerAdapter) roleHandler(w http.ResponseWriter, r *http.Request) {
@@ -324,6 +324,7 @@ func (a *RolesServerAdapter) readRolesListServerRequest(r *http.Request) (*Roles
 	return result, nil
 }
 func (a *RolesServerAdapter) writeRolesListServerResponse(w http.ResponseWriter, r *RolesListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -373,6 +374,7 @@ func (a *RolesServerAdapter) readRolesAddServerRequest(r *http.Request) (*RolesA
 	return result, nil
 }
 func (a *RolesServerAdapter) writeRolesAddServerResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

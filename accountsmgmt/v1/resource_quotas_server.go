@@ -306,8 +306,8 @@ func NewResourceQuotasServerAdapter(server ResourceQuotasServer, router *mux.Rou
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.resourceQuotaHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
-	adapter.router.Methods("POST").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
 	return adapter
 }
 func (a *ResourceQuotasServerAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
@@ -324,6 +324,7 @@ func (a *ResourceQuotasServerAdapter) readResourceQuotasListServerRequest(r *htt
 	return result, nil
 }
 func (a *ResourceQuotasServerAdapter) writeResourceQuotasListServerResponse(w http.ResponseWriter, r *ResourceQuotasListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
@@ -373,6 +374,7 @@ func (a *ResourceQuotasServerAdapter) readResourceQuotasAddServerRequest(r *http
 	return result, nil
 }
 func (a *ResourceQuotasServerAdapter) writeResourceQuotasAddServerResponse(w http.ResponseWriter, r *ResourceQuotasAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

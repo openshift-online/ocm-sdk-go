@@ -91,7 +91,7 @@ func NewRegistryCredentialServerAdapter(server RegistryCredentialServer, router 
 	adapter := new(RegistryCredentialServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
 }
 func (a *RegistryCredentialServerAdapter) readRegistryCredentialGetServerRequest(r *http.Request) (*RegistryCredentialGetServerRequest, error) {
@@ -101,6 +101,7 @@ func (a *RegistryCredentialServerAdapter) readRegistryCredentialGetServerRequest
 	return result, nil
 }
 func (a *RegistryCredentialServerAdapter) writeRegistryCredentialGetServerResponse(w http.ResponseWriter, r *RegistryCredentialGetServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {

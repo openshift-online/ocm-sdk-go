@@ -137,7 +137,7 @@ func NewLogsServerAdapter(server LogsServer, router *mux.Router) *LogsServerAdap
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.logHandler)
-	adapter.router.Methods("GET").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *LogsServerAdapter) logHandler(w http.ResponseWriter, r *http.Request) {
@@ -154,6 +154,7 @@ func (a *LogsServerAdapter) readLogsListServerRequest(r *http.Request) (*LogsLis
 	return result, nil
 }
 func (a *LogsServerAdapter) writeLogsListServerResponse(w http.ResponseWriter, r *LogsListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
 	if err != nil {
