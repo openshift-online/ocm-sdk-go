@@ -34,8 +34,8 @@ type IdentityProviderBuilder struct {
 	github        *GithubIdentityProviderBuilder
 	gitlab        *GitlabIdentityProviderBuilder
 	google        *GoogleIdentityProviderBuilder
-	ldap          *LdapidentityProviderBuilder
-	openID        *OpenIdidentityProviderBuilder
+	ldap          *LDAPIdentityProviderBuilder
+	openID        *OpenIDIdentityProviderBuilder
 }
 
 // NewIdentityProvider creates a new builder of 'identity_provider' objects.
@@ -137,7 +137,7 @@ func (b *IdentityProviderBuilder) Google(value *GoogleIdentityProviderBuilder) *
 // to the given value.
 //
 // Details for `ldap` identity providers.
-func (b *IdentityProviderBuilder) LDAP(value *LdapidentityProviderBuilder) *IdentityProviderBuilder {
+func (b *IdentityProviderBuilder) LDAP(value *LDAPIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.ldap = value
 	return b
 }
@@ -146,7 +146,7 @@ func (b *IdentityProviderBuilder) LDAP(value *LdapidentityProviderBuilder) *Iden
 // to the given value.
 //
 // Details for `openid` identity providers.
-func (b *IdentityProviderBuilder) OpenID(value *OpenIdidentityProviderBuilder) *IdentityProviderBuilder {
+func (b *IdentityProviderBuilder) OpenID(value *OpenIDIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.openID = value
 	return b
 }

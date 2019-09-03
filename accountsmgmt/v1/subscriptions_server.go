@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // SubscriptionsServer represents the interface the manages the 'subscriptions' resource.
@@ -232,10 +233,23 @@ func (a *SubscriptionsServerAdapter) subscriptionHandler(w http.ResponseWriter, 
 	return
 }
 func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.Request) (*SubscriptionsListServerRequest, error) {
+	var err error
 	result := new(SubscriptionsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *SubscriptionsServerAdapter) writeSubscriptionsListServerResponse(w http.ResponseWriter, r *SubscriptionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

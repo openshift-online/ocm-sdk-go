@@ -107,10 +107,11 @@ func (a *GroupServerAdapter) usersHandler(w http.ResponseWriter, r *http.Request
 	return
 }
 func (a *GroupServerAdapter) readGroupGetServerRequest(r *http.Request) (*GroupGetServerRequest, error) {
+	var err error
 	result := new(GroupGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *GroupServerAdapter) writeGroupGetServerResponse(w http.ResponseWriter, r *GroupGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

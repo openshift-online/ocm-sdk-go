@@ -19,11 +19,11 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// LdapidentityProvider represents the values of the 'ldapidentity_provider' type.
+// LDAPIdentityProvider represents the values of the 'LDAP_identity_provider' type.
 //
 // Details for `ldap` identity providers.
-type LdapidentityProvider struct {
-	ldapattributes *Ldapattributes
+type LDAPIdentityProvider struct {
+	ldapAttributes *LDAPAttributes
 	bindDN         *string
 	bindPassword   *string
 	ca             *string
@@ -32,8 +32,8 @@ type LdapidentityProvider struct {
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *LdapidentityProvider) Empty() bool {
-	return o == nil || (o.ldapattributes == nil &&
+func (o *LDAPIdentityProvider) Empty() bool {
+	return o == nil || (o.ldapAttributes == nil &&
 		o.bindDN == nil &&
 		o.bindPassword == nil &&
 		o.ca == nil &&
@@ -42,25 +42,25 @@ func (o *LdapidentityProvider) Empty() bool {
 		true)
 }
 
-// Ldapattributes returns the value of the 'ldapattributes' attribute, or
+// LDAPAttributes returns the value of the 'LDAP_attributes' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // LDAP attributes used to configure the provider.
-func (o *LdapidentityProvider) Ldapattributes() *Ldapattributes {
+func (o *LDAPIdentityProvider) LDAPAttributes() *LDAPAttributes {
 	if o == nil {
 		return nil
 	}
-	return o.ldapattributes
+	return o.ldapAttributes
 }
 
-// GetLdapattributes returns the value of the 'ldapattributes' attribute and
+// GetLDAPAttributes returns the value of the 'LDAP_attributes' attribute and
 // a flag indicating if the attribute has a value.
 //
 // LDAP attributes used to configure the provider.
-func (o *LdapidentityProvider) GetLdapattributes() (value *Ldapattributes, ok bool) {
-	ok = o != nil && o.ldapattributes != nil
+func (o *LDAPIdentityProvider) GetLDAPAttributes() (value *LDAPAttributes, ok bool) {
+	ok = o != nil && o.ldapAttributes != nil
 	if ok {
-		value = o.ldapattributes
+		value = o.ldapAttributes
 	}
 	return
 }
@@ -69,7 +69,7 @@ func (o *LdapidentityProvider) GetLdapattributes() (value *Ldapattributes, ok bo
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Optional distinguished name to use to bind during the search phase.
-func (o *LdapidentityProvider) BindDN() string {
+func (o *LDAPIdentityProvider) BindDN() string {
 	if o != nil && o.bindDN != nil {
 		return *o.bindDN
 	}
@@ -80,7 +80,7 @@ func (o *LdapidentityProvider) BindDN() string {
 // a flag indicating if the attribute has a value.
 //
 // Optional distinguished name to use to bind during the search phase.
-func (o *LdapidentityProvider) GetBindDN() (value string, ok bool) {
+func (o *LDAPIdentityProvider) GetBindDN() (value string, ok bool) {
 	ok = o != nil && o.bindDN != nil
 	if ok {
 		value = *o.bindDN
@@ -92,7 +92,7 @@ func (o *LdapidentityProvider) GetBindDN() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Optional password to use to bind during the search phase.
-func (o *LdapidentityProvider) BindPassword() string {
+func (o *LDAPIdentityProvider) BindPassword() string {
 	if o != nil && o.bindPassword != nil {
 		return *o.bindPassword
 	}
@@ -103,7 +103,7 @@ func (o *LdapidentityProvider) BindPassword() string {
 // a flag indicating if the attribute has a value.
 //
 // Optional password to use to bind during the search phase.
-func (o *LdapidentityProvider) GetBindPassword() (value string, ok bool) {
+func (o *LDAPIdentityProvider) GetBindPassword() (value string, ok bool) {
 	ok = o != nil && o.bindPassword != nil
 	if ok {
 		value = *o.bindPassword
@@ -115,7 +115,7 @@ func (o *LdapidentityProvider) GetBindPassword() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Certificate bundle to use to validate server certificates for the configured URL.
-func (o *LdapidentityProvider) CA() string {
+func (o *LDAPIdentityProvider) CA() string {
 	if o != nil && o.ca != nil {
 		return *o.ca
 	}
@@ -126,7 +126,7 @@ func (o *LdapidentityProvider) CA() string {
 // a flag indicating if the attribute has a value.
 //
 // Certificate bundle to use to validate server certificates for the configured URL.
-func (o *LdapidentityProvider) GetCA() (value string, ok bool) {
+func (o *LDAPIdentityProvider) GetCA() (value string, ok bool) {
 	ok = o != nil && o.ca != nil
 	if ok {
 		value = *o.ca
@@ -139,7 +139,7 @@ func (o *LdapidentityProvider) GetCA() (value string, ok bool) {
 //
 // An https://tools.ietf.org/html/rfc2255[RFC 2255] URL which specifies the LDAP host and
 // search parameters to use.
-func (o *LdapidentityProvider) URL() string {
+func (o *LDAPIdentityProvider) URL() string {
 	if o != nil && o.url != nil {
 		return *o.url
 	}
@@ -151,7 +151,7 @@ func (o *LdapidentityProvider) URL() string {
 //
 // An https://tools.ietf.org/html/rfc2255[RFC 2255] URL which specifies the LDAP host and
 // search parameters to use.
-func (o *LdapidentityProvider) GetURL() (value string, ok bool) {
+func (o *LDAPIdentityProvider) GetURL() (value string, ok bool) {
 	ok = o != nil && o.url != nil
 	if ok {
 		value = *o.url
@@ -164,7 +164,7 @@ func (o *LdapidentityProvider) GetURL() (value string, ok bool) {
 //
 // When `true` no TLS connection is made to the server. When `false` `ldaps://...` URLs
 // connect using TLS and `ldap://...` are upgraded to TLS.
-func (o *LdapidentityProvider) Insecure() bool {
+func (o *LDAPIdentityProvider) Insecure() bool {
 	if o != nil && o.insecure != nil {
 		return *o.insecure
 	}
@@ -176,7 +176,7 @@ func (o *LdapidentityProvider) Insecure() bool {
 //
 // When `true` no TLS connection is made to the server. When `false` `ldaps://...` URLs
 // connect using TLS and `ldap://...` are upgraded to TLS.
-func (o *LdapidentityProvider) GetInsecure() (value bool, ok bool) {
+func (o *LDAPIdentityProvider) GetInsecure() (value bool, ok bool) {
 	ok = o != nil && o.insecure != nil
 	if ok {
 		value = *o.insecure
@@ -184,13 +184,13 @@ func (o *LdapidentityProvider) GetInsecure() (value bool, ok bool) {
 	return
 }
 
-// LdapidentityProviderList is a list of values of the 'ldapidentity_provider' type.
-type LdapidentityProviderList struct {
-	items []*LdapidentityProvider
+// LDAPIdentityProviderList is a list of values of the 'LDAP_identity_provider' type.
+type LDAPIdentityProviderList struct {
+	items []*LDAPIdentityProvider
 }
 
 // Len returns the length of the list.
-func (l *LdapidentityProviderList) Len() int {
+func (l *LDAPIdentityProviderList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -198,13 +198,13 @@ func (l *LdapidentityProviderList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *LdapidentityProviderList) Empty() bool {
+func (l *LDAPIdentityProviderList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *LdapidentityProviderList) Get(i int) *LdapidentityProvider {
+func (l *LDAPIdentityProviderList) Get(i int) *LDAPIdentityProvider {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -217,12 +217,12 @@ func (l *LdapidentityProviderList) Get(i int) *LdapidentityProvider {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *LdapidentityProviderList) Slice() []*LdapidentityProvider {
-	var slice []*LdapidentityProvider
+func (l *LDAPIdentityProviderList) Slice() []*LDAPIdentityProvider {
+	var slice []*LDAPIdentityProvider
 	if l == nil {
-		slice = make([]*LdapidentityProvider, 0)
+		slice = make([]*LDAPIdentityProvider, 0)
 	} else {
-		slice = make([]*LdapidentityProvider, len(l.items))
+		slice = make([]*LDAPIdentityProvider, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -231,7 +231,7 @@ func (l *LdapidentityProviderList) Slice() []*LdapidentityProvider {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *LdapidentityProviderList) Each(f func(item *LdapidentityProvider) bool) {
+func (l *LDAPIdentityProviderList) Each(f func(item *LDAPIdentityProvider) bool) {
 	if l == nil {
 		return
 	}
@@ -245,7 +245,7 @@ func (l *LdapidentityProviderList) Each(f func(item *LdapidentityProvider) bool)
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *LdapidentityProviderList) Range(f func(index int, item *LdapidentityProvider) bool) {
+func (l *LDAPIdentityProviderList) Range(f func(index int, item *LDAPIdentityProvider) bool) {
 	if l == nil {
 		return
 	}

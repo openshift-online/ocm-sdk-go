@@ -19,35 +19,35 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// LdapattributesListBuilder contains the data and logic needed to build
-// 'ldapattributes' objects.
-type LdapattributesListBuilder struct {
-	items []*LdapattributesBuilder
+// LDAPIdentityProviderListBuilder contains the data and logic needed to build
+// 'LDAP_identity_provider' objects.
+type LDAPIdentityProviderListBuilder struct {
+	items []*LDAPIdentityProviderBuilder
 }
 
-// NewLdapattributesList creates a new builder of 'ldapattributes' objects.
-func NewLdapattributesList() *LdapattributesListBuilder {
-	return new(LdapattributesListBuilder)
+// NewLDAPIdentityProviderList creates a new builder of 'LDAP_identity_provider' objects.
+func NewLDAPIdentityProviderList() *LDAPIdentityProviderListBuilder {
+	return new(LDAPIdentityProviderListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *LdapattributesListBuilder) Items(values ...*LdapattributesBuilder) *LdapattributesListBuilder {
-	b.items = make([]*LdapattributesBuilder, len(values))
+func (b *LDAPIdentityProviderListBuilder) Items(values ...*LDAPIdentityProviderBuilder) *LDAPIdentityProviderListBuilder {
+	b.items = make([]*LDAPIdentityProviderBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
-// Build creates a list of 'ldapattributes' objects using the
+// Build creates a list of 'LDAP_identity_provider' objects using the
 // configuration stored in the builder.
-func (b *LdapattributesListBuilder) Build() (list *LdapattributesList, err error) {
-	items := make([]*Ldapattributes, len(b.items))
+func (b *LDAPIdentityProviderListBuilder) Build() (list *LDAPIdentityProviderList, err error) {
+	items := make([]*LDAPIdentityProvider, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(LdapattributesList)
+	list = new(LDAPIdentityProviderList)
 	list.items = items
 	return
 }

@@ -95,10 +95,11 @@ func NewCredentialsServerAdapter(server CredentialsServer, router *mux.Router) *
 	return adapter
 }
 func (a *CredentialsServerAdapter) readCredentialsGetServerRequest(r *http.Request) (*CredentialsGetServerRequest, error) {
+	var err error
 	result := new(CredentialsGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *CredentialsServerAdapter) writeCredentialsGetServerResponse(w http.ResponseWriter, r *CredentialsGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

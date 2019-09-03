@@ -95,10 +95,11 @@ func NewRegistryServerAdapter(server RegistryServer, router *mux.Router) *Regist
 	return adapter
 }
 func (a *RegistryServerAdapter) readRegistryGetServerRequest(r *http.Request) (*RegistryGetServerRequest, error) {
+	var err error
 	result := new(RegistryGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *RegistryServerAdapter) writeRegistryGetServerResponse(w http.ResponseWriter, r *RegistryGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

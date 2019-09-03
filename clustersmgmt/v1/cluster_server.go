@@ -265,10 +265,11 @@ func (a *ClusterServerAdapter) identityProvidersHandler(w http.ResponseWriter, r
 	return
 }
 func (a *ClusterServerAdapter) readClusterGetServerRequest(r *http.Request) (*ClusterGetServerRequest, error) {
+	var err error
 	result := new(ClusterGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *ClusterServerAdapter) writeClusterGetServerResponse(w http.ResponseWriter, r *ClusterGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -311,14 +312,15 @@ func (a *ClusterServerAdapter) getHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 func (a *ClusterServerAdapter) readClusterUpdateServerRequest(r *http.Request) (*ClusterUpdateServerRequest, error) {
+	var err error
 	result := new(ClusterUpdateServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *ClusterServerAdapter) writeClusterUpdateServerResponse(w http.ResponseWriter, r *ClusterUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -361,10 +363,11 @@ func (a *ClusterServerAdapter) updateHandler(w http.ResponseWriter, r *http.Requ
 	}
 }
 func (a *ClusterServerAdapter) readClusterDeleteServerRequest(r *http.Request) (*ClusterDeleteServerRequest, error) {
+	var err error
 	result := new(ClusterDeleteServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *ClusterServerAdapter) writeClusterDeleteServerResponse(w http.ResponseWriter, r *ClusterDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

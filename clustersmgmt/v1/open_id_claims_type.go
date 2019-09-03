@@ -19,99 +19,99 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIdurls represents the values of the 'open_idurls' type.
+// OpenIDClaims represents the values of the 'open_ID_claims' type.
 //
-// _OpenID_ identity provider URLs.
-type OpenIdurls struct {
-	authorize *string
-	token     *string
-	userInfo  *string
+// _OpenID_ identity provider claims.
+type OpenIDClaims struct {
+	email             []string
+	name              []string
+	preferredUsername []string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *OpenIdurls) Empty() bool {
-	return o == nil || (o.authorize == nil &&
-		o.token == nil &&
-		o.userInfo == nil &&
+func (o *OpenIDClaims) Empty() bool {
+	return o == nil || (o.email == nil &&
+		o.name == nil &&
+		o.preferredUsername == nil &&
 		true)
 }
 
-// Authorize returns the value of the 'authorize' attribute, or
+// Email returns the value of the 'email' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Authorization endpoint described in the _OpenID_ specification. Must use HTTPS.
-func (o *OpenIdurls) Authorize() string {
-	if o != nil && o.authorize != nil {
-		return *o.authorize
+// List of claims to use as the mail address.
+func (o *OpenIDClaims) Email() []string {
+	if o == nil {
+		return nil
 	}
-	return ""
+	return o.email
 }
 
-// GetAuthorize returns the value of the 'authorize' attribute and
+// GetEmail returns the value of the 'email' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Authorization endpoint described in the _OpenID_ specification. Must use HTTPS.
-func (o *OpenIdurls) GetAuthorize() (value string, ok bool) {
-	ok = o != nil && o.authorize != nil
+// List of claims to use as the mail address.
+func (o *OpenIDClaims) GetEmail() (value []string, ok bool) {
+	ok = o != nil && o.email != nil
 	if ok {
-		value = *o.authorize
+		value = o.email
 	}
 	return
 }
 
-// Token returns the value of the 'token' attribute, or
+// Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Token endpoint described in the _OpenID_ specification. Must use HTTPS.
-func (o *OpenIdurls) Token() string {
-	if o != nil && o.token != nil {
-		return *o.token
+// List of claims to use as the display name.
+func (o *OpenIDClaims) Name() []string {
+	if o == nil {
+		return nil
 	}
-	return ""
+	return o.name
 }
 
-// GetToken returns the value of the 'token' attribute and
+// GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Token endpoint described in the _OpenID_ specification. Must use HTTPS.
-func (o *OpenIdurls) GetToken() (value string, ok bool) {
-	ok = o != nil && o.token != nil
+// List of claims to use as the display name.
+func (o *OpenIDClaims) GetName() (value []string, ok bool) {
+	ok = o != nil && o.name != nil
 	if ok {
-		value = *o.token
+		value = o.name
 	}
 	return
 }
 
-// UserInfo returns the value of the 'user_info' attribute, or
+// PreferredUsername returns the value of the 'preferred_username' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// User information endpoint described in the _OpenID_ specification. Must use HTTPS.
-func (o *OpenIdurls) UserInfo() string {
-	if o != nil && o.userInfo != nil {
-		return *o.userInfo
+// List of claims to use as the preferred user name when provisioning a user.
+func (o *OpenIDClaims) PreferredUsername() []string {
+	if o == nil {
+		return nil
 	}
-	return ""
+	return o.preferredUsername
 }
 
-// GetUserInfo returns the value of the 'user_info' attribute and
+// GetPreferredUsername returns the value of the 'preferred_username' attribute and
 // a flag indicating if the attribute has a value.
 //
-// User information endpoint described in the _OpenID_ specification. Must use HTTPS.
-func (o *OpenIdurls) GetUserInfo() (value string, ok bool) {
-	ok = o != nil && o.userInfo != nil
+// List of claims to use as the preferred user name when provisioning a user.
+func (o *OpenIDClaims) GetPreferredUsername() (value []string, ok bool) {
+	ok = o != nil && o.preferredUsername != nil
 	if ok {
-		value = *o.userInfo
+		value = o.preferredUsername
 	}
 	return
 }
 
-// OpenIdurlsList is a list of values of the 'open_idurls' type.
-type OpenIdurlsList struct {
-	items []*OpenIdurls
+// OpenIDClaimsList is a list of values of the 'open_ID_claims' type.
+type OpenIDClaimsList struct {
+	items []*OpenIDClaims
 }
 
 // Len returns the length of the list.
-func (l *OpenIdurlsList) Len() int {
+func (l *OpenIDClaimsList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -119,13 +119,13 @@ func (l *OpenIdurlsList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *OpenIdurlsList) Empty() bool {
+func (l *OpenIDClaimsList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *OpenIdurlsList) Get(i int) *OpenIdurls {
+func (l *OpenIDClaimsList) Get(i int) *OpenIDClaims {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -138,12 +138,12 @@ func (l *OpenIdurlsList) Get(i int) *OpenIdurls {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *OpenIdurlsList) Slice() []*OpenIdurls {
-	var slice []*OpenIdurls
+func (l *OpenIDClaimsList) Slice() []*OpenIDClaims {
+	var slice []*OpenIDClaims
 	if l == nil {
-		slice = make([]*OpenIdurls, 0)
+		slice = make([]*OpenIDClaims, 0)
 	} else {
-		slice = make([]*OpenIdurls, len(l.items))
+		slice = make([]*OpenIDClaims, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -152,7 +152,7 @@ func (l *OpenIdurlsList) Slice() []*OpenIdurls {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *OpenIdurlsList) Each(f func(item *OpenIdurls) bool) {
+func (l *OpenIDClaimsList) Each(f func(item *OpenIDClaims) bool) {
 	if l == nil {
 		return
 	}
@@ -166,7 +166,7 @@ func (l *OpenIdurlsList) Each(f func(item *OpenIdurls) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *OpenIdurlsList) Range(f func(index int, item *OpenIdurls) bool) {
+func (l *OpenIDClaimsList) Range(f func(index int, item *OpenIDClaims) bool) {
 	if l == nil {
 		return
 	}

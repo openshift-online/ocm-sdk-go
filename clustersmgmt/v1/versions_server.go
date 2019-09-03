@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // VersionsServer represents the interface the manages the 'versions' resource.
@@ -281,10 +282,27 @@ func (a *VersionsServerAdapter) versionHandler(w http.ResponseWriter, r *http.Re
 	return
 }
 func (a *VersionsServerAdapter) readVersionsListServerRequest(r *http.Request) (*VersionsListServerRequest, error) {
+	var err error
 	result := new(VersionsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(result.query, "search")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *VersionsServerAdapter) writeVersionsListServerResponse(w http.ResponseWriter, r *VersionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

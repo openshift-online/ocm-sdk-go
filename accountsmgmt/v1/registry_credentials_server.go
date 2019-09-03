@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RegistryCredentialsServer represents the interface the manages the 'registry_credentials' resource.
@@ -318,10 +319,23 @@ func (a *RegistryCredentialsServerAdapter) registryCredentialHandler(w http.Resp
 	return
 }
 func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsListServerRequest(r *http.Request) (*RegistryCredentialsListServerRequest, error) {
+	var err error
 	result := new(RegistryCredentialsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsListServerResponse(w http.ResponseWriter, r *RegistryCredentialsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -364,14 +378,15 @@ func (a *RegistryCredentialsServerAdapter) listHandler(w http.ResponseWriter, r 
 	}
 }
 func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsAddServerRequest(r *http.Request) (*RegistryCredentialsAddServerRequest, error) {
+	var err error
 	result := new(RegistryCredentialsAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsAddServerResponse(w http.ResponseWriter, r *RegistryCredentialsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

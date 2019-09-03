@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // AccountsServer represents the interface the manages the 'accounts' resource.
@@ -318,10 +319,23 @@ func (a *AccountsServerAdapter) accountHandler(w http.ResponseWriter, r *http.Re
 	return
 }
 func (a *AccountsServerAdapter) readAccountsListServerRequest(r *http.Request) (*AccountsListServerRequest, error) {
+	var err error
 	result := new(AccountsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *AccountsServerAdapter) writeAccountsListServerResponse(w http.ResponseWriter, r *AccountsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -364,14 +378,15 @@ func (a *AccountsServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 func (a *AccountsServerAdapter) readAccountsAddServerRequest(r *http.Request) (*AccountsAddServerRequest, error) {
+	var err error
 	result := new(AccountsAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *AccountsServerAdapter) writeAccountsAddServerResponse(w http.ResponseWriter, r *AccountsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

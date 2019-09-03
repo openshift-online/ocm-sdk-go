@@ -95,10 +95,11 @@ func NewAccessTokenServerAdapter(server AccessTokenServer, router *mux.Router) *
 	return adapter
 }
 func (a *AccessTokenServerAdapter) readAccessTokenPostServerRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {
+	var err error
 	result := new(AccessTokenPostServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *AccessTokenServerAdapter) writeAccessTokenPostServerResponse(w http.ResponseWriter, r *AccessTokenPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

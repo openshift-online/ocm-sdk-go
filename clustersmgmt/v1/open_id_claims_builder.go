@@ -19,25 +19,25 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIdclaimsBuilder contains the data and logic needed to build 'open_idclaims' objects.
+// OpenIDClaimsBuilder contains the data and logic needed to build 'open_ID_claims' objects.
 //
 // _OpenID_ identity provider claims.
-type OpenIdclaimsBuilder struct {
+type OpenIDClaimsBuilder struct {
 	email             []string
 	name              []string
 	preferredUsername []string
 }
 
-// NewOpenIdclaims creates a new builder of 'open_idclaims' objects.
-func NewOpenIdclaims() *OpenIdclaimsBuilder {
-	return new(OpenIdclaimsBuilder)
+// NewOpenIDClaims creates a new builder of 'open_ID_claims' objects.
+func NewOpenIDClaims() *OpenIDClaimsBuilder {
+	return new(OpenIDClaimsBuilder)
 }
 
 // Email sets the value of the 'email' attribute
 // to the given values.
 //
 //
-func (b *OpenIdclaimsBuilder) Email(values ...string) *OpenIdclaimsBuilder {
+func (b *OpenIDClaimsBuilder) Email(values ...string) *OpenIDClaimsBuilder {
 	b.email = make([]string, len(values))
 	copy(b.email, values)
 	return b
@@ -47,7 +47,7 @@ func (b *OpenIdclaimsBuilder) Email(values ...string) *OpenIdclaimsBuilder {
 // to the given values.
 //
 //
-func (b *OpenIdclaimsBuilder) Name(values ...string) *OpenIdclaimsBuilder {
+func (b *OpenIDClaimsBuilder) Name(values ...string) *OpenIDClaimsBuilder {
 	b.name = make([]string, len(values))
 	copy(b.name, values)
 	return b
@@ -57,15 +57,15 @@ func (b *OpenIdclaimsBuilder) Name(values ...string) *OpenIdclaimsBuilder {
 // to the given values.
 //
 //
-func (b *OpenIdclaimsBuilder) PreferredUsername(values ...string) *OpenIdclaimsBuilder {
+func (b *OpenIDClaimsBuilder) PreferredUsername(values ...string) *OpenIDClaimsBuilder {
 	b.preferredUsername = make([]string, len(values))
 	copy(b.preferredUsername, values)
 	return b
 }
 
-// Build creates a 'open_idclaims' object using the configuration stored in the builder.
-func (b *OpenIdclaimsBuilder) Build() (object *OpenIdclaims, err error) {
-	object = new(OpenIdclaims)
+// Build creates a 'open_ID_claims' object using the configuration stored in the builder.
+func (b *OpenIDClaimsBuilder) Build() (object *OpenIDClaims, err error) {
+	object = new(OpenIDClaims)
 	if b.email != nil {
 		object.email = make([]string, len(b.email))
 		copy(object.email, b.email)

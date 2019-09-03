@@ -23,19 +23,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// sshcredentialsListData is type used internally to marshal and unmarshal lists of objects
-// of type 'sshcredentials'.
-type sshcredentialsListData []*sshcredentialsData
+// openIDIdentityProviderListData is type used internally to marshal and unmarshal lists of objects
+// of type 'open_ID_identity_provider'.
+type openIDIdentityProviderListData []*openIDIdentityProviderData
 
-// UnmarshalSshcredentialsList reads a list of values of the 'sshcredentials'
+// UnmarshalOpenIDIdentityProviderList reads a list of values of the 'open_ID_identity_provider'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
-func UnmarshalSshcredentialsList(source interface{}) (list *SshcredentialsList, err error) {
+func UnmarshalOpenIDIdentityProviderList(source interface{}) (list *OpenIDIdentityProviderList, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	var data sshcredentialsListData
+	var data openIDIdentityProviderListData
 	err = decoder.Decode(&data)
 	if err != nil {
 		return
@@ -45,12 +45,12 @@ func UnmarshalSshcredentialsList(source interface{}) (list *SshcredentialsList, 
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'sshcredentials' value to a JSON document.
-func (l *SshcredentialsList) wrap() (data sshcredentialsListData, err error) {
+// 'open_ID_identity_provider' value to a JSON document.
+func (l *OpenIDIdentityProviderList) wrap() (data openIDIdentityProviderListData, err error) {
 	if l == nil {
 		return
 	}
-	data = make(sshcredentialsListData, len(l.items))
+	data = make(openIDIdentityProviderListData, len(l.items))
 	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
@@ -61,19 +61,19 @@ func (l *SshcredentialsList) wrap() (data sshcredentialsListData, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'sshcredentials' type.
-func (d sshcredentialsListData) unwrap() (list *SshcredentialsList, err error) {
+// list of values of the 'open_ID_identity_provider' type.
+func (d openIDIdentityProviderListData) unwrap() (list *OpenIDIdentityProviderList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*Sshcredentials, len(d))
+	items := make([]*OpenIDIdentityProvider, len(d))
 	for i, item := range d {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(SshcredentialsList)
+	list = new(OpenIDIdentityProviderList)
 	list.items = items
 	return
 }

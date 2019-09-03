@@ -39,8 +39,8 @@ type identityProviderData struct {
 	Github        *githubIdentityProviderData    "json:\"github,omitempty\""
 	Gitlab        *gitlabIdentityProviderData    "json:\"gitlab,omitempty\""
 	Google        *googleIdentityProviderData    "json:\"google,omitempty\""
-	LDAP          *ldapidentityProviderData      "json:\"ldap,omitempty\""
-	OpenID        *openIdidentityProviderData    "json:\"open_id,omitempty\""
+	LDAP          *ldapIdentityProviderData      "json:\"ldap,omitempty\""
+	OpenID        *openIDIdentityProviderData    "json:\"open_id,omitempty\""
 }
 
 // MarshalIdentityProvider writes a value of the 'identity_provider' to the given target,

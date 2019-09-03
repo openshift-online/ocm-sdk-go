@@ -19,21 +19,21 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIdidentityProvider represents the values of the 'open_ididentity_provider' type.
+// OpenIDIdentityProvider represents the values of the 'open_ID_identity_provider' type.
 //
 // Details for `openid` identity providers.
-type OpenIdidentityProvider struct {
+type OpenIDIdentityProvider struct {
 	ca                       *string
-	claims                   *OpenIdclaims
+	claims                   *OpenIDClaims
 	clientID                 *string
 	clientSecret             *string
 	extraAuthorizeParameters map[string]string
 	extraScopes              []string
-	urls                     *OpenIdurls
+	urls                     *OpenIDURLs
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *OpenIdidentityProvider) Empty() bool {
+func (o *OpenIDIdentityProvider) Empty() bool {
 	return o == nil || (o.ca == nil &&
 		o.claims == nil &&
 		o.clientID == nil &&
@@ -48,7 +48,7 @@ func (o *OpenIdidentityProvider) Empty() bool {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Certificate bunde to use to validate server certificates for the configured URL.
-func (o *OpenIdidentityProvider) CA() string {
+func (o *OpenIDIdentityProvider) CA() string {
 	if o != nil && o.ca != nil {
 		return *o.ca
 	}
@@ -59,7 +59,7 @@ func (o *OpenIdidentityProvider) CA() string {
 // a flag indicating if the attribute has a value.
 //
 // Certificate bunde to use to validate server certificates for the configured URL.
-func (o *OpenIdidentityProvider) GetCA() (value string, ok bool) {
+func (o *OpenIDIdentityProvider) GetCA() (value string, ok bool) {
 	ok = o != nil && o.ca != nil
 	if ok {
 		value = *o.ca
@@ -71,7 +71,7 @@ func (o *OpenIdidentityProvider) GetCA() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Claims used to configure the provider.
-func (o *OpenIdidentityProvider) Claims() *OpenIdclaims {
+func (o *OpenIDIdentityProvider) Claims() *OpenIDClaims {
 	if o == nil {
 		return nil
 	}
@@ -82,7 +82,7 @@ func (o *OpenIdidentityProvider) Claims() *OpenIdclaims {
 // a flag indicating if the attribute has a value.
 //
 // Claims used to configure the provider.
-func (o *OpenIdidentityProvider) GetClaims() (value *OpenIdclaims, ok bool) {
+func (o *OpenIDIdentityProvider) GetClaims() (value *OpenIDClaims, ok bool) {
 	ok = o != nil && o.claims != nil
 	if ok {
 		value = o.claims
@@ -94,7 +94,7 @@ func (o *OpenIdidentityProvider) GetClaims() (value *OpenIdclaims, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Identifier of a client registered with the _OpenID_ provider.
-func (o *OpenIdidentityProvider) ClientID() string {
+func (o *OpenIDIdentityProvider) ClientID() string {
 	if o != nil && o.clientID != nil {
 		return *o.clientID
 	}
@@ -105,7 +105,7 @@ func (o *OpenIdidentityProvider) ClientID() string {
 // a flag indicating if the attribute has a value.
 //
 // Identifier of a client registered with the _OpenID_ provider.
-func (o *OpenIdidentityProvider) GetClientID() (value string, ok bool) {
+func (o *OpenIDIdentityProvider) GetClientID() (value string, ok bool) {
 	ok = o != nil && o.clientID != nil
 	if ok {
 		value = *o.clientID
@@ -117,7 +117,7 @@ func (o *OpenIdidentityProvider) GetClientID() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Client secret.
-func (o *OpenIdidentityProvider) ClientSecret() string {
+func (o *OpenIDIdentityProvider) ClientSecret() string {
 	if o != nil && o.clientSecret != nil {
 		return *o.clientSecret
 	}
@@ -128,7 +128,7 @@ func (o *OpenIdidentityProvider) ClientSecret() string {
 // a flag indicating if the attribute has a value.
 //
 // Client secret.
-func (o *OpenIdidentityProvider) GetClientSecret() (value string, ok bool) {
+func (o *OpenIDIdentityProvider) GetClientSecret() (value string, ok bool) {
 	ok = o != nil && o.clientSecret != nil
 	if ok {
 		value = *o.clientSecret
@@ -140,7 +140,7 @@ func (o *OpenIdidentityProvider) GetClientSecret() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Optional map of extra parameters to add to the authorization token request.
-func (o *OpenIdidentityProvider) ExtraAuthorizeParameters() map[string]string {
+func (o *OpenIDIdentityProvider) ExtraAuthorizeParameters() map[string]string {
 	if o == nil {
 		return nil
 	}
@@ -151,7 +151,7 @@ func (o *OpenIdidentityProvider) ExtraAuthorizeParameters() map[string]string {
 // a flag indicating if the attribute has a value.
 //
 // Optional map of extra parameters to add to the authorization token request.
-func (o *OpenIdidentityProvider) GetExtraAuthorizeParameters() (value map[string]string, ok bool) {
+func (o *OpenIDIdentityProvider) GetExtraAuthorizeParameters() (value map[string]string, ok bool) {
 	ok = o != nil && o.extraAuthorizeParameters != nil
 	if ok {
 		value = o.extraAuthorizeParameters
@@ -164,7 +164,7 @@ func (o *OpenIdidentityProvider) GetExtraAuthorizeParameters() (value map[string
 //
 // Optional list of scopes to request, in addition to the `openid` scope, during the
 // authorization token request.
-func (o *OpenIdidentityProvider) ExtraScopes() []string {
+func (o *OpenIDIdentityProvider) ExtraScopes() []string {
 	if o == nil {
 		return nil
 	}
@@ -176,7 +176,7 @@ func (o *OpenIdidentityProvider) ExtraScopes() []string {
 //
 // Optional list of scopes to request, in addition to the `openid` scope, during the
 // authorization token request.
-func (o *OpenIdidentityProvider) GetExtraScopes() (value []string, ok bool) {
+func (o *OpenIDIdentityProvider) GetExtraScopes() (value []string, ok bool) {
 	ok = o != nil && o.extraScopes != nil
 	if ok {
 		value = o.extraScopes
@@ -188,7 +188,7 @@ func (o *OpenIdidentityProvider) GetExtraScopes() (value []string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // URLs of the provider.
-func (o *OpenIdidentityProvider) URLS() *OpenIdurls {
+func (o *OpenIDIdentityProvider) URLS() *OpenIDURLs {
 	if o == nil {
 		return nil
 	}
@@ -199,7 +199,7 @@ func (o *OpenIdidentityProvider) URLS() *OpenIdurls {
 // a flag indicating if the attribute has a value.
 //
 // URLs of the provider.
-func (o *OpenIdidentityProvider) GetURLS() (value *OpenIdurls, ok bool) {
+func (o *OpenIDIdentityProvider) GetURLS() (value *OpenIDURLs, ok bool) {
 	ok = o != nil && o.urls != nil
 	if ok {
 		value = o.urls
@@ -207,13 +207,13 @@ func (o *OpenIdidentityProvider) GetURLS() (value *OpenIdurls, ok bool) {
 	return
 }
 
-// OpenIdidentityProviderList is a list of values of the 'open_ididentity_provider' type.
-type OpenIdidentityProviderList struct {
-	items []*OpenIdidentityProvider
+// OpenIDIdentityProviderList is a list of values of the 'open_ID_identity_provider' type.
+type OpenIDIdentityProviderList struct {
+	items []*OpenIDIdentityProvider
 }
 
 // Len returns the length of the list.
-func (l *OpenIdidentityProviderList) Len() int {
+func (l *OpenIDIdentityProviderList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -221,13 +221,13 @@ func (l *OpenIdidentityProviderList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *OpenIdidentityProviderList) Empty() bool {
+func (l *OpenIDIdentityProviderList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *OpenIdidentityProviderList) Get(i int) *OpenIdidentityProvider {
+func (l *OpenIDIdentityProviderList) Get(i int) *OpenIDIdentityProvider {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -240,12 +240,12 @@ func (l *OpenIdidentityProviderList) Get(i int) *OpenIdidentityProvider {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *OpenIdidentityProviderList) Slice() []*OpenIdidentityProvider {
-	var slice []*OpenIdidentityProvider
+func (l *OpenIDIdentityProviderList) Slice() []*OpenIDIdentityProvider {
+	var slice []*OpenIDIdentityProvider
 	if l == nil {
-		slice = make([]*OpenIdidentityProvider, 0)
+		slice = make([]*OpenIDIdentityProvider, 0)
 	} else {
-		slice = make([]*OpenIdidentityProvider, len(l.items))
+		slice = make([]*OpenIDIdentityProvider, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -254,7 +254,7 @@ func (l *OpenIdidentityProviderList) Slice() []*OpenIdidentityProvider {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *OpenIdidentityProviderList) Each(f func(item *OpenIdidentityProvider) bool) {
+func (l *OpenIDIdentityProviderList) Each(f func(item *OpenIDIdentityProvider) bool) {
 	if l == nil {
 		return
 	}
@@ -268,7 +268,7 @@ func (l *OpenIdidentityProviderList) Each(f func(item *OpenIdidentityProvider) b
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *OpenIdidentityProviderList) Range(f func(index int, item *OpenIdidentityProvider) bool) {
+func (l *OpenIDIdentityProviderList) Range(f func(index int, item *OpenIDIdentityProvider) bool) {
 	if l == nil {
 		return
 	}

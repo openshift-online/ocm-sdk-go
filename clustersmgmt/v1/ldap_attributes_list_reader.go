@@ -23,19 +23,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// ldapidentityProviderListData is type used internally to marshal and unmarshal lists of objects
-// of type 'ldapidentity_provider'.
-type ldapidentityProviderListData []*ldapidentityProviderData
+// ldapAttributesListData is type used internally to marshal and unmarshal lists of objects
+// of type 'LDAP_attributes'.
+type ldapAttributesListData []*ldapAttributesData
 
-// UnmarshalLdapidentityProviderList reads a list of values of the 'ldapidentity_provider'
+// UnmarshalLDAPAttributesList reads a list of values of the 'LDAP_attributes'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
-func UnmarshalLdapidentityProviderList(source interface{}) (list *LdapidentityProviderList, err error) {
+func UnmarshalLDAPAttributesList(source interface{}) (list *LDAPAttributesList, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	var data ldapidentityProviderListData
+	var data ldapAttributesListData
 	err = decoder.Decode(&data)
 	if err != nil {
 		return
@@ -45,12 +45,12 @@ func UnmarshalLdapidentityProviderList(source interface{}) (list *LdapidentityPr
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'ldapidentity_provider' value to a JSON document.
-func (l *LdapidentityProviderList) wrap() (data ldapidentityProviderListData, err error) {
+// 'LDAP_attributes' value to a JSON document.
+func (l *LDAPAttributesList) wrap() (data ldapAttributesListData, err error) {
 	if l == nil {
 		return
 	}
-	data = make(ldapidentityProviderListData, len(l.items))
+	data = make(ldapAttributesListData, len(l.items))
 	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
@@ -61,19 +61,19 @@ func (l *LdapidentityProviderList) wrap() (data ldapidentityProviderListData, er
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'ldapidentity_provider' type.
-func (d ldapidentityProviderListData) unwrap() (list *LdapidentityProviderList, err error) {
+// list of values of the 'LDAP_attributes' type.
+func (d ldapAttributesListData) unwrap() (list *LDAPAttributesList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*LdapidentityProvider, len(d))
+	items := make([]*LDAPAttributes, len(d))
 	for i, item := range d {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(LdapidentityProviderList)
+	list = new(LDAPAttributesList)
 	list.items = items
 	return
 }

@@ -39,7 +39,7 @@ type ClusterCredentials struct {
 	href       *string
 	link       bool
 	kubeconfig *string
-	ssh        *Sshcredentials
+	ssh        *SSHCredentials
 	admin      *AdminCredentials
 }
 
@@ -131,7 +131,7 @@ func (o *ClusterCredentials) GetKubeconfig() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // SSH key pair of the cluster.
-func (o *ClusterCredentials) SSH() *Sshcredentials {
+func (o *ClusterCredentials) SSH() *SSHCredentials {
 	if o == nil {
 		return nil
 	}
@@ -142,7 +142,7 @@ func (o *ClusterCredentials) SSH() *Sshcredentials {
 // a flag indicating if the attribute has a value.
 //
 // SSH key pair of the cluster.
-func (o *ClusterCredentials) GetSSH() (value *Sshcredentials, ok bool) {
+func (o *ClusterCredentials) GetSSH() (value *SSHCredentials, ok bool) {
 	ok = o != nil && o.ssh != nil
 	if ok {
 		value = o.ssh

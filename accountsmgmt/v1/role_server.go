@@ -205,10 +205,11 @@ func NewRoleServerAdapter(server RoleServer, router *mux.Router) *RoleServerAdap
 	return adapter
 }
 func (a *RoleServerAdapter) readRoleGetServerRequest(r *http.Request) (*RoleGetServerRequest, error) {
+	var err error
 	result := new(RoleGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *RoleServerAdapter) writeRoleGetServerResponse(w http.ResponseWriter, r *RoleGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -251,14 +252,15 @@ func (a *RoleServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func (a *RoleServerAdapter) readRoleUpdateServerRequest(r *http.Request) (*RoleUpdateServerRequest, error) {
+	var err error
 	result := new(RoleUpdateServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *RoleServerAdapter) writeRoleUpdateServerResponse(w http.ResponseWriter, r *RoleUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -301,10 +303,11 @@ func (a *RoleServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 func (a *RoleServerAdapter) readRoleDeleteServerRequest(r *http.Request) (*RoleDeleteServerRequest, error) {
+	var err error
 	result := new(RoleDeleteServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *RoleServerAdapter) writeRoleDeleteServerResponse(w http.ResponseWriter, r *RoleDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

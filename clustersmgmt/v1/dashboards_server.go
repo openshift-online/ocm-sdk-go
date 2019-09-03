@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // DashboardsServer represents the interface the manages the 'dashboards' resource.
@@ -285,10 +286,27 @@ func (a *DashboardsServerAdapter) dashboardHandler(w http.ResponseWriter, r *htt
 	return
 }
 func (a *DashboardsServerAdapter) readDashboardsListServerRequest(r *http.Request) (*DashboardsListServerRequest, error) {
+	var err error
 	result := new(DashboardsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(result.query, "search")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *DashboardsServerAdapter) writeDashboardsListServerResponse(w http.ResponseWriter, r *DashboardsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

@@ -19,35 +19,35 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIdclaimsListBuilder contains the data and logic needed to build
-// 'open_idclaims' objects.
-type OpenIdclaimsListBuilder struct {
-	items []*OpenIdclaimsBuilder
+// OpenIDIdentityProviderListBuilder contains the data and logic needed to build
+// 'open_ID_identity_provider' objects.
+type OpenIDIdentityProviderListBuilder struct {
+	items []*OpenIDIdentityProviderBuilder
 }
 
-// NewOpenIdclaimsList creates a new builder of 'open_idclaims' objects.
-func NewOpenIdclaimsList() *OpenIdclaimsListBuilder {
-	return new(OpenIdclaimsListBuilder)
+// NewOpenIDIdentityProviderList creates a new builder of 'open_ID_identity_provider' objects.
+func NewOpenIDIdentityProviderList() *OpenIDIdentityProviderListBuilder {
+	return new(OpenIDIdentityProviderListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *OpenIdclaimsListBuilder) Items(values ...*OpenIdclaimsBuilder) *OpenIdclaimsListBuilder {
-	b.items = make([]*OpenIdclaimsBuilder, len(values))
+func (b *OpenIDIdentityProviderListBuilder) Items(values ...*OpenIDIdentityProviderBuilder) *OpenIDIdentityProviderListBuilder {
+	b.items = make([]*OpenIDIdentityProviderBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
-// Build creates a list of 'open_idclaims' objects using the
+// Build creates a list of 'open_ID_identity_provider' objects using the
 // configuration stored in the builder.
-func (b *OpenIdclaimsListBuilder) Build() (list *OpenIdclaimsList, err error) {
-	items := make([]*OpenIdclaims, len(b.items))
+func (b *OpenIDIdentityProviderListBuilder) Build() (list *OpenIDIdentityProviderList, err error) {
+	items := make([]*OpenIDIdentityProvider, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(OpenIdclaimsList)
+	list = new(OpenIDIdentityProviderList)
 	list.items = items
 	return
 }

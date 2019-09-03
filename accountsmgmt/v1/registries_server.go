@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RegistriesServer represents the interface the manages the 'registries' resource.
@@ -232,10 +233,23 @@ func (a *RegistriesServerAdapter) registryHandler(w http.ResponseWriter, r *http
 	return
 }
 func (a *RegistriesServerAdapter) readRegistriesListServerRequest(r *http.Request) (*RegistriesListServerRequest, error) {
+	var err error
 	result := new(RegistriesListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *RegistriesServerAdapter) writeRegistriesListServerResponse(w http.ResponseWriter, r *RegistriesListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

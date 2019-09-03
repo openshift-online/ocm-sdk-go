@@ -181,10 +181,11 @@ func NewResourceQuotaServerAdapter(server ResourceQuotaServer, router *mux.Route
 	return adapter
 }
 func (a *ResourceQuotaServerAdapter) readResourceQuotaGetServerRequest(r *http.Request) (*ResourceQuotaGetServerRequest, error) {
+	var err error
 	result := new(ResourceQuotaGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *ResourceQuotaServerAdapter) writeResourceQuotaGetServerResponse(w http.ResponseWriter, r *ResourceQuotaGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -227,14 +228,15 @@ func (a *ResourceQuotaServerAdapter) getHandler(w http.ResponseWriter, r *http.R
 	}
 }
 func (a *ResourceQuotaServerAdapter) readResourceQuotaUpdateServerRequest(r *http.Request) (*ResourceQuotaUpdateServerRequest, error) {
+	var err error
 	result := new(ResourceQuotaUpdateServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *ResourceQuotaServerAdapter) writeResourceQuotaUpdateServerResponse(w http.ResponseWriter, r *ResourceQuotaUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

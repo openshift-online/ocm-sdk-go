@@ -119,10 +119,11 @@ func NewPermissionServerAdapter(server PermissionServer, router *mux.Router) *Pe
 	return adapter
 }
 func (a *PermissionServerAdapter) readPermissionGetServerRequest(r *http.Request) (*PermissionGetServerRequest, error) {
+	var err error
 	result := new(PermissionGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *PermissionServerAdapter) writePermissionGetServerResponse(w http.ResponseWriter, r *PermissionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -165,10 +166,11 @@ func (a *PermissionServerAdapter) getHandler(w http.ResponseWriter, r *http.Requ
 	}
 }
 func (a *PermissionServerAdapter) readPermissionDeleteServerRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
+	var err error
 	result := new(PermissionDeleteServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *PermissionServerAdapter) writePermissionDeleteServerResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

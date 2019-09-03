@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RoleBindingsServer represents the interface the manages the 'role_bindings' resource.
@@ -318,10 +319,23 @@ func (a *RoleBindingsServerAdapter) roleBindingHandler(w http.ResponseWriter, r 
 	return
 }
 func (a *RoleBindingsServerAdapter) readRoleBindingsListServerRequest(r *http.Request) (*RoleBindingsListServerRequest, error) {
+	var err error
 	result := new(RoleBindingsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *RoleBindingsServerAdapter) writeRoleBindingsListServerResponse(w http.ResponseWriter, r *RoleBindingsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -364,14 +378,15 @@ func (a *RoleBindingsServerAdapter) listHandler(w http.ResponseWriter, r *http.R
 	}
 }
 func (a *RoleBindingsServerAdapter) readRoleBindingsAddServerRequest(r *http.Request) (*RoleBindingsAddServerRequest, error) {
+	var err error
 	result := new(RoleBindingsAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *RoleBindingsServerAdapter) writeRoleBindingsAddServerResponse(w http.ResponseWriter, r *RoleBindingsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

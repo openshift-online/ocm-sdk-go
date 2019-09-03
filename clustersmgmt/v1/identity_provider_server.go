@@ -119,10 +119,11 @@ func NewIdentityProviderServerAdapter(server IdentityProviderServer, router *mux
 	return adapter
 }
 func (a *IdentityProviderServerAdapter) readIdentityProviderGetServerRequest(r *http.Request) (*IdentityProviderGetServerRequest, error) {
+	var err error
 	result := new(IdentityProviderGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *IdentityProviderServerAdapter) writeIdentityProviderGetServerResponse(w http.ResponseWriter, r *IdentityProviderGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -165,10 +166,11 @@ func (a *IdentityProviderServerAdapter) getHandler(w http.ResponseWriter, r *htt
 	}
 }
 func (a *IdentityProviderServerAdapter) readIdentityProviderDeleteServerRequest(r *http.Request) (*IdentityProviderDeleteServerRequest, error) {
+	var err error
 	result := new(IdentityProviderDeleteServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *IdentityProviderServerAdapter) writeIdentityProviderDeleteServerResponse(w http.ResponseWriter, r *IdentityProviderDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

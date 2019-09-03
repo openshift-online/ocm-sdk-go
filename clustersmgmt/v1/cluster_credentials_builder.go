@@ -27,7 +27,7 @@ type ClusterCredentialsBuilder struct {
 	href       *string
 	link       bool
 	kubeconfig *string
-	ssh        *SshcredentialsBuilder
+	ssh        *SSHCredentialsBuilder
 	admin      *AdminCredentialsBuilder
 }
 
@@ -67,7 +67,7 @@ func (b *ClusterCredentialsBuilder) Kubeconfig(value string) *ClusterCredentials
 // to the given value.
 //
 // SSH key pair of a cluster.
-func (b *ClusterCredentialsBuilder) SSH(value *SshcredentialsBuilder) *ClusterCredentialsBuilder {
+func (b *ClusterCredentialsBuilder) SSH(value *SSHCredentialsBuilder) *ClusterCredentialsBuilder {
 	b.ssh = value
 	return b
 }

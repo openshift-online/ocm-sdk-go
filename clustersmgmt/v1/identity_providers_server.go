@@ -234,10 +234,11 @@ func (a *IdentityProvidersServerAdapter) identityProviderHandler(w http.Response
 	return
 }
 func (a *IdentityProvidersServerAdapter) readIdentityProvidersListServerRequest(r *http.Request) (*IdentityProvidersListServerRequest, error) {
+	var err error
 	result := new(IdentityProvidersListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *IdentityProvidersServerAdapter) writeIdentityProvidersListServerResponse(w http.ResponseWriter, r *IdentityProvidersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -280,14 +281,15 @@ func (a *IdentityProvidersServerAdapter) listHandler(w http.ResponseWriter, r *h
 	}
 }
 func (a *IdentityProvidersServerAdapter) readIdentityProvidersAddServerRequest(r *http.Request) (*IdentityProvidersAddServerRequest, error) {
+	var err error
 	result := new(IdentityProvidersAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *IdentityProvidersServerAdapter) writeIdentityProvidersAddServerResponse(w http.ResponseWriter, r *IdentityProvidersAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

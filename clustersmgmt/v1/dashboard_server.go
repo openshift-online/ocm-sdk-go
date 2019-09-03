@@ -95,10 +95,11 @@ func NewDashboardServerAdapter(server DashboardServer, router *mux.Router) *Dash
 	return adapter
 }
 func (a *DashboardServerAdapter) readDashboardGetServerRequest(r *http.Request) (*DashboardGetServerRequest, error) {
+	var err error
 	result := new(DashboardGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *DashboardServerAdapter) writeDashboardGetServerResponse(w http.ResponseWriter, r *DashboardGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

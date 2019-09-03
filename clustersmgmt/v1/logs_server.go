@@ -148,10 +148,11 @@ func (a *LogsServerAdapter) logHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 func (a *LogsServerAdapter) readLogsListServerRequest(r *http.Request) (*LogsListServerRequest, error) {
+	var err error
 	result := new(LogsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *LogsServerAdapter) writeLogsListServerResponse(w http.ResponseWriter, r *LogsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

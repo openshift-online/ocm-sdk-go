@@ -23,18 +23,18 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// ldapattributesData is the data structure used internally to marshal and unmarshal
-// objects of type 'ldapattributes'.
-type ldapattributesData struct {
+// ldapAttributesData is the data structure used internally to marshal and unmarshal
+// objects of type 'LDAP_attributes'.
+type ldapAttributesData struct {
 	Email             []string "json:\"email,omitempty\""
 	ID                []string "json:\"id,omitempty\""
 	Name              []string "json:\"name,omitempty\""
 	PreferredUsername []string "json:\"preferred_username,omitempty\""
 }
 
-// MarshalLdapattributes writes a value of the 'ldapattributes' to the given target,
+// MarshalLDAPAttributes writes a value of the 'LDAP_attributes' to the given target,
 // which can be a writer or a JSON encoder.
-func MarshalLdapattributes(object *Ldapattributes, target interface{}) error {
+func MarshalLDAPAttributes(object *LDAPAttributes, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
 	if err != nil {
 		return err
@@ -46,13 +46,13 @@ func MarshalLdapattributes(object *Ldapattributes, target interface{}) error {
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'ldapattributes'
+// wrap is the method used internally to convert a value of the 'LDAP_attributes'
 // value to a JSON document.
-func (o *Ldapattributes) wrap() (data *ldapattributesData, err error) {
+func (o *LDAPAttributes) wrap() (data *ldapAttributesData, err error) {
 	if o == nil {
 		return
 	}
-	data = new(ldapattributesData)
+	data = new(ldapAttributesData)
 	data.Email = o.email
 	data.ID = o.id
 	data.Name = o.name
@@ -60,14 +60,14 @@ func (o *Ldapattributes) wrap() (data *ldapattributesData, err error) {
 	return
 }
 
-// UnmarshalLdapattributes reads a value of the 'ldapattributes' type from the given
+// UnmarshalLDAPAttributes reads a value of the 'LDAP_attributes' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
-func UnmarshalLdapattributes(source interface{}) (object *Ldapattributes, err error) {
+func UnmarshalLDAPAttributes(source interface{}) (object *LDAPAttributes, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	data := new(ldapattributesData)
+	data := new(ldapAttributesData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return
@@ -77,12 +77,12 @@ func UnmarshalLdapattributes(source interface{}) (object *Ldapattributes, err er
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'ldapattributes' type.
-func (d *ldapattributesData) unwrap() (object *Ldapattributes, err error) {
+// value of the 'LDAP_attributes' type.
+func (d *ldapAttributesData) unwrap() (object *LDAPAttributes, err error) {
 	if d == nil {
 		return
 	}
-	object = new(Ldapattributes)
+	object = new(LDAPAttributes)
 	object.email = d.Email
 	object.id = d.ID
 	object.name = d.Name

@@ -135,14 +135,15 @@ func NewClusterAuthorizationsServerAdapter(server ClusterAuthorizationsServer, r
 	return adapter
 }
 func (a *ClusterAuthorizationsServerAdapter) readClusterAuthorizationsPostServerRequest(r *http.Request) (*ClusterAuthorizationsPostServerRequest, error) {
+	var err error
 	result := new(ClusterAuthorizationsPostServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *ClusterAuthorizationsServerAdapter) writeClusterAuthorizationsPostServerResponse(w http.ResponseWriter, r *ClusterAuthorizationsPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

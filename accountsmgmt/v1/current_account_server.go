@@ -95,10 +95,11 @@ func NewCurrentAccountServerAdapter(server CurrentAccountServer, router *mux.Rou
 	return adapter
 }
 func (a *CurrentAccountServerAdapter) readCurrentAccountGetServerRequest(r *http.Request) (*CurrentAccountGetServerRequest, error) {
+	var err error
 	result := new(CurrentAccountGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *CurrentAccountServerAdapter) writeCurrentAccountGetServerResponse(w http.ResponseWriter, r *CurrentAccountGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

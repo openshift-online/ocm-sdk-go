@@ -32,7 +32,7 @@ type clusterCredentialsData struct {
 	ID         *string               "json:\"id,omitempty\""
 	HREF       *string               "json:\"href,omitempty\""
 	Kubeconfig *string               "json:\"kubeconfig,omitempty\""
-	SSH        *sshcredentialsData   "json:\"ssh,omitempty\""
+	SSH        *sshCredentialsData   "json:\"ssh,omitempty\""
 	Admin      *adminCredentialsData "json:\"admin,omitempty\""
 }
 

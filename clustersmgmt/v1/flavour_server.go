@@ -95,10 +95,11 @@ func NewFlavourServerAdapter(server FlavourServer, router *mux.Router) *FlavourS
 	return adapter
 }
 func (a *FlavourServerAdapter) readFlavourGetServerRequest(r *http.Request) (*FlavourGetServerRequest, error) {
+	var err error
 	result := new(FlavourGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *FlavourServerAdapter) writeFlavourGetServerResponse(w http.ResponseWriter, r *FlavourGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
