@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.32 Sep 03 2019
+
+- Makefile generates code using the ocm-api-metamodel v0.0.4.
+
+- Generated servers parse request query parameters.
 
 == 0.1.31 Aug 28 2019
 
