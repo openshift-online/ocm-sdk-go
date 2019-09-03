@@ -136,14 +136,15 @@ func NewClusterRegistrationsServerAdapter(server ClusterRegistrationsServer, rou
 	return adapter
 }
 func (a *ClusterRegistrationsServerAdapter) readClusterRegistrationsPostServerRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {
+	var err error
 	result := new(ClusterRegistrationsPostServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *ClusterRegistrationsServerAdapter) writeClusterRegistrationsPostServerResponse(w http.ResponseWriter, r *ClusterRegistrationsPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

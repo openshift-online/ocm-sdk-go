@@ -119,10 +119,11 @@ func NewSubscriptionServerAdapter(server SubscriptionServer, router *mux.Router)
 	return adapter
 }
 func (a *SubscriptionServerAdapter) readSubscriptionGetServerRequest(r *http.Request) (*SubscriptionGetServerRequest, error) {
+	var err error
 	result := new(SubscriptionGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *SubscriptionServerAdapter) writeSubscriptionGetServerResponse(w http.ResponseWriter, r *SubscriptionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -165,10 +166,11 @@ func (a *SubscriptionServerAdapter) getHandler(w http.ResponseWriter, r *http.Re
 	}
 }
 func (a *SubscriptionServerAdapter) readSubscriptionDeleteServerRequest(r *http.Request) (*SubscriptionDeleteServerRequest, error) {
+	var err error
 	result := new(SubscriptionDeleteServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *SubscriptionServerAdapter) writeSubscriptionDeleteServerResponse(w http.ResponseWriter, r *SubscriptionDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

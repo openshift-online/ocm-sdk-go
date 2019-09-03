@@ -19,24 +19,24 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// SshcredentialsBuilder contains the data and logic needed to build 'sshcredentials' objects.
+// SSHCredentialsBuilder contains the data and logic needed to build 'SSH_credentials' objects.
 //
 // SSH key pair of a cluster.
-type SshcredentialsBuilder struct {
+type SSHCredentialsBuilder struct {
 	publicKey  *string
 	privateKey *string
 }
 
-// NewSshcredentials creates a new builder of 'sshcredentials' objects.
-func NewSshcredentials() *SshcredentialsBuilder {
-	return new(SshcredentialsBuilder)
+// NewSSHCredentials creates a new builder of 'SSH_credentials' objects.
+func NewSSHCredentials() *SSHCredentialsBuilder {
+	return new(SSHCredentialsBuilder)
 }
 
 // PublicKey sets the value of the 'public_key' attribute
 // to the given value.
 //
 //
-func (b *SshcredentialsBuilder) PublicKey(value string) *SshcredentialsBuilder {
+func (b *SSHCredentialsBuilder) PublicKey(value string) *SSHCredentialsBuilder {
 	b.publicKey = &value
 	return b
 }
@@ -45,14 +45,14 @@ func (b *SshcredentialsBuilder) PublicKey(value string) *SshcredentialsBuilder {
 // to the given value.
 //
 //
-func (b *SshcredentialsBuilder) PrivateKey(value string) *SshcredentialsBuilder {
+func (b *SSHCredentialsBuilder) PrivateKey(value string) *SSHCredentialsBuilder {
 	b.privateKey = &value
 	return b
 }
 
-// Build creates a 'sshcredentials' object using the configuration stored in the builder.
-func (b *SshcredentialsBuilder) Build() (object *Sshcredentials, err error) {
-	object = new(Sshcredentials)
+// Build creates a 'SSH_credentials' object using the configuration stored in the builder.
+func (b *SSHCredentialsBuilder) Build() (object *SSHCredentials, err error) {
+	object = new(SSHCredentials)
 	if b.publicKey != nil {
 		object.publicKey = b.publicKey
 	}

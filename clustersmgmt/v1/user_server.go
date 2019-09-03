@@ -119,10 +119,11 @@ func NewUserServerAdapter(server UserServer, router *mux.Router) *UserServerAdap
 	return adapter
 }
 func (a *UserServerAdapter) readUserGetServerRequest(r *http.Request) (*UserGetServerRequest, error) {
+	var err error
 	result := new(UserGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *UserServerAdapter) writeUserGetServerResponse(w http.ResponseWriter, r *UserGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -165,10 +166,11 @@ func (a *UserServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func (a *UserServerAdapter) readUserDeleteServerRequest(r *http.Request) (*UserDeleteServerRequest, error) {
+	var err error
 	result := new(UserDeleteServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *UserServerAdapter) writeUserDeleteServerResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

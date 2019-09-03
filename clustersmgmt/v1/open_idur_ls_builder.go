@@ -19,25 +19,25 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIdurlsBuilder contains the data and logic needed to build 'open_idurls' objects.
+// OpenIDURLsBuilder contains the data and logic needed to build 'open_IDUR_ls' objects.
 //
 // _OpenID_ identity provider URLs.
-type OpenIdurlsBuilder struct {
+type OpenIDURLsBuilder struct {
 	authorize *string
 	token     *string
 	userInfo  *string
 }
 
-// NewOpenIdurls creates a new builder of 'open_idurls' objects.
-func NewOpenIdurls() *OpenIdurlsBuilder {
-	return new(OpenIdurlsBuilder)
+// NewOpenIDURLs creates a new builder of 'open_IDUR_ls' objects.
+func NewOpenIDURLs() *OpenIDURLsBuilder {
+	return new(OpenIDURLsBuilder)
 }
 
 // Authorize sets the value of the 'authorize' attribute
 // to the given value.
 //
 //
-func (b *OpenIdurlsBuilder) Authorize(value string) *OpenIdurlsBuilder {
+func (b *OpenIDURLsBuilder) Authorize(value string) *OpenIDURLsBuilder {
 	b.authorize = &value
 	return b
 }
@@ -46,7 +46,7 @@ func (b *OpenIdurlsBuilder) Authorize(value string) *OpenIdurlsBuilder {
 // to the given value.
 //
 //
-func (b *OpenIdurlsBuilder) Token(value string) *OpenIdurlsBuilder {
+func (b *OpenIDURLsBuilder) Token(value string) *OpenIDURLsBuilder {
 	b.token = &value
 	return b
 }
@@ -55,14 +55,14 @@ func (b *OpenIdurlsBuilder) Token(value string) *OpenIdurlsBuilder {
 // to the given value.
 //
 //
-func (b *OpenIdurlsBuilder) UserInfo(value string) *OpenIdurlsBuilder {
+func (b *OpenIDURLsBuilder) UserInfo(value string) *OpenIDURLsBuilder {
 	b.userInfo = &value
 	return b
 }
 
-// Build creates a 'open_idurls' object using the configuration stored in the builder.
-func (b *OpenIdurlsBuilder) Build() (object *OpenIdurls, err error) {
-	object = new(OpenIdurls)
+// Build creates a 'open_IDUR_ls' object using the configuration stored in the builder.
+func (b *OpenIDURLsBuilder) Build() (object *OpenIDURLs, err error) {
+	object = new(OpenIDURLs)
 	if b.authorize != nil {
 		object.authorize = b.authorize
 	}

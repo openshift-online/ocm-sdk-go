@@ -95,10 +95,11 @@ func NewRegistryCredentialServerAdapter(server RegistryCredentialServer, router 
 	return adapter
 }
 func (a *RegistryCredentialServerAdapter) readRegistryCredentialGetServerRequest(r *http.Request) (*RegistryCredentialGetServerRequest, error) {
+	var err error
 	result := new(RegistryCredentialGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *RegistryCredentialServerAdapter) writeRegistryCredentialGetServerResponse(w http.ResponseWriter, r *RegistryCredentialGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

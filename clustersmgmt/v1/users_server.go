@@ -234,10 +234,11 @@ func (a *UsersServerAdapter) userHandler(w http.ResponseWriter, r *http.Request)
 	return
 }
 func (a *UsersServerAdapter) readUsersListServerRequest(r *http.Request) (*UsersListServerRequest, error) {
+	var err error
 	result := new(UsersListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *UsersServerAdapter) writeUsersListServerResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -280,14 +281,15 @@ func (a *UsersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request)
 	}
 }
 func (a *UsersServerAdapter) readUsersAddServerRequest(r *http.Request) (*UsersAddServerRequest, error) {
+	var err error
 	result := new(UsersAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *UsersServerAdapter) writeUsersAddServerResponse(w http.ResponseWriter, r *UsersAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

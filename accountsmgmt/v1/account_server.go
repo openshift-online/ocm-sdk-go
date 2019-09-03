@@ -181,10 +181,11 @@ func NewAccountServerAdapter(server AccountServer, router *mux.Router) *AccountS
 	return adapter
 }
 func (a *AccountServerAdapter) readAccountGetServerRequest(r *http.Request) (*AccountGetServerRequest, error) {
+	var err error
 	result := new(AccountGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *AccountServerAdapter) writeAccountGetServerResponse(w http.ResponseWriter, r *AccountGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -227,14 +228,15 @@ func (a *AccountServerAdapter) getHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 func (a *AccountServerAdapter) readAccountUpdateServerRequest(r *http.Request) (*AccountUpdateServerRequest, error) {
+	var err error
 	result := new(AccountUpdateServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *AccountServerAdapter) writeAccountUpdateServerResponse(w http.ResponseWriter, r *AccountUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

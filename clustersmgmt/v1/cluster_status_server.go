@@ -95,10 +95,11 @@ func NewClusterStatusServerAdapter(server ClusterStatusServer, router *mux.Route
 	return adapter
 }
 func (a *ClusterStatusServerAdapter) readClusterStatusGetServerRequest(r *http.Request) (*ClusterStatusGetServerRequest, error) {
+	var err error
 	result := new(ClusterStatusGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *ClusterStatusServerAdapter) writeClusterStatusGetServerResponse(w http.ResponseWriter, r *ClusterStatusGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

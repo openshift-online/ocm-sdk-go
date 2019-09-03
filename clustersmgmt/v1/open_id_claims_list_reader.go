@@ -23,19 +23,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// openIdclaimsListData is type used internally to marshal and unmarshal lists of objects
-// of type 'open_idclaims'.
-type openIdclaimsListData []*openIdclaimsData
+// openIDClaimsListData is type used internally to marshal and unmarshal lists of objects
+// of type 'open_ID_claims'.
+type openIDClaimsListData []*openIDClaimsData
 
-// UnmarshalOpenIdclaimsList reads a list of values of the 'open_idclaims'
+// UnmarshalOpenIDClaimsList reads a list of values of the 'open_ID_claims'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
-func UnmarshalOpenIdclaimsList(source interface{}) (list *OpenIdclaimsList, err error) {
+func UnmarshalOpenIDClaimsList(source interface{}) (list *OpenIDClaimsList, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	var data openIdclaimsListData
+	var data openIDClaimsListData
 	err = decoder.Decode(&data)
 	if err != nil {
 		return
@@ -45,12 +45,12 @@ func UnmarshalOpenIdclaimsList(source interface{}) (list *OpenIdclaimsList, err 
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'open_idclaims' value to a JSON document.
-func (l *OpenIdclaimsList) wrap() (data openIdclaimsListData, err error) {
+// 'open_ID_claims' value to a JSON document.
+func (l *OpenIDClaimsList) wrap() (data openIDClaimsListData, err error) {
 	if l == nil {
 		return
 	}
-	data = make(openIdclaimsListData, len(l.items))
+	data = make(openIDClaimsListData, len(l.items))
 	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
@@ -61,19 +61,19 @@ func (l *OpenIdclaimsList) wrap() (data openIdclaimsListData, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'open_idclaims' type.
-func (d openIdclaimsListData) unwrap() (list *OpenIdclaimsList, err error) {
+// list of values of the 'open_ID_claims' type.
+func (d openIDClaimsListData) unwrap() (list *OpenIDClaimsList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*OpenIdclaims, len(d))
+	items := make([]*OpenIDClaims, len(d))
 	for i, item := range d {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(OpenIdclaimsList)
+	list = new(OpenIDClaimsList)
 	list.items = items
 	return
 }

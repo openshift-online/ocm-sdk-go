@@ -23,19 +23,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// ldapattributesListData is type used internally to marshal and unmarshal lists of objects
-// of type 'ldapattributes'.
-type ldapattributesListData []*ldapattributesData
+// sshCredentialsListData is type used internally to marshal and unmarshal lists of objects
+// of type 'SSH_credentials'.
+type sshCredentialsListData []*sshCredentialsData
 
-// UnmarshalLdapattributesList reads a list of values of the 'ldapattributes'
+// UnmarshalSSHCredentialsList reads a list of values of the 'SSH_credentials'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
-func UnmarshalLdapattributesList(source interface{}) (list *LdapattributesList, err error) {
+func UnmarshalSSHCredentialsList(source interface{}) (list *SSHCredentialsList, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	var data ldapattributesListData
+	var data sshCredentialsListData
 	err = decoder.Decode(&data)
 	if err != nil {
 		return
@@ -45,12 +45,12 @@ func UnmarshalLdapattributesList(source interface{}) (list *LdapattributesList, 
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'ldapattributes' value to a JSON document.
-func (l *LdapattributesList) wrap() (data ldapattributesListData, err error) {
+// 'SSH_credentials' value to a JSON document.
+func (l *SSHCredentialsList) wrap() (data sshCredentialsListData, err error) {
 	if l == nil {
 		return
 	}
-	data = make(ldapattributesListData, len(l.items))
+	data = make(sshCredentialsListData, len(l.items))
 	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
@@ -61,19 +61,19 @@ func (l *LdapattributesList) wrap() (data ldapattributesListData, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'ldapattributes' type.
-func (d ldapattributesListData) unwrap() (list *LdapattributesList, err error) {
+// list of values of the 'SSH_credentials' type.
+func (d sshCredentialsListData) unwrap() (list *SSHCredentialsList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*Ldapattributes, len(d))
+	items := make([]*SSHCredentials, len(d))
 	for i, item := range d {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(LdapattributesList)
+	list = new(SSHCredentialsList)
 	list.items = items
 	return
 }

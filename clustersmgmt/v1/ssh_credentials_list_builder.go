@@ -19,35 +19,35 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIdurlsListBuilder contains the data and logic needed to build
-// 'open_idurls' objects.
-type OpenIdurlsListBuilder struct {
-	items []*OpenIdurlsBuilder
+// SSHCredentialsListBuilder contains the data and logic needed to build
+// 'SSH_credentials' objects.
+type SSHCredentialsListBuilder struct {
+	items []*SSHCredentialsBuilder
 }
 
-// NewOpenIdurlsList creates a new builder of 'open_idurls' objects.
-func NewOpenIdurlsList() *OpenIdurlsListBuilder {
-	return new(OpenIdurlsListBuilder)
+// NewSSHCredentialsList creates a new builder of 'SSH_credentials' objects.
+func NewSSHCredentialsList() *SSHCredentialsListBuilder {
+	return new(SSHCredentialsListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *OpenIdurlsListBuilder) Items(values ...*OpenIdurlsBuilder) *OpenIdurlsListBuilder {
-	b.items = make([]*OpenIdurlsBuilder, len(values))
+func (b *SSHCredentialsListBuilder) Items(values ...*SSHCredentialsBuilder) *SSHCredentialsListBuilder {
+	b.items = make([]*SSHCredentialsBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
-// Build creates a list of 'open_idurls' objects using the
+// Build creates a list of 'SSH_credentials' objects using the
 // configuration stored in the builder.
-func (b *OpenIdurlsListBuilder) Build() (list *OpenIdurlsList, err error) {
-	items := make([]*OpenIdurls, len(b.items))
+func (b *SSHCredentialsListBuilder) Build() (list *SSHCredentialsList, err error) {
+	items := make([]*SSHCredentials, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(OpenIdurlsList)
+	list = new(SSHCredentialsList)
 	list.items = items
 	return
 }

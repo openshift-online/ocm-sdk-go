@@ -23,19 +23,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// openIdurlsListData is type used internally to marshal and unmarshal lists of objects
-// of type 'open_idurls'.
-type openIdurlsListData []*openIdurlsData
+// openIDURLsListData is type used internally to marshal and unmarshal lists of objects
+// of type 'open_IDUR_ls'.
+type openIDURLsListData []*openIDURLsData
 
-// UnmarshalOpenIdurlsList reads a list of values of the 'open_idurls'
+// UnmarshalOpenIDURLsList reads a list of values of the 'open_IDUR_ls'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
-func UnmarshalOpenIdurlsList(source interface{}) (list *OpenIdurlsList, err error) {
+func UnmarshalOpenIDURLsList(source interface{}) (list *OpenIDURLsList, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	var data openIdurlsListData
+	var data openIDURLsListData
 	err = decoder.Decode(&data)
 	if err != nil {
 		return
@@ -45,12 +45,12 @@ func UnmarshalOpenIdurlsList(source interface{}) (list *OpenIdurlsList, err erro
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'open_idurls' value to a JSON document.
-func (l *OpenIdurlsList) wrap() (data openIdurlsListData, err error) {
+// 'open_IDUR_ls' value to a JSON document.
+func (l *OpenIDURLsList) wrap() (data openIDURLsListData, err error) {
 	if l == nil {
 		return
 	}
-	data = make(openIdurlsListData, len(l.items))
+	data = make(openIDURLsListData, len(l.items))
 	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
@@ -61,19 +61,19 @@ func (l *OpenIdurlsList) wrap() (data openIdurlsListData, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'open_idurls' type.
-func (d openIdurlsListData) unwrap() (list *OpenIdurlsList, err error) {
+// list of values of the 'open_IDUR_ls' type.
+func (d openIDURLsListData) unwrap() (list *OpenIDURLsList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*OpenIdurls, len(d))
+	items := make([]*OpenIDURLs, len(d))
 	for i, item := range d {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(OpenIdurlsList)
+	list = new(OpenIDURLsList)
 	list.items = items
 	return
 }

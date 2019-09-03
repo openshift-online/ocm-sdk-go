@@ -19,26 +19,26 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// LdapattributesBuilder contains the data and logic needed to build 'ldapattributes' objects.
+// LDAPAttributesBuilder contains the data and logic needed to build 'LDAP_attributes' objects.
 //
 // LDAP attributes used to configure the LDAP identity provider.
-type LdapattributesBuilder struct {
+type LDAPAttributesBuilder struct {
 	email             []string
 	id                []string
 	name              []string
 	preferredUsername []string
 }
 
-// NewLdapattributes creates a new builder of 'ldapattributes' objects.
-func NewLdapattributes() *LdapattributesBuilder {
-	return new(LdapattributesBuilder)
+// NewLDAPAttributes creates a new builder of 'LDAP_attributes' objects.
+func NewLDAPAttributes() *LDAPAttributesBuilder {
+	return new(LDAPAttributesBuilder)
 }
 
 // Email sets the value of the 'email' attribute
 // to the given values.
 //
 //
-func (b *LdapattributesBuilder) Email(values ...string) *LdapattributesBuilder {
+func (b *LDAPAttributesBuilder) Email(values ...string) *LDAPAttributesBuilder {
 	b.email = make([]string, len(values))
 	copy(b.email, values)
 	return b
@@ -48,7 +48,7 @@ func (b *LdapattributesBuilder) Email(values ...string) *LdapattributesBuilder {
 // to the given values.
 //
 //
-func (b *LdapattributesBuilder) ID(values ...string) *LdapattributesBuilder {
+func (b *LDAPAttributesBuilder) ID(values ...string) *LDAPAttributesBuilder {
 	b.id = make([]string, len(values))
 	copy(b.id, values)
 	return b
@@ -58,7 +58,7 @@ func (b *LdapattributesBuilder) ID(values ...string) *LdapattributesBuilder {
 // to the given values.
 //
 //
-func (b *LdapattributesBuilder) Name(values ...string) *LdapattributesBuilder {
+func (b *LDAPAttributesBuilder) Name(values ...string) *LDAPAttributesBuilder {
 	b.name = make([]string, len(values))
 	copy(b.name, values)
 	return b
@@ -68,15 +68,15 @@ func (b *LdapattributesBuilder) Name(values ...string) *LdapattributesBuilder {
 // to the given values.
 //
 //
-func (b *LdapattributesBuilder) PreferredUsername(values ...string) *LdapattributesBuilder {
+func (b *LDAPAttributesBuilder) PreferredUsername(values ...string) *LDAPAttributesBuilder {
 	b.preferredUsername = make([]string, len(values))
 	copy(b.preferredUsername, values)
 	return b
 }
 
-// Build creates a 'ldapattributes' object using the configuration stored in the builder.
-func (b *LdapattributesBuilder) Build() (object *Ldapattributes, err error) {
-	object = new(Ldapattributes)
+// Build creates a 'LDAP_attributes' object using the configuration stored in the builder.
+func (b *LDAPAttributesBuilder) Build() (object *LDAPAttributes, err error) {
+	object = new(LDAPAttributes)
 	if b.email != nil {
 		object.email = make([]string, len(b.email))
 		copy(object.email, b.email)

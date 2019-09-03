@@ -119,10 +119,11 @@ func NewRoleBindingServerAdapter(server RoleBindingServer, router *mux.Router) *
 	return adapter
 }
 func (a *RoleBindingServerAdapter) readRoleBindingGetServerRequest(r *http.Request) (*RoleBindingGetServerRequest, error) {
+	var err error
 	result := new(RoleBindingGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *RoleBindingServerAdapter) writeRoleBindingGetServerResponse(w http.ResponseWriter, r *RoleBindingGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -165,10 +166,11 @@ func (a *RoleBindingServerAdapter) getHandler(w http.ResponseWriter, r *http.Req
 	}
 }
 func (a *RoleBindingServerAdapter) readRoleBindingDeleteServerRequest(r *http.Request) (*RoleBindingDeleteServerRequest, error) {
+	var err error
 	result := new(RoleBindingDeleteServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *RoleBindingServerAdapter) writeRoleBindingDeleteServerResponse(w http.ResponseWriter, r *RoleBindingDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

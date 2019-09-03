@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // PermissionsServer represents the interface the manages the 'permissions' resource.
@@ -318,10 +319,23 @@ func (a *PermissionsServerAdapter) permissionHandler(w http.ResponseWriter, r *h
 	return
 }
 func (a *PermissionsServerAdapter) readPermissionsListServerRequest(r *http.Request) (*PermissionsListServerRequest, error) {
+	var err error
 	result := new(PermissionsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *PermissionsServerAdapter) writePermissionsListServerResponse(w http.ResponseWriter, r *PermissionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -364,14 +378,15 @@ func (a *PermissionsServerAdapter) listHandler(w http.ResponseWriter, r *http.Re
 	}
 }
 func (a *PermissionsServerAdapter) readPermissionsAddServerRequest(r *http.Request) (*PermissionsAddServerRequest, error) {
+	var err error
 	result := new(PermissionsAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *PermissionsServerAdapter) writePermissionsAddServerResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

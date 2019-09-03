@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // FlavoursServer represents the interface the manages the 'flavours' resource.
@@ -367,10 +368,27 @@ func (a *FlavoursServerAdapter) flavourHandler(w http.ResponseWriter, r *http.Re
 	return
 }
 func (a *FlavoursServerAdapter) readFlavoursListServerRequest(r *http.Request) (*FlavoursListServerRequest, error) {
+	var err error
 	result := new(FlavoursListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(result.query, "search")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *FlavoursServerAdapter) writeFlavoursListServerResponse(w http.ResponseWriter, r *FlavoursListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -413,14 +431,15 @@ func (a *FlavoursServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 func (a *FlavoursServerAdapter) readFlavoursAddServerRequest(r *http.Request) (*FlavoursAddServerRequest, error) {
+	var err error
 	result := new(FlavoursAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *FlavoursServerAdapter) writeFlavoursAddServerResponse(w http.ResponseWriter, r *FlavoursAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

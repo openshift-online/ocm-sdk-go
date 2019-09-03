@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RolesServer represents the interface the manages the 'roles' resource.
@@ -318,10 +319,23 @@ func (a *RolesServerAdapter) roleHandler(w http.ResponseWriter, r *http.Request)
 	return
 }
 func (a *RolesServerAdapter) readRolesListServerRequest(r *http.Request) (*RolesListServerRequest, error) {
+	var err error
 	result := new(RolesListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *RolesServerAdapter) writeRolesListServerResponse(w http.ResponseWriter, r *RolesListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -364,14 +378,15 @@ func (a *RolesServerAdapter) listHandler(w http.ResponseWriter, r *http.Request)
 	}
 }
 func (a *RolesServerAdapter) readRolesAddServerRequest(r *http.Request) (*RolesAddServerRequest, error) {
+	var err error
 	result := new(RolesAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *RolesServerAdapter) writeRolesAddServerResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

@@ -95,10 +95,11 @@ func NewVersionServerAdapter(server VersionServer, router *mux.Router) *VersionS
 	return adapter
 }
 func (a *VersionServerAdapter) readVersionGetServerRequest(r *http.Request) (*VersionGetServerRequest, error) {
+	var err error
 	result := new(VersionGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *VersionServerAdapter) writeVersionGetServerResponse(w http.ResponseWriter, r *VersionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

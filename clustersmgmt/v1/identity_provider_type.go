@@ -46,8 +46,8 @@ type IdentityProvider struct {
 	github        *GithubIdentityProvider
 	gitlab        *GitlabIdentityProvider
 	google        *GoogleIdentityProvider
-	ldap          *LdapidentityProvider
-	openID        *OpenIdidentityProvider
+	ldap          *LDAPIdentityProvider
+	openID        *OpenIDIdentityProvider
 }
 
 // Kind returns the name of the type of the object.
@@ -316,7 +316,7 @@ func (o *IdentityProvider) GetGoogle() (value *GoogleIdentityProvider, ok bool) 
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Details for `ldap` identity providers.
-func (o *IdentityProvider) LDAP() *LdapidentityProvider {
+func (o *IdentityProvider) LDAP() *LDAPIdentityProvider {
 	if o == nil {
 		return nil
 	}
@@ -327,7 +327,7 @@ func (o *IdentityProvider) LDAP() *LdapidentityProvider {
 // a flag indicating if the attribute has a value.
 //
 // Details for `ldap` identity providers.
-func (o *IdentityProvider) GetLDAP() (value *LdapidentityProvider, ok bool) {
+func (o *IdentityProvider) GetLDAP() (value *LDAPIdentityProvider, ok bool) {
 	ok = o != nil && o.ldap != nil
 	if ok {
 		value = o.ldap
@@ -339,7 +339,7 @@ func (o *IdentityProvider) GetLDAP() (value *LdapidentityProvider, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Details for `openid` identity providers.
-func (o *IdentityProvider) OpenID() *OpenIdidentityProvider {
+func (o *IdentityProvider) OpenID() *OpenIDIdentityProvider {
 	if o == nil {
 		return nil
 	}
@@ -350,7 +350,7 @@ func (o *IdentityProvider) OpenID() *OpenIdidentityProvider {
 // a flag indicating if the attribute has a value.
 //
 // Details for `openid` identity providers.
-func (o *IdentityProvider) GetOpenID() (value *OpenIdidentityProvider, ok bool) {
+func (o *IdentityProvider) GetOpenID() (value *OpenIDIdentityProvider, ok bool) {
 	ok = o != nil && o.openID != nil
 	if ok {
 		value = o.openID

@@ -19,29 +19,29 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIdidentityProviderBuilder contains the data and logic needed to build 'open_ididentity_provider' objects.
+// OpenIDIdentityProviderBuilder contains the data and logic needed to build 'open_ID_identity_provider' objects.
 //
 // Details for `openid` identity providers.
-type OpenIdidentityProviderBuilder struct {
+type OpenIDIdentityProviderBuilder struct {
 	ca                       *string
-	claims                   *OpenIdclaimsBuilder
+	claims                   *OpenIDClaimsBuilder
 	clientID                 *string
 	clientSecret             *string
 	extraAuthorizeParameters map[string]string
 	extraScopes              []string
-	urls                     *OpenIdurlsBuilder
+	urls                     *OpenIDURLsBuilder
 }
 
-// NewOpenIdidentityProvider creates a new builder of 'open_ididentity_provider' objects.
-func NewOpenIdidentityProvider() *OpenIdidentityProviderBuilder {
-	return new(OpenIdidentityProviderBuilder)
+// NewOpenIDIdentityProvider creates a new builder of 'open_ID_identity_provider' objects.
+func NewOpenIDIdentityProvider() *OpenIDIdentityProviderBuilder {
+	return new(OpenIDIdentityProviderBuilder)
 }
 
 // CA sets the value of the 'CA' attribute
 // to the given value.
 //
 //
-func (b *OpenIdidentityProviderBuilder) CA(value string) *OpenIdidentityProviderBuilder {
+func (b *OpenIDIdentityProviderBuilder) CA(value string) *OpenIDIdentityProviderBuilder {
 	b.ca = &value
 	return b
 }
@@ -50,7 +50,7 @@ func (b *OpenIdidentityProviderBuilder) CA(value string) *OpenIdidentityProvider
 // to the given value.
 //
 // _OpenID_ identity provider claims.
-func (b *OpenIdidentityProviderBuilder) Claims(value *OpenIdclaimsBuilder) *OpenIdidentityProviderBuilder {
+func (b *OpenIDIdentityProviderBuilder) Claims(value *OpenIDClaimsBuilder) *OpenIDIdentityProviderBuilder {
 	b.claims = value
 	return b
 }
@@ -59,7 +59,7 @@ func (b *OpenIdidentityProviderBuilder) Claims(value *OpenIdclaimsBuilder) *Open
 // to the given value.
 //
 //
-func (b *OpenIdidentityProviderBuilder) ClientID(value string) *OpenIdidentityProviderBuilder {
+func (b *OpenIDIdentityProviderBuilder) ClientID(value string) *OpenIDIdentityProviderBuilder {
 	b.clientID = &value
 	return b
 }
@@ -68,7 +68,7 @@ func (b *OpenIdidentityProviderBuilder) ClientID(value string) *OpenIdidentityPr
 // to the given value.
 //
 //
-func (b *OpenIdidentityProviderBuilder) ClientSecret(value string) *OpenIdidentityProviderBuilder {
+func (b *OpenIDIdentityProviderBuilder) ClientSecret(value string) *OpenIDIdentityProviderBuilder {
 	b.clientSecret = &value
 	return b
 }
@@ -77,7 +77,7 @@ func (b *OpenIdidentityProviderBuilder) ClientSecret(value string) *OpenIdidenti
 // to the given value.
 //
 //
-func (b *OpenIdidentityProviderBuilder) ExtraAuthorizeParameters(value map[string]string) *OpenIdidentityProviderBuilder {
+func (b *OpenIDIdentityProviderBuilder) ExtraAuthorizeParameters(value map[string]string) *OpenIDIdentityProviderBuilder {
 	b.extraAuthorizeParameters = value
 	return b
 }
@@ -86,7 +86,7 @@ func (b *OpenIdidentityProviderBuilder) ExtraAuthorizeParameters(value map[strin
 // to the given values.
 //
 //
-func (b *OpenIdidentityProviderBuilder) ExtraScopes(values ...string) *OpenIdidentityProviderBuilder {
+func (b *OpenIDIdentityProviderBuilder) ExtraScopes(values ...string) *OpenIDIdentityProviderBuilder {
 	b.extraScopes = make([]string, len(values))
 	copy(b.extraScopes, values)
 	return b
@@ -96,14 +96,14 @@ func (b *OpenIdidentityProviderBuilder) ExtraScopes(values ...string) *OpenIdide
 // to the given value.
 //
 // _OpenID_ identity provider URLs.
-func (b *OpenIdidentityProviderBuilder) URLS(value *OpenIdurlsBuilder) *OpenIdidentityProviderBuilder {
+func (b *OpenIDIdentityProviderBuilder) URLS(value *OpenIDURLsBuilder) *OpenIDIdentityProviderBuilder {
 	b.urls = value
 	return b
 }
 
-// Build creates a 'open_ididentity_provider' object using the configuration stored in the builder.
-func (b *OpenIdidentityProviderBuilder) Build() (object *OpenIdidentityProvider, err error) {
-	object = new(OpenIdidentityProvider)
+// Build creates a 'open_ID_identity_provider' object using the configuration stored in the builder.
+func (b *OpenIDIdentityProviderBuilder) Build() (object *OpenIDIdentityProvider, err error) {
+	object = new(OpenIDIdentityProvider)
 	if b.ca != nil {
 		object.ca = b.ca
 	}

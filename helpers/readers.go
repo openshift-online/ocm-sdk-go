@@ -24,6 +24,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/url"
+	"strconv"
+	"time"
 )
 
 // NewEncoder creates a new JSON encoder from the given target. The target can be a
@@ -62,4 +65,126 @@ func NewDecoder(source interface{}) (decoder *json.Decoder, err error) {
 		)
 	}
 	return
+}
+
+// ParseInteger reads a string and parses it to integer,
+// if an error ocurred it returns a non-nil error.
+func ParseInteger(query url.Values, parameterName string) (*int, error) {
+	values := query[parameterName]
+	count := len(values)
+	if count == 0 {
+		return nil, nil
+	}
+	if count > 1 {
+		err := fmt.Errorf(
+			"expected at most one value for parameter '%s' but got %d",
+			parameterName, count,
+		)
+		return nil, err
+	}
+	value := values[0]
+	parsedInt64, err := strconv.ParseInt(value, 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"value '%s' isn't valid for the '%s' parameter because it isn't an integer: %v",
+			value, parameterName, err,
+		)
+	}
+	parsedInt := int(parsedInt64)
+	return &parsedInt, nil
+}
+
+// ParseFloat reads a string and parses it to float,
+// if an error ocurred it returns a non-nil error.
+func ParseFloat(query url.Values, parameterName string) (*float64, error) {
+	values := query[parameterName]
+	count := len(values)
+	if count == 0 {
+		return nil, nil
+	}
+	if count > 1 {
+		err := fmt.Errorf(
+			"expected at most one value for parameter '%s' but got %d",
+			parameterName, count,
+		)
+		return nil, err
+	}
+	value := values[0]
+	parsedFloat, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"value '%s' isn't valid for the '%s' parameter because it isn't a float: %v",
+			value, parameterName, err,
+		)
+	}
+	return &parsedFloat, nil
+}
+
+// ParseString returns a pointer to the string and nil error.
+func ParseString(query url.Values, parameterName string) (*string, error) {
+	values := query[parameterName]
+	count := len(values)
+	if count == 0 {
+		return nil, nil
+	}
+	if count > 1 {
+		err := fmt.Errorf(
+			"expected at most one value for parameter '%s' but got %d",
+			parameterName, count,
+		)
+		return nil, err
+	}
+	return &values[0], nil
+}
+
+// ParseBoolean reads a string and parses it to boolean,
+// if an error ocurred it returns a non-nil error.
+func ParseBoolean(query url.Values, parameterName string) (*bool, error) {
+	values := query[parameterName]
+	count := len(values)
+	if count == 0 {
+		return nil, nil
+	}
+	if count > 1 {
+		err := fmt.Errorf(
+			"expected at most one value for parameter '%s' but got %d",
+			parameterName, count,
+		)
+		return nil, err
+	}
+	value := values[0]
+	parsedBool, err := strconv.ParseBool(value)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"value '%s' isn't valid for the '%s' parameter because it isn't a boolean: %v",
+			value, parameterName, err,
+		)
+	}
+	return &parsedBool, nil
+}
+
+// ParseDate reads a string and parses it to a time.Time,
+// if an error ocurred it returns a non-nil error.
+func ParseDate(query url.Values, parameterName string) (*time.Time, error) {
+	values := query[parameterName]
+	count := len(values)
+	if count == 0 {
+		return nil, nil
+	}
+	if count > 1 {
+		err := fmt.Errorf(
+			"expected at most one value for parameter '%s' but got %d",
+			parameterName, count,
+		)
+		return nil, err
+	}
+	value := values[0]
+	parsedTime, err := time.Parse(time.RFC3339, value)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"value '%s' isn't valid for the '%s' parameter because it isn't a date: %v",
+			value, parameterName, err,
+		)
+	}
+	return &parsedTime, nil
 }

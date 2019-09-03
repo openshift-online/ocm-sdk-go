@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ClustersServer represents the interface the manages the 'clusters' resource.
@@ -371,10 +372,27 @@ func (a *ClustersServerAdapter) clusterHandler(w http.ResponseWriter, r *http.Re
 	return
 }
 func (a *ClustersServerAdapter) readClustersListServerRequest(r *http.Request) (*ClustersListServerRequest, error) {
+	var err error
 	result := new(ClustersListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(result.query, "search")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *ClustersServerAdapter) writeClustersListServerResponse(w http.ResponseWriter, r *ClustersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -417,14 +435,15 @@ func (a *ClustersServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 func (a *ClustersServerAdapter) readClustersAddServerRequest(r *http.Request) (*ClustersAddServerRequest, error) {
+	var err error
 	result := new(ClustersAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *ClustersServerAdapter) writeClustersAddServerResponse(w http.ResponseWriter, r *ClustersAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

@@ -29,6 +29,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ResourceQuotasServer represents the interface the manages the 'resource_quotas' resource.
@@ -318,10 +319,23 @@ func (a *ResourceQuotasServerAdapter) resourceQuotaHandler(w http.ResponseWriter
 	return
 }
 func (a *ResourceQuotasServerAdapter) readResourceQuotasListServerRequest(r *http.Request) (*ResourceQuotasListServerRequest, error) {
+	var err error
 	result := new(ResourceQuotasListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	result.page, err = helpers.ParseInteger(result.query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(result.query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(result.query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 func (a *ResourceQuotasServerAdapter) writeResourceQuotasListServerResponse(w http.ResponseWriter, r *ResourceQuotasListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -364,14 +378,15 @@ func (a *ResourceQuotasServerAdapter) listHandler(w http.ResponseWriter, r *http
 	}
 }
 func (a *ResourceQuotasServerAdapter) readResourceQuotasAddServerRequest(r *http.Request) (*ResourceQuotasAddServerRequest, error) {
+	var err error
 	result := new(ResourceQuotasAddServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *ResourceQuotasServerAdapter) writeResourceQuotasAddServerResponse(w http.ResponseWriter, r *ResourceQuotasAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

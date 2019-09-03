@@ -19,11 +19,11 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// LdapidentityProviderBuilder contains the data and logic needed to build 'ldapidentity_provider' objects.
+// LDAPIdentityProviderBuilder contains the data and logic needed to build 'LDAP_identity_provider' objects.
 //
 // Details for `ldap` identity providers.
-type LdapidentityProviderBuilder struct {
-	ldapattributes *LdapattributesBuilder
+type LDAPIdentityProviderBuilder struct {
+	ldapAttributes *LDAPAttributesBuilder
 	bindDN         *string
 	bindPassword   *string
 	ca             *string
@@ -31,17 +31,17 @@ type LdapidentityProviderBuilder struct {
 	insecure       *bool
 }
 
-// NewLdapidentityProvider creates a new builder of 'ldapidentity_provider' objects.
-func NewLdapidentityProvider() *LdapidentityProviderBuilder {
-	return new(LdapidentityProviderBuilder)
+// NewLDAPIdentityProvider creates a new builder of 'LDAP_identity_provider' objects.
+func NewLDAPIdentityProvider() *LDAPIdentityProviderBuilder {
+	return new(LDAPIdentityProviderBuilder)
 }
 
-// Ldapattributes sets the value of the 'ldapattributes' attribute
+// LDAPAttributes sets the value of the 'LDAP_attributes' attribute
 // to the given value.
 //
 // LDAP attributes used to configure the LDAP identity provider.
-func (b *LdapidentityProviderBuilder) Ldapattributes(value *LdapattributesBuilder) *LdapidentityProviderBuilder {
-	b.ldapattributes = value
+func (b *LDAPIdentityProviderBuilder) LDAPAttributes(value *LDAPAttributesBuilder) *LDAPIdentityProviderBuilder {
+	b.ldapAttributes = value
 	return b
 }
 
@@ -49,7 +49,7 @@ func (b *LdapidentityProviderBuilder) Ldapattributes(value *LdapattributesBuilde
 // to the given value.
 //
 //
-func (b *LdapidentityProviderBuilder) BindDN(value string) *LdapidentityProviderBuilder {
+func (b *LDAPIdentityProviderBuilder) BindDN(value string) *LDAPIdentityProviderBuilder {
 	b.bindDN = &value
 	return b
 }
@@ -58,7 +58,7 @@ func (b *LdapidentityProviderBuilder) BindDN(value string) *LdapidentityProvider
 // to the given value.
 //
 //
-func (b *LdapidentityProviderBuilder) BindPassword(value string) *LdapidentityProviderBuilder {
+func (b *LDAPIdentityProviderBuilder) BindPassword(value string) *LDAPIdentityProviderBuilder {
 	b.bindPassword = &value
 	return b
 }
@@ -67,7 +67,7 @@ func (b *LdapidentityProviderBuilder) BindPassword(value string) *LdapidentityPr
 // to the given value.
 //
 //
-func (b *LdapidentityProviderBuilder) CA(value string) *LdapidentityProviderBuilder {
+func (b *LDAPIdentityProviderBuilder) CA(value string) *LDAPIdentityProviderBuilder {
 	b.ca = &value
 	return b
 }
@@ -76,7 +76,7 @@ func (b *LdapidentityProviderBuilder) CA(value string) *LdapidentityProviderBuil
 // to the given value.
 //
 //
-func (b *LdapidentityProviderBuilder) URL(value string) *LdapidentityProviderBuilder {
+func (b *LDAPIdentityProviderBuilder) URL(value string) *LDAPIdentityProviderBuilder {
 	b.url = &value
 	return b
 }
@@ -85,16 +85,16 @@ func (b *LdapidentityProviderBuilder) URL(value string) *LdapidentityProviderBui
 // to the given value.
 //
 //
-func (b *LdapidentityProviderBuilder) Insecure(value bool) *LdapidentityProviderBuilder {
+func (b *LDAPIdentityProviderBuilder) Insecure(value bool) *LDAPIdentityProviderBuilder {
 	b.insecure = &value
 	return b
 }
 
-// Build creates a 'ldapidentity_provider' object using the configuration stored in the builder.
-func (b *LdapidentityProviderBuilder) Build() (object *LdapidentityProvider, err error) {
-	object = new(LdapidentityProvider)
-	if b.ldapattributes != nil {
-		object.ldapattributes, err = b.ldapattributes.Build()
+// Build creates a 'LDAP_identity_provider' object using the configuration stored in the builder.
+func (b *LDAPIdentityProviderBuilder) Build() (object *LDAPIdentityProvider, err error) {
+	object = new(LDAPIdentityProvider)
+	if b.ldapAttributes != nil {
+		object.ldapAttributes, err = b.ldapAttributes.Build()
 		if err != nil {
 			return
 		}

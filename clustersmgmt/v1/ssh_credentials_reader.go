@@ -23,17 +23,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// openIdclaimsData is the data structure used internally to marshal and unmarshal
-// objects of type 'open_idclaims'.
-type openIdclaimsData struct {
-	Email             []string "json:\"email,omitempty\""
-	Name              []string "json:\"name,omitempty\""
-	PreferredUsername []string "json:\"preferred_username,omitempty\""
+// sshCredentialsData is the data structure used internally to marshal and unmarshal
+// objects of type 'SSH_credentials'.
+type sshCredentialsData struct {
+	PublicKey  *string "json:\"public_key,omitempty\""
+	PrivateKey *string "json:\"private_key,omitempty\""
 }
 
-// MarshalOpenIdclaims writes a value of the 'open_idclaims' to the given target,
+// MarshalSSHCredentials writes a value of the 'SSH_credentials' to the given target,
 // which can be a writer or a JSON encoder.
-func MarshalOpenIdclaims(object *OpenIdclaims, target interface{}) error {
+func MarshalSSHCredentials(object *SSHCredentials, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
 	if err != nil {
 		return err
@@ -45,27 +44,26 @@ func MarshalOpenIdclaims(object *OpenIdclaims, target interface{}) error {
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'open_idclaims'
+// wrap is the method used internally to convert a value of the 'SSH_credentials'
 // value to a JSON document.
-func (o *OpenIdclaims) wrap() (data *openIdclaimsData, err error) {
+func (o *SSHCredentials) wrap() (data *sshCredentialsData, err error) {
 	if o == nil {
 		return
 	}
-	data = new(openIdclaimsData)
-	data.Email = o.email
-	data.Name = o.name
-	data.PreferredUsername = o.preferredUsername
+	data = new(sshCredentialsData)
+	data.PublicKey = o.publicKey
+	data.PrivateKey = o.privateKey
 	return
 }
 
-// UnmarshalOpenIdclaims reads a value of the 'open_idclaims' type from the given
+// UnmarshalSSHCredentials reads a value of the 'SSH_credentials' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
-func UnmarshalOpenIdclaims(source interface{}) (object *OpenIdclaims, err error) {
+func UnmarshalSSHCredentials(source interface{}) (object *SSHCredentials, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	data := new(openIdclaimsData)
+	data := new(sshCredentialsData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return
@@ -75,14 +73,13 @@ func UnmarshalOpenIdclaims(source interface{}) (object *OpenIdclaims, err error)
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'open_idclaims' type.
-func (d *openIdclaimsData) unwrap() (object *OpenIdclaims, err error) {
+// value of the 'SSH_credentials' type.
+func (d *sshCredentialsData) unwrap() (object *SSHCredentials, err error) {
 	if d == nil {
 		return
 	}
-	object = new(OpenIdclaims)
-	object.email = d.Email
-	object.name = d.Name
-	object.preferredUsername = d.PreferredUsername
+	object = new(SSHCredentials)
+	object.publicKey = d.PublicKey
+	object.privateKey = d.PrivateKey
 	return
 }

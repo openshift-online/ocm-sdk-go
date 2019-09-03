@@ -148,10 +148,11 @@ func (a *GroupsServerAdapter) groupHandler(w http.ResponseWriter, r *http.Reques
 	return
 }
 func (a *GroupsServerAdapter) readGroupsListServerRequest(r *http.Request) (*GroupsListServerRequest, error) {
+	var err error
 	result := new(GroupsListServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *GroupsServerAdapter) writeGroupsListServerResponse(w http.ResponseWriter, r *GroupsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")

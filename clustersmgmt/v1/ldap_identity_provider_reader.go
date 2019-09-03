@@ -23,10 +23,10 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// ldapidentityProviderData is the data structure used internally to marshal and unmarshal
-// objects of type 'ldapidentity_provider'.
-type ldapidentityProviderData struct {
-	Ldapattributes *ldapattributesData "json:\"ldapattributes,omitempty\""
+// ldapIdentityProviderData is the data structure used internally to marshal and unmarshal
+// objects of type 'LDAP_identity_provider'.
+type ldapIdentityProviderData struct {
+	LDAPAttributes *ldapAttributesData "json:\"ldap_attributes,omitempty\""
 	BindDN         *string             "json:\"bind_dn,omitempty\""
 	BindPassword   *string             "json:\"bind_password,omitempty\""
 	CA             *string             "json:\"ca,omitempty\""
@@ -34,9 +34,9 @@ type ldapidentityProviderData struct {
 	Insecure       *bool               "json:\"insecure,omitempty\""
 }
 
-// MarshalLdapidentityProvider writes a value of the 'ldapidentity_provider' to the given target,
+// MarshalLDAPIdentityProvider writes a value of the 'LDAP_identity_provider' to the given target,
 // which can be a writer or a JSON encoder.
-func MarshalLdapidentityProvider(object *LdapidentityProvider, target interface{}) error {
+func MarshalLDAPIdentityProvider(object *LDAPIdentityProvider, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
 	if err != nil {
 		return err
@@ -48,14 +48,14 @@ func MarshalLdapidentityProvider(object *LdapidentityProvider, target interface{
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'ldapidentity_provider'
+// wrap is the method used internally to convert a value of the 'LDAP_identity_provider'
 // value to a JSON document.
-func (o *LdapidentityProvider) wrap() (data *ldapidentityProviderData, err error) {
+func (o *LDAPIdentityProvider) wrap() (data *ldapIdentityProviderData, err error) {
 	if o == nil {
 		return
 	}
-	data = new(ldapidentityProviderData)
-	data.Ldapattributes, err = o.ldapattributes.wrap()
+	data = new(ldapIdentityProviderData)
+	data.LDAPAttributes, err = o.ldapAttributes.wrap()
 	if err != nil {
 		return
 	}
@@ -67,14 +67,14 @@ func (o *LdapidentityProvider) wrap() (data *ldapidentityProviderData, err error
 	return
 }
 
-// UnmarshalLdapidentityProvider reads a value of the 'ldapidentity_provider' type from the given
+// UnmarshalLDAPIdentityProvider reads a value of the 'LDAP_identity_provider' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
-func UnmarshalLdapidentityProvider(source interface{}) (object *LdapidentityProvider, err error) {
+func UnmarshalLDAPIdentityProvider(source interface{}) (object *LDAPIdentityProvider, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	data := new(ldapidentityProviderData)
+	data := new(ldapIdentityProviderData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return
@@ -84,13 +84,13 @@ func UnmarshalLdapidentityProvider(source interface{}) (object *LdapidentityProv
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'ldapidentity_provider' type.
-func (d *ldapidentityProviderData) unwrap() (object *LdapidentityProvider, err error) {
+// value of the 'LDAP_identity_provider' type.
+func (d *ldapIdentityProviderData) unwrap() (object *LDAPIdentityProvider, err error) {
 	if d == nil {
 		return
 	}
-	object = new(LdapidentityProvider)
-	object.ldapattributes, err = d.Ldapattributes.unwrap()
+	object = new(LDAPIdentityProvider)
+	object.ldapAttributes, err = d.LDAPAttributes.unwrap()
 	if err != nil {
 		return
 	}

@@ -23,17 +23,17 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// openIdurlsData is the data structure used internally to marshal and unmarshal
-// objects of type 'open_idurls'.
-type openIdurlsData struct {
+// openIDURLsData is the data structure used internally to marshal and unmarshal
+// objects of type 'open_IDUR_ls'.
+type openIDURLsData struct {
 	Authorize *string "json:\"authorize,omitempty\""
 	Token     *string "json:\"token,omitempty\""
 	UserInfo  *string "json:\"user_info,omitempty\""
 }
 
-// MarshalOpenIdurls writes a value of the 'open_idurls' to the given target,
+// MarshalOpenIDURLs writes a value of the 'open_IDUR_ls' to the given target,
 // which can be a writer or a JSON encoder.
-func MarshalOpenIdurls(object *OpenIdurls, target interface{}) error {
+func MarshalOpenIDURLs(object *OpenIDURLs, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
 	if err != nil {
 		return err
@@ -45,27 +45,27 @@ func MarshalOpenIdurls(object *OpenIdurls, target interface{}) error {
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'open_idurls'
+// wrap is the method used internally to convert a value of the 'open_IDUR_ls'
 // value to a JSON document.
-func (o *OpenIdurls) wrap() (data *openIdurlsData, err error) {
+func (o *OpenIDURLs) wrap() (data *openIDURLsData, err error) {
 	if o == nil {
 		return
 	}
-	data = new(openIdurlsData)
+	data = new(openIDURLsData)
 	data.Authorize = o.authorize
 	data.Token = o.token
 	data.UserInfo = o.userInfo
 	return
 }
 
-// UnmarshalOpenIdurls reads a value of the 'open_idurls' type from the given
+// UnmarshalOpenIDURLs reads a value of the 'open_IDUR_ls' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
-func UnmarshalOpenIdurls(source interface{}) (object *OpenIdurls, err error) {
+func UnmarshalOpenIDURLs(source interface{}) (object *OpenIDURLs, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	data := new(openIdurlsData)
+	data := new(openIDURLsData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return
@@ -75,12 +75,12 @@ func UnmarshalOpenIdurls(source interface{}) (object *OpenIdurls, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'open_idurls' type.
-func (d *openIdurlsData) unwrap() (object *OpenIdurls, err error) {
+// value of the 'open_IDUR_ls' type.
+func (d *openIDURLsData) unwrap() (object *OpenIDURLs, err error) {
 	if d == nil {
 		return
 	}
-	object = new(OpenIdurls)
+	object = new(OpenIDURLs)
 	object.authorize = d.Authorize
 	object.token = d.Token
 	object.userInfo = d.UserInfo

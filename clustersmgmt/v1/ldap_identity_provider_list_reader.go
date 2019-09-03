@@ -23,19 +23,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// openIdidentityProviderListData is type used internally to marshal and unmarshal lists of objects
-// of type 'open_ididentity_provider'.
-type openIdidentityProviderListData []*openIdidentityProviderData
+// ldapIdentityProviderListData is type used internally to marshal and unmarshal lists of objects
+// of type 'LDAP_identity_provider'.
+type ldapIdentityProviderListData []*ldapIdentityProviderData
 
-// UnmarshalOpenIdidentityProviderList reads a list of values of the 'open_ididentity_provider'
+// UnmarshalLDAPIdentityProviderList reads a list of values of the 'LDAP_identity_provider'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
-func UnmarshalOpenIdidentityProviderList(source interface{}) (list *OpenIdidentityProviderList, err error) {
+func UnmarshalLDAPIdentityProviderList(source interface{}) (list *LDAPIdentityProviderList, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	var data openIdidentityProviderListData
+	var data ldapIdentityProviderListData
 	err = decoder.Decode(&data)
 	if err != nil {
 		return
@@ -45,12 +45,12 @@ func UnmarshalOpenIdidentityProviderList(source interface{}) (list *OpenIdidenti
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'open_ididentity_provider' value to a JSON document.
-func (l *OpenIdidentityProviderList) wrap() (data openIdidentityProviderListData, err error) {
+// 'LDAP_identity_provider' value to a JSON document.
+func (l *LDAPIdentityProviderList) wrap() (data ldapIdentityProviderListData, err error) {
 	if l == nil {
 		return
 	}
-	data = make(openIdidentityProviderListData, len(l.items))
+	data = make(ldapIdentityProviderListData, len(l.items))
 	for i, item := range l.items {
 		data[i], err = item.wrap()
 		if err != nil {
@@ -61,19 +61,19 @@ func (l *OpenIdidentityProviderList) wrap() (data openIdidentityProviderListData
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'open_ididentity_provider' type.
-func (d openIdidentityProviderListData) unwrap() (list *OpenIdidentityProviderList, err error) {
+// list of values of the 'LDAP_identity_provider' type.
+func (d ldapIdentityProviderListData) unwrap() (list *LDAPIdentityProviderList, err error) {
 	if d == nil {
 		return
 	}
-	items := make([]*OpenIdidentityProvider, len(d))
+	items := make([]*LDAPIdentityProvider, len(d))
 	for i, item := range d {
 		items[i], err = item.unwrap()
 		if err != nil {
 			return
 		}
 	}
-	list = new(OpenIdidentityProviderList)
+	list = new(LDAPIdentityProviderList)
 	list.items = items
 	return
 }

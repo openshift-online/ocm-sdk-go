@@ -207,10 +207,11 @@ func (a *OrganizationServerAdapter) quotaSummaryHandler(w http.ResponseWriter, r
 	return
 }
 func (a *OrganizationServerAdapter) readOrganizationGetServerRequest(r *http.Request) (*OrganizationGetServerRequest, error) {
+	var err error
 	result := new(OrganizationGetServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	return result, nil
+	return result, err
 }
 func (a *OrganizationServerAdapter) writeOrganizationGetServerResponse(w http.ResponseWriter, r *OrganizationGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
@@ -253,14 +254,15 @@ func (a *OrganizationServerAdapter) getHandler(w http.ResponseWriter, r *http.Re
 	}
 }
 func (a *OrganizationServerAdapter) readOrganizationUpdateServerRequest(r *http.Request) (*OrganizationUpdateServerRequest, error) {
+	var err error
 	result := new(OrganizationUpdateServerRequest)
-	result.query = r.Form
+	result.query = r.URL.Query()
 	result.path = r.URL.Path
-	err := result.unmarshal(r.Body)
+	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return result, err
 }
 func (a *OrganizationServerAdapter) writeOrganizationUpdateServerResponse(w http.ResponseWriter, r *OrganizationUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
