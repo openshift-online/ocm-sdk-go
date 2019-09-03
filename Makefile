@@ -79,13 +79,13 @@ generate: model metamodel
 .PHONY: model
 model:
 	[ -d "$@" ] || git clone "$(model_url)" "$@"
-	cd "$@" && git fetch origin
+	cd "$@" && git fetch --tags origin
 	cd "$@" && git checkout -B build "$(model_version)"
 
 .PHONY: metamodel
 metamodel:
 	[ -d "$@" ] || git clone "$(metamodel_url)" "$@"
-	cd "$@" && git fetch origin
+	cd "$@" && git fetch --tags origin
 	cd "$@" && git checkout -B build "$(metamodel_version)"
 	make -C "$@"
 
