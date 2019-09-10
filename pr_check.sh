@@ -25,6 +25,20 @@ export PATH="${GOBIN}:${PATH}"
 
 # Install Go tools:
 go get github.com/onsi/ginkgo/ginkgo
+go get golang.org/x/tools/cmd/goimports
+
+# Check that running `make generate` doesn't introduce any change in the
+# generated code:
+make generate fmt
+git diff --exit-code clustersmgmt accountsmgmt
+if [ $? = 1 ]; then
+  echo "Generated code isn't in sync with model and metamodel"
+  exit 1
+fi
+
+# Remove the temporary model and metamodel directories, as otherwise `ginkgo`
+# will try to run the tests inside them:
+rm -rf model metamodel
 
 # Run the checks:
 make \
