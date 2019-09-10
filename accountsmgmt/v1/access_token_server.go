@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type AccessTokenServer interface {
 
 // AccessTokenPostServerRequest is the request for the 'post' method.
 type AccessTokenPostServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // AccessTokenPostServerResponse is the response for the 'post' method.
@@ -97,8 +94,6 @@ func NewAccessTokenServerAdapter(server AccessTokenServer, router *mux.Router) *
 func (a *AccessTokenServerAdapter) readAccessTokenPostServerRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {
 	var err error
 	result := new(AccessTokenPostServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *AccessTokenServerAdapter) writeAccessTokenPostServerResponse(w http.ResponseWriter, r *AccessTokenPostServerResponse) error {

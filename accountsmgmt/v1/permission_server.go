@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type PermissionServer interface {
 
 // PermissionGetServerRequest is the request for the 'get' method.
 type PermissionGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // PermissionGetServerResponse is the response for the 'get' method.
@@ -87,8 +84,6 @@ func (r *PermissionGetServerResponse) marshal(writer io.Writer) error {
 
 // PermissionDeleteServerRequest is the request for the 'delete' method.
 type PermissionDeleteServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // PermissionDeleteServerResponse is the response for the 'delete' method.
@@ -121,8 +116,6 @@ func NewPermissionServerAdapter(server PermissionServer, router *mux.Router) *Pe
 func (a *PermissionServerAdapter) readPermissionGetServerRequest(r *http.Request) (*PermissionGetServerRequest, error) {
 	var err error
 	result := new(PermissionGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *PermissionServerAdapter) writePermissionGetServerResponse(w http.ResponseWriter, r *PermissionGetServerResponse) error {
@@ -168,8 +161,6 @@ func (a *PermissionServerAdapter) getHandler(w http.ResponseWriter, r *http.Requ
 func (a *PermissionServerAdapter) readPermissionDeleteServerRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
 	var err error
 	result := new(PermissionDeleteServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *PermissionServerAdapter) writePermissionDeleteServerResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {

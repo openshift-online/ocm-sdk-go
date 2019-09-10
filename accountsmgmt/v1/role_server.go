@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -52,8 +51,6 @@ type RoleServer interface {
 
 // RoleGetServerRequest is the request for the 'get' method.
 type RoleGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // RoleGetServerResponse is the response for the 'get' method.
@@ -92,9 +89,7 @@ func (r *RoleGetServerResponse) marshal(writer io.Writer) error {
 
 // RoleUpdateServerRequest is the request for the 'update' method.
 type RoleUpdateServerRequest struct {
-	path  string
-	query url.Values
-	body  *Role
+	body *Role
 }
 
 // Body returns the value of the 'body' parameter.
@@ -172,8 +167,6 @@ func (r *RoleUpdateServerResponse) marshal(writer io.Writer) error {
 
 // RoleDeleteServerRequest is the request for the 'delete' method.
 type RoleDeleteServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // RoleDeleteServerResponse is the response for the 'delete' method.
@@ -207,8 +200,6 @@ func NewRoleServerAdapter(server RoleServer, router *mux.Router) *RoleServerAdap
 func (a *RoleServerAdapter) readRoleGetServerRequest(r *http.Request) (*RoleGetServerRequest, error) {
 	var err error
 	result := new(RoleGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *RoleServerAdapter) writeRoleGetServerResponse(w http.ResponseWriter, r *RoleGetServerResponse) error {
@@ -254,8 +245,6 @@ func (a *RoleServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
 func (a *RoleServerAdapter) readRoleUpdateServerRequest(r *http.Request) (*RoleUpdateServerRequest, error) {
 	var err error
 	result := new(RoleUpdateServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
@@ -305,8 +294,6 @@ func (a *RoleServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request
 func (a *RoleServerAdapter) readRoleDeleteServerRequest(r *http.Request) (*RoleDeleteServerRequest, error) {
 	var err error
 	result := new(RoleDeleteServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *RoleServerAdapter) writeRoleDeleteServerResponse(w http.ResponseWriter, r *RoleDeleteServerResponse) error {

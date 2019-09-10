@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type RegistryServer interface {
 
 // RegistryGetServerRequest is the request for the 'get' method.
 type RegistryGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // RegistryGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewRegistryServerAdapter(server RegistryServer, router *mux.Router) *Regist
 func (a *RegistryServerAdapter) readRegistryGetServerRequest(r *http.Request) (*RegistryGetServerRequest, error) {
 	var err error
 	result := new(RegistryGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *RegistryServerAdapter) writeRegistryGetServerResponse(w http.ResponseWriter, r *RegistryGetServerResponse) error {

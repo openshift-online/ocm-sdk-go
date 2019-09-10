@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -53,8 +52,6 @@ type OrganizationsServer interface {
 
 // OrganizationsListServerRequest is the request for the 'list' method.
 type OrganizationsListServerRequest struct {
-	path  string
-	query url.Values
 	page  *int
 	size  *int
 	total *int
@@ -217,9 +214,7 @@ type organizationsListServerResponseData struct {
 
 // OrganizationsAddServerRequest is the request for the 'add' method.
 type OrganizationsAddServerRequest struct {
-	path  string
-	query url.Values
-	body  *Organization
+	body *Organization
 }
 
 // Body returns the value of the 'body' parameter.
@@ -321,17 +316,16 @@ func (a *OrganizationsServerAdapter) organizationHandler(w http.ResponseWriter, 
 func (a *OrganizationsServerAdapter) readOrganizationsListServerRequest(r *http.Request) (*OrganizationsListServerRequest, error) {
 	var err error
 	result := new(OrganizationsListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
-	result.page, err = helpers.ParseInteger(result.query, "page")
+	query := r.URL.Query()
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(result.query, "size")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}
-	result.total, err = helpers.ParseInteger(result.query, "total")
+	result.total, err = helpers.ParseInteger(query, "total")
 	if err != nil {
 		return nil, err
 	}
@@ -380,8 +374,6 @@ func (a *OrganizationsServerAdapter) listHandler(w http.ResponseWriter, r *http.
 func (a *OrganizationsServerAdapter) readOrganizationsAddServerRequest(r *http.Request) (*OrganizationsAddServerRequest, error) {
 	var err error
 	result := new(OrganizationsAddServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

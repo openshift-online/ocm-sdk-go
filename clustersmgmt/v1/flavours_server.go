@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -53,8 +52,6 @@ type FlavoursServer interface {
 
 // FlavoursListServerRequest is the request for the 'list' method.
 type FlavoursListServerRequest struct {
-	path   string
-	query  url.Values
 	page   *int
 	size   *int
 	search *string
@@ -266,9 +263,7 @@ type flavoursListServerResponseData struct {
 
 // FlavoursAddServerRequest is the request for the 'add' method.
 type FlavoursAddServerRequest struct {
-	path  string
-	query url.Values
-	body  *Flavour
+	body *Flavour
 }
 
 // Body returns the value of the 'body' parameter.
@@ -370,21 +365,20 @@ func (a *FlavoursServerAdapter) flavourHandler(w http.ResponseWriter, r *http.Re
 func (a *FlavoursServerAdapter) readFlavoursListServerRequest(r *http.Request) (*FlavoursListServerRequest, error) {
 	var err error
 	result := new(FlavoursListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
-	result.page, err = helpers.ParseInteger(result.query, "page")
+	query := r.URL.Query()
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(result.query, "size")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}
-	result.search, err = helpers.ParseString(result.query, "search")
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}
-	result.total, err = helpers.ParseInteger(result.query, "total")
+	result.total, err = helpers.ParseInteger(query, "total")
 	if err != nil {
 		return nil, err
 	}
@@ -433,8 +427,6 @@ func (a *FlavoursServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 func (a *FlavoursServerAdapter) readFlavoursAddServerRequest(r *http.Request) (*FlavoursAddServerRequest, error) {
 	var err error
 	result := new(FlavoursAddServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -48,8 +47,6 @@ type SubscriptionsServer interface {
 
 // SubscriptionsListServerRequest is the request for the 'list' method.
 type SubscriptionsListServerRequest struct {
-	path  string
-	query url.Values
 	page  *int
 	size  *int
 	total *int
@@ -235,17 +232,16 @@ func (a *SubscriptionsServerAdapter) subscriptionHandler(w http.ResponseWriter, 
 func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.Request) (*SubscriptionsListServerRequest, error) {
 	var err error
 	result := new(SubscriptionsListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
-	result.page, err = helpers.ParseInteger(result.query, "page")
+	query := r.URL.Query()
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(result.query, "size")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}
-	result.total, err = helpers.ParseInteger(result.query, "total")
+	result.total, err = helpers.ParseInteger(query, "total")
 	if err != nil {
 		return nil, err
 	}

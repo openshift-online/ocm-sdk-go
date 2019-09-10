@@ -35,6 +35,7 @@ type SubscriptionBuilder struct {
 	clusterID          *string
 	externalClusterID  *string
 	organizationID     *string
+	displayName        *string
 	lastTelemetryDate  *time.Time
 	creator            *AccountBuilder
 }
@@ -107,6 +108,15 @@ func (b *SubscriptionBuilder) OrganizationID(value string) *SubscriptionBuilder 
 	return b
 }
 
+// DisplayName sets the value of the 'display_name' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) DisplayName(value string) *SubscriptionBuilder {
+	b.displayName = &value
+	return b
+}
+
 // LastTelemetryDate sets the value of the 'last_telemetry_date' attribute
 // to the given value.
 //
@@ -151,6 +161,9 @@ func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	}
 	if b.organizationID != nil {
 		object.organizationID = b.organizationID
+	}
+	if b.displayName != nil {
+		object.displayName = b.displayName
 	}
 	if b.lastTelemetryDate != nil {
 		object.lastTelemetryDate = b.lastTelemetryDate

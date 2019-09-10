@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type GroupServer interface {
 
 // GroupGetServerRequest is the request for the 'get' method.
 type GroupGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // GroupGetServerResponse is the response for the 'get' method.
@@ -109,8 +106,6 @@ func (a *GroupServerAdapter) usersHandler(w http.ResponseWriter, r *http.Request
 func (a *GroupServerAdapter) readGroupGetServerRequest(r *http.Request) (*GroupGetServerRequest, error) {
 	var err error
 	result := new(GroupGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *GroupServerAdapter) writeGroupGetServerResponse(w http.ResponseWriter, r *GroupGetServerResponse) error {

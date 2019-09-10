@@ -47,6 +47,7 @@ type Subscription struct {
 	clusterID          *string
 	externalClusterID  *string
 	organizationID     *string
+	displayName        *string
 	lastTelemetryDate  *time.Time
 	creator            *Account
 }
@@ -111,6 +112,7 @@ func (o *Subscription) Empty() bool {
 		o.clusterID == nil &&
 		o.externalClusterID == nil &&
 		o.organizationID == nil &&
+		o.displayName == nil &&
 		o.lastTelemetryDate == nil &&
 		o.creator == nil &&
 		true)
@@ -227,6 +229,29 @@ func (o *Subscription) GetOrganizationID() (value string, ok bool) {
 	ok = o != nil && o.organizationID != nil
 	if ok {
 		value = *o.organizationID
+	}
+	return
+}
+
+// DisplayName returns the value of the 'display_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) DisplayName() string {
+	if o != nil && o.displayName != nil {
+		return *o.displayName
+	}
+	return ""
+}
+
+// GetDisplayName returns the value of the 'display_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetDisplayName() (value string, ok bool) {
+	ok = o != nil && o.displayName != nil
+	if ok {
+		value = *o.displayName
 	}
 	return
 }

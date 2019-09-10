@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -77,8 +76,6 @@ type ClusterServer interface {
 
 // ClusterGetServerRequest is the request for the 'get' method.
 type ClusterGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // ClusterGetServerResponse is the response for the 'get' method.
@@ -117,9 +114,7 @@ func (r *ClusterGetServerResponse) marshal(writer io.Writer) error {
 
 // ClusterUpdateServerRequest is the request for the 'update' method.
 type ClusterUpdateServerRequest struct {
-	path  string
-	query url.Values
-	body  *Cluster
+	body *Cluster
 }
 
 // Body returns the value of the 'body' parameter.
@@ -197,8 +192,6 @@ func (r *ClusterUpdateServerResponse) marshal(writer io.Writer) error {
 
 // ClusterDeleteServerRequest is the request for the 'delete' method.
 type ClusterDeleteServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // ClusterDeleteServerResponse is the response for the 'delete' method.
@@ -267,8 +260,6 @@ func (a *ClusterServerAdapter) identityProvidersHandler(w http.ResponseWriter, r
 func (a *ClusterServerAdapter) readClusterGetServerRequest(r *http.Request) (*ClusterGetServerRequest, error) {
 	var err error
 	result := new(ClusterGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *ClusterServerAdapter) writeClusterGetServerResponse(w http.ResponseWriter, r *ClusterGetServerResponse) error {
@@ -314,8 +305,6 @@ func (a *ClusterServerAdapter) getHandler(w http.ResponseWriter, r *http.Request
 func (a *ClusterServerAdapter) readClusterUpdateServerRequest(r *http.Request) (*ClusterUpdateServerRequest, error) {
 	var err error
 	result := new(ClusterUpdateServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
@@ -365,8 +354,6 @@ func (a *ClusterServerAdapter) updateHandler(w http.ResponseWriter, r *http.Requ
 func (a *ClusterServerAdapter) readClusterDeleteServerRequest(r *http.Request) (*ClusterDeleteServerRequest, error) {
 	var err error
 	result := new(ClusterDeleteServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *ClusterServerAdapter) writeClusterDeleteServerResponse(w http.ResponseWriter, r *ClusterDeleteServerResponse) error {

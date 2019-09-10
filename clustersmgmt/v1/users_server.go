@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -52,8 +51,6 @@ type UsersServer interface {
 
 // UsersListServerRequest is the request for the 'list' method.
 type UsersListServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // UsersListServerResponse is the response for the 'list' method.
@@ -132,9 +129,7 @@ type usersListServerResponseData struct {
 
 // UsersAddServerRequest is the request for the 'add' method.
 type UsersAddServerRequest struct {
-	path  string
-	query url.Values
-	body  *User
+	body *User
 }
 
 // Body returns the value of the 'body' parameter.
@@ -236,8 +231,6 @@ func (a *UsersServerAdapter) userHandler(w http.ResponseWriter, r *http.Request)
 func (a *UsersServerAdapter) readUsersListServerRequest(r *http.Request) (*UsersListServerRequest, error) {
 	var err error
 	result := new(UsersListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *UsersServerAdapter) writeUsersListServerResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
@@ -283,8 +276,6 @@ func (a *UsersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request)
 func (a *UsersServerAdapter) readUsersAddServerRequest(r *http.Request) (*UsersAddServerRequest, error) {
 	var err error
 	result := new(UsersAddServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

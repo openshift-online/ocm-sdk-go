@@ -15,7 +15,7 @@
 #
 
 # Details of the model to use:
-model_version:=v0.0.1
+model_version:=v0.0.2
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:

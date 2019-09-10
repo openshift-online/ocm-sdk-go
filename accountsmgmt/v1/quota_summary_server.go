@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -43,8 +42,6 @@ type QuotaSummaryServer interface {
 
 // QuotaSummaryListServerRequest is the request for the 'list' method.
 type QuotaSummaryListServerRequest struct {
-	path   string
-	query  url.Values
 	page   *int
 	size   *int
 	search *string
@@ -273,21 +270,20 @@ func NewQuotaSummaryServerAdapter(server QuotaSummaryServer, router *mux.Router)
 func (a *QuotaSummaryServerAdapter) readQuotaSummaryListServerRequest(r *http.Request) (*QuotaSummaryListServerRequest, error) {
 	var err error
 	result := new(QuotaSummaryListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
-	result.page, err = helpers.ParseInteger(result.query, "page")
+	query := r.URL.Query()
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(result.query, "size")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}
-	result.search, err = helpers.ParseString(result.query, "search")
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}
-	result.total, err = helpers.ParseInteger(result.query, "total")
+	result.total, err = helpers.ParseInteger(query, "total")
 	if err != nil {
 		return nil, err
 	}

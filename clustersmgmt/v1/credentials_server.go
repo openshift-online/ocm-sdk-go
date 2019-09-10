@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type CredentialsServer interface {
 
 // CredentialsGetServerRequest is the request for the 'get' method.
 type CredentialsGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // CredentialsGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewCredentialsServerAdapter(server CredentialsServer, router *mux.Router) *
 func (a *CredentialsServerAdapter) readCredentialsGetServerRequest(r *http.Request) (*CredentialsGetServerRequest, error) {
 	var err error
 	result := new(CredentialsGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *CredentialsServerAdapter) writeCredentialsGetServerResponse(w http.ResponseWriter, r *CredentialsGetServerResponse) error {

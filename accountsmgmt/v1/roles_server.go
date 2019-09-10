@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -53,8 +52,6 @@ type RolesServer interface {
 
 // RolesListServerRequest is the request for the 'list' method.
 type RolesListServerRequest struct {
-	path  string
-	query url.Values
 	page  *int
 	size  *int
 	total *int
@@ -217,9 +214,7 @@ type rolesListServerResponseData struct {
 
 // RolesAddServerRequest is the request for the 'add' method.
 type RolesAddServerRequest struct {
-	path  string
-	query url.Values
-	body  *Role
+	body *Role
 }
 
 // Body returns the value of the 'body' parameter.
@@ -321,17 +316,16 @@ func (a *RolesServerAdapter) roleHandler(w http.ResponseWriter, r *http.Request)
 func (a *RolesServerAdapter) readRolesListServerRequest(r *http.Request) (*RolesListServerRequest, error) {
 	var err error
 	result := new(RolesListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
-	result.page, err = helpers.ParseInteger(result.query, "page")
+	query := r.URL.Query()
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(result.query, "size")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}
-	result.total, err = helpers.ParseInteger(result.query, "total")
+	result.total, err = helpers.ParseInteger(query, "total")
 	if err != nil {
 		return nil, err
 	}
@@ -380,8 +374,6 @@ func (a *RolesServerAdapter) listHandler(w http.ResponseWriter, r *http.Request)
 func (a *RolesServerAdapter) readRolesAddServerRequest(r *http.Request) (*RolesAddServerRequest, error) {
 	var err error
 	result := new(RolesAddServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

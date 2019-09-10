@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type RoleBindingServer interface {
 
 // RoleBindingGetServerRequest is the request for the 'get' method.
 type RoleBindingGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // RoleBindingGetServerResponse is the response for the 'get' method.
@@ -87,8 +84,6 @@ func (r *RoleBindingGetServerResponse) marshal(writer io.Writer) error {
 
 // RoleBindingDeleteServerRequest is the request for the 'delete' method.
 type RoleBindingDeleteServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // RoleBindingDeleteServerResponse is the response for the 'delete' method.
@@ -121,8 +116,6 @@ func NewRoleBindingServerAdapter(server RoleBindingServer, router *mux.Router) *
 func (a *RoleBindingServerAdapter) readRoleBindingGetServerRequest(r *http.Request) (*RoleBindingGetServerRequest, error) {
 	var err error
 	result := new(RoleBindingGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *RoleBindingServerAdapter) writeRoleBindingGetServerResponse(w http.ResponseWriter, r *RoleBindingGetServerResponse) error {
@@ -168,8 +161,6 @@ func (a *RoleBindingServerAdapter) getHandler(w http.ResponseWriter, r *http.Req
 func (a *RoleBindingServerAdapter) readRoleBindingDeleteServerRequest(r *http.Request) (*RoleBindingDeleteServerRequest, error) {
 	var err error
 	result := new(RoleBindingDeleteServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *RoleBindingServerAdapter) writeRoleBindingDeleteServerResponse(w http.ResponseWriter, r *RoleBindingDeleteServerResponse) error {

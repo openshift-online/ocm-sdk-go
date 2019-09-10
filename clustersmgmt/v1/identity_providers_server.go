@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -52,8 +51,6 @@ type IdentityProvidersServer interface {
 
 // IdentityProvidersListServerRequest is the request for the 'list' method.
 type IdentityProvidersListServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // IdentityProvidersListServerResponse is the response for the 'list' method.
@@ -132,9 +129,7 @@ type identityProvidersListServerResponseData struct {
 
 // IdentityProvidersAddServerRequest is the request for the 'add' method.
 type IdentityProvidersAddServerRequest struct {
-	path  string
-	query url.Values
-	body  *IdentityProvider
+	body *IdentityProvider
 }
 
 // Body returns the value of the 'body' parameter.
@@ -236,8 +231,6 @@ func (a *IdentityProvidersServerAdapter) identityProviderHandler(w http.Response
 func (a *IdentityProvidersServerAdapter) readIdentityProvidersListServerRequest(r *http.Request) (*IdentityProvidersListServerRequest, error) {
 	var err error
 	result := new(IdentityProvidersListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *IdentityProvidersServerAdapter) writeIdentityProvidersListServerResponse(w http.ResponseWriter, r *IdentityProvidersListServerResponse) error {
@@ -283,8 +276,6 @@ func (a *IdentityProvidersServerAdapter) listHandler(w http.ResponseWriter, r *h
 func (a *IdentityProvidersServerAdapter) readIdentityProvidersAddServerRequest(r *http.Request) (*IdentityProvidersAddServerRequest, error) {
 	var err error
 	result := new(IdentityProvidersAddServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

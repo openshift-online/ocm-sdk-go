@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -53,8 +52,6 @@ type AccountsServer interface {
 
 // AccountsListServerRequest is the request for the 'list' method.
 type AccountsListServerRequest struct {
-	path  string
-	query url.Values
 	page  *int
 	size  *int
 	total *int
@@ -217,9 +214,7 @@ type accountsListServerResponseData struct {
 
 // AccountsAddServerRequest is the request for the 'add' method.
 type AccountsAddServerRequest struct {
-	path  string
-	query url.Values
-	body  *Account
+	body *Account
 }
 
 // Body returns the value of the 'body' parameter.
@@ -321,17 +316,16 @@ func (a *AccountsServerAdapter) accountHandler(w http.ResponseWriter, r *http.Re
 func (a *AccountsServerAdapter) readAccountsListServerRequest(r *http.Request) (*AccountsListServerRequest, error) {
 	var err error
 	result := new(AccountsListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
-	result.page, err = helpers.ParseInteger(result.query, "page")
+	query := r.URL.Query()
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(result.query, "size")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}
-	result.total, err = helpers.ParseInteger(result.query, "total")
+	result.total, err = helpers.ParseInteger(query, "total")
 	if err != nil {
 		return nil, err
 	}
@@ -380,8 +374,6 @@ func (a *AccountsServerAdapter) listHandler(w http.ResponseWriter, r *http.Reque
 func (a *AccountsServerAdapter) readAccountsAddServerRequest(r *http.Request) (*AccountsAddServerRequest, error) {
 	var err error
 	result := new(AccountsAddServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err
