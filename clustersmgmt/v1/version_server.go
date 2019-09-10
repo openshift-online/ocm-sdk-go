@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type VersionServer interface {
 
 // VersionGetServerRequest is the request for the 'get' method.
 type VersionGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // VersionGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewVersionServerAdapter(server VersionServer, router *mux.Router) *VersionS
 func (a *VersionServerAdapter) readVersionGetServerRequest(r *http.Request) (*VersionGetServerRequest, error) {
 	var err error
 	result := new(VersionGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *VersionServerAdapter) writeVersionGetServerResponse(w http.ResponseWriter, r *VersionGetServerResponse) error {

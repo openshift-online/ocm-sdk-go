@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type ClusterStatusServer interface {
 
 // ClusterStatusGetServerRequest is the request for the 'get' method.
 type ClusterStatusGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // ClusterStatusGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewClusterStatusServerAdapter(server ClusterStatusServer, router *mux.Route
 func (a *ClusterStatusServerAdapter) readClusterStatusGetServerRequest(r *http.Request) (*ClusterStatusGetServerRequest, error) {
 	var err error
 	result := new(ClusterStatusGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *ClusterStatusServerAdapter) writeClusterStatusGetServerResponse(w http.ResponseWriter, r *ClusterStatusGetServerResponse) error {

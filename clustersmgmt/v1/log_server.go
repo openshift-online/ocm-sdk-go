@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type LogServer interface {
 
 // LogGetServerRequest is the request for the 'get' method.
 type LogGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // LogGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewLogServerAdapter(server LogServer, router *mux.Router) *LogServerAdapter
 func (a *LogServerAdapter) readLogGetServerRequest(r *http.Request) (*LogGetServerRequest, error) {
 	var err error
 	result := new(LogGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *LogServerAdapter) writeLogGetServerResponse(w http.ResponseWriter, r *LogGetServerResponse) error {

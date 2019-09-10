@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type DashboardServer interface {
 
 // DashboardGetServerRequest is the request for the 'get' method.
 type DashboardGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // DashboardGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewDashboardServerAdapter(server DashboardServer, router *mux.Router) *Dash
 func (a *DashboardServerAdapter) readDashboardGetServerRequest(r *http.Request) (*DashboardGetServerRequest, error) {
 	var err error
 	result := new(DashboardGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *DashboardServerAdapter) writeDashboardGetServerResponse(w http.ResponseWriter, r *DashboardGetServerResponse) error {

@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type FlavourServer interface {
 
 // FlavourGetServerRequest is the request for the 'get' method.
 type FlavourGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // FlavourGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewFlavourServerAdapter(server FlavourServer, router *mux.Router) *FlavourS
 func (a *FlavourServerAdapter) readFlavourGetServerRequest(r *http.Request) (*FlavourGetServerRequest, error) {
 	var err error
 	result := new(FlavourGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *FlavourServerAdapter) writeFlavourGetServerResponse(w http.ResponseWriter, r *FlavourGetServerResponse) error {

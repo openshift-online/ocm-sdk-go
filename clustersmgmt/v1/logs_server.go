@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type LogsServer interface {
 
 // LogsListServerRequest is the request for the 'list' method.
 type LogsListServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // LogsListServerResponse is the response for the 'list' method.
@@ -150,8 +147,6 @@ func (a *LogsServerAdapter) logHandler(w http.ResponseWriter, r *http.Request) {
 func (a *LogsServerAdapter) readLogsListServerRequest(r *http.Request) (*LogsListServerRequest, error) {
 	var err error
 	result := new(LogsListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *LogsServerAdapter) writeLogsListServerResponse(w http.ResponseWriter, r *LogsListServerResponse) error {

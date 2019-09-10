@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -59,8 +58,6 @@ type OrganizationServer interface {
 
 // OrganizationGetServerRequest is the request for the 'get' method.
 type OrganizationGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // OrganizationGetServerResponse is the response for the 'get' method.
@@ -99,9 +96,7 @@ func (r *OrganizationGetServerResponse) marshal(writer io.Writer) error {
 
 // OrganizationUpdateServerRequest is the request for the 'update' method.
 type OrganizationUpdateServerRequest struct {
-	path  string
-	query url.Values
-	body  *Organization
+	body *Organization
 }
 
 // Body returns the value of the 'body' parameter.
@@ -209,8 +204,6 @@ func (a *OrganizationServerAdapter) quotaSummaryHandler(w http.ResponseWriter, r
 func (a *OrganizationServerAdapter) readOrganizationGetServerRequest(r *http.Request) (*OrganizationGetServerRequest, error) {
 	var err error
 	result := new(OrganizationGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *OrganizationServerAdapter) writeOrganizationGetServerResponse(w http.ResponseWriter, r *OrganizationGetServerResponse) error {
@@ -256,8 +249,6 @@ func (a *OrganizationServerAdapter) getHandler(w http.ResponseWriter, r *http.Re
 func (a *OrganizationServerAdapter) readOrganizationUpdateServerRequest(r *http.Request) (*OrganizationUpdateServerRequest, error) {
 	var err error
 	result := new(OrganizationUpdateServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

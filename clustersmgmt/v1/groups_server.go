@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type GroupsServer interface {
 
 // GroupsListServerRequest is the request for the 'list' method.
 type GroupsListServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // GroupsListServerResponse is the response for the 'list' method.
@@ -150,8 +147,6 @@ func (a *GroupsServerAdapter) groupHandler(w http.ResponseWriter, r *http.Reques
 func (a *GroupsServerAdapter) readGroupsListServerRequest(r *http.Request) (*GroupsListServerRequest, error) {
 	var err error
 	result := new(GroupsListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *GroupsServerAdapter) writeGroupsListServerResponse(w http.ResponseWriter, r *GroupsListServerResponse) error {

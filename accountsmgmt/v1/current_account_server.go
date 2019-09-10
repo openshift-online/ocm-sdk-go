@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type CurrentAccountServer interface {
 
 // CurrentAccountGetServerRequest is the request for the 'get' method.
 type CurrentAccountGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // CurrentAccountGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewCurrentAccountServerAdapter(server CurrentAccountServer, router *mux.Rou
 func (a *CurrentAccountServerAdapter) readCurrentAccountGetServerRequest(r *http.Request) (*CurrentAccountGetServerRequest, error) {
 	var err error
 	result := new(CurrentAccountGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *CurrentAccountServerAdapter) writeCurrentAccountGetServerResponse(w http.ResponseWriter, r *CurrentAccountGetServerResponse) error {

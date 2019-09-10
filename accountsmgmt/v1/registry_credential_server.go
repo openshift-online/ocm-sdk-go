@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type RegistryCredentialServer interface {
 
 // RegistryCredentialGetServerRequest is the request for the 'get' method.
 type RegistryCredentialGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // RegistryCredentialGetServerResponse is the response for the 'get' method.
@@ -97,8 +94,6 @@ func NewRegistryCredentialServerAdapter(server RegistryCredentialServer, router 
 func (a *RegistryCredentialServerAdapter) readRegistryCredentialGetServerRequest(r *http.Request) (*RegistryCredentialGetServerRequest, error) {
 	var err error
 	result := new(RegistryCredentialGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *RegistryCredentialServerAdapter) writeRegistryCredentialGetServerResponse(w http.ResponseWriter, r *RegistryCredentialGetServerResponse) error {

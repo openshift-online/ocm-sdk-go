@@ -37,6 +37,7 @@ type subscriptionData struct {
 	ClusterID          *string                 "json:\"cluster_id,omitempty\""
 	ExternalClusterID  *string                 "json:\"external_cluster_id,omitempty\""
 	OrganizationID     *string                 "json:\"organization_id,omitempty\""
+	DisplayName        *string                 "json:\"display_name,omitempty\""
 	LastTelemetryDate  *time.Time              "json:\"last_telemetry_date,omitempty\""
 	Creator            *accountData            "json:\"creator,omitempty\""
 }
@@ -81,6 +82,7 @@ func (o *Subscription) wrap() (data *subscriptionData, err error) {
 	data.ClusterID = o.clusterID
 	data.ExternalClusterID = o.externalClusterID
 	data.OrganizationID = o.organizationID
+	data.DisplayName = o.displayName
 	data.LastTelemetryDate = o.lastTelemetryDate
 	data.Creator, err = o.creator.wrap()
 	if err != nil {
@@ -141,6 +143,7 @@ func (d *subscriptionData) unwrap() (object *Subscription, err error) {
 	object.clusterID = d.ClusterID
 	object.externalClusterID = d.ExternalClusterID
 	object.organizationID = d.OrganizationID
+	object.displayName = d.DisplayName
 	object.lastTelemetryDate = d.LastTelemetryDate
 	object.creator, err = d.Creator.unwrap()
 	if err != nil {

@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type IdentityProviderServer interface {
 
 // IdentityProviderGetServerRequest is the request for the 'get' method.
 type IdentityProviderGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // IdentityProviderGetServerResponse is the response for the 'get' method.
@@ -87,8 +84,6 @@ func (r *IdentityProviderGetServerResponse) marshal(writer io.Writer) error {
 
 // IdentityProviderDeleteServerRequest is the request for the 'delete' method.
 type IdentityProviderDeleteServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // IdentityProviderDeleteServerResponse is the response for the 'delete' method.
@@ -121,8 +116,6 @@ func NewIdentityProviderServerAdapter(server IdentityProviderServer, router *mux
 func (a *IdentityProviderServerAdapter) readIdentityProviderGetServerRequest(r *http.Request) (*IdentityProviderGetServerRequest, error) {
 	var err error
 	result := new(IdentityProviderGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *IdentityProviderServerAdapter) writeIdentityProviderGetServerResponse(w http.ResponseWriter, r *IdentityProviderGetServerResponse) error {
@@ -168,8 +161,6 @@ func (a *IdentityProviderServerAdapter) getHandler(w http.ResponseWriter, r *htt
 func (a *IdentityProviderServerAdapter) readIdentityProviderDeleteServerRequest(r *http.Request) (*IdentityProviderDeleteServerRequest, error) {
 	var err error
 	result := new(IdentityProviderDeleteServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *IdentityProviderServerAdapter) writeIdentityProviderDeleteServerResponse(w http.ResponseWriter, r *IdentityProviderDeleteServerResponse) error {

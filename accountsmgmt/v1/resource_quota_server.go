@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type ResourceQuotaServer interface {
 
 // ResourceQuotaGetServerRequest is the request for the 'get' method.
 type ResourceQuotaGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // ResourceQuotaGetServerResponse is the response for the 'get' method.
@@ -87,9 +84,7 @@ func (r *ResourceQuotaGetServerResponse) marshal(writer io.Writer) error {
 
 // ResourceQuotaUpdateServerRequest is the request for the 'update' method.
 type ResourceQuotaUpdateServerRequest struct {
-	path  string
-	query url.Values
-	body  *ResourceQuota
+	body *ResourceQuota
 }
 
 // Body returns the value of the 'body' parameter.
@@ -183,8 +178,6 @@ func NewResourceQuotaServerAdapter(server ResourceQuotaServer, router *mux.Route
 func (a *ResourceQuotaServerAdapter) readResourceQuotaGetServerRequest(r *http.Request) (*ResourceQuotaGetServerRequest, error) {
 	var err error
 	result := new(ResourceQuotaGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *ResourceQuotaServerAdapter) writeResourceQuotaGetServerResponse(w http.ResponseWriter, r *ResourceQuotaGetServerResponse) error {
@@ -230,8 +223,6 @@ func (a *ResourceQuotaServerAdapter) getHandler(w http.ResponseWriter, r *http.R
 func (a *ResourceQuotaServerAdapter) readResourceQuotaUpdateServerRequest(r *http.Request) (*ResourceQuotaUpdateServerRequest, error) {
 	var err error
 	result := new(ResourceQuotaUpdateServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type UserServer interface {
 
 // UserGetServerRequest is the request for the 'get' method.
 type UserGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // UserGetServerResponse is the response for the 'get' method.
@@ -87,8 +84,6 @@ func (r *UserGetServerResponse) marshal(writer io.Writer) error {
 
 // UserDeleteServerRequest is the request for the 'delete' method.
 type UserDeleteServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // UserDeleteServerResponse is the response for the 'delete' method.
@@ -121,8 +116,6 @@ func NewUserServerAdapter(server UserServer, router *mux.Router) *UserServerAdap
 func (a *UserServerAdapter) readUserGetServerRequest(r *http.Request) (*UserGetServerRequest, error) {
 	var err error
 	result := new(UserGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *UserServerAdapter) writeUserGetServerResponse(w http.ResponseWriter, r *UserGetServerResponse) error {
@@ -168,8 +161,6 @@ func (a *UserServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
 func (a *UserServerAdapter) readUserDeleteServerRequest(r *http.Request) (*UserDeleteServerRequest, error) {
 	var err error
 	result := new(UserDeleteServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *UserServerAdapter) writeUserDeleteServerResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {

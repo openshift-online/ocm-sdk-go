@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type AccountServer interface {
 
 // AccountGetServerRequest is the request for the 'get' method.
 type AccountGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // AccountGetServerResponse is the response for the 'get' method.
@@ -87,9 +84,7 @@ func (r *AccountGetServerResponse) marshal(writer io.Writer) error {
 
 // AccountUpdateServerRequest is the request for the 'update' method.
 type AccountUpdateServerRequest struct {
-	path  string
-	query url.Values
-	body  *Account
+	body *Account
 }
 
 // Body returns the value of the 'body' parameter.
@@ -183,8 +178,6 @@ func NewAccountServerAdapter(server AccountServer, router *mux.Router) *AccountS
 func (a *AccountServerAdapter) readAccountGetServerRequest(r *http.Request) (*AccountGetServerRequest, error) {
 	var err error
 	result := new(AccountGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *AccountServerAdapter) writeAccountGetServerResponse(w http.ResponseWriter, r *AccountGetServerResponse) error {
@@ -230,8 +223,6 @@ func (a *AccountServerAdapter) getHandler(w http.ResponseWriter, r *http.Request
 func (a *AccountServerAdapter) readAccountUpdateServerRequest(r *http.Request) (*AccountUpdateServerRequest, error) {
 	var err error
 	result := new(AccountUpdateServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

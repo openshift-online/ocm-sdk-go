@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -47,8 +46,6 @@ type SubscriptionServer interface {
 
 // SubscriptionGetServerRequest is the request for the 'get' method.
 type SubscriptionGetServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // SubscriptionGetServerResponse is the response for the 'get' method.
@@ -87,8 +84,6 @@ func (r *SubscriptionGetServerResponse) marshal(writer io.Writer) error {
 
 // SubscriptionDeleteServerRequest is the request for the 'delete' method.
 type SubscriptionDeleteServerRequest struct {
-	path  string
-	query url.Values
 }
 
 // SubscriptionDeleteServerResponse is the response for the 'delete' method.
@@ -121,8 +116,6 @@ func NewSubscriptionServerAdapter(server SubscriptionServer, router *mux.Router)
 func (a *SubscriptionServerAdapter) readSubscriptionGetServerRequest(r *http.Request) (*SubscriptionGetServerRequest, error) {
 	var err error
 	result := new(SubscriptionGetServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *SubscriptionServerAdapter) writeSubscriptionGetServerResponse(w http.ResponseWriter, r *SubscriptionGetServerResponse) error {
@@ -168,8 +161,6 @@ func (a *SubscriptionServerAdapter) getHandler(w http.ResponseWriter, r *http.Re
 func (a *SubscriptionServerAdapter) readSubscriptionDeleteServerRequest(r *http.Request) (*SubscriptionDeleteServerRequest, error) {
 	var err error
 	result := new(SubscriptionDeleteServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	return result, err
 }
 func (a *SubscriptionServerAdapter) writeSubscriptionDeleteServerResponse(w http.ResponseWriter, r *SubscriptionDeleteServerResponse) error {

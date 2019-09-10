@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -42,8 +41,6 @@ type ClusterAuthorizationsServer interface {
 
 // ClusterAuthorizationsPostServerRequest is the request for the 'post' method.
 type ClusterAuthorizationsPostServerRequest struct {
-	path    string
-	query   url.Values
 	request *ClusterAuthorizationRequest
 }
 
@@ -137,8 +134,6 @@ func NewClusterAuthorizationsServerAdapter(server ClusterAuthorizationsServer, r
 func (a *ClusterAuthorizationsServerAdapter) readClusterAuthorizationsPostServerRequest(r *http.Request) (*ClusterAuthorizationsPostServerRequest, error) {
 	var err error
 	result := new(ClusterAuthorizationsPostServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

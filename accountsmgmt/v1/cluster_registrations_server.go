@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -43,8 +42,6 @@ type ClusterRegistrationsServer interface {
 
 // ClusterRegistrationsPostServerRequest is the request for the 'post' method.
 type ClusterRegistrationsPostServerRequest struct {
-	path    string
-	query   url.Values
 	request *ClusterRegistrationRequest
 }
 
@@ -138,8 +135,6 @@ func NewClusterRegistrationsServerAdapter(server ClusterRegistrationsServer, rou
 func (a *ClusterRegistrationsServerAdapter) readClusterRegistrationsPostServerRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {
 	var err error
 	result := new(ClusterRegistrationsPostServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
 	err = result.unmarshal(r.Body)
 	if err != nil {
 		return nil, err

@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -48,8 +47,6 @@ type VersionsServer interface {
 
 // VersionsListServerRequest is the request for the 'list' method.
 type VersionsListServerRequest struct {
-	path   string
-	query  url.Values
 	page   *int
 	size   *int
 	search *string
@@ -284,21 +281,20 @@ func (a *VersionsServerAdapter) versionHandler(w http.ResponseWriter, r *http.Re
 func (a *VersionsServerAdapter) readVersionsListServerRequest(r *http.Request) (*VersionsListServerRequest, error) {
 	var err error
 	result := new(VersionsListServerRequest)
-	result.query = r.URL.Query()
-	result.path = r.URL.Path
-	result.page, err = helpers.ParseInteger(result.query, "page")
+	query := r.URL.Query()
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(result.query, "size")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}
-	result.search, err = helpers.ParseString(result.query, "search")
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}
-	result.total, err = helpers.ParseInteger(result.query, "total")
+	result.total, err = helpers.ParseInteger(query, "total")
 	if err != nil {
 		return nil, err
 	}
