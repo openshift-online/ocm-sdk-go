@@ -3,6 +3,16 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.33 Sep 10 2019
+
+- Update to model 0.0.2:
+** Add `DisplayName` attribute to `Subscription` type.
+
+- Update to metamodel 0.0.5:
+** Fix generation of field names for query parameters.
+** Remove `query` and `path` fields from request objects.
+** Remove unused imports.
+
 == 0.1.32 Sep 03 2019
 
 - Makefile generates code using the ocm-api-metamodel v0.0.4.
