@@ -96,6 +96,7 @@ type FlavoursListRequest struct {
 	page      *int
 	size      *int
 	search    *string
+	order     *string
 	total     *int
 }
 
@@ -135,20 +136,41 @@ func (r *FlavoursListRequest) Size(value int) *FlavoursListRequest {
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause
-// of an SQL statement, but using the names of the attributes of the cluster
-// instead of the names of the columns of a table. For example, in order to
-// retrieve all the flavours with a name starting with `my`the value should be:
+// The syntax of this parameter is similar to the syntax of the _where_ clause of an
+// SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// flavours with a name starting with `my`the value should be:
 //
 // [source,sql]
 // ----
 // name like 'my%'
 // ----
 //
-// If the parameter isn't provided, or if the value is empty, then all the
-// flavours that the user has permission to see will be returned.
+// If the parameter isn't provided, or if the value is empty, then all the flavours
+// that the user has permission to see will be returned.
 func (r *FlavoursListRequest) Search(value string) *FlavoursListRequest {
 	r.search = &value
+	return r
+}
+
+// Order sets the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to sort the flavours
+// descending by name the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *FlavoursListRequest) Order(value string) *FlavoursListRequest {
+	r.order = &value
 	return r
 }
 
@@ -180,6 +202,9 @@ func (r *FlavoursListRequest) SendContext(ctx context.Context) (result *Flavours
 	}
 	if r.search != nil {
 		helpers.AddValue(&query, "search", *r.search)
+	}
+	if r.order != nil {
+		helpers.AddValue(&query, "order", *r.order)
 	}
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)

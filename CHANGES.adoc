@@ -3,6 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.34 Sep 11 2019
+
+- Use access token that is about to expire if there is no other mechanism to
+  obtain a new one.
+
+- Update to model 0.0.3:
+** Add `order` parameter to the collections that suport it.
+** Add cloud providers collection.
+
 == 0.1.33 Sep 10 2019
 
 - Update to model 0.0.2:

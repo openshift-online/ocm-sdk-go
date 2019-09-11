@@ -57,6 +57,7 @@ type ClustersListServerRequest struct {
 	page   *int
 	size   *int
 	search *string
+	order  *string
 	total  *int
 }
 
@@ -116,11 +117,11 @@ func (r *ClustersListServerRequest) GetSize() (value int, ok bool) {
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause
-// of an SQL statement, but using the names of the attributes of the cluster
-// instead of the names of the columns of a table. For example, in order to
-// retrieve all the clusters with a name starting with `my` in the
-// `us-east-1` region the value should be:
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the cluster instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// clusters with a name starting with `my` in the `us-east-1` region the value
+// should be:
 //
 // [source,sql]
 // ----
@@ -141,11 +142,11 @@ func (r *ClustersListServerRequest) Search() string {
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause
-// of an SQL statement, but using the names of the attributes of the cluster
-// instead of the names of the columns of a table. For example, in order to
-// retrieve all the clusters with a name starting with `my` in the
-// `us-east-1` region the value should be:
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the cluster instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// clusters with a name starting with `my` in the `us-east-1` region the value
+// should be:
 //
 // [source,sql]
 // ----
@@ -158,6 +159,54 @@ func (r *ClustersListServerRequest) GetSearch() (value string, ok bool) {
 	ok = r != nil && r.search != nil
 	if ok {
 		value = *r.search
+	}
+	return
+}
+
+// Order returns the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the cluster instead of
+// the names of the columns of a table. For example, in order to sort the clusters
+// descending by region identifier the value should be:
+//
+// [source,sql]
+// ----
+// region.id desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *ClustersListServerRequest) Order() string {
+	if r != nil && r.order != nil {
+		return *r.order
+	}
+	return ""
+}
+
+// GetOrder returns the value of the 'order' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the cluster instead of
+// the names of the columns of a table. For example, in order to sort the clusters
+// descending by region identifier the value should be:
+//
+// [source,sql]
+// ----
+// region.id desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *ClustersListServerRequest) GetOrder() (value string, ok bool) {
+	ok = r != nil && r.order != nil
+	if ok {
+		value = *r.order
 	}
 	return
 }
@@ -379,6 +428,10 @@ func (a *ClustersServerAdapter) readClustersListServerRequest(r *http.Request) (
 		return nil, err
 	}
 	result.search, err = helpers.ParseString(query, "search")
+	if err != nil {
+		return nil, err
+	}
+	result.order, err = helpers.ParseString(query, "order")
 	if err != nil {
 		return nil, err
 	}

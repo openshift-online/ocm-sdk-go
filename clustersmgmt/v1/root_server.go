@@ -28,6 +28,11 @@ import (
 // RootServer represents the interface the manages the 'root' resource.
 type RootServer interface {
 
+	// CloudProviders returns the target 'cloud_providers' resource.
+	//
+	// Reference to the resource that manages the collection of cloud providers.
+	CloudProviders() CloudProvidersServer
+
 	// Clusters returns the target 'clusters' resource.
 	//
 	// Reference to the resource that manages the collection of clusters.
@@ -60,11 +65,18 @@ func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdap
 	adapter := new(RootServerAdapter)
 	adapter.server = server
 	adapter.router = router
+	adapter.router.PathPrefix("/cloud_providers").HandlerFunc(adapter.cloudProvidersHandler)
 	adapter.router.PathPrefix("/clusters").HandlerFunc(adapter.clustersHandler)
 	adapter.router.PathPrefix("/dashboards").HandlerFunc(adapter.dashboardsHandler)
 	adapter.router.PathPrefix("/flavours").HandlerFunc(adapter.flavoursHandler)
 	adapter.router.PathPrefix("/versions").HandlerFunc(adapter.versionsHandler)
 	return adapter
+}
+func (a *RootServerAdapter) cloudProvidersHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.CloudProviders()
+	targetAdapter := NewCloudProvidersServerAdapter(target, a.router.PathPrefix("/cloud_providers").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
 }
 func (a *RootServerAdapter) clustersHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Clusters()

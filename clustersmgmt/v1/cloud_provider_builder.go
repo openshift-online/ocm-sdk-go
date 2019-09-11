@@ -23,6 +23,9 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Cloud provider.
 type CloudProviderBuilder struct {
+	id          *string
+	href        *string
+	link        bool
 	name        *string
 	displayName *string
 }
@@ -30,6 +33,24 @@ type CloudProviderBuilder struct {
 // NewCloudProvider creates a new builder of 'cloud_provider' objects.
 func NewCloudProvider() *CloudProviderBuilder {
 	return new(CloudProviderBuilder)
+}
+
+// ID sets the identifier of the object.
+func (b *CloudProviderBuilder) ID(value string) *CloudProviderBuilder {
+	b.id = &value
+	return b
+}
+
+// HREF sets the link to the object.
+func (b *CloudProviderBuilder) HREF(value string) *CloudProviderBuilder {
+	b.href = &value
+	return b
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *CloudProviderBuilder) Link(value bool) *CloudProviderBuilder {
+	b.link = value
+	return b
 }
 
 // Name sets the value of the 'name' attribute
@@ -53,6 +74,9 @@ func (b *CloudProviderBuilder) DisplayName(value string) *CloudProviderBuilder {
 // Build creates a 'cloud_provider' object using the configuration stored in the builder.
 func (b *CloudProviderBuilder) Build() (object *CloudProvider, err error) {
 	object = new(CloudProvider)
+	object.id = b.id
+	object.href = b.href
+	object.link = b.link
 	if b.name != nil {
 		object.name = b.name
 	}

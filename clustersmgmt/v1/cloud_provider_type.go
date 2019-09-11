@@ -19,17 +19,85 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
+// CloudProviderKind is the name of the type used to represent objects
+// of type 'cloud_provider'.
+const CloudProviderKind = "CloudProvider"
+
+// CloudProviderLinkKind is the name of the type used to represent links
+// to objects of type 'cloud_provider'.
+const CloudProviderLinkKind = "CloudProviderLink"
+
+// CloudProviderNilKind is the name of the type used to nil references
+// to objects of type 'cloud_provider'.
+const CloudProviderNilKind = "CloudProviderNil"
+
 // CloudProvider represents the values of the 'cloud_provider' type.
 //
 // Cloud provider.
 type CloudProvider struct {
+	id          *string
+	href        *string
+	link        bool
 	name        *string
 	displayName *string
 }
 
+// Kind returns the name of the type of the object.
+func (o *CloudProvider) Kind() string {
+	if o == nil {
+		return CloudProviderNilKind
+	}
+	if o.link {
+		return CloudProviderLinkKind
+	}
+	return CloudProviderKind
+}
+
+// ID returns the identifier of the object.
+func (o *CloudProvider) ID() string {
+	if o != nil && o.id != nil {
+		return *o.id
+	}
+	return ""
+}
+
+// GetID returns the identifier of the object and a flag indicating if the
+// identifier has a value.
+func (o *CloudProvider) GetID() (value string, ok bool) {
+	ok = o != nil && o.id != nil
+	if ok {
+		value = *o.id
+	}
+	return
+}
+
+// Link returns true iif this is a link.
+func (o *CloudProvider) Link() bool {
+	return o != nil && o.link
+}
+
+// HREF returns the link to the object.
+func (o *CloudProvider) HREF() string {
+	if o != nil && o.href != nil {
+		return *o.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the object and a flag indicating if the
+// link has a value.
+func (o *CloudProvider) GetHREF() (value string, ok bool) {
+	ok = o != nil && o.href != nil
+	if ok {
+		value = *o.href
+	}
+	return
+}
+
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CloudProvider) Empty() bool {
-	return o == nil || (o.name == nil &&
+	return o == nil || (o.id == nil &&
+		o.name == nil &&
 		o.displayName == nil &&
 		true)
 }
@@ -82,9 +150,57 @@ func (o *CloudProvider) GetDisplayName() (value string, ok bool) {
 	return
 }
 
+// CloudProviderListKind is the name of the type used to represent list of
+// objects of type 'cloud_provider'.
+const CloudProviderListKind = "CloudProviderList"
+
+// CloudProviderListLinkKind is the name of the type used to represent links
+// to list of objects of type 'cloud_provider'.
+const CloudProviderListLinkKind = "CloudProviderListLink"
+
+// CloudProviderNilKind is the name of the type used to nil lists of
+// objects of type 'cloud_provider'.
+const CloudProviderListNilKind = "CloudProviderListNil"
+
 // CloudProviderList is a list of values of the 'cloud_provider' type.
 type CloudProviderList struct {
+	href  *string
+	link  bool
 	items []*CloudProvider
+}
+
+// Kind returns the name of the type of the object.
+func (l *CloudProviderList) Kind() string {
+	if l == nil {
+		return CloudProviderListNilKind
+	}
+	if l.link {
+		return CloudProviderListLinkKind
+	}
+	return CloudProviderListKind
+}
+
+// Link returns true iif this is a link.
+func (l *CloudProviderList) Link() bool {
+	return l != nil && l.link
+}
+
+// HREF returns the link to the list.
+func (l *CloudProviderList) HREF() string {
+	if l != nil && l.href != nil {
+		return *l.href
+	}
+	return ""
+}
+
+// GetHREF returns the link of the list and a flag indicating if the
+// link has a value.
+func (l *CloudProviderList) GetHREF() (value string, ok bool) {
+	ok = l != nil && l.href != nil
+	if ok {
+		value = *l.href
+	}
+	return
 }
 
 // Len returns the length of the list.

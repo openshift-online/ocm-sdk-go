@@ -44,6 +44,17 @@ func NewRootClient(transport http.RoundTripper, path string, metric string) *Roo
 	return client
 }
 
+// CloudProviders returns the target 'cloud_providers' resource.
+//
+// Reference to the resource that manages the collection of cloud providers.
+func (c *RootClient) CloudProviders() *CloudProvidersClient {
+	return NewCloudProvidersClient(
+		c.transport,
+		path.Join(c.path, "cloud_providers"),
+		path.Join(c.metric, "cloud_providers"),
+	)
+}
+
 // Clusters returns the target 'clusters' resource.
 //
 // Reference to the resource that manages the collection of clusters.
