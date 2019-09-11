@@ -55,6 +55,7 @@ type FlavoursListServerRequest struct {
 	page   *int
 	size   *int
 	search *string
+	order  *string
 	total  *int
 }
 
@@ -114,18 +115,18 @@ func (r *FlavoursListServerRequest) GetSize() (value int, ok bool) {
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause
-// of an SQL statement, but using the names of the attributes of the cluster
-// instead of the names of the columns of a table. For example, in order to
-// retrieve all the flavours with a name starting with `my`the value should be:
+// The syntax of this parameter is similar to the syntax of the _where_ clause of an
+// SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// flavours with a name starting with `my`the value should be:
 //
 // [source,sql]
 // ----
 // name like 'my%'
 // ----
 //
-// If the parameter isn't provided, or if the value is empty, then all the
-// flavours that the user has permission to see will be returned.
+// If the parameter isn't provided, or if the value is empty, then all the flavours
+// that the user has permission to see will be returned.
 func (r *FlavoursListServerRequest) Search() string {
 	if r != nil && r.search != nil {
 		return *r.search
@@ -138,22 +139,70 @@ func (r *FlavoursListServerRequest) Search() string {
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause
-// of an SQL statement, but using the names of the attributes of the cluster
-// instead of the names of the columns of a table. For example, in order to
-// retrieve all the flavours with a name starting with `my`the value should be:
+// The syntax of this parameter is similar to the syntax of the _where_ clause of an
+// SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// flavours with a name starting with `my`the value should be:
 //
 // [source,sql]
 // ----
 // name like 'my%'
 // ----
 //
-// If the parameter isn't provided, or if the value is empty, then all the
-// flavours that the user has permission to see will be returned.
+// If the parameter isn't provided, or if the value is empty, then all the flavours
+// that the user has permission to see will be returned.
 func (r *FlavoursListServerRequest) GetSearch() (value string, ok bool) {
 	ok = r != nil && r.search != nil
 	if ok {
 		value = *r.search
+	}
+	return
+}
+
+// Order returns the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to sort the flavours
+// descending by name the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *FlavoursListServerRequest) Order() string {
+	if r != nil && r.order != nil {
+		return *r.order
+	}
+	return ""
+}
+
+// GetOrder returns the value of the 'order' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to sort the flavours
+// descending by name the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *FlavoursListServerRequest) GetOrder() (value string, ok bool) {
+	ok = r != nil && r.order != nil
+	if ok {
+		value = *r.order
 	}
 	return
 }
@@ -375,6 +424,10 @@ func (a *FlavoursServerAdapter) readFlavoursListServerRequest(r *http.Request) (
 		return nil, err
 	}
 	result.search, err = helpers.ParseString(query, "search")
+	if err != nil {
+		return nil, err
+	}
+	result.order, err = helpers.ParseString(query, "order")
 	if err != nil {
 		return nil, err
 	}

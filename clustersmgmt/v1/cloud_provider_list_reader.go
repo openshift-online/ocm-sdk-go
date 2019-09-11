@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
@@ -75,5 +77,73 @@ func (d cloudProviderListData) unwrap() (list *CloudProviderList, err error) {
 	}
 	list = new(CloudProviderList)
 	list.items = items
+	return
+}
+
+// cloudProviderListLinkData is type used internally to marshal and unmarshal links
+// to lists of objects of type 'cloud_provider'.
+type cloudProviderListLinkData struct {
+	Kind  *string              "json:\"kind,omitempty\""
+	HREF  *string              "json:\"href,omitempty\""
+	Items []*cloudProviderData "json:\"items,omitempty\""
+}
+
+// wrapLink is the method used internally to convert a list of values of the
+// 'cloud_provider' value to a link.
+func (l *CloudProviderList) wrapLink() (data *cloudProviderListLinkData, err error) {
+	if l == nil {
+		return
+	}
+	items := make([]*cloudProviderData, len(l.items))
+	for i, item := range l.items {
+		items[i], err = item.wrap()
+		if err != nil {
+			return
+		}
+	}
+	data = new(cloudProviderListLinkData)
+	data.Items = items
+	data.HREF = l.href
+	data.Kind = new(string)
+	if l.link {
+		*data.Kind = CloudProviderListLinkKind
+	} else {
+		*data.Kind = CloudProviderListKind
+	}
+	return
+}
+
+// unwrapLink is the function used internally to convert a JSON link to a list
+// of values of the 'cloud_provider' type to a list.
+func (d *cloudProviderListLinkData) unwrapLink() (list *CloudProviderList, err error) {
+	if d == nil {
+		return
+	}
+	items := make([]*CloudProvider, len(d.Items))
+	for i, item := range d.Items {
+		items[i], err = item.unwrap()
+		if err != nil {
+			return
+		}
+	}
+	list = new(CloudProviderList)
+	list.items = items
+	list.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case CloudProviderListKind:
+			list.link = false
+		case CloudProviderListLinkKind:
+			list.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				CloudProviderListKind,
+				CloudProviderListLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	return
 }

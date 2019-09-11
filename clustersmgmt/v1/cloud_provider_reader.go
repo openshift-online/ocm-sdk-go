@@ -20,12 +20,17 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
+	"fmt"
+
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // cloudProviderData is the data structure used internally to marshal and unmarshal
 // objects of type 'cloud_provider'.
 type cloudProviderData struct {
+	Kind        *string "json:\"kind,omitempty\""
+	ID          *string "json:\"id,omitempty\""
+	HREF        *string "json:\"href,omitempty\""
 	Name        *string "json:\"name,omitempty\""
 	DisplayName *string "json:\"display_name,omitempty\""
 }
@@ -51,6 +56,14 @@ func (o *CloudProvider) wrap() (data *cloudProviderData, err error) {
 		return
 	}
 	data = new(cloudProviderData)
+	data.ID = o.id
+	data.HREF = o.href
+	data.Kind = new(string)
+	if o.link {
+		*data.Kind = CloudProviderLinkKind
+	} else {
+		*data.Kind = CloudProviderKind
+	}
 	data.Name = o.name
 	data.DisplayName = o.displayName
 	return
@@ -79,6 +92,24 @@ func (d *cloudProviderData) unwrap() (object *CloudProvider, err error) {
 		return
 	}
 	object = new(CloudProvider)
+	object.id = d.ID
+	object.href = d.HREF
+	if d.Kind != nil {
+		switch *d.Kind {
+		case CloudProviderKind:
+			object.link = false
+		case CloudProviderLinkKind:
+			object.link = true
+		default:
+			err = fmt.Errorf(
+				"expected kind '%s' or '%s' but got '%s'",
+				CloudProviderKind,
+				CloudProviderLinkKind,
+				*d.Kind,
+			)
+			return
+		}
+	}
 	object.name = d.Name
 	object.displayName = d.DisplayName
 	return

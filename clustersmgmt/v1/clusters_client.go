@@ -98,6 +98,7 @@ type ClustersListRequest struct {
 	page      *int
 	size      *int
 	search    *string
+	order     *string
 	total     *int
 }
 
@@ -137,11 +138,11 @@ func (r *ClustersListRequest) Size(value int) *ClustersListRequest {
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause
-// of an SQL statement, but using the names of the attributes of the cluster
-// instead of the names of the columns of a table. For example, in order to
-// retrieve all the clusters with a name starting with `my` in the
-// `us-east-1` region the value should be:
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the cluster instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// clusters with a name starting with `my` in the `us-east-1` region the value
+// should be:
 //
 // [source,sql]
 // ----
@@ -152,6 +153,27 @@ func (r *ClustersListRequest) Size(value int) *ClustersListRequest {
 // clusters that the user has permission to see will be returned.
 func (r *ClustersListRequest) Search(value string) *ClustersListRequest {
 	r.search = &value
+	return r
+}
+
+// Order sets the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the cluster instead of
+// the names of the columns of a table. For example, in order to sort the clusters
+// descending by region identifier the value should be:
+//
+// [source,sql]
+// ----
+// region.id desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *ClustersListRequest) Order(value string) *ClustersListRequest {
+	r.order = &value
 	return r
 }
 
@@ -183,6 +205,9 @@ func (r *ClustersListRequest) SendContext(ctx context.Context) (result *Clusters
 	}
 	if r.search != nil {
 		helpers.AddValue(&query, "search", *r.search)
+	}
+	if r.order != nil {
+		helpers.AddValue(&query, "order", *r.order)
 	}
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)

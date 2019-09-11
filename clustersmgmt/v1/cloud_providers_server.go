@@ -31,22 +31,22 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// DashboardsServer represents the interface the manages the 'dashboards' resource.
-type DashboardsServer interface {
+// CloudProvidersServer represents the interface the manages the 'cloud_providers' resource.
+type CloudProvidersServer interface {
 
 	// List handles a request for the 'list' method.
 	//
-	// Retrieves a list of dashboards.
-	List(ctx context.Context, request *DashboardsListServerRequest, response *DashboardsListServerResponse) error
+	// Retrieves the list of cloud providers.
+	List(ctx context.Context, request *CloudProvidersListServerRequest, response *CloudProvidersListServerResponse) error
 
-	// Dashboard returns the target 'dashboard' server for the given identifier.
+	// CloudProvider returns the target 'cloud_provider' server for the given identifier.
 	//
-	// Reference to the resource that manages a specific dashboard.
-	Dashboard(id string) DashboardServer
+	// Returns a reference to the service that manages an specific cloud provider.
+	CloudProvider(id string) CloudProviderServer
 }
 
-// DashboardsListServerRequest is the request for the 'list' method.
-type DashboardsListServerRequest struct {
+// CloudProvidersListServerRequest is the request for the 'list' method.
+type CloudProvidersListServerRequest struct {
 	page   *int
 	size   *int
 	search *string
@@ -59,7 +59,7 @@ type DashboardsListServerRequest struct {
 // Index of the requested page, where one corresponds to the first page.
 //
 // Default value is `1`.
-func (r *DashboardsListServerRequest) Page() int {
+func (r *CloudProvidersListServerRequest) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
 	}
@@ -72,7 +72,7 @@ func (r *DashboardsListServerRequest) Page() int {
 // Index of the requested page, where one corresponds to the first page.
 //
 // Default value is `1`.
-func (r *DashboardsListServerRequest) GetPage() (value int, ok bool) {
+func (r *CloudProvidersListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
@@ -85,7 +85,7 @@ func (r *DashboardsListServerRequest) GetPage() (value int, ok bool) {
 // Maximum number of items that will be contained in the returned page.
 //
 // Default value is `100`.
-func (r *DashboardsListServerRequest) Size() int {
+func (r *CloudProvidersListServerRequest) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
 	}
@@ -98,7 +98,7 @@ func (r *DashboardsListServerRequest) Size() int {
 // Maximum number of items that will be contained in the returned page.
 //
 // Default value is `100`.
-func (r *DashboardsListServerRequest) GetSize() (value int, ok bool) {
+func (r *CloudProvidersListServerRequest) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
 		value = *r.size
@@ -111,18 +111,18 @@ func (r *DashboardsListServerRequest) GetSize() (value int, ok bool) {
 // Search criteria.
 //
 // The syntax of this parameter is similar to the syntax of the _where_ clause of a
-// SQL statement, but using the names of the attributes of the dashboard instead of
-// the names of the columns of a table. For example, in order to retrieve all the
-// dashboards with a name starting with `my` the value should be:
+// SQL statement, but using the names of the attributes of the cloud provider
+// instead of the names of the columns of a table. For example, in order to retrieve
+// all the cloud providers with a name starting with `A` the value should be:
 //
 // [source,sql]
 // ----
-// name like 'my%'
+// name like 'A%'
 // ----
 //
-// If the parameter isn't provided, or if the value is empty, then all the
-// dashboards that the user has permission to see will be returned.
-func (r *DashboardsListServerRequest) Search() string {
+// If the parameter isn't provided, or if the value is empty, then all the clusters
+// that the user has permission to see will be returned.
+func (r *CloudProvidersListServerRequest) Search() string {
 	if r != nil && r.search != nil {
 		return *r.search
 	}
@@ -135,18 +135,18 @@ func (r *DashboardsListServerRequest) Search() string {
 // Search criteria.
 //
 // The syntax of this parameter is similar to the syntax of the _where_ clause of a
-// SQL statement, but using the names of the attributes of the dashboard instead of
-// the names of the columns of a table. For example, in order to retrieve all the
-// dashboards with a name starting with `my` the value should be:
+// SQL statement, but using the names of the attributes of the cloud provider
+// instead of the names of the columns of a table. For example, in order to retrieve
+// all the cloud providers with a name starting with `A` the value should be:
 //
 // [source,sql]
 // ----
-// name like 'my%'
+// name like 'A%'
 // ----
 //
-// If the parameter isn't provided, or if the value is empty, then all the
-// dashboards that the user has permission to see will be returned.
-func (r *DashboardsListServerRequest) GetSearch() (value string, ok bool) {
+// If the parameter isn't provided, or if the value is empty, then all the clusters
+// that the user has permission to see will be returned.
+func (r *CloudProvidersListServerRequest) GetSearch() (value string, ok bool) {
 	ok = r != nil && r.search != nil
 	if ok {
 		value = *r.search
@@ -159,9 +159,9 @@ func (r *DashboardsListServerRequest) GetSearch() (value string, ok bool) {
 // Order criteria.
 //
 // The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement, but using the names of the attributes of the dashboard instead of
-// the names of the columns of a table. For example, in order to sort the dashboards
-// descending by name the value should be:
+// a SQL statement, but using the names of the attributes of the cloud provider
+// instead of the names of the columns of a table. For example, in order to sort the
+// clusters descending by name identifier the value should be:
 //
 // [source,sql]
 // ----
@@ -170,7 +170,7 @@ func (r *DashboardsListServerRequest) GetSearch() (value string, ok bool) {
 //
 // If the parameter isn't provided, or if the value is empty, then the order of the
 // results is undefined.
-func (r *DashboardsListServerRequest) Order() string {
+func (r *CloudProvidersListServerRequest) Order() string {
 	if r != nil && r.order != nil {
 		return *r.order
 	}
@@ -183,9 +183,9 @@ func (r *DashboardsListServerRequest) Order() string {
 // Order criteria.
 //
 // The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement, but using the names of the attributes of the dashboard instead of
-// the names of the columns of a table. For example, in order to sort the dashboards
-// descending by name the value should be:
+// a SQL statement, but using the names of the attributes of the cloud provider
+// instead of the names of the columns of a table. For example, in order to sort the
+// clusters descending by name identifier the value should be:
 //
 // [source,sql]
 // ----
@@ -194,7 +194,7 @@ func (r *DashboardsListServerRequest) Order() string {
 //
 // If the parameter isn't provided, or if the value is empty, then the order of the
 // results is undefined.
-func (r *DashboardsListServerRequest) GetOrder() (value string, ok bool) {
+func (r *CloudProvidersListServerRequest) GetOrder() (value string, ok bool) {
 	ok = r != nil && r.order != nil
 	if ok {
 		value = *r.order
@@ -206,7 +206,7 @@ func (r *DashboardsListServerRequest) GetOrder() (value string, ok bool) {
 //
 // Total number of items of the collection that match the search criteria,
 // regardless of the size of the page.
-func (r *DashboardsListServerRequest) Total() int {
+func (r *CloudProvidersListServerRequest) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
 	}
@@ -218,7 +218,7 @@ func (r *DashboardsListServerRequest) Total() int {
 //
 // Total number of items of the collection that match the search criteria,
 // regardless of the size of the page.
-func (r *DashboardsListServerRequest) GetTotal() (value int, ok bool) {
+func (r *CloudProvidersListServerRequest) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {
 		value = *r.total
@@ -226,14 +226,14 @@ func (r *DashboardsListServerRequest) GetTotal() (value int, ok bool) {
 	return
 }
 
-// DashboardsListServerResponse is the response for the 'list' method.
-type DashboardsListServerResponse struct {
+// CloudProvidersListServerResponse is the response for the 'list' method.
+type CloudProvidersListServerResponse struct {
 	status int
 	err    *errors.Error
 	page   *int
 	size   *int
 	total  *int
-	items  *DashboardList
+	items  *CloudProviderList
 }
 
 // Page sets the value of the 'page' parameter.
@@ -241,7 +241,7 @@ type DashboardsListServerResponse struct {
 // Index of the requested page, where one corresponds to the first page.
 //
 // Default value is `1`.
-func (r *DashboardsListServerResponse) Page(value int) *DashboardsListServerResponse {
+func (r *CloudProvidersListServerResponse) Page(value int) *CloudProvidersListServerResponse {
 	r.page = &value
 	return r
 }
@@ -251,7 +251,7 @@ func (r *DashboardsListServerResponse) Page(value int) *DashboardsListServerResp
 // Maximum number of items that will be contained in the returned page.
 //
 // Default value is `100`.
-func (r *DashboardsListServerResponse) Size(value int) *DashboardsListServerResponse {
+func (r *CloudProvidersListServerResponse) Size(value int) *CloudProvidersListServerResponse {
 	r.size = &value
 	return r
 }
@@ -260,31 +260,31 @@ func (r *DashboardsListServerResponse) Size(value int) *DashboardsListServerResp
 //
 // Total number of items of the collection that match the search criteria,
 // regardless of the size of the page.
-func (r *DashboardsListServerResponse) Total(value int) *DashboardsListServerResponse {
+func (r *CloudProvidersListServerResponse) Total(value int) *CloudProvidersListServerResponse {
 	r.total = &value
 	return r
 }
 
 // Items sets the value of the 'items' parameter.
 //
-// Retrieved list of dashboards.
-func (r *DashboardsListServerResponse) Items(value *DashboardList) *DashboardsListServerResponse {
+// Retrieved list of cloud providers.
+func (r *CloudProvidersListServerResponse) Items(value *CloudProviderList) *CloudProvidersListServerResponse {
 	r.items = value
 	return r
 }
 
 // SetStatusCode sets the status code for a give response and returns the response object.
-func (r *DashboardsListServerResponse) SetStatusCode(status int) *DashboardsListServerResponse {
+func (r *CloudProvidersListServerResponse) SetStatusCode(status int) *CloudProvidersListServerResponse {
 	r.status = status
 	return r
 }
 
 // marshall is the method used internally to marshal responses for the
 // 'list' method.
-func (r *DashboardsListServerResponse) marshal(writer io.Writer) error {
+func (r *CloudProvidersListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
-	data := new(dashboardsListServerResponseData)
+	data := new(cloudProvidersListServerResponseData)
 	data.Page = r.page
 	data.Size = r.size
 	data.Total = r.total
@@ -296,40 +296,40 @@ func (r *DashboardsListServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// dashboardsListServerResponseData is the structure used internally to write the request of the
+// cloudProvidersListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
-type dashboardsListServerResponseData struct {
-	Page  *int              "json:\"page,omitempty\""
-	Size  *int              "json:\"size,omitempty\""
-	Total *int              "json:\"total,omitempty\""
-	Items dashboardListData "json:\"items,omitempty\""
+type cloudProvidersListServerResponseData struct {
+	Page  *int                  "json:\"page,omitempty\""
+	Size  *int                  "json:\"size,omitempty\""
+	Total *int                  "json:\"total,omitempty\""
+	Items cloudProviderListData "json:\"items,omitempty\""
 }
 
-// DashboardsServerAdapter represents the structs that adapts Requests and Response to internal
+// CloudProvidersServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type DashboardsServerAdapter struct {
-	server DashboardsServer
+type CloudProvidersServerAdapter struct {
+	server CloudProvidersServer
 	router *mux.Router
 }
 
-func NewDashboardsServerAdapter(server DashboardsServer, router *mux.Router) *DashboardsServerAdapter {
-	adapter := new(DashboardsServerAdapter)
+func NewCloudProvidersServerAdapter(server CloudProvidersServer, router *mux.Router) *CloudProvidersServerAdapter {
+	adapter := new(CloudProvidersServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.dashboardHandler)
+	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.cloudProviderHandler)
 	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
-func (a *DashboardsServerAdapter) dashboardHandler(w http.ResponseWriter, r *http.Request) {
+func (a *CloudProvidersServerAdapter) cloudProviderHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
-	target := a.server.Dashboard(id)
-	targetAdapter := NewDashboardServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	target := a.server.CloudProvider(id)
+	targetAdapter := NewCloudProviderServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *DashboardsServerAdapter) readDashboardsListServerRequest(r *http.Request) (*DashboardsListServerRequest, error) {
+func (a *CloudProvidersServerAdapter) readCloudProvidersListServerRequest(r *http.Request) (*CloudProvidersListServerRequest, error) {
 	var err error
-	result := new(DashboardsListServerRequest)
+	result := new(CloudProvidersListServerRequest)
 	query := r.URL.Query()
 	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
@@ -353,7 +353,7 @@ func (a *DashboardsServerAdapter) readDashboardsListServerRequest(r *http.Reques
 	}
 	return result, err
 }
-func (a *DashboardsServerAdapter) writeDashboardsListServerResponse(w http.ResponseWriter, r *DashboardsListServerResponse) error {
+func (a *CloudProvidersServerAdapter) writeCloudProvidersListServerResponse(w http.ResponseWriter, r *CloudProvidersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -362,8 +362,8 @@ func (a *DashboardsServerAdapter) writeDashboardsListServerResponse(w http.Respo
 	}
 	return nil
 }
-func (a *DashboardsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readDashboardsListServerRequest(r)
+func (a *CloudProvidersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readCloudProvidersListServerRequest(r)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
 		errorBody, _ := errors.NewError().
@@ -373,7 +373,7 @@ func (a *DashboardsServerAdapter) listHandler(w http.ResponseWriter, r *http.Req
 		errors.SendError(w, r, errorBody)
 		return
 	}
-	resp := new(DashboardsListServerResponse)
+	resp := new(CloudProvidersListServerResponse)
 	err = a.server.List(r.Context(), req, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
@@ -383,7 +383,7 @@ func (a *DashboardsServerAdapter) listHandler(w http.ResponseWriter, r *http.Req
 			Build()
 		errors.SendError(w, r, errorBody)
 	}
-	err = a.writeDashboardsListServerResponse(w, resp)
+	err = a.writeCloudProvidersListServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().
@@ -393,6 +393,6 @@ func (a *DashboardsServerAdapter) listHandler(w http.ResponseWriter, r *http.Req
 		errors.SendError(w, r, errorBody)
 	}
 }
-func (a *DashboardsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *CloudProvidersServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

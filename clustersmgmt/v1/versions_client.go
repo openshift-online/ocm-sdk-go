@@ -83,6 +83,7 @@ type VersionsListRequest struct {
 	page      *int
 	size      *int
 	search    *string
+	order     *string
 	total     *int
 }
 
@@ -122,7 +123,7 @@ func (r *VersionsListRequest) Size(value int) *VersionsListRequest {
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause of an
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
 // SQL statement, but using the names of the attributes of the version instead of
 // the names of the columns of a table. For example, in order to retrieve all the
 // versions that are enabled:
@@ -132,10 +133,31 @@ func (r *VersionsListRequest) Size(value int) *VersionsListRequest {
 // enabled = 't'
 // ----
 //
-// If the parameter isn't provided, or if the value is empty, then all the
-// versoins that the user has permission to see will be returned.
+// If the parameter isn't provided, or if the value is empty, then all the versions
+// that the user has permission to see will be returned.
 func (r *VersionsListRequest) Search(value string) *VersionsListRequest {
 	r.search = &value
+	return r
+}
+
+// Order sets the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the version instead of
+// the names of the columns of a table. For example, in order to sort the versions
+// descending by identifier the value should be:
+//
+// [source,sql]
+// ----
+// id desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *VersionsListRequest) Order(value string) *VersionsListRequest {
+	r.order = &value
 	return r
 }
 
@@ -167,6 +189,9 @@ func (r *VersionsListRequest) SendContext(ctx context.Context) (result *Versions
 	}
 	if r.search != nil {
 		helpers.AddValue(&query, "search", *r.search)
+	}
+	if r.order != nil {
+		helpers.AddValue(&query, "order", *r.order)
 	}
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
