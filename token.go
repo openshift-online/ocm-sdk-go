@@ -55,8 +55,7 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 	c.tokenMutex.Lock()
 	defer c.tokenMutex.Unlock()
 
-	// If the access token is expired, then check the refresh token and either refresh it or
-	// request a new one:
+	// Check the expiration times of the tokens:
 	now := time.Now()
 	var accessExpires bool
 	var accessLeft time.Duration
@@ -78,46 +77,112 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 		c.debugExpiry(ctx, "Bearer", c.accessToken, accessExpires, accessLeft)
 		c.debugExpiry(ctx, "Refresh", c.refreshToken, refreshExpires, refreshLeft)
 	}
-	if c.accessToken == nil || (accessExpires && accessLeft < 1*time.Minute) {
-		if c.refreshToken == nil || (refreshExpires && refreshLeft < 1*time.Minute) {
-			c.logger.Debug(ctx, "Requesting new token")
-			err = c.sendRequestTokenForm(ctx)
-			if err != nil {
-				return
-			}
-		} else {
-			c.logger.Debug(ctx, "Refreshing token")
-			err = c.sendRefreshTokenForm(ctx)
-			if err != nil {
-				return
-			}
-		}
+
+	// If the access token is available and it isn't expired or about to expire then we can
+	// return the current tokens directly:
+	if c.accessToken != nil && (!accessExpires || accessLeft >= 1*time.Minute) {
+		access, refresh = c.currentTokens()
+		return
 	}
+
+	// At this point we know that the access token is unavailable, expired or about to expire.
+	// So we need to check if we can use the refresh token to request a new one.
+	if c.refreshToken != nil && (!refreshExpires || refreshLeft >= 1*time.Minute) {
+		err = c.sendRefreshTokenForm(ctx)
+		if err != nil {
+			return
+		}
+		access, refresh = c.currentTokens()
+		return
+	}
+
+	// Now we know that both the access and refresh tokens are unavaiable, expired or about to
+	// expire. So we need to check if we have other credentials that can be used to request a
+	// new token, and use them.
+	havePassword := c.user != "" && c.password != ""
+	haveSecret := c.clientID != "" && c.clientSecret != ""
+	if havePassword || haveSecret {
+		err = c.sendRequestTokenForm(ctx)
+		if err != nil {
+			return
+		}
+		access, refresh = c.currentTokens()
+		return
+	}
+
+	// Here we know that the access and refresh tokens are unavailable, expired or about to
+	// expire. We also know that we don't have credentials to request new ones. But we could
+	// still use the refresh token if it isn't completely exired.
+	if c.refreshToken != nil && refreshLeft > 0 {
+		c.logger.Warn(
+			ctx,
+			"Refresh token expires in only %s, but there is no other mechanism to "+
+				"obtain a new token, so will try to use it anyhow",
+			refreshLeft,
+		)
+		err = c.sendRefreshTokenForm(ctx)
+		if err != nil {
+			return
+		}
+		access, refresh = c.currentTokens()
+		return
+	}
+
+	// At this point we know that the access token is expired or about to expire. We know also
+	// that the refresh token is unavailable or completely expired. And we know that we don't
+	// have credentials to request new tokens. But we can still use the access token if it isn't
+	// expired.
+	if c.accessToken != nil && accessLeft > 0 {
+		c.logger.Warn(
+			ctx,
+			"Access token expires in only %s, but there is no other mechanism to "+
+				"obtain a new token, so will try to use it anyhow",
+			accessLeft,
+		)
+		access, refresh = c.currentTokens()
+		return
+	}
+
+	// There is no way to get a valid access token, so all we can do is report the failure:
+	err = fmt.Errorf(
+		"access and refresh tokens are unavailable or expired, and there are no " +
+			"password or client secret to request new ones",
+	)
+
+	return
+}
+
+// currentTokens returns the current tokens without trying to send any request to refresh them, and
+// checking that they are actually available. If they aren't available then it will return empty
+// strings.
+func (c *Connection) currentTokens() (access, refresh string) {
 	if c.accessToken != nil {
 		access = c.accessToken.Raw
 	}
 	if c.refreshToken != nil {
 		refresh = c.refreshToken.Raw
 	}
-
 	return
 }
 
 func (c *Connection) sendRequestTokenForm(ctx context.Context) error {
 	form := url.Values{}
-	if c.user != "" && c.password != "" {
+	havePassword := c.user != "" && c.password != ""
+	haveSecret := c.clientID != "" && c.clientSecret != ""
+	if havePassword {
+		c.logger.Debug(ctx, "Requesting new token using the password grant")
 		form.Set("grant_type", "password")
 		form.Set("client_id", c.clientID)
 		form.Set("username", c.user)
 		form.Set("password", c.password)
-	} else if c.clientID != "" && c.clientSecret != "" {
+	} else if haveSecret {
+		c.logger.Debug(ctx, "Requesting new token using the client credentials grant")
 		form.Set("grant_type", "client_credentials")
 		form.Set("client_id", c.clientID)
 		form.Set("client_secret", c.clientSecret)
 	} else {
 		return fmt.Errorf(
-			"either user name and password or client identifier and secret must " +
-				"be provided",
+			"either password or client secret must be provided",
 		)
 	}
 	form.Set("scope", strings.Join(c.scopes, " "))
@@ -125,6 +190,7 @@ func (c *Connection) sendRequestTokenForm(ctx context.Context) error {
 }
 
 func (c *Connection) sendRefreshTokenForm(ctx context.Context) error {
+	c.logger.Debug(ctx, "Requesting new token using the refresh token grant")
 	form := url.Values{}
 	form.Set("grant_type", "refresh_token")
 	form.Set("client_id", c.clientID)

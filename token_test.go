@@ -201,6 +201,25 @@ var _ = Describe("Tokens", func() {
 			Expect(err).To(HaveOccurred())
 		})
 
+		It("Succeeds if access token expires soon and there is no refresh token", func() {
+			// Generate the tokens:
+			accessToken := DefaultToken("Bearer", 1*time.Second)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(accessToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Get the tokens:
+			_, _, err = connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
+		})
+
 		It("Fails if the refresh token is expired", func() {
 			// Generate the tokens:
 			refreshToken := DefaultToken("Refresh", -5*time.Second)
