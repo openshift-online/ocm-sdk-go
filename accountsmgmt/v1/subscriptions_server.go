@@ -50,6 +50,7 @@ type SubscriptionsListServerRequest struct {
 	page  *int
 	size  *int
 	total *int
+	order *string
 }
 
 // Page returns the value of the 'page' parameter.
@@ -124,6 +125,52 @@ func (r *SubscriptionsListServerRequest) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {
 		value = *r.total
+	}
+	return
+}
+
+// Order returns the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// subscriptions descending by name identifier the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *SubscriptionsListServerRequest) Order() string {
+	if r != nil && r.order != nil {
+		return *r.order
+	}
+	return ""
+}
+
+// GetOrder returns the value of the 'order' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// subscriptions descending by name identifier the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *SubscriptionsListServerRequest) GetOrder() (value string, ok bool) {
+	ok = r != nil && r.order != nil
+	if ok {
+		value = *r.order
 	}
 	return
 }
@@ -242,6 +289,10 @@ func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.
 		return nil, err
 	}
 	result.total, err = helpers.ParseInteger(query, "total")
+	if err != nil {
+		return nil, err
+	}
+	result.order, err = helpers.ParseString(query, "order")
 	if err != nil {
 		return nil, err
 	}
