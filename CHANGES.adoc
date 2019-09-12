@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.35 Sep 12 2019
+
+- Update to model 0.0.5:
+** Add `order` parameter to the methods to list accounts and subscriptions.
+
 == 0.1.34 Sep 11 2019
 
 - Use access token that is about to expire if there is no other mechanism to

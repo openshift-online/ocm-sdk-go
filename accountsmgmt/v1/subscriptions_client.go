@@ -83,6 +83,7 @@ type SubscriptionsListRequest struct {
 	page      *int
 	size      *int
 	total     *int
+	order     *string
 }
 
 // Parameter adds a query parameter.
@@ -126,6 +127,26 @@ func (r *SubscriptionsListRequest) Total(value int) *SubscriptionsListRequest {
 	return r
 }
 
+// Order sets the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// subscriptions descending by name identifier the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *SubscriptionsListRequest) Order(value string) *SubscriptionsListRequest {
+	r.order = &value
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -145,6 +166,9 @@ func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *Sub
 	}
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
+	}
+	if r.order != nil {
+		helpers.AddValue(&query, "order", *r.order)
 	}
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
