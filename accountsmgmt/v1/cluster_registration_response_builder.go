@@ -23,9 +23,9 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterRegistrationResponseBuilder struct {
-	clusterID          *string
-	authorizationToken *string
 	accountID          *string
+	authorizationToken *string
+	clusterID          *string
 	expiresAt          *string
 }
 
@@ -34,12 +34,12 @@ func NewClusterRegistrationResponse() *ClusterRegistrationResponseBuilder {
 	return new(ClusterRegistrationResponseBuilder)
 }
 
-// ClusterID sets the value of the 'cluster_ID' attribute
+// AccountID sets the value of the 'account_ID' attribute
 // to the given value.
 //
 //
-func (b *ClusterRegistrationResponseBuilder) ClusterID(value string) *ClusterRegistrationResponseBuilder {
-	b.clusterID = &value
+func (b *ClusterRegistrationResponseBuilder) AccountID(value string) *ClusterRegistrationResponseBuilder {
+	b.accountID = &value
 	return b
 }
 
@@ -52,12 +52,12 @@ func (b *ClusterRegistrationResponseBuilder) AuthorizationToken(value string) *C
 	return b
 }
 
-// AccountID sets the value of the 'account_ID' attribute
+// ClusterID sets the value of the 'cluster_ID' attribute
 // to the given value.
 //
 //
-func (b *ClusterRegistrationResponseBuilder) AccountID(value string) *ClusterRegistrationResponseBuilder {
-	b.accountID = &value
+func (b *ClusterRegistrationResponseBuilder) ClusterID(value string) *ClusterRegistrationResponseBuilder {
+	b.clusterID = &value
 	return b
 }
 
@@ -70,17 +70,29 @@ func (b *ClusterRegistrationResponseBuilder) ExpiresAt(value string) *ClusterReg
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterRegistrationResponseBuilder) Copy(object *ClusterRegistrationResponse) *ClusterRegistrationResponseBuilder {
+	if object == nil {
+		return b
+	}
+	b.accountID = object.accountID
+	b.authorizationToken = object.authorizationToken
+	b.clusterID = object.clusterID
+	b.expiresAt = object.expiresAt
+	return b
+}
+
 // Build creates a 'cluster_registration_response' object using the configuration stored in the builder.
 func (b *ClusterRegistrationResponseBuilder) Build() (object *ClusterRegistrationResponse, err error) {
 	object = new(ClusterRegistrationResponse)
-	if b.clusterID != nil {
-		object.clusterID = b.clusterID
+	if b.accountID != nil {
+		object.accountID = b.accountID
 	}
 	if b.authorizationToken != nil {
 		object.authorizationToken = b.authorizationToken
 	}
-	if b.accountID != nil {
-		object.accountID = b.accountID
+	if b.clusterID != nil {
+		object.clusterID = b.clusterID
 	}
 	if b.expiresAt != nil {
 		object.expiresAt = b.expiresAt

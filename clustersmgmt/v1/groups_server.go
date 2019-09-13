@@ -52,10 +52,18 @@ type GroupsListServerRequest struct {
 type GroupsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *GroupList
 	page   *int
 	size   *int
 	total  *int
-	items  *GroupList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of groups.
+func (r *GroupsListServerResponse) Items(value *GroupList) *GroupsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -82,14 +90,6 @@ func (r *GroupsListServerResponse) Total(value int) *GroupsListServerResponse {
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of groups.
-func (r *GroupsListServerResponse) Items(value *GroupList) *GroupsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *GroupsListServerResponse) SetStatusCode(status int) *GroupsListServerResponse {
 	r.status = status
@@ -102,13 +102,13 @@ func (r *GroupsListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(groupsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -116,10 +116,10 @@ func (r *GroupsListServerResponse) marshal(writer io.Writer) error {
 // groupsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type groupsListServerResponseData struct {
+	Items groupListData "json:\"items,omitempty\""
 	Page  *int          "json:\"page,omitempty\""
 	Size  *int          "json:\"size,omitempty\""
 	Total *int          "json:\"total,omitempty\""
-	Items groupListData "json:\"items,omitempty\""
 }
 
 // GroupsServerAdapter represents the structs that adapts Requests and Response to internal

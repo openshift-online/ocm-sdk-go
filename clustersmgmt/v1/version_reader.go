@@ -31,8 +31,8 @@ type versionData struct {
 	Kind    *string "json:\"kind,omitempty\""
 	ID      *string "json:\"id,omitempty\""
 	HREF    *string "json:\"href,omitempty\""
-	Enabled *bool   "json:\"enabled,omitempty\""
 	Default *bool   "json:\"default,omitempty\""
+	Enabled *bool   "json:\"enabled,omitempty\""
 }
 
 // MarshalVersion writes a value of the 'version' to the given target,
@@ -64,8 +64,8 @@ func (o *Version) wrap() (data *versionData, err error) {
 	} else {
 		*data.Kind = VersionKind
 	}
-	data.Enabled = o.enabled
 	data.Default = o.default_
+	data.Enabled = o.enabled
 	return
 }
 
@@ -110,7 +110,7 @@ func (d *versionData) unwrap() (object *Version, err error) {
 			return
 		}
 	}
-	object.enabled = d.Enabled
 	object.default_ = d.Default
+	object.enabled = d.Enabled
 	return
 }

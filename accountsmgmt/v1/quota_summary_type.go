@@ -23,25 +23,94 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type QuotaSummary struct {
+	byoc                 *bool
+	allowed              *int
+	availabilityZoneType *string
 	organizationID       *string
+	reserved             *int
 	resourceName         *string
 	resourceType         *string
-	byoc                 *bool
-	availabilityZoneType *string
-	allowed              *int
-	reserved             *int
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *QuotaSummary) Empty() bool {
-	return o == nil || (o.organizationID == nil &&
+	return o == nil || (o.byoc == nil &&
+		o.allowed == nil &&
+		o.availabilityZoneType == nil &&
+		o.organizationID == nil &&
+		o.reserved == nil &&
 		o.resourceName == nil &&
 		o.resourceType == nil &&
-		o.byoc == nil &&
-		o.availabilityZoneType == nil &&
-		o.allowed == nil &&
-		o.reserved == nil &&
 		true)
+}
+
+// BYOC returns the value of the 'BYOC' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *QuotaSummary) BYOC() bool {
+	if o != nil && o.byoc != nil {
+		return *o.byoc
+	}
+	return false
+}
+
+// GetBYOC returns the value of the 'BYOC' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *QuotaSummary) GetBYOC() (value bool, ok bool) {
+	ok = o != nil && o.byoc != nil
+	if ok {
+		value = *o.byoc
+	}
+	return
+}
+
+// Allowed returns the value of the 'allowed' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *QuotaSummary) Allowed() int {
+	if o != nil && o.allowed != nil {
+		return *o.allowed
+	}
+	return 0
+}
+
+// GetAllowed returns the value of the 'allowed' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *QuotaSummary) GetAllowed() (value int, ok bool) {
+	ok = o != nil && o.allowed != nil
+	if ok {
+		value = *o.allowed
+	}
+	return
+}
+
+// AvailabilityZoneType returns the value of the 'availability_zone_type' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *QuotaSummary) AvailabilityZoneType() string {
+	if o != nil && o.availabilityZoneType != nil {
+		return *o.availabilityZoneType
+	}
+	return ""
+}
+
+// GetAvailabilityZoneType returns the value of the 'availability_zone_type' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *QuotaSummary) GetAvailabilityZoneType() (value string, ok bool) {
+	ok = o != nil && o.availabilityZoneType != nil
+	if ok {
+		value = *o.availabilityZoneType
+	}
+	return
 }
 
 // OrganizationID returns the value of the 'organization_ID' attribute, or
@@ -63,6 +132,29 @@ func (o *QuotaSummary) GetOrganizationID() (value string, ok bool) {
 	ok = o != nil && o.organizationID != nil
 	if ok {
 		value = *o.organizationID
+	}
+	return
+}
+
+// Reserved returns the value of the 'reserved' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *QuotaSummary) Reserved() int {
+	if o != nil && o.reserved != nil {
+		return *o.reserved
+	}
+	return 0
+}
+
+// GetReserved returns the value of the 'reserved' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *QuotaSummary) GetReserved() (value int, ok bool) {
+	ok = o != nil && o.reserved != nil
+	if ok {
+		value = *o.reserved
 	}
 	return
 }
@@ -109,98 +201,6 @@ func (o *QuotaSummary) GetResourceType() (value string, ok bool) {
 	ok = o != nil && o.resourceType != nil
 	if ok {
 		value = *o.resourceType
-	}
-	return
-}
-
-// BYOC returns the value of the 'BYOC' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *QuotaSummary) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
-	}
-	return false
-}
-
-// GetBYOC returns the value of the 'BYOC' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *QuotaSummary) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
-	if ok {
-		value = *o.byoc
-	}
-	return
-}
-
-// AvailabilityZoneType returns the value of the 'availability_zone_type' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *QuotaSummary) AvailabilityZoneType() string {
-	if o != nil && o.availabilityZoneType != nil {
-		return *o.availabilityZoneType
-	}
-	return ""
-}
-
-// GetAvailabilityZoneType returns the value of the 'availability_zone_type' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *QuotaSummary) GetAvailabilityZoneType() (value string, ok bool) {
-	ok = o != nil && o.availabilityZoneType != nil
-	if ok {
-		value = *o.availabilityZoneType
-	}
-	return
-}
-
-// Allowed returns the value of the 'allowed' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *QuotaSummary) Allowed() int {
-	if o != nil && o.allowed != nil {
-		return *o.allowed
-	}
-	return 0
-}
-
-// GetAllowed returns the value of the 'allowed' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *QuotaSummary) GetAllowed() (value int, ok bool) {
-	ok = o != nil && o.allowed != nil
-	if ok {
-		value = *o.allowed
-	}
-	return
-}
-
-// Reserved returns the value of the 'reserved' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *QuotaSummary) Reserved() int {
-	if o != nil && o.reserved != nil {
-		return *o.reserved
-	}
-	return 0
-}
-
-// GetReserved returns the value of the 'reserved' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *QuotaSummary) GetReserved() (value int, ok bool) {
-	ok = o != nil && o.reserved != nil
-	if ok {
-		value = *o.reserved
 	}
 	return
 }

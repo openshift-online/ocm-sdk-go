@@ -53,22 +53,22 @@ func NewIdentityProvidersClient(transport http.RoundTripper, path string, metric
 	return client
 }
 
-// List creates a request for the 'list' method.
+// Add creates a request for the 'add' method.
 //
-// Retrieves the list of identity providers.
-func (c *IdentityProvidersClient) List() *IdentityProvidersListRequest {
-	request := new(IdentityProvidersListRequest)
+// Adds a new identity provider to the cluster.
+func (c *IdentityProvidersClient) Add() *IdentityProvidersAddRequest {
+	request := new(IdentityProvidersAddRequest)
 	request.transport = c.transport
 	request.path = c.path
 	request.metric = c.metric
 	return request
 }
 
-// Add creates a request for the 'add' method.
+// List creates a request for the 'list' method.
 //
-// Adds a new identity provider to the cluster.
-func (c *IdentityProvidersClient) Add() *IdentityProvidersAddRequest {
-	request := new(IdentityProvidersAddRequest)
+// Retrieves the list of identity providers.
+func (c *IdentityProvidersClient) List() *IdentityProvidersListRequest {
+	request := new(IdentityProvidersListRequest)
 	request.transport = c.transport
 	request.path = c.path
 	request.metric = c.metric
@@ -84,217 +84,6 @@ func (c *IdentityProvidersClient) IdentityProvider(id string) *IdentityProviderC
 		path.Join(c.path, id),
 		path.Join(c.metric, "-"),
 	)
-}
-
-// IdentityProvidersListRequest is the request for the 'list' method.
-type IdentityProvidersListRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *IdentityProvidersListRequest) Parameter(name string, value interface{}) *IdentityProvidersListRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *IdentityProvidersListRequest) Header(name string, value interface{}) *IdentityProvidersListRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *IdentityProvidersListRequest) Send() (result *IdentityProvidersListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *IdentityProvidersListRequest) SendContext(ctx context.Context) (result *IdentityProvidersListResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: http.MethodGet,
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = new(IdentityProvidersListResponse)
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	err = result.unmarshal(response.Body)
-	if err != nil {
-		return
-	}
-	return
-}
-
-// IdentityProvidersListResponse is the response for the 'list' method.
-type IdentityProvidersListResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-	page   *int
-	size   *int
-	total  *int
-	items  *IdentityProviderList
-}
-
-// Status returns the response status code.
-func (r *IdentityProvidersListResponse) Status() int {
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *IdentityProvidersListResponse) Header() http.Header {
-	return r.header
-}
-
-// Error returns the response error.
-func (r *IdentityProvidersListResponse) Error() *errors.Error {
-	return r.err
-}
-
-// Page returns the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-func (r *IdentityProvidersListResponse) Page() int {
-	if r != nil && r.page != nil {
-		return *r.page
-	}
-	return 0
-}
-
-// GetPage returns the value of the 'page' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Index of the requested page, where one corresponds to the first page.
-func (r *IdentityProvidersListResponse) GetPage() (value int, ok bool) {
-	ok = r != nil && r.page != nil
-	if ok {
-		value = *r.page
-	}
-	return
-}
-
-// Size returns the value of the 'size' parameter.
-//
-// Number of items contained in the returned page.
-func (r *IdentityProvidersListResponse) Size() int {
-	if r != nil && r.size != nil {
-		return *r.size
-	}
-	return 0
-}
-
-// GetSize returns the value of the 'size' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Number of items contained in the returned page.
-func (r *IdentityProvidersListResponse) GetSize() (value int, ok bool) {
-	ok = r != nil && r.size != nil
-	if ok {
-		value = *r.size
-	}
-	return
-}
-
-// Total returns the value of the 'total' parameter.
-//
-// Total number of items of the collection.
-func (r *IdentityProvidersListResponse) Total() int {
-	if r != nil && r.total != nil {
-		return *r.total
-	}
-	return 0
-}
-
-// GetTotal returns the value of the 'total' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Total number of items of the collection.
-func (r *IdentityProvidersListResponse) GetTotal() (value int, ok bool) {
-	ok = r != nil && r.total != nil
-	if ok {
-		value = *r.total
-	}
-	return
-}
-
-// Items returns the value of the 'items' parameter.
-//
-// Retrieved list of identity providers.
-func (r *IdentityProvidersListResponse) Items() *IdentityProviderList {
-	if r == nil {
-		return nil
-	}
-	return r.items
-}
-
-// GetItems returns the value of the 'items' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Retrieved list of identity providers.
-func (r *IdentityProvidersListResponse) GetItems() (value *IdentityProviderList, ok bool) {
-	ok = r != nil && r.items != nil
-	if ok {
-		value = r.items
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'list' method.
-func (r *IdentityProvidersListResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(identityProvidersListResponseData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.page = data.Page
-	r.size = data.Size
-	r.total = data.Total
-	r.items, err = data.Items.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-// identityProvidersListResponseData is the structure used internally to unmarshal
-// the response of the 'list' method.
-type identityProvidersListResponseData struct {
-	Page  *int                     "json:\"page,omitempty\""
-	Size  *int                     "json:\"size,omitempty\""
-	Total *int                     "json:\"total,omitempty\""
-	Items identityProviderListData "json:\"items,omitempty\""
 }
 
 // IdentityProvidersAddRequest is the request for the 'add' method.
@@ -453,4 +242,215 @@ func (r *IdentityProvidersAddResponse) unmarshal(reader io.Reader) error {
 		return err
 	}
 	return err
+}
+
+// IdentityProvidersListRequest is the request for the 'list' method.
+type IdentityProvidersListRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *IdentityProvidersListRequest) Parameter(name string, value interface{}) *IdentityProvidersListRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *IdentityProvidersListRequest) Header(name string, value interface{}) *IdentityProvidersListRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *IdentityProvidersListRequest) Send() (result *IdentityProvidersListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *IdentityProvidersListRequest) SendContext(ctx context.Context) (result *IdentityProvidersListResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: http.MethodGet,
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = new(IdentityProvidersListResponse)
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	err = result.unmarshal(response.Body)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// IdentityProvidersListResponse is the response for the 'list' method.
+type IdentityProvidersListResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+	items  *IdentityProviderList
+	page   *int
+	size   *int
+	total  *int
+}
+
+// Status returns the response status code.
+func (r *IdentityProvidersListResponse) Status() int {
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *IdentityProvidersListResponse) Header() http.Header {
+	return r.header
+}
+
+// Error returns the response error.
+func (r *IdentityProvidersListResponse) Error() *errors.Error {
+	return r.err
+}
+
+// Items returns the value of the 'items' parameter.
+//
+// Retrieved list of identity providers.
+func (r *IdentityProvidersListResponse) Items() *IdentityProviderList {
+	if r == nil {
+		return nil
+	}
+	return r.items
+}
+
+// GetItems returns the value of the 'items' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Retrieved list of identity providers.
+func (r *IdentityProvidersListResponse) GetItems() (value *IdentityProviderList, ok bool) {
+	ok = r != nil && r.items != nil
+	if ok {
+		value = r.items
+	}
+	return
+}
+
+// Page returns the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+func (r *IdentityProvidersListResponse) Page() int {
+	if r != nil && r.page != nil {
+		return *r.page
+	}
+	return 0
+}
+
+// GetPage returns the value of the 'page' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Index of the requested page, where one corresponds to the first page.
+func (r *IdentityProvidersListResponse) GetPage() (value int, ok bool) {
+	ok = r != nil && r.page != nil
+	if ok {
+		value = *r.page
+	}
+	return
+}
+
+// Size returns the value of the 'size' parameter.
+//
+// Number of items contained in the returned page.
+func (r *IdentityProvidersListResponse) Size() int {
+	if r != nil && r.size != nil {
+		return *r.size
+	}
+	return 0
+}
+
+// GetSize returns the value of the 'size' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Number of items contained in the returned page.
+func (r *IdentityProvidersListResponse) GetSize() (value int, ok bool) {
+	ok = r != nil && r.size != nil
+	if ok {
+		value = *r.size
+	}
+	return
+}
+
+// Total returns the value of the 'total' parameter.
+//
+// Total number of items of the collection.
+func (r *IdentityProvidersListResponse) Total() int {
+	if r != nil && r.total != nil {
+		return *r.total
+	}
+	return 0
+}
+
+// GetTotal returns the value of the 'total' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Total number of items of the collection.
+func (r *IdentityProvidersListResponse) GetTotal() (value int, ok bool) {
+	ok = r != nil && r.total != nil
+	if ok {
+		value = *r.total
+	}
+	return
+}
+
+// unmarshal is the method used internally to unmarshal responses to the
+// 'list' method.
+func (r *IdentityProvidersListResponse) unmarshal(reader io.Reader) error {
+	var err error
+	decoder := json.NewDecoder(reader)
+	data := new(identityProvidersListResponseData)
+	err = decoder.Decode(data)
+	if err != nil {
+		return err
+	}
+	r.items, err = data.Items.unwrap()
+	if err != nil {
+		return err
+	}
+	r.page = data.Page
+	r.size = data.Size
+	r.total = data.Total
+	return err
+}
+
+// identityProvidersListResponseData is the structure used internally to unmarshal
+// the response of the 'list' method.
+type identityProvidersListResponseData struct {
+	Items identityProviderListData "json:\"items,omitempty\""
+	Page  *int                     "json:\"page,omitempty\""
+	Size  *int                     "json:\"size,omitempty\""
+	Total *int                     "json:\"total,omitempty\""
 }

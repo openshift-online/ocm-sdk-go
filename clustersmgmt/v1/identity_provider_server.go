@@ -33,15 +33,31 @@ import (
 // IdentityProviderServer represents the interface the manages the 'identity_provider' resource.
 type IdentityProviderServer interface {
 
-	// Get handles a request for the 'get' method.
-	//
-	// Retrieves the details of the identity provider.
-	Get(ctx context.Context, request *IdentityProviderGetServerRequest, response *IdentityProviderGetServerResponse) error
-
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the identity provider.
 	Delete(ctx context.Context, request *IdentityProviderDeleteServerRequest, response *IdentityProviderDeleteServerResponse) error
+
+	// Get handles a request for the 'get' method.
+	//
+	// Retrieves the details of the identity provider.
+	Get(ctx context.Context, request *IdentityProviderGetServerRequest, response *IdentityProviderGetServerResponse) error
+}
+
+// IdentityProviderDeleteServerRequest is the request for the 'delete' method.
+type IdentityProviderDeleteServerRequest struct {
+}
+
+// IdentityProviderDeleteServerResponse is the response for the 'delete' method.
+type IdentityProviderDeleteServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *IdentityProviderDeleteServerResponse) SetStatusCode(status int) *IdentityProviderDeleteServerResponse {
+	r.status = status
+	return r
 }
 
 // IdentityProviderGetServerRequest is the request for the 'get' method.
@@ -82,22 +98,6 @@ func (r *IdentityProviderGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// IdentityProviderDeleteServerRequest is the request for the 'delete' method.
-type IdentityProviderDeleteServerRequest struct {
-}
-
-// IdentityProviderDeleteServerResponse is the response for the 'delete' method.
-type IdentityProviderDeleteServerResponse struct {
-	status int
-	err    *errors.Error
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *IdentityProviderDeleteServerResponse) SetStatusCode(status int) *IdentityProviderDeleteServerResponse {
-	r.status = status
-	return r
-}
-
 // IdentityProviderServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type IdentityProviderServerAdapter struct {
@@ -109,9 +109,50 @@ func NewIdentityProviderServerAdapter(server IdentityProviderServer, router *mux
 	adapter := new(IdentityProviderServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
+}
+func (a *IdentityProviderServerAdapter) readIdentityProviderDeleteServerRequest(r *http.Request) (*IdentityProviderDeleteServerRequest, error) {
+	var err error
+	result := new(IdentityProviderDeleteServerRequest)
+	return result, err
+}
+func (a *IdentityProviderServerAdapter) writeIdentityProviderDeleteServerResponse(w http.ResponseWriter, r *IdentityProviderDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	return nil
+}
+func (a *IdentityProviderServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readIdentityProviderDeleteServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(IdentityProviderDeleteServerResponse)
+	err = a.server.Delete(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeIdentityProviderDeleteServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *IdentityProviderServerAdapter) readIdentityProviderGetServerRequest(r *http.Request) (*IdentityProviderGetServerRequest, error) {
 	var err error
@@ -149,47 +190,6 @@ func (a *IdentityProviderServerAdapter) getHandler(w http.ResponseWriter, r *htt
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeIdentityProviderGetServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *IdentityProviderServerAdapter) readIdentityProviderDeleteServerRequest(r *http.Request) (*IdentityProviderDeleteServerRequest, error) {
-	var err error
-	result := new(IdentityProviderDeleteServerRequest)
-	return result, err
-}
-func (a *IdentityProviderServerAdapter) writeIdentityProviderDeleteServerResponse(w http.ResponseWriter, r *IdentityProviderDeleteServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	return nil
-}
-func (a *IdentityProviderServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readIdentityProviderDeleteServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(IdentityProviderDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeIdentityProviderDeleteServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

@@ -132,10 +132,18 @@ func (r *RegistriesListServerRequest) GetTotal() (value int, ok bool) {
 type RegistriesListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *RegistryList
 	page   *int
 	size   *int
 	total  *int
-	items  *RegistryList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of registries.
+func (r *RegistriesListServerResponse) Items(value *RegistryList) *RegistriesListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -167,14 +175,6 @@ func (r *RegistriesListServerResponse) Total(value int) *RegistriesListServerRes
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of registries.
-func (r *RegistriesListServerResponse) Items(value *RegistryList) *RegistriesListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *RegistriesListServerResponse) SetStatusCode(status int) *RegistriesListServerResponse {
 	r.status = status
@@ -187,13 +187,13 @@ func (r *RegistriesListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(registriesListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -201,10 +201,10 @@ func (r *RegistriesListServerResponse) marshal(writer io.Writer) error {
 // registriesListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type registriesListServerResponseData struct {
+	Items registryListData "json:\"items,omitempty\""
 	Page  *int             "json:\"page,omitempty\""
 	Size  *int             "json:\"size,omitempty\""
 	Total *int             "json:\"total,omitempty\""
-	Items registryListData "json:\"items,omitempty\""
 }
 
 // RegistriesServerAdapter represents the structs that adapts Requests and Response to internal

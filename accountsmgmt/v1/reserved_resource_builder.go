@@ -23,34 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ReservedResourceBuilder struct {
-	resourceName         *string
-	resourceType         *string
 	byoc                 *bool
 	availabilityZoneType *string
 	count                *int
+	resourceName         *string
+	resourceType         *string
 }
 
 // NewReservedResource creates a new builder of 'reserved_resource' objects.
 func NewReservedResource() *ReservedResourceBuilder {
 	return new(ReservedResourceBuilder)
-}
-
-// ResourceName sets the value of the 'resource_name' attribute
-// to the given value.
-//
-//
-func (b *ReservedResourceBuilder) ResourceName(value string) *ReservedResourceBuilder {
-	b.resourceName = &value
-	return b
-}
-
-// ResourceType sets the value of the 'resource_type' attribute
-// to the given value.
-//
-//
-func (b *ReservedResourceBuilder) ResourceType(value string) *ReservedResourceBuilder {
-	b.resourceType = &value
-	return b
 }
 
 // BYOC sets the value of the 'BYOC' attribute
@@ -80,15 +62,40 @@ func (b *ReservedResourceBuilder) Count(value int) *ReservedResourceBuilder {
 	return b
 }
 
+// ResourceName sets the value of the 'resource_name' attribute
+// to the given value.
+//
+//
+func (b *ReservedResourceBuilder) ResourceName(value string) *ReservedResourceBuilder {
+	b.resourceName = &value
+	return b
+}
+
+// ResourceType sets the value of the 'resource_type' attribute
+// to the given value.
+//
+//
+func (b *ReservedResourceBuilder) ResourceType(value string) *ReservedResourceBuilder {
+	b.resourceType = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ReservedResourceBuilder) Copy(object *ReservedResource) *ReservedResourceBuilder {
+	if object == nil {
+		return b
+	}
+	b.byoc = object.byoc
+	b.availabilityZoneType = object.availabilityZoneType
+	b.count = object.count
+	b.resourceName = object.resourceName
+	b.resourceType = object.resourceType
+	return b
+}
+
 // Build creates a 'reserved_resource' object using the configuration stored in the builder.
 func (b *ReservedResourceBuilder) Build() (object *ReservedResource, err error) {
 	object = new(ReservedResource)
-	if b.resourceName != nil {
-		object.resourceName = b.resourceName
-	}
-	if b.resourceType != nil {
-		object.resourceType = b.resourceType
-	}
 	if b.byoc != nil {
 		object.byoc = b.byoc
 	}
@@ -97,6 +104,12 @@ func (b *ReservedResourceBuilder) Build() (object *ReservedResource, err error) 
 	}
 	if b.count != nil {
 		object.count = b.count
+	}
+	if b.resourceName != nil {
+		object.resourceName = b.resourceName
+	}
+	if b.resourceType != nil {
+		object.resourceType = b.resourceType
 	}
 	return
 }

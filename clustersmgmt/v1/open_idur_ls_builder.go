@@ -60,6 +60,17 @@ func (b *OpenIDURLsBuilder) UserInfo(value string) *OpenIDURLsBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *OpenIDURLsBuilder) Copy(object *OpenIDURLs) *OpenIDURLsBuilder {
+	if object == nil {
+		return b
+	}
+	b.authorize = object.authorize
+	b.token = object.token
+	b.userInfo = object.userInfo
+	return b
+}
+
 // Build creates a 'open_IDUR_ls' object using the configuration stored in the builder.
 func (b *OpenIDURLsBuilder) Build() (object *OpenIDURLs, err error) {
 	object = new(OpenIDURLs)

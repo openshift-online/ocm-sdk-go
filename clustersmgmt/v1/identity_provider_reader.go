@@ -31,16 +31,16 @@ type identityProviderData struct {
 	Kind          *string                        "json:\"kind,omitempty\""
 	ID            *string                        "json:\"id,omitempty\""
 	HREF          *string                        "json:\"href,omitempty\""
-	Type          *IdentityProviderType          "json:\"type,omitempty\""
-	Name          *string                        "json:\"name,omitempty\""
+	LDAP          *ldapIdentityProviderData      "json:\"ldap,omitempty\""
 	Challenge     *bool                          "json:\"challenge,omitempty\""
-	Login         *bool                          "json:\"login,omitempty\""
-	MappingMethod *IdentityProviderMappingMethod "json:\"mapping_method,omitempty\""
 	Github        *githubIdentityProviderData    "json:\"github,omitempty\""
 	Gitlab        *gitlabIdentityProviderData    "json:\"gitlab,omitempty\""
 	Google        *googleIdentityProviderData    "json:\"google,omitempty\""
-	LDAP          *ldapIdentityProviderData      "json:\"ldap,omitempty\""
+	Login         *bool                          "json:\"login,omitempty\""
+	MappingMethod *IdentityProviderMappingMethod "json:\"mapping_method,omitempty\""
+	Name          *string                        "json:\"name,omitempty\""
 	OpenID        *openIDIdentityProviderData    "json:\"open_id,omitempty\""
+	Type          *IdentityProviderType          "json:\"type,omitempty\""
 }
 
 // MarshalIdentityProvider writes a value of the 'identity_provider' to the given target,
@@ -72,11 +72,11 @@ func (o *IdentityProvider) wrap() (data *identityProviderData, err error) {
 	} else {
 		*data.Kind = IdentityProviderKind
 	}
-	data.Type = o.type_
-	data.Name = o.name
+	data.LDAP, err = o.ldap.wrap()
+	if err != nil {
+		return
+	}
 	data.Challenge = o.challenge
-	data.Login = o.login
-	data.MappingMethod = o.mappingMethod
 	data.Github, err = o.github.wrap()
 	if err != nil {
 		return
@@ -89,14 +89,14 @@ func (o *IdentityProvider) wrap() (data *identityProviderData, err error) {
 	if err != nil {
 		return
 	}
-	data.LDAP, err = o.ldap.wrap()
-	if err != nil {
-		return
-	}
+	data.Login = o.login
+	data.MappingMethod = o.mappingMethod
+	data.Name = o.name
 	data.OpenID, err = o.openID.wrap()
 	if err != nil {
 		return
 	}
+	data.Type = o.type_
 	return
 }
 
@@ -141,11 +141,11 @@ func (d *identityProviderData) unwrap() (object *IdentityProvider, err error) {
 			return
 		}
 	}
-	object.type_ = d.Type
-	object.name = d.Name
+	object.ldap, err = d.LDAP.unwrap()
+	if err != nil {
+		return
+	}
 	object.challenge = d.Challenge
-	object.login = d.Login
-	object.mappingMethod = d.MappingMethod
 	object.github, err = d.Github.unwrap()
 	if err != nil {
 		return
@@ -158,13 +158,13 @@ func (d *identityProviderData) unwrap() (object *IdentityProvider, err error) {
 	if err != nil {
 		return
 	}
-	object.ldap, err = d.LDAP.unwrap()
-	if err != nil {
-		return
-	}
+	object.login = d.Login
+	object.mappingMethod = d.MappingMethod
+	object.name = d.Name
 	object.openID, err = d.OpenID.unwrap()
 	if err != nil {
 		return
 	}
+	object.type_ = d.Type
 	return
 }

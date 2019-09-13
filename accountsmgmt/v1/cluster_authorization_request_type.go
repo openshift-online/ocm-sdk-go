@@ -23,46 +23,46 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationRequest struct {
-	clusterID        *string
+	byoc             *bool
 	accountUsername  *string
+	availabilityZone *string
+	clusterID        *string
 	managed          *bool
 	reserve          *bool
-	byoc             *bool
-	availabilityZone *string
 	resources        *ReservedResourceList
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterAuthorizationRequest) Empty() bool {
-	return o == nil || (o.clusterID == nil &&
+	return o == nil || (o.byoc == nil &&
 		o.accountUsername == nil &&
+		o.availabilityZone == nil &&
+		o.clusterID == nil &&
 		o.managed == nil &&
 		o.reserve == nil &&
-		o.byoc == nil &&
-		o.availabilityZone == nil &&
 		o.resources.Empty() &&
 		true)
 }
 
-// ClusterID returns the value of the 'cluster_ID' attribute, or
+// BYOC returns the value of the 'BYOC' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *ClusterAuthorizationRequest) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
+func (o *ClusterAuthorizationRequest) BYOC() bool {
+	if o != nil && o.byoc != nil {
+		return *o.byoc
 	}
-	return ""
+	return false
 }
 
-// GetClusterID returns the value of the 'cluster_ID' attribute and
+// GetBYOC returns the value of the 'BYOC' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *ClusterAuthorizationRequest) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
+func (o *ClusterAuthorizationRequest) GetBYOC() (value bool, ok bool) {
+	ok = o != nil && o.byoc != nil
 	if ok {
-		value = *o.clusterID
+		value = *o.byoc
 	}
 	return
 }
@@ -86,6 +86,52 @@ func (o *ClusterAuthorizationRequest) GetAccountUsername() (value string, ok boo
 	ok = o != nil && o.accountUsername != nil
 	if ok {
 		value = *o.accountUsername
+	}
+	return
+}
+
+// AvailabilityZone returns the value of the 'availability_zone' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) AvailabilityZone() string {
+	if o != nil && o.availabilityZone != nil {
+		return *o.availabilityZone
+	}
+	return ""
+}
+
+// GetAvailabilityZone returns the value of the 'availability_zone' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetAvailabilityZone() (value string, ok bool) {
+	ok = o != nil && o.availabilityZone != nil
+	if ok {
+		value = *o.availabilityZone
+	}
+	return
+}
+
+// ClusterID returns the value of the 'cluster_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) ClusterID() string {
+	if o != nil && o.clusterID != nil {
+		return *o.clusterID
+	}
+	return ""
+}
+
+// GetClusterID returns the value of the 'cluster_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetClusterID() (value string, ok bool) {
+	ok = o != nil && o.clusterID != nil
+	if ok {
+		value = *o.clusterID
 	}
 	return
 }
@@ -132,52 +178,6 @@ func (o *ClusterAuthorizationRequest) GetReserve() (value bool, ok bool) {
 	ok = o != nil && o.reserve != nil
 	if ok {
 		value = *o.reserve
-	}
-	return
-}
-
-// BYOC returns the value of the 'BYOC' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *ClusterAuthorizationRequest) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
-	}
-	return false
-}
-
-// GetBYOC returns the value of the 'BYOC' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *ClusterAuthorizationRequest) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
-	if ok {
-		value = *o.byoc
-	}
-	return
-}
-
-// AvailabilityZone returns the value of the 'availability_zone' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *ClusterAuthorizationRequest) AvailabilityZone() string {
-	if o != nil && o.availabilityZone != nil {
-		return *o.availabilityZone
-	}
-	return ""
-}
-
-// GetAvailabilityZone returns the value of the 'availability_zone' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *ClusterAuthorizationRequest) GetAvailabilityZone() (value string, ok bool) {
-	ok = o != nil && o.availabilityZone != nil
-	if ok {
-		value = *o.availabilityZone
 	}
 	return
 }

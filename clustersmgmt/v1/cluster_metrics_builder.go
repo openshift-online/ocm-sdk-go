@@ -24,11 +24,11 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Cluster metrics received via telemetry.
 type ClusterMetricsBuilder struct {
 	cpu                *ClusterMetricBuilder
-	memory             *ClusterMetricBuilder
-	storage            *ClusterMetricBuilder
 	computeNodesCPU    *ClusterMetricBuilder
 	computeNodesMemory *ClusterMetricBuilder
+	memory             *ClusterMetricBuilder
 	nodes              *ClusterNodesBuilder
+	storage            *ClusterMetricBuilder
 }
 
 // NewClusterMetrics creates a new builder of 'cluster_metrics' objects.
@@ -43,26 +43,6 @@ func NewClusterMetrics() *ClusterMetricsBuilder {
 // a cluster.
 func (b *ClusterMetricsBuilder) CPU(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.cpu = value
-	return b
-}
-
-// Memory sets the value of the 'memory' attribute
-// to the given value.
-//
-// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
-// a cluster.
-func (b *ClusterMetricsBuilder) Memory(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
-	b.memory = value
-	return b
-}
-
-// Storage sets the value of the 'storage' attribute
-// to the given value.
-//
-// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
-// a cluster.
-func (b *ClusterMetricsBuilder) Storage(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
-	b.storage = value
 	return b
 }
 
@@ -86,6 +66,16 @@ func (b *ClusterMetricsBuilder) ComputeNodesMemory(value *ClusterMetricBuilder) 
 	return b
 }
 
+// Memory sets the value of the 'memory' attribute
+// to the given value.
+//
+// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
+// a cluster.
+func (b *ClusterMetricsBuilder) Memory(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
+	b.memory = value
+	return b
+}
+
 // Nodes sets the value of the 'nodes' attribute
 // to the given value.
 //
@@ -95,23 +85,59 @@ func (b *ClusterMetricsBuilder) Nodes(value *ClusterNodesBuilder) *ClusterMetric
 	return b
 }
 
+// Storage sets the value of the 'storage' attribute
+// to the given value.
+//
+// Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
+// a cluster.
+func (b *ClusterMetricsBuilder) Storage(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
+	b.storage = value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterMetricsBuilder) Copy(object *ClusterMetrics) *ClusterMetricsBuilder {
+	if object == nil {
+		return b
+	}
+	if object.cpu != nil {
+		b.cpu = NewClusterMetric().Copy(object.cpu)
+	} else {
+		b.cpu = nil
+	}
+	if object.computeNodesCPU != nil {
+		b.computeNodesCPU = NewClusterMetric().Copy(object.computeNodesCPU)
+	} else {
+		b.computeNodesCPU = nil
+	}
+	if object.computeNodesMemory != nil {
+		b.computeNodesMemory = NewClusterMetric().Copy(object.computeNodesMemory)
+	} else {
+		b.computeNodesMemory = nil
+	}
+	if object.memory != nil {
+		b.memory = NewClusterMetric().Copy(object.memory)
+	} else {
+		b.memory = nil
+	}
+	if object.nodes != nil {
+		b.nodes = NewClusterNodes().Copy(object.nodes)
+	} else {
+		b.nodes = nil
+	}
+	if object.storage != nil {
+		b.storage = NewClusterMetric().Copy(object.storage)
+	} else {
+		b.storage = nil
+	}
+	return b
+}
+
 // Build creates a 'cluster_metrics' object using the configuration stored in the builder.
 func (b *ClusterMetricsBuilder) Build() (object *ClusterMetrics, err error) {
 	object = new(ClusterMetrics)
 	if b.cpu != nil {
 		object.cpu, err = b.cpu.Build()
-		if err != nil {
-			return
-		}
-	}
-	if b.memory != nil {
-		object.memory, err = b.memory.Build()
-		if err != nil {
-			return
-		}
-	}
-	if b.storage != nil {
-		object.storage, err = b.storage.Build()
 		if err != nil {
 			return
 		}
@@ -128,8 +154,20 @@ func (b *ClusterMetricsBuilder) Build() (object *ClusterMetrics, err error) {
 			return
 		}
 	}
+	if b.memory != nil {
+		object.memory, err = b.memory.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.nodes != nil {
 		object.nodes, err = b.nodes.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.storage != nil {
+		object.storage, err = b.storage.Build()
 		if err != nil {
 			return
 		}

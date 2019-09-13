@@ -52,6 +52,17 @@ func NewRoleClient(transport http.RoundTripper, path string, metric string) *Rol
 	return client
 }
 
+// Delete creates a request for the 'delete' method.
+//
+// Deletes the role.
+func (c *RoleClient) Delete() *RoleDeleteRequest {
+	request := new(RoleDeleteRequest)
+	request.transport = c.transport
+	request.path = c.path
+	request.metric = c.metric
+	return request
+}
+
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the role.
@@ -74,15 +85,90 @@ func (c *RoleClient) Update() *RoleUpdateRequest {
 	return request
 }
 
-// Delete creates a request for the 'delete' method.
+// RoleDeleteRequest is the request for the 'delete' method.
+type RoleDeleteRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *RoleDeleteRequest) Parameter(name string, value interface{}) *RoleDeleteRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *RoleDeleteRequest) Header(name string, value interface{}) *RoleDeleteRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
 //
-// Deletes the role.
-func (c *RoleClient) Delete() *RoleDeleteRequest {
-	request := new(RoleDeleteRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleDeleteRequest) SendContext(ctx context.Context) (result *RoleDeleteResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: http.MethodDelete,
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = new(RoleDeleteResponse)
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// RoleDeleteResponse is the response for the 'delete' method.
+type RoleDeleteResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *RoleDeleteResponse) Status() int {
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *RoleDeleteResponse) Header() http.Header {
+	return r.header
+}
+
+// Error returns the response error.
+func (r *RoleDeleteResponse) Error() *errors.Error {
+	return r.err
 }
 
 // RoleGetRequest is the request for the 'get' method.
@@ -371,90 +457,4 @@ func (r *RoleUpdateResponse) unmarshal(reader io.Reader) error {
 		return err
 	}
 	return err
-}
-
-// RoleDeleteRequest is the request for the 'delete' method.
-type RoleDeleteRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *RoleDeleteRequest) Parameter(name string, value interface{}) *RoleDeleteRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *RoleDeleteRequest) Header(name string, value interface{}) *RoleDeleteRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RoleDeleteRequest) SendContext(ctx context.Context) (result *RoleDeleteResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: http.MethodDelete,
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = new(RoleDeleteResponse)
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	return
-}
-
-// RoleDeleteResponse is the response for the 'delete' method.
-type RoleDeleteResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-}
-
-// Status returns the response status code.
-func (r *RoleDeleteResponse) Status() int {
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *RoleDeleteResponse) Header() http.Header {
-	return r.header
-}
-
-// Error returns the response error.
-func (r *RoleDeleteResponse) Error() *errors.Error {
-	return r.err
 }

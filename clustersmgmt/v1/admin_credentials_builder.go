@@ -24,22 +24,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Temporary administrator credentials generated during the installation of the
 // cluster.
 type AdminCredentialsBuilder struct {
-	user     *string
 	password *string
+	user     *string
 }
 
 // NewAdminCredentials creates a new builder of 'admin_credentials' objects.
 func NewAdminCredentials() *AdminCredentialsBuilder {
 	return new(AdminCredentialsBuilder)
-}
-
-// User sets the value of the 'user' attribute
-// to the given value.
-//
-//
-func (b *AdminCredentialsBuilder) User(value string) *AdminCredentialsBuilder {
-	b.user = &value
-	return b
 }
 
 // Password sets the value of the 'password' attribute
@@ -51,14 +42,33 @@ func (b *AdminCredentialsBuilder) Password(value string) *AdminCredentialsBuilde
 	return b
 }
 
+// User sets the value of the 'user' attribute
+// to the given value.
+//
+//
+func (b *AdminCredentialsBuilder) User(value string) *AdminCredentialsBuilder {
+	b.user = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *AdminCredentialsBuilder) Copy(object *AdminCredentials) *AdminCredentialsBuilder {
+	if object == nil {
+		return b
+	}
+	b.password = object.password
+	b.user = object.user
+	return b
+}
+
 // Build creates a 'admin_credentials' object using the configuration stored in the builder.
 func (b *AdminCredentialsBuilder) Build() (object *AdminCredentials, err error) {
 	object = new(AdminCredentials)
-	if b.user != nil {
-		object.user = b.user
-	}
 	if b.password != nil {
 		object.password = b.password
+	}
+	if b.user != nil {
+		object.user = b.user
 	}
 	return
 }

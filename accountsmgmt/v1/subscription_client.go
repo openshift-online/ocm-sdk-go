@@ -50,6 +50,17 @@ func NewSubscriptionClient(transport http.RoundTripper, path string, metric stri
 	return client
 }
 
+// Delete creates a request for the 'delete' method.
+//
+// Deletes the subscription.
+func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
+	request := new(SubscriptionDeleteRequest)
+	request.transport = c.transport
+	request.path = c.path
+	request.metric = c.metric
+	return request
+}
+
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the subscription.
@@ -61,15 +72,90 @@ func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
 	return request
 }
 
-// Delete creates a request for the 'delete' method.
+// SubscriptionDeleteRequest is the request for the 'delete' method.
+type SubscriptionDeleteRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *SubscriptionDeleteRequest) Parameter(name string, value interface{}) *SubscriptionDeleteRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *SubscriptionDeleteRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
 //
-// Deletes the subscription.
-func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
-	request := new(SubscriptionDeleteRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *SubscriptionDeleteRequest) Send() (result *SubscriptionDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *SubscriptionDeleteResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: http.MethodDelete,
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = new(SubscriptionDeleteResponse)
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// SubscriptionDeleteResponse is the response for the 'delete' method.
+type SubscriptionDeleteResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *SubscriptionDeleteResponse) Status() int {
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *SubscriptionDeleteResponse) Header() http.Header {
+	return r.header
+}
+
+// Error returns the response error.
+func (r *SubscriptionDeleteResponse) Error() *errors.Error {
+	return r.err
 }
 
 // SubscriptionGetRequest is the request for the 'get' method.
@@ -200,90 +286,4 @@ func (r *SubscriptionGetResponse) unmarshal(reader io.Reader) error {
 		return err
 	}
 	return err
-}
-
-// SubscriptionDeleteRequest is the request for the 'delete' method.
-type SubscriptionDeleteRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *SubscriptionDeleteRequest) Parameter(name string, value interface{}) *SubscriptionDeleteRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *SubscriptionDeleteRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SubscriptionDeleteRequest) Send() (result *SubscriptionDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *SubscriptionDeleteResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: http.MethodDelete,
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = new(SubscriptionDeleteResponse)
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	return
-}
-
-// SubscriptionDeleteResponse is the response for the 'delete' method.
-type SubscriptionDeleteResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-}
-
-// Status returns the response status code.
-func (r *SubscriptionDeleteResponse) Status() int {
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *SubscriptionDeleteResponse) Header() http.Header {
-	return r.header
-}
-
-// Error returns the response error.
-func (r *SubscriptionDeleteResponse) Error() *errors.Error {
-	return r.err
 }

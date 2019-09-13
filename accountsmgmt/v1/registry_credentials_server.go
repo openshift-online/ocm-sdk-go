@@ -34,20 +34,98 @@ import (
 // RegistryCredentialsServer represents the interface the manages the 'registry_credentials' resource.
 type RegistryCredentialsServer interface {
 
-	// List handles a request for the 'list' method.
-	//
-	// Retrieves the list of accounts.
-	List(ctx context.Context, request *RegistryCredentialsListServerRequest, response *RegistryCredentialsListServerResponse) error
-
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new registry credential.
 	Add(ctx context.Context, request *RegistryCredentialsAddServerRequest, response *RegistryCredentialsAddServerResponse) error
 
+	// List handles a request for the 'list' method.
+	//
+	// Retrieves the list of accounts.
+	List(ctx context.Context, request *RegistryCredentialsListServerRequest, response *RegistryCredentialsListServerResponse) error
+
 	// RegistryCredential returns the target 'registry_credential' server for the given identifier.
 	//
 	// Reference to the service that manages an specific registry credential.
 	RegistryCredential(id string) RegistryCredentialServer
+}
+
+// RegistryCredentialsAddServerRequest is the request for the 'add' method.
+type RegistryCredentialsAddServerRequest struct {
+	body *RegistryCredential
+}
+
+// Body returns the value of the 'body' parameter.
+//
+// Registry credential data.
+func (r *RegistryCredentialsAddServerRequest) Body() *RegistryCredential {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Registry credential data.
+func (r *RegistryCredentialsAddServerRequest) GetBody() (value *RegistryCredential, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// unmarshal is the method used internally to unmarshal request to the
+// 'add' method.
+func (r *RegistryCredentialsAddServerRequest) unmarshal(reader io.Reader) error {
+	var err error
+	decoder := json.NewDecoder(reader)
+	data := new(registryCredentialData)
+	err = decoder.Decode(data)
+	if err != nil {
+		return err
+	}
+	r.body, err = data.unwrap()
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+// RegistryCredentialsAddServerResponse is the response for the 'add' method.
+type RegistryCredentialsAddServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *RegistryCredential
+}
+
+// Body sets the value of the 'body' parameter.
+//
+// Registry credential data.
+func (r *RegistryCredentialsAddServerResponse) Body(value *RegistryCredential) *RegistryCredentialsAddServerResponse {
+	r.body = value
+	return r
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *RegistryCredentialsAddServerResponse) SetStatusCode(status int) *RegistryCredentialsAddServerResponse {
+	r.status = status
+	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'add' method.
+func (r *RegistryCredentialsAddServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data, err := r.body.wrap()
+	if err != nil {
+		return err
+	}
+	err = encoder.Encode(data)
+	return err
 }
 
 // RegistryCredentialsListServerRequest is the request for the 'list' method.
@@ -137,10 +215,18 @@ func (r *RegistryCredentialsListServerRequest) GetTotal() (value int, ok bool) {
 type RegistryCredentialsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *RegistryCredentialList
 	page   *int
 	size   *int
 	total  *int
-	items  *RegistryCredentialList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of registry credentials.
+func (r *RegistryCredentialsListServerResponse) Items(value *RegistryCredentialList) *RegistryCredentialsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -172,14 +258,6 @@ func (r *RegistryCredentialsListServerResponse) Total(value int) *RegistryCreden
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of registry credentials.
-func (r *RegistryCredentialsListServerResponse) Items(value *RegistryCredentialList) *RegistryCredentialsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *RegistryCredentialsListServerResponse) SetStatusCode(status int) *RegistryCredentialsListServerResponse {
 	r.status = status
@@ -192,13 +270,13 @@ func (r *RegistryCredentialsListServerResponse) marshal(writer io.Writer) error 
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(registryCredentialsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -206,88 +284,10 @@ func (r *RegistryCredentialsListServerResponse) marshal(writer io.Writer) error 
 // registryCredentialsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type registryCredentialsListServerResponseData struct {
+	Items registryCredentialListData "json:\"items,omitempty\""
 	Page  *int                       "json:\"page,omitempty\""
 	Size  *int                       "json:\"size,omitempty\""
 	Total *int                       "json:\"total,omitempty\""
-	Items registryCredentialListData "json:\"items,omitempty\""
-}
-
-// RegistryCredentialsAddServerRequest is the request for the 'add' method.
-type RegistryCredentialsAddServerRequest struct {
-	body *RegistryCredential
-}
-
-// Body returns the value of the 'body' parameter.
-//
-// Registry credential data.
-func (r *RegistryCredentialsAddServerRequest) Body() *RegistryCredential {
-	if r == nil {
-		return nil
-	}
-	return r.body
-}
-
-// GetBody returns the value of the 'body' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Registry credential data.
-func (r *RegistryCredentialsAddServerRequest) GetBody() (value *RegistryCredential, ok bool) {
-	ok = r != nil && r.body != nil
-	if ok {
-		value = r.body
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal request to the
-// 'add' method.
-func (r *RegistryCredentialsAddServerRequest) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(registryCredentialData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-// RegistryCredentialsAddServerResponse is the response for the 'add' method.
-type RegistryCredentialsAddServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *RegistryCredential
-}
-
-// Body sets the value of the 'body' parameter.
-//
-// Registry credential data.
-func (r *RegistryCredentialsAddServerResponse) Body(value *RegistryCredential) *RegistryCredentialsAddServerResponse {
-	r.body = value
-	return r
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RegistryCredentialsAddServerResponse) SetStatusCode(status int) *RegistryCredentialsAddServerResponse {
-	r.status = status
-	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'add' method.
-func (r *RegistryCredentialsAddServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // RegistryCredentialsServerAdapter represents the structs that adapts Requests and Response to internal
@@ -302,8 +302,8 @@ func NewRegistryCredentialsServerAdapter(server RegistryCredentialsServer, route
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.registryCredentialHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *RegistryCredentialsServerAdapter) registryCredentialHandler(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +312,55 @@ func (a *RegistryCredentialsServerAdapter) registryCredentialHandler(w http.Resp
 	targetAdapter := NewRegistryCredentialServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
+}
+func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsAddServerRequest(r *http.Request) (*RegistryCredentialsAddServerRequest, error) {
+	var err error
+	result := new(RegistryCredentialsAddServerRequest)
+	err = result.unmarshal(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	return result, err
+}
+func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsAddServerResponse(w http.ResponseWriter, r *RegistryCredentialsAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (a *RegistryCredentialsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readRegistryCredentialsAddServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(RegistryCredentialsAddServerResponse)
+	err = a.server.Add(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeRegistryCredentialsAddServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsListServerRequest(r *http.Request) (*RegistryCredentialsListServerRequest, error) {
 	var err error
@@ -362,55 +411,6 @@ func (a *RegistryCredentialsServerAdapter) listHandler(w http.ResponseWriter, r 
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeRegistryCredentialsListServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsAddServerRequest(r *http.Request) (*RegistryCredentialsAddServerRequest, error) {
-	var err error
-	result := new(RegistryCredentialsAddServerRequest)
-	err = result.unmarshal(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
-}
-func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsAddServerResponse(w http.ResponseWriter, r *RegistryCredentialsAddServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-func (a *RegistryCredentialsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRegistryCredentialsAddServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(RegistryCredentialsAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeRegistryCredentialsAddServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

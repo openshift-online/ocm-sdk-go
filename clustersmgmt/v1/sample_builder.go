@@ -54,6 +54,16 @@ func (b *SampleBuilder) Value(value float64) *SampleBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *SampleBuilder) Copy(object *Sample) *SampleBuilder {
+	if object == nil {
+		return b
+	}
+	b.time = object.time
+	b.value = object.value
+	return b
+}
+
 // Build creates a 'sample' object using the configuration stored in the builder.
 func (b *SampleBuilder) Build() (object *Sample, err error) {
 	object = new(Sample)

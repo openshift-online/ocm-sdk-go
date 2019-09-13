@@ -80,10 +80,10 @@ type SubscriptionsListRequest struct {
 	metric    string
 	query     url.Values
 	header    http.Header
+	order     *string
 	page      *int
 	size      *int
 	total     *int
-	order     *string
 }
 
 // Parameter adds a query parameter.
@@ -95,6 +95,26 @@ func (r *SubscriptionsListRequest) Parameter(name string, value interface{}) *Su
 // Header adds a request header.
 func (r *SubscriptionsListRequest) Header(name string, value interface{}) *SubscriptionsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Order sets the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// subscriptions descending by name identifier the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *SubscriptionsListRequest) Order(value string) *SubscriptionsListRequest {
+	r.order = &value
 	return r
 }
 
@@ -127,26 +147,6 @@ func (r *SubscriptionsListRequest) Total(value int) *SubscriptionsListRequest {
 	return r
 }
 
-// Order sets the value of the 'order' parameter.
-//
-// Order criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement. For example, in order to sort the
-// subscriptions descending by name identifier the value should be:
-//
-// [source,sql]
-// ----
-// name desc
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then the order of the
-// results is undefined.
-func (r *SubscriptionsListRequest) Order(value string) *SubscriptionsListRequest {
-	r.order = &value
-	return r
-}
-
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -158,6 +158,9 @@ func (r *SubscriptionsListRequest) Send() (result *SubscriptionsListResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *SubscriptionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
+	if r.order != nil {
+		helpers.AddValue(&query, "order", *r.order)
+	}
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
 	}
@@ -166,9 +169,6 @@ func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *Sub
 	}
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
-	}
-	if r.order != nil {
-		helpers.AddValue(&query, "order", *r.order)
 	}
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -211,10 +211,10 @@ type SubscriptionsListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
+	items  *SubscriptionList
 	page   *int
 	size   *int
 	total  *int
-	items  *SubscriptionList
 }
 
 // Status returns the response status code.
@@ -230,6 +230,28 @@ func (r *SubscriptionsListResponse) Header() http.Header {
 // Error returns the response error.
 func (r *SubscriptionsListResponse) Error() *errors.Error {
 	return r.err
+}
+
+// Items returns the value of the 'items' parameter.
+//
+// Retrieved list of subscriptions.
+func (r *SubscriptionsListResponse) Items() *SubscriptionList {
+	if r == nil {
+		return nil
+	}
+	return r.items
+}
+
+// GetItems returns the value of the 'items' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Retrieved list of subscriptions.
+func (r *SubscriptionsListResponse) GetItems() (value *SubscriptionList, ok bool) {
+	ok = r != nil && r.items != nil
+	if ok {
+		value = r.items
+	}
+	return
 }
 
 // Page returns the value of the 'page' parameter.
@@ -308,28 +330,6 @@ func (r *SubscriptionsListResponse) GetTotal() (value int, ok bool) {
 	return
 }
 
-// Items returns the value of the 'items' parameter.
-//
-// Retrieved list of subscriptions.
-func (r *SubscriptionsListResponse) Items() *SubscriptionList {
-	if r == nil {
-		return nil
-	}
-	return r.items
-}
-
-// GetItems returns the value of the 'items' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Retrieved list of subscriptions.
-func (r *SubscriptionsListResponse) GetItems() (value *SubscriptionList, ok bool) {
-	ok = r != nil && r.items != nil
-	if ok {
-		value = r.items
-	}
-	return
-}
-
 // unmarshal is the method used internally to unmarshal responses to the
 // 'list' method.
 func (r *SubscriptionsListResponse) unmarshal(reader io.Reader) error {
@@ -340,21 +340,21 @@ func (r *SubscriptionsListResponse) unmarshal(reader io.Reader) error {
 	if err != nil {
 		return err
 	}
-	r.page = data.Page
-	r.size = data.Size
-	r.total = data.Total
 	r.items, err = data.Items.unwrap()
 	if err != nil {
 		return err
 	}
+	r.page = data.Page
+	r.size = data.Size
+	r.total = data.Total
 	return err
 }
 
 // subscriptionsListResponseData is the structure used internally to unmarshal
 // the response of the 'list' method.
 type subscriptionsListResponseData struct {
+	Items subscriptionListData "json:\"items,omitempty\""
 	Page  *int                 "json:\"page,omitempty\""
 	Size  *int                 "json:\"size,omitempty\""
 	Total *int                 "json:\"total,omitempty\""
-	Items subscriptionListData "json:\"items,omitempty\""
 }

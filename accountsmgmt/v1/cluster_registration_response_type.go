@@ -23,40 +23,40 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterRegistrationResponse struct {
-	clusterID          *string
-	authorizationToken *string
 	accountID          *string
+	authorizationToken *string
+	clusterID          *string
 	expiresAt          *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterRegistrationResponse) Empty() bool {
-	return o == nil || (o.clusterID == nil &&
+	return o == nil || (o.accountID == nil &&
 		o.authorizationToken == nil &&
-		o.accountID == nil &&
+		o.clusterID == nil &&
 		o.expiresAt == nil &&
 		true)
 }
 
-// ClusterID returns the value of the 'cluster_ID' attribute, or
+// AccountID returns the value of the 'account_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *ClusterRegistrationResponse) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
+func (o *ClusterRegistrationResponse) AccountID() string {
+	if o != nil && o.accountID != nil {
+		return *o.accountID
 	}
 	return ""
 }
 
-// GetClusterID returns the value of the 'cluster_ID' attribute and
+// GetAccountID returns the value of the 'account_ID' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *ClusterRegistrationResponse) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
+func (o *ClusterRegistrationResponse) GetAccountID() (value string, ok bool) {
+	ok = o != nil && o.accountID != nil
 	if ok {
-		value = *o.clusterID
+		value = *o.accountID
 	}
 	return
 }
@@ -84,25 +84,25 @@ func (o *ClusterRegistrationResponse) GetAuthorizationToken() (value string, ok 
 	return
 }
 
-// AccountID returns the value of the 'account_ID' attribute, or
+// ClusterID returns the value of the 'cluster_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *ClusterRegistrationResponse) AccountID() string {
-	if o != nil && o.accountID != nil {
-		return *o.accountID
+func (o *ClusterRegistrationResponse) ClusterID() string {
+	if o != nil && o.clusterID != nil {
+		return *o.clusterID
 	}
 	return ""
 }
 
-// GetAccountID returns the value of the 'account_ID' attribute and
+// GetClusterID returns the value of the 'cluster_ID' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *ClusterRegistrationResponse) GetAccountID() (value string, ok bool) {
-	ok = o != nil && o.accountID != nil
+func (o *ClusterRegistrationResponse) GetClusterID() (value string, ok bool) {
+	ok = o != nil && o.clusterID != nil
 	if ok {
-		value = *o.accountID
+		value = *o.clusterID
 	}
 	return
 }

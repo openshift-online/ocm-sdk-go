@@ -26,8 +26,8 @@ import (
 // adminCredentialsData is the data structure used internally to marshal and unmarshal
 // objects of type 'admin_credentials'.
 type adminCredentialsData struct {
-	User     *string "json:\"user,omitempty\""
 	Password *string "json:\"password,omitempty\""
+	User     *string "json:\"user,omitempty\""
 }
 
 // MarshalAdminCredentials writes a value of the 'admin_credentials' to the given target,
@@ -51,8 +51,8 @@ func (o *AdminCredentials) wrap() (data *adminCredentialsData, err error) {
 		return
 	}
 	data = new(adminCredentialsData)
-	data.User = o.user
 	data.Password = o.password
+	data.User = o.user
 	return
 }
 
@@ -79,7 +79,7 @@ func (d *adminCredentialsData) unwrap() (object *AdminCredentials, err error) {
 		return
 	}
 	object = new(AdminCredentials)
-	object.user = d.User
 	object.password = d.Password
+	object.user = d.User
 	return
 }

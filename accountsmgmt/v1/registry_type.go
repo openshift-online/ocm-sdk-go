@@ -38,12 +38,12 @@ type Registry struct {
 	id         *string
 	href       *string
 	link       bool
-	name       *string
 	url        *string
-	teamName   *string
-	orgName    *string
-	type_      *string
 	cloudAlias *bool
+	name       *string
+	orgName    *string
+	teamName   *string
+	type_      *string
 }
 
 // Kind returns the name of the type of the object.
@@ -101,36 +101,13 @@ func (o *Registry) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Registry) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.name == nil &&
 		o.url == nil &&
-		o.teamName == nil &&
-		o.orgName == nil &&
-		o.type_ == nil &&
 		o.cloudAlias == nil &&
+		o.name == nil &&
+		o.orgName == nil &&
+		o.teamName == nil &&
+		o.type_ == nil &&
 		true)
-}
-
-// Name returns the value of the 'name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Registry) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
-	}
-	return ""
-}
-
-// GetName returns the value of the 'name' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Registry) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
-	if ok {
-		value = *o.name
-	}
-	return
 }
 
 // URL returns the value of the 'URL' attribute, or
@@ -156,25 +133,48 @@ func (o *Registry) GetURL() (value string, ok bool) {
 	return
 }
 
-// TeamName returns the value of the 'team_name' attribute, or
+// CloudAlias returns the value of the 'cloud_alias' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Registry) TeamName() string {
-	if o != nil && o.teamName != nil {
-		return *o.teamName
+func (o *Registry) CloudAlias() bool {
+	if o != nil && o.cloudAlias != nil {
+		return *o.cloudAlias
+	}
+	return false
+}
+
+// GetCloudAlias returns the value of the 'cloud_alias' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Registry) GetCloudAlias() (value bool, ok bool) {
+	ok = o != nil && o.cloudAlias != nil
+	if ok {
+		value = *o.cloudAlias
+	}
+	return
+}
+
+// Name returns the value of the 'name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Registry) Name() string {
+	if o != nil && o.name != nil {
+		return *o.name
 	}
 	return ""
 }
 
-// GetTeamName returns the value of the 'team_name' attribute and
+// GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Registry) GetTeamName() (value string, ok bool) {
-	ok = o != nil && o.teamName != nil
+func (o *Registry) GetName() (value string, ok bool) {
+	ok = o != nil && o.name != nil
 	if ok {
-		value = *o.teamName
+		value = *o.name
 	}
 	return
 }
@@ -202,6 +202,29 @@ func (o *Registry) GetOrgName() (value string, ok bool) {
 	return
 }
 
+// TeamName returns the value of the 'team_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Registry) TeamName() string {
+	if o != nil && o.teamName != nil {
+		return *o.teamName
+	}
+	return ""
+}
+
+// GetTeamName returns the value of the 'team_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Registry) GetTeamName() (value string, ok bool) {
+	ok = o != nil && o.teamName != nil
+	if ok {
+		value = *o.teamName
+	}
+	return
+}
+
 // Type returns the value of the 'type' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -221,29 +244,6 @@ func (o *Registry) GetType() (value string, ok bool) {
 	ok = o != nil && o.type_ != nil
 	if ok {
 		value = *o.type_
-	}
-	return
-}
-
-// CloudAlias returns the value of the 'cloud_alias' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Registry) CloudAlias() bool {
-	if o != nil && o.cloudAlias != nil {
-		return *o.cloudAlias
-	}
-	return false
-}
-
-// GetCloudAlias returns the value of the 'cloud_alias' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Registry) GetCloudAlias() (value bool, ok bool) {
-	ok = o != nil && o.cloudAlias != nil
-	if ok {
-		value = *o.cloudAlias
 	}
 	return
 }

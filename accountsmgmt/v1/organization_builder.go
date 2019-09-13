@@ -61,6 +61,18 @@ func (b *OrganizationBuilder) Name(value string) *OrganizationBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *OrganizationBuilder) Copy(object *Organization) *OrganizationBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.name = object.name
+	return b
+}
+
 // Build creates a 'organization' object using the configuration stored in the builder.
 func (b *OrganizationBuilder) Build() (object *Organization, err error) {
 	object = new(Organization)

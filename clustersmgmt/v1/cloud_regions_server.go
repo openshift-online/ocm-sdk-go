@@ -56,10 +56,18 @@ type CloudRegionsListServerRequest struct {
 type CloudRegionsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *CloudRegionList
 	page   *int
 	size   *int
 	total  *int
-	items  *CloudRegionList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of cloud providers.
+func (r *CloudRegionsListServerResponse) Items(value *CloudRegionList) *CloudRegionsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -91,14 +99,6 @@ func (r *CloudRegionsListServerResponse) Total(value int) *CloudRegionsListServe
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of cloud providers.
-func (r *CloudRegionsListServerResponse) Items(value *CloudRegionList) *CloudRegionsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *CloudRegionsListServerResponse) SetStatusCode(status int) *CloudRegionsListServerResponse {
 	r.status = status
@@ -111,13 +111,13 @@ func (r *CloudRegionsListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(cloudRegionsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -125,10 +125,10 @@ func (r *CloudRegionsListServerResponse) marshal(writer io.Writer) error {
 // cloudRegionsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type cloudRegionsListServerResponseData struct {
+	Items cloudRegionListData "json:\"items,omitempty\""
 	Page  *int                "json:\"page,omitempty\""
 	Size  *int                "json:\"size,omitempty\""
 	Total *int                "json:\"total,omitempty\""
-	Items cloudRegionListData "json:\"items,omitempty\""
 }
 
 // CloudRegionsServerAdapter represents the structs that adapts Requests and Response to internal

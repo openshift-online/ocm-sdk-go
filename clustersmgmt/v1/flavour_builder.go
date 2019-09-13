@@ -28,10 +28,10 @@ type FlavourBuilder struct {
 	href    *string
 	link    bool
 	aws     *AWSBuilder
-	version *string
-	nodes   *ClusterNodesBuilder
 	name    *string
 	network *NetworkBuilder
+	nodes   *ClusterNodesBuilder
+	version *string
 }
 
 // NewFlavour creates a new builder of 'flavour' objects.
@@ -66,24 +66,6 @@ func (b *FlavourBuilder) AWS(value *AWSBuilder) *FlavourBuilder {
 	return b
 }
 
-// Version sets the value of the 'version' attribute
-// to the given value.
-//
-//
-func (b *FlavourBuilder) Version(value string) *FlavourBuilder {
-	b.version = &value
-	return b
-}
-
-// Nodes sets the value of the 'nodes' attribute
-// to the given value.
-//
-// Counts of different classes of nodes inside a cluster.
-func (b *FlavourBuilder) Nodes(value *ClusterNodesBuilder) *FlavourBuilder {
-	b.nodes = value
-	return b
-}
-
 // Name sets the value of the 'name' attribute
 // to the given value.
 //
@@ -102,6 +84,52 @@ func (b *FlavourBuilder) Network(value *NetworkBuilder) *FlavourBuilder {
 	return b
 }
 
+// Nodes sets the value of the 'nodes' attribute
+// to the given value.
+//
+// Counts of different classes of nodes inside a cluster.
+func (b *FlavourBuilder) Nodes(value *ClusterNodesBuilder) *FlavourBuilder {
+	b.nodes = value
+	return b
+}
+
+// Version sets the value of the 'version' attribute
+// to the given value.
+//
+//
+func (b *FlavourBuilder) Version(value string) *FlavourBuilder {
+	b.version = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *FlavourBuilder) Copy(object *Flavour) *FlavourBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	if object.aws != nil {
+		b.aws = NewAWS().Copy(object.aws)
+	} else {
+		b.aws = nil
+	}
+	b.name = object.name
+	if object.network != nil {
+		b.network = NewNetwork().Copy(object.network)
+	} else {
+		b.network = nil
+	}
+	if object.nodes != nil {
+		b.nodes = NewClusterNodes().Copy(object.nodes)
+	} else {
+		b.nodes = nil
+	}
+	b.version = object.version
+	return b
+}
+
 // Build creates a 'flavour' object using the configuration stored in the builder.
 func (b *FlavourBuilder) Build() (object *Flavour, err error) {
 	object = new(Flavour)
@@ -114,15 +142,6 @@ func (b *FlavourBuilder) Build() (object *Flavour, err error) {
 			return
 		}
 	}
-	if b.version != nil {
-		object.version = b.version
-	}
-	if b.nodes != nil {
-		object.nodes, err = b.nodes.Build()
-		if err != nil {
-			return
-		}
-	}
 	if b.name != nil {
 		object.name = b.name
 	}
@@ -131,6 +150,15 @@ func (b *FlavourBuilder) Build() (object *Flavour, err error) {
 		if err != nil {
 			return
 		}
+	}
+	if b.nodes != nil {
+		object.nodes, err = b.nodes.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.version != nil {
+		object.version = b.version
 	}
 	return
 }

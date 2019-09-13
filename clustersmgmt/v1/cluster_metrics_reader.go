@@ -27,11 +27,11 @@ import (
 // objects of type 'cluster_metrics'.
 type clusterMetricsData struct {
 	CPU                *clusterMetricData "json:\"cpu,omitempty\""
-	Memory             *clusterMetricData "json:\"memory,omitempty\""
-	Storage            *clusterMetricData "json:\"storage,omitempty\""
 	ComputeNodesCPU    *clusterMetricData "json:\"compute_nodes_cpu,omitempty\""
 	ComputeNodesMemory *clusterMetricData "json:\"compute_nodes_memory,omitempty\""
+	Memory             *clusterMetricData "json:\"memory,omitempty\""
 	Nodes              *clusterNodesData  "json:\"nodes,omitempty\""
+	Storage            *clusterMetricData "json:\"storage,omitempty\""
 }
 
 // MarshalClusterMetrics writes a value of the 'cluster_metrics' to the given target,
@@ -59,14 +59,6 @@ func (o *ClusterMetrics) wrap() (data *clusterMetricsData, err error) {
 	if err != nil {
 		return
 	}
-	data.Memory, err = o.memory.wrap()
-	if err != nil {
-		return
-	}
-	data.Storage, err = o.storage.wrap()
-	if err != nil {
-		return
-	}
 	data.ComputeNodesCPU, err = o.computeNodesCPU.wrap()
 	if err != nil {
 		return
@@ -75,7 +67,15 @@ func (o *ClusterMetrics) wrap() (data *clusterMetricsData, err error) {
 	if err != nil {
 		return
 	}
+	data.Memory, err = o.memory.wrap()
+	if err != nil {
+		return
+	}
 	data.Nodes, err = o.nodes.wrap()
+	if err != nil {
+		return
+	}
+	data.Storage, err = o.storage.wrap()
 	if err != nil {
 		return
 	}
@@ -109,14 +109,6 @@ func (d *clusterMetricsData) unwrap() (object *ClusterMetrics, err error) {
 	if err != nil {
 		return
 	}
-	object.memory, err = d.Memory.unwrap()
-	if err != nil {
-		return
-	}
-	object.storage, err = d.Storage.unwrap()
-	if err != nil {
-		return
-	}
 	object.computeNodesCPU, err = d.ComputeNodesCPU.unwrap()
 	if err != nil {
 		return
@@ -125,7 +117,15 @@ func (d *clusterMetricsData) unwrap() (object *ClusterMetrics, err error) {
 	if err != nil {
 		return
 	}
+	object.memory, err = d.Memory.unwrap()
+	if err != nil {
+		return
+	}
 	object.nodes, err = d.Nodes.unwrap()
+	if err != nil {
+		return
+	}
+	object.storage, err = d.Storage.unwrap()
 	if err != nil {
 		return
 	}

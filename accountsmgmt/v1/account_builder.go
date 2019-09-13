@@ -26,14 +26,14 @@ type AccountBuilder struct {
 	id             *string
 	href           *string
 	link           bool
-	name           *string
-	username       *string
+	banDescription *string
+	banned         *bool
 	email          *string
 	firstName      *string
 	lastName       *string
-	banned         *bool
-	banDescription *string
+	name           *string
 	organization   *OrganizationBuilder
+	username       *string
 }
 
 // NewAccount creates a new builder of 'account' objects.
@@ -59,21 +59,21 @@ func (b *AccountBuilder) Link(value bool) *AccountBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
+// BanDescription sets the value of the 'ban_description' attribute
 // to the given value.
 //
 //
-func (b *AccountBuilder) Name(value string) *AccountBuilder {
-	b.name = &value
+func (b *AccountBuilder) BanDescription(value string) *AccountBuilder {
+	b.banDescription = &value
 	return b
 }
 
-// Username sets the value of the 'username' attribute
+// Banned sets the value of the 'banned' attribute
 // to the given value.
 //
 //
-func (b *AccountBuilder) Username(value string) *AccountBuilder {
-	b.username = &value
+func (b *AccountBuilder) Banned(value bool) *AccountBuilder {
+	b.banned = &value
 	return b
 }
 
@@ -104,21 +104,12 @@ func (b *AccountBuilder) LastName(value string) *AccountBuilder {
 	return b
 }
 
-// Banned sets the value of the 'banned' attribute
+// Name sets the value of the 'name' attribute
 // to the given value.
 //
 //
-func (b *AccountBuilder) Banned(value bool) *AccountBuilder {
-	b.banned = &value
-	return b
-}
-
-// BanDescription sets the value of the 'ban_description' attribute
-// to the given value.
-//
-//
-func (b *AccountBuilder) BanDescription(value string) *AccountBuilder {
-	b.banDescription = &value
+func (b *AccountBuilder) Name(value string) *AccountBuilder {
+	b.name = &value
 	return b
 }
 
@@ -131,17 +122,49 @@ func (b *AccountBuilder) Organization(value *OrganizationBuilder) *AccountBuilde
 	return b
 }
 
+// Username sets the value of the 'username' attribute
+// to the given value.
+//
+//
+func (b *AccountBuilder) Username(value string) *AccountBuilder {
+	b.username = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *AccountBuilder) Copy(object *Account) *AccountBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.banDescription = object.banDescription
+	b.banned = object.banned
+	b.email = object.email
+	b.firstName = object.firstName
+	b.lastName = object.lastName
+	b.name = object.name
+	if object.organization != nil {
+		b.organization = NewOrganization().Copy(object.organization)
+	} else {
+		b.organization = nil
+	}
+	b.username = object.username
+	return b
+}
+
 // Build creates a 'account' object using the configuration stored in the builder.
 func (b *AccountBuilder) Build() (object *Account, err error) {
 	object = new(Account)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.name != nil {
-		object.name = b.name
+	if b.banDescription != nil {
+		object.banDescription = b.banDescription
 	}
-	if b.username != nil {
-		object.username = b.username
+	if b.banned != nil {
+		object.banned = b.banned
 	}
 	if b.email != nil {
 		object.email = b.email
@@ -152,17 +175,17 @@ func (b *AccountBuilder) Build() (object *Account, err error) {
 	if b.lastName != nil {
 		object.lastName = b.lastName
 	}
-	if b.banned != nil {
-		object.banned = b.banned
-	}
-	if b.banDescription != nil {
-		object.banDescription = b.banDescription
+	if b.name != nil {
+		object.name = b.name
 	}
 	if b.organization != nil {
 		object.organization, err = b.organization.Build()
 		if err != nil {
 			return
 		}
+	}
+	if b.username != nil {
+		object.username = b.username
 	}
 	return
 }

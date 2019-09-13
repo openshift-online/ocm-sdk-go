@@ -28,10 +28,25 @@ import (
 // RootServer represents the interface the manages the 'root' resource.
 type RootServer interface {
 
+	// AccessToken returns the target 'access_token' resource.
+	//
+	// Reference to the resource that manages generates access tokens.
+	AccessToken() AccessTokenServer
+
 	// Accounts returns the target 'accounts' resource.
 	//
 	// Reference to the resource that manages the collection of accounts.
 	Accounts() AccountsServer
+
+	// ClusterAuthorizations returns the target 'cluster_authorizations' resource.
+	//
+	// Reference to the resource that manages cluster authorizations.
+	ClusterAuthorizations() ClusterAuthorizationsServer
+
+	// ClusterRegistrations returns the target 'cluster_registrations' resource.
+	//
+	// Reference to the resource that manages cluster registrations.
+	ClusterRegistrations() ClusterRegistrationsServer
 
 	// CurrentAccount returns the target 'current_account' resource.
 	//
@@ -44,11 +59,6 @@ type RootServer interface {
 	// Reference to the resource that manages the collection of
 	// organizations.
 	Organizations() OrganizationsServer
-
-	// AccessToken returns the target 'access_token' resource.
-	//
-	// Reference to the resource that manages generates access tokens.
-	AccessToken() AccessTokenServer
 
 	// Permissions returns the target 'permissions' resource.
 	//
@@ -66,26 +76,16 @@ type RootServer interface {
 	// credentials.
 	RegistryCredentials() RegistryCredentialsServer
 
-	// ClusterAuthorizations returns the target 'cluster_authorizations' resource.
-	//
-	// Reference to the resource that manages cluster authorizations.
-	ClusterAuthorizations() ClusterAuthorizationsServer
-
-	// ClusterRegistrations returns the target 'cluster_registrations' resource.
-	//
-	// Reference to the resource that manages cluster registrations.
-	ClusterRegistrations() ClusterRegistrationsServer
-
-	// Roles returns the target 'roles' resource.
-	//
-	// Reference to the resource that manages the collection of roles.
-	Roles() RolesServer
-
 	// RoleBindings returns the target 'role_bindings' resource.
 	//
 	// Reference to the resource that manages the collection of role
 	// bindings.
 	RoleBindings() RoleBindingsServer
+
+	// Roles returns the target 'roles' resource.
+	//
+	// Reference to the resource that manages the collection of roles.
+	Roles() RolesServer
 
 	// Subscriptions returns the target 'subscriptions' resource.
 	//
@@ -105,23 +105,41 @@ func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdap
 	adapter := new(RootServerAdapter)
 	adapter.server = server
 	adapter.router = router
+	adapter.router.PathPrefix("/access_token").HandlerFunc(adapter.accessTokenHandler)
 	adapter.router.PathPrefix("/accounts").HandlerFunc(adapter.accountsHandler)
+	adapter.router.PathPrefix("/cluster_authorizations").HandlerFunc(adapter.clusterAuthorizationsHandler)
+	adapter.router.PathPrefix("/cluster_registrations").HandlerFunc(adapter.clusterRegistrationsHandler)
 	adapter.router.PathPrefix("/current_account").HandlerFunc(adapter.currentAccountHandler)
 	adapter.router.PathPrefix("/organizations").HandlerFunc(adapter.organizationsHandler)
-	adapter.router.PathPrefix("/access_token").HandlerFunc(adapter.accessTokenHandler)
 	adapter.router.PathPrefix("/permissions").HandlerFunc(adapter.permissionsHandler)
 	adapter.router.PathPrefix("/registries").HandlerFunc(adapter.registriesHandler)
 	adapter.router.PathPrefix("/registry_credentials").HandlerFunc(adapter.registryCredentialsHandler)
-	adapter.router.PathPrefix("/cluster_authorizations").HandlerFunc(adapter.clusterAuthorizationsHandler)
-	adapter.router.PathPrefix("/cluster_registrations").HandlerFunc(adapter.clusterRegistrationsHandler)
-	adapter.router.PathPrefix("/roles").HandlerFunc(adapter.rolesHandler)
 	adapter.router.PathPrefix("/role_bindings").HandlerFunc(adapter.roleBindingsHandler)
+	adapter.router.PathPrefix("/roles").HandlerFunc(adapter.rolesHandler)
 	adapter.router.PathPrefix("/subscriptions").HandlerFunc(adapter.subscriptionsHandler)
 	return adapter
+}
+func (a *RootServerAdapter) accessTokenHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.AccessToken()
+	targetAdapter := NewAccessTokenServerAdapter(target, a.router.PathPrefix("/access_token").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
 }
 func (a *RootServerAdapter) accountsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Accounts()
 	targetAdapter := NewAccountsServerAdapter(target, a.router.PathPrefix("/accounts").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
+}
+func (a *RootServerAdapter) clusterAuthorizationsHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.ClusterAuthorizations()
+	targetAdapter := NewClusterAuthorizationsServerAdapter(target, a.router.PathPrefix("/cluster_authorizations").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
+}
+func (a *RootServerAdapter) clusterRegistrationsHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.ClusterRegistrations()
+	targetAdapter := NewClusterRegistrationsServerAdapter(target, a.router.PathPrefix("/cluster_registrations").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
@@ -134,12 +152,6 @@ func (a *RootServerAdapter) currentAccountHandler(w http.ResponseWriter, r *http
 func (a *RootServerAdapter) organizationsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Organizations()
 	targetAdapter := NewOrganizationsServerAdapter(target, a.router.PathPrefix("/organizations").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootServerAdapter) accessTokenHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.AccessToken()
-	targetAdapter := NewAccessTokenServerAdapter(target, a.router.PathPrefix("/access_token").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
@@ -161,27 +173,15 @@ func (a *RootServerAdapter) registryCredentialsHandler(w http.ResponseWriter, r 
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) clusterAuthorizationsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.ClusterAuthorizations()
-	targetAdapter := NewClusterAuthorizationsServerAdapter(target, a.router.PathPrefix("/cluster_authorizations").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootServerAdapter) clusterRegistrationsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.ClusterRegistrations()
-	targetAdapter := NewClusterRegistrationsServerAdapter(target, a.router.PathPrefix("/cluster_registrations").Subrouter())
+func (a *RootServerAdapter) roleBindingsHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.RoleBindings()
+	targetAdapter := NewRoleBindingsServerAdapter(target, a.router.PathPrefix("/role_bindings").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
 func (a *RootServerAdapter) rolesHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Roles()
 	targetAdapter := NewRolesServerAdapter(target, a.router.PathPrefix("/roles").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootServerAdapter) roleBindingsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.RoleBindings()
-	targetAdapter := NewRoleBindingsServerAdapter(target, a.router.PathPrefix("/role_bindings").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }

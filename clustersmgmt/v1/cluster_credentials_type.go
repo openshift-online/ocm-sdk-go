@@ -38,9 +38,9 @@ type ClusterCredentials struct {
 	id         *string
 	href       *string
 	link       bool
-	kubeconfig *string
 	ssh        *SSHCredentials
 	admin      *AdminCredentials
+	kubeconfig *string
 }
 
 // Kind returns the name of the type of the object.
@@ -98,33 +98,10 @@ func (o *ClusterCredentials) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterCredentials) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.kubeconfig == nil &&
 		o.ssh == nil &&
 		o.admin == nil &&
+		o.kubeconfig == nil &&
 		true)
-}
-
-// Kubeconfig returns the value of the 'kubeconfig' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Administrator _kubeconfig_ file for the cluster.
-func (o *ClusterCredentials) Kubeconfig() string {
-	if o != nil && o.kubeconfig != nil {
-		return *o.kubeconfig
-	}
-	return ""
-}
-
-// GetKubeconfig returns the value of the 'kubeconfig' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Administrator _kubeconfig_ file for the cluster.
-func (o *ClusterCredentials) GetKubeconfig() (value string, ok bool) {
-	ok = o != nil && o.kubeconfig != nil
-	if ok {
-		value = *o.kubeconfig
-	}
-	return
 }
 
 // SSH returns the value of the 'SSH' attribute, or
@@ -171,6 +148,29 @@ func (o *ClusterCredentials) GetAdmin() (value *AdminCredentials, ok bool) {
 	ok = o != nil && o.admin != nil
 	if ok {
 		value = o.admin
+	}
+	return
+}
+
+// Kubeconfig returns the value of the 'kubeconfig' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Administrator _kubeconfig_ file for the cluster.
+func (o *ClusterCredentials) Kubeconfig() string {
+	if o != nil && o.kubeconfig != nil {
+		return *o.kubeconfig
+	}
+	return ""
+}
+
+// GetKubeconfig returns the value of the 'kubeconfig' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Administrator _kubeconfig_ file for the cluster.
+func (o *ClusterCredentials) GetKubeconfig() (value string, ok bool) {
+	ok = o != nil && o.kubeconfig != nil
+	if ok {
+		value = *o.kubeconfig
 	}
 	return
 }

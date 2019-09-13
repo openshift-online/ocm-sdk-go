@@ -24,11 +24,11 @@ type IdentityProviderMappingMethod string
 
 const (
 	//
-	IdentityProviderMappingMethodClaim IdentityProviderMappingMethod = "claim"
+	IdentityProviderMappingMethodAdd IdentityProviderMappingMethod = "add"
 	//
-	IdentityProviderMappingMethodLookup IdentityProviderMappingMethod = "lookup"
+	IdentityProviderMappingMethodClaim IdentityProviderMappingMethod = "claim"
 	//
 	IdentityProviderMappingMethodGenerate IdentityProviderMappingMethod = "generate"
 	//
-	IdentityProviderMappingMethodAdd IdentityProviderMappingMethod = "add"
+	IdentityProviderMappingMethodLookup IdentityProviderMappingMethod = "lookup"
 )

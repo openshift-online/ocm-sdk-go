@@ -26,10 +26,10 @@ type RegistryCredentialBuilder struct {
 	id       *string
 	href     *string
 	link     bool
-	username *string
-	token    *string
-	registry *RegistryBuilder
 	account  *AccountBuilder
+	registry *RegistryBuilder
+	token    *string
+	username *string
 }
 
 // NewRegistryCredential creates a new builder of 'registry_credential' objects.
@@ -55,21 +55,12 @@ func (b *RegistryCredentialBuilder) Link(value bool) *RegistryCredentialBuilder 
 	return b
 }
 
-// Username sets the value of the 'username' attribute
+// Account sets the value of the 'account' attribute
 // to the given value.
 //
 //
-func (b *RegistryCredentialBuilder) Username(value string) *RegistryCredentialBuilder {
-	b.username = &value
-	return b
-}
-
-// Token sets the value of the 'token' attribute
-// to the given value.
-//
-//
-func (b *RegistryCredentialBuilder) Token(value string) *RegistryCredentialBuilder {
-	b.token = &value
+func (b *RegistryCredentialBuilder) Account(value *AccountBuilder) *RegistryCredentialBuilder {
+	b.account = value
 	return b
 }
 
@@ -82,12 +73,44 @@ func (b *RegistryCredentialBuilder) Registry(value *RegistryBuilder) *RegistryCr
 	return b
 }
 
-// Account sets the value of the 'account' attribute
+// Token sets the value of the 'token' attribute
 // to the given value.
 //
 //
-func (b *RegistryCredentialBuilder) Account(value *AccountBuilder) *RegistryCredentialBuilder {
-	b.account = value
+func (b *RegistryCredentialBuilder) Token(value string) *RegistryCredentialBuilder {
+	b.token = &value
+	return b
+}
+
+// Username sets the value of the 'username' attribute
+// to the given value.
+//
+//
+func (b *RegistryCredentialBuilder) Username(value string) *RegistryCredentialBuilder {
+	b.username = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *RegistryCredentialBuilder) Copy(object *RegistryCredential) *RegistryCredentialBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	if object.account != nil {
+		b.account = NewAccount().Copy(object.account)
+	} else {
+		b.account = nil
+	}
+	if object.registry != nil {
+		b.registry = NewRegistry().Copy(object.registry)
+	} else {
+		b.registry = nil
+	}
+	b.token = object.token
+	b.username = object.username
 	return b
 }
 
@@ -97,11 +120,11 @@ func (b *RegistryCredentialBuilder) Build() (object *RegistryCredential, err err
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.username != nil {
-		object.username = b.username
-	}
-	if b.token != nil {
-		object.token = b.token
+	if b.account != nil {
+		object.account, err = b.account.Build()
+		if err != nil {
+			return
+		}
 	}
 	if b.registry != nil {
 		object.registry, err = b.registry.Build()
@@ -109,11 +132,11 @@ func (b *RegistryCredentialBuilder) Build() (object *RegistryCredential, err err
 			return
 		}
 	}
-	if b.account != nil {
-		object.account, err = b.account.Build()
-		if err != nil {
-			return
-		}
+	if b.token != nil {
+		object.token = b.token
+	}
+	if b.username != nil {
+		object.username = b.username
 	}
 	return
 }

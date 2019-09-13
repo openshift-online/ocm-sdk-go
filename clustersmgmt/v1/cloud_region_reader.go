@@ -31,9 +31,9 @@ type cloudRegionData struct {
 	Kind          *string            "json:\"kind,omitempty\""
 	ID            *string            "json:\"id,omitempty\""
 	HREF          *string            "json:\"href,omitempty\""
-	Name          *string            "json:\"name,omitempty\""
-	DisplayName   *string            "json:\"display_name,omitempty\""
 	CloudProvider *cloudProviderData "json:\"cloud_provider,omitempty\""
+	DisplayName   *string            "json:\"display_name,omitempty\""
+	Name          *string            "json:\"name,omitempty\""
 }
 
 // MarshalCloudRegion writes a value of the 'cloud_region' to the given target,
@@ -65,12 +65,12 @@ func (o *CloudRegion) wrap() (data *cloudRegionData, err error) {
 	} else {
 		*data.Kind = CloudRegionKind
 	}
-	data.Name = o.name
-	data.DisplayName = o.displayName
 	data.CloudProvider, err = o.cloudProvider.wrap()
 	if err != nil {
 		return
 	}
+	data.DisplayName = o.displayName
+	data.Name = o.name
 	return
 }
 
@@ -115,11 +115,11 @@ func (d *cloudRegionData) unwrap() (object *CloudRegion, err error) {
 			return
 		}
 	}
-	object.name = d.Name
-	object.displayName = d.DisplayName
 	object.cloudProvider, err = d.CloudProvider.unwrap()
 	if err != nil {
 		return
 	}
+	object.displayName = d.DisplayName
+	object.name = d.Name
 	return
 }

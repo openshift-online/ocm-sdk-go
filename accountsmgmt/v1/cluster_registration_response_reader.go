@@ -26,9 +26,9 @@ import (
 // clusterRegistrationResponseData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_registration_response'.
 type clusterRegistrationResponseData struct {
-	ClusterID          *string "json:\"cluster_id,omitempty\""
-	AuthorizationToken *string "json:\"authorization_token,omitempty\""
 	AccountID          *string "json:\"account_id,omitempty\""
+	AuthorizationToken *string "json:\"authorization_token,omitempty\""
+	ClusterID          *string "json:\"cluster_id,omitempty\""
 	ExpiresAt          *string "json:\"expires_at,omitempty\""
 }
 
@@ -53,9 +53,9 @@ func (o *ClusterRegistrationResponse) wrap() (data *clusterRegistrationResponseD
 		return
 	}
 	data = new(clusterRegistrationResponseData)
-	data.ClusterID = o.clusterID
-	data.AuthorizationToken = o.authorizationToken
 	data.AccountID = o.accountID
+	data.AuthorizationToken = o.authorizationToken
+	data.ClusterID = o.clusterID
 	data.ExpiresAt = o.expiresAt
 	return
 }
@@ -83,9 +83,9 @@ func (d *clusterRegistrationResponseData) unwrap() (object *ClusterRegistrationR
 		return
 	}
 	object = new(ClusterRegistrationResponse)
-	object.clusterID = d.ClusterID
-	object.authorizationToken = d.AuthorizationToken
 	object.accountID = d.AccountID
+	object.authorizationToken = d.AuthorizationToken
+	object.clusterID = d.ClusterID
 	object.expiresAt = d.ExpiresAt
 	return
 }

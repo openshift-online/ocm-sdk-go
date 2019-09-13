@@ -47,11 +47,59 @@ type VersionsServer interface {
 
 // VersionsListServerRequest is the request for the 'list' method.
 type VersionsListServerRequest struct {
-	page   *int
-	size   *int
-	search *string
 	order  *string
+	page   *int
+	search *string
+	size   *int
 	total  *int
+}
+
+// Order returns the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the version instead of
+// the names of the columns of a table. For example, in order to sort the versions
+// descending by identifier the value should be:
+//
+// [source,sql]
+// ----
+// id desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *VersionsListServerRequest) Order() string {
+	if r != nil && r.order != nil {
+		return *r.order
+	}
+	return ""
+}
+
+// GetOrder returns the value of the 'order' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the version instead of
+// the names of the columns of a table. For example, in order to sort the versions
+// descending by identifier the value should be:
+//
+// [source,sql]
+// ----
+// id desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *VersionsListServerRequest) GetOrder() (value string, ok bool) {
+	ok = r != nil && r.order != nil
+	if ok {
+		value = *r.order
+	}
+	return
 }
 
 // Page returns the value of the 'page' parameter.
@@ -76,32 +124,6 @@ func (r *VersionsListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
-	}
-	return
-}
-
-// Size returns the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *VersionsListServerRequest) Size() int {
-	if r != nil && r.size != nil {
-		return *r.size
-	}
-	return 0
-}
-
-// GetSize returns the value of the 'size' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *VersionsListServerRequest) GetSize() (value int, ok bool) {
-	ok = r != nil && r.size != nil
-	if ok {
-		value = *r.size
 	}
 	return
 }
@@ -154,50 +176,28 @@ func (r *VersionsListServerRequest) GetSearch() (value string, ok bool) {
 	return
 }
 
-// Order returns the value of the 'order' parameter.
+// Size returns the value of the 'size' parameter.
 //
-// Order criteria.
+// Maximum number of items that will be contained in the returned page.
 //
-// The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement, but using the names of the attributes of the version instead of
-// the names of the columns of a table. For example, in order to sort the versions
-// descending by identifier the value should be:
-//
-// [source,sql]
-// ----
-// id desc
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then the order of the
-// results is undefined.
-func (r *VersionsListServerRequest) Order() string {
-	if r != nil && r.order != nil {
-		return *r.order
+// Default value is `100`.
+func (r *VersionsListServerRequest) Size() int {
+	if r != nil && r.size != nil {
+		return *r.size
 	}
-	return ""
+	return 0
 }
 
-// GetOrder returns the value of the 'order' parameter and
+// GetSize returns the value of the 'size' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Order criteria.
+// Maximum number of items that will be contained in the returned page.
 //
-// The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement, but using the names of the attributes of the version instead of
-// the names of the columns of a table. For example, in order to sort the versions
-// descending by identifier the value should be:
-//
-// [source,sql]
-// ----
-// id desc
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then the order of the
-// results is undefined.
-func (r *VersionsListServerRequest) GetOrder() (value string, ok bool) {
-	ok = r != nil && r.order != nil
+// Default value is `100`.
+func (r *VersionsListServerRequest) GetSize() (value int, ok bool) {
+	ok = r != nil && r.size != nil
 	if ok {
-		value = *r.order
+		value = *r.size
 	}
 	return
 }
@@ -230,10 +230,18 @@ func (r *VersionsListServerRequest) GetTotal() (value int, ok bool) {
 type VersionsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *VersionList
 	page   *int
 	size   *int
 	total  *int
-	items  *VersionList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of versions.
+func (r *VersionsListServerResponse) Items(value *VersionList) *VersionsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -265,14 +273,6 @@ func (r *VersionsListServerResponse) Total(value int) *VersionsListServerRespons
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of versions.
-func (r *VersionsListServerResponse) Items(value *VersionList) *VersionsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *VersionsListServerResponse) SetStatusCode(status int) *VersionsListServerResponse {
 	r.status = status
@@ -285,13 +285,13 @@ func (r *VersionsListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(versionsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -299,10 +299,10 @@ func (r *VersionsListServerResponse) marshal(writer io.Writer) error {
 // versionsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type versionsListServerResponseData struct {
+	Items versionListData "json:\"items,omitempty\""
 	Page  *int            "json:\"page,omitempty\""
 	Size  *int            "json:\"size,omitempty\""
 	Total *int            "json:\"total,omitempty\""
-	Items versionListData "json:\"items,omitempty\""
 }
 
 // VersionsServerAdapter represents the structs that adapts Requests and Response to internal
@@ -331,11 +331,11 @@ func (a *VersionsServerAdapter) readVersionsListServerRequest(r *http.Request) (
 	var err error
 	result := new(VersionsListServerRequest)
 	query := r.URL.Query()
-	result.page, err = helpers.ParseInteger(query, "page")
+	result.order, err = helpers.ParseString(query, "order")
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(query, "size")
+	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
 	}
@@ -343,7 +343,7 @@ func (a *VersionsServerAdapter) readVersionsListServerRequest(r *http.Request) (
 	if err != nil {
 		return nil, err
 	}
-	result.order, err = helpers.ParseString(query, "order")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}

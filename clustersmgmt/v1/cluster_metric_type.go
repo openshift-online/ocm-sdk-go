@@ -28,40 +28,17 @@ import (
 // Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
 // a cluster.
 type ClusterMetric struct {
-	updatedTimestamp *time.Time
 	total            *Value
+	updatedTimestamp *time.Time
 	used             *Value
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterMetric) Empty() bool {
-	return o == nil || (o.updatedTimestamp == nil &&
-		o.total == nil &&
+	return o == nil || (o.total == nil &&
+		o.updatedTimestamp == nil &&
 		o.used == nil &&
 		true)
-}
-
-// UpdatedTimestamp returns the value of the 'updated_timestamp' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Collection timestamp of the metric.
-func (o *ClusterMetric) UpdatedTimestamp() time.Time {
-	if o != nil && o.updatedTimestamp != nil {
-		return *o.updatedTimestamp
-	}
-	return time.Time{}
-}
-
-// GetUpdatedTimestamp returns the value of the 'updated_timestamp' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Collection timestamp of the metric.
-func (o *ClusterMetric) GetUpdatedTimestamp() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedTimestamp != nil
-	if ok {
-		value = *o.updatedTimestamp
-	}
-	return
 }
 
 // Total returns the value of the 'total' attribute, or
@@ -85,6 +62,29 @@ func (o *ClusterMetric) GetTotal() (value *Value, ok bool) {
 	ok = o != nil && o.total != nil
 	if ok {
 		value = o.total
+	}
+	return
+}
+
+// UpdatedTimestamp returns the value of the 'updated_timestamp' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Collection timestamp of the metric.
+func (o *ClusterMetric) UpdatedTimestamp() time.Time {
+	if o != nil && o.updatedTimestamp != nil {
+		return *o.updatedTimestamp
+	}
+	return time.Time{}
+}
+
+// GetUpdatedTimestamp returns the value of the 'updated_timestamp' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Collection timestamp of the metric.
+func (o *ClusterMetric) GetUpdatedTimestamp() (value time.Time, ok bool) {
+	ok = o != nil && o.updatedTimestamp != nil
+	if ok {
+		value = *o.updatedTimestamp
 	}
 	return
 }

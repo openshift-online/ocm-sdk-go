@@ -80,10 +80,10 @@ type DashboardsListRequest struct {
 	metric    string
 	query     url.Values
 	header    http.Header
-	page      *int
-	size      *int
-	search    *string
 	order     *string
+	page      *int
+	search    *string
+	size      *int
 	total     *int
 }
 
@@ -96,47 +96,6 @@ func (r *DashboardsListRequest) Parameter(name string, value interface{}) *Dashb
 // Header adds a request header.
 func (r *DashboardsListRequest) Header(name string, value interface{}) *DashboardsListRequest {
 	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Page sets the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
-func (r *DashboardsListRequest) Page(value int) *DashboardsListRequest {
-	r.page = &value
-	return r
-}
-
-// Size sets the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *DashboardsListRequest) Size(value int) *DashboardsListRequest {
-	r.size = &value
-	return r
-}
-
-// Search sets the value of the 'search' parameter.
-//
-// Search criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _where_ clause of a
-// SQL statement, but using the names of the attributes of the dashboard instead of
-// the names of the columns of a table. For example, in order to retrieve all the
-// dashboards with a name starting with `my` the value should be:
-//
-// [source,sql]
-// ----
-// name like 'my%'
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then all the
-// dashboards that the user has permission to see will be returned.
-func (r *DashboardsListRequest) Search(value string) *DashboardsListRequest {
-	r.search = &value
 	return r
 }
 
@@ -161,6 +120,47 @@ func (r *DashboardsListRequest) Order(value string) *DashboardsListRequest {
 	return r
 }
 
+// Page sets the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *DashboardsListRequest) Page(value int) *DashboardsListRequest {
+	r.page = &value
+	return r
+}
+
+// Search sets the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the dashboard instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// dashboards with a name starting with `my` the value should be:
+//
+// [source,sql]
+// ----
+// name like 'my%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// dashboards that the user has permission to see will be returned.
+func (r *DashboardsListRequest) Search(value string) *DashboardsListRequest {
+	r.search = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *DashboardsListRequest) Size(value int) *DashboardsListRequest {
+	r.size = &value
+	return r
+}
+
 // Total sets the value of the 'total' parameter.
 //
 // Total number of items of the collection that match the search criteria,
@@ -181,17 +181,17 @@ func (r *DashboardsListRequest) Send() (result *DashboardsListResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *DashboardsListRequest) SendContext(ctx context.Context) (result *DashboardsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
+	if r.order != nil {
+		helpers.AddValue(&query, "order", *r.order)
+	}
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
-	}
-	if r.size != nil {
-		helpers.AddValue(&query, "size", *r.size)
 	}
 	if r.search != nil {
 		helpers.AddValue(&query, "search", *r.search)
 	}
-	if r.order != nil {
-		helpers.AddValue(&query, "order", *r.order)
+	if r.size != nil {
+		helpers.AddValue(&query, "size", *r.size)
 	}
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
@@ -237,10 +237,10 @@ type DashboardsListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
+	items  *DashboardList
 	page   *int
 	size   *int
 	total  *int
-	items  *DashboardList
 }
 
 // Status returns the response status code.
@@ -256,6 +256,28 @@ func (r *DashboardsListResponse) Header() http.Header {
 // Error returns the response error.
 func (r *DashboardsListResponse) Error() *errors.Error {
 	return r.err
+}
+
+// Items returns the value of the 'items' parameter.
+//
+// Retrieved list of dashboards.
+func (r *DashboardsListResponse) Items() *DashboardList {
+	if r == nil {
+		return nil
+	}
+	return r.items
+}
+
+// GetItems returns the value of the 'items' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Retrieved list of dashboards.
+func (r *DashboardsListResponse) GetItems() (value *DashboardList, ok bool) {
+	ok = r != nil && r.items != nil
+	if ok {
+		value = r.items
+	}
+	return
 }
 
 // Page returns the value of the 'page' parameter.
@@ -334,28 +356,6 @@ func (r *DashboardsListResponse) GetTotal() (value int, ok bool) {
 	return
 }
 
-// Items returns the value of the 'items' parameter.
-//
-// Retrieved list of dashboards.
-func (r *DashboardsListResponse) Items() *DashboardList {
-	if r == nil {
-		return nil
-	}
-	return r.items
-}
-
-// GetItems returns the value of the 'items' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Retrieved list of dashboards.
-func (r *DashboardsListResponse) GetItems() (value *DashboardList, ok bool) {
-	ok = r != nil && r.items != nil
-	if ok {
-		value = r.items
-	}
-	return
-}
-
 // unmarshal is the method used internally to unmarshal responses to the
 // 'list' method.
 func (r *DashboardsListResponse) unmarshal(reader io.Reader) error {
@@ -366,21 +366,21 @@ func (r *DashboardsListResponse) unmarshal(reader io.Reader) error {
 	if err != nil {
 		return err
 	}
-	r.page = data.Page
-	r.size = data.Size
-	r.total = data.Total
 	r.items, err = data.Items.unwrap()
 	if err != nil {
 		return err
 	}
+	r.page = data.Page
+	r.size = data.Size
+	r.total = data.Total
 	return err
 }
 
 // dashboardsListResponseData is the structure used internally to unmarshal
 // the response of the 'list' method.
 type dashboardsListResponseData struct {
+	Items dashboardListData "json:\"items,omitempty\""
 	Page  *int              "json:\"page,omitempty\""
 	Size  *int              "json:\"size,omitempty\""
 	Total *int              "json:\"total,omitempty\""
-	Items dashboardListData "json:\"items,omitempty\""
 }

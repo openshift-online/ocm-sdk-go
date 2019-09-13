@@ -40,6 +40,15 @@ func (b *ClusterAPIBuilder) URL(value string) *ClusterAPIBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterAPIBuilder) Copy(object *ClusterAPI) *ClusterAPIBuilder {
+	if object == nil {
+		return b
+	}
+	b.url = object.url
+	return b
+}
+
 // Build creates a 'cluster_API' object using the configuration stored in the builder.
 func (b *ClusterAPIBuilder) Build() (object *ClusterAPI, err error) {
 	object = new(ClusterAPI)

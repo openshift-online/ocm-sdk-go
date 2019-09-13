@@ -26,14 +26,14 @@ type ResourceQuotaBuilder struct {
 	id                   *string
 	href                 *string
 	link                 bool
-	organizationID       *string
+	byoc                 *bool
 	sku                  *string
+	allowed              *int
+	availabilityZoneType *string
+	organizationID       *string
+	reserved             *int
 	resourceName         *string
 	resourceType         *string
-	byoc                 *bool
-	availabilityZoneType *string
-	allowed              *int
-	reserved             *int
 }
 
 // NewResourceQuota creates a new builder of 'resource_quota' objects.
@@ -59,12 +59,12 @@ func (b *ResourceQuotaBuilder) Link(value bool) *ResourceQuotaBuilder {
 	return b
 }
 
-// OrganizationID sets the value of the 'organization_ID' attribute
+// BYOC sets the value of the 'BYOC' attribute
 // to the given value.
 //
 //
-func (b *ResourceQuotaBuilder) OrganizationID(value string) *ResourceQuotaBuilder {
-	b.organizationID = &value
+func (b *ResourceQuotaBuilder) BYOC(value bool) *ResourceQuotaBuilder {
+	b.byoc = &value
 	return b
 }
 
@@ -74,6 +74,42 @@ func (b *ResourceQuotaBuilder) OrganizationID(value string) *ResourceQuotaBuilde
 //
 func (b *ResourceQuotaBuilder) SKU(value string) *ResourceQuotaBuilder {
 	b.sku = &value
+	return b
+}
+
+// Allowed sets the value of the 'allowed' attribute
+// to the given value.
+//
+//
+func (b *ResourceQuotaBuilder) Allowed(value int) *ResourceQuotaBuilder {
+	b.allowed = &value
+	return b
+}
+
+// AvailabilityZoneType sets the value of the 'availability_zone_type' attribute
+// to the given value.
+//
+//
+func (b *ResourceQuotaBuilder) AvailabilityZoneType(value string) *ResourceQuotaBuilder {
+	b.availabilityZoneType = &value
+	return b
+}
+
+// OrganizationID sets the value of the 'organization_ID' attribute
+// to the given value.
+//
+//
+func (b *ResourceQuotaBuilder) OrganizationID(value string) *ResourceQuotaBuilder {
+	b.organizationID = &value
+	return b
+}
+
+// Reserved sets the value of the 'reserved' attribute
+// to the given value.
+//
+//
+func (b *ResourceQuotaBuilder) Reserved(value int) *ResourceQuotaBuilder {
+	b.reserved = &value
 	return b
 }
 
@@ -95,39 +131,22 @@ func (b *ResourceQuotaBuilder) ResourceType(value string) *ResourceQuotaBuilder 
 	return b
 }
 
-// BYOC sets the value of the 'BYOC' attribute
-// to the given value.
-//
-//
-func (b *ResourceQuotaBuilder) BYOC(value bool) *ResourceQuotaBuilder {
-	b.byoc = &value
-	return b
-}
-
-// AvailabilityZoneType sets the value of the 'availability_zone_type' attribute
-// to the given value.
-//
-//
-func (b *ResourceQuotaBuilder) AvailabilityZoneType(value string) *ResourceQuotaBuilder {
-	b.availabilityZoneType = &value
-	return b
-}
-
-// Allowed sets the value of the 'allowed' attribute
-// to the given value.
-//
-//
-func (b *ResourceQuotaBuilder) Allowed(value int) *ResourceQuotaBuilder {
-	b.allowed = &value
-	return b
-}
-
-// Reserved sets the value of the 'reserved' attribute
-// to the given value.
-//
-//
-func (b *ResourceQuotaBuilder) Reserved(value int) *ResourceQuotaBuilder {
-	b.reserved = &value
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ResourceQuotaBuilder) Copy(object *ResourceQuota) *ResourceQuotaBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.byoc = object.byoc
+	b.sku = object.sku
+	b.allowed = object.allowed
+	b.availabilityZoneType = object.availabilityZoneType
+	b.organizationID = object.organizationID
+	b.reserved = object.reserved
+	b.resourceName = object.resourceName
+	b.resourceType = object.resourceType
 	return b
 }
 
@@ -137,29 +156,29 @@ func (b *ResourceQuotaBuilder) Build() (object *ResourceQuota, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.organizationID != nil {
-		object.organizationID = b.organizationID
+	if b.byoc != nil {
+		object.byoc = b.byoc
 	}
 	if b.sku != nil {
 		object.sku = b.sku
+	}
+	if b.allowed != nil {
+		object.allowed = b.allowed
+	}
+	if b.availabilityZoneType != nil {
+		object.availabilityZoneType = b.availabilityZoneType
+	}
+	if b.organizationID != nil {
+		object.organizationID = b.organizationID
+	}
+	if b.reserved != nil {
+		object.reserved = b.reserved
 	}
 	if b.resourceName != nil {
 		object.resourceName = b.resourceName
 	}
 	if b.resourceType != nil {
 		object.resourceType = b.resourceType
-	}
-	if b.byoc != nil {
-		object.byoc = b.byoc
-	}
-	if b.availabilityZoneType != nil {
-		object.availabilityZoneType = b.availabilityZoneType
-	}
-	if b.allowed != nil {
-		object.allowed = b.allowed
-	}
-	if b.reserved != nil {
-		object.reserved = b.reserved
 	}
 	return
 }

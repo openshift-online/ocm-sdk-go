@@ -60,6 +60,17 @@ func (b *GoogleIdentityProviderBuilder) HostedDomain(value string) *GoogleIdenti
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *GoogleIdentityProviderBuilder) Copy(object *GoogleIdentityProvider) *GoogleIdentityProviderBuilder {
+	if object == nil {
+		return b
+	}
+	b.clientID = object.clientID
+	b.clientSecret = object.clientSecret
+	b.hostedDomain = object.hostedDomain
+	return b
+}
+
 // Build creates a 'google_identity_provider' object using the configuration stored in the builder.
 func (b *GoogleIdentityProviderBuilder) Build() (object *GoogleIdentityProvider, err error) {
 	object = new(GoogleIdentityProvider)

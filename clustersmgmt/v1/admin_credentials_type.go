@@ -24,38 +24,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Temporary administrator credentials generated during the installation of the
 // cluster.
 type AdminCredentials struct {
-	user     *string
 	password *string
+	user     *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AdminCredentials) Empty() bool {
-	return o == nil || (o.user == nil &&
-		o.password == nil &&
+	return o == nil || (o.password == nil &&
+		o.user == nil &&
 		true)
-}
-
-// User returns the value of the 'user' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Cluster administrator user name.
-func (o *AdminCredentials) User() string {
-	if o != nil && o.user != nil {
-		return *o.user
-	}
-	return ""
-}
-
-// GetUser returns the value of the 'user' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Cluster administrator user name.
-func (o *AdminCredentials) GetUser() (value string, ok bool) {
-	ok = o != nil && o.user != nil
-	if ok {
-		value = *o.user
-	}
-	return
 }
 
 // Password returns the value of the 'password' attribute, or
@@ -77,6 +54,29 @@ func (o *AdminCredentials) GetPassword() (value string, ok bool) {
 	ok = o != nil && o.password != nil
 	if ok {
 		value = *o.password
+	}
+	return
+}
+
+// User returns the value of the 'user' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Cluster administrator user name.
+func (o *AdminCredentials) User() string {
+	if o != nil && o.user != nil {
+		return *o.user
+	}
+	return ""
+}
+
+// GetUser returns the value of the 'user' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Cluster administrator user name.
+func (o *AdminCredentials) GetUser() (value string, ok bool) {
+	ok = o != nil && o.user != nil
+	if ok {
+		value = *o.user
 	}
 	return
 }

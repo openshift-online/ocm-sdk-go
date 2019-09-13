@@ -62,6 +62,25 @@ func (b *GroupBuilder) Users(values ...*UserBuilder) *GroupBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *GroupBuilder) Copy(object *Group) *GroupBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	if object.users != nil && len(object.users.items) > 0 {
+		b.users = make([]*UserBuilder, len(object.users.items))
+		for i, item := range object.users.items {
+			b.users[i] = NewUser().Copy(item)
+		}
+	} else {
+		b.users = nil
+	}
+	return b
+}
+
 // Build creates a 'group' object using the configuration stored in the builder.
 func (b *GroupBuilder) Build() (object *Group, err error) {
 	object = new(Group)

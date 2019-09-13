@@ -23,8 +23,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // LDAP attributes used to configure the LDAP identity provider.
 type LDAPAttributesBuilder struct {
-	email             []string
 	id                []string
+	email             []string
 	name              []string
 	preferredUsername []string
 }
@@ -34,16 +34,6 @@ func NewLDAPAttributes() *LDAPAttributesBuilder {
 	return new(LDAPAttributesBuilder)
 }
 
-// Email sets the value of the 'email' attribute
-// to the given values.
-//
-//
-func (b *LDAPAttributesBuilder) Email(values ...string) *LDAPAttributesBuilder {
-	b.email = make([]string, len(values))
-	copy(b.email, values)
-	return b
-}
-
 // ID sets the value of the 'ID' attribute
 // to the given values.
 //
@@ -51,6 +41,16 @@ func (b *LDAPAttributesBuilder) Email(values ...string) *LDAPAttributesBuilder {
 func (b *LDAPAttributesBuilder) ID(values ...string) *LDAPAttributesBuilder {
 	b.id = make([]string, len(values))
 	copy(b.id, values)
+	return b
+}
+
+// Email sets the value of the 'email' attribute
+// to the given values.
+//
+//
+func (b *LDAPAttributesBuilder) Email(values ...string) *LDAPAttributesBuilder {
+	b.email = make([]string, len(values))
+	copy(b.email, values)
 	return b
 }
 
@@ -74,16 +74,48 @@ func (b *LDAPAttributesBuilder) PreferredUsername(values ...string) *LDAPAttribu
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *LDAPAttributesBuilder) Copy(object *LDAPAttributes) *LDAPAttributesBuilder {
+	if object == nil {
+		return b
+	}
+	if len(object.id) > 0 {
+		b.id = make([]string, len(object.id))
+		copy(b.id, object.id)
+	} else {
+		b.id = nil
+	}
+	if len(object.email) > 0 {
+		b.email = make([]string, len(object.email))
+		copy(b.email, object.email)
+	} else {
+		b.email = nil
+	}
+	if len(object.name) > 0 {
+		b.name = make([]string, len(object.name))
+		copy(b.name, object.name)
+	} else {
+		b.name = nil
+	}
+	if len(object.preferredUsername) > 0 {
+		b.preferredUsername = make([]string, len(object.preferredUsername))
+		copy(b.preferredUsername, object.preferredUsername)
+	} else {
+		b.preferredUsername = nil
+	}
+	return b
+}
+
 // Build creates a 'LDAP_attributes' object using the configuration stored in the builder.
 func (b *LDAPAttributesBuilder) Build() (object *LDAPAttributes, err error) {
 	object = new(LDAPAttributes)
-	if b.email != nil {
-		object.email = make([]string, len(b.email))
-		copy(object.email, b.email)
-	}
 	if b.id != nil {
 		object.id = make([]string, len(b.id))
 		copy(object.id, b.id)
+	}
+	if b.email != nil {
+		object.email = make([]string, len(b.email))
+		copy(object.email, b.email)
 	}
 	if b.name != nil {
 		object.name = make([]string, len(b.name))

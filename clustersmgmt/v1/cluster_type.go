@@ -78,31 +78,31 @@ type Cluster struct {
 	id                  *string
 	href                *string
 	link                bool
-	name                *string
-	flavour             *Flavour
-	console             *ClusterConsole
-	multiAZ             *bool
-	nodes               *ClusterNodes
 	api                 *ClusterAPI
-	region              *CloudRegion
-	displayName         *string
-	dns                 *DNS
-	properties          map[string]string
-	state               *ClusterState
-	managed             *bool
-	externalID          *string
 	aws                 *AWS
-	network             *Network
-	creationTimestamp   *time.Time
-	expirationTimestamp *time.Time
+	dns                 *DNS
 	cloudProvider       *CloudProvider
-	openshiftVersion    *string
-	subscription        *Subscription
-	groups              *GroupList
+	console             *ClusterConsole
+	creationTimestamp   *time.Time
 	creator             *string
-	version             *Version
+	displayName         *string
+	expirationTimestamp *time.Time
+	externalID          *string
+	flavour             *Flavour
+	groups              *GroupList
 	identityProviders   *IdentityProviderList
+	managed             *bool
 	metrics             *ClusterMetrics
+	multiAZ             *bool
+	name                *string
+	network             *Network
+	nodes               *ClusterNodes
+	openshiftVersion    *string
+	properties          map[string]string
+	region              *CloudRegion
+	state               *ClusterState
+	subscription        *Subscription
+	version             *Version
 }
 
 // Kind returns the name of the type of the object.
@@ -160,153 +160,32 @@ func (o *Cluster) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Cluster) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.name == nil &&
-		o.flavour == nil &&
-		o.console == nil &&
-		o.multiAZ == nil &&
-		o.nodes == nil &&
 		o.api == nil &&
-		o.region == nil &&
-		o.displayName == nil &&
-		o.dns == nil &&
-		o.properties == nil &&
-		o.state == nil &&
-		o.managed == nil &&
-		o.externalID == nil &&
 		o.aws == nil &&
-		o.network == nil &&
-		o.creationTimestamp == nil &&
-		o.expirationTimestamp == nil &&
+		o.dns == nil &&
 		o.cloudProvider == nil &&
-		o.openshiftVersion == nil &&
-		o.subscription == nil &&
-		o.groups.Empty() &&
+		o.console == nil &&
+		o.creationTimestamp == nil &&
 		o.creator == nil &&
-		o.version == nil &&
+		o.displayName == nil &&
+		o.expirationTimestamp == nil &&
+		o.externalID == nil &&
+		o.flavour == nil &&
+		o.groups.Empty() &&
 		o.identityProviders.Empty() &&
+		o.managed == nil &&
 		o.metrics == nil &&
+		o.multiAZ == nil &&
+		o.name == nil &&
+		o.network == nil &&
+		o.nodes == nil &&
+		o.openshiftVersion == nil &&
+		o.properties == nil &&
+		o.region == nil &&
+		o.state == nil &&
+		o.subscription == nil &&
+		o.version == nil &&
 		true)
-}
-
-// Name returns the value of the 'name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Name of the cluster. This name is assigned by the user when the
-// cluster is created.
-func (o *Cluster) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
-	}
-	return ""
-}
-
-// GetName returns the value of the 'name' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Name of the cluster. This name is assigned by the user when the
-// cluster is created.
-func (o *Cluster) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
-	if ok {
-		value = *o.name
-	}
-	return
-}
-
-// Flavour returns the value of the 'flavour' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Link to the _flavour_ that was used to create the cluster.
-func (o *Cluster) Flavour() *Flavour {
-	if o == nil {
-		return nil
-	}
-	return o.flavour
-}
-
-// GetFlavour returns the value of the 'flavour' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Link to the _flavour_ that was used to create the cluster.
-func (o *Cluster) GetFlavour() (value *Flavour, ok bool) {
-	ok = o != nil && o.flavour != nil
-	if ok {
-		value = o.flavour
-	}
-	return
-}
-
-// Console returns the value of the 'console' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Information about the console of the cluster.
-func (o *Cluster) Console() *ClusterConsole {
-	if o == nil {
-		return nil
-	}
-	return o.console
-}
-
-// GetConsole returns the value of the 'console' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Information about the console of the cluster.
-func (o *Cluster) GetConsole() (value *ClusterConsole, ok bool) {
-	ok = o != nil && o.console != nil
-	if ok {
-		value = o.console
-	}
-	return
-}
-
-// MultiAZ returns the value of the 'multi_AZ' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Flag indicating if the cluster should be created with nodes in
-// different availability zones or all the nodes in a single one
-// randomly selected.
-func (o *Cluster) MultiAZ() bool {
-	if o != nil && o.multiAZ != nil {
-		return *o.multiAZ
-	}
-	return false
-}
-
-// GetMultiAZ returns the value of the 'multi_AZ' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Flag indicating if the cluster should be created with nodes in
-// different availability zones or all the nodes in a single one
-// randomly selected.
-func (o *Cluster) GetMultiAZ() (value bool, ok bool) {
-	ok = o != nil && o.multiAZ != nil
-	if ok {
-		value = *o.multiAZ
-	}
-	return
-}
-
-// Nodes returns the value of the 'nodes' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Information about the nodes of the cluster.
-func (o *Cluster) Nodes() *ClusterNodes {
-	if o == nil {
-		return nil
-	}
-	return o.nodes
-}
-
-// GetNodes returns the value of the 'nodes' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Information about the nodes of the cluster.
-func (o *Cluster) GetNodes() (value *ClusterNodes, ok bool) {
-	ok = o != nil && o.nodes != nil
-	if ok {
-		value = o.nodes
-	}
-	return
 }
 
 // API returns the value of the 'API' attribute, or
@@ -328,171 +207,6 @@ func (o *Cluster) GetAPI() (value *ClusterAPI, ok bool) {
 	ok = o != nil && o.api != nil
 	if ok {
 		value = o.api
-	}
-	return
-}
-
-// Region returns the value of the 'region' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Link to the cloud provider region where the cluster is installed.
-func (o *Cluster) Region() *CloudRegion {
-	if o == nil {
-		return nil
-	}
-	return o.region
-}
-
-// GetRegion returns the value of the 'region' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Link to the cloud provider region where the cluster is installed.
-func (o *Cluster) GetRegion() (value *CloudRegion, ok bool) {
-	ok = o != nil && o.region != nil
-	if ok {
-		value = o.region
-	}
-	return
-}
-
-// DisplayName returns the value of the 'display_name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Name of the cluster for display purposes. It can contain any
-// characters, including spaces.
-func (o *Cluster) DisplayName() string {
-	if o != nil && o.displayName != nil {
-		return *o.displayName
-	}
-	return ""
-}
-
-// GetDisplayName returns the value of the 'display_name' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Name of the cluster for display purposes. It can contain any
-// characters, including spaces.
-func (o *Cluster) GetDisplayName() (value string, ok bool) {
-	ok = o != nil && o.displayName != nil
-	if ok {
-		value = *o.displayName
-	}
-	return
-}
-
-// DNS returns the value of the 'DNS' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// DNS settings of the cluster.
-func (o *Cluster) DNS() *DNS {
-	if o == nil {
-		return nil
-	}
-	return o.dns
-}
-
-// GetDNS returns the value of the 'DNS' attribute and
-// a flag indicating if the attribute has a value.
-//
-// DNS settings of the cluster.
-func (o *Cluster) GetDNS() (value *DNS, ok bool) {
-	ok = o != nil && o.dns != nil
-	if ok {
-		value = o.dns
-	}
-	return
-}
-
-// Properties returns the value of the 'properties' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// User defined properties for tagging and querying.
-func (o *Cluster) Properties() map[string]string {
-	if o == nil {
-		return nil
-	}
-	return o.properties
-}
-
-// GetProperties returns the value of the 'properties' attribute and
-// a flag indicating if the attribute has a value.
-//
-// User defined properties for tagging and querying.
-func (o *Cluster) GetProperties() (value map[string]string, ok bool) {
-	ok = o != nil && o.properties != nil
-	if ok {
-		value = o.properties
-	}
-	return
-}
-
-// State returns the value of the 'state' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Overall state of the cluster.
-func (o *Cluster) State() ClusterState {
-	if o != nil && o.state != nil {
-		return *o.state
-	}
-	return ClusterState("")
-}
-
-// GetState returns the value of the 'state' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Overall state of the cluster.
-func (o *Cluster) GetState() (value ClusterState, ok bool) {
-	ok = o != nil && o.state != nil
-	if ok {
-		value = *o.state
-	}
-	return
-}
-
-// Managed returns the value of the 'managed' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Flag indicating if the cluster is managed (by Red Hat) or
-// self-managed by the user.
-func (o *Cluster) Managed() bool {
-	if o != nil && o.managed != nil {
-		return *o.managed
-	}
-	return false
-}
-
-// GetManaged returns the value of the 'managed' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Flag indicating if the cluster is managed (by Red Hat) or
-// self-managed by the user.
-func (o *Cluster) GetManaged() (value bool, ok bool) {
-	ok = o != nil && o.managed != nil
-	if ok {
-		value = *o.managed
-	}
-	return
-}
-
-// ExternalID returns the value of the 'external_ID' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// External identifier of the cluster, generated by the installer.
-func (o *Cluster) ExternalID() string {
-	if o != nil && o.externalID != nil {
-		return *o.externalID
-	}
-	return ""
-}
-
-// GetExternalID returns the value of the 'external_ID' attribute and
-// a flag indicating if the attribute has a value.
-//
-// External identifier of the cluster, generated by the installer.
-func (o *Cluster) GetExternalID() (value string, ok bool) {
-	ok = o != nil && o.externalID != nil
-	if ok {
-		value = *o.externalID
 	}
 	return
 }
@@ -520,25 +234,71 @@ func (o *Cluster) GetAWS() (value *AWS, ok bool) {
 	return
 }
 
-// Network returns the value of the 'network' attribute, or
+// DNS returns the value of the 'DNS' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Network settings of the cluster.
-func (o *Cluster) Network() *Network {
+// DNS settings of the cluster.
+func (o *Cluster) DNS() *DNS {
 	if o == nil {
 		return nil
 	}
-	return o.network
+	return o.dns
 }
 
-// GetNetwork returns the value of the 'network' attribute and
+// GetDNS returns the value of the 'DNS' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Network settings of the cluster.
-func (o *Cluster) GetNetwork() (value *Network, ok bool) {
-	ok = o != nil && o.network != nil
+// DNS settings of the cluster.
+func (o *Cluster) GetDNS() (value *DNS, ok bool) {
+	ok = o != nil && o.dns != nil
 	if ok {
-		value = o.network
+		value = o.dns
+	}
+	return
+}
+
+// CloudProvider returns the value of the 'cloud_provider' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the cloud provider where the cluster is installed.
+func (o *Cluster) CloudProvider() *CloudProvider {
+	if o == nil {
+		return nil
+	}
+	return o.cloudProvider
+}
+
+// GetCloudProvider returns the value of the 'cloud_provider' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the cloud provider where the cluster is installed.
+func (o *Cluster) GetCloudProvider() (value *CloudProvider, ok bool) {
+	ok = o != nil && o.cloudProvider != nil
+	if ok {
+		value = o.cloudProvider
+	}
+	return
+}
+
+// Console returns the value of the 'console' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Information about the console of the cluster.
+func (o *Cluster) Console() *ClusterConsole {
+	if o == nil {
+		return nil
+	}
+	return o.console
+}
+
+// GetConsole returns the value of the 'console' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Information about the console of the cluster.
+func (o *Cluster) GetConsole() (value *ClusterConsole, ok bool) {
+	ok = o != nil && o.console != nil
+	if ok {
+		value = o.console
 	}
 	return
 }
@@ -564,6 +324,54 @@ func (o *Cluster) GetCreationTimestamp() (value time.Time, ok bool) {
 	ok = o != nil && o.creationTimestamp != nil
 	if ok {
 		value = *o.creationTimestamp
+	}
+	return
+}
+
+// Creator returns the value of the 'creator' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Mail address of the user that created the cluster.
+func (o *Cluster) Creator() string {
+	if o != nil && o.creator != nil {
+		return *o.creator
+	}
+	return ""
+}
+
+// GetCreator returns the value of the 'creator' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Mail address of the user that created the cluster.
+func (o *Cluster) GetCreator() (value string, ok bool) {
+	ok = o != nil && o.creator != nil
+	if ok {
+		value = *o.creator
+	}
+	return
+}
+
+// DisplayName returns the value of the 'display_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Name of the cluster for display purposes. It can contain any
+// characters, including spaces.
+func (o *Cluster) DisplayName() string {
+	if o != nil && o.displayName != nil {
+		return *o.displayName
+	}
+	return ""
+}
+
+// GetDisplayName returns the value of the 'display_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Name of the cluster for display purposes. It can contain any
+// characters, including spaces.
+func (o *Cluster) GetDisplayName() (value string, ok bool) {
+	ok = o != nil && o.displayName != nil
+	if ok {
+		value = *o.displayName
 	}
 	return
 }
@@ -595,25 +403,244 @@ func (o *Cluster) GetExpirationTimestamp() (value time.Time, ok bool) {
 	return
 }
 
-// CloudProvider returns the value of the 'cloud_provider' attribute, or
+// ExternalID returns the value of the 'external_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Link to the cloud provider where the cluster is installed.
-func (o *Cluster) CloudProvider() *CloudProvider {
+// External identifier of the cluster, generated by the installer.
+func (o *Cluster) ExternalID() string {
+	if o != nil && o.externalID != nil {
+		return *o.externalID
+	}
+	return ""
+}
+
+// GetExternalID returns the value of the 'external_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+// External identifier of the cluster, generated by the installer.
+func (o *Cluster) GetExternalID() (value string, ok bool) {
+	ok = o != nil && o.externalID != nil
+	if ok {
+		value = *o.externalID
+	}
+	return
+}
+
+// Flavour returns the value of the 'flavour' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the _flavour_ that was used to create the cluster.
+func (o *Cluster) Flavour() *Flavour {
 	if o == nil {
 		return nil
 	}
-	return o.cloudProvider
+	return o.flavour
 }
 
-// GetCloudProvider returns the value of the 'cloud_provider' attribute and
+// GetFlavour returns the value of the 'flavour' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Link to the cloud provider where the cluster is installed.
-func (o *Cluster) GetCloudProvider() (value *CloudProvider, ok bool) {
-	ok = o != nil && o.cloudProvider != nil
+// Link to the _flavour_ that was used to create the cluster.
+func (o *Cluster) GetFlavour() (value *Flavour, ok bool) {
+	ok = o != nil && o.flavour != nil
 	if ok {
-		value = o.cloudProvider
+		value = o.flavour
+	}
+	return
+}
+
+// Groups returns the value of the 'groups' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the collection of groups of user of the cluster.
+func (o *Cluster) Groups() *GroupList {
+	if o == nil {
+		return nil
+	}
+	return o.groups
+}
+
+// GetGroups returns the value of the 'groups' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the collection of groups of user of the cluster.
+func (o *Cluster) GetGroups() (value *GroupList, ok bool) {
+	ok = o != nil && o.groups != nil
+	if ok {
+		value = o.groups
+	}
+	return
+}
+
+// IdentityProviders returns the value of the 'identity_providers' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the collection of identity providers of the cluster.
+func (o *Cluster) IdentityProviders() *IdentityProviderList {
+	if o == nil {
+		return nil
+	}
+	return o.identityProviders
+}
+
+// GetIdentityProviders returns the value of the 'identity_providers' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the collection of identity providers of the cluster.
+func (o *Cluster) GetIdentityProviders() (value *IdentityProviderList, ok bool) {
+	ok = o != nil && o.identityProviders != nil
+	if ok {
+		value = o.identityProviders
+	}
+	return
+}
+
+// Managed returns the value of the 'managed' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Flag indicating if the cluster is managed (by Red Hat) or
+// self-managed by the user.
+func (o *Cluster) Managed() bool {
+	if o != nil && o.managed != nil {
+		return *o.managed
+	}
+	return false
+}
+
+// GetManaged returns the value of the 'managed' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Flag indicating if the cluster is managed (by Red Hat) or
+// self-managed by the user.
+func (o *Cluster) GetManaged() (value bool, ok bool) {
+	ok = o != nil && o.managed != nil
+	if ok {
+		value = *o.managed
+	}
+	return
+}
+
+// Metrics returns the value of the 'metrics' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Cluster metrics received from telemetry.
+//
+// When provisioning a cluster this will be ignored.
+func (o *Cluster) Metrics() *ClusterMetrics {
+	if o == nil {
+		return nil
+	}
+	return o.metrics
+}
+
+// GetMetrics returns the value of the 'metrics' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Cluster metrics received from telemetry.
+//
+// When provisioning a cluster this will be ignored.
+func (o *Cluster) GetMetrics() (value *ClusterMetrics, ok bool) {
+	ok = o != nil && o.metrics != nil
+	if ok {
+		value = o.metrics
+	}
+	return
+}
+
+// MultiAZ returns the value of the 'multi_AZ' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Flag indicating if the cluster should be created with nodes in
+// different availability zones or all the nodes in a single one
+// randomly selected.
+func (o *Cluster) MultiAZ() bool {
+	if o != nil && o.multiAZ != nil {
+		return *o.multiAZ
+	}
+	return false
+}
+
+// GetMultiAZ returns the value of the 'multi_AZ' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Flag indicating if the cluster should be created with nodes in
+// different availability zones or all the nodes in a single one
+// randomly selected.
+func (o *Cluster) GetMultiAZ() (value bool, ok bool) {
+	ok = o != nil && o.multiAZ != nil
+	if ok {
+		value = *o.multiAZ
+	}
+	return
+}
+
+// Name returns the value of the 'name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Name of the cluster. This name is assigned by the user when the
+// cluster is created.
+func (o *Cluster) Name() string {
+	if o != nil && o.name != nil {
+		return *o.name
+	}
+	return ""
+}
+
+// GetName returns the value of the 'name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Name of the cluster. This name is assigned by the user when the
+// cluster is created.
+func (o *Cluster) GetName() (value string, ok bool) {
+	ok = o != nil && o.name != nil
+	if ok {
+		value = *o.name
+	}
+	return
+}
+
+// Network returns the value of the 'network' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Network settings of the cluster.
+func (o *Cluster) Network() *Network {
+	if o == nil {
+		return nil
+	}
+	return o.network
+}
+
+// GetNetwork returns the value of the 'network' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Network settings of the cluster.
+func (o *Cluster) GetNetwork() (value *Network, ok bool) {
+	ok = o != nil && o.network != nil
+	if ok {
+		value = o.network
+	}
+	return
+}
+
+// Nodes returns the value of the 'nodes' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Information about the nodes of the cluster.
+func (o *Cluster) Nodes() *ClusterNodes {
+	if o == nil {
+		return nil
+	}
+	return o.nodes
+}
+
+// GetNodes returns the value of the 'nodes' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Information about the nodes of the cluster.
+func (o *Cluster) GetNodes() (value *ClusterNodes, ok bool) {
+	ok = o != nil && o.nodes != nil
+	if ok {
+		value = o.nodes
 	}
 	return
 }
@@ -651,6 +678,75 @@ func (o *Cluster) GetOpenshiftVersion() (value string, ok bool) {
 	return
 }
 
+// Properties returns the value of the 'properties' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// User defined properties for tagging and querying.
+func (o *Cluster) Properties() map[string]string {
+	if o == nil {
+		return nil
+	}
+	return o.properties
+}
+
+// GetProperties returns the value of the 'properties' attribute and
+// a flag indicating if the attribute has a value.
+//
+// User defined properties for tagging and querying.
+func (o *Cluster) GetProperties() (value map[string]string, ok bool) {
+	ok = o != nil && o.properties != nil
+	if ok {
+		value = o.properties
+	}
+	return
+}
+
+// Region returns the value of the 'region' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the cloud provider region where the cluster is installed.
+func (o *Cluster) Region() *CloudRegion {
+	if o == nil {
+		return nil
+	}
+	return o.region
+}
+
+// GetRegion returns the value of the 'region' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the cloud provider region where the cluster is installed.
+func (o *Cluster) GetRegion() (value *CloudRegion, ok bool) {
+	ok = o != nil && o.region != nil
+	if ok {
+		value = o.region
+	}
+	return
+}
+
+// State returns the value of the 'state' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Overall state of the cluster.
+func (o *Cluster) State() ClusterState {
+	if o != nil && o.state != nil {
+		return *o.state
+	}
+	return ClusterState("")
+}
+
+// GetState returns the value of the 'state' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Overall state of the cluster.
+func (o *Cluster) GetState() (value ClusterState, ok bool) {
+	ok = o != nil && o.state != nil
+	if ok {
+		value = *o.state
+	}
+	return
+}
+
 // Subscription returns the value of the 'subscription' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -676,52 +772,6 @@ func (o *Cluster) GetSubscription() (value *Subscription, ok bool) {
 	return
 }
 
-// Groups returns the value of the 'groups' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Link to the collection of groups of user of the cluster.
-func (o *Cluster) Groups() *GroupList {
-	if o == nil {
-		return nil
-	}
-	return o.groups
-}
-
-// GetGroups returns the value of the 'groups' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Link to the collection of groups of user of the cluster.
-func (o *Cluster) GetGroups() (value *GroupList, ok bool) {
-	ok = o != nil && o.groups != nil
-	if ok {
-		value = o.groups
-	}
-	return
-}
-
-// Creator returns the value of the 'creator' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Mail address of the user that created the cluster.
-func (o *Cluster) Creator() string {
-	if o != nil && o.creator != nil {
-		return *o.creator
-	}
-	return ""
-}
-
-// GetCreator returns the value of the 'creator' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Mail address of the user that created the cluster.
-func (o *Cluster) GetCreator() (value string, ok bool) {
-	ok = o != nil && o.creator != nil
-	if ok {
-		value = *o.creator
-	}
-	return
-}
-
 // Version returns the value of the 'version' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -741,56 +791,6 @@ func (o *Cluster) GetVersion() (value *Version, ok bool) {
 	ok = o != nil && o.version != nil
 	if ok {
 		value = o.version
-	}
-	return
-}
-
-// IdentityProviders returns the value of the 'identity_providers' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Link to the collection of identity providers of the cluster.
-func (o *Cluster) IdentityProviders() *IdentityProviderList {
-	if o == nil {
-		return nil
-	}
-	return o.identityProviders
-}
-
-// GetIdentityProviders returns the value of the 'identity_providers' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Link to the collection of identity providers of the cluster.
-func (o *Cluster) GetIdentityProviders() (value *IdentityProviderList, ok bool) {
-	ok = o != nil && o.identityProviders != nil
-	if ok {
-		value = o.identityProviders
-	}
-	return
-}
-
-// Metrics returns the value of the 'metrics' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Cluster metrics received from telemetry.
-//
-// When provisioning a cluster this will be ignored.
-func (o *Cluster) Metrics() *ClusterMetrics {
-	if o == nil {
-		return nil
-	}
-	return o.metrics
-}
-
-// GetMetrics returns the value of the 'metrics' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Cluster metrics received from telemetry.
-//
-// When provisioning a cluster this will be ignored.
-func (o *Cluster) GetMetrics() (value *ClusterMetrics, ok bool) {
-	ok = o != nil && o.metrics != nil
-	if ok {
-		value = o.metrics
 	}
 	return
 }

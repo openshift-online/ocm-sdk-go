@@ -47,10 +47,56 @@ type SubscriptionsServer interface {
 
 // SubscriptionsListServerRequest is the request for the 'list' method.
 type SubscriptionsListServerRequest struct {
+	order *string
 	page  *int
 	size  *int
 	total *int
-	order *string
+}
+
+// Order returns the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// subscriptions descending by name identifier the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *SubscriptionsListServerRequest) Order() string {
+	if r != nil && r.order != nil {
+		return *r.order
+	}
+	return ""
+}
+
+// GetOrder returns the value of the 'order' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// subscriptions descending by name identifier the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *SubscriptionsListServerRequest) GetOrder() (value string, ok bool) {
+	ok = r != nil && r.order != nil
+	if ok {
+		value = *r.order
+	}
+	return
 }
 
 // Page returns the value of the 'page' parameter.
@@ -129,60 +175,22 @@ func (r *SubscriptionsListServerRequest) GetTotal() (value int, ok bool) {
 	return
 }
 
-// Order returns the value of the 'order' parameter.
-//
-// Order criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement. For example, in order to sort the
-// subscriptions descending by name identifier the value should be:
-//
-// [source,sql]
-// ----
-// name desc
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then the order of the
-// results is undefined.
-func (r *SubscriptionsListServerRequest) Order() string {
-	if r != nil && r.order != nil {
-		return *r.order
-	}
-	return ""
-}
-
-// GetOrder returns the value of the 'order' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Order criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement. For example, in order to sort the
-// subscriptions descending by name identifier the value should be:
-//
-// [source,sql]
-// ----
-// name desc
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then the order of the
-// results is undefined.
-func (r *SubscriptionsListServerRequest) GetOrder() (value string, ok bool) {
-	ok = r != nil && r.order != nil
-	if ok {
-		value = *r.order
-	}
-	return
-}
-
 // SubscriptionsListServerResponse is the response for the 'list' method.
 type SubscriptionsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *SubscriptionList
 	page   *int
 	size   *int
 	total  *int
-	items  *SubscriptionList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of subscriptions.
+func (r *SubscriptionsListServerResponse) Items(value *SubscriptionList) *SubscriptionsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -214,14 +222,6 @@ func (r *SubscriptionsListServerResponse) Total(value int) *SubscriptionsListSer
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of subscriptions.
-func (r *SubscriptionsListServerResponse) Items(value *SubscriptionList) *SubscriptionsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *SubscriptionsListServerResponse) SetStatusCode(status int) *SubscriptionsListServerResponse {
 	r.status = status
@@ -234,13 +234,13 @@ func (r *SubscriptionsListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(subscriptionsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -248,10 +248,10 @@ func (r *SubscriptionsListServerResponse) marshal(writer io.Writer) error {
 // subscriptionsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type subscriptionsListServerResponseData struct {
+	Items subscriptionListData "json:\"items,omitempty\""
 	Page  *int                 "json:\"page,omitempty\""
 	Size  *int                 "json:\"size,omitempty\""
 	Total *int                 "json:\"total,omitempty\""
-	Items subscriptionListData "json:\"items,omitempty\""
 }
 
 // SubscriptionsServerAdapter represents the structs that adapts Requests and Response to internal
@@ -280,6 +280,10 @@ func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.
 	var err error
 	result := new(SubscriptionsListServerRequest)
 	query := r.URL.Query()
+	result.order, err = helpers.ParseString(query, "order")
+	if err != nil {
+		return nil, err
+	}
 	result.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return nil, err
@@ -289,10 +293,6 @@ func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.
 		return nil, err
 	}
 	result.total, err = helpers.ParseInteger(query, "total")
-	if err != nil {
-		return nil, err
-	}
-	result.order, err = helpers.ParseString(query, "order")
 	if err != nil {
 		return nil, err
 	}

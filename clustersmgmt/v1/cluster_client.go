@@ -53,6 +53,17 @@ func NewClusterClient(transport http.RoundTripper, path string, metric string) *
 	return client
 }
 
+// Delete creates a request for the 'delete' method.
+//
+// Deletes the cluster.
+func (c *ClusterClient) Delete() *ClusterDeleteRequest {
+	request := new(ClusterDeleteRequest)
+	request.transport = c.transport
+	request.path = c.path
+	request.metric = c.metric
+	return request
+}
+
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the cluster.
@@ -75,28 +86,6 @@ func (c *ClusterClient) Update() *ClusterUpdateRequest {
 	return request
 }
 
-// Delete creates a request for the 'delete' method.
-//
-// Deletes the cluster.
-func (c *ClusterClient) Delete() *ClusterDeleteRequest {
-	request := new(ClusterDeleteRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
-}
-
-// Status returns the target 'cluster_status' resource.
-//
-// Reference to the resource that manages the detailed status of the cluster.
-func (c *ClusterClient) Status() *ClusterStatusClient {
-	return NewClusterStatusClient(
-		c.transport,
-		path.Join(c.path, "status"),
-		path.Join(c.metric, "status"),
-	)
-}
-
 // Credentials returns the target 'credentials' resource.
 //
 // Reference to the resource that manages the credentials of the cluster.
@@ -105,17 +94,6 @@ func (c *ClusterClient) Credentials() *CredentialsClient {
 		c.transport,
 		path.Join(c.path, "credentials"),
 		path.Join(c.metric, "credentials"),
-	)
-}
-
-// Logs returns the target 'logs' resource.
-//
-// Reference to the resource that manages the collection of logs of the cluster.
-func (c *ClusterClient) Logs() *LogsClient {
-	return NewLogsClient(
-		c.transport,
-		path.Join(c.path, "logs"),
-		path.Join(c.metric, "logs"),
 	)
 }
 
@@ -139,6 +117,114 @@ func (c *ClusterClient) IdentityProviders() *IdentityProvidersClient {
 		path.Join(c.path, "identity_providers"),
 		path.Join(c.metric, "identity_providers"),
 	)
+}
+
+// Logs returns the target 'logs' resource.
+//
+// Reference to the resource that manages the collection of logs of the cluster.
+func (c *ClusterClient) Logs() *LogsClient {
+	return NewLogsClient(
+		c.transport,
+		path.Join(c.path, "logs"),
+		path.Join(c.metric, "logs"),
+	)
+}
+
+// Status returns the target 'cluster_status' resource.
+//
+// Reference to the resource that manages the detailed status of the cluster.
+func (c *ClusterClient) Status() *ClusterStatusClient {
+	return NewClusterStatusClient(
+		c.transport,
+		path.Join(c.path, "status"),
+		path.Join(c.metric, "status"),
+	)
+}
+
+// ClusterDeleteRequest is the request for the 'delete' method.
+type ClusterDeleteRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *ClusterDeleteRequest) Parameter(name string, value interface{}) *ClusterDeleteRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDeleteRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: http.MethodDelete,
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = new(ClusterDeleteResponse)
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// ClusterDeleteResponse is the response for the 'delete' method.
+type ClusterDeleteResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *ClusterDeleteResponse) Status() int {
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *ClusterDeleteResponse) Header() http.Header {
+	return r.header
+}
+
+// Error returns the response error.
+func (r *ClusterDeleteResponse) Error() *errors.Error {
+	return r.err
 }
 
 // ClusterGetRequest is the request for the 'get' method.
@@ -427,90 +513,4 @@ func (r *ClusterUpdateResponse) unmarshal(reader io.Reader) error {
 		return err
 	}
 	return err
-}
-
-// ClusterDeleteRequest is the request for the 'delete' method.
-type ClusterDeleteRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *ClusterDeleteRequest) Parameter(name string, value interface{}) *ClusterDeleteRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDeleteRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: http.MethodDelete,
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = new(ClusterDeleteResponse)
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	return
-}
-
-// ClusterDeleteResponse is the response for the 'delete' method.
-type ClusterDeleteResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-}
-
-// Status returns the response status code.
-func (r *ClusterDeleteResponse) Status() int {
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *ClusterDeleteResponse) Header() http.Header {
-	return r.header
-}
-
-// Error returns the response error.
-func (r *ClusterDeleteResponse) Error() *errors.Error {
-	return r.err
 }

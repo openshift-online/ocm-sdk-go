@@ -31,14 +31,14 @@ type accountData struct {
 	Kind           *string           "json:\"kind,omitempty\""
 	ID             *string           "json:\"id,omitempty\""
 	HREF           *string           "json:\"href,omitempty\""
-	Name           *string           "json:\"name,omitempty\""
-	Username       *string           "json:\"username,omitempty\""
+	BanDescription *string           "json:\"ban_description,omitempty\""
+	Banned         *bool             "json:\"banned,omitempty\""
 	Email          *string           "json:\"email,omitempty\""
 	FirstName      *string           "json:\"first_name,omitempty\""
 	LastName       *string           "json:\"last_name,omitempty\""
-	Banned         *bool             "json:\"banned,omitempty\""
-	BanDescription *string           "json:\"ban_description,omitempty\""
+	Name           *string           "json:\"name,omitempty\""
 	Organization   *organizationData "json:\"organization,omitempty\""
+	Username       *string           "json:\"username,omitempty\""
 }
 
 // MarshalAccount writes a value of the 'account' to the given target,
@@ -70,17 +70,17 @@ func (o *Account) wrap() (data *accountData, err error) {
 	} else {
 		*data.Kind = AccountKind
 	}
-	data.Name = o.name
-	data.Username = o.username
+	data.BanDescription = o.banDescription
+	data.Banned = o.banned
 	data.Email = o.email
 	data.FirstName = o.firstName
 	data.LastName = o.lastName
-	data.Banned = o.banned
-	data.BanDescription = o.banDescription
+	data.Name = o.name
 	data.Organization, err = o.organization.wrap()
 	if err != nil {
 		return
 	}
+	data.Username = o.username
 	return
 }
 
@@ -125,16 +125,16 @@ func (d *accountData) unwrap() (object *Account, err error) {
 			return
 		}
 	}
-	object.name = d.Name
-	object.username = d.Username
+	object.banDescription = d.BanDescription
+	object.banned = d.Banned
 	object.email = d.Email
 	object.firstName = d.FirstName
 	object.lastName = d.LastName
-	object.banned = d.Banned
-	object.banDescription = d.BanDescription
+	object.name = d.Name
 	object.organization, err = d.Organization.unwrap()
 	if err != nil {
 		return
 	}
+	object.username = d.Username
 	return
 }

@@ -27,12 +27,12 @@ import (
 // objects of type 'open_ID_identity_provider'.
 type openIDIdentityProviderData struct {
 	CA                       *string           "json:\"ca,omitempty\""
+	URLS                     *openIDURLsData   "json:\"urls,omitempty\""
 	Claims                   *openIDClaimsData "json:\"claims,omitempty\""
 	ClientID                 *string           "json:\"client_id,omitempty\""
 	ClientSecret             *string           "json:\"client_secret,omitempty\""
 	ExtraAuthorizeParameters map[string]string "json:\"extra_authorize_parameters,omitempty\""
 	ExtraScopes              []string          "json:\"extra_scopes,omitempty\""
-	URLS                     *openIDURLsData   "json:\"urls,omitempty\""
 }
 
 // MarshalOpenIDIdentityProvider writes a value of the 'open_ID_identity_provider' to the given target,
@@ -57,6 +57,10 @@ func (o *OpenIDIdentityProvider) wrap() (data *openIDIdentityProviderData, err e
 	}
 	data = new(openIDIdentityProviderData)
 	data.CA = o.ca
+	data.URLS, err = o.urls.wrap()
+	if err != nil {
+		return
+	}
 	data.Claims, err = o.claims.wrap()
 	if err != nil {
 		return
@@ -65,10 +69,6 @@ func (o *OpenIDIdentityProvider) wrap() (data *openIDIdentityProviderData, err e
 	data.ClientSecret = o.clientSecret
 	data.ExtraAuthorizeParameters = o.extraAuthorizeParameters
 	data.ExtraScopes = o.extraScopes
-	data.URLS, err = o.urls.wrap()
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -96,6 +96,10 @@ func (d *openIDIdentityProviderData) unwrap() (object *OpenIDIdentityProvider, e
 	}
 	object = new(OpenIDIdentityProvider)
 	object.ca = d.CA
+	object.urls, err = d.URLS.unwrap()
+	if err != nil {
+		return
+	}
 	object.claims, err = d.Claims.unwrap()
 	if err != nil {
 		return
@@ -104,9 +108,5 @@ func (d *openIDIdentityProviderData) unwrap() (object *OpenIDIdentityProvider, e
 	object.clientSecret = d.ClientSecret
 	object.extraAuthorizeParameters = d.ExtraAuthorizeParameters
 	object.extraScopes = d.ExtraScopes
-	object.urls, err = d.URLS.unwrap()
-	if err != nil {
-		return
-	}
 	return
 }

@@ -81,6 +81,20 @@ func (b *PermissionBuilder) RoleID(value string) *PermissionBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *PermissionBuilder) Copy(object *Permission) *PermissionBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.action = object.action
+	b.resourceType = object.resourceType
+	b.roleID = object.roleID
+	return b
+}
+
 // Build creates a 'permission' object using the configuration stored in the builder.
 func (b *PermissionBuilder) Build() (object *Permission, err error) {
 	object = new(Permission)

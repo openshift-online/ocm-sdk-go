@@ -24,17 +24,17 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Details for `gitlab` identity providers.
 type GitlabIdentityProvider struct {
 	ca           *string
+	url          *string
 	clientID     *string
 	clientSecret *string
-	url          *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *GitlabIdentityProvider) Empty() bool {
 	return o == nil || (o.ca == nil &&
+		o.url == nil &&
 		o.clientID == nil &&
 		o.clientSecret == nil &&
-		o.url == nil &&
 		true)
 }
 
@@ -57,6 +57,29 @@ func (o *GitlabIdentityProvider) GetCA() (value string, ok bool) {
 	ok = o != nil && o.ca != nil
 	if ok {
 		value = *o.ca
+	}
+	return
+}
+
+// URL returns the value of the 'URL' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// URL of the _GitLab_ instance.
+func (o *GitlabIdentityProvider) URL() string {
+	if o != nil && o.url != nil {
+		return *o.url
+	}
+	return ""
+}
+
+// GetURL returns the value of the 'URL' attribute and
+// a flag indicating if the attribute has a value.
+//
+// URL of the _GitLab_ instance.
+func (o *GitlabIdentityProvider) GetURL() (value string, ok bool) {
+	ok = o != nil && o.url != nil
+	if ok {
+		value = *o.url
 	}
 	return
 }
@@ -103,29 +126,6 @@ func (o *GitlabIdentityProvider) GetClientSecret() (value string, ok bool) {
 	ok = o != nil && o.clientSecret != nil
 	if ok {
 		value = *o.clientSecret
-	}
-	return
-}
-
-// URL returns the value of the 'URL' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// URL of the _GitLab_ instance.
-func (o *GitlabIdentityProvider) URL() string {
-	if o != nil && o.url != nil {
-		return *o.url
-	}
-	return ""
-}
-
-// GetURL returns the value of the 'URL' attribute and
-// a flag indicating if the attribute has a value.
-//
-// URL of the _GitLab_ instance.
-func (o *GitlabIdentityProvider) GetURL() (value string, ok bool) {
-	ok = o != nil && o.url != nil
-	if ok {
-		value = *o.url
 	}
 	return
 }

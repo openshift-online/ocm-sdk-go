@@ -34,20 +34,98 @@ import (
 // RolesServer represents the interface the manages the 'roles' resource.
 type RolesServer interface {
 
-	// List handles a request for the 'list' method.
-	//
-	// Retrieves a list of roles.
-	List(ctx context.Context, request *RolesListServerRequest, response *RolesListServerResponse) error
-
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new role.
 	Add(ctx context.Context, request *RolesAddServerRequest, response *RolesAddServerResponse) error
 
+	// List handles a request for the 'list' method.
+	//
+	// Retrieves a list of roles.
+	List(ctx context.Context, request *RolesListServerRequest, response *RolesListServerResponse) error
+
 	// Role returns the target 'role' server for the given identifier.
 	//
 	// Reference to the service that manages a specific role.
 	Role(id string) RoleServer
+}
+
+// RolesAddServerRequest is the request for the 'add' method.
+type RolesAddServerRequest struct {
+	body *Role
+}
+
+// Body returns the value of the 'body' parameter.
+//
+// Role data.
+func (r *RolesAddServerRequest) Body() *Role {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Role data.
+func (r *RolesAddServerRequest) GetBody() (value *Role, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// unmarshal is the method used internally to unmarshal request to the
+// 'add' method.
+func (r *RolesAddServerRequest) unmarshal(reader io.Reader) error {
+	var err error
+	decoder := json.NewDecoder(reader)
+	data := new(roleData)
+	err = decoder.Decode(data)
+	if err != nil {
+		return err
+	}
+	r.body, err = data.unwrap()
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+// RolesAddServerResponse is the response for the 'add' method.
+type RolesAddServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *Role
+}
+
+// Body sets the value of the 'body' parameter.
+//
+// Role data.
+func (r *RolesAddServerResponse) Body(value *Role) *RolesAddServerResponse {
+	r.body = value
+	return r
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *RolesAddServerResponse) SetStatusCode(status int) *RolesAddServerResponse {
+	r.status = status
+	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'add' method.
+func (r *RolesAddServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data, err := r.body.wrap()
+	if err != nil {
+		return err
+	}
+	err = encoder.Encode(data)
+	return err
 }
 
 // RolesListServerRequest is the request for the 'list' method.
@@ -137,10 +215,18 @@ func (r *RolesListServerRequest) GetTotal() (value int, ok bool) {
 type RolesListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *RoleList
 	page   *int
 	size   *int
 	total  *int
-	items  *RoleList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of roles.
+func (r *RolesListServerResponse) Items(value *RoleList) *RolesListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -172,14 +258,6 @@ func (r *RolesListServerResponse) Total(value int) *RolesListServerResponse {
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of roles.
-func (r *RolesListServerResponse) Items(value *RoleList) *RolesListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *RolesListServerResponse) SetStatusCode(status int) *RolesListServerResponse {
 	r.status = status
@@ -192,13 +270,13 @@ func (r *RolesListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(rolesListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -206,88 +284,10 @@ func (r *RolesListServerResponse) marshal(writer io.Writer) error {
 // rolesListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type rolesListServerResponseData struct {
+	Items roleListData "json:\"items,omitempty\""
 	Page  *int         "json:\"page,omitempty\""
 	Size  *int         "json:\"size,omitempty\""
 	Total *int         "json:\"total,omitempty\""
-	Items roleListData "json:\"items,omitempty\""
-}
-
-// RolesAddServerRequest is the request for the 'add' method.
-type RolesAddServerRequest struct {
-	body *Role
-}
-
-// Body returns the value of the 'body' parameter.
-//
-// Role data.
-func (r *RolesAddServerRequest) Body() *Role {
-	if r == nil {
-		return nil
-	}
-	return r.body
-}
-
-// GetBody returns the value of the 'body' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Role data.
-func (r *RolesAddServerRequest) GetBody() (value *Role, ok bool) {
-	ok = r != nil && r.body != nil
-	if ok {
-		value = r.body
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal request to the
-// 'add' method.
-func (r *RolesAddServerRequest) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(roleData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-// RolesAddServerResponse is the response for the 'add' method.
-type RolesAddServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *Role
-}
-
-// Body sets the value of the 'body' parameter.
-//
-// Role data.
-func (r *RolesAddServerResponse) Body(value *Role) *RolesAddServerResponse {
-	r.body = value
-	return r
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RolesAddServerResponse) SetStatusCode(status int) *RolesAddServerResponse {
-	r.status = status
-	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'add' method.
-func (r *RolesAddServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // RolesServerAdapter represents the structs that adapts Requests and Response to internal
@@ -302,8 +302,8 @@ func NewRolesServerAdapter(server RolesServer, router *mux.Router) *RolesServerA
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *RolesServerAdapter) roleHandler(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +312,55 @@ func (a *RolesServerAdapter) roleHandler(w http.ResponseWriter, r *http.Request)
 	targetAdapter := NewRoleServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
+}
+func (a *RolesServerAdapter) readRolesAddServerRequest(r *http.Request) (*RolesAddServerRequest, error) {
+	var err error
+	result := new(RolesAddServerRequest)
+	err = result.unmarshal(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	return result, err
+}
+func (a *RolesServerAdapter) writeRolesAddServerResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (a *RolesServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readRolesAddServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(RolesAddServerResponse)
+	err = a.server.Add(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeRolesAddServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *RolesServerAdapter) readRolesListServerRequest(r *http.Request) (*RolesListServerRequest, error) {
 	var err error
@@ -362,55 +411,6 @@ func (a *RolesServerAdapter) listHandler(w http.ResponseWriter, r *http.Request)
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeRolesListServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *RolesServerAdapter) readRolesAddServerRequest(r *http.Request) (*RolesAddServerRequest, error) {
-	var err error
-	result := new(RolesAddServerRequest)
-	err = result.unmarshal(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
-}
-func (a *RolesServerAdapter) writeRolesAddServerResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-func (a *RolesServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRolesAddServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(RolesAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeRolesAddServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

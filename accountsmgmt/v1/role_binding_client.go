@@ -50,6 +50,17 @@ func NewRoleBindingClient(transport http.RoundTripper, path string, metric strin
 	return client
 }
 
+// Delete creates a request for the 'delete' method.
+//
+// Deletes the role binding.
+func (c *RoleBindingClient) Delete() *RoleBindingDeleteRequest {
+	request := new(RoleBindingDeleteRequest)
+	request.transport = c.transport
+	request.path = c.path
+	request.metric = c.metric
+	return request
+}
+
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the role binding.
@@ -61,15 +72,90 @@ func (c *RoleBindingClient) Get() *RoleBindingGetRequest {
 	return request
 }
 
-// Delete creates a request for the 'delete' method.
+// RoleBindingDeleteRequest is the request for the 'delete' method.
+type RoleBindingDeleteRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *RoleBindingDeleteRequest) Parameter(name string, value interface{}) *RoleBindingDeleteRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *RoleBindingDeleteRequest) Header(name string, value interface{}) *RoleBindingDeleteRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
 //
-// Deletes the role binding.
-func (c *RoleBindingClient) Delete() *RoleBindingDeleteRequest {
-	request := new(RoleBindingDeleteRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *RoleBindingDeleteRequest) Send() (result *RoleBindingDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *RoleBindingDeleteRequest) SendContext(ctx context.Context) (result *RoleBindingDeleteResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: http.MethodDelete,
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = new(RoleBindingDeleteResponse)
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// RoleBindingDeleteResponse is the response for the 'delete' method.
+type RoleBindingDeleteResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *RoleBindingDeleteResponse) Status() int {
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *RoleBindingDeleteResponse) Header() http.Header {
+	return r.header
+}
+
+// Error returns the response error.
+func (r *RoleBindingDeleteResponse) Error() *errors.Error {
+	return r.err
 }
 
 // RoleBindingGetRequest is the request for the 'get' method.
@@ -200,90 +286,4 @@ func (r *RoleBindingGetResponse) unmarshal(reader io.Reader) error {
 		return err
 	}
 	return err
-}
-
-// RoleBindingDeleteRequest is the request for the 'delete' method.
-type RoleBindingDeleteRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *RoleBindingDeleteRequest) Parameter(name string, value interface{}) *RoleBindingDeleteRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *RoleBindingDeleteRequest) Header(name string, value interface{}) *RoleBindingDeleteRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RoleBindingDeleteRequest) Send() (result *RoleBindingDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RoleBindingDeleteRequest) SendContext(ctx context.Context) (result *RoleBindingDeleteResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: http.MethodDelete,
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = new(RoleBindingDeleteResponse)
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	return
-}
-
-// RoleBindingDeleteResponse is the response for the 'delete' method.
-type RoleBindingDeleteResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-}
-
-// Status returns the response status code.
-func (r *RoleBindingDeleteResponse) Status() int {
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *RoleBindingDeleteResponse) Header() http.Header {
-	return r.header
-}
-
-// Error returns the response error.
-func (r *RoleBindingDeleteResponse) Error() *errors.Error {
-	return r.err
 }

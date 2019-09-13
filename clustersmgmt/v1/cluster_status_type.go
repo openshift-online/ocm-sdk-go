@@ -38,8 +38,8 @@ type ClusterStatus struct {
 	id          *string
 	href        *string
 	link        bool
-	state       *ClusterState
 	description *string
+	state       *ClusterState
 }
 
 // Kind returns the name of the type of the object.
@@ -97,32 +97,9 @@ func (o *ClusterStatus) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterStatus) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.state == nil &&
 		o.description == nil &&
+		o.state == nil &&
 		true)
-}
-
-// State returns the value of the 'state' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// The overall state of the cluster.
-func (o *ClusterStatus) State() ClusterState {
-	if o != nil && o.state != nil {
-		return *o.state
-	}
-	return ClusterState("")
-}
-
-// GetState returns the value of the 'state' attribute and
-// a flag indicating if the attribute has a value.
-//
-// The overall state of the cluster.
-func (o *ClusterStatus) GetState() (value ClusterState, ok bool) {
-	ok = o != nil && o.state != nil
-	if ok {
-		value = *o.state
-	}
-	return
 }
 
 // Description returns the value of the 'description' attribute, or
@@ -144,6 +121,29 @@ func (o *ClusterStatus) GetDescription() (value string, ok bool) {
 	ok = o != nil && o.description != nil
 	if ok {
 		value = *o.description
+	}
+	return
+}
+
+// State returns the value of the 'state' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The overall state of the cluster.
+func (o *ClusterStatus) State() ClusterState {
+	if o != nil && o.state != nil {
+		return *o.state
+	}
+	return ClusterState("")
+}
+
+// GetState returns the value of the 'state' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The overall state of the cluster.
+func (o *ClusterStatus) GetState() (value ClusterState, ok bool) {
+	ok = o != nil && o.state != nil
+	if ok {
+		value = *o.state
 	}
 	return
 }

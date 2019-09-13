@@ -28,8 +28,8 @@ import (
 // clusterMetricData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_metric'.
 type clusterMetricData struct {
-	UpdatedTimestamp *time.Time "json:\"updated_timestamp,omitempty\""
 	Total            *valueData "json:\"total,omitempty\""
+	UpdatedTimestamp *time.Time "json:\"updated_timestamp,omitempty\""
 	Used             *valueData "json:\"used,omitempty\""
 }
 
@@ -54,11 +54,11 @@ func (o *ClusterMetric) wrap() (data *clusterMetricData, err error) {
 		return
 	}
 	data = new(clusterMetricData)
-	data.UpdatedTimestamp = o.updatedTimestamp
 	data.Total, err = o.total.wrap()
 	if err != nil {
 		return
 	}
+	data.UpdatedTimestamp = o.updatedTimestamp
 	data.Used, err = o.used.wrap()
 	if err != nil {
 		return
@@ -89,11 +89,11 @@ func (d *clusterMetricData) unwrap() (object *ClusterMetric, err error) {
 		return
 	}
 	object = new(ClusterMetric)
-	object.updatedTimestamp = d.UpdatedTimestamp
 	object.total, err = d.Total.unwrap()
 	if err != nil {
 		return
 	}
+	object.updatedTimestamp = d.UpdatedTimestamp
 	object.used, err = d.Used.unwrap()
 	if err != nil {
 		return

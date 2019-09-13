@@ -61,6 +61,18 @@ func (b *LogBuilder) Content(value string) *LogBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *LogBuilder) Copy(object *Log) *LogBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.content = object.content
+	return b
+}
+
 // Build creates a 'log' object using the configuration stored in the builder.
 func (b *LogBuilder) Build() (object *Log, err error) {
 	object = new(Log)

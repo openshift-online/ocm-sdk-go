@@ -26,8 +26,8 @@ import (
 // networkData is the data structure used internally to marshal and unmarshal
 // objects of type 'network'.
 type networkData struct {
-	PodCIDR     *string "json:\"pod_cidr,omitempty\""
 	MachineCIDR *string "json:\"machine_cidr,omitempty\""
+	PodCIDR     *string "json:\"pod_cidr,omitempty\""
 	ServiceCIDR *string "json:\"service_cidr,omitempty\""
 }
 
@@ -52,8 +52,8 @@ func (o *Network) wrap() (data *networkData, err error) {
 		return
 	}
 	data = new(networkData)
-	data.PodCIDR = o.podCIDR
 	data.MachineCIDR = o.machineCIDR
+	data.PodCIDR = o.podCIDR
 	data.ServiceCIDR = o.serviceCIDR
 	return
 }
@@ -81,8 +81,8 @@ func (d *networkData) unwrap() (object *Network, err error) {
 		return
 	}
 	object = new(Network)
-	object.podCIDR = d.PodCIDR
 	object.machineCIDR = d.MachineCIDR
+	object.podCIDR = d.PodCIDR
 	object.serviceCIDR = d.ServiceCIDR
 	return
 }

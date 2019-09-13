@@ -26,11 +26,11 @@ import (
 // ldapIdentityProviderData is the data structure used internally to marshal and unmarshal
 // objects of type 'LDAP_identity_provider'.
 type ldapIdentityProviderData struct {
+	CA             *string             "json:\"ca,omitempty\""
 	LDAPAttributes *ldapAttributesData "json:\"ldap_attributes,omitempty\""
+	URL            *string             "json:\"url,omitempty\""
 	BindDN         *string             "json:\"bind_dn,omitempty\""
 	BindPassword   *string             "json:\"bind_password,omitempty\""
-	CA             *string             "json:\"ca,omitempty\""
-	URL            *string             "json:\"url,omitempty\""
 	Insecure       *bool               "json:\"insecure,omitempty\""
 }
 
@@ -55,14 +55,14 @@ func (o *LDAPIdentityProvider) wrap() (data *ldapIdentityProviderData, err error
 		return
 	}
 	data = new(ldapIdentityProviderData)
+	data.CA = o.ca
 	data.LDAPAttributes, err = o.ldapAttributes.wrap()
 	if err != nil {
 		return
 	}
+	data.URL = o.url
 	data.BindDN = o.bindDN
 	data.BindPassword = o.bindPassword
-	data.CA = o.ca
-	data.URL = o.url
 	data.Insecure = o.insecure
 	return
 }
@@ -90,14 +90,14 @@ func (d *ldapIdentityProviderData) unwrap() (object *LDAPIdentityProvider, err e
 		return
 	}
 	object = new(LDAPIdentityProvider)
+	object.ca = d.CA
 	object.ldapAttributes, err = d.LDAPAttributes.unwrap()
 	if err != nil {
 		return
 	}
+	object.url = d.URL
 	object.bindDN = d.BindDN
 	object.bindPassword = d.BindPassword
-	object.ca = d.CA
-	object.url = d.URL
 	object.insecure = d.Insecure
 	return
 }

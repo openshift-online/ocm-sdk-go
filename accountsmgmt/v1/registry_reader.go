@@ -31,12 +31,12 @@ type registryData struct {
 	Kind       *string "json:\"kind,omitempty\""
 	ID         *string "json:\"id,omitempty\""
 	HREF       *string "json:\"href,omitempty\""
-	Name       *string "json:\"name,omitempty\""
 	URL        *string "json:\"url,omitempty\""
-	TeamName   *string "json:\"team_name,omitempty\""
-	OrgName    *string "json:\"org_name,omitempty\""
-	Type       *string "json:\"type,omitempty\""
 	CloudAlias *bool   "json:\"cloud_alias,omitempty\""
+	Name       *string "json:\"name,omitempty\""
+	OrgName    *string "json:\"org_name,omitempty\""
+	TeamName   *string "json:\"team_name,omitempty\""
+	Type       *string "json:\"type,omitempty\""
 }
 
 // MarshalRegistry writes a value of the 'registry' to the given target,
@@ -68,12 +68,12 @@ func (o *Registry) wrap() (data *registryData, err error) {
 	} else {
 		*data.Kind = RegistryKind
 	}
-	data.Name = o.name
 	data.URL = o.url
-	data.TeamName = o.teamName
-	data.OrgName = o.orgName
-	data.Type = o.type_
 	data.CloudAlias = o.cloudAlias
+	data.Name = o.name
+	data.OrgName = o.orgName
+	data.TeamName = o.teamName
+	data.Type = o.type_
 	return
 }
 
@@ -118,11 +118,11 @@ func (d *registryData) unwrap() (object *Registry, err error) {
 			return
 		}
 	}
-	object.name = d.Name
 	object.url = d.URL
-	object.teamName = d.TeamName
-	object.orgName = d.OrgName
-	object.type_ = d.Type
 	object.cloudAlias = d.CloudAlias
+	object.name = d.Name
+	object.orgName = d.OrgName
+	object.teamName = d.TeamName
+	object.type_ = d.Type
 	return
 }

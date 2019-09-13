@@ -26,11 +26,11 @@ import (
 // reservedResourceData is the data structure used internally to marshal and unmarshal
 // objects of type 'reserved_resource'.
 type reservedResourceData struct {
-	ResourceName         *string "json:\"resource_name,omitempty\""
-	ResourceType         *string "json:\"resource_type,omitempty\""
 	BYOC                 *bool   "json:\"byoc,omitempty\""
 	AvailabilityZoneType *string "json:\"availability_zone_type,omitempty\""
 	Count                *int    "json:\"count,omitempty\""
+	ResourceName         *string "json:\"resource_name,omitempty\""
+	ResourceType         *string "json:\"resource_type,omitempty\""
 }
 
 // MarshalReservedResource writes a value of the 'reserved_resource' to the given target,
@@ -54,11 +54,11 @@ func (o *ReservedResource) wrap() (data *reservedResourceData, err error) {
 		return
 	}
 	data = new(reservedResourceData)
-	data.ResourceName = o.resourceName
-	data.ResourceType = o.resourceType
 	data.BYOC = o.byoc
 	data.AvailabilityZoneType = o.availabilityZoneType
 	data.Count = o.count
+	data.ResourceName = o.resourceName
+	data.ResourceType = o.resourceType
 	return
 }
 
@@ -85,10 +85,10 @@ func (d *reservedResourceData) unwrap() (object *ReservedResource, err error) {
 		return
 	}
 	object = new(ReservedResource)
-	object.resourceName = d.ResourceName
-	object.resourceType = d.ResourceType
 	object.byoc = d.BYOC
 	object.availabilityZoneType = d.AvailabilityZoneType
 	object.count = d.Count
+	object.resourceName = d.ResourceName
+	object.resourceType = d.ResourceType
 	return
 }

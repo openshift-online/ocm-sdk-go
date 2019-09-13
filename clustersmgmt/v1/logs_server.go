@@ -52,10 +52,18 @@ type LogsListServerRequest struct {
 type LogsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *LogList
 	page   *int
 	size   *int
 	total  *int
-	items  *LogList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of logs.
+func (r *LogsListServerResponse) Items(value *LogList) *LogsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -82,14 +90,6 @@ func (r *LogsListServerResponse) Total(value int) *LogsListServerResponse {
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of logs.
-func (r *LogsListServerResponse) Items(value *LogList) *LogsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *LogsListServerResponse) SetStatusCode(status int) *LogsListServerResponse {
 	r.status = status
@@ -102,13 +102,13 @@ func (r *LogsListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(logsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -116,10 +116,10 @@ func (r *LogsListServerResponse) marshal(writer io.Writer) error {
 // logsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type logsListServerResponseData struct {
+	Items logListData "json:\"items,omitempty\""
 	Page  *int        "json:\"page,omitempty\""
 	Size  *int        "json:\"size,omitempty\""
 	Total *int        "json:\"total,omitempty\""
-	Items logListData "json:\"items,omitempty\""
 }
 
 // LogsServerAdapter represents the structs that adapts Requests and Response to internal

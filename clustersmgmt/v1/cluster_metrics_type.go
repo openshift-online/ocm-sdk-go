@@ -24,21 +24,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Cluster metrics received via telemetry.
 type ClusterMetrics struct {
 	cpu                *ClusterMetric
-	memory             *ClusterMetric
-	storage            *ClusterMetric
 	computeNodesCPU    *ClusterMetric
 	computeNodesMemory *ClusterMetric
+	memory             *ClusterMetric
 	nodes              *ClusterNodes
+	storage            *ClusterMetric
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterMetrics) Empty() bool {
 	return o == nil || (o.cpu == nil &&
-		o.memory == nil &&
-		o.storage == nil &&
 		o.computeNodesCPU == nil &&
 		o.computeNodesMemory == nil &&
+		o.memory == nil &&
 		o.nodes == nil &&
+		o.storage == nil &&
 		true)
 }
 
@@ -61,56 +61,6 @@ func (o *ClusterMetrics) GetCPU() (value *ClusterMetric, ok bool) {
 	ok = o != nil && o.cpu != nil
 	if ok {
 		value = o.cpu
-	}
-	return
-}
-
-// Memory returns the value of the 'memory' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// The amount of memory provisioned and used in the cluster.
-func (o *ClusterMetrics) Memory() *ClusterMetric {
-	if o == nil {
-		return nil
-	}
-	return o.memory
-}
-
-// GetMemory returns the value of the 'memory' attribute and
-// a flag indicating if the attribute has a value.
-//
-// The amount of memory provisioned and used in the cluster.
-func (o *ClusterMetrics) GetMemory() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.memory != nil
-	if ok {
-		value = o.memory
-	}
-	return
-}
-
-// Storage returns the value of the 'storage' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// The amount of storage provisioned and used in the cluster.
-//
-// WARNING: This isn't currently populated.
-func (o *ClusterMetrics) Storage() *ClusterMetric {
-	if o == nil {
-		return nil
-	}
-	return o.storage
-}
-
-// GetStorage returns the value of the 'storage' attribute and
-// a flag indicating if the attribute has a value.
-//
-// The amount of storage provisioned and used in the cluster.
-//
-// WARNING: This isn't currently populated.
-func (o *ClusterMetrics) GetStorage() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.storage != nil
-	if ok {
-		value = o.storage
 	}
 	return
 }
@@ -161,6 +111,29 @@ func (o *ClusterMetrics) GetComputeNodesMemory() (value *ClusterMetric, ok bool)
 	return
 }
 
+// Memory returns the value of the 'memory' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The amount of memory provisioned and used in the cluster.
+func (o *ClusterMetrics) Memory() *ClusterMetric {
+	if o == nil {
+		return nil
+	}
+	return o.memory
+}
+
+// GetMemory returns the value of the 'memory' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The amount of memory provisioned and used in the cluster.
+func (o *ClusterMetrics) GetMemory() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.memory != nil
+	if ok {
+		value = o.memory
+	}
+	return
+}
+
 // Nodes returns the value of the 'nodes' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -180,6 +153,33 @@ func (o *ClusterMetrics) GetNodes() (value *ClusterNodes, ok bool) {
 	ok = o != nil && o.nodes != nil
 	if ok {
 		value = o.nodes
+	}
+	return
+}
+
+// Storage returns the value of the 'storage' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The amount of storage provisioned and used in the cluster.
+//
+// WARNING: This isn't currently populated.
+func (o *ClusterMetrics) Storage() *ClusterMetric {
+	if o == nil {
+		return nil
+	}
+	return o.storage
+}
+
+// GetStorage returns the value of the 'storage' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The amount of storage provisioned and used in the cluster.
+//
+// WARNING: This isn't currently populated.
+func (o *ClusterMetrics) GetStorage() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.storage != nil
+	if ok {
+		value = o.storage
 	}
 	return
 }

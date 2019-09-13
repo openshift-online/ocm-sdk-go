@@ -32,31 +32,31 @@ type clusterData struct {
 	Kind                *string                       "json:\"kind,omitempty\""
 	ID                  *string                       "json:\"id,omitempty\""
 	HREF                *string                       "json:\"href,omitempty\""
-	Name                *string                       "json:\"name,omitempty\""
-	Flavour             *flavourData                  "json:\"flavour,omitempty\""
-	Console             *clusterConsoleData           "json:\"console,omitempty\""
-	MultiAZ             *bool                         "json:\"multi_az,omitempty\""
-	Nodes               *clusterNodesData             "json:\"nodes,omitempty\""
 	API                 *clusterAPIData               "json:\"api,omitempty\""
-	Region              *cloudRegionData              "json:\"region,omitempty\""
-	DisplayName         *string                       "json:\"display_name,omitempty\""
-	DNS                 *dnsData                      "json:\"dns,omitempty\""
-	Properties          map[string]string             "json:\"properties,omitempty\""
-	State               *ClusterState                 "json:\"state,omitempty\""
-	Managed             *bool                         "json:\"managed,omitempty\""
-	ExternalID          *string                       "json:\"external_id,omitempty\""
 	AWS                 *awsData                      "json:\"aws,omitempty\""
-	Network             *networkData                  "json:\"network,omitempty\""
-	CreationTimestamp   *time.Time                    "json:\"creation_timestamp,omitempty\""
-	ExpirationTimestamp *time.Time                    "json:\"expiration_timestamp,omitempty\""
+	DNS                 *dnsData                      "json:\"dns,omitempty\""
 	CloudProvider       *cloudProviderData            "json:\"cloud_provider,omitempty\""
-	OpenshiftVersion    *string                       "json:\"openshift_version,omitempty\""
-	Subscription        *subscriptionData             "json:\"subscription,omitempty\""
-	Groups              *groupListLinkData            "json:\"groups,omitempty\""
+	Console             *clusterConsoleData           "json:\"console,omitempty\""
+	CreationTimestamp   *time.Time                    "json:\"creation_timestamp,omitempty\""
 	Creator             *string                       "json:\"creator,omitempty\""
-	Version             *versionData                  "json:\"version,omitempty\""
+	DisplayName         *string                       "json:\"display_name,omitempty\""
+	ExpirationTimestamp *time.Time                    "json:\"expiration_timestamp,omitempty\""
+	ExternalID          *string                       "json:\"external_id,omitempty\""
+	Flavour             *flavourData                  "json:\"flavour,omitempty\""
+	Groups              *groupListLinkData            "json:\"groups,omitempty\""
 	IdentityProviders   *identityProviderListLinkData "json:\"identity_providers,omitempty\""
+	Managed             *bool                         "json:\"managed,omitempty\""
 	Metrics             *clusterMetricsData           "json:\"metrics,omitempty\""
+	MultiAZ             *bool                         "json:\"multi_az,omitempty\""
+	Name                *string                       "json:\"name,omitempty\""
+	Network             *networkData                  "json:\"network,omitempty\""
+	Nodes               *clusterNodesData             "json:\"nodes,omitempty\""
+	OpenshiftVersion    *string                       "json:\"openshift_version,omitempty\""
+	Properties          map[string]string             "json:\"properties,omitempty\""
+	Region              *cloudRegionData              "json:\"region,omitempty\""
+	State               *ClusterState                 "json:\"state,omitempty\""
+	Subscription        *subscriptionData             "json:\"subscription,omitempty\""
+	Version             *versionData                  "json:\"version,omitempty\""
 }
 
 // MarshalCluster writes a value of the 'cluster' to the given target,
@@ -88,8 +88,19 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 	} else {
 		*data.Kind = ClusterKind
 	}
-	data.Name = o.name
-	data.Flavour, err = o.flavour.wrap()
+	data.API, err = o.api.wrap()
+	if err != nil {
+		return
+	}
+	data.AWS, err = o.aws.wrap()
+	if err != nil {
+		return
+	}
+	data.DNS, err = o.dns.wrap()
+	if err != nil {
+		return
+	}
+	data.CloudProvider, err = o.cloudProvider.wrap()
 	if err != nil {
 		return
 	}
@@ -97,44 +108,12 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 	if err != nil {
 		return
 	}
-	data.MultiAZ = o.multiAZ
-	data.Nodes, err = o.nodes.wrap()
-	if err != nil {
-		return
-	}
-	data.API, err = o.api.wrap()
-	if err != nil {
-		return
-	}
-	data.Region, err = o.region.wrap()
-	if err != nil {
-		return
-	}
-	data.DisplayName = o.displayName
-	data.DNS, err = o.dns.wrap()
-	if err != nil {
-		return
-	}
-	data.Properties = o.properties
-	data.State = o.state
-	data.Managed = o.managed
-	data.ExternalID = o.externalID
-	data.AWS, err = o.aws.wrap()
-	if err != nil {
-		return
-	}
-	data.Network, err = o.network.wrap()
-	if err != nil {
-		return
-	}
 	data.CreationTimestamp = o.creationTimestamp
+	data.Creator = o.creator
+	data.DisplayName = o.displayName
 	data.ExpirationTimestamp = o.expirationTimestamp
-	data.CloudProvider, err = o.cloudProvider.wrap()
-	if err != nil {
-		return
-	}
-	data.OpenshiftVersion = o.openshiftVersion
-	data.Subscription, err = o.subscription.wrap()
+	data.ExternalID = o.externalID
+	data.Flavour, err = o.flavour.wrap()
 	if err != nil {
 		return
 	}
@@ -142,16 +121,37 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 	if err != nil {
 		return
 	}
-	data.Creator = o.creator
-	data.Version, err = o.version.wrap()
-	if err != nil {
-		return
-	}
 	data.IdentityProviders, err = o.identityProviders.wrapLink()
 	if err != nil {
 		return
 	}
+	data.Managed = o.managed
 	data.Metrics, err = o.metrics.wrap()
+	if err != nil {
+		return
+	}
+	data.MultiAZ = o.multiAZ
+	data.Name = o.name
+	data.Network, err = o.network.wrap()
+	if err != nil {
+		return
+	}
+	data.Nodes, err = o.nodes.wrap()
+	if err != nil {
+		return
+	}
+	data.OpenshiftVersion = o.openshiftVersion
+	data.Properties = o.properties
+	data.Region, err = o.region.wrap()
+	if err != nil {
+		return
+	}
+	data.State = o.state
+	data.Subscription, err = o.subscription.wrap()
+	if err != nil {
+		return
+	}
+	data.Version, err = o.version.wrap()
 	if err != nil {
 		return
 	}
@@ -199,8 +199,19 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 			return
 		}
 	}
-	object.name = d.Name
-	object.flavour, err = d.Flavour.unwrap()
+	object.api, err = d.API.unwrap()
+	if err != nil {
+		return
+	}
+	object.aws, err = d.AWS.unwrap()
+	if err != nil {
+		return
+	}
+	object.dns, err = d.DNS.unwrap()
+	if err != nil {
+		return
+	}
+	object.cloudProvider, err = d.CloudProvider.unwrap()
 	if err != nil {
 		return
 	}
@@ -208,44 +219,12 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 	if err != nil {
 		return
 	}
-	object.multiAZ = d.MultiAZ
-	object.nodes, err = d.Nodes.unwrap()
-	if err != nil {
-		return
-	}
-	object.api, err = d.API.unwrap()
-	if err != nil {
-		return
-	}
-	object.region, err = d.Region.unwrap()
-	if err != nil {
-		return
-	}
-	object.displayName = d.DisplayName
-	object.dns, err = d.DNS.unwrap()
-	if err != nil {
-		return
-	}
-	object.properties = d.Properties
-	object.state = d.State
-	object.managed = d.Managed
-	object.externalID = d.ExternalID
-	object.aws, err = d.AWS.unwrap()
-	if err != nil {
-		return
-	}
-	object.network, err = d.Network.unwrap()
-	if err != nil {
-		return
-	}
 	object.creationTimestamp = d.CreationTimestamp
+	object.creator = d.Creator
+	object.displayName = d.DisplayName
 	object.expirationTimestamp = d.ExpirationTimestamp
-	object.cloudProvider, err = d.CloudProvider.unwrap()
-	if err != nil {
-		return
-	}
-	object.openshiftVersion = d.OpenshiftVersion
-	object.subscription, err = d.Subscription.unwrap()
+	object.externalID = d.ExternalID
+	object.flavour, err = d.Flavour.unwrap()
 	if err != nil {
 		return
 	}
@@ -253,16 +232,37 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 	if err != nil {
 		return
 	}
-	object.creator = d.Creator
-	object.version, err = d.Version.unwrap()
-	if err != nil {
-		return
-	}
 	object.identityProviders, err = d.IdentityProviders.unwrapLink()
 	if err != nil {
 		return
 	}
+	object.managed = d.Managed
 	object.metrics, err = d.Metrics.unwrap()
+	if err != nil {
+		return
+	}
+	object.multiAZ = d.MultiAZ
+	object.name = d.Name
+	object.network, err = d.Network.unwrap()
+	if err != nil {
+		return
+	}
+	object.nodes, err = d.Nodes.unwrap()
+	if err != nil {
+		return
+	}
+	object.openshiftVersion = d.OpenshiftVersion
+	object.properties = d.Properties
+	object.region, err = d.Region.unwrap()
+	if err != nil {
+		return
+	}
+	object.state = d.State
+	object.subscription, err = d.Subscription.unwrap()
+	if err != nil {
+		return
+	}
+	object.version, err = d.Version.unwrap()
 	if err != nil {
 		return
 	}

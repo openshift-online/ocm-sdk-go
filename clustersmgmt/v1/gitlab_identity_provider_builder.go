@@ -24,9 +24,9 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Details for `gitlab` identity providers.
 type GitlabIdentityProviderBuilder struct {
 	ca           *string
+	url          *string
 	clientID     *string
 	clientSecret *string
-	url          *string
 }
 
 // NewGitlabIdentityProvider creates a new builder of 'gitlab_identity_provider' objects.
@@ -40,6 +40,15 @@ func NewGitlabIdentityProvider() *GitlabIdentityProviderBuilder {
 //
 func (b *GitlabIdentityProviderBuilder) CA(value string) *GitlabIdentityProviderBuilder {
 	b.ca = &value
+	return b
+}
+
+// URL sets the value of the 'URL' attribute
+// to the given value.
+//
+//
+func (b *GitlabIdentityProviderBuilder) URL(value string) *GitlabIdentityProviderBuilder {
+	b.url = &value
 	return b
 }
 
@@ -61,12 +70,15 @@ func (b *GitlabIdentityProviderBuilder) ClientSecret(value string) *GitlabIdenti
 	return b
 }
 
-// URL sets the value of the 'URL' attribute
-// to the given value.
-//
-//
-func (b *GitlabIdentityProviderBuilder) URL(value string) *GitlabIdentityProviderBuilder {
-	b.url = &value
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *GitlabIdentityProviderBuilder) Copy(object *GitlabIdentityProvider) *GitlabIdentityProviderBuilder {
+	if object == nil {
+		return b
+	}
+	b.ca = object.ca
+	b.url = object.url
+	b.clientID = object.clientID
+	b.clientSecret = object.clientSecret
 	return b
 }
 
@@ -76,14 +88,14 @@ func (b *GitlabIdentityProviderBuilder) Build() (object *GitlabIdentityProvider,
 	if b.ca != nil {
 		object.ca = b.ca
 	}
+	if b.url != nil {
+		object.url = b.url
+	}
 	if b.clientID != nil {
 		object.clientID = b.clientID
 	}
 	if b.clientSecret != nil {
 		object.clientSecret = b.clientSecret
-	}
-	if b.url != nil {
-		object.url = b.url
 	}
 	return
 }

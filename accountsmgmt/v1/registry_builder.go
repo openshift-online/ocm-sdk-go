@@ -26,12 +26,12 @@ type RegistryBuilder struct {
 	id         *string
 	href       *string
 	link       bool
-	name       *string
 	url        *string
-	teamName   *string
-	orgName    *string
-	type_      *string
 	cloudAlias *bool
+	name       *string
+	orgName    *string
+	teamName   *string
+	type_      *string
 }
 
 // NewRegistry creates a new builder of 'registry' objects.
@@ -57,48 +57,12 @@ func (b *RegistryBuilder) Link(value bool) *RegistryBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
-// to the given value.
-//
-//
-func (b *RegistryBuilder) Name(value string) *RegistryBuilder {
-	b.name = &value
-	return b
-}
-
 // URL sets the value of the 'URL' attribute
 // to the given value.
 //
 //
 func (b *RegistryBuilder) URL(value string) *RegistryBuilder {
 	b.url = &value
-	return b
-}
-
-// TeamName sets the value of the 'team_name' attribute
-// to the given value.
-//
-//
-func (b *RegistryBuilder) TeamName(value string) *RegistryBuilder {
-	b.teamName = &value
-	return b
-}
-
-// OrgName sets the value of the 'org_name' attribute
-// to the given value.
-//
-//
-func (b *RegistryBuilder) OrgName(value string) *RegistryBuilder {
-	b.orgName = &value
-	return b
-}
-
-// Type sets the value of the 'type' attribute
-// to the given value.
-//
-//
-func (b *RegistryBuilder) Type(value string) *RegistryBuilder {
-	b.type_ = &value
 	return b
 }
 
@@ -111,29 +75,82 @@ func (b *RegistryBuilder) CloudAlias(value bool) *RegistryBuilder {
 	return b
 }
 
+// Name sets the value of the 'name' attribute
+// to the given value.
+//
+//
+func (b *RegistryBuilder) Name(value string) *RegistryBuilder {
+	b.name = &value
+	return b
+}
+
+// OrgName sets the value of the 'org_name' attribute
+// to the given value.
+//
+//
+func (b *RegistryBuilder) OrgName(value string) *RegistryBuilder {
+	b.orgName = &value
+	return b
+}
+
+// TeamName sets the value of the 'team_name' attribute
+// to the given value.
+//
+//
+func (b *RegistryBuilder) TeamName(value string) *RegistryBuilder {
+	b.teamName = &value
+	return b
+}
+
+// Type sets the value of the 'type' attribute
+// to the given value.
+//
+//
+func (b *RegistryBuilder) Type(value string) *RegistryBuilder {
+	b.type_ = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *RegistryBuilder) Copy(object *Registry) *RegistryBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.url = object.url
+	b.cloudAlias = object.cloudAlias
+	b.name = object.name
+	b.orgName = object.orgName
+	b.teamName = object.teamName
+	b.type_ = object.type_
+	return b
+}
+
 // Build creates a 'registry' object using the configuration stored in the builder.
 func (b *RegistryBuilder) Build() (object *Registry, err error) {
 	object = new(Registry)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.name != nil {
-		object.name = b.name
-	}
 	if b.url != nil {
 		object.url = b.url
 	}
-	if b.teamName != nil {
-		object.teamName = b.teamName
+	if b.cloudAlias != nil {
+		object.cloudAlias = b.cloudAlias
+	}
+	if b.name != nil {
+		object.name = b.name
 	}
 	if b.orgName != nil {
 		object.orgName = b.orgName
 	}
+	if b.teamName != nil {
+		object.teamName = b.teamName
+	}
 	if b.type_ != nil {
 		object.type_ = b.type_
-	}
-	if b.cloudAlias != nil {
-		object.cloudAlias = b.cloudAlias
 	}
 	return
 }

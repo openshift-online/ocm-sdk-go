@@ -28,23 +28,14 @@ import (
 // Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
 // a cluster.
 type ClusterMetricBuilder struct {
-	updatedTimestamp *time.Time
 	total            *ValueBuilder
+	updatedTimestamp *time.Time
 	used             *ValueBuilder
 }
 
 // NewClusterMetric creates a new builder of 'cluster_metric' objects.
 func NewClusterMetric() *ClusterMetricBuilder {
 	return new(ClusterMetricBuilder)
-}
-
-// UpdatedTimestamp sets the value of the 'updated_timestamp' attribute
-// to the given value.
-//
-//
-func (b *ClusterMetricBuilder) UpdatedTimestamp(value time.Time) *ClusterMetricBuilder {
-	b.updatedTimestamp = &value
-	return b
 }
 
 // Total sets the value of the 'total' attribute
@@ -70,6 +61,15 @@ func (b *ClusterMetricBuilder) UpdatedTimestamp(value time.Time) *ClusterMetricB
 // - 1 PiB = 2^50 bytes
 func (b *ClusterMetricBuilder) Total(value *ValueBuilder) *ClusterMetricBuilder {
 	b.total = value
+	return b
+}
+
+// UpdatedTimestamp sets the value of the 'updated_timestamp' attribute
+// to the given value.
+//
+//
+func (b *ClusterMetricBuilder) UpdatedTimestamp(value time.Time) *ClusterMetricBuilder {
+	b.updatedTimestamp = &value
 	return b
 }
 
@@ -99,17 +99,36 @@ func (b *ClusterMetricBuilder) Used(value *ValueBuilder) *ClusterMetricBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterMetricBuilder) Copy(object *ClusterMetric) *ClusterMetricBuilder {
+	if object == nil {
+		return b
+	}
+	if object.total != nil {
+		b.total = NewValue().Copy(object.total)
+	} else {
+		b.total = nil
+	}
+	b.updatedTimestamp = object.updatedTimestamp
+	if object.used != nil {
+		b.used = NewValue().Copy(object.used)
+	} else {
+		b.used = nil
+	}
+	return b
+}
+
 // Build creates a 'cluster_metric' object using the configuration stored in the builder.
 func (b *ClusterMetricBuilder) Build() (object *ClusterMetric, err error) {
 	object = new(ClusterMetric)
-	if b.updatedTimestamp != nil {
-		object.updatedTimestamp = b.updatedTimestamp
-	}
 	if b.total != nil {
 		object.total, err = b.total.Build()
 		if err != nil {
 			return
 		}
+	}
+	if b.updatedTimestamp != nil {
+		object.updatedTimestamp = b.updatedTimestamp
 	}
 	if b.used != nil {
 		object.used, err = b.used.Build()

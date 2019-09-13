@@ -26,12 +26,12 @@ import (
 // clusterAuthorizationRequestData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_authorization_request'.
 type clusterAuthorizationRequestData struct {
-	ClusterID        *string                  "json:\"cluster_id,omitempty\""
+	BYOC             *bool                    "json:\"byoc,omitempty\""
 	AccountUsername  *string                  "json:\"account_username,omitempty\""
+	AvailabilityZone *string                  "json:\"availability_zone,omitempty\""
+	ClusterID        *string                  "json:\"cluster_id,omitempty\""
 	Managed          *bool                    "json:\"managed,omitempty\""
 	Reserve          *bool                    "json:\"reserve,omitempty\""
-	BYOC             *bool                    "json:\"byoc,omitempty\""
-	AvailabilityZone *string                  "json:\"availability_zone,omitempty\""
 	Resources        reservedResourceListData "json:\"resources,omitempty\""
 }
 
@@ -56,12 +56,12 @@ func (o *ClusterAuthorizationRequest) wrap() (data *clusterAuthorizationRequestD
 		return
 	}
 	data = new(clusterAuthorizationRequestData)
-	data.ClusterID = o.clusterID
+	data.BYOC = o.byoc
 	data.AccountUsername = o.accountUsername
+	data.AvailabilityZone = o.availabilityZone
+	data.ClusterID = o.clusterID
 	data.Managed = o.managed
 	data.Reserve = o.reserve
-	data.BYOC = o.byoc
-	data.AvailabilityZone = o.availabilityZone
 	data.Resources, err = o.resources.wrap()
 	if err != nil {
 		return
@@ -92,12 +92,12 @@ func (d *clusterAuthorizationRequestData) unwrap() (object *ClusterAuthorization
 		return
 	}
 	object = new(ClusterAuthorizationRequest)
-	object.clusterID = d.ClusterID
+	object.byoc = d.BYOC
 	object.accountUsername = d.AccountUsername
+	object.availabilityZone = d.AvailabilityZone
+	object.clusterID = d.ClusterID
 	object.managed = d.Managed
 	object.reserve = d.Reserve
-	object.byoc = d.BYOC
-	object.availabilityZone = d.AvailabilityZone
 	object.resources, err = d.Resources.unwrap()
 	if err != nil {
 		return

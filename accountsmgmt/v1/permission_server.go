@@ -33,15 +33,31 @@ import (
 // PermissionServer represents the interface the manages the 'permission' resource.
 type PermissionServer interface {
 
-	// Get handles a request for the 'get' method.
-	//
-	// Retrieves the details of the permission.
-	Get(ctx context.Context, request *PermissionGetServerRequest, response *PermissionGetServerResponse) error
-
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the permission.
 	Delete(ctx context.Context, request *PermissionDeleteServerRequest, response *PermissionDeleteServerResponse) error
+
+	// Get handles a request for the 'get' method.
+	//
+	// Retrieves the details of the permission.
+	Get(ctx context.Context, request *PermissionGetServerRequest, response *PermissionGetServerResponse) error
+}
+
+// PermissionDeleteServerRequest is the request for the 'delete' method.
+type PermissionDeleteServerRequest struct {
+}
+
+// PermissionDeleteServerResponse is the response for the 'delete' method.
+type PermissionDeleteServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *PermissionDeleteServerResponse) SetStatusCode(status int) *PermissionDeleteServerResponse {
+	r.status = status
+	return r
 }
 
 // PermissionGetServerRequest is the request for the 'get' method.
@@ -82,22 +98,6 @@ func (r *PermissionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// PermissionDeleteServerRequest is the request for the 'delete' method.
-type PermissionDeleteServerRequest struct {
-}
-
-// PermissionDeleteServerResponse is the response for the 'delete' method.
-type PermissionDeleteServerResponse struct {
-	status int
-	err    *errors.Error
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *PermissionDeleteServerResponse) SetStatusCode(status int) *PermissionDeleteServerResponse {
-	r.status = status
-	return r
-}
-
 // PermissionServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type PermissionServerAdapter struct {
@@ -109,9 +109,50 @@ func NewPermissionServerAdapter(server PermissionServer, router *mux.Router) *Pe
 	adapter := new(PermissionServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
+}
+func (a *PermissionServerAdapter) readPermissionDeleteServerRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
+	var err error
+	result := new(PermissionDeleteServerRequest)
+	return result, err
+}
+func (a *PermissionServerAdapter) writePermissionDeleteServerResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	return nil
+}
+func (a *PermissionServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readPermissionDeleteServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(PermissionDeleteServerResponse)
+	err = a.server.Delete(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writePermissionDeleteServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *PermissionServerAdapter) readPermissionGetServerRequest(r *http.Request) (*PermissionGetServerRequest, error) {
 	var err error
@@ -149,47 +190,6 @@ func (a *PermissionServerAdapter) getHandler(w http.ResponseWriter, r *http.Requ
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writePermissionGetServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *PermissionServerAdapter) readPermissionDeleteServerRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
-	var err error
-	result := new(PermissionDeleteServerRequest)
-	return result, err
-}
-func (a *PermissionServerAdapter) writePermissionDeleteServerResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	return nil
-}
-func (a *PermissionServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readPermissionDeleteServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(PermissionDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writePermissionDeleteServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

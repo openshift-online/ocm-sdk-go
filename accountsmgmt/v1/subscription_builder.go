@@ -30,14 +30,14 @@ type SubscriptionBuilder struct {
 	id                 *string
 	href               *string
 	link               bool
+	clusterID          *string
+	creator            *AccountBuilder
+	displayName        *string
+	externalClusterID  *string
+	lastTelemetryDate  *time.Time
+	organizationID     *string
 	plan               *PlanBuilder
 	registryCredential *RegistryCredentialBuilder
-	clusterID          *string
-	externalClusterID  *string
-	organizationID     *string
-	displayName        *string
-	lastTelemetryDate  *time.Time
-	creator            *AccountBuilder
 }
 
 // NewSubscription creates a new builder of 'subscription' objects.
@@ -63,6 +63,60 @@ func (b *SubscriptionBuilder) Link(value bool) *SubscriptionBuilder {
 	return b
 }
 
+// ClusterID sets the value of the 'cluster_ID' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) ClusterID(value string) *SubscriptionBuilder {
+	b.clusterID = &value
+	return b
+}
+
+// Creator sets the value of the 'creator' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) Creator(value *AccountBuilder) *SubscriptionBuilder {
+	b.creator = value
+	return b
+}
+
+// DisplayName sets the value of the 'display_name' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) DisplayName(value string) *SubscriptionBuilder {
+	b.displayName = &value
+	return b
+}
+
+// ExternalClusterID sets the value of the 'external_cluster_ID' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) ExternalClusterID(value string) *SubscriptionBuilder {
+	b.externalClusterID = &value
+	return b
+}
+
+// LastTelemetryDate sets the value of the 'last_telemetry_date' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) LastTelemetryDate(value time.Time) *SubscriptionBuilder {
+	b.lastTelemetryDate = &value
+	return b
+}
+
+// OrganizationID sets the value of the 'organization_ID' attribute
+// to the given value.
+//
+//
+func (b *SubscriptionBuilder) OrganizationID(value string) *SubscriptionBuilder {
+	b.organizationID = &value
+	return b
+}
+
 // Plan sets the value of the 'plan' attribute
 // to the given value.
 //
@@ -81,57 +135,34 @@ func (b *SubscriptionBuilder) RegistryCredential(value *RegistryCredentialBuilde
 	return b
 }
 
-// ClusterID sets the value of the 'cluster_ID' attribute
-// to the given value.
-//
-//
-func (b *SubscriptionBuilder) ClusterID(value string) *SubscriptionBuilder {
-	b.clusterID = &value
-	return b
-}
-
-// ExternalClusterID sets the value of the 'external_cluster_ID' attribute
-// to the given value.
-//
-//
-func (b *SubscriptionBuilder) ExternalClusterID(value string) *SubscriptionBuilder {
-	b.externalClusterID = &value
-	return b
-}
-
-// OrganizationID sets the value of the 'organization_ID' attribute
-// to the given value.
-//
-//
-func (b *SubscriptionBuilder) OrganizationID(value string) *SubscriptionBuilder {
-	b.organizationID = &value
-	return b
-}
-
-// DisplayName sets the value of the 'display_name' attribute
-// to the given value.
-//
-//
-func (b *SubscriptionBuilder) DisplayName(value string) *SubscriptionBuilder {
-	b.displayName = &value
-	return b
-}
-
-// LastTelemetryDate sets the value of the 'last_telemetry_date' attribute
-// to the given value.
-//
-//
-func (b *SubscriptionBuilder) LastTelemetryDate(value time.Time) *SubscriptionBuilder {
-	b.lastTelemetryDate = &value
-	return b
-}
-
-// Creator sets the value of the 'creator' attribute
-// to the given value.
-//
-//
-func (b *SubscriptionBuilder) Creator(value *AccountBuilder) *SubscriptionBuilder {
-	b.creator = value
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *SubscriptionBuilder) Copy(object *Subscription) *SubscriptionBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.clusterID = object.clusterID
+	if object.creator != nil {
+		b.creator = NewAccount().Copy(object.creator)
+	} else {
+		b.creator = nil
+	}
+	b.displayName = object.displayName
+	b.externalClusterID = object.externalClusterID
+	b.lastTelemetryDate = object.lastTelemetryDate
+	b.organizationID = object.organizationID
+	if object.plan != nil {
+		b.plan = NewPlan().Copy(object.plan)
+	} else {
+		b.plan = nil
+	}
+	if object.registryCredential != nil {
+		b.registryCredential = NewRegistryCredential().Copy(object.registryCredential)
+	} else {
+		b.registryCredential = nil
+	}
 	return b
 }
 
@@ -141,6 +172,27 @@ func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	if b.clusterID != nil {
+		object.clusterID = b.clusterID
+	}
+	if b.creator != nil {
+		object.creator, err = b.creator.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.displayName != nil {
+		object.displayName = b.displayName
+	}
+	if b.externalClusterID != nil {
+		object.externalClusterID = b.externalClusterID
+	}
+	if b.lastTelemetryDate != nil {
+		object.lastTelemetryDate = b.lastTelemetryDate
+	}
+	if b.organizationID != nil {
+		object.organizationID = b.organizationID
+	}
 	if b.plan != nil {
 		object.plan, err = b.plan.Build()
 		if err != nil {
@@ -149,27 +201,6 @@ func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	}
 	if b.registryCredential != nil {
 		object.registryCredential, err = b.registryCredential.Build()
-		if err != nil {
-			return
-		}
-	}
-	if b.clusterID != nil {
-		object.clusterID = b.clusterID
-	}
-	if b.externalClusterID != nil {
-		object.externalClusterID = b.externalClusterID
-	}
-	if b.organizationID != nil {
-		object.organizationID = b.organizationID
-	}
-	if b.displayName != nil {
-		object.displayName = b.displayName
-	}
-	if b.lastTelemetryDate != nil {
-		object.lastTelemetryDate = b.lastTelemetryDate
-	}
-	if b.creator != nil {
-		object.creator, err = b.creator.Build()
 		if err != nil {
 			return
 		}

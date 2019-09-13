@@ -26,13 +26,13 @@ import (
 // quotaSummaryData is the data structure used internally to marshal and unmarshal
 // objects of type 'quota_summary'.
 type quotaSummaryData struct {
+	BYOC                 *bool   "json:\"byoc,omitempty\""
+	Allowed              *int    "json:\"allowed,omitempty\""
+	AvailabilityZoneType *string "json:\"availability_zone_type,omitempty\""
 	OrganizationID       *string "json:\"organization_id,omitempty\""
+	Reserved             *int    "json:\"reserved,omitempty\""
 	ResourceName         *string "json:\"resource_name,omitempty\""
 	ResourceType         *string "json:\"resource_type,omitempty\""
-	BYOC                 *bool   "json:\"byoc,omitempty\""
-	AvailabilityZoneType *string "json:\"availability_zone_type,omitempty\""
-	Allowed              *int    "json:\"allowed,omitempty\""
-	Reserved             *int    "json:\"reserved,omitempty\""
 }
 
 // MarshalQuotaSummary writes a value of the 'quota_summary' to the given target,
@@ -56,13 +56,13 @@ func (o *QuotaSummary) wrap() (data *quotaSummaryData, err error) {
 		return
 	}
 	data = new(quotaSummaryData)
+	data.BYOC = o.byoc
+	data.Allowed = o.allowed
+	data.AvailabilityZoneType = o.availabilityZoneType
 	data.OrganizationID = o.organizationID
+	data.Reserved = o.reserved
 	data.ResourceName = o.resourceName
 	data.ResourceType = o.resourceType
-	data.BYOC = o.byoc
-	data.AvailabilityZoneType = o.availabilityZoneType
-	data.Allowed = o.allowed
-	data.Reserved = o.reserved
 	return
 }
 
@@ -89,12 +89,12 @@ func (d *quotaSummaryData) unwrap() (object *QuotaSummary, err error) {
 		return
 	}
 	object = new(QuotaSummary)
+	object.byoc = d.BYOC
+	object.allowed = d.Allowed
+	object.availabilityZoneType = d.AvailabilityZoneType
 	object.organizationID = d.OrganizationID
+	object.reserved = d.Reserved
 	object.resourceName = d.ResourceName
 	object.resourceType = d.ResourceType
-	object.byoc = d.BYOC
-	object.availabilityZoneType = d.AvailabilityZoneType
-	object.allowed = d.Allowed
-	object.reserved = d.Reserved
 	return
 }

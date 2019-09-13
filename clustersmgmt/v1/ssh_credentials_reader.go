@@ -26,8 +26,8 @@ import (
 // sshCredentialsData is the data structure used internally to marshal and unmarshal
 // objects of type 'SSH_credentials'.
 type sshCredentialsData struct {
-	PublicKey  *string "json:\"public_key,omitempty\""
 	PrivateKey *string "json:\"private_key,omitempty\""
+	PublicKey  *string "json:\"public_key,omitempty\""
 }
 
 // MarshalSSHCredentials writes a value of the 'SSH_credentials' to the given target,
@@ -51,8 +51,8 @@ func (o *SSHCredentials) wrap() (data *sshCredentialsData, err error) {
 		return
 	}
 	data = new(sshCredentialsData)
-	data.PublicKey = o.publicKey
 	data.PrivateKey = o.privateKey
+	data.PublicKey = o.publicKey
 	return
 }
 
@@ -79,7 +79,7 @@ func (d *sshCredentialsData) unwrap() (object *SSHCredentials, err error) {
 		return
 	}
 	object = new(SSHCredentials)
-	object.publicKey = d.PublicKey
 	object.privateKey = d.PrivateKey
+	object.publicKey = d.PublicKey
 	return
 }

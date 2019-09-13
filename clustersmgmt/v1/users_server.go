@@ -33,98 +33,20 @@ import (
 // UsersServer represents the interface the manages the 'users' resource.
 type UsersServer interface {
 
-	// List handles a request for the 'list' method.
-	//
-	// Retrieves the list of users.
-	List(ctx context.Context, request *UsersListServerRequest, response *UsersListServerResponse) error
-
 	// Add handles a request for the 'add' method.
 	//
 	// Adds a new user to the group.
 	Add(ctx context.Context, request *UsersAddServerRequest, response *UsersAddServerResponse) error
 
+	// List handles a request for the 'list' method.
+	//
+	// Retrieves the list of users.
+	List(ctx context.Context, request *UsersListServerRequest, response *UsersListServerResponse) error
+
 	// User returns the target 'user' server for the given identifier.
 	//
 	// Reference to the service that manages an specific user.
 	User(id string) UserServer
-}
-
-// UsersListServerRequest is the request for the 'list' method.
-type UsersListServerRequest struct {
-}
-
-// UsersListServerResponse is the response for the 'list' method.
-type UsersListServerResponse struct {
-	status int
-	err    *errors.Error
-	page   *int
-	size   *int
-	total  *int
-	items  *UserList
-}
-
-// Page sets the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-func (r *UsersListServerResponse) Page(value int) *UsersListServerResponse {
-	r.page = &value
-	return r
-}
-
-// Size sets the value of the 'size' parameter.
-//
-// Number of items contained in the returned page.
-func (r *UsersListServerResponse) Size(value int) *UsersListServerResponse {
-	r.size = &value
-	return r
-}
-
-// Total sets the value of the 'total' parameter.
-//
-// Total number of items of the collection.
-func (r *UsersListServerResponse) Total(value int) *UsersListServerResponse {
-	r.total = &value
-	return r
-}
-
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of users.
-func (r *UsersListServerResponse) Items(value *UserList) *UsersListServerResponse {
-	r.items = value
-	return r
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *UsersListServerResponse) SetStatusCode(status int) *UsersListServerResponse {
-	r.status = status
-	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'list' method.
-func (r *UsersListServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data := new(usersListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
-	data.Items, err = r.items.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
-}
-
-// usersListServerResponseData is the structure used internally to write the request of the
-// 'list' method.
-type usersListServerResponseData struct {
-	Page  *int         "json:\"page,omitempty\""
-	Size  *int         "json:\"size,omitempty\""
-	Total *int         "json:\"total,omitempty\""
-	Items userListData "json:\"items,omitempty\""
 }
 
 // UsersAddServerRequest is the request for the 'add' method.
@@ -205,6 +127,84 @@ func (r *UsersAddServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
+// UsersListServerRequest is the request for the 'list' method.
+type UsersListServerRequest struct {
+}
+
+// UsersListServerResponse is the response for the 'list' method.
+type UsersListServerResponse struct {
+	status int
+	err    *errors.Error
+	items  *UserList
+	page   *int
+	size   *int
+	total  *int
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of users.
+func (r *UsersListServerResponse) Items(value *UserList) *UsersListServerResponse {
+	r.items = value
+	return r
+}
+
+// Page sets the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+func (r *UsersListServerResponse) Page(value int) *UsersListServerResponse {
+	r.page = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Number of items contained in the returned page.
+func (r *UsersListServerResponse) Size(value int) *UsersListServerResponse {
+	r.size = &value
+	return r
+}
+
+// Total sets the value of the 'total' parameter.
+//
+// Total number of items of the collection.
+func (r *UsersListServerResponse) Total(value int) *UsersListServerResponse {
+	r.total = &value
+	return r
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *UsersListServerResponse) SetStatusCode(status int) *UsersListServerResponse {
+	r.status = status
+	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'list' method.
+func (r *UsersListServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data := new(usersListServerResponseData)
+	data.Items, err = r.items.wrap()
+	if err != nil {
+		return err
+	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
+	err = encoder.Encode(data)
+	return err
+}
+
+// usersListServerResponseData is the structure used internally to write the request of the
+// 'list' method.
+type usersListServerResponseData struct {
+	Items userListData "json:\"items,omitempty\""
+	Page  *int         "json:\"page,omitempty\""
+	Size  *int         "json:\"size,omitempty\""
+	Total *int         "json:\"total,omitempty\""
+}
+
 // UsersServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type UsersServerAdapter struct {
@@ -217,8 +217,8 @@ func NewUsersServerAdapter(server UsersServer, router *mux.Router) *UsersServerA
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.userHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *UsersServerAdapter) userHandler(w http.ResponseWriter, r *http.Request) {
@@ -227,51 +227,6 @@ func (a *UsersServerAdapter) userHandler(w http.ResponseWriter, r *http.Request)
 	targetAdapter := NewUserServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
-}
-func (a *UsersServerAdapter) readUsersListServerRequest(r *http.Request) (*UsersListServerRequest, error) {
-	var err error
-	result := new(UsersListServerRequest)
-	return result, err
-}
-func (a *UsersServerAdapter) writeUsersListServerResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-func (a *UsersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readUsersListServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(UsersListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeUsersListServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
 }
 func (a *UsersServerAdapter) readUsersAddServerRequest(r *http.Request) (*UsersAddServerRequest, error) {
 	var err error
@@ -313,6 +268,51 @@ func (a *UsersServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) 
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeUsersAddServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+}
+func (a *UsersServerAdapter) readUsersListServerRequest(r *http.Request) (*UsersListServerRequest, error) {
+	var err error
+	result := new(UsersListServerRequest)
+	return result, err
+}
+func (a *UsersServerAdapter) writeUsersListServerResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (a *UsersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readUsersListServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(UsersListServerResponse)
+	err = a.server.List(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeUsersListServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

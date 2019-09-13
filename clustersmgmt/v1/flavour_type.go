@@ -40,10 +40,10 @@ type Flavour struct {
 	href    *string
 	link    bool
 	aws     *AWS
-	version *string
-	nodes   *ClusterNodes
 	name    *string
 	network *Network
+	nodes   *ClusterNodes
+	version *string
 }
 
 // Kind returns the name of the type of the object.
@@ -102,10 +102,10 @@ func (o *Flavour) GetHREF() (value string, ok bool) {
 func (o *Flavour) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.aws == nil &&
-		o.version == nil &&
-		o.nodes == nil &&
 		o.name == nil &&
 		o.network == nil &&
+		o.nodes == nil &&
+		o.version == nil &&
 		true)
 }
 
@@ -132,58 +132,6 @@ func (o *Flavour) GetAWS() (value *AWS, ok bool) {
 	ok = o != nil && o.aws != nil
 	if ok {
 		value = o.aws
-	}
-	return
-}
-
-// Version returns the value of the 'version' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Version of _OpenShift_ that will be used to create the cluster.
-func (o *Flavour) Version() string {
-	if o != nil && o.version != nil {
-		return *o.version
-	}
-	return ""
-}
-
-// GetVersion returns the value of the 'version' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Version of _OpenShift_ that will be used to create the cluster.
-func (o *Flavour) GetVersion() (value string, ok bool) {
-	ok = o != nil && o.version != nil
-	if ok {
-		value = *o.version
-	}
-	return
-}
-
-// Nodes returns the value of the 'nodes' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Number of nodes that will be used by default when creating a cluster that uses
-// this flavour.
-//
-// These can be overriden specifying in the cluster itself a different number of nodes.
-func (o *Flavour) Nodes() *ClusterNodes {
-	if o == nil {
-		return nil
-	}
-	return o.nodes
-}
-
-// GetNodes returns the value of the 'nodes' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Number of nodes that will be used by default when creating a cluster that uses
-// this flavour.
-//
-// These can be overriden specifying in the cluster itself a different number of nodes.
-func (o *Flavour) GetNodes() (value *ClusterNodes, ok bool) {
-	ok = o != nil && o.nodes != nil
-	if ok {
-		value = o.nodes
 	}
 	return
 }
@@ -240,6 +188,58 @@ func (o *Flavour) GetNetwork() (value *Network, ok bool) {
 	ok = o != nil && o.network != nil
 	if ok {
 		value = o.network
+	}
+	return
+}
+
+// Nodes returns the value of the 'nodes' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Number of nodes that will be used by default when creating a cluster that uses
+// this flavour.
+//
+// These can be overriden specifying in the cluster itself a different number of nodes.
+func (o *Flavour) Nodes() *ClusterNodes {
+	if o == nil {
+		return nil
+	}
+	return o.nodes
+}
+
+// GetNodes returns the value of the 'nodes' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Number of nodes that will be used by default when creating a cluster that uses
+// this flavour.
+//
+// These can be overriden specifying in the cluster itself a different number of nodes.
+func (o *Flavour) GetNodes() (value *ClusterNodes, ok bool) {
+	ok = o != nil && o.nodes != nil
+	if ok {
+		value = o.nodes
+	}
+	return
+}
+
+// Version returns the value of the 'version' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Version of _OpenShift_ that will be used to create the cluster.
+func (o *Flavour) Version() string {
+	if o != nil && o.version != nil {
+		return *o.version
+	}
+	return ""
+}
+
+// GetVersion returns the value of the 'version' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Version of _OpenShift_ that will be used to create the cluster.
+func (o *Flavour) GetVersion() (value string, ok bool) {
+	ok = o != nil && o.version != nil
+	if ok {
+		value = *o.version
 	}
 	return
 }

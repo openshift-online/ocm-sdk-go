@@ -51,6 +51,17 @@ func (b *SubscriptionBuilder) Link(value bool) *SubscriptionBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *SubscriptionBuilder) Copy(object *Subscription) *SubscriptionBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	return b
+}
+
 // Build creates a 'subscription' object using the configuration stored in the builder.
 func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	object = new(Subscription)

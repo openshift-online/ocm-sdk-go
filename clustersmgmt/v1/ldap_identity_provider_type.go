@@ -23,23 +23,46 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `ldap` identity providers.
 type LDAPIdentityProvider struct {
+	ca             *string
 	ldapAttributes *LDAPAttributes
+	url            *string
 	bindDN         *string
 	bindPassword   *string
-	ca             *string
-	url            *string
 	insecure       *bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *LDAPIdentityProvider) Empty() bool {
-	return o == nil || (o.ldapAttributes == nil &&
+	return o == nil || (o.ca == nil &&
+		o.ldapAttributes == nil &&
+		o.url == nil &&
 		o.bindDN == nil &&
 		o.bindPassword == nil &&
-		o.ca == nil &&
-		o.url == nil &&
 		o.insecure == nil &&
 		true)
+}
+
+// CA returns the value of the 'CA' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Certificate bundle to use to validate server certificates for the configured URL.
+func (o *LDAPIdentityProvider) CA() string {
+	if o != nil && o.ca != nil {
+		return *o.ca
+	}
+	return ""
+}
+
+// GetCA returns the value of the 'CA' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Certificate bundle to use to validate server certificates for the configured URL.
+func (o *LDAPIdentityProvider) GetCA() (value string, ok bool) {
+	ok = o != nil && o.ca != nil
+	if ok {
+		value = *o.ca
+	}
+	return
 }
 
 // LDAPAttributes returns the value of the 'LDAP_attributes' attribute, or
@@ -61,6 +84,31 @@ func (o *LDAPIdentityProvider) GetLDAPAttributes() (value *LDAPAttributes, ok bo
 	ok = o != nil && o.ldapAttributes != nil
 	if ok {
 		value = o.ldapAttributes
+	}
+	return
+}
+
+// URL returns the value of the 'URL' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// An https://tools.ietf.org/html/rfc2255[RFC 2255] URL which specifies the LDAP host and
+// search parameters to use.
+func (o *LDAPIdentityProvider) URL() string {
+	if o != nil && o.url != nil {
+		return *o.url
+	}
+	return ""
+}
+
+// GetURL returns the value of the 'URL' attribute and
+// a flag indicating if the attribute has a value.
+//
+// An https://tools.ietf.org/html/rfc2255[RFC 2255] URL which specifies the LDAP host and
+// search parameters to use.
+func (o *LDAPIdentityProvider) GetURL() (value string, ok bool) {
+	ok = o != nil && o.url != nil
+	if ok {
+		value = *o.url
 	}
 	return
 }
@@ -107,54 +155,6 @@ func (o *LDAPIdentityProvider) GetBindPassword() (value string, ok bool) {
 	ok = o != nil && o.bindPassword != nil
 	if ok {
 		value = *o.bindPassword
-	}
-	return
-}
-
-// CA returns the value of the 'CA' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Certificate bundle to use to validate server certificates for the configured URL.
-func (o *LDAPIdentityProvider) CA() string {
-	if o != nil && o.ca != nil {
-		return *o.ca
-	}
-	return ""
-}
-
-// GetCA returns the value of the 'CA' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Certificate bundle to use to validate server certificates for the configured URL.
-func (o *LDAPIdentityProvider) GetCA() (value string, ok bool) {
-	ok = o != nil && o.ca != nil
-	if ok {
-		value = *o.ca
-	}
-	return
-}
-
-// URL returns the value of the 'URL' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// An https://tools.ietf.org/html/rfc2255[RFC 2255] URL which specifies the LDAP host and
-// search parameters to use.
-func (o *LDAPIdentityProvider) URL() string {
-	if o != nil && o.url != nil {
-		return *o.url
-	}
-	return ""
-}
-
-// GetURL returns the value of the 'URL' attribute and
-// a flag indicating if the attribute has a value.
-//
-// An https://tools.ietf.org/html/rfc2255[RFC 2255] URL which specifies the LDAP host and
-// search parameters to use.
-func (o *LDAPIdentityProvider) GetURL() (value string, ok bool) {
-	ok = o != nil && o.url != nil
-	if ok {
-		value = *o.url
 	}
 	return
 }

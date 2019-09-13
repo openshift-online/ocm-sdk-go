@@ -31,11 +31,11 @@ type roleBindingData struct {
 	Kind         *string           "json:\"kind,omitempty\""
 	ID           *string           "json:\"id,omitempty\""
 	HREF         *string           "json:\"href,omitempty\""
-	Type         *string           "json:\"type,omitempty\""
-	Subscription *subscriptionData "json:\"subscription,omitempty\""
 	Account      *accountData      "json:\"account,omitempty\""
 	Organization *organizationData "json:\"organization,omitempty\""
 	Role         *roleData         "json:\"role,omitempty\""
+	Subscription *subscriptionData "json:\"subscription,omitempty\""
+	Type         *string           "json:\"type,omitempty\""
 }
 
 // MarshalRoleBinding writes a value of the 'role_binding' to the given target,
@@ -67,11 +67,6 @@ func (o *RoleBinding) wrap() (data *roleBindingData, err error) {
 	} else {
 		*data.Kind = RoleBindingKind
 	}
-	data.Type = o.type_
-	data.Subscription, err = o.subscription.wrap()
-	if err != nil {
-		return
-	}
 	data.Account, err = o.account.wrap()
 	if err != nil {
 		return
@@ -84,6 +79,11 @@ func (o *RoleBinding) wrap() (data *roleBindingData, err error) {
 	if err != nil {
 		return
 	}
+	data.Subscription, err = o.subscription.wrap()
+	if err != nil {
+		return
+	}
+	data.Type = o.type_
 	return
 }
 
@@ -128,11 +128,6 @@ func (d *roleBindingData) unwrap() (object *RoleBinding, err error) {
 			return
 		}
 	}
-	object.type_ = d.Type
-	object.subscription, err = d.Subscription.unwrap()
-	if err != nil {
-		return
-	}
 	object.account, err = d.Account.unwrap()
 	if err != nil {
 		return
@@ -145,5 +140,10 @@ func (d *roleBindingData) unwrap() (object *RoleBinding, err error) {
 	if err != nil {
 		return
 	}
+	object.subscription, err = d.Subscription.unwrap()
+	if err != nil {
+		return
+	}
+	object.type_ = d.Type
 	return
 }

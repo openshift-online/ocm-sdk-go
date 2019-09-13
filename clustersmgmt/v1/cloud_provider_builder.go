@@ -26,8 +26,8 @@ type CloudProviderBuilder struct {
 	id          *string
 	href        *string
 	link        bool
-	name        *string
 	displayName *string
+	name        *string
 }
 
 // NewCloudProvider creates a new builder of 'cloud_provider' objects.
@@ -53,15 +53,6 @@ func (b *CloudProviderBuilder) Link(value bool) *CloudProviderBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
-// to the given value.
-//
-//
-func (b *CloudProviderBuilder) Name(value string) *CloudProviderBuilder {
-	b.name = &value
-	return b
-}
-
 // DisplayName sets the value of the 'display_name' attribute
 // to the given value.
 //
@@ -71,17 +62,39 @@ func (b *CloudProviderBuilder) DisplayName(value string) *CloudProviderBuilder {
 	return b
 }
 
+// Name sets the value of the 'name' attribute
+// to the given value.
+//
+//
+func (b *CloudProviderBuilder) Name(value string) *CloudProviderBuilder {
+	b.name = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *CloudProviderBuilder) Copy(object *CloudProvider) *CloudProviderBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.displayName = object.displayName
+	b.name = object.name
+	return b
+}
+
 // Build creates a 'cloud_provider' object using the configuration stored in the builder.
 func (b *CloudProviderBuilder) Build() (object *CloudProvider, err error) {
 	object = new(CloudProvider)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.name != nil {
-		object.name = b.name
-	}
 	if b.displayName != nil {
 		object.displayName = b.displayName
+	}
+	if b.name != nil {
+		object.name = b.name
 	}
 	return
 }
