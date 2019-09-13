@@ -31,8 +31,8 @@ type cloudProviderData struct {
 	Kind        *string "json:\"kind,omitempty\""
 	ID          *string "json:\"id,omitempty\""
 	HREF        *string "json:\"href,omitempty\""
-	Name        *string "json:\"name,omitempty\""
 	DisplayName *string "json:\"display_name,omitempty\""
+	Name        *string "json:\"name,omitempty\""
 }
 
 // MarshalCloudProvider writes a value of the 'cloud_provider' to the given target,
@@ -64,8 +64,8 @@ func (o *CloudProvider) wrap() (data *cloudProviderData, err error) {
 	} else {
 		*data.Kind = CloudProviderKind
 	}
-	data.Name = o.name
 	data.DisplayName = o.displayName
+	data.Name = o.name
 	return
 }
 
@@ -110,7 +110,7 @@ func (d *cloudProviderData) unwrap() (object *CloudProvider, err error) {
 			return
 		}
 	}
-	object.name = d.Name
 	object.displayName = d.DisplayName
+	object.name = d.Name
 	return
 }

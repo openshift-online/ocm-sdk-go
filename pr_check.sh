@@ -29,7 +29,7 @@ go get golang.org/x/tools/cmd/goimports
 
 # Check that running `make generate` doesn't introduce any change in the
 # generated code:
-make generate fmt
+make generate
 git diff --exit-code clustersmgmt accountsmgmt
 if [ $? = 1 ]; then
   echo "Generated code isn't in sync with model and metamodel"

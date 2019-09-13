@@ -38,8 +38,8 @@ type Version struct {
 	id       *string
 	href     *string
 	link     bool
-	enabled  *bool
 	default_ *bool
+	enabled  *bool
 }
 
 // Kind returns the name of the type of the object.
@@ -97,32 +97,9 @@ func (o *Version) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Version) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.enabled == nil &&
 		o.default_ == nil &&
+		o.enabled == nil &&
 		true)
-}
-
-// Enabled returns the value of the 'enabled' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Indicates if this version can be used to create clusters.
-func (o *Version) Enabled() bool {
-	if o != nil && o.enabled != nil {
-		return *o.enabled
-	}
-	return false
-}
-
-// GetEnabled returns the value of the 'enabled' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Indicates if this version can be used to create clusters.
-func (o *Version) GetEnabled() (value bool, ok bool) {
-	ok = o != nil && o.enabled != nil
-	if ok {
-		value = *o.enabled
-	}
-	return
 }
 
 // Default returns the value of the 'default' attribute, or
@@ -146,6 +123,29 @@ func (o *Version) GetDefault() (value bool, ok bool) {
 	ok = o != nil && o.default_ != nil
 	if ok {
 		value = *o.default_
+	}
+	return
+}
+
+// Enabled returns the value of the 'enabled' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates if this version can be used to create clusters.
+func (o *Version) Enabled() bool {
+	if o != nil && o.enabled != nil {
+		return *o.enabled
+	}
+	return false
+}
+
+// GetEnabled returns the value of the 'enabled' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates if this version can be used to create clusters.
+func (o *Version) GetEnabled() (value bool, ok bool) {
+	ok = o != nil && o.enabled != nil
+	if ok {
+		value = *o.enabled
 	}
 	return
 }

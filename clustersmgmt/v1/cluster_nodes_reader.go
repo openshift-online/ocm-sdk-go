@@ -26,10 +26,10 @@ import (
 // clusterNodesData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_nodes'.
 type clusterNodesData struct {
-	Total   *int "json:\"total,omitempty\""
-	Master  *int "json:\"master,omitempty\""
-	Infra   *int "json:\"infra,omitempty\""
 	Compute *int "json:\"compute,omitempty\""
+	Infra   *int "json:\"infra,omitempty\""
+	Master  *int "json:\"master,omitempty\""
+	Total   *int "json:\"total,omitempty\""
 }
 
 // MarshalClusterNodes writes a value of the 'cluster_nodes' to the given target,
@@ -53,10 +53,10 @@ func (o *ClusterNodes) wrap() (data *clusterNodesData, err error) {
 		return
 	}
 	data = new(clusterNodesData)
-	data.Total = o.total
-	data.Master = o.master
-	data.Infra = o.infra
 	data.Compute = o.compute
+	data.Infra = o.infra
+	data.Master = o.master
+	data.Total = o.total
 	return
 }
 
@@ -83,9 +83,9 @@ func (d *clusterNodesData) unwrap() (object *ClusterNodes, err error) {
 		return
 	}
 	object = new(ClusterNodes)
-	object.total = d.Total
-	object.master = d.Master
-	object.infra = d.Infra
 	object.compute = d.Compute
+	object.infra = d.Infra
+	object.master = d.Master
+	object.total = d.Total
 	return
 }

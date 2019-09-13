@@ -34,20 +34,98 @@ import (
 // OrganizationsServer represents the interface the manages the 'organizations' resource.
 type OrganizationsServer interface {
 
-	// List handles a request for the 'list' method.
-	//
-	// Retrieves a list of organizations.
-	List(ctx context.Context, request *OrganizationsListServerRequest, response *OrganizationsListServerResponse) error
-
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new organization.
 	Add(ctx context.Context, request *OrganizationsAddServerRequest, response *OrganizationsAddServerResponse) error
 
+	// List handles a request for the 'list' method.
+	//
+	// Retrieves a list of organizations.
+	List(ctx context.Context, request *OrganizationsListServerRequest, response *OrganizationsListServerResponse) error
+
 	// Organization returns the target 'organization' server for the given identifier.
 	//
 	// Reference to the service that manages a specific organization.
 	Organization(id string) OrganizationServer
+}
+
+// OrganizationsAddServerRequest is the request for the 'add' method.
+type OrganizationsAddServerRequest struct {
+	body *Organization
+}
+
+// Body returns the value of the 'body' parameter.
+//
+// Organization data.
+func (r *OrganizationsAddServerRequest) Body() *Organization {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Organization data.
+func (r *OrganizationsAddServerRequest) GetBody() (value *Organization, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// unmarshal is the method used internally to unmarshal request to the
+// 'add' method.
+func (r *OrganizationsAddServerRequest) unmarshal(reader io.Reader) error {
+	var err error
+	decoder := json.NewDecoder(reader)
+	data := new(organizationData)
+	err = decoder.Decode(data)
+	if err != nil {
+		return err
+	}
+	r.body, err = data.unwrap()
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+// OrganizationsAddServerResponse is the response for the 'add' method.
+type OrganizationsAddServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *Organization
+}
+
+// Body sets the value of the 'body' parameter.
+//
+// Organization data.
+func (r *OrganizationsAddServerResponse) Body(value *Organization) *OrganizationsAddServerResponse {
+	r.body = value
+	return r
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *OrganizationsAddServerResponse) SetStatusCode(status int) *OrganizationsAddServerResponse {
+	r.status = status
+	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'add' method.
+func (r *OrganizationsAddServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data, err := r.body.wrap()
+	if err != nil {
+		return err
+	}
+	err = encoder.Encode(data)
+	return err
 }
 
 // OrganizationsListServerRequest is the request for the 'list' method.
@@ -137,10 +215,18 @@ func (r *OrganizationsListServerRequest) GetTotal() (value int, ok bool) {
 type OrganizationsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *OrganizationList
 	page   *int
 	size   *int
 	total  *int
-	items  *OrganizationList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of organizations.
+func (r *OrganizationsListServerResponse) Items(value *OrganizationList) *OrganizationsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -172,14 +258,6 @@ func (r *OrganizationsListServerResponse) Total(value int) *OrganizationsListSer
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of organizations.
-func (r *OrganizationsListServerResponse) Items(value *OrganizationList) *OrganizationsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *OrganizationsListServerResponse) SetStatusCode(status int) *OrganizationsListServerResponse {
 	r.status = status
@@ -192,13 +270,13 @@ func (r *OrganizationsListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(organizationsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -206,88 +284,10 @@ func (r *OrganizationsListServerResponse) marshal(writer io.Writer) error {
 // organizationsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type organizationsListServerResponseData struct {
+	Items organizationListData "json:\"items,omitempty\""
 	Page  *int                 "json:\"page,omitempty\""
 	Size  *int                 "json:\"size,omitempty\""
 	Total *int                 "json:\"total,omitempty\""
-	Items organizationListData "json:\"items,omitempty\""
-}
-
-// OrganizationsAddServerRequest is the request for the 'add' method.
-type OrganizationsAddServerRequest struct {
-	body *Organization
-}
-
-// Body returns the value of the 'body' parameter.
-//
-// Organization data.
-func (r *OrganizationsAddServerRequest) Body() *Organization {
-	if r == nil {
-		return nil
-	}
-	return r.body
-}
-
-// GetBody returns the value of the 'body' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Organization data.
-func (r *OrganizationsAddServerRequest) GetBody() (value *Organization, ok bool) {
-	ok = r != nil && r.body != nil
-	if ok {
-		value = r.body
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal request to the
-// 'add' method.
-func (r *OrganizationsAddServerRequest) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(organizationData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-// OrganizationsAddServerResponse is the response for the 'add' method.
-type OrganizationsAddServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *Organization
-}
-
-// Body sets the value of the 'body' parameter.
-//
-// Organization data.
-func (r *OrganizationsAddServerResponse) Body(value *Organization) *OrganizationsAddServerResponse {
-	r.body = value
-	return r
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *OrganizationsAddServerResponse) SetStatusCode(status int) *OrganizationsAddServerResponse {
-	r.status = status
-	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'add' method.
-func (r *OrganizationsAddServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // OrganizationsServerAdapter represents the structs that adapts Requests and Response to internal
@@ -302,8 +302,8 @@ func NewOrganizationsServerAdapter(server OrganizationsServer, router *mux.Route
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.organizationHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *OrganizationsServerAdapter) organizationHandler(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +312,55 @@ func (a *OrganizationsServerAdapter) organizationHandler(w http.ResponseWriter, 
 	targetAdapter := NewOrganizationServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
+}
+func (a *OrganizationsServerAdapter) readOrganizationsAddServerRequest(r *http.Request) (*OrganizationsAddServerRequest, error) {
+	var err error
+	result := new(OrganizationsAddServerRequest)
+	err = result.unmarshal(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	return result, err
+}
+func (a *OrganizationsServerAdapter) writeOrganizationsAddServerResponse(w http.ResponseWriter, r *OrganizationsAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (a *OrganizationsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readOrganizationsAddServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(OrganizationsAddServerResponse)
+	err = a.server.Add(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeOrganizationsAddServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *OrganizationsServerAdapter) readOrganizationsListServerRequest(r *http.Request) (*OrganizationsListServerRequest, error) {
 	var err error
@@ -362,55 +411,6 @@ func (a *OrganizationsServerAdapter) listHandler(w http.ResponseWriter, r *http.
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeOrganizationsListServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *OrganizationsServerAdapter) readOrganizationsAddServerRequest(r *http.Request) (*OrganizationsAddServerRequest, error) {
-	var err error
-	result := new(OrganizationsAddServerRequest)
-	err = result.unmarshal(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
-}
-func (a *OrganizationsServerAdapter) writeOrganizationsAddServerResponse(w http.ResponseWriter, r *OrganizationsAddServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-func (a *OrganizationsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readOrganizationsAddServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(OrganizationsAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeOrganizationsAddServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

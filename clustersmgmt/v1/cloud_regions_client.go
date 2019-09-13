@@ -150,10 +150,10 @@ type CloudRegionsListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
+	items  *CloudRegionList
 	page   *int
 	size   *int
 	total  *int
-	items  *CloudRegionList
 }
 
 // Status returns the response status code.
@@ -169,6 +169,28 @@ func (r *CloudRegionsListResponse) Header() http.Header {
 // Error returns the response error.
 func (r *CloudRegionsListResponse) Error() *errors.Error {
 	return r.err
+}
+
+// Items returns the value of the 'items' parameter.
+//
+// Retrieved list of cloud providers.
+func (r *CloudRegionsListResponse) Items() *CloudRegionList {
+	if r == nil {
+		return nil
+	}
+	return r.items
+}
+
+// GetItems returns the value of the 'items' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Retrieved list of cloud providers.
+func (r *CloudRegionsListResponse) GetItems() (value *CloudRegionList, ok bool) {
+	ok = r != nil && r.items != nil
+	if ok {
+		value = r.items
+	}
+	return
 }
 
 // Page returns the value of the 'page' parameter.
@@ -247,28 +269,6 @@ func (r *CloudRegionsListResponse) GetTotal() (value int, ok bool) {
 	return
 }
 
-// Items returns the value of the 'items' parameter.
-//
-// Retrieved list of cloud providers.
-func (r *CloudRegionsListResponse) Items() *CloudRegionList {
-	if r == nil {
-		return nil
-	}
-	return r.items
-}
-
-// GetItems returns the value of the 'items' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Retrieved list of cloud providers.
-func (r *CloudRegionsListResponse) GetItems() (value *CloudRegionList, ok bool) {
-	ok = r != nil && r.items != nil
-	if ok {
-		value = r.items
-	}
-	return
-}
-
 // unmarshal is the method used internally to unmarshal responses to the
 // 'list' method.
 func (r *CloudRegionsListResponse) unmarshal(reader io.Reader) error {
@@ -279,21 +279,21 @@ func (r *CloudRegionsListResponse) unmarshal(reader io.Reader) error {
 	if err != nil {
 		return err
 	}
-	r.page = data.Page
-	r.size = data.Size
-	r.total = data.Total
 	r.items, err = data.Items.unwrap()
 	if err != nil {
 		return err
 	}
+	r.page = data.Page
+	r.size = data.Size
+	r.total = data.Total
 	return err
 }
 
 // cloudRegionsListResponseData is the structure used internally to unmarshal
 // the response of the 'list' method.
 type cloudRegionsListResponseData struct {
+	Items cloudRegionListData "json:\"items,omitempty\""
 	Page  *int                "json:\"page,omitempty\""
 	Size  *int                "json:\"size,omitempty\""
 	Total *int                "json:\"total,omitempty\""
-	Items cloudRegionListData "json:\"items,omitempty\""
 }

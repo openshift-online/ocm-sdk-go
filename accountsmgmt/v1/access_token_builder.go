@@ -30,6 +30,14 @@ func NewAccessToken() *AccessTokenBuilder {
 	return new(AccessTokenBuilder)
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *AccessTokenBuilder) Copy(object *AccessToken) *AccessTokenBuilder {
+	if object == nil {
+		return b
+	}
+	return b
+}
+
 // Build creates a 'access_token' object using the configuration stored in the builder.
 func (b *AccessTokenBuilder) Build() (object *AccessToken, err error) {
 	object = new(AccessToken)

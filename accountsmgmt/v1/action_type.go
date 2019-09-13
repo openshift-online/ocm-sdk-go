@@ -24,13 +24,13 @@ type Action string
 
 const (
 	//
-	ActionGet Action = "get"
-	//
-	ActionList Action = "list"
-	//
 	ActionCreate Action = "create"
 	//
 	ActionDelete Action = "delete"
+	//
+	ActionGet Action = "get"
+	//
+	ActionList Action = "list"
 	//
 	ActionUpdate Action = "update"
 )

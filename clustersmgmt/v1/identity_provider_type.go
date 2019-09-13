@@ -38,16 +38,16 @@ type IdentityProvider struct {
 	id            *string
 	href          *string
 	link          bool
-	type_         *IdentityProviderType
-	name          *string
+	ldap          *LDAPIdentityProvider
 	challenge     *bool
-	login         *bool
-	mappingMethod *IdentityProviderMappingMethod
 	github        *GithubIdentityProvider
 	gitlab        *GitlabIdentityProvider
 	google        *GoogleIdentityProvider
-	ldap          *LDAPIdentityProvider
+	login         *bool
+	mappingMethod *IdentityProviderMappingMethod
+	name          *string
 	openID        *OpenIDIdentityProvider
+	type_         *IdentityProviderType
 }
 
 // Kind returns the name of the type of the object.
@@ -105,65 +105,38 @@ func (o *IdentityProvider) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *IdentityProvider) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.type_ == nil &&
-		o.name == nil &&
+		o.ldap == nil &&
 		o.challenge == nil &&
-		o.login == nil &&
-		o.mappingMethod == nil &&
 		o.github == nil &&
 		o.gitlab == nil &&
 		o.google == nil &&
-		o.ldap == nil &&
+		o.login == nil &&
+		o.mappingMethod == nil &&
+		o.name == nil &&
 		o.openID == nil &&
+		o.type_ == nil &&
 		true)
 }
 
-// Type returns the value of the 'type' attribute, or
+// LDAP returns the value of the 'LDAP' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Type of identity provider. The rest of the attributes will be populated according to this
-// value. For example, if the type is `github` then only the `github` attribute will be
-// populated.
-func (o *IdentityProvider) Type() IdentityProviderType {
-	if o != nil && o.type_ != nil {
-		return *o.type_
+// Details for `ldap` identity providers.
+func (o *IdentityProvider) LDAP() *LDAPIdentityProvider {
+	if o == nil {
+		return nil
 	}
-	return IdentityProviderType("")
+	return o.ldap
 }
 
-// GetType returns the value of the 'type' attribute and
+// GetLDAP returns the value of the 'LDAP' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Type of identity provider. The rest of the attributes will be populated according to this
-// value. For example, if the type is `github` then only the `github` attribute will be
-// populated.
-func (o *IdentityProvider) GetType() (value IdentityProviderType, ok bool) {
-	ok = o != nil && o.type_ != nil
+// Details for `ldap` identity providers.
+func (o *IdentityProvider) GetLDAP() (value *LDAPIdentityProvider, ok bool) {
+	ok = o != nil && o.ldap != nil
 	if ok {
-		value = *o.type_
-	}
-	return
-}
-
-// Name returns the value of the 'name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// The name of the identity provider.
-func (o *IdentityProvider) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
-	}
-	return ""
-}
-
-// GetName returns the value of the 'name' attribute and
-// a flag indicating if the attribute has a value.
-//
-// The name of the identity provider.
-func (o *IdentityProvider) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
-	if ok {
-		value = *o.name
+		value = o.ldap
 	}
 	return
 }
@@ -189,56 +162,6 @@ func (o *IdentityProvider) GetChallenge() (value bool, ok bool) {
 	ok = o != nil && o.challenge != nil
 	if ok {
 		value = *o.challenge
-	}
-	return
-}
-
-// Login returns the value of the 'login' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// When `true` unauthenticated token requests from web clients (like the web console) are
-// redirected to the authorize URL to log in.
-func (o *IdentityProvider) Login() bool {
-	if o != nil && o.login != nil {
-		return *o.login
-	}
-	return false
-}
-
-// GetLogin returns the value of the 'login' attribute and
-// a flag indicating if the attribute has a value.
-//
-// When `true` unauthenticated token requests from web clients (like the web console) are
-// redirected to the authorize URL to log in.
-func (o *IdentityProvider) GetLogin() (value bool, ok bool) {
-	ok = o != nil && o.login != nil
-	if ok {
-		value = *o.login
-	}
-	return
-}
-
-// MappingMethod returns the value of the 'mapping_method' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Controls how mappings are established between this provider's identities and user
-// objects.
-func (o *IdentityProvider) MappingMethod() IdentityProviderMappingMethod {
-	if o != nil && o.mappingMethod != nil {
-		return *o.mappingMethod
-	}
-	return IdentityProviderMappingMethod("")
-}
-
-// GetMappingMethod returns the value of the 'mapping_method' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Controls how mappings are established between this provider's identities and user
-// objects.
-func (o *IdentityProvider) GetMappingMethod() (value IdentityProviderMappingMethod, ok bool) {
-	ok = o != nil && o.mappingMethod != nil
-	if ok {
-		value = *o.mappingMethod
 	}
 	return
 }
@@ -312,25 +235,75 @@ func (o *IdentityProvider) GetGoogle() (value *GoogleIdentityProvider, ok bool) 
 	return
 }
 
-// LDAP returns the value of the 'LDAP' attribute, or
+// Login returns the value of the 'login' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Details for `ldap` identity providers.
-func (o *IdentityProvider) LDAP() *LDAPIdentityProvider {
-	if o == nil {
-		return nil
+// When `true` unauthenticated token requests from web clients (like the web console) are
+// redirected to the authorize URL to log in.
+func (o *IdentityProvider) Login() bool {
+	if o != nil && o.login != nil {
+		return *o.login
 	}
-	return o.ldap
+	return false
 }
 
-// GetLDAP returns the value of the 'LDAP' attribute and
+// GetLogin returns the value of the 'login' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Details for `ldap` identity providers.
-func (o *IdentityProvider) GetLDAP() (value *LDAPIdentityProvider, ok bool) {
-	ok = o != nil && o.ldap != nil
+// When `true` unauthenticated token requests from web clients (like the web console) are
+// redirected to the authorize URL to log in.
+func (o *IdentityProvider) GetLogin() (value bool, ok bool) {
+	ok = o != nil && o.login != nil
 	if ok {
-		value = o.ldap
+		value = *o.login
+	}
+	return
+}
+
+// MappingMethod returns the value of the 'mapping_method' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Controls how mappings are established between this provider's identities and user
+// objects.
+func (o *IdentityProvider) MappingMethod() IdentityProviderMappingMethod {
+	if o != nil && o.mappingMethod != nil {
+		return *o.mappingMethod
+	}
+	return IdentityProviderMappingMethod("")
+}
+
+// GetMappingMethod returns the value of the 'mapping_method' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Controls how mappings are established between this provider's identities and user
+// objects.
+func (o *IdentityProvider) GetMappingMethod() (value IdentityProviderMappingMethod, ok bool) {
+	ok = o != nil && o.mappingMethod != nil
+	if ok {
+		value = *o.mappingMethod
+	}
+	return
+}
+
+// Name returns the value of the 'name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The name of the identity provider.
+func (o *IdentityProvider) Name() string {
+	if o != nil && o.name != nil {
+		return *o.name
+	}
+	return ""
+}
+
+// GetName returns the value of the 'name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The name of the identity provider.
+func (o *IdentityProvider) GetName() (value string, ok bool) {
+	ok = o != nil && o.name != nil
+	if ok {
+		value = *o.name
 	}
 	return
 }
@@ -354,6 +327,33 @@ func (o *IdentityProvider) GetOpenID() (value *OpenIDIdentityProvider, ok bool) 
 	ok = o != nil && o.openID != nil
 	if ok {
 		value = o.openID
+	}
+	return
+}
+
+// Type returns the value of the 'type' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Type of identity provider. The rest of the attributes will be populated according to this
+// value. For example, if the type is `github` then only the `github` attribute will be
+// populated.
+func (o *IdentityProvider) Type() IdentityProviderType {
+	if o != nil && o.type_ != nil {
+		return *o.type_
+	}
+	return IdentityProviderType("")
+}
+
+// GetType returns the value of the 'type' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Type of identity provider. The rest of the attributes will be populated according to this
+// value. For example, if the type is `github` then only the `github` attribute will be
+// populated.
+func (o *IdentityProvider) GetType() (value IdentityProviderType, ok bool) {
+	ok = o != nil && o.type_ != nil
+	if ok {
+		value = *o.type_
 	}
 	return
 }

@@ -63,6 +63,32 @@ func (b *OpenIDClaimsBuilder) PreferredUsername(values ...string) *OpenIDClaimsB
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *OpenIDClaimsBuilder) Copy(object *OpenIDClaims) *OpenIDClaimsBuilder {
+	if object == nil {
+		return b
+	}
+	if len(object.email) > 0 {
+		b.email = make([]string, len(object.email))
+		copy(b.email, object.email)
+	} else {
+		b.email = nil
+	}
+	if len(object.name) > 0 {
+		b.name = make([]string, len(object.name))
+		copy(b.name, object.name)
+	} else {
+		b.name = nil
+	}
+	if len(object.preferredUsername) > 0 {
+		b.preferredUsername = make([]string, len(object.preferredUsername))
+		copy(b.preferredUsername, object.preferredUsername)
+	} else {
+		b.preferredUsername = nil
+	}
+	return b
+}
+
 // Build creates a 'open_ID_claims' object using the configuration stored in the builder.
 func (b *OpenIDClaimsBuilder) Build() (object *OpenIDClaims, err error) {
 	object = new(OpenIDClaims)

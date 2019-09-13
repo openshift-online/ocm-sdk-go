@@ -42,14 +42,14 @@ type Subscription struct {
 	id                 *string
 	href               *string
 	link               bool
+	clusterID          *string
+	creator            *Account
+	displayName        *string
+	externalClusterID  *string
+	lastTelemetryDate  *time.Time
+	organizationID     *string
 	plan               *Plan
 	registryCredential *RegistryCredential
-	clusterID          *string
-	externalClusterID  *string
-	organizationID     *string
-	displayName        *string
-	lastTelemetryDate  *time.Time
-	creator            *Account
 }
 
 // Kind returns the name of the type of the object.
@@ -107,15 +107,153 @@ func (o *Subscription) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Subscription) Empty() bool {
 	return o == nil || (o.id == nil &&
+		o.clusterID == nil &&
+		o.creator == nil &&
+		o.displayName == nil &&
+		o.externalClusterID == nil &&
+		o.lastTelemetryDate == nil &&
+		o.organizationID == nil &&
 		o.plan == nil &&
 		o.registryCredential == nil &&
-		o.clusterID == nil &&
-		o.externalClusterID == nil &&
-		o.organizationID == nil &&
-		o.displayName == nil &&
-		o.lastTelemetryDate == nil &&
-		o.creator == nil &&
 		true)
+}
+
+// ClusterID returns the value of the 'cluster_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) ClusterID() string {
+	if o != nil && o.clusterID != nil {
+		return *o.clusterID
+	}
+	return ""
+}
+
+// GetClusterID returns the value of the 'cluster_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetClusterID() (value string, ok bool) {
+	ok = o != nil && o.clusterID != nil
+	if ok {
+		value = *o.clusterID
+	}
+	return
+}
+
+// Creator returns the value of the 'creator' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the account that created the subscription.
+func (o *Subscription) Creator() *Account {
+	if o == nil {
+		return nil
+	}
+	return o.creator
+}
+
+// GetCreator returns the value of the 'creator' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the account that created the subscription.
+func (o *Subscription) GetCreator() (value *Account, ok bool) {
+	ok = o != nil && o.creator != nil
+	if ok {
+		value = o.creator
+	}
+	return
+}
+
+// DisplayName returns the value of the 'display_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) DisplayName() string {
+	if o != nil && o.displayName != nil {
+		return *o.displayName
+	}
+	return ""
+}
+
+// GetDisplayName returns the value of the 'display_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetDisplayName() (value string, ok bool) {
+	ok = o != nil && o.displayName != nil
+	if ok {
+		value = *o.displayName
+	}
+	return
+}
+
+// ExternalClusterID returns the value of the 'external_cluster_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) ExternalClusterID() string {
+	if o != nil && o.externalClusterID != nil {
+		return *o.externalClusterID
+	}
+	return ""
+}
+
+// GetExternalClusterID returns the value of the 'external_cluster_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetExternalClusterID() (value string, ok bool) {
+	ok = o != nil && o.externalClusterID != nil
+	if ok {
+		value = *o.externalClusterID
+	}
+	return
+}
+
+// LastTelemetryDate returns the value of the 'last_telemetry_date' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Last telemetry authorization request for this subscription.
+func (o *Subscription) LastTelemetryDate() time.Time {
+	if o != nil && o.lastTelemetryDate != nil {
+		return *o.lastTelemetryDate
+	}
+	return time.Time{}
+}
+
+// GetLastTelemetryDate returns the value of the 'last_telemetry_date' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Last telemetry authorization request for this subscription.
+func (o *Subscription) GetLastTelemetryDate() (value time.Time, ok bool) {
+	ok = o != nil && o.lastTelemetryDate != nil
+	if ok {
+		value = *o.lastTelemetryDate
+	}
+	return
+}
+
+// OrganizationID returns the value of the 'organization_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) OrganizationID() string {
+	if o != nil && o.organizationID != nil {
+		return *o.organizationID
+	}
+	return ""
+}
+
+// GetOrganizationID returns the value of the 'organization_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetOrganizationID() (value string, ok bool) {
+	ok = o != nil && o.organizationID != nil
+	if ok {
+		value = *o.organizationID
+	}
+	return
 }
 
 // Plan returns the value of the 'plan' attribute, or
@@ -160,144 +298,6 @@ func (o *Subscription) GetRegistryCredential() (value *RegistryCredential, ok bo
 	ok = o != nil && o.registryCredential != nil
 	if ok {
 		value = o.registryCredential
-	}
-	return
-}
-
-// ClusterID returns the value of the 'cluster_ID' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Subscription) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
-	}
-	return ""
-}
-
-// GetClusterID returns the value of the 'cluster_ID' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Subscription) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
-	if ok {
-		value = *o.clusterID
-	}
-	return
-}
-
-// ExternalClusterID returns the value of the 'external_cluster_ID' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Subscription) ExternalClusterID() string {
-	if o != nil && o.externalClusterID != nil {
-		return *o.externalClusterID
-	}
-	return ""
-}
-
-// GetExternalClusterID returns the value of the 'external_cluster_ID' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Subscription) GetExternalClusterID() (value string, ok bool) {
-	ok = o != nil && o.externalClusterID != nil
-	if ok {
-		value = *o.externalClusterID
-	}
-	return
-}
-
-// OrganizationID returns the value of the 'organization_ID' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Subscription) OrganizationID() string {
-	if o != nil && o.organizationID != nil {
-		return *o.organizationID
-	}
-	return ""
-}
-
-// GetOrganizationID returns the value of the 'organization_ID' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Subscription) GetOrganizationID() (value string, ok bool) {
-	ok = o != nil && o.organizationID != nil
-	if ok {
-		value = *o.organizationID
-	}
-	return
-}
-
-// DisplayName returns the value of the 'display_name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Subscription) DisplayName() string {
-	if o != nil && o.displayName != nil {
-		return *o.displayName
-	}
-	return ""
-}
-
-// GetDisplayName returns the value of the 'display_name' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Subscription) GetDisplayName() (value string, ok bool) {
-	ok = o != nil && o.displayName != nil
-	if ok {
-		value = *o.displayName
-	}
-	return
-}
-
-// LastTelemetryDate returns the value of the 'last_telemetry_date' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Last telemetry authorization request for this subscription.
-func (o *Subscription) LastTelemetryDate() time.Time {
-	if o != nil && o.lastTelemetryDate != nil {
-		return *o.lastTelemetryDate
-	}
-	return time.Time{}
-}
-
-// GetLastTelemetryDate returns the value of the 'last_telemetry_date' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Last telemetry authorization request for this subscription.
-func (o *Subscription) GetLastTelemetryDate() (value time.Time, ok bool) {
-	ok = o != nil && o.lastTelemetryDate != nil
-	if ok {
-		value = *o.lastTelemetryDate
-	}
-	return
-}
-
-// Creator returns the value of the 'creator' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Link to the account that created the subscription.
-func (o *Subscription) Creator() *Account {
-	if o == nil {
-		return nil
-	}
-	return o.creator
-}
-
-// GetCreator returns the value of the 'creator' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Link to the account that created the subscription.
-func (o *Subscription) GetCreator() (value *Account, ok bool) {
-	ok = o != nil && o.creator != nil
-	if ok {
-		value = o.creator
 	}
 	return
 }

@@ -24,12 +24,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Details for `openid` identity providers.
 type OpenIDIdentityProviderBuilder struct {
 	ca                       *string
+	urls                     *OpenIDURLsBuilder
 	claims                   *OpenIDClaimsBuilder
 	clientID                 *string
 	clientSecret             *string
 	extraAuthorizeParameters map[string]string
 	extraScopes              []string
-	urls                     *OpenIDURLsBuilder
 }
 
 // NewOpenIDIdentityProvider creates a new builder of 'open_ID_identity_provider' objects.
@@ -43,6 +43,15 @@ func NewOpenIDIdentityProvider() *OpenIDIdentityProviderBuilder {
 //
 func (b *OpenIDIdentityProviderBuilder) CA(value string) *OpenIDIdentityProviderBuilder {
 	b.ca = &value
+	return b
+}
+
+// URLS sets the value of the 'URLS' attribute
+// to the given value.
+//
+// _OpenID_ identity provider URLs.
+func (b *OpenIDIdentityProviderBuilder) URLS(value *OpenIDURLsBuilder) *OpenIDIdentityProviderBuilder {
+	b.urls = value
 	return b
 }
 
@@ -92,12 +101,31 @@ func (b *OpenIDIdentityProviderBuilder) ExtraScopes(values ...string) *OpenIDIde
 	return b
 }
 
-// URLS sets the value of the 'URLS' attribute
-// to the given value.
-//
-// _OpenID_ identity provider URLs.
-func (b *OpenIDIdentityProviderBuilder) URLS(value *OpenIDURLsBuilder) *OpenIDIdentityProviderBuilder {
-	b.urls = value
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *OpenIDIdentityProviderBuilder) Copy(object *OpenIDIdentityProvider) *OpenIDIdentityProviderBuilder {
+	if object == nil {
+		return b
+	}
+	b.ca = object.ca
+	if object.urls != nil {
+		b.urls = NewOpenIDURLs().Copy(object.urls)
+	} else {
+		b.urls = nil
+	}
+	if object.claims != nil {
+		b.claims = NewOpenIDClaims().Copy(object.claims)
+	} else {
+		b.claims = nil
+	}
+	b.clientID = object.clientID
+	b.clientSecret = object.clientSecret
+	b.extraAuthorizeParameters = object.extraAuthorizeParameters
+	if len(object.extraScopes) > 0 {
+		b.extraScopes = make([]string, len(object.extraScopes))
+		copy(b.extraScopes, object.extraScopes)
+	} else {
+		b.extraScopes = nil
+	}
 	return b
 }
 
@@ -106,6 +134,12 @@ func (b *OpenIDIdentityProviderBuilder) Build() (object *OpenIDIdentityProvider,
 	object = new(OpenIDIdentityProvider)
 	if b.ca != nil {
 		object.ca = b.ca
+	}
+	if b.urls != nil {
+		object.urls, err = b.urls.Build()
+		if err != nil {
+			return
+		}
 	}
 	if b.claims != nil {
 		object.claims, err = b.claims.Build()
@@ -125,12 +159,6 @@ func (b *OpenIDIdentityProviderBuilder) Build() (object *OpenIDIdentityProvider,
 	if b.extraScopes != nil {
 		object.extraScopes = make([]string, len(b.extraScopes))
 		copy(object.extraScopes, b.extraScopes)
-	}
-	if b.urls != nil {
-		object.urls, err = b.urls.Build()
-		if err != nil {
-			return
-		}
 	}
 	return
 }

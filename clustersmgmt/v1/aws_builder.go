@@ -50,6 +50,16 @@ func (b *AWSBuilder) SecretAccessKey(value string) *AWSBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *AWSBuilder) Copy(object *AWS) *AWSBuilder {
+	if object == nil {
+		return b
+	}
+	b.accessKeyID = object.accessKeyID
+	b.secretAccessKey = object.secretAccessKey
+	return b
+}
+
 // Build creates a 'AWS' object using the configuration stored in the builder.
 func (b *AWSBuilder) Build() (object *AWS, err error) {
 	object = new(AWS)

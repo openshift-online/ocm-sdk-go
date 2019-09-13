@@ -23,18 +23,45 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type QuotaSummaryBuilder struct {
+	byoc                 *bool
+	allowed              *int
+	availabilityZoneType *string
 	organizationID       *string
+	reserved             *int
 	resourceName         *string
 	resourceType         *string
-	byoc                 *bool
-	availabilityZoneType *string
-	allowed              *int
-	reserved             *int
 }
 
 // NewQuotaSummary creates a new builder of 'quota_summary' objects.
 func NewQuotaSummary() *QuotaSummaryBuilder {
 	return new(QuotaSummaryBuilder)
+}
+
+// BYOC sets the value of the 'BYOC' attribute
+// to the given value.
+//
+//
+func (b *QuotaSummaryBuilder) BYOC(value bool) *QuotaSummaryBuilder {
+	b.byoc = &value
+	return b
+}
+
+// Allowed sets the value of the 'allowed' attribute
+// to the given value.
+//
+//
+func (b *QuotaSummaryBuilder) Allowed(value int) *QuotaSummaryBuilder {
+	b.allowed = &value
+	return b
+}
+
+// AvailabilityZoneType sets the value of the 'availability_zone_type' attribute
+// to the given value.
+//
+//
+func (b *QuotaSummaryBuilder) AvailabilityZoneType(value string) *QuotaSummaryBuilder {
+	b.availabilityZoneType = &value
+	return b
 }
 
 // OrganizationID sets the value of the 'organization_ID' attribute
@@ -43,6 +70,15 @@ func NewQuotaSummary() *QuotaSummaryBuilder {
 //
 func (b *QuotaSummaryBuilder) OrganizationID(value string) *QuotaSummaryBuilder {
 	b.organizationID = &value
+	return b
+}
+
+// Reserved sets the value of the 'reserved' attribute
+// to the given value.
+//
+//
+func (b *QuotaSummaryBuilder) Reserved(value int) *QuotaSummaryBuilder {
+	b.reserved = &value
 	return b
 }
 
@@ -64,65 +100,44 @@ func (b *QuotaSummaryBuilder) ResourceType(value string) *QuotaSummaryBuilder {
 	return b
 }
 
-// BYOC sets the value of the 'BYOC' attribute
-// to the given value.
-//
-//
-func (b *QuotaSummaryBuilder) BYOC(value bool) *QuotaSummaryBuilder {
-	b.byoc = &value
-	return b
-}
-
-// AvailabilityZoneType sets the value of the 'availability_zone_type' attribute
-// to the given value.
-//
-//
-func (b *QuotaSummaryBuilder) AvailabilityZoneType(value string) *QuotaSummaryBuilder {
-	b.availabilityZoneType = &value
-	return b
-}
-
-// Allowed sets the value of the 'allowed' attribute
-// to the given value.
-//
-//
-func (b *QuotaSummaryBuilder) Allowed(value int) *QuotaSummaryBuilder {
-	b.allowed = &value
-	return b
-}
-
-// Reserved sets the value of the 'reserved' attribute
-// to the given value.
-//
-//
-func (b *QuotaSummaryBuilder) Reserved(value int) *QuotaSummaryBuilder {
-	b.reserved = &value
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *QuotaSummaryBuilder) Copy(object *QuotaSummary) *QuotaSummaryBuilder {
+	if object == nil {
+		return b
+	}
+	b.byoc = object.byoc
+	b.allowed = object.allowed
+	b.availabilityZoneType = object.availabilityZoneType
+	b.organizationID = object.organizationID
+	b.reserved = object.reserved
+	b.resourceName = object.resourceName
+	b.resourceType = object.resourceType
 	return b
 }
 
 // Build creates a 'quota_summary' object using the configuration stored in the builder.
 func (b *QuotaSummaryBuilder) Build() (object *QuotaSummary, err error) {
 	object = new(QuotaSummary)
+	if b.byoc != nil {
+		object.byoc = b.byoc
+	}
+	if b.allowed != nil {
+		object.allowed = b.allowed
+	}
+	if b.availabilityZoneType != nil {
+		object.availabilityZoneType = b.availabilityZoneType
+	}
 	if b.organizationID != nil {
 		object.organizationID = b.organizationID
+	}
+	if b.reserved != nil {
+		object.reserved = b.reserved
 	}
 	if b.resourceName != nil {
 		object.resourceName = b.resourceName
 	}
 	if b.resourceType != nil {
 		object.resourceType = b.resourceType
-	}
-	if b.byoc != nil {
-		object.byoc = b.byoc
-	}
-	if b.availabilityZoneType != nil {
-		object.availabilityZoneType = b.availabilityZoneType
-	}
-	if b.allowed != nil {
-		object.allowed = b.allowed
-	}
-	if b.reserved != nil {
-		object.reserved = b.reserved
 	}
 	return
 }

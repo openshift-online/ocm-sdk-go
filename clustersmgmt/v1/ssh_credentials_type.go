@@ -23,38 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // SSH key pair of a cluster.
 type SSHCredentials struct {
-	publicKey  *string
 	privateKey *string
+	publicKey  *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SSHCredentials) Empty() bool {
-	return o == nil || (o.publicKey == nil &&
-		o.privateKey == nil &&
+	return o == nil || (o.privateKey == nil &&
+		o.publicKey == nil &&
 		true)
-}
-
-// PublicKey returns the value of the 'public_key' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// SSH public key of the cluster.
-func (o *SSHCredentials) PublicKey() string {
-	if o != nil && o.publicKey != nil {
-		return *o.publicKey
-	}
-	return ""
-}
-
-// GetPublicKey returns the value of the 'public_key' attribute and
-// a flag indicating if the attribute has a value.
-//
-// SSH public key of the cluster.
-func (o *SSHCredentials) GetPublicKey() (value string, ok bool) {
-	ok = o != nil && o.publicKey != nil
-	if ok {
-		value = *o.publicKey
-	}
-	return
 }
 
 // PrivateKey returns the value of the 'private_key' attribute, or
@@ -76,6 +53,29 @@ func (o *SSHCredentials) GetPrivateKey() (value string, ok bool) {
 	ok = o != nil && o.privateKey != nil
 	if ok {
 		value = *o.privateKey
+	}
+	return
+}
+
+// PublicKey returns the value of the 'public_key' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// SSH public key of the cluster.
+func (o *SSHCredentials) PublicKey() string {
+	if o != nil && o.publicKey != nil {
+		return *o.publicKey
+	}
+	return ""
+}
+
+// GetPublicKey returns the value of the 'public_key' attribute and
+// a flag indicating if the attribute has a value.
+//
+// SSH public key of the cluster.
+func (o *SSHCredentials) GetPublicKey() (value string, ok bool) {
+	ok = o != nil && o.publicKey != nil
+	if ok {
+		value = *o.publicKey
 	}
 	return
 }

@@ -32,10 +32,10 @@ type flavourData struct {
 	ID      *string           "json:\"id,omitempty\""
 	HREF    *string           "json:\"href,omitempty\""
 	AWS     *awsData          "json:\"aws,omitempty\""
-	Version *string           "json:\"version,omitempty\""
-	Nodes   *clusterNodesData "json:\"nodes,omitempty\""
 	Name    *string           "json:\"name,omitempty\""
 	Network *networkData      "json:\"network,omitempty\""
+	Nodes   *clusterNodesData "json:\"nodes,omitempty\""
+	Version *string           "json:\"version,omitempty\""
 }
 
 // MarshalFlavour writes a value of the 'flavour' to the given target,
@@ -71,16 +71,16 @@ func (o *Flavour) wrap() (data *flavourData, err error) {
 	if err != nil {
 		return
 	}
-	data.Version = o.version
-	data.Nodes, err = o.nodes.wrap()
-	if err != nil {
-		return
-	}
 	data.Name = o.name
 	data.Network, err = o.network.wrap()
 	if err != nil {
 		return
 	}
+	data.Nodes, err = o.nodes.wrap()
+	if err != nil {
+		return
+	}
+	data.Version = o.version
 	return
 }
 
@@ -129,15 +129,15 @@ func (d *flavourData) unwrap() (object *Flavour, err error) {
 	if err != nil {
 		return
 	}
-	object.version = d.Version
-	object.nodes, err = d.Nodes.unwrap()
-	if err != nil {
-		return
-	}
 	object.name = d.Name
 	object.network, err = d.Network.unwrap()
 	if err != nil {
 		return
 	}
+	object.nodes, err = d.Nodes.unwrap()
+	if err != nil {
+		return
+	}
+	object.version = d.Version
 	return
 }

@@ -31,8 +31,8 @@ type clusterStatusData struct {
 	Kind        *string       "json:\"kind,omitempty\""
 	ID          *string       "json:\"id,omitempty\""
 	HREF        *string       "json:\"href,omitempty\""
-	State       *ClusterState "json:\"state,omitempty\""
 	Description *string       "json:\"description,omitempty\""
+	State       *ClusterState "json:\"state,omitempty\""
 }
 
 // MarshalClusterStatus writes a value of the 'cluster_status' to the given target,
@@ -64,8 +64,8 @@ func (o *ClusterStatus) wrap() (data *clusterStatusData, err error) {
 	} else {
 		*data.Kind = ClusterStatusKind
 	}
-	data.State = o.state
 	data.Description = o.description
+	data.State = o.state
 	return
 }
 
@@ -110,7 +110,7 @@ func (d *clusterStatusData) unwrap() (object *ClusterStatus, err error) {
 			return
 		}
 	}
-	object.state = d.State
 	object.description = d.Description
+	object.state = d.State
 	return
 }

@@ -26,11 +26,11 @@ type RoleBindingBuilder struct {
 	id           *string
 	href         *string
 	link         bool
-	type_        *string
-	subscription *SubscriptionBuilder
 	account      *AccountBuilder
 	organization *OrganizationBuilder
 	role         *RoleBuilder
+	subscription *SubscriptionBuilder
+	type_        *string
 }
 
 // NewRoleBinding creates a new builder of 'role_binding' objects.
@@ -53,24 +53,6 @@ func (b *RoleBindingBuilder) HREF(value string) *RoleBindingBuilder {
 // Link sets the flag that indicates if this is a link.
 func (b *RoleBindingBuilder) Link(value bool) *RoleBindingBuilder {
 	b.link = value
-	return b
-}
-
-// Type sets the value of the 'type' attribute
-// to the given value.
-//
-//
-func (b *RoleBindingBuilder) Type(value string) *RoleBindingBuilder {
-	b.type_ = &value
-	return b
-}
-
-// Subscription sets the value of the 'subscription' attribute
-// to the given value.
-//
-//
-func (b *RoleBindingBuilder) Subscription(value *SubscriptionBuilder) *RoleBindingBuilder {
-	b.subscription = value
 	return b
 }
 
@@ -101,21 +83,62 @@ func (b *RoleBindingBuilder) Role(value *RoleBuilder) *RoleBindingBuilder {
 	return b
 }
 
+// Subscription sets the value of the 'subscription' attribute
+// to the given value.
+//
+//
+func (b *RoleBindingBuilder) Subscription(value *SubscriptionBuilder) *RoleBindingBuilder {
+	b.subscription = value
+	return b
+}
+
+// Type sets the value of the 'type' attribute
+// to the given value.
+//
+//
+func (b *RoleBindingBuilder) Type(value string) *RoleBindingBuilder {
+	b.type_ = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *RoleBindingBuilder) Copy(object *RoleBinding) *RoleBindingBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	if object.account != nil {
+		b.account = NewAccount().Copy(object.account)
+	} else {
+		b.account = nil
+	}
+	if object.organization != nil {
+		b.organization = NewOrganization().Copy(object.organization)
+	} else {
+		b.organization = nil
+	}
+	if object.role != nil {
+		b.role = NewRole().Copy(object.role)
+	} else {
+		b.role = nil
+	}
+	if object.subscription != nil {
+		b.subscription = NewSubscription().Copy(object.subscription)
+	} else {
+		b.subscription = nil
+	}
+	b.type_ = object.type_
+	return b
+}
+
 // Build creates a 'role_binding' object using the configuration stored in the builder.
 func (b *RoleBindingBuilder) Build() (object *RoleBinding, err error) {
 	object = new(RoleBinding)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.type_ != nil {
-		object.type_ = b.type_
-	}
-	if b.subscription != nil {
-		object.subscription, err = b.subscription.Build()
-		if err != nil {
-			return
-		}
-	}
 	if b.account != nil {
 		object.account, err = b.account.Build()
 		if err != nil {
@@ -133,6 +156,15 @@ func (b *RoleBindingBuilder) Build() (object *RoleBinding, err error) {
 		if err != nil {
 			return
 		}
+	}
+	if b.subscription != nil {
+		object.subscription, err = b.subscription.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.type_ != nil {
+		object.type_ = b.type_
 	}
 	return
 }

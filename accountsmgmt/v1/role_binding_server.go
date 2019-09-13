@@ -33,15 +33,31 @@ import (
 // RoleBindingServer represents the interface the manages the 'role_binding' resource.
 type RoleBindingServer interface {
 
-	// Get handles a request for the 'get' method.
-	//
-	// Retrieves the details of the role binding.
-	Get(ctx context.Context, request *RoleBindingGetServerRequest, response *RoleBindingGetServerResponse) error
-
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the role binding.
 	Delete(ctx context.Context, request *RoleBindingDeleteServerRequest, response *RoleBindingDeleteServerResponse) error
+
+	// Get handles a request for the 'get' method.
+	//
+	// Retrieves the details of the role binding.
+	Get(ctx context.Context, request *RoleBindingGetServerRequest, response *RoleBindingGetServerResponse) error
+}
+
+// RoleBindingDeleteServerRequest is the request for the 'delete' method.
+type RoleBindingDeleteServerRequest struct {
+}
+
+// RoleBindingDeleteServerResponse is the response for the 'delete' method.
+type RoleBindingDeleteServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *RoleBindingDeleteServerResponse) SetStatusCode(status int) *RoleBindingDeleteServerResponse {
+	r.status = status
+	return r
 }
 
 // RoleBindingGetServerRequest is the request for the 'get' method.
@@ -82,22 +98,6 @@ func (r *RoleBindingGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// RoleBindingDeleteServerRequest is the request for the 'delete' method.
-type RoleBindingDeleteServerRequest struct {
-}
-
-// RoleBindingDeleteServerResponse is the response for the 'delete' method.
-type RoleBindingDeleteServerResponse struct {
-	status int
-	err    *errors.Error
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RoleBindingDeleteServerResponse) SetStatusCode(status int) *RoleBindingDeleteServerResponse {
-	r.status = status
-	return r
-}
-
 // RoleBindingServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type RoleBindingServerAdapter struct {
@@ -109,9 +109,50 @@ func NewRoleBindingServerAdapter(server RoleBindingServer, router *mux.Router) *
 	adapter := new(RoleBindingServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
+}
+func (a *RoleBindingServerAdapter) readRoleBindingDeleteServerRequest(r *http.Request) (*RoleBindingDeleteServerRequest, error) {
+	var err error
+	result := new(RoleBindingDeleteServerRequest)
+	return result, err
+}
+func (a *RoleBindingServerAdapter) writeRoleBindingDeleteServerResponse(w http.ResponseWriter, r *RoleBindingDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	return nil
+}
+func (a *RoleBindingServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readRoleBindingDeleteServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(RoleBindingDeleteServerResponse)
+	err = a.server.Delete(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeRoleBindingDeleteServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *RoleBindingServerAdapter) readRoleBindingGetServerRequest(r *http.Request) (*RoleBindingGetServerRequest, error) {
 	var err error
@@ -149,47 +190,6 @@ func (a *RoleBindingServerAdapter) getHandler(w http.ResponseWriter, r *http.Req
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeRoleBindingGetServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *RoleBindingServerAdapter) readRoleBindingDeleteServerRequest(r *http.Request) (*RoleBindingDeleteServerRequest, error) {
-	var err error
-	result := new(RoleBindingDeleteServerRequest)
-	return result, err
-}
-func (a *RoleBindingServerAdapter) writeRoleBindingDeleteServerResponse(w http.ResponseWriter, r *RoleBindingDeleteServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	return nil
-}
-func (a *RoleBindingServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRoleBindingDeleteServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(RoleBindingDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeRoleBindingDeleteServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

@@ -23,42 +23,19 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // LDAP attributes used to configure the LDAP identity provider.
 type LDAPAttributes struct {
-	email             []string
 	id                []string
+	email             []string
 	name              []string
 	preferredUsername []string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *LDAPAttributes) Empty() bool {
-	return o == nil || (o.email == nil &&
-		o.id == nil &&
+	return o == nil || (o.id == nil &&
+		o.email == nil &&
 		o.name == nil &&
 		o.preferredUsername == nil &&
 		true)
-}
-
-// Email returns the value of the 'email' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// List of attributes to use as the mail address.
-func (o *LDAPAttributes) Email() []string {
-	if o == nil {
-		return nil
-	}
-	return o.email
-}
-
-// GetEmail returns the value of the 'email' attribute and
-// a flag indicating if the attribute has a value.
-//
-// List of attributes to use as the mail address.
-func (o *LDAPAttributes) GetEmail() (value []string, ok bool) {
-	ok = o != nil && o.email != nil
-	if ok {
-		value = o.email
-	}
-	return
 }
 
 // ID returns the value of the 'ID' attribute, or
@@ -80,6 +57,29 @@ func (o *LDAPAttributes) GetID() (value []string, ok bool) {
 	ok = o != nil && o.id != nil
 	if ok {
 		value = o.id
+	}
+	return
+}
+
+// Email returns the value of the 'email' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// List of attributes to use as the mail address.
+func (o *LDAPAttributes) Email() []string {
+	if o == nil {
+		return nil
+	}
+	return o.email
+}
+
+// GetEmail returns the value of the 'email' attribute and
+// a flag indicating if the attribute has a value.
+//
+// List of attributes to use as the mail address.
+func (o *LDAPAttributes) GetEmail() (value []string, ok bool) {
+	ok = o != nil && o.email != nil
+	if ok {
+		value = o.email
 	}
 	return
 }

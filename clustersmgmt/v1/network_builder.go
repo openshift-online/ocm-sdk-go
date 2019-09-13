@@ -23,8 +23,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Network configuration of a cluster.
 type NetworkBuilder struct {
-	podCIDR     *string
 	machineCIDR *string
+	podCIDR     *string
 	serviceCIDR *string
 }
 
@@ -33,21 +33,21 @@ func NewNetwork() *NetworkBuilder {
 	return new(NetworkBuilder)
 }
 
-// PodCIDR sets the value of the 'pod_CIDR' attribute
-// to the given value.
-//
-//
-func (b *NetworkBuilder) PodCIDR(value string) *NetworkBuilder {
-	b.podCIDR = &value
-	return b
-}
-
 // MachineCIDR sets the value of the 'machine_CIDR' attribute
 // to the given value.
 //
 //
 func (b *NetworkBuilder) MachineCIDR(value string) *NetworkBuilder {
 	b.machineCIDR = &value
+	return b
+}
+
+// PodCIDR sets the value of the 'pod_CIDR' attribute
+// to the given value.
+//
+//
+func (b *NetworkBuilder) PodCIDR(value string) *NetworkBuilder {
+	b.podCIDR = &value
 	return b
 }
 
@@ -60,14 +60,25 @@ func (b *NetworkBuilder) ServiceCIDR(value string) *NetworkBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *NetworkBuilder) Copy(object *Network) *NetworkBuilder {
+	if object == nil {
+		return b
+	}
+	b.machineCIDR = object.machineCIDR
+	b.podCIDR = object.podCIDR
+	b.serviceCIDR = object.serviceCIDR
+	return b
+}
+
 // Build creates a 'network' object using the configuration stored in the builder.
 func (b *NetworkBuilder) Build() (object *Network, err error) {
 	object = new(Network)
-	if b.podCIDR != nil {
-		object.podCIDR = b.podCIDR
-	}
 	if b.machineCIDR != nil {
 		object.machineCIDR = b.machineCIDR
+	}
+	if b.podCIDR != nil {
+		object.podCIDR = b.podCIDR
 	}
 	if b.serviceCIDR != nil {
 		object.serviceCIDR = b.serviceCIDR

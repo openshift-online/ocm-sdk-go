@@ -26,8 +26,8 @@ type VersionBuilder struct {
 	id       *string
 	href     *string
 	link     bool
-	enabled  *bool
 	default_ *bool
+	enabled  *bool
 }
 
 // NewVersion creates a new builder of 'version' objects.
@@ -53,15 +53,6 @@ func (b *VersionBuilder) Link(value bool) *VersionBuilder {
 	return b
 }
 
-// Enabled sets the value of the 'enabled' attribute
-// to the given value.
-//
-//
-func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
-	b.enabled = &value
-	return b
-}
-
 // Default sets the value of the 'default' attribute
 // to the given value.
 //
@@ -71,17 +62,39 @@ func (b *VersionBuilder) Default(value bool) *VersionBuilder {
 	return b
 }
 
+// Enabled sets the value of the 'enabled' attribute
+// to the given value.
+//
+//
+func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
+	b.enabled = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.default_ = object.default_
+	b.enabled = object.enabled
+	return b
+}
+
 // Build creates a 'version' object using the configuration stored in the builder.
 func (b *VersionBuilder) Build() (object *Version, err error) {
 	object = new(Version)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.enabled != nil {
-		object.enabled = b.enabled
-	}
 	if b.default_ != nil {
 		object.default_ = b.default_
+	}
+	if b.enabled != nil {
+		object.enabled = b.enabled
 	}
 	return
 }

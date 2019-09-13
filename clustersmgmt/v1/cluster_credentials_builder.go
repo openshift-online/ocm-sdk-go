@@ -26,9 +26,9 @@ type ClusterCredentialsBuilder struct {
 	id         *string
 	href       *string
 	link       bool
-	kubeconfig *string
 	ssh        *SSHCredentialsBuilder
 	admin      *AdminCredentialsBuilder
+	kubeconfig *string
 }
 
 // NewClusterCredentials creates a new builder of 'cluster_credentials' objects.
@@ -54,15 +54,6 @@ func (b *ClusterCredentialsBuilder) Link(value bool) *ClusterCredentialsBuilder 
 	return b
 }
 
-// Kubeconfig sets the value of the 'kubeconfig' attribute
-// to the given value.
-//
-//
-func (b *ClusterCredentialsBuilder) Kubeconfig(value string) *ClusterCredentialsBuilder {
-	b.kubeconfig = &value
-	return b
-}
-
 // SSH sets the value of the 'SSH' attribute
 // to the given value.
 //
@@ -82,15 +73,43 @@ func (b *ClusterCredentialsBuilder) Admin(value *AdminCredentialsBuilder) *Clust
 	return b
 }
 
+// Kubeconfig sets the value of the 'kubeconfig' attribute
+// to the given value.
+//
+//
+func (b *ClusterCredentialsBuilder) Kubeconfig(value string) *ClusterCredentialsBuilder {
+	b.kubeconfig = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterCredentialsBuilder) Copy(object *ClusterCredentials) *ClusterCredentialsBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	if object.ssh != nil {
+		b.ssh = NewSSHCredentials().Copy(object.ssh)
+	} else {
+		b.ssh = nil
+	}
+	if object.admin != nil {
+		b.admin = NewAdminCredentials().Copy(object.admin)
+	} else {
+		b.admin = nil
+	}
+	b.kubeconfig = object.kubeconfig
+	return b
+}
+
 // Build creates a 'cluster_credentials' object using the configuration stored in the builder.
 func (b *ClusterCredentialsBuilder) Build() (object *ClusterCredentials, err error) {
 	object = new(ClusterCredentials)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.kubeconfig != nil {
-		object.kubeconfig = b.kubeconfig
-	}
 	if b.ssh != nil {
 		object.ssh, err = b.ssh.Build()
 		if err != nil {
@@ -102,6 +121,9 @@ func (b *ClusterCredentialsBuilder) Build() (object *ClusterCredentials, err err
 		if err != nil {
 			return
 		}
+	}
+	if b.kubeconfig != nil {
+		object.kubeconfig = b.kubeconfig
 	}
 	return
 }

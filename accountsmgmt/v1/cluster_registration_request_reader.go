@@ -26,8 +26,8 @@ import (
 // clusterRegistrationRequestData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_registration_request'.
 type clusterRegistrationRequestData struct {
-	ClusterID          *string "json:\"cluster_id,omitempty\""
 	AuthorizationToken *string "json:\"authorization_token,omitempty\""
+	ClusterID          *string "json:\"cluster_id,omitempty\""
 }
 
 // MarshalClusterRegistrationRequest writes a value of the 'cluster_registration_request' to the given target,
@@ -51,8 +51,8 @@ func (o *ClusterRegistrationRequest) wrap() (data *clusterRegistrationRequestDat
 		return
 	}
 	data = new(clusterRegistrationRequestData)
-	data.ClusterID = o.clusterID
 	data.AuthorizationToken = o.authorizationToken
+	data.ClusterID = o.clusterID
 	return
 }
 
@@ -79,7 +79,7 @@ func (d *clusterRegistrationRequestData) unwrap() (object *ClusterRegistrationRe
 		return
 	}
 	object = new(ClusterRegistrationRequest)
-	object.clusterID = d.ClusterID
 	object.authorizationToken = d.AuthorizationToken
+	object.clusterID = d.ClusterID
 	return
 }

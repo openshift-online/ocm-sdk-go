@@ -31,9 +31,9 @@ type clusterCredentialsData struct {
 	Kind       *string               "json:\"kind,omitempty\""
 	ID         *string               "json:\"id,omitempty\""
 	HREF       *string               "json:\"href,omitempty\""
-	Kubeconfig *string               "json:\"kubeconfig,omitempty\""
 	SSH        *sshCredentialsData   "json:\"ssh,omitempty\""
 	Admin      *adminCredentialsData "json:\"admin,omitempty\""
+	Kubeconfig *string               "json:\"kubeconfig,omitempty\""
 }
 
 // MarshalClusterCredentials writes a value of the 'cluster_credentials' to the given target,
@@ -65,7 +65,6 @@ func (o *ClusterCredentials) wrap() (data *clusterCredentialsData, err error) {
 	} else {
 		*data.Kind = ClusterCredentialsKind
 	}
-	data.Kubeconfig = o.kubeconfig
 	data.SSH, err = o.ssh.wrap()
 	if err != nil {
 		return
@@ -74,6 +73,7 @@ func (o *ClusterCredentials) wrap() (data *clusterCredentialsData, err error) {
 	if err != nil {
 		return
 	}
+	data.Kubeconfig = o.kubeconfig
 	return
 }
 
@@ -118,7 +118,6 @@ func (d *clusterCredentialsData) unwrap() (object *ClusterCredentials, err error
 			return
 		}
 	}
-	object.kubeconfig = d.Kubeconfig
 	object.ssh, err = d.SSH.unwrap()
 	if err != nil {
 		return
@@ -127,5 +126,6 @@ func (d *clusterCredentialsData) unwrap() (object *ClusterCredentials, err error
 	if err != nil {
 		return
 	}
+	object.kubeconfig = d.Kubeconfig
 	return
 }

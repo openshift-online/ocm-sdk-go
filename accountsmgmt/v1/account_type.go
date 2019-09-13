@@ -38,14 +38,14 @@ type Account struct {
 	id             *string
 	href           *string
 	link           bool
-	name           *string
-	username       *string
+	banDescription *string
+	banned         *bool
 	email          *string
 	firstName      *string
 	lastName       *string
-	banned         *bool
-	banDescription *string
+	name           *string
 	organization   *Organization
+	username       *string
 }
 
 // Kind returns the name of the type of the object.
@@ -103,59 +103,59 @@ func (o *Account) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Account) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.name == nil &&
-		o.username == nil &&
+		o.banDescription == nil &&
+		o.banned == nil &&
 		o.email == nil &&
 		o.firstName == nil &&
 		o.lastName == nil &&
-		o.banned == nil &&
-		o.banDescription == nil &&
+		o.name == nil &&
 		o.organization == nil &&
+		o.username == nil &&
 		true)
 }
 
-// Name returns the value of the 'name' attribute, or
+// BanDescription returns the value of the 'ban_description' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Account) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+func (o *Account) BanDescription() string {
+	if o != nil && o.banDescription != nil {
+		return *o.banDescription
 	}
 	return ""
 }
 
-// GetName returns the value of the 'name' attribute and
+// GetBanDescription returns the value of the 'ban_description' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Account) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+func (o *Account) GetBanDescription() (value string, ok bool) {
+	ok = o != nil && o.banDescription != nil
 	if ok {
-		value = *o.name
+		value = *o.banDescription
 	}
 	return
 }
 
-// Username returns the value of the 'username' attribute, or
+// Banned returns the value of the 'banned' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Account) Username() string {
-	if o != nil && o.username != nil {
-		return *o.username
+func (o *Account) Banned() bool {
+	if o != nil && o.banned != nil {
+		return *o.banned
 	}
-	return ""
+	return false
 }
 
-// GetUsername returns the value of the 'username' attribute and
+// GetBanned returns the value of the 'banned' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Account) GetUsername() (value string, ok bool) {
-	ok = o != nil && o.username != nil
+func (o *Account) GetBanned() (value bool, ok bool) {
+	ok = o != nil && o.banned != nil
 	if ok {
-		value = *o.username
+		value = *o.banned
 	}
 	return
 }
@@ -229,48 +229,25 @@ func (o *Account) GetLastName() (value string, ok bool) {
 	return
 }
 
-// Banned returns the value of the 'banned' attribute, or
+// Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Account) Banned() bool {
-	if o != nil && o.banned != nil {
-		return *o.banned
-	}
-	return false
-}
-
-// GetBanned returns the value of the 'banned' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Account) GetBanned() (value bool, ok bool) {
-	ok = o != nil && o.banned != nil
-	if ok {
-		value = *o.banned
-	}
-	return
-}
-
-// BanDescription returns the value of the 'ban_description' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Account) BanDescription() string {
-	if o != nil && o.banDescription != nil {
-		return *o.banDescription
+func (o *Account) Name() string {
+	if o != nil && o.name != nil {
+		return *o.name
 	}
 	return ""
 }
 
-// GetBanDescription returns the value of the 'ban_description' attribute and
+// GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Account) GetBanDescription() (value string, ok bool) {
-	ok = o != nil && o.banDescription != nil
+func (o *Account) GetName() (value string, ok bool) {
+	ok = o != nil && o.name != nil
 	if ok {
-		value = *o.banDescription
+		value = *o.name
 	}
 	return
 }
@@ -294,6 +271,29 @@ func (o *Account) GetOrganization() (value *Organization, ok bool) {
 	ok = o != nil && o.organization != nil
 	if ok {
 		value = o.organization
+	}
+	return
+}
+
+// Username returns the value of the 'username' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Account) Username() string {
+	if o != nil && o.username != nil {
+		return *o.username
+	}
+	return ""
+}
+
+// GetUsername returns the value of the 'username' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Account) GetUsername() (value string, ok bool) {
+	ok = o != nil && o.username != nil
+	if ok {
+		value = *o.username
 	}
 	return
 }

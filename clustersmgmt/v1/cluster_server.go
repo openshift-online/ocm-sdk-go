@@ -33,6 +33,11 @@ import (
 // ClusterServer represents the interface the manages the 'cluster' resource.
 type ClusterServer interface {
 
+	// Delete handles a request for the 'delete' method.
+	//
+	// Deletes the cluster.
+	Delete(ctx context.Context, request *ClusterDeleteServerRequest, response *ClusterDeleteServerResponse) error
+
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the cluster.
@@ -43,25 +48,10 @@ type ClusterServer interface {
 	// Updates the cluster.
 	Update(ctx context.Context, request *ClusterUpdateServerRequest, response *ClusterUpdateServerResponse) error
 
-	// Delete handles a request for the 'delete' method.
-	//
-	// Deletes the cluster.
-	Delete(ctx context.Context, request *ClusterDeleteServerRequest, response *ClusterDeleteServerResponse) error
-
-	// Status returns the target 'cluster_status' resource.
-	//
-	// Reference to the resource that manages the detailed status of the cluster.
-	Status() ClusterStatusServer
-
 	// Credentials returns the target 'credentials' resource.
 	//
 	// Reference to the resource that manages the credentials of the cluster.
 	Credentials() CredentialsServer
-
-	// Logs returns the target 'logs' resource.
-	//
-	// Reference to the resource that manages the collection of logs of the cluster.
-	Logs() LogsServer
 
 	// Groups returns the target 'groups' resource.
 	//
@@ -72,6 +62,32 @@ type ClusterServer interface {
 	//
 	// Reference to the resource that manages the collection of identity providers.
 	IdentityProviders() IdentityProvidersServer
+
+	// Logs returns the target 'logs' resource.
+	//
+	// Reference to the resource that manages the collection of logs of the cluster.
+	Logs() LogsServer
+
+	// Status returns the target 'cluster_status' resource.
+	//
+	// Reference to the resource that manages the detailed status of the cluster.
+	Status() ClusterStatusServer
+}
+
+// ClusterDeleteServerRequest is the request for the 'delete' method.
+type ClusterDeleteServerRequest struct {
+}
+
+// ClusterDeleteServerResponse is the response for the 'delete' method.
+type ClusterDeleteServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *ClusterDeleteServerResponse) SetStatusCode(status int) *ClusterDeleteServerResponse {
+	r.status = status
+	return r
 }
 
 // ClusterGetServerRequest is the request for the 'get' method.
@@ -190,22 +206,6 @@ func (r *ClusterUpdateServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// ClusterDeleteServerRequest is the request for the 'delete' method.
-type ClusterDeleteServerRequest struct {
-}
-
-// ClusterDeleteServerResponse is the response for the 'delete' method.
-type ClusterDeleteServerResponse struct {
-	status int
-	err    *errors.Error
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClusterDeleteServerResponse) SetStatusCode(status int) *ClusterDeleteServerResponse {
-	r.status = status
-	return r
-}
-
 // ClusterServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type ClusterServerAdapter struct {
@@ -217,31 +217,19 @@ func NewClusterServerAdapter(server ClusterServer, router *mux.Router) *ClusterS
 	adapter := new(ClusterServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.PathPrefix("/status").HandlerFunc(adapter.statusHandler)
 	adapter.router.PathPrefix("/credentials").HandlerFunc(adapter.credentialsHandler)
-	adapter.router.PathPrefix("/logs").HandlerFunc(adapter.logsHandler)
 	adapter.router.PathPrefix("/groups").HandlerFunc(adapter.groupsHandler)
 	adapter.router.PathPrefix("/identity_providers").HandlerFunc(adapter.identityProvidersHandler)
+	adapter.router.PathPrefix("/logs").HandlerFunc(adapter.logsHandler)
+	adapter.router.PathPrefix("/status").HandlerFunc(adapter.statusHandler)
+	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
-	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	return adapter
-}
-func (a *ClusterServerAdapter) statusHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Status()
-	targetAdapter := NewClusterStatusServerAdapter(target, a.router.PathPrefix("/status").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
 }
 func (a *ClusterServerAdapter) credentialsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Credentials()
 	targetAdapter := NewCredentialsServerAdapter(target, a.router.PathPrefix("/credentials").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *ClusterServerAdapter) logsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Logs()
-	targetAdapter := NewLogsServerAdapter(target, a.router.PathPrefix("/logs").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
@@ -256,6 +244,59 @@ func (a *ClusterServerAdapter) identityProvidersHandler(w http.ResponseWriter, r
 	targetAdapter := NewIdentityProvidersServerAdapter(target, a.router.PathPrefix("/identity_providers").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
+}
+func (a *ClusterServerAdapter) logsHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.Logs()
+	targetAdapter := NewLogsServerAdapter(target, a.router.PathPrefix("/logs").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
+}
+func (a *ClusterServerAdapter) statusHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.Status()
+	targetAdapter := NewClusterStatusServerAdapter(target, a.router.PathPrefix("/status").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
+}
+func (a *ClusterServerAdapter) readClusterDeleteServerRequest(r *http.Request) (*ClusterDeleteServerRequest, error) {
+	var err error
+	result := new(ClusterDeleteServerRequest)
+	return result, err
+}
+func (a *ClusterServerAdapter) writeClusterDeleteServerResponse(w http.ResponseWriter, r *ClusterDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	return nil
+}
+func (a *ClusterServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readClusterDeleteServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(ClusterDeleteServerResponse)
+	err = a.server.Delete(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeClusterDeleteServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *ClusterServerAdapter) readClusterGetServerRequest(r *http.Request) (*ClusterGetServerRequest, error) {
 	var err error
@@ -342,47 +383,6 @@ func (a *ClusterServerAdapter) updateHandler(w http.ResponseWriter, r *http.Requ
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeClusterUpdateServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *ClusterServerAdapter) readClusterDeleteServerRequest(r *http.Request) (*ClusterDeleteServerRequest, error) {
-	var err error
-	result := new(ClusterDeleteServerRequest)
-	return result, err
-}
-func (a *ClusterServerAdapter) writeClusterDeleteServerResponse(w http.ResponseWriter, r *ClusterDeleteServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	return nil
-}
-func (a *ClusterServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClusterDeleteServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(ClusterDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeClusterDeleteServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

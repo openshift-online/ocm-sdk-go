@@ -26,8 +26,8 @@ type ClusterStatusBuilder struct {
 	id          *string
 	href        *string
 	link        bool
-	state       *ClusterState
 	description *string
+	state       *ClusterState
 }
 
 // NewClusterStatus creates a new builder of 'cluster_status' objects.
@@ -53,15 +53,6 @@ func (b *ClusterStatusBuilder) Link(value bool) *ClusterStatusBuilder {
 	return b
 }
 
-// State sets the value of the 'state' attribute
-// to the given value.
-//
-// Overall state of a cluster.
-func (b *ClusterStatusBuilder) State(value ClusterState) *ClusterStatusBuilder {
-	b.state = &value
-	return b
-}
-
 // Description sets the value of the 'description' attribute
 // to the given value.
 //
@@ -71,17 +62,39 @@ func (b *ClusterStatusBuilder) Description(value string) *ClusterStatusBuilder {
 	return b
 }
 
+// State sets the value of the 'state' attribute
+// to the given value.
+//
+// Overall state of a cluster.
+func (b *ClusterStatusBuilder) State(value ClusterState) *ClusterStatusBuilder {
+	b.state = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterStatusBuilder) Copy(object *ClusterStatus) *ClusterStatusBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	b.description = object.description
+	b.state = object.state
+	return b
+}
+
 // Build creates a 'cluster_status' object using the configuration stored in the builder.
 func (b *ClusterStatusBuilder) Build() (object *ClusterStatus, err error) {
 	object = new(ClusterStatus)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.state != nil {
-		object.state = b.state
-	}
 	if b.description != nil {
 		object.description = b.description
+	}
+	if b.state != nil {
+		object.state = b.state
 	}
 	return
 }

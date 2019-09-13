@@ -26,8 +26,8 @@ import (
 // clusterRegistrationData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_registration'.
 type clusterRegistrationData struct {
-	SubscriptionID *string "json:\"subscription_id,omitempty\""
 	ExternalID     *string "json:\"external_id,omitempty\""
+	SubscriptionID *string "json:\"subscription_id,omitempty\""
 }
 
 // MarshalClusterRegistration writes a value of the 'cluster_registration' to the given target,
@@ -51,8 +51,8 @@ func (o *ClusterRegistration) wrap() (data *clusterRegistrationData, err error) 
 		return
 	}
 	data = new(clusterRegistrationData)
-	data.SubscriptionID = o.subscriptionID
 	data.ExternalID = o.externalID
+	data.SubscriptionID = o.subscriptionID
 	return
 }
 
@@ -79,7 +79,7 @@ func (d *clusterRegistrationData) unwrap() (object *ClusterRegistration, err err
 		return
 	}
 	object = new(ClusterRegistration)
-	object.subscriptionID = d.SubscriptionID
 	object.externalID = d.ExternalID
+	object.subscriptionID = d.SubscriptionID
 	return
 }

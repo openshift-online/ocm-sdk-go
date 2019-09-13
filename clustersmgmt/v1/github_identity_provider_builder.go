@@ -71,6 +71,23 @@ func (b *GithubIdentityProviderBuilder) Teams(values ...string) *GithubIdentityP
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *GithubIdentityProviderBuilder) Copy(object *GithubIdentityProvider) *GithubIdentityProviderBuilder {
+	if object == nil {
+		return b
+	}
+	b.ca = object.ca
+	b.clientID = object.clientID
+	b.hostname = object.hostname
+	if len(object.teams) > 0 {
+		b.teams = make([]string, len(object.teams))
+		copy(b.teams, object.teams)
+	} else {
+		b.teams = nil
+	}
+	return b
+}
+
 // Build creates a 'github_identity_provider' object using the configuration stored in the builder.
 func (b *GithubIdentityProviderBuilder) Build() (object *GithubIdentityProvider, err error) {
 	object = new(GithubIdentityProvider)

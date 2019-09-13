@@ -75,18 +75,6 @@ func (c *OrganizationClient) Update() *OrganizationUpdateRequest {
 	return request
 }
 
-// ResourceQuota returns the target 'resource_quotas' resource.
-//
-// Reference to the service that manages the resource quotas for this
-// organization.
-func (c *OrganizationClient) ResourceQuota() *ResourceQuotasClient {
-	return NewResourceQuotasClient(
-		c.transport,
-		path.Join(c.path, "resource_quota"),
-		path.Join(c.metric, "resource_quota"),
-	)
-}
-
 // QuotaSummary returns the target 'quota_summary' resource.
 //
 // Reference to the service that returns the summary of the resource quota for this
@@ -96,6 +84,18 @@ func (c *OrganizationClient) QuotaSummary() *QuotaSummaryClient {
 		c.transport,
 		path.Join(c.path, "quota_summary"),
 		path.Join(c.metric, "quota_summary"),
+	)
+}
+
+// ResourceQuota returns the target 'resource_quotas' resource.
+//
+// Reference to the service that manages the resource quotas for this
+// organization.
+func (c *OrganizationClient) ResourceQuota() *ResourceQuotasClient {
+	return NewResourceQuotasClient(
+		c.transport,
+		path.Join(c.path, "resource_quota"),
+		path.Join(c.metric, "resource_quota"),
 	)
 }
 

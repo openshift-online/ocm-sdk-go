@@ -33,98 +33,20 @@ import (
 // IdentityProvidersServer represents the interface the manages the 'identity_providers' resource.
 type IdentityProvidersServer interface {
 
-	// List handles a request for the 'list' method.
-	//
-	// Retrieves the list of identity providers.
-	List(ctx context.Context, request *IdentityProvidersListServerRequest, response *IdentityProvidersListServerResponse) error
-
 	// Add handles a request for the 'add' method.
 	//
 	// Adds a new identity provider to the cluster.
 	Add(ctx context.Context, request *IdentityProvidersAddServerRequest, response *IdentityProvidersAddServerResponse) error
 
+	// List handles a request for the 'list' method.
+	//
+	// Retrieves the list of identity providers.
+	List(ctx context.Context, request *IdentityProvidersListServerRequest, response *IdentityProvidersListServerResponse) error
+
 	// IdentityProvider returns the target 'identity_provider' server for the given identifier.
 	//
 	// Reference to the service that manages an specific identity provider.
 	IdentityProvider(id string) IdentityProviderServer
-}
-
-// IdentityProvidersListServerRequest is the request for the 'list' method.
-type IdentityProvidersListServerRequest struct {
-}
-
-// IdentityProvidersListServerResponse is the response for the 'list' method.
-type IdentityProvidersListServerResponse struct {
-	status int
-	err    *errors.Error
-	page   *int
-	size   *int
-	total  *int
-	items  *IdentityProviderList
-}
-
-// Page sets the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-func (r *IdentityProvidersListServerResponse) Page(value int) *IdentityProvidersListServerResponse {
-	r.page = &value
-	return r
-}
-
-// Size sets the value of the 'size' parameter.
-//
-// Number of items contained in the returned page.
-func (r *IdentityProvidersListServerResponse) Size(value int) *IdentityProvidersListServerResponse {
-	r.size = &value
-	return r
-}
-
-// Total sets the value of the 'total' parameter.
-//
-// Total number of items of the collection.
-func (r *IdentityProvidersListServerResponse) Total(value int) *IdentityProvidersListServerResponse {
-	r.total = &value
-	return r
-}
-
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of identity providers.
-func (r *IdentityProvidersListServerResponse) Items(value *IdentityProviderList) *IdentityProvidersListServerResponse {
-	r.items = value
-	return r
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *IdentityProvidersListServerResponse) SetStatusCode(status int) *IdentityProvidersListServerResponse {
-	r.status = status
-	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'list' method.
-func (r *IdentityProvidersListServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data := new(identityProvidersListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
-	data.Items, err = r.items.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
-}
-
-// identityProvidersListServerResponseData is the structure used internally to write the request of the
-// 'list' method.
-type identityProvidersListServerResponseData struct {
-	Page  *int                     "json:\"page,omitempty\""
-	Size  *int                     "json:\"size,omitempty\""
-	Total *int                     "json:\"total,omitempty\""
-	Items identityProviderListData "json:\"items,omitempty\""
 }
 
 // IdentityProvidersAddServerRequest is the request for the 'add' method.
@@ -205,6 +127,84 @@ func (r *IdentityProvidersAddServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
+// IdentityProvidersListServerRequest is the request for the 'list' method.
+type IdentityProvidersListServerRequest struct {
+}
+
+// IdentityProvidersListServerResponse is the response for the 'list' method.
+type IdentityProvidersListServerResponse struct {
+	status int
+	err    *errors.Error
+	items  *IdentityProviderList
+	page   *int
+	size   *int
+	total  *int
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of identity providers.
+func (r *IdentityProvidersListServerResponse) Items(value *IdentityProviderList) *IdentityProvidersListServerResponse {
+	r.items = value
+	return r
+}
+
+// Page sets the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+func (r *IdentityProvidersListServerResponse) Page(value int) *IdentityProvidersListServerResponse {
+	r.page = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Number of items contained in the returned page.
+func (r *IdentityProvidersListServerResponse) Size(value int) *IdentityProvidersListServerResponse {
+	r.size = &value
+	return r
+}
+
+// Total sets the value of the 'total' parameter.
+//
+// Total number of items of the collection.
+func (r *IdentityProvidersListServerResponse) Total(value int) *IdentityProvidersListServerResponse {
+	r.total = &value
+	return r
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *IdentityProvidersListServerResponse) SetStatusCode(status int) *IdentityProvidersListServerResponse {
+	r.status = status
+	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'list' method.
+func (r *IdentityProvidersListServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data := new(identityProvidersListServerResponseData)
+	data.Items, err = r.items.wrap()
+	if err != nil {
+		return err
+	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
+	err = encoder.Encode(data)
+	return err
+}
+
+// identityProvidersListServerResponseData is the structure used internally to write the request of the
+// 'list' method.
+type identityProvidersListServerResponseData struct {
+	Items identityProviderListData "json:\"items,omitempty\""
+	Page  *int                     "json:\"page,omitempty\""
+	Size  *int                     "json:\"size,omitempty\""
+	Total *int                     "json:\"total,omitempty\""
+}
+
 // IdentityProvidersServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type IdentityProvidersServerAdapter struct {
@@ -217,8 +217,8 @@ func NewIdentityProvidersServerAdapter(server IdentityProvidersServer, router *m
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.identityProviderHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *IdentityProvidersServerAdapter) identityProviderHandler(w http.ResponseWriter, r *http.Request) {
@@ -227,51 +227,6 @@ func (a *IdentityProvidersServerAdapter) identityProviderHandler(w http.Response
 	targetAdapter := NewIdentityProviderServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
-}
-func (a *IdentityProvidersServerAdapter) readIdentityProvidersListServerRequest(r *http.Request) (*IdentityProvidersListServerRequest, error) {
-	var err error
-	result := new(IdentityProvidersListServerRequest)
-	return result, err
-}
-func (a *IdentityProvidersServerAdapter) writeIdentityProvidersListServerResponse(w http.ResponseWriter, r *IdentityProvidersListServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-func (a *IdentityProvidersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readIdentityProvidersListServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(IdentityProvidersListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeIdentityProvidersListServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
 }
 func (a *IdentityProvidersServerAdapter) readIdentityProvidersAddServerRequest(r *http.Request) (*IdentityProvidersAddServerRequest, error) {
 	var err error
@@ -313,6 +268,51 @@ func (a *IdentityProvidersServerAdapter) addHandler(w http.ResponseWriter, r *ht
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeIdentityProvidersAddServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+}
+func (a *IdentityProvidersServerAdapter) readIdentityProvidersListServerRequest(r *http.Request) (*IdentityProvidersListServerRequest, error) {
+	var err error
+	result := new(IdentityProvidersListServerRequest)
+	return result, err
+}
+func (a *IdentityProvidersServerAdapter) writeIdentityProvidersListServerResponse(w http.ResponseWriter, r *IdentityProvidersListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (a *IdentityProvidersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readIdentityProvidersListServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(IdentityProvidersListServerResponse)
+	err = a.server.List(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeIdentityProvidersListServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

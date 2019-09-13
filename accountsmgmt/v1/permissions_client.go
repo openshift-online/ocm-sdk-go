@@ -53,22 +53,22 @@ func NewPermissionsClient(transport http.RoundTripper, path string, metric strin
 	return client
 }
 
-// List creates a request for the 'list' method.
+// Add creates a request for the 'add' method.
 //
-// Retrieves a list of permissions.
-func (c *PermissionsClient) List() *PermissionsListRequest {
-	request := new(PermissionsListRequest)
+// Creates a new permission.
+func (c *PermissionsClient) Add() *PermissionsAddRequest {
+	request := new(PermissionsAddRequest)
 	request.transport = c.transport
 	request.path = c.path
 	request.metric = c.metric
 	return request
 }
 
-// Add creates a request for the 'add' method.
+// List creates a request for the 'list' method.
 //
-// Creates a new permission.
-func (c *PermissionsClient) Add() *PermissionsAddRequest {
-	request := new(PermissionsAddRequest)
+// Retrieves a list of permissions.
+func (c *PermissionsClient) List() *PermissionsListRequest {
+	request := new(PermissionsListRequest)
 	request.transport = c.transport
 	request.path = c.path
 	request.metric = c.metric
@@ -84,268 +84,6 @@ func (c *PermissionsClient) Permission(id string) *PermissionClient {
 		path.Join(c.path, id),
 		path.Join(c.metric, "-"),
 	)
-}
-
-// PermissionsListRequest is the request for the 'list' method.
-type PermissionsListRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-	page      *int
-	size      *int
-	total     *int
-}
-
-// Parameter adds a query parameter.
-func (r *PermissionsListRequest) Parameter(name string, value interface{}) *PermissionsListRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *PermissionsListRequest) Header(name string, value interface{}) *PermissionsListRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Page sets the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
-func (r *PermissionsListRequest) Page(value int) *PermissionsListRequest {
-	r.page = &value
-	return r
-}
-
-// Size sets the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *PermissionsListRequest) Size(value int) *PermissionsListRequest {
-	r.size = &value
-	return r
-}
-
-// Total sets the value of the 'total' parameter.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *PermissionsListRequest) Total(value int) *PermissionsListRequest {
-	r.total = &value
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PermissionsListRequest) Send() (result *PermissionsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PermissionsListRequest) SendContext(ctx context.Context) (result *PermissionsListResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	if r.page != nil {
-		helpers.AddValue(&query, "page", *r.page)
-	}
-	if r.size != nil {
-		helpers.AddValue(&query, "size", *r.size)
-	}
-	if r.total != nil {
-		helpers.AddValue(&query, "total", *r.total)
-	}
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: http.MethodGet,
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = new(PermissionsListResponse)
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	err = result.unmarshal(response.Body)
-	if err != nil {
-		return
-	}
-	return
-}
-
-// PermissionsListResponse is the response for the 'list' method.
-type PermissionsListResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-	page   *int
-	size   *int
-	total  *int
-	items  *PermissionList
-}
-
-// Status returns the response status code.
-func (r *PermissionsListResponse) Status() int {
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *PermissionsListResponse) Header() http.Header {
-	return r.header
-}
-
-// Error returns the response error.
-func (r *PermissionsListResponse) Error() *errors.Error {
-	return r.err
-}
-
-// Page returns the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
-func (r *PermissionsListResponse) Page() int {
-	if r != nil && r.page != nil {
-		return *r.page
-	}
-	return 0
-}
-
-// GetPage returns the value of the 'page' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
-func (r *PermissionsListResponse) GetPage() (value int, ok bool) {
-	ok = r != nil && r.page != nil
-	if ok {
-		value = *r.page
-	}
-	return
-}
-
-// Size returns the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *PermissionsListResponse) Size() int {
-	if r != nil && r.size != nil {
-		return *r.size
-	}
-	return 0
-}
-
-// GetSize returns the value of the 'size' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *PermissionsListResponse) GetSize() (value int, ok bool) {
-	ok = r != nil && r.size != nil
-	if ok {
-		value = *r.size
-	}
-	return
-}
-
-// Total returns the value of the 'total' parameter.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *PermissionsListResponse) Total() int {
-	if r != nil && r.total != nil {
-		return *r.total
-	}
-	return 0
-}
-
-// GetTotal returns the value of the 'total' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *PermissionsListResponse) GetTotal() (value int, ok bool) {
-	ok = r != nil && r.total != nil
-	if ok {
-		value = *r.total
-	}
-	return
-}
-
-// Items returns the value of the 'items' parameter.
-//
-// Retrieved list of permissions.
-func (r *PermissionsListResponse) Items() *PermissionList {
-	if r == nil {
-		return nil
-	}
-	return r.items
-}
-
-// GetItems returns the value of the 'items' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Retrieved list of permissions.
-func (r *PermissionsListResponse) GetItems() (value *PermissionList, ok bool) {
-	ok = r != nil && r.items != nil
-	if ok {
-		value = r.items
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'list' method.
-func (r *PermissionsListResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(permissionsListResponseData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.page = data.Page
-	r.size = data.Size
-	r.total = data.Total
-	r.items, err = data.Items.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-// permissionsListResponseData is the structure used internally to unmarshal
-// the response of the 'list' method.
-type permissionsListResponseData struct {
-	Page  *int               "json:\"page,omitempty\""
-	Size  *int               "json:\"size,omitempty\""
-	Total *int               "json:\"total,omitempty\""
-	Items permissionListData "json:\"items,omitempty\""
 }
 
 // PermissionsAddRequest is the request for the 'add' method.
@@ -504,4 +242,266 @@ func (r *PermissionsAddResponse) unmarshal(reader io.Reader) error {
 		return err
 	}
 	return err
+}
+
+// PermissionsListRequest is the request for the 'list' method.
+type PermissionsListRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+	page      *int
+	size      *int
+	total     *int
+}
+
+// Parameter adds a query parameter.
+func (r *PermissionsListRequest) Parameter(name string, value interface{}) *PermissionsListRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *PermissionsListRequest) Header(name string, value interface{}) *PermissionsListRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Page sets the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *PermissionsListRequest) Page(value int) *PermissionsListRequest {
+	r.page = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *PermissionsListRequest) Size(value int) *PermissionsListRequest {
+	r.size = &value
+	return r
+}
+
+// Total sets the value of the 'total' parameter.
+//
+// Total number of items of the collection that match the search criteria,
+// regardless of the size of the page.
+func (r *PermissionsListRequest) Total(value int) *PermissionsListRequest {
+	r.total = &value
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *PermissionsListRequest) Send() (result *PermissionsListResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *PermissionsListRequest) SendContext(ctx context.Context) (result *PermissionsListResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	if r.page != nil {
+		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.size != nil {
+		helpers.AddValue(&query, "size", *r.size)
+	}
+	if r.total != nil {
+		helpers.AddValue(&query, "total", *r.total)
+	}
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: http.MethodGet,
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = new(PermissionsListResponse)
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	err = result.unmarshal(response.Body)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// PermissionsListResponse is the response for the 'list' method.
+type PermissionsListResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+	items  *PermissionList
+	page   *int
+	size   *int
+	total  *int
+}
+
+// Status returns the response status code.
+func (r *PermissionsListResponse) Status() int {
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *PermissionsListResponse) Header() http.Header {
+	return r.header
+}
+
+// Error returns the response error.
+func (r *PermissionsListResponse) Error() *errors.Error {
+	return r.err
+}
+
+// Items returns the value of the 'items' parameter.
+//
+// Retrieved list of permissions.
+func (r *PermissionsListResponse) Items() *PermissionList {
+	if r == nil {
+		return nil
+	}
+	return r.items
+}
+
+// GetItems returns the value of the 'items' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Retrieved list of permissions.
+func (r *PermissionsListResponse) GetItems() (value *PermissionList, ok bool) {
+	ok = r != nil && r.items != nil
+	if ok {
+		value = r.items
+	}
+	return
+}
+
+// Page returns the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *PermissionsListResponse) Page() int {
+	if r != nil && r.page != nil {
+		return *r.page
+	}
+	return 0
+}
+
+// GetPage returns the value of the 'page' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *PermissionsListResponse) GetPage() (value int, ok bool) {
+	ok = r != nil && r.page != nil
+	if ok {
+		value = *r.page
+	}
+	return
+}
+
+// Size returns the value of the 'size' parameter.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *PermissionsListResponse) Size() int {
+	if r != nil && r.size != nil {
+		return *r.size
+	}
+	return 0
+}
+
+// GetSize returns the value of the 'size' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *PermissionsListResponse) GetSize() (value int, ok bool) {
+	ok = r != nil && r.size != nil
+	if ok {
+		value = *r.size
+	}
+	return
+}
+
+// Total returns the value of the 'total' parameter.
+//
+// Total number of items of the collection that match the search criteria,
+// regardless of the size of the page.
+func (r *PermissionsListResponse) Total() int {
+	if r != nil && r.total != nil {
+		return *r.total
+	}
+	return 0
+}
+
+// GetTotal returns the value of the 'total' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Total number of items of the collection that match the search criteria,
+// regardless of the size of the page.
+func (r *PermissionsListResponse) GetTotal() (value int, ok bool) {
+	ok = r != nil && r.total != nil
+	if ok {
+		value = *r.total
+	}
+	return
+}
+
+// unmarshal is the method used internally to unmarshal responses to the
+// 'list' method.
+func (r *PermissionsListResponse) unmarshal(reader io.Reader) error {
+	var err error
+	decoder := json.NewDecoder(reader)
+	data := new(permissionsListResponseData)
+	err = decoder.Decode(data)
+	if err != nil {
+		return err
+	}
+	r.items, err = data.Items.unwrap()
+	if err != nil {
+		return err
+	}
+	r.page = data.Page
+	r.size = data.Size
+	r.total = data.Total
+	return err
+}
+
+// permissionsListResponseData is the structure used internally to unmarshal
+// the response of the 'list' method.
+type permissionsListResponseData struct {
+	Items permissionListData "json:\"items,omitempty\""
+	Page  *int               "json:\"page,omitempty\""
+	Size  *int               "json:\"size,omitempty\""
+	Total *int               "json:\"total,omitempty\""
 }

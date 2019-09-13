@@ -23,63 +23,40 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Counts of different classes of nodes inside a cluster.
 type ClusterNodes struct {
-	total   *int
-	master  *int
-	infra   *int
 	compute *int
+	infra   *int
+	master  *int
+	total   *int
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterNodes) Empty() bool {
-	return o == nil || (o.total == nil &&
-		o.master == nil &&
+	return o == nil || (o.compute == nil &&
 		o.infra == nil &&
-		o.compute == nil &&
+		o.master == nil &&
+		o.total == nil &&
 		true)
 }
 
-// Total returns the value of the 'total' attribute, or
+// Compute returns the value of the 'compute' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Total number of nodes of the cluster.
-func (o *ClusterNodes) Total() int {
-	if o != nil && o.total != nil {
-		return *o.total
+// Number of compute nodes of the cluster.
+func (o *ClusterNodes) Compute() int {
+	if o != nil && o.compute != nil {
+		return *o.compute
 	}
 	return 0
 }
 
-// GetTotal returns the value of the 'total' attribute and
+// GetCompute returns the value of the 'compute' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Total number of nodes of the cluster.
-func (o *ClusterNodes) GetTotal() (value int, ok bool) {
-	ok = o != nil && o.total != nil
+// Number of compute nodes of the cluster.
+func (o *ClusterNodes) GetCompute() (value int, ok bool) {
+	ok = o != nil && o.compute != nil
 	if ok {
-		value = *o.total
-	}
-	return
-}
-
-// Master returns the value of the 'master' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Number of master nodes of the cluster.
-func (o *ClusterNodes) Master() int {
-	if o != nil && o.master != nil {
-		return *o.master
-	}
-	return 0
-}
-
-// GetMaster returns the value of the 'master' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Number of master nodes of the cluster.
-func (o *ClusterNodes) GetMaster() (value int, ok bool) {
-	ok = o != nil && o.master != nil
-	if ok {
-		value = *o.master
+		value = *o.compute
 	}
 	return
 }
@@ -107,25 +84,48 @@ func (o *ClusterNodes) GetInfra() (value int, ok bool) {
 	return
 }
 
-// Compute returns the value of the 'compute' attribute, or
+// Master returns the value of the 'master' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Number of compute nodes of the cluster.
-func (o *ClusterNodes) Compute() int {
-	if o != nil && o.compute != nil {
-		return *o.compute
+// Number of master nodes of the cluster.
+func (o *ClusterNodes) Master() int {
+	if o != nil && o.master != nil {
+		return *o.master
 	}
 	return 0
 }
 
-// GetCompute returns the value of the 'compute' attribute and
+// GetMaster returns the value of the 'master' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Number of compute nodes of the cluster.
-func (o *ClusterNodes) GetCompute() (value int, ok bool) {
-	ok = o != nil && o.compute != nil
+// Number of master nodes of the cluster.
+func (o *ClusterNodes) GetMaster() (value int, ok bool) {
+	ok = o != nil && o.master != nil
 	if ok {
-		value = *o.compute
+		value = *o.master
+	}
+	return
+}
+
+// Total returns the value of the 'total' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Total number of nodes of the cluster.
+func (o *ClusterNodes) Total() int {
+	if o != nil && o.total != nil {
+		return *o.total
+	}
+	return 0
+}
+
+// GetTotal returns the value of the 'total' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Total number of nodes of the cluster.
+func (o *ClusterNodes) GetTotal() (value int, ok bool) {
+	ok = o != nil && o.total != nil
+	if ok {
+		value = *o.total
 	}
 	return
 }

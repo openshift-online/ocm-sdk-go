@@ -61,6 +61,28 @@ func (b *ClusterAuthorizationResponseBuilder) Subscription(value *SubscriptionBu
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterAuthorizationResponseBuilder) Copy(object *ClusterAuthorizationResponse) *ClusterAuthorizationResponseBuilder {
+	if object == nil {
+		return b
+	}
+	b.allowed = object.allowed
+	if object.excessResources != nil && len(object.excessResources.items) > 0 {
+		b.excessResources = make([]*ReservedResourceBuilder, len(object.excessResources.items))
+		for i, item := range object.excessResources.items {
+			b.excessResources[i] = NewReservedResource().Copy(item)
+		}
+	} else {
+		b.excessResources = nil
+	}
+	if object.subscription != nil {
+		b.subscription = NewSubscription().Copy(object.subscription)
+	} else {
+		b.subscription = nil
+	}
+	return b
+}
+
 // Build creates a 'cluster_authorization_response' object using the configuration stored in the builder.
 func (b *ClusterAuthorizationResponseBuilder) Build() (object *ClusterAuthorizationResponse, err error) {
 	object = new(ClusterAuthorizationResponse)

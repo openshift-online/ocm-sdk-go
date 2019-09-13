@@ -51,6 +51,17 @@ func (b *PlanBuilder) Link(value bool) *PlanBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *PlanBuilder) Copy(object *Plan) *PlanBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	return b
+}
+
 // Build creates a 'plan' object using the configuration stored in the builder.
 func (b *PlanBuilder) Build() (object *Plan, err error) {
 	object = new(Plan)

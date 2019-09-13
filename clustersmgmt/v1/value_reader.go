@@ -26,8 +26,8 @@ import (
 // valueData is the data structure used internally to marshal and unmarshal
 // objects of type 'value'.
 type valueData struct {
-	Value *float64 "json:\"value,omitempty\""
 	Unit  *string  "json:\"unit,omitempty\""
+	Value *float64 "json:\"value,omitempty\""
 }
 
 // MarshalValue writes a value of the 'value' to the given target,
@@ -51,8 +51,8 @@ func (o *Value) wrap() (data *valueData, err error) {
 		return
 	}
 	data = new(valueData)
-	data.Value = o.value
 	data.Unit = o.unit
+	data.Value = o.value
 	return
 }
 
@@ -79,7 +79,7 @@ func (d *valueData) unwrap() (object *Value, err error) {
 		return
 	}
 	object = new(Value)
-	object.value = d.Value
 	object.unit = d.Unit
+	object.value = d.Value
 	return
 }

@@ -38,11 +38,11 @@ type RoleBinding struct {
 	id           *string
 	href         *string
 	link         bool
-	type_        *string
-	subscription *Subscription
 	account      *Account
 	organization *Organization
 	role         *Role
+	subscription *Subscription
+	type_        *string
 }
 
 // Kind returns the name of the type of the object.
@@ -100,58 +100,12 @@ func (o *RoleBinding) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *RoleBinding) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.type_ == nil &&
-		o.subscription == nil &&
 		o.account == nil &&
 		o.organization == nil &&
 		o.role == nil &&
+		o.subscription == nil &&
+		o.type_ == nil &&
 		true)
-}
-
-// Type returns the value of the 'type' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *RoleBinding) Type() string {
-	if o != nil && o.type_ != nil {
-		return *o.type_
-	}
-	return ""
-}
-
-// GetType returns the value of the 'type' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *RoleBinding) GetType() (value string, ok bool) {
-	ok = o != nil && o.type_ != nil
-	if ok {
-		value = *o.type_
-	}
-	return
-}
-
-// Subscription returns the value of the 'subscription' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *RoleBinding) Subscription() *Subscription {
-	if o == nil {
-		return nil
-	}
-	return o.subscription
-}
-
-// GetSubscription returns the value of the 'subscription' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *RoleBinding) GetSubscription() (value *Subscription, ok bool) {
-	ok = o != nil && o.subscription != nil
-	if ok {
-		value = o.subscription
-	}
-	return
 }
 
 // Account returns the value of the 'account' attribute, or
@@ -219,6 +173,52 @@ func (o *RoleBinding) GetRole() (value *Role, ok bool) {
 	ok = o != nil && o.role != nil
 	if ok {
 		value = o.role
+	}
+	return
+}
+
+// Subscription returns the value of the 'subscription' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RoleBinding) Subscription() *Subscription {
+	if o == nil {
+		return nil
+	}
+	return o.subscription
+}
+
+// GetSubscription returns the value of the 'subscription' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RoleBinding) GetSubscription() (value *Subscription, ok bool) {
+	ok = o != nil && o.subscription != nil
+	if ok {
+		value = o.subscription
+	}
+	return
+}
+
+// Type returns the value of the 'type' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RoleBinding) Type() string {
+	if o != nil && o.type_ != nil {
+		return *o.type_
+	}
+	return ""
+}
+
+// GetType returns the value of the 'type' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RoleBinding) GetType() (value string, ok bool) {
+	ok = o != nil && o.type_ != nil
+	if ok {
+		value = *o.type_
 	}
 	return
 }

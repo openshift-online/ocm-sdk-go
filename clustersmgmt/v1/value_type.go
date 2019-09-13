@@ -40,38 +40,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // - 1 TiB = 2^40 bytes
 // - 1 PiB = 2^50 bytes
 type Value struct {
-	value *float64
 	unit  *string
+	value *float64
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Value) Empty() bool {
-	return o == nil || (o.value == nil &&
-		o.unit == nil &&
+	return o == nil || (o.unit == nil &&
+		o.value == nil &&
 		true)
-}
-
-// Value returns the value of the 'value' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Numeric value.
-func (o *Value) Value() float64 {
-	if o != nil && o.value != nil {
-		return *o.value
-	}
-	return 0.0
-}
-
-// GetValue returns the value of the 'value' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Numeric value.
-func (o *Value) GetValue() (value float64, ok bool) {
-	ok = o != nil && o.value != nil
-	if ok {
-		value = *o.value
-	}
-	return
 }
 
 // Unit returns the value of the 'unit' attribute, or
@@ -93,6 +70,29 @@ func (o *Value) GetUnit() (value string, ok bool) {
 	ok = o != nil && o.unit != nil
 	if ok {
 		value = *o.unit
+	}
+	return
+}
+
+// Value returns the value of the 'value' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Numeric value.
+func (o *Value) Value() float64 {
+	if o != nil && o.value != nil {
+		return *o.value
+	}
+	return 0.0
+}
+
+// GetValue returns the value of the 'value' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Numeric value.
+func (o *Value) GetValue() (value float64, ok bool) {
+	ok = o != nil && o.value != nil
+	if ok {
+		value = *o.value
 	}
 	return
 }

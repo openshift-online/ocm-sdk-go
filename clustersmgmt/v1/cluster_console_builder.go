@@ -40,6 +40,15 @@ func (b *ClusterConsoleBuilder) URL(value string) *ClusterConsoleBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterConsoleBuilder) Copy(object *ClusterConsole) *ClusterConsoleBuilder {
+	if object == nil {
+		return b
+	}
+	b.url = object.url
+	return b
+}
+
 // Build creates a 'cluster_console' object using the configuration stored in the builder.
 func (b *ClusterConsoleBuilder) Build() (object *ClusterConsole, err error) {
 	object = new(ClusterConsole)

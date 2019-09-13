@@ -23,40 +23,17 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Network configuration of a cluster.
 type Network struct {
-	podCIDR     *string
 	machineCIDR *string
+	podCIDR     *string
 	serviceCIDR *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Network) Empty() bool {
-	return o == nil || (o.podCIDR == nil &&
-		o.machineCIDR == nil &&
+	return o == nil || (o.machineCIDR == nil &&
+		o.podCIDR == nil &&
 		o.serviceCIDR == nil &&
 		true)
-}
-
-// PodCIDR returns the value of the 'pod_CIDR' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.
-func (o *Network) PodCIDR() string {
-	if o != nil && o.podCIDR != nil {
-		return *o.podCIDR
-	}
-	return ""
-}
-
-// GetPodCIDR returns the value of the 'pod_CIDR' attribute and
-// a flag indicating if the attribute has a value.
-//
-// IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.
-func (o *Network) GetPodCIDR() (value string, ok bool) {
-	ok = o != nil && o.podCIDR != nil
-	if ok {
-		value = *o.podCIDR
-	}
-	return
 }
 
 // MachineCIDR returns the value of the 'machine_CIDR' attribute, or
@@ -78,6 +55,29 @@ func (o *Network) GetMachineCIDR() (value string, ok bool) {
 	ok = o != nil && o.machineCIDR != nil
 	if ok {
 		value = *o.machineCIDR
+	}
+	return
+}
+
+// PodCIDR returns the value of the 'pod_CIDR' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.
+func (o *Network) PodCIDR() string {
+	if o != nil && o.podCIDR != nil {
+		return *o.podCIDR
+	}
+	return ""
+}
+
+// GetPodCIDR returns the value of the 'pod_CIDR' attribute and
+// a flag indicating if the attribute has a value.
+//
+// IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.
+func (o *Network) GetPodCIDR() (value string, ok bool) {
+	ok = o != nil && o.podCIDR != nil
+	if ok {
+		value = *o.podCIDR
 	}
 	return
 }

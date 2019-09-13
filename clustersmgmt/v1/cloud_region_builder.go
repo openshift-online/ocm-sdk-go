@@ -26,9 +26,9 @@ type CloudRegionBuilder struct {
 	id            *string
 	href          *string
 	link          bool
-	name          *string
-	displayName   *string
 	cloudProvider *CloudProviderBuilder
+	displayName   *string
+	name          *string
 }
 
 // NewCloudRegion creates a new builder of 'cloud_region' objects.
@@ -54,12 +54,12 @@ func (b *CloudRegionBuilder) Link(value bool) *CloudRegionBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
+// CloudProvider sets the value of the 'cloud_provider' attribute
 // to the given value.
 //
-//
-func (b *CloudRegionBuilder) Name(value string) *CloudRegionBuilder {
-	b.name = &value
+// Cloud provider.
+func (b *CloudRegionBuilder) CloudProvider(value *CloudProviderBuilder) *CloudRegionBuilder {
+	b.cloudProvider = value
 	return b
 }
 
@@ -72,12 +72,30 @@ func (b *CloudRegionBuilder) DisplayName(value string) *CloudRegionBuilder {
 	return b
 }
 
-// CloudProvider sets the value of the 'cloud_provider' attribute
+// Name sets the value of the 'name' attribute
 // to the given value.
 //
-// Cloud provider.
-func (b *CloudRegionBuilder) CloudProvider(value *CloudProviderBuilder) *CloudRegionBuilder {
-	b.cloudProvider = value
+//
+func (b *CloudRegionBuilder) Name(value string) *CloudRegionBuilder {
+	b.name = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *CloudRegionBuilder) Copy(object *CloudRegion) *CloudRegionBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	if object.cloudProvider != nil {
+		b.cloudProvider = NewCloudProvider().Copy(object.cloudProvider)
+	} else {
+		b.cloudProvider = nil
+	}
+	b.displayName = object.displayName
+	b.name = object.name
 	return b
 }
 
@@ -87,17 +105,17 @@ func (b *CloudRegionBuilder) Build() (object *CloudRegion, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.name != nil {
-		object.name = b.name
-	}
-	if b.displayName != nil {
-		object.displayName = b.displayName
-	}
 	if b.cloudProvider != nil {
 		object.cloudProvider, err = b.cloudProvider.Build()
 		if err != nil {
 			return
 		}
+	}
+	if b.displayName != nil {
+		object.displayName = b.displayName
+	}
+	if b.name != nil {
+		object.name = b.name
 	}
 	return
 }

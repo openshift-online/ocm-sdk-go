@@ -26,8 +26,8 @@ import (
 // ldapAttributesData is the data structure used internally to marshal and unmarshal
 // objects of type 'LDAP_attributes'.
 type ldapAttributesData struct {
-	Email             []string "json:\"email,omitempty\""
 	ID                []string "json:\"id,omitempty\""
+	Email             []string "json:\"email,omitempty\""
 	Name              []string "json:\"name,omitempty\""
 	PreferredUsername []string "json:\"preferred_username,omitempty\""
 }
@@ -53,8 +53,8 @@ func (o *LDAPAttributes) wrap() (data *ldapAttributesData, err error) {
 		return
 	}
 	data = new(ldapAttributesData)
-	data.Email = o.email
 	data.ID = o.id
+	data.Email = o.email
 	data.Name = o.name
 	data.PreferredUsername = o.preferredUsername
 	return
@@ -83,8 +83,8 @@ func (d *ldapAttributesData) unwrap() (object *LDAPAttributes, err error) {
 		return
 	}
 	object = new(LDAPAttributes)
-	object.email = d.Email
 	object.id = d.ID
+	object.email = d.Email
 	object.name = d.Name
 	object.preferredUsername = d.PreferredUsername
 	return

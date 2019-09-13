@@ -51,6 +51,23 @@ func (b *MetricBuilder) Vector(values ...*SampleBuilder) *MetricBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *MetricBuilder) Copy(object *Metric) *MetricBuilder {
+	if object == nil {
+		return b
+	}
+	b.name = object.name
+	if object.vector != nil && len(object.vector.items) > 0 {
+		b.vector = make([]*SampleBuilder, len(object.vector.items))
+		for i, item := range object.vector.items {
+			b.vector[i] = NewSample().Copy(item)
+		}
+	} else {
+		b.vector = nil
+	}
+	return b
+}
+
 // Build creates a 'metric' object using the configuration stored in the builder.
 func (b *MetricBuilder) Build() (object *Metric, err error) {
 	object = new(Metric)

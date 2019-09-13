@@ -27,9 +27,9 @@ import (
 // objects of type 'gitlab_identity_provider'.
 type gitlabIdentityProviderData struct {
 	CA           *string "json:\"ca,omitempty\""
+	URL          *string "json:\"url,omitempty\""
 	ClientID     *string "json:\"client_id,omitempty\""
 	ClientSecret *string "json:\"client_secret,omitempty\""
-	URL          *string "json:\"url,omitempty\""
 }
 
 // MarshalGitlabIdentityProvider writes a value of the 'gitlab_identity_provider' to the given target,
@@ -54,9 +54,9 @@ func (o *GitlabIdentityProvider) wrap() (data *gitlabIdentityProviderData, err e
 	}
 	data = new(gitlabIdentityProviderData)
 	data.CA = o.ca
+	data.URL = o.url
 	data.ClientID = o.clientID
 	data.ClientSecret = o.clientSecret
-	data.URL = o.url
 	return
 }
 
@@ -84,8 +84,8 @@ func (d *gitlabIdentityProviderData) unwrap() (object *GitlabIdentityProvider, e
 	}
 	object = new(GitlabIdentityProvider)
 	object.ca = d.CA
+	object.url = d.URL
 	object.clientID = d.ClientID
 	object.clientSecret = d.ClientSecret
-	object.url = d.URL
 	return
 }

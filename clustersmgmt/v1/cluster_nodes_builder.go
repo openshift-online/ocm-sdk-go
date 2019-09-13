@@ -23,10 +23,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Counts of different classes of nodes inside a cluster.
 type ClusterNodesBuilder struct {
-	total   *int
-	master  *int
-	infra   *int
 	compute *int
+	infra   *int
+	master  *int
+	total   *int
 }
 
 // NewClusterNodes creates a new builder of 'cluster_nodes' objects.
@@ -34,21 +34,12 @@ func NewClusterNodes() *ClusterNodesBuilder {
 	return new(ClusterNodesBuilder)
 }
 
-// Total sets the value of the 'total' attribute
+// Compute sets the value of the 'compute' attribute
 // to the given value.
 //
 //
-func (b *ClusterNodesBuilder) Total(value int) *ClusterNodesBuilder {
-	b.total = &value
-	return b
-}
-
-// Master sets the value of the 'master' attribute
-// to the given value.
-//
-//
-func (b *ClusterNodesBuilder) Master(value int) *ClusterNodesBuilder {
-	b.master = &value
+func (b *ClusterNodesBuilder) Compute(value int) *ClusterNodesBuilder {
+	b.compute = &value
 	return b
 }
 
@@ -61,29 +52,50 @@ func (b *ClusterNodesBuilder) Infra(value int) *ClusterNodesBuilder {
 	return b
 }
 
-// Compute sets the value of the 'compute' attribute
+// Master sets the value of the 'master' attribute
 // to the given value.
 //
 //
-func (b *ClusterNodesBuilder) Compute(value int) *ClusterNodesBuilder {
-	b.compute = &value
+func (b *ClusterNodesBuilder) Master(value int) *ClusterNodesBuilder {
+	b.master = &value
+	return b
+}
+
+// Total sets the value of the 'total' attribute
+// to the given value.
+//
+//
+func (b *ClusterNodesBuilder) Total(value int) *ClusterNodesBuilder {
+	b.total = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterNodesBuilder) Copy(object *ClusterNodes) *ClusterNodesBuilder {
+	if object == nil {
+		return b
+	}
+	b.compute = object.compute
+	b.infra = object.infra
+	b.master = object.master
+	b.total = object.total
 	return b
 }
 
 // Build creates a 'cluster_nodes' object using the configuration stored in the builder.
 func (b *ClusterNodesBuilder) Build() (object *ClusterNodes, err error) {
 	object = new(ClusterNodes)
-	if b.total != nil {
-		object.total = b.total
-	}
-	if b.master != nil {
-		object.master = b.master
+	if b.compute != nil {
+		object.compute = b.compute
 	}
 	if b.infra != nil {
 		object.infra = b.infra
 	}
-	if b.compute != nil {
-		object.compute = b.compute
+	if b.master != nil {
+		object.master = b.master
+	}
+	if b.total != nil {
+		object.total = b.total
 	}
 	return
 }

@@ -34,20 +34,98 @@ import (
 // PermissionsServer represents the interface the manages the 'permissions' resource.
 type PermissionsServer interface {
 
-	// List handles a request for the 'list' method.
-	//
-	// Retrieves a list of permissions.
-	List(ctx context.Context, request *PermissionsListServerRequest, response *PermissionsListServerResponse) error
-
 	// Add handles a request for the 'add' method.
 	//
 	// Creates a new permission.
 	Add(ctx context.Context, request *PermissionsAddServerRequest, response *PermissionsAddServerResponse) error
 
+	// List handles a request for the 'list' method.
+	//
+	// Retrieves a list of permissions.
+	List(ctx context.Context, request *PermissionsListServerRequest, response *PermissionsListServerResponse) error
+
 	// Permission returns the target 'permission' server for the given identifier.
 	//
 	// Reference to the service that manages an specific permission.
 	Permission(id string) PermissionServer
+}
+
+// PermissionsAddServerRequest is the request for the 'add' method.
+type PermissionsAddServerRequest struct {
+	body *Permission
+}
+
+// Body returns the value of the 'body' parameter.
+//
+// Permission data.
+func (r *PermissionsAddServerRequest) Body() *Permission {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Permission data.
+func (r *PermissionsAddServerRequest) GetBody() (value *Permission, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// unmarshal is the method used internally to unmarshal request to the
+// 'add' method.
+func (r *PermissionsAddServerRequest) unmarshal(reader io.Reader) error {
+	var err error
+	decoder := json.NewDecoder(reader)
+	data := new(permissionData)
+	err = decoder.Decode(data)
+	if err != nil {
+		return err
+	}
+	r.body, err = data.unwrap()
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+// PermissionsAddServerResponse is the response for the 'add' method.
+type PermissionsAddServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *Permission
+}
+
+// Body sets the value of the 'body' parameter.
+//
+// Permission data.
+func (r *PermissionsAddServerResponse) Body(value *Permission) *PermissionsAddServerResponse {
+	r.body = value
+	return r
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *PermissionsAddServerResponse) SetStatusCode(status int) *PermissionsAddServerResponse {
+	r.status = status
+	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'add' method.
+func (r *PermissionsAddServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data, err := r.body.wrap()
+	if err != nil {
+		return err
+	}
+	err = encoder.Encode(data)
+	return err
 }
 
 // PermissionsListServerRequest is the request for the 'list' method.
@@ -137,10 +215,18 @@ func (r *PermissionsListServerRequest) GetTotal() (value int, ok bool) {
 type PermissionsListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *PermissionList
 	page   *int
 	size   *int
 	total  *int
-	items  *PermissionList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of permissions.
+func (r *PermissionsListServerResponse) Items(value *PermissionList) *PermissionsListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -172,14 +258,6 @@ func (r *PermissionsListServerResponse) Total(value int) *PermissionsListServerR
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of permissions.
-func (r *PermissionsListServerResponse) Items(value *PermissionList) *PermissionsListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *PermissionsListServerResponse) SetStatusCode(status int) *PermissionsListServerResponse {
 	r.status = status
@@ -192,13 +270,13 @@ func (r *PermissionsListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(permissionsListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -206,88 +284,10 @@ func (r *PermissionsListServerResponse) marshal(writer io.Writer) error {
 // permissionsListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type permissionsListServerResponseData struct {
+	Items permissionListData "json:\"items,omitempty\""
 	Page  *int               "json:\"page,omitempty\""
 	Size  *int               "json:\"size,omitempty\""
 	Total *int               "json:\"total,omitempty\""
-	Items permissionListData "json:\"items,omitempty\""
-}
-
-// PermissionsAddServerRequest is the request for the 'add' method.
-type PermissionsAddServerRequest struct {
-	body *Permission
-}
-
-// Body returns the value of the 'body' parameter.
-//
-// Permission data.
-func (r *PermissionsAddServerRequest) Body() *Permission {
-	if r == nil {
-		return nil
-	}
-	return r.body
-}
-
-// GetBody returns the value of the 'body' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Permission data.
-func (r *PermissionsAddServerRequest) GetBody() (value *Permission, ok bool) {
-	ok = r != nil && r.body != nil
-	if ok {
-		value = r.body
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal request to the
-// 'add' method.
-func (r *PermissionsAddServerRequest) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(permissionData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-// PermissionsAddServerResponse is the response for the 'add' method.
-type PermissionsAddServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *Permission
-}
-
-// Body sets the value of the 'body' parameter.
-//
-// Permission data.
-func (r *PermissionsAddServerResponse) Body(value *Permission) *PermissionsAddServerResponse {
-	r.body = value
-	return r
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *PermissionsAddServerResponse) SetStatusCode(status int) *PermissionsAddServerResponse {
-	r.status = status
-	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'add' method.
-func (r *PermissionsAddServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // PermissionsServerAdapter represents the structs that adapts Requests and Response to internal
@@ -302,8 +302,8 @@ func NewPermissionsServerAdapter(server PermissionsServer, router *mux.Router) *
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.permissionHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *PermissionsServerAdapter) permissionHandler(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +312,55 @@ func (a *PermissionsServerAdapter) permissionHandler(w http.ResponseWriter, r *h
 	targetAdapter := NewPermissionServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
+}
+func (a *PermissionsServerAdapter) readPermissionsAddServerRequest(r *http.Request) (*PermissionsAddServerRequest, error) {
+	var err error
+	result := new(PermissionsAddServerRequest)
+	err = result.unmarshal(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	return result, err
+}
+func (a *PermissionsServerAdapter) writePermissionsAddServerResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (a *PermissionsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readPermissionsAddServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(PermissionsAddServerResponse)
+	err = a.server.Add(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writePermissionsAddServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *PermissionsServerAdapter) readPermissionsListServerRequest(r *http.Request) (*PermissionsListServerRequest, error) {
 	var err error
@@ -362,55 +411,6 @@ func (a *PermissionsServerAdapter) listHandler(w http.ResponseWriter, r *http.Re
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writePermissionsListServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *PermissionsServerAdapter) readPermissionsAddServerRequest(r *http.Request) (*PermissionsAddServerRequest, error) {
-	var err error
-	result := new(PermissionsAddServerRequest)
-	err = result.unmarshal(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
-}
-func (a *PermissionsServerAdapter) writePermissionsAddServerResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-func (a *PermissionsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readPermissionsAddServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(PermissionsAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writePermissionsAddServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

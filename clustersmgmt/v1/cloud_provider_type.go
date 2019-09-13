@@ -38,8 +38,8 @@ type CloudProvider struct {
 	id          *string
 	href        *string
 	link        bool
-	name        *string
 	displayName *string
+	name        *string
 }
 
 // Kind returns the name of the type of the object.
@@ -97,32 +97,9 @@ func (o *CloudProvider) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CloudProvider) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.name == nil &&
 		o.displayName == nil &&
+		o.name == nil &&
 		true)
-}
-
-// Name returns the value of the 'name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Human friendly identifier of the cloud provider, for example `aws`.
-func (o *CloudProvider) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
-	}
-	return ""
-}
-
-// GetName returns the value of the 'name' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Human friendly identifier of the cloud provider, for example `aws`.
-func (o *CloudProvider) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
-	if ok {
-		value = *o.name
-	}
-	return
 }
 
 // DisplayName returns the value of the 'display_name' attribute, or
@@ -146,6 +123,29 @@ func (o *CloudProvider) GetDisplayName() (value string, ok bool) {
 	ok = o != nil && o.displayName != nil
 	if ok {
 		value = *o.displayName
+	}
+	return
+}
+
+// Name returns the value of the 'name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Human friendly identifier of the cloud provider, for example `aws`.
+func (o *CloudProvider) Name() string {
+	if o != nil && o.name != nil {
+		return *o.name
+	}
+	return ""
+}
+
+// GetName returns the value of the 'name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Human friendly identifier of the cloud provider, for example `aws`.
+func (o *CloudProvider) GetName() (value string, ok bool) {
+	ok = o != nil && o.name != nil
+	if ok {
+		value = *o.name
 	}
 	return
 }

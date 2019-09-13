@@ -38,10 +38,10 @@ type RegistryCredential struct {
 	id       *string
 	href     *string
 	link     bool
-	username *string
-	token    *string
-	registry *Registry
 	account  *Account
+	registry *Registry
+	token    *string
+	username *string
 }
 
 // Kind returns the name of the type of the object.
@@ -99,55 +99,32 @@ func (o *RegistryCredential) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *RegistryCredential) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.username == nil &&
-		o.token == nil &&
-		o.registry == nil &&
 		o.account == nil &&
+		o.registry == nil &&
+		o.token == nil &&
+		o.username == nil &&
 		true)
 }
 
-// Username returns the value of the 'username' attribute, or
+// Account returns the value of the 'account' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *RegistryCredential) Username() string {
-	if o != nil && o.username != nil {
-		return *o.username
+func (o *RegistryCredential) Account() *Account {
+	if o == nil {
+		return nil
 	}
-	return ""
+	return o.account
 }
 
-// GetUsername returns the value of the 'username' attribute and
+// GetAccount returns the value of the 'account' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *RegistryCredential) GetUsername() (value string, ok bool) {
-	ok = o != nil && o.username != nil
+func (o *RegistryCredential) GetAccount() (value *Account, ok bool) {
+	ok = o != nil && o.account != nil
 	if ok {
-		value = *o.username
-	}
-	return
-}
-
-// Token returns the value of the 'token' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *RegistryCredential) Token() string {
-	if o != nil && o.token != nil {
-		return *o.token
-	}
-	return ""
-}
-
-// GetToken returns the value of the 'token' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *RegistryCredential) GetToken() (value string, ok bool) {
-	ok = o != nil && o.token != nil
-	if ok {
-		value = *o.token
+		value = o.account
 	}
 	return
 }
@@ -175,25 +152,48 @@ func (o *RegistryCredential) GetRegistry() (value *Registry, ok bool) {
 	return
 }
 
-// Account returns the value of the 'account' attribute, or
+// Token returns the value of the 'token' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *RegistryCredential) Account() *Account {
-	if o == nil {
-		return nil
+func (o *RegistryCredential) Token() string {
+	if o != nil && o.token != nil {
+		return *o.token
 	}
-	return o.account
+	return ""
 }
 
-// GetAccount returns the value of the 'account' attribute and
+// GetToken returns the value of the 'token' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *RegistryCredential) GetAccount() (value *Account, ok bool) {
-	ok = o != nil && o.account != nil
+func (o *RegistryCredential) GetToken() (value string, ok bool) {
+	ok = o != nil && o.token != nil
 	if ok {
-		value = o.account
+		value = *o.token
+	}
+	return
+}
+
+// Username returns the value of the 'username' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RegistryCredential) Username() string {
+	if o != nil && o.username != nil {
+		return *o.username
+	}
+	return ""
+}
+
+// GetUsername returns the value of the 'username' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RegistryCredential) GetUsername() (value string, ok bool) {
+	ok = o != nil && o.username != nil
+	if ok {
+		value = *o.username
 	}
 	return
 }

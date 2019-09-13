@@ -69,8 +69,8 @@ type QuotaSummaryListRequest struct {
 	query     url.Values
 	header    http.Header
 	page      *int
-	size      *int
 	search    *string
+	size      *int
 	total     *int
 }
 
@@ -96,16 +96,6 @@ func (r *QuotaSummaryListRequest) Page(value int) *QuotaSummaryListRequest {
 	return r
 }
 
-// Size sets the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *QuotaSummaryListRequest) Size(value int) *QuotaSummaryListRequest {
-	r.size = &value
-	return r
-}
-
 // Search sets the value of the 'search' parameter.
 //
 // Search criteria.
@@ -125,6 +115,16 @@ func (r *QuotaSummaryListRequest) Size(value int) *QuotaSummaryListRequest {
 // items that the user has permission to see will be returned.
 func (r *QuotaSummaryListRequest) Search(value string) *QuotaSummaryListRequest {
 	r.search = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *QuotaSummaryListRequest) Size(value int) *QuotaSummaryListRequest {
+	r.size = &value
 	return r
 }
 
@@ -151,11 +151,11 @@ func (r *QuotaSummaryListRequest) SendContext(ctx context.Context) (result *Quot
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
 	}
-	if r.size != nil {
-		helpers.AddValue(&query, "size", *r.size)
-	}
 	if r.search != nil {
 		helpers.AddValue(&query, "search", *r.search)
+	}
+	if r.size != nil {
+		helpers.AddValue(&query, "size", *r.size)
 	}
 	if r.total != nil {
 		helpers.AddValue(&query, "total", *r.total)
@@ -201,10 +201,10 @@ type QuotaSummaryListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
+	items  *QuotaSummaryList
 	page   *int
 	size   *int
 	total  *int
-	items  *QuotaSummaryList
 }
 
 // Status returns the response status code.
@@ -220,6 +220,28 @@ func (r *QuotaSummaryListResponse) Header() http.Header {
 // Error returns the response error.
 func (r *QuotaSummaryListResponse) Error() *errors.Error {
 	return r.err
+}
+
+// Items returns the value of the 'items' parameter.
+//
+// Retrieved quota summary items.
+func (r *QuotaSummaryListResponse) Items() *QuotaSummaryList {
+	if r == nil {
+		return nil
+	}
+	return r.items
+}
+
+// GetItems returns the value of the 'items' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Retrieved quota summary items.
+func (r *QuotaSummaryListResponse) GetItems() (value *QuotaSummaryList, ok bool) {
+	ok = r != nil && r.items != nil
+	if ok {
+		value = r.items
+	}
+	return
 }
 
 // Page returns the value of the 'page' parameter.
@@ -298,28 +320,6 @@ func (r *QuotaSummaryListResponse) GetTotal() (value int, ok bool) {
 	return
 }
 
-// Items returns the value of the 'items' parameter.
-//
-// Retrieved quota summary items.
-func (r *QuotaSummaryListResponse) Items() *QuotaSummaryList {
-	if r == nil {
-		return nil
-	}
-	return r.items
-}
-
-// GetItems returns the value of the 'items' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Retrieved quota summary items.
-func (r *QuotaSummaryListResponse) GetItems() (value *QuotaSummaryList, ok bool) {
-	ok = r != nil && r.items != nil
-	if ok {
-		value = r.items
-	}
-	return
-}
-
 // unmarshal is the method used internally to unmarshal responses to the
 // 'list' method.
 func (r *QuotaSummaryListResponse) unmarshal(reader io.Reader) error {
@@ -330,21 +330,21 @@ func (r *QuotaSummaryListResponse) unmarshal(reader io.Reader) error {
 	if err != nil {
 		return err
 	}
-	r.page = data.Page
-	r.size = data.Size
-	r.total = data.Total
 	r.items, err = data.Items.unwrap()
 	if err != nil {
 		return err
 	}
+	r.page = data.Page
+	r.size = data.Size
+	r.total = data.Total
 	return err
 }
 
 // quotaSummaryListResponseData is the structure used internally to unmarshal
 // the response of the 'list' method.
 type quotaSummaryListResponseData struct {
+	Items quotaSummaryListData "json:\"items,omitempty\""
 	Page  *int                 "json:\"page,omitempty\""
 	Size  *int                 "json:\"size,omitempty\""
 	Total *int                 "json:\"total,omitempty\""
-	Items quotaSummaryListData "json:\"items,omitempty\""
 }

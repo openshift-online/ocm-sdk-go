@@ -43,8 +43,8 @@ type QuotaSummaryServer interface {
 // QuotaSummaryListServerRequest is the request for the 'list' method.
 type QuotaSummaryListServerRequest struct {
 	page   *int
-	size   *int
 	search *string
+	size   *int
 	total  *int
 }
 
@@ -70,32 +70,6 @@ func (r *QuotaSummaryListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
-	}
-	return
-}
-
-// Size returns the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *QuotaSummaryListServerRequest) Size() int {
-	if r != nil && r.size != nil {
-		return *r.size
-	}
-	return 0
-}
-
-// GetSize returns the value of the 'size' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *QuotaSummaryListServerRequest) GetSize() (value int, ok bool) {
-	ok = r != nil && r.size != nil
-	if ok {
-		value = *r.size
 	}
 	return
 }
@@ -150,6 +124,32 @@ func (r *QuotaSummaryListServerRequest) GetSearch() (value string, ok bool) {
 	return
 }
 
+// Size returns the value of the 'size' parameter.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *QuotaSummaryListServerRequest) Size() int {
+	if r != nil && r.size != nil {
+		return *r.size
+	}
+	return 0
+}
+
+// GetSize returns the value of the 'size' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *QuotaSummaryListServerRequest) GetSize() (value int, ok bool) {
+	ok = r != nil && r.size != nil
+	if ok {
+		value = *r.size
+	}
+	return
+}
+
 // Total returns the value of the 'total' parameter.
 //
 // Total number of items of the collection that match the search criteria,
@@ -178,10 +178,18 @@ func (r *QuotaSummaryListServerRequest) GetTotal() (value int, ok bool) {
 type QuotaSummaryListServerResponse struct {
 	status int
 	err    *errors.Error
+	items  *QuotaSummaryList
 	page   *int
 	size   *int
 	total  *int
-	items  *QuotaSummaryList
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved quota summary items.
+func (r *QuotaSummaryListServerResponse) Items(value *QuotaSummaryList) *QuotaSummaryListServerResponse {
+	r.items = value
+	return r
 }
 
 // Page sets the value of the 'page' parameter.
@@ -213,14 +221,6 @@ func (r *QuotaSummaryListServerResponse) Total(value int) *QuotaSummaryListServe
 	return r
 }
 
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved quota summary items.
-func (r *QuotaSummaryListServerResponse) Items(value *QuotaSummaryList) *QuotaSummaryListServerResponse {
-	r.items = value
-	return r
-}
-
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *QuotaSummaryListServerResponse) SetStatusCode(status int) *QuotaSummaryListServerResponse {
 	r.status = status
@@ -233,13 +233,13 @@ func (r *QuotaSummaryListServerResponse) marshal(writer io.Writer) error {
 	var err error
 	encoder := json.NewEncoder(writer)
 	data := new(quotaSummaryListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
 	data.Items, err = r.items.wrap()
 	if err != nil {
 		return err
 	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
 	err = encoder.Encode(data)
 	return err
 }
@@ -247,10 +247,10 @@ func (r *QuotaSummaryListServerResponse) marshal(writer io.Writer) error {
 // quotaSummaryListServerResponseData is the structure used internally to write the request of the
 // 'list' method.
 type quotaSummaryListServerResponseData struct {
+	Items quotaSummaryListData "json:\"items,omitempty\""
 	Page  *int                 "json:\"page,omitempty\""
 	Size  *int                 "json:\"size,omitempty\""
 	Total *int                 "json:\"total,omitempty\""
-	Items quotaSummaryListData "json:\"items,omitempty\""
 }
 
 // QuotaSummaryServerAdapter represents the structs that adapts Requests and Response to internal
@@ -275,11 +275,11 @@ func (a *QuotaSummaryServerAdapter) readQuotaSummaryListServerRequest(r *http.Re
 	if err != nil {
 		return nil, err
 	}
-	result.size, err = helpers.ParseInteger(query, "size")
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}
-	result.search, err = helpers.ParseString(query, "search")
+	result.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {
 		return nil, err
 	}

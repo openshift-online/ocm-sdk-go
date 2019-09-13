@@ -24,13 +24,13 @@ type IdentityProviderType string
 
 const (
 	//
+	IdentityProviderTypeLDAP IdentityProviderType = "LDAP"
+	//
 	IdentityProviderTypeGithub IdentityProviderType = "github"
 	//
 	IdentityProviderTypeGitlab IdentityProviderType = "gitlab"
 	//
 	IdentityProviderTypeGoogle IdentityProviderType = "google"
-	//
-	IdentityProviderTypeLDAP IdentityProviderType = "LDAP"
 	//
 	IdentityProviderTypeOpenID IdentityProviderType = "open_ID"
 )

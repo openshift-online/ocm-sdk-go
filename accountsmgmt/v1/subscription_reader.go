@@ -32,14 +32,14 @@ type subscriptionData struct {
 	Kind               *string                 "json:\"kind,omitempty\""
 	ID                 *string                 "json:\"id,omitempty\""
 	HREF               *string                 "json:\"href,omitempty\""
+	ClusterID          *string                 "json:\"cluster_id,omitempty\""
+	Creator            *accountData            "json:\"creator,omitempty\""
+	DisplayName        *string                 "json:\"display_name,omitempty\""
+	ExternalClusterID  *string                 "json:\"external_cluster_id,omitempty\""
+	LastTelemetryDate  *time.Time              "json:\"last_telemetry_date,omitempty\""
+	OrganizationID     *string                 "json:\"organization_id,omitempty\""
 	Plan               *planData               "json:\"plan,omitempty\""
 	RegistryCredential *registryCredentialData "json:\"registry_credential,omitempty\""
-	ClusterID          *string                 "json:\"cluster_id,omitempty\""
-	ExternalClusterID  *string                 "json:\"external_cluster_id,omitempty\""
-	OrganizationID     *string                 "json:\"organization_id,omitempty\""
-	DisplayName        *string                 "json:\"display_name,omitempty\""
-	LastTelemetryDate  *time.Time              "json:\"last_telemetry_date,omitempty\""
-	Creator            *accountData            "json:\"creator,omitempty\""
 }
 
 // MarshalSubscription writes a value of the 'subscription' to the given target,
@@ -71,20 +71,20 @@ func (o *Subscription) wrap() (data *subscriptionData, err error) {
 	} else {
 		*data.Kind = SubscriptionKind
 	}
+	data.ClusterID = o.clusterID
+	data.Creator, err = o.creator.wrap()
+	if err != nil {
+		return
+	}
+	data.DisplayName = o.displayName
+	data.ExternalClusterID = o.externalClusterID
+	data.LastTelemetryDate = o.lastTelemetryDate
+	data.OrganizationID = o.organizationID
 	data.Plan, err = o.plan.wrap()
 	if err != nil {
 		return
 	}
 	data.RegistryCredential, err = o.registryCredential.wrap()
-	if err != nil {
-		return
-	}
-	data.ClusterID = o.clusterID
-	data.ExternalClusterID = o.externalClusterID
-	data.OrganizationID = o.organizationID
-	data.DisplayName = o.displayName
-	data.LastTelemetryDate = o.lastTelemetryDate
-	data.Creator, err = o.creator.wrap()
 	if err != nil {
 		return
 	}
@@ -132,20 +132,20 @@ func (d *subscriptionData) unwrap() (object *Subscription, err error) {
 			return
 		}
 	}
+	object.clusterID = d.ClusterID
+	object.creator, err = d.Creator.unwrap()
+	if err != nil {
+		return
+	}
+	object.displayName = d.DisplayName
+	object.externalClusterID = d.ExternalClusterID
+	object.lastTelemetryDate = d.LastTelemetryDate
+	object.organizationID = d.OrganizationID
 	object.plan, err = d.Plan.unwrap()
 	if err != nil {
 		return
 	}
 	object.registryCredential, err = d.RegistryCredential.unwrap()
-	if err != nil {
-		return
-	}
-	object.clusterID = d.ClusterID
-	object.externalClusterID = d.ExternalClusterID
-	object.organizationID = d.OrganizationID
-	object.displayName = d.DisplayName
-	object.lastTelemetryDate = d.LastTelemetryDate
-	object.creator, err = d.Creator.unwrap()
 	if err != nil {
 		return
 	}

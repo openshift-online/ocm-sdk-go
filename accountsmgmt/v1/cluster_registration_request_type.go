@@ -23,38 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterRegistrationRequest struct {
-	clusterID          *string
 	authorizationToken *string
+	clusterID          *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterRegistrationRequest) Empty() bool {
-	return o == nil || (o.clusterID == nil &&
-		o.authorizationToken == nil &&
+	return o == nil || (o.authorizationToken == nil &&
+		o.clusterID == nil &&
 		true)
-}
-
-// ClusterID returns the value of the 'cluster_ID' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *ClusterRegistrationRequest) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
-	}
-	return ""
-}
-
-// GetClusterID returns the value of the 'cluster_ID' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *ClusterRegistrationRequest) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
-	if ok {
-		value = *o.clusterID
-	}
-	return
 }
 
 // AuthorizationToken returns the value of the 'authorization_token' attribute, or
@@ -76,6 +53,29 @@ func (o *ClusterRegistrationRequest) GetAuthorizationToken() (value string, ok b
 	ok = o != nil && o.authorizationToken != nil
 	if ok {
 		value = *o.authorizationToken
+	}
+	return
+}
+
+// ClusterID returns the value of the 'cluster_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterRegistrationRequest) ClusterID() string {
+	if o != nil && o.clusterID != nil {
+		return *o.clusterID
+	}
+	return ""
+}
+
+// GetClusterID returns the value of the 'cluster_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterRegistrationRequest) GetClusterID() (value string, ok bool) {
+	ok = o != nil && o.clusterID != nil
+	if ok {
+		value = *o.clusterID
 	}
 	return
 }

@@ -26,8 +26,8 @@ type DashboardBuilder struct {
 	id      *string
 	href    *string
 	link    bool
-	name    *string
 	metrics []*MetricBuilder
+	name    *string
 }
 
 // NewDashboard creates a new builder of 'dashboard' objects.
@@ -53,15 +53,6 @@ func (b *DashboardBuilder) Link(value bool) *DashboardBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
-// to the given value.
-//
-//
-func (b *DashboardBuilder) Name(value string) *DashboardBuilder {
-	b.name = &value
-	return b
-}
-
 // Metrics sets the value of the 'metrics' attribute
 // to the given values.
 //
@@ -72,15 +63,41 @@ func (b *DashboardBuilder) Metrics(values ...*MetricBuilder) *DashboardBuilder {
 	return b
 }
 
+// Name sets the value of the 'name' attribute
+// to the given value.
+//
+//
+func (b *DashboardBuilder) Name(value string) *DashboardBuilder {
+	b.name = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *DashboardBuilder) Copy(object *Dashboard) *DashboardBuilder {
+	if object == nil {
+		return b
+	}
+	b.id = object.id
+	b.href = object.href
+	b.link = object.link
+	if object.metrics != nil && len(object.metrics.items) > 0 {
+		b.metrics = make([]*MetricBuilder, len(object.metrics.items))
+		for i, item := range object.metrics.items {
+			b.metrics[i] = NewMetric().Copy(item)
+		}
+	} else {
+		b.metrics = nil
+	}
+	b.name = object.name
+	return b
+}
+
 // Build creates a 'dashboard' object using the configuration stored in the builder.
 func (b *DashboardBuilder) Build() (object *Dashboard, err error) {
 	object = new(Dashboard)
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.name != nil {
-		object.name = b.name
-	}
 	if b.metrics != nil {
 		object.metrics = new(MetricList)
 		object.metrics.items = make([]*Metric, len(b.metrics))
@@ -90,6 +107,9 @@ func (b *DashboardBuilder) Build() (object *Dashboard, err error) {
 				return
 			}
 		}
+	}
+	if b.name != nil {
+		object.name = b.name
 	}
 	return
 }

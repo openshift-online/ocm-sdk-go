@@ -38,9 +38,9 @@ type CloudRegion struct {
 	id            *string
 	href          *string
 	link          bool
-	name          *string
-	displayName   *string
 	cloudProvider *CloudProvider
+	displayName   *string
+	name          *string
 }
 
 // Kind returns the name of the type of the object.
@@ -98,37 +98,31 @@ func (o *CloudRegion) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CloudRegion) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.name == nil &&
-		o.displayName == nil &&
 		o.cloudProvider == nil &&
+		o.displayName == nil &&
+		o.name == nil &&
 		true)
 }
 
-// Name returns the value of the 'name' attribute, or
+// CloudProvider returns the value of the 'cloud_provider' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Human friendly identifier of the region, for example `us-east-1`.
-//
-// NOTE: Currently for all cloud provideers and all regions `id` and `name` have exactly
-// the same values.
-func (o *CloudRegion) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+// Link to the cloud provider that the region belongs to.
+func (o *CloudRegion) CloudProvider() *CloudProvider {
+	if o == nil {
+		return nil
 	}
-	return ""
+	return o.cloudProvider
 }
 
-// GetName returns the value of the 'name' attribute and
+// GetCloudProvider returns the value of the 'cloud_provider' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Human friendly identifier of the region, for example `us-east-1`.
-//
-// NOTE: Currently for all cloud provideers and all regions `id` and `name` have exactly
-// the same values.
-func (o *CloudRegion) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+// Link to the cloud provider that the region belongs to.
+func (o *CloudRegion) GetCloudProvider() (value *CloudProvider, ok bool) {
+	ok = o != nil && o.cloudProvider != nil
 	if ok {
-		value = *o.name
+		value = o.cloudProvider
 	}
 	return
 }
@@ -156,25 +150,31 @@ func (o *CloudRegion) GetDisplayName() (value string, ok bool) {
 	return
 }
 
-// CloudProvider returns the value of the 'cloud_provider' attribute, or
+// Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Link to the cloud provider that the region belongs to.
-func (o *CloudRegion) CloudProvider() *CloudProvider {
-	if o == nil {
-		return nil
+// Human friendly identifier of the region, for example `us-east-1`.
+//
+// NOTE: Currently for all cloud provideers and all regions `id` and `name` have exactly
+// the same values.
+func (o *CloudRegion) Name() string {
+	if o != nil && o.name != nil {
+		return *o.name
 	}
-	return o.cloudProvider
+	return ""
 }
 
-// GetCloudProvider returns the value of the 'cloud_provider' attribute and
+// GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Link to the cloud provider that the region belongs to.
-func (o *CloudRegion) GetCloudProvider() (value *CloudProvider, ok bool) {
-	ok = o != nil && o.cloudProvider != nil
+// Human friendly identifier of the region, for example `us-east-1`.
+//
+// NOTE: Currently for all cloud provideers and all regions `id` and `name` have exactly
+// the same values.
+func (o *CloudRegion) GetName() (value string, ok bool) {
+	ok = o != nil && o.name != nil
 	if ok {
-		value = o.cloudProvider
+		value = *o.name
 	}
 	return
 }

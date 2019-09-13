@@ -34,280 +34,20 @@ import (
 // FlavoursServer represents the interface the manages the 'flavours' resource.
 type FlavoursServer interface {
 
-	// List handles a request for the 'list' method.
-	//
-	//
-	List(ctx context.Context, request *FlavoursListServerRequest, response *FlavoursListServerResponse) error
-
 	// Add handles a request for the 'add' method.
 	//
 	// Adds a new cluster flavour.
 	Add(ctx context.Context, request *FlavoursAddServerRequest, response *FlavoursAddServerResponse) error
 
+	// List handles a request for the 'list' method.
+	//
+	//
+	List(ctx context.Context, request *FlavoursListServerRequest, response *FlavoursListServerResponse) error
+
 	// Flavour returns the target 'flavour' server for the given identifier.
 	//
 	// Reference to the resource that manages a specific flavour.
 	Flavour(id string) FlavourServer
-}
-
-// FlavoursListServerRequest is the request for the 'list' method.
-type FlavoursListServerRequest struct {
-	page   *int
-	size   *int
-	search *string
-	order  *string
-	total  *int
-}
-
-// Page returns the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
-func (r *FlavoursListServerRequest) Page() int {
-	if r != nil && r.page != nil {
-		return *r.page
-	}
-	return 0
-}
-
-// GetPage returns the value of the 'page' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
-func (r *FlavoursListServerRequest) GetPage() (value int, ok bool) {
-	ok = r != nil && r.page != nil
-	if ok {
-		value = *r.page
-	}
-	return
-}
-
-// Size returns the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *FlavoursListServerRequest) Size() int {
-	if r != nil && r.size != nil {
-		return *r.size
-	}
-	return 0
-}
-
-// GetSize returns the value of the 'size' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *FlavoursListServerRequest) GetSize() (value int, ok bool) {
-	ok = r != nil && r.size != nil
-	if ok {
-		value = *r.size
-	}
-	return
-}
-
-// Search returns the value of the 'search' parameter.
-//
-// Search criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _where_ clause of an
-// SQL statement, but using the names of the attributes of the flavour instead of
-// the names of the columns of a table. For example, in order to retrieve all the
-// flavours with a name starting with `my`the value should be:
-//
-// [source,sql]
-// ----
-// name like 'my%'
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then all the flavours
-// that the user has permission to see will be returned.
-func (r *FlavoursListServerRequest) Search() string {
-	if r != nil && r.search != nil {
-		return *r.search
-	}
-	return ""
-}
-
-// GetSearch returns the value of the 'search' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Search criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _where_ clause of an
-// SQL statement, but using the names of the attributes of the flavour instead of
-// the names of the columns of a table. For example, in order to retrieve all the
-// flavours with a name starting with `my`the value should be:
-//
-// [source,sql]
-// ----
-// name like 'my%'
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then all the flavours
-// that the user has permission to see will be returned.
-func (r *FlavoursListServerRequest) GetSearch() (value string, ok bool) {
-	ok = r != nil && r.search != nil
-	if ok {
-		value = *r.search
-	}
-	return
-}
-
-// Order returns the value of the 'order' parameter.
-//
-// Order criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement, but using the names of the attributes of the flavour instead of
-// the names of the columns of a table. For example, in order to sort the flavours
-// descending by name the value should be:
-//
-// [source,sql]
-// ----
-// name desc
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then the order of the
-// results is undefined.
-func (r *FlavoursListServerRequest) Order() string {
-	if r != nil && r.order != nil {
-		return *r.order
-	}
-	return ""
-}
-
-// GetOrder returns the value of the 'order' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Order criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement, but using the names of the attributes of the flavour instead of
-// the names of the columns of a table. For example, in order to sort the flavours
-// descending by name the value should be:
-//
-// [source,sql]
-// ----
-// name desc
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then the order of the
-// results is undefined.
-func (r *FlavoursListServerRequest) GetOrder() (value string, ok bool) {
-	ok = r != nil && r.order != nil
-	if ok {
-		value = *r.order
-	}
-	return
-}
-
-// Total returns the value of the 'total' parameter.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *FlavoursListServerRequest) Total() int {
-	if r != nil && r.total != nil {
-		return *r.total
-	}
-	return 0
-}
-
-// GetTotal returns the value of the 'total' parameter and
-// a flag indicating if the parameter has a value.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *FlavoursListServerRequest) GetTotal() (value int, ok bool) {
-	ok = r != nil && r.total != nil
-	if ok {
-		value = *r.total
-	}
-	return
-}
-
-// FlavoursListServerResponse is the response for the 'list' method.
-type FlavoursListServerResponse struct {
-	status int
-	err    *errors.Error
-	page   *int
-	size   *int
-	total  *int
-	items  *FlavourList
-}
-
-// Page sets the value of the 'page' parameter.
-//
-// Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
-func (r *FlavoursListServerResponse) Page(value int) *FlavoursListServerResponse {
-	r.page = &value
-	return r
-}
-
-// Size sets the value of the 'size' parameter.
-//
-// Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
-func (r *FlavoursListServerResponse) Size(value int) *FlavoursListServerResponse {
-	r.size = &value
-	return r
-}
-
-// Total sets the value of the 'total' parameter.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *FlavoursListServerResponse) Total(value int) *FlavoursListServerResponse {
-	r.total = &value
-	return r
-}
-
-// Items sets the value of the 'items' parameter.
-//
-// Retrieved list of flavours.
-func (r *FlavoursListServerResponse) Items(value *FlavourList) *FlavoursListServerResponse {
-	r.items = value
-	return r
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *FlavoursListServerResponse) SetStatusCode(status int) *FlavoursListServerResponse {
-	r.status = status
-	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'list' method.
-func (r *FlavoursListServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data := new(flavoursListServerResponseData)
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
-	data.Items, err = r.items.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
-}
-
-// flavoursListServerResponseData is the structure used internally to write the request of the
-// 'list' method.
-type flavoursListServerResponseData struct {
-	Page  *int            "json:\"page,omitempty\""
-	Size  *int            "json:\"size,omitempty\""
-	Total *int            "json:\"total,omitempty\""
-	Items flavourListData "json:\"items,omitempty\""
 }
 
 // FlavoursAddServerRequest is the request for the 'add' method.
@@ -388,6 +128,266 @@ func (r *FlavoursAddServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
+// FlavoursListServerRequest is the request for the 'list' method.
+type FlavoursListServerRequest struct {
+	order  *string
+	page   *int
+	search *string
+	size   *int
+	total  *int
+}
+
+// Order returns the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to sort the flavours
+// descending by name the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *FlavoursListServerRequest) Order() string {
+	if r != nil && r.order != nil {
+		return *r.order
+	}
+	return ""
+}
+
+// GetOrder returns the value of the 'order' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to sort the flavours
+// descending by name the value should be:
+//
+// [source,sql]
+// ----
+// name desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *FlavoursListServerRequest) GetOrder() (value string, ok bool) {
+	ok = r != nil && r.order != nil
+	if ok {
+		value = *r.order
+	}
+	return
+}
+
+// Page returns the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *FlavoursListServerRequest) Page() int {
+	if r != nil && r.page != nil {
+		return *r.page
+	}
+	return 0
+}
+
+// GetPage returns the value of the 'page' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *FlavoursListServerRequest) GetPage() (value int, ok bool) {
+	ok = r != nil && r.page != nil
+	if ok {
+		value = *r.page
+	}
+	return
+}
+
+// Search returns the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of an
+// SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// flavours with a name starting with `my`the value should be:
+//
+// [source,sql]
+// ----
+// name like 'my%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the flavours
+// that the user has permission to see will be returned.
+func (r *FlavoursListServerRequest) Search() string {
+	if r != nil && r.search != nil {
+		return *r.search
+	}
+	return ""
+}
+
+// GetSearch returns the value of the 'search' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of an
+// SQL statement, but using the names of the attributes of the flavour instead of
+// the names of the columns of a table. For example, in order to retrieve all the
+// flavours with a name starting with `my`the value should be:
+//
+// [source,sql]
+// ----
+// name like 'my%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the flavours
+// that the user has permission to see will be returned.
+func (r *FlavoursListServerRequest) GetSearch() (value string, ok bool) {
+	ok = r != nil && r.search != nil
+	if ok {
+		value = *r.search
+	}
+	return
+}
+
+// Size returns the value of the 'size' parameter.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *FlavoursListServerRequest) Size() int {
+	if r != nil && r.size != nil {
+		return *r.size
+	}
+	return 0
+}
+
+// GetSize returns the value of the 'size' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *FlavoursListServerRequest) GetSize() (value int, ok bool) {
+	ok = r != nil && r.size != nil
+	if ok {
+		value = *r.size
+	}
+	return
+}
+
+// Total returns the value of the 'total' parameter.
+//
+// Total number of items of the collection that match the search criteria,
+// regardless of the size of the page.
+func (r *FlavoursListServerRequest) Total() int {
+	if r != nil && r.total != nil {
+		return *r.total
+	}
+	return 0
+}
+
+// GetTotal returns the value of the 'total' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Total number of items of the collection that match the search criteria,
+// regardless of the size of the page.
+func (r *FlavoursListServerRequest) GetTotal() (value int, ok bool) {
+	ok = r != nil && r.total != nil
+	if ok {
+		value = *r.total
+	}
+	return
+}
+
+// FlavoursListServerResponse is the response for the 'list' method.
+type FlavoursListServerResponse struct {
+	status int
+	err    *errors.Error
+	items  *FlavourList
+	page   *int
+	size   *int
+	total  *int
+}
+
+// Items sets the value of the 'items' parameter.
+//
+// Retrieved list of flavours.
+func (r *FlavoursListServerResponse) Items(value *FlavourList) *FlavoursListServerResponse {
+	r.items = value
+	return r
+}
+
+// Page sets the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+//
+// Default value is `1`.
+func (r *FlavoursListServerResponse) Page(value int) *FlavoursListServerResponse {
+	r.page = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Maximum number of items that will be contained in the returned page.
+//
+// Default value is `100`.
+func (r *FlavoursListServerResponse) Size(value int) *FlavoursListServerResponse {
+	r.size = &value
+	return r
+}
+
+// Total sets the value of the 'total' parameter.
+//
+// Total number of items of the collection that match the search criteria,
+// regardless of the size of the page.
+func (r *FlavoursListServerResponse) Total(value int) *FlavoursListServerResponse {
+	r.total = &value
+	return r
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *FlavoursListServerResponse) SetStatusCode(status int) *FlavoursListServerResponse {
+	r.status = status
+	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'list' method.
+func (r *FlavoursListServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data := new(flavoursListServerResponseData)
+	data.Items, err = r.items.wrap()
+	if err != nil {
+		return err
+	}
+	data.Page = r.page
+	data.Size = r.size
+	data.Total = r.total
+	err = encoder.Encode(data)
+	return err
+}
+
+// flavoursListServerResponseData is the structure used internally to write the request of the
+// 'list' method.
+type flavoursListServerResponseData struct {
+	Items flavourListData "json:\"items,omitempty\""
+	Page  *int            "json:\"page,omitempty\""
+	Size  *int            "json:\"size,omitempty\""
+	Total *int            "json:\"total,omitempty\""
+}
+
 // FlavoursServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type FlavoursServerAdapter struct {
@@ -400,8 +400,8 @@ func NewFlavoursServerAdapter(server FlavoursServer, router *mux.Router) *Flavou
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.flavourHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
 	return adapter
 }
 func (a *FlavoursServerAdapter) flavourHandler(w http.ResponseWriter, r *http.Request) {
@@ -410,72 +410,6 @@ func (a *FlavoursServerAdapter) flavourHandler(w http.ResponseWriter, r *http.Re
 	targetAdapter := NewFlavourServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
-}
-func (a *FlavoursServerAdapter) readFlavoursListServerRequest(r *http.Request) (*FlavoursListServerRequest, error) {
-	var err error
-	result := new(FlavoursListServerRequest)
-	query := r.URL.Query()
-	result.page, err = helpers.ParseInteger(query, "page")
-	if err != nil {
-		return nil, err
-	}
-	result.size, err = helpers.ParseInteger(query, "size")
-	if err != nil {
-		return nil, err
-	}
-	result.search, err = helpers.ParseString(query, "search")
-	if err != nil {
-		return nil, err
-	}
-	result.order, err = helpers.ParseString(query, "order")
-	if err != nil {
-		return nil, err
-	}
-	result.total, err = helpers.ParseInteger(query, "total")
-	if err != nil {
-		return nil, err
-	}
-	return result, err
-}
-func (a *FlavoursServerAdapter) writeFlavoursListServerResponse(w http.ResponseWriter, r *FlavoursListServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-func (a *FlavoursServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readFlavoursListServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(FlavoursListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeFlavoursListServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
 }
 func (a *FlavoursServerAdapter) readFlavoursAddServerRequest(r *http.Request) (*FlavoursAddServerRequest, error) {
 	var err error
@@ -517,6 +451,72 @@ func (a *FlavoursServerAdapter) addHandler(w http.ResponseWriter, r *http.Reques
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeFlavoursAddServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+}
+func (a *FlavoursServerAdapter) readFlavoursListServerRequest(r *http.Request) (*FlavoursListServerRequest, error) {
+	var err error
+	result := new(FlavoursListServerRequest)
+	query := r.URL.Query()
+	result.order, err = helpers.ParseString(query, "order")
+	if err != nil {
+		return nil, err
+	}
+	result.page, err = helpers.ParseInteger(query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(query, "search")
+	if err != nil {
+		return nil, err
+	}
+	result.size, err = helpers.ParseInteger(query, "size")
+	if err != nil {
+		return nil, err
+	}
+	result.total, err = helpers.ParseInteger(query, "total")
+	if err != nil {
+		return nil, err
+	}
+	return result, err
+}
+func (a *FlavoursServerAdapter) writeFlavoursListServerResponse(w http.ResponseWriter, r *FlavoursListServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (a *FlavoursServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readFlavoursListServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(FlavoursListServerResponse)
+	err = a.server.List(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeFlavoursListServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

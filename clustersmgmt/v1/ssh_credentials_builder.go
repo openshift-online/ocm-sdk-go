@@ -23,22 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // SSH key pair of a cluster.
 type SSHCredentialsBuilder struct {
-	publicKey  *string
 	privateKey *string
+	publicKey  *string
 }
 
 // NewSSHCredentials creates a new builder of 'SSH_credentials' objects.
 func NewSSHCredentials() *SSHCredentialsBuilder {
 	return new(SSHCredentialsBuilder)
-}
-
-// PublicKey sets the value of the 'public_key' attribute
-// to the given value.
-//
-//
-func (b *SSHCredentialsBuilder) PublicKey(value string) *SSHCredentialsBuilder {
-	b.publicKey = &value
-	return b
 }
 
 // PrivateKey sets the value of the 'private_key' attribute
@@ -50,14 +41,33 @@ func (b *SSHCredentialsBuilder) PrivateKey(value string) *SSHCredentialsBuilder 
 	return b
 }
 
+// PublicKey sets the value of the 'public_key' attribute
+// to the given value.
+//
+//
+func (b *SSHCredentialsBuilder) PublicKey(value string) *SSHCredentialsBuilder {
+	b.publicKey = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *SSHCredentialsBuilder) Copy(object *SSHCredentials) *SSHCredentialsBuilder {
+	if object == nil {
+		return b
+	}
+	b.privateKey = object.privateKey
+	b.publicKey = object.publicKey
+	return b
+}
+
 // Build creates a 'SSH_credentials' object using the configuration stored in the builder.
 func (b *SSHCredentialsBuilder) Build() (object *SSHCredentials, err error) {
 	object = new(SSHCredentials)
-	if b.publicKey != nil {
-		object.publicKey = b.publicKey
-	}
 	if b.privateKey != nil {
 		object.privateKey = b.privateKey
+	}
+	if b.publicKey != nil {
+		object.publicKey = b.publicKey
 	}
 	return
 }

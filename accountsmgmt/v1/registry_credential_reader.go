@@ -31,10 +31,10 @@ type registryCredentialData struct {
 	Kind     *string       "json:\"kind,omitempty\""
 	ID       *string       "json:\"id,omitempty\""
 	HREF     *string       "json:\"href,omitempty\""
-	Username *string       "json:\"username,omitempty\""
-	Token    *string       "json:\"token,omitempty\""
-	Registry *registryData "json:\"registry,omitempty\""
 	Account  *accountData  "json:\"account,omitempty\""
+	Registry *registryData "json:\"registry,omitempty\""
+	Token    *string       "json:\"token,omitempty\""
+	Username *string       "json:\"username,omitempty\""
 }
 
 // MarshalRegistryCredential writes a value of the 'registry_credential' to the given target,
@@ -66,16 +66,16 @@ func (o *RegistryCredential) wrap() (data *registryCredentialData, err error) {
 	} else {
 		*data.Kind = RegistryCredentialKind
 	}
-	data.Username = o.username
-	data.Token = o.token
-	data.Registry, err = o.registry.wrap()
-	if err != nil {
-		return
-	}
 	data.Account, err = o.account.wrap()
 	if err != nil {
 		return
 	}
+	data.Registry, err = o.registry.wrap()
+	if err != nil {
+		return
+	}
+	data.Token = o.token
+	data.Username = o.username
 	return
 }
 
@@ -120,15 +120,15 @@ func (d *registryCredentialData) unwrap() (object *RegistryCredential, err error
 			return
 		}
 	}
-	object.username = d.Username
-	object.token = d.Token
-	object.registry, err = d.Registry.unwrap()
-	if err != nil {
-		return
-	}
 	object.account, err = d.Account.unwrap()
 	if err != nil {
 		return
 	}
+	object.registry, err = d.Registry.unwrap()
+	if err != nil {
+		return
+	}
+	object.token = d.Token
+	object.username = d.Username
 	return
 }

@@ -33,15 +33,31 @@ import (
 // UserServer represents the interface the manages the 'user' resource.
 type UserServer interface {
 
-	// Get handles a request for the 'get' method.
-	//
-	// Retrieves the details of the user.
-	Get(ctx context.Context, request *UserGetServerRequest, response *UserGetServerResponse) error
-
 	// Delete handles a request for the 'delete' method.
 	//
 	// Deletes the user.
 	Delete(ctx context.Context, request *UserDeleteServerRequest, response *UserDeleteServerResponse) error
+
+	// Get handles a request for the 'get' method.
+	//
+	// Retrieves the details of the user.
+	Get(ctx context.Context, request *UserGetServerRequest, response *UserGetServerResponse) error
+}
+
+// UserDeleteServerRequest is the request for the 'delete' method.
+type UserDeleteServerRequest struct {
+}
+
+// UserDeleteServerResponse is the response for the 'delete' method.
+type UserDeleteServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// SetStatusCode sets the status code for a give response and returns the response object.
+func (r *UserDeleteServerResponse) SetStatusCode(status int) *UserDeleteServerResponse {
+	r.status = status
+	return r
 }
 
 // UserGetServerRequest is the request for the 'get' method.
@@ -82,22 +98,6 @@ func (r *UserGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// UserDeleteServerRequest is the request for the 'delete' method.
-type UserDeleteServerRequest struct {
-}
-
-// UserDeleteServerResponse is the response for the 'delete' method.
-type UserDeleteServerResponse struct {
-	status int
-	err    *errors.Error
-}
-
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *UserDeleteServerResponse) SetStatusCode(status int) *UserDeleteServerResponse {
-	r.status = status
-	return r
-}
-
 // UserServerAdapter represents the structs that adapts Requests and Response to internal
 // structs.
 type UserServerAdapter struct {
@@ -109,9 +109,50 @@ func NewUserServerAdapter(server UserServer, router *mux.Router) *UserServerAdap
 	adapter := new(UserServerAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
+	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
 	return adapter
+}
+func (a *UserServerAdapter) readUserDeleteServerRequest(r *http.Request) (*UserDeleteServerRequest, error) {
+	var err error
+	result := new(UserDeleteServerRequest)
+	return result, err
+}
+func (a *UserServerAdapter) writeUserDeleteServerResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(r.status)
+	return nil
+}
+func (a *UserServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
+	req, err := a.readUserDeleteServerRequest(r)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+		return
+	}
+	resp := new(UserDeleteServerResponse)
+	err = a.server.Delete(r.Context(), req, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
+	err = a.writeUserDeleteServerResponse(w, resp)
+	if err != nil {
+		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
+		errorBody, _ := errors.NewError().
+			Reason(reason).
+			ID("500").
+			Build()
+		errors.SendError(w, r, errorBody)
+	}
 }
 func (a *UserServerAdapter) readUserGetServerRequest(r *http.Request) (*UserGetServerRequest, error) {
 	var err error
@@ -149,47 +190,6 @@ func (a *UserServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
 		errors.SendError(w, r, errorBody)
 	}
 	err = a.writeUserGetServerResponse(w, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-}
-func (a *UserServerAdapter) readUserDeleteServerRequest(r *http.Request) (*UserDeleteServerRequest, error) {
-	var err error
-	result := new(UserDeleteServerRequest)
-	return result, err
-}
-func (a *UserServerAdapter) writeUserDeleteServerResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	return nil
-}
-func (a *UserServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readUserDeleteServerRequest(r)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-		return
-	}
-	resp := new(UserDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
-	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, errorBody)
-	}
-	err = a.writeUserDeleteServerResponse(w, resp)
 	if err != nil {
 		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
 		errorBody, _ := errors.NewError().

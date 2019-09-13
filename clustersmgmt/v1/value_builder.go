@@ -40,22 +40,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // - 1 TiB = 2^40 bytes
 // - 1 PiB = 2^50 bytes
 type ValueBuilder struct {
-	value *float64
 	unit  *string
+	value *float64
 }
 
 // NewValue creates a new builder of 'value' objects.
 func NewValue() *ValueBuilder {
 	return new(ValueBuilder)
-}
-
-// Value sets the value of the 'value' attribute
-// to the given value.
-//
-//
-func (b *ValueBuilder) Value(value float64) *ValueBuilder {
-	b.value = &value
-	return b
 }
 
 // Unit sets the value of the 'unit' attribute
@@ -67,14 +58,33 @@ func (b *ValueBuilder) Unit(value string) *ValueBuilder {
 	return b
 }
 
+// Value sets the value of the 'value' attribute
+// to the given value.
+//
+//
+func (b *ValueBuilder) Value(value float64) *ValueBuilder {
+	b.value = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ValueBuilder) Copy(object *Value) *ValueBuilder {
+	if object == nil {
+		return b
+	}
+	b.unit = object.unit
+	b.value = object.value
+	return b
+}
+
 // Build creates a 'value' object using the configuration stored in the builder.
 func (b *ValueBuilder) Build() (object *Value, err error) {
 	object = new(Value)
-	if b.value != nil {
-		object.value = b.value
-	}
 	if b.unit != nil {
 		object.unit = b.unit
+	}
+	if b.value != nil {
+		object.value = b.value
 	}
 	return
 }

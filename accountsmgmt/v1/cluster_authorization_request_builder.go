@@ -23,12 +23,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationRequestBuilder struct {
-	clusterID        *string
+	byoc             *bool
 	accountUsername  *string
+	availabilityZone *string
+	clusterID        *string
 	managed          *bool
 	reserve          *bool
-	byoc             *bool
-	availabilityZone *string
 	resources        []*ReservedResourceBuilder
 }
 
@@ -37,12 +37,12 @@ func NewClusterAuthorizationRequest() *ClusterAuthorizationRequestBuilder {
 	return new(ClusterAuthorizationRequestBuilder)
 }
 
-// ClusterID sets the value of the 'cluster_ID' attribute
+// BYOC sets the value of the 'BYOC' attribute
 // to the given value.
 //
 //
-func (b *ClusterAuthorizationRequestBuilder) ClusterID(value string) *ClusterAuthorizationRequestBuilder {
-	b.clusterID = &value
+func (b *ClusterAuthorizationRequestBuilder) BYOC(value bool) *ClusterAuthorizationRequestBuilder {
+	b.byoc = &value
 	return b
 }
 
@@ -52,6 +52,24 @@ func (b *ClusterAuthorizationRequestBuilder) ClusterID(value string) *ClusterAut
 //
 func (b *ClusterAuthorizationRequestBuilder) AccountUsername(value string) *ClusterAuthorizationRequestBuilder {
 	b.accountUsername = &value
+	return b
+}
+
+// AvailabilityZone sets the value of the 'availability_zone' attribute
+// to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) AvailabilityZone(value string) *ClusterAuthorizationRequestBuilder {
+	b.availabilityZone = &value
+	return b
+}
+
+// ClusterID sets the value of the 'cluster_ID' attribute
+// to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) ClusterID(value string) *ClusterAuthorizationRequestBuilder {
+	b.clusterID = &value
 	return b
 }
 
@@ -73,24 +91,6 @@ func (b *ClusterAuthorizationRequestBuilder) Reserve(value bool) *ClusterAuthori
 	return b
 }
 
-// BYOC sets the value of the 'BYOC' attribute
-// to the given value.
-//
-//
-func (b *ClusterAuthorizationRequestBuilder) BYOC(value bool) *ClusterAuthorizationRequestBuilder {
-	b.byoc = &value
-	return b
-}
-
-// AvailabilityZone sets the value of the 'availability_zone' attribute
-// to the given value.
-//
-//
-func (b *ClusterAuthorizationRequestBuilder) AvailabilityZone(value string) *ClusterAuthorizationRequestBuilder {
-	b.availabilityZone = &value
-	return b
-}
-
 // Resources sets the value of the 'resources' attribute
 // to the given values.
 //
@@ -101,26 +101,48 @@ func (b *ClusterAuthorizationRequestBuilder) Resources(values ...*ReservedResour
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterAuthorizationRequestBuilder) Copy(object *ClusterAuthorizationRequest) *ClusterAuthorizationRequestBuilder {
+	if object == nil {
+		return b
+	}
+	b.byoc = object.byoc
+	b.accountUsername = object.accountUsername
+	b.availabilityZone = object.availabilityZone
+	b.clusterID = object.clusterID
+	b.managed = object.managed
+	b.reserve = object.reserve
+	if object.resources != nil && len(object.resources.items) > 0 {
+		b.resources = make([]*ReservedResourceBuilder, len(object.resources.items))
+		for i, item := range object.resources.items {
+			b.resources[i] = NewReservedResource().Copy(item)
+		}
+	} else {
+		b.resources = nil
+	}
+	return b
+}
+
 // Build creates a 'cluster_authorization_request' object using the configuration stored in the builder.
 func (b *ClusterAuthorizationRequestBuilder) Build() (object *ClusterAuthorizationRequest, err error) {
 	object = new(ClusterAuthorizationRequest)
-	if b.clusterID != nil {
-		object.clusterID = b.clusterID
+	if b.byoc != nil {
+		object.byoc = b.byoc
 	}
 	if b.accountUsername != nil {
 		object.accountUsername = b.accountUsername
+	}
+	if b.availabilityZone != nil {
+		object.availabilityZone = b.availabilityZone
+	}
+	if b.clusterID != nil {
+		object.clusterID = b.clusterID
 	}
 	if b.managed != nil {
 		object.managed = b.managed
 	}
 	if b.reserve != nil {
 		object.reserve = b.reserve
-	}
-	if b.byoc != nil {
-		object.byoc = b.byoc
-	}
-	if b.availabilityZone != nil {
-		object.availabilityZone = b.availabilityZone
 	}
 	if b.resources != nil {
 		object.resources = new(ReservedResourceList)

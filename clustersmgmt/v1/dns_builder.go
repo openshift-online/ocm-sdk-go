@@ -40,6 +40,15 @@ func (b *DNSBuilder) BaseDomain(value string) *DNSBuilder {
 	return b
 }
 
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *DNSBuilder) Copy(object *DNS) *DNSBuilder {
+	if object == nil {
+		return b
+	}
+	b.baseDomain = object.baseDomain
+	return b
+}
+
 // Build creates a 'DNS' object using the configuration stored in the builder.
 func (b *DNSBuilder) Build() (object *DNS, err error) {
 	object = new(DNS)

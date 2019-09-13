@@ -38,8 +38,8 @@ type Dashboard struct {
 	id      *string
 	href    *string
 	link    bool
-	name    *string
 	metrics *MetricList
+	name    *string
 }
 
 // Kind returns the name of the type of the object.
@@ -97,32 +97,9 @@ func (o *Dashboard) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Dashboard) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.name == nil &&
 		o.metrics.Empty() &&
+		o.name == nil &&
 		true)
-}
-
-// Name returns the value of the 'name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Name of the dashboard.
-func (o *Dashboard) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
-	}
-	return ""
-}
-
-// GetName returns the value of the 'name' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Name of the dashboard.
-func (o *Dashboard) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
-	if ok {
-		value = *o.name
-	}
-	return
 }
 
 // Metrics returns the value of the 'metrics' attribute, or
@@ -144,6 +121,29 @@ func (o *Dashboard) GetMetrics() (value *MetricList, ok bool) {
 	ok = o != nil && o.metrics != nil
 	if ok {
 		value = o.metrics
+	}
+	return
+}
+
+// Name returns the value of the 'name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Name of the dashboard.
+func (o *Dashboard) Name() string {
+	if o != nil && o.name != nil {
+		return *o.name
+	}
+	return ""
+}
+
+// GetName returns the value of the 'name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Name of the dashboard.
+func (o *Dashboard) GetName() (value string, ok bool) {
+	ok = o != nil && o.name != nil
+	if ok {
+		value = *o.name
 	}
 	return
 }

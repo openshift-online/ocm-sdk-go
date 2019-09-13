@@ -23,67 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ReservedResource struct {
-	resourceName         *string
-	resourceType         *string
 	byoc                 *bool
 	availabilityZoneType *string
 	count                *int
+	resourceName         *string
+	resourceType         *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ReservedResource) Empty() bool {
-	return o == nil || (o.resourceName == nil &&
-		o.resourceType == nil &&
-		o.byoc == nil &&
+	return o == nil || (o.byoc == nil &&
 		o.availabilityZoneType == nil &&
 		o.count == nil &&
+		o.resourceName == nil &&
+		o.resourceType == nil &&
 		true)
-}
-
-// ResourceName returns the value of the 'resource_name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *ReservedResource) ResourceName() string {
-	if o != nil && o.resourceName != nil {
-		return *o.resourceName
-	}
-	return ""
-}
-
-// GetResourceName returns the value of the 'resource_name' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *ReservedResource) GetResourceName() (value string, ok bool) {
-	ok = o != nil && o.resourceName != nil
-	if ok {
-		value = *o.resourceName
-	}
-	return
-}
-
-// ResourceType returns the value of the 'resource_type' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *ReservedResource) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
-	}
-	return ""
-}
-
-// GetResourceType returns the value of the 'resource_type' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *ReservedResource) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
-	if ok {
-		value = *o.resourceType
-	}
-	return
 }
 
 // BYOC returns the value of the 'BYOC' attribute, or
@@ -151,6 +105,52 @@ func (o *ReservedResource) GetCount() (value int, ok bool) {
 	ok = o != nil && o.count != nil
 	if ok {
 		value = *o.count
+	}
+	return
+}
+
+// ResourceName returns the value of the 'resource_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ReservedResource) ResourceName() string {
+	if o != nil && o.resourceName != nil {
+		return *o.resourceName
+	}
+	return ""
+}
+
+// GetResourceName returns the value of the 'resource_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ReservedResource) GetResourceName() (value string, ok bool) {
+	ok = o != nil && o.resourceName != nil
+	if ok {
+		value = *o.resourceName
+	}
+	return
+}
+
+// ResourceType returns the value of the 'resource_type' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ReservedResource) ResourceType() string {
+	if o != nil && o.resourceType != nil {
+		return *o.resourceType
+	}
+	return ""
+}
+
+// GetResourceType returns the value of the 'resource_type' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ReservedResource) GetResourceType() (value string, ok bool) {
+	ok = o != nil && o.resourceType != nil
+	if ok {
+		value = *o.resourceType
 	}
 	return
 }

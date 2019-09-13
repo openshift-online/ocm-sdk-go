@@ -23,22 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Registration of a new cluster to the service.
 type ClusterRegistrationBuilder struct {
-	subscriptionID *string
 	externalID     *string
+	subscriptionID *string
 }
 
 // NewClusterRegistration creates a new builder of 'cluster_registration' objects.
 func NewClusterRegistration() *ClusterRegistrationBuilder {
 	return new(ClusterRegistrationBuilder)
-}
-
-// SubscriptionID sets the value of the 'subscription_ID' attribute
-// to the given value.
-//
-//
-func (b *ClusterRegistrationBuilder) SubscriptionID(value string) *ClusterRegistrationBuilder {
-	b.subscriptionID = &value
-	return b
 }
 
 // ExternalID sets the value of the 'external_ID' attribute
@@ -50,14 +41,33 @@ func (b *ClusterRegistrationBuilder) ExternalID(value string) *ClusterRegistrati
 	return b
 }
 
+// SubscriptionID sets the value of the 'subscription_ID' attribute
+// to the given value.
+//
+//
+func (b *ClusterRegistrationBuilder) SubscriptionID(value string) *ClusterRegistrationBuilder {
+	b.subscriptionID = &value
+	return b
+}
+
+// Copy copies the attributes of the given object into this builder, discarding any previous values.
+func (b *ClusterRegistrationBuilder) Copy(object *ClusterRegistration) *ClusterRegistrationBuilder {
+	if object == nil {
+		return b
+	}
+	b.externalID = object.externalID
+	b.subscriptionID = object.subscriptionID
+	return b
+}
+
 // Build creates a 'cluster_registration' object using the configuration stored in the builder.
 func (b *ClusterRegistrationBuilder) Build() (object *ClusterRegistration, err error) {
 	object = new(ClusterRegistration)
-	if b.subscriptionID != nil {
-		object.subscriptionID = b.subscriptionID
-	}
 	if b.externalID != nil {
 		object.externalID = b.externalID
+	}
+	if b.subscriptionID != nil {
+		object.subscriptionID = b.subscriptionID
 	}
 	return
 }
