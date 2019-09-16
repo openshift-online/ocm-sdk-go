@@ -72,7 +72,6 @@ type ClusterBuilder struct {
 	cloudProvider       *CloudProviderBuilder
 	console             *ClusterConsoleBuilder
 	creationTimestamp   *time.Time
-	creator             *string
 	displayName         *string
 	expirationTimestamp *time.Time
 	externalID          *string
@@ -167,15 +166,6 @@ func (b *ClusterBuilder) Console(value *ClusterConsoleBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) CreationTimestamp(value time.Time) *ClusterBuilder {
 	b.creationTimestamp = &value
-	return b
-}
-
-// Creator sets the value of the 'creator' attribute
-// to the given value.
-//
-//
-func (b *ClusterBuilder) Creator(value string) *ClusterBuilder {
-	b.creator = &value
 	return b
 }
 
@@ -378,7 +368,6 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.console = nil
 	}
 	b.creationTimestamp = object.creationTimestamp
-	b.creator = object.creator
 	b.displayName = object.displayName
 	b.expirationTimestamp = object.expirationTimestamp
 	b.externalID = object.externalID
@@ -480,9 +469,6 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	if b.creationTimestamp != nil {
 		object.creationTimestamp = b.creationTimestamp
-	}
-	if b.creator != nil {
-		object.creator = b.creator
 	}
 	if b.displayName != nil {
 		object.displayName = b.displayName
