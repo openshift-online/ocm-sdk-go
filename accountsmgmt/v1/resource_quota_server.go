@@ -130,34 +130,12 @@ func (r *ResourceQuotaUpdateServerRequest) unmarshal(reader io.Reader) error {
 type ResourceQuotaUpdateServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *ResourceQuota
-}
-
-// Body sets the value of the 'body' parameter.
-//
-//
-func (r *ResourceQuotaUpdateServerResponse) Body(value *ResourceQuota) *ResourceQuotaUpdateServerResponse {
-	r.body = value
-	return r
 }
 
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *ResourceQuotaUpdateServerResponse) SetStatusCode(status int) *ResourceQuotaUpdateServerResponse {
 	r.status = status
 	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'update' method.
-func (r *ResourceQuotaUpdateServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // ResourceQuotaServerAdapter represents the structs that adapts Requests and Response to internal
@@ -232,10 +210,6 @@ func (a *ResourceQuotaServerAdapter) readResourceQuotaUpdateServerRequest(r *htt
 func (a *ResourceQuotaServerAdapter) writeResourceQuotaUpdateServerResponse(w http.ResponseWriter, r *ResourceQuotaUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 func (a *ResourceQuotaServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {

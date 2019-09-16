@@ -305,10 +305,6 @@ func (r *OrganizationUpdateRequest) SendContext(ctx context.Context) (result *Or
 		err = result.err
 		return
 	}
-	err = result.unmarshal(response.Body)
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -330,7 +326,6 @@ type OrganizationUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Organization
 }
 
 // Status returns the response status code.
@@ -346,43 +341,4 @@ func (r *OrganizationUpdateResponse) Header() http.Header {
 // Error returns the response error.
 func (r *OrganizationUpdateResponse) Error() *errors.Error {
 	return r.err
-}
-
-// Body returns the value of the 'body' parameter.
-//
-//
-func (r *OrganizationUpdateResponse) Body() *Organization {
-	if r == nil {
-		return nil
-	}
-	return r.body
-}
-
-// GetBody returns the value of the 'body' parameter and
-// a flag indicating if the parameter has a value.
-//
-//
-func (r *OrganizationUpdateResponse) GetBody() (value *Organization, ok bool) {
-	ok = r != nil && r.body != nil
-	if ok {
-		value = r.body
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'update' method.
-func (r *OrganizationUpdateResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(organizationData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
 }
