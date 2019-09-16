@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.36 Sep 16 2019
+
+- Update to model 0.0.6:
+** Remove the `creator` attribute of the `Cluster` type.
+
+- Update to metamodel 0.0.7:
+** Add `Copy` method to builders.
+
 == 0.1.35 Sep 12 2019
 
 - Update to model 0.0.5:
