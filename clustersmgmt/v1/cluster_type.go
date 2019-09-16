@@ -84,7 +84,6 @@ type Cluster struct {
 	cloudProvider       *CloudProvider
 	console             *ClusterConsole
 	creationTimestamp   *time.Time
-	creator             *string
 	displayName         *string
 	expirationTimestamp *time.Time
 	externalID          *string
@@ -166,7 +165,6 @@ func (o *Cluster) Empty() bool {
 		o.cloudProvider == nil &&
 		o.console == nil &&
 		o.creationTimestamp == nil &&
-		o.creator == nil &&
 		o.displayName == nil &&
 		o.expirationTimestamp == nil &&
 		o.externalID == nil &&
@@ -324,29 +322,6 @@ func (o *Cluster) GetCreationTimestamp() (value time.Time, ok bool) {
 	ok = o != nil && o.creationTimestamp != nil
 	if ok {
 		value = *o.creationTimestamp
-	}
-	return
-}
-
-// Creator returns the value of the 'creator' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Mail address of the user that created the cluster.
-func (o *Cluster) Creator() string {
-	if o != nil && o.creator != nil {
-		return *o.creator
-	}
-	return ""
-}
-
-// GetCreator returns the value of the 'creator' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Mail address of the user that created the cluster.
-func (o *Cluster) GetCreator() (value string, ok bool) {
-	ok = o != nil && o.creator != nil
-	if ok {
-		value = *o.creator
 	}
 	return
 }

@@ -38,7 +38,6 @@ type clusterData struct {
 	CloudProvider       *cloudProviderData            "json:\"cloud_provider,omitempty\""
 	Console             *clusterConsoleData           "json:\"console,omitempty\""
 	CreationTimestamp   *time.Time                    "json:\"creation_timestamp,omitempty\""
-	Creator             *string                       "json:\"creator,omitempty\""
 	DisplayName         *string                       "json:\"display_name,omitempty\""
 	ExpirationTimestamp *time.Time                    "json:\"expiration_timestamp,omitempty\""
 	ExternalID          *string                       "json:\"external_id,omitempty\""
@@ -109,7 +108,6 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 		return
 	}
 	data.CreationTimestamp = o.creationTimestamp
-	data.Creator = o.creator
 	data.DisplayName = o.displayName
 	data.ExpirationTimestamp = o.expirationTimestamp
 	data.ExternalID = o.externalID
@@ -220,7 +218,6 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 		return
 	}
 	object.creationTimestamp = d.CreationTimestamp
-	object.creator = d.Creator
 	object.displayName = d.DisplayName
 	object.expirationTimestamp = d.ExpirationTimestamp
 	object.externalID = d.ExternalID
