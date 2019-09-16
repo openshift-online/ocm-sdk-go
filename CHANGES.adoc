@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.37 Sep 16 2019
+
+- Update to model 0.0.7:
+** Add `search` parameter to the `List` method of the subscriptions resource.
+
 == 0.1.36 Sep 16 2019
 
 - Update to model 0.0.6:
