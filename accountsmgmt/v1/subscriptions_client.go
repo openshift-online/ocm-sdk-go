@@ -82,6 +82,7 @@ type SubscriptionsListRequest struct {
 	header    http.Header
 	order     *string
 	page      *int
+	search    *string
 	size      *int
 	total     *int
 }
@@ -128,6 +129,27 @@ func (r *SubscriptionsListRequest) Page(value int) *SubscriptionsListRequest {
 	return r
 }
 
+// Search sets the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the subscription instead
+// of the names of the columns of a table. For example, in order to retrieve all the
+// subscriptions for managed clusters the value should be:
+//
+// [source,sql]
+// ----
+// managed = 't'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// clusters that the user has permission to see will be returned.
+func (r *SubscriptionsListRequest) Search(value string) *SubscriptionsListRequest {
+	r.search = &value
+	return r
+}
+
 // Size sets the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
@@ -163,6 +185,9 @@ func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *Sub
 	}
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.search != nil {
+		helpers.AddValue(&query, "search", *r.search)
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)

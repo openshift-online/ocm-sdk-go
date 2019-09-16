@@ -47,10 +47,11 @@ type SubscriptionsServer interface {
 
 // SubscriptionsListServerRequest is the request for the 'list' method.
 type SubscriptionsListServerRequest struct {
-	order *string
-	page  *int
-	size  *int
-	total *int
+	order  *string
+	page   *int
+	search *string
+	size   *int
+	total  *int
 }
 
 // Order returns the value of the 'order' parameter.
@@ -121,6 +122,54 @@ func (r *SubscriptionsListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
+	}
+	return
+}
+
+// Search returns the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the subscription instead
+// of the names of the columns of a table. For example, in order to retrieve all the
+// subscriptions for managed clusters the value should be:
+//
+// [source,sql]
+// ----
+// managed = 't'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// clusters that the user has permission to see will be returned.
+func (r *SubscriptionsListServerRequest) Search() string {
+	if r != nil && r.search != nil {
+		return *r.search
+	}
+	return ""
+}
+
+// GetSearch returns the value of the 'search' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the subscription instead
+// of the names of the columns of a table. For example, in order to retrieve all the
+// subscriptions for managed clusters the value should be:
+//
+// [source,sql]
+// ----
+// managed = 't'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// clusters that the user has permission to see will be returned.
+func (r *SubscriptionsListServerRequest) GetSearch() (value string, ok bool) {
+	ok = r != nil && r.search != nil
+	if ok {
+		value = *r.search
 	}
 	return
 }
@@ -285,6 +334,10 @@ func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.
 		return nil, err
 	}
 	result.page, err = helpers.ParseInteger(query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}
