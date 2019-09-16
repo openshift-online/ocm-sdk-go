@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.38 Sep 17 2019
+
+- Update to model 0.0.8:
+** Update methods don't return body.
+
 == 0.1.37 Sep 16 2019
 
 - Update to model 0.0.7:
