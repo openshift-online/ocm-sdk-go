@@ -280,10 +280,6 @@ func (r *ResourceQuotaUpdateRequest) SendContext(ctx context.Context) (result *R
 		err = result.err
 		return
 	}
-	err = result.unmarshal(response.Body)
-	if err != nil {
-		return
-	}
 	return
 }
 
@@ -305,7 +301,6 @@ type ResourceQuotaUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *ResourceQuota
 }
 
 // Status returns the response status code.
@@ -321,43 +316,4 @@ func (r *ResourceQuotaUpdateResponse) Header() http.Header {
 // Error returns the response error.
 func (r *ResourceQuotaUpdateResponse) Error() *errors.Error {
 	return r.err
-}
-
-// Body returns the value of the 'body' parameter.
-//
-//
-func (r *ResourceQuotaUpdateResponse) Body() *ResourceQuota {
-	if r == nil {
-		return nil
-	}
-	return r.body
-}
-
-// GetBody returns the value of the 'body' parameter and
-// a flag indicating if the parameter has a value.
-//
-//
-func (r *ResourceQuotaUpdateResponse) GetBody() (value *ResourceQuota, ok bool) {
-	ok = r != nil && r.body != nil
-	if ok {
-		value = r.body
-	}
-	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'update' method.
-func (r *ResourceQuotaUpdateResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(resourceQuotaData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
 }

@@ -142,34 +142,12 @@ func (r *OrganizationUpdateServerRequest) unmarshal(reader io.Reader) error {
 type OrganizationUpdateServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *Organization
-}
-
-// Body sets the value of the 'body' parameter.
-//
-//
-func (r *OrganizationUpdateServerResponse) Body(value *Organization) *OrganizationUpdateServerResponse {
-	r.body = value
-	return r
 }
 
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *OrganizationUpdateServerResponse) SetStatusCode(status int) *OrganizationUpdateServerResponse {
 	r.status = status
 	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'update' method.
-func (r *OrganizationUpdateServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // OrganizationServerAdapter represents the structs that adapts Requests and Response to internal
@@ -258,10 +236,6 @@ func (a *OrganizationServerAdapter) readOrganizationUpdateServerRequest(r *http.
 func (a *OrganizationServerAdapter) writeOrganizationUpdateServerResponse(w http.ResponseWriter, r *OrganizationUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 func (a *OrganizationServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {

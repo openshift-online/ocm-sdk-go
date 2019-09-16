@@ -130,34 +130,12 @@ func (r *AccountUpdateServerRequest) unmarshal(reader io.Reader) error {
 type AccountUpdateServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *Account
-}
-
-// Body sets the value of the 'body' parameter.
-//
-//
-func (r *AccountUpdateServerResponse) Body(value *Account) *AccountUpdateServerResponse {
-	r.body = value
-	return r
 }
 
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *AccountUpdateServerResponse) SetStatusCode(status int) *AccountUpdateServerResponse {
 	r.status = status
 	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'update' method.
-func (r *AccountUpdateServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // AccountServerAdapter represents the structs that adapts Requests and Response to internal
@@ -232,10 +210,6 @@ func (a *AccountServerAdapter) readAccountUpdateServerRequest(r *http.Request) (
 func (a *AccountServerAdapter) writeAccountUpdateServerResponse(w http.ResponseWriter, r *AccountUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 func (a *AccountServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {

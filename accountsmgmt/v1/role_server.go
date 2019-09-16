@@ -151,34 +151,12 @@ func (r *RoleUpdateServerRequest) unmarshal(reader io.Reader) error {
 type RoleUpdateServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *Role
-}
-
-// Body sets the value of the 'body' parameter.
-//
-//
-func (r *RoleUpdateServerResponse) Body(value *Role) *RoleUpdateServerResponse {
-	r.body = value
-	return r
 }
 
 // SetStatusCode sets the status code for a give response and returns the response object.
 func (r *RoleUpdateServerResponse) SetStatusCode(status int) *RoleUpdateServerResponse {
 	r.status = status
 	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'update' method.
-func (r *RoleUpdateServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // RoleServerAdapter represents the structs that adapts Requests and Response to internal
@@ -295,10 +273,6 @@ func (a *RoleServerAdapter) readRoleUpdateServerRequest(r *http.Request) (*RoleU
 func (a *RoleServerAdapter) writeRoleUpdateServerResponse(w http.ResponseWriter, r *RoleUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 func (a *RoleServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {
