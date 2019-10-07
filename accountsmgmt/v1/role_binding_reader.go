@@ -28,14 +28,15 @@ import (
 // roleBindingData is the data structure used internally to marshal and unmarshal
 // objects of type 'role_binding'.
 type roleBindingData struct {
-	Kind         *string           "json:\"kind,omitempty\""
-	ID           *string           "json:\"id,omitempty\""
-	HREF         *string           "json:\"href,omitempty\""
-	Account      *accountData      "json:\"account,omitempty\""
-	Organization *organizationData "json:\"organization,omitempty\""
-	Role         *roleData         "json:\"role,omitempty\""
-	Subscription *subscriptionData "json:\"subscription,omitempty\""
-	Type         *string           "json:\"type,omitempty\""
+	Kind          *string           "json:\"kind,omitempty\""
+	ID            *string           "json:\"id,omitempty\""
+	HREF          *string           "json:\"href,omitempty\""
+	Account       *accountData      "json:\"account,omitempty\""
+	ConfigManaged *bool             "json:\"config_managed,omitempty\""
+	Organization  *organizationData "json:\"organization,omitempty\""
+	Role          *roleData         "json:\"role,omitempty\""
+	Subscription  *subscriptionData "json:\"subscription,omitempty\""
+	Type          *string           "json:\"type,omitempty\""
 }
 
 // MarshalRoleBinding writes a value of the 'role_binding' to the given target,
@@ -71,6 +72,7 @@ func (o *RoleBinding) wrap() (data *roleBindingData, err error) {
 	if err != nil {
 		return
 	}
+	data.ConfigManaged = o.configManaged
 	data.Organization, err = o.organization.wrap()
 	if err != nil {
 		return
@@ -132,6 +134,7 @@ func (d *roleBindingData) unwrap() (object *RoleBinding, err error) {
 	if err != nil {
 		return
 	}
+	object.configManaged = d.ConfigManaged
 	object.organization, err = d.Organization.unwrap()
 	if err != nil {
 		return

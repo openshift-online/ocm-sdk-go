@@ -34,6 +34,7 @@ type ResourceQuotaBuilder struct {
 	reserved             *int
 	resourceName         *string
 	resourceType         *string
+	type_                *string
 }
 
 // NewResourceQuota creates a new builder of 'resource_quota' objects.
@@ -131,6 +132,15 @@ func (b *ResourceQuotaBuilder) ResourceType(value string) *ResourceQuotaBuilder 
 	return b
 }
 
+// Type sets the value of the 'type' attribute
+// to the given value.
+//
+//
+func (b *ResourceQuotaBuilder) Type(value string) *ResourceQuotaBuilder {
+	b.type_ = &value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *ResourceQuotaBuilder) Copy(object *ResourceQuota) *ResourceQuotaBuilder {
 	if object == nil {
@@ -147,6 +157,7 @@ func (b *ResourceQuotaBuilder) Copy(object *ResourceQuota) *ResourceQuotaBuilder
 	b.reserved = object.reserved
 	b.resourceName = object.resourceName
 	b.resourceType = object.resourceType
+	b.type_ = object.type_
 	return b
 }
 
@@ -179,6 +190,9 @@ func (b *ResourceQuotaBuilder) Build() (object *ResourceQuota, err error) {
 	}
 	if b.resourceType != nil {
 		object.resourceType = b.resourceType
+	}
+	if b.type_ != nil {
+		object.type_ = b.type_
 	}
 	return
 }

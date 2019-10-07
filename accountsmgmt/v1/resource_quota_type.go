@@ -46,6 +46,7 @@ type ResourceQuota struct {
 	reserved             *int
 	resourceName         *string
 	resourceType         *string
+	type_                *string
 }
 
 // Kind returns the name of the type of the object.
@@ -111,6 +112,7 @@ func (o *ResourceQuota) Empty() bool {
 		o.reserved == nil &&
 		o.resourceName == nil &&
 		o.resourceType == nil &&
+		o.type_ == nil &&
 		true)
 }
 
@@ -294,6 +296,29 @@ func (o *ResourceQuota) GetResourceType() (value string, ok bool) {
 	ok = o != nil && o.resourceType != nil
 	if ok {
 		value = *o.resourceType
+	}
+	return
+}
+
+// Type returns the value of the 'type' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ResourceQuota) Type() string {
+	if o != nil && o.type_ != nil {
+		return *o.type_
+	}
+	return ""
+}
+
+// GetType returns the value of the 'type' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ResourceQuota) GetType() (value string, ok bool) {
+	ok = o != nil && o.type_ != nil
+	if ok {
+		value = *o.type_
 	}
 	return
 }
