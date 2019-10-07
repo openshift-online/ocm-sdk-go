@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.39 Oct 7 2019
+
+- Update to model: 0.0.8
+** Add `type` attribute to the `ResourceQuota` type.
+** Add `config_managed` attribute to the `RoleBinding` type.
+
 == 0.1.38 Sep 17 2019
 
 - Update to model 0.0.8:
