@@ -130,6 +130,17 @@ func (c *ClusterClient) Logs() *LogsClient {
 	)
 }
 
+// MetricQueries returns the target 'metric_queries' resource.
+//
+// Reference to the resource that manages metrics queries for the cluster.
+func (c *ClusterClient) MetricQueries() *MetricQueriesClient {
+	return NewMetricQueriesClient(
+		c.transport,
+		path.Join(c.path, "metric_queries"),
+		path.Join(c.metric, "metric_queries"),
+	)
+}
+
 // Status returns the target 'cluster_status' resource.
 //
 // Reference to the resource that manages the detailed status of the cluster.
