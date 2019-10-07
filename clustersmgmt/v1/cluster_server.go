@@ -68,6 +68,11 @@ type ClusterServer interface {
 	// Reference to the resource that manages the collection of logs of the cluster.
 	Logs() LogsServer
 
+	// MetricQueries returns the target 'metric_queries' resource.
+	//
+	// Reference to the resource that manages metrics queries for the cluster.
+	MetricQueries() MetricQueriesServer
+
 	// Status returns the target 'cluster_status' resource.
 	//
 	// Reference to the resource that manages the detailed status of the cluster.
@@ -199,6 +204,7 @@ func NewClusterServerAdapter(server ClusterServer, router *mux.Router) *ClusterS
 	adapter.router.PathPrefix("/groups").HandlerFunc(adapter.groupsHandler)
 	adapter.router.PathPrefix("/identity_providers").HandlerFunc(adapter.identityProvidersHandler)
 	adapter.router.PathPrefix("/logs").HandlerFunc(adapter.logsHandler)
+	adapter.router.PathPrefix("/metric_queries").HandlerFunc(adapter.metricQueriesHandler)
 	adapter.router.PathPrefix("/status").HandlerFunc(adapter.statusHandler)
 	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
 	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
@@ -226,6 +232,12 @@ func (a *ClusterServerAdapter) identityProvidersHandler(w http.ResponseWriter, r
 func (a *ClusterServerAdapter) logsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Logs()
 	targetAdapter := NewLogsServerAdapter(target, a.router.PathPrefix("/logs").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
+}
+func (a *ClusterServerAdapter) metricQueriesHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.MetricQueries()
+	targetAdapter := NewMetricQueriesServerAdapter(target, a.router.PathPrefix("/metric_queries").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
