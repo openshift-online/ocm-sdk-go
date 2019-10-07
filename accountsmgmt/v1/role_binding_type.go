@@ -35,14 +35,15 @@ const RoleBindingNilKind = "RoleBindingNil"
 //
 //
 type RoleBinding struct {
-	id           *string
-	href         *string
-	link         bool
-	account      *Account
-	organization *Organization
-	role         *Role
-	subscription *Subscription
-	type_        *string
+	id            *string
+	href          *string
+	link          bool
+	account       *Account
+	configManaged *bool
+	organization  *Organization
+	role          *Role
+	subscription  *Subscription
+	type_         *string
 }
 
 // Kind returns the name of the type of the object.
@@ -101,6 +102,7 @@ func (o *RoleBinding) GetHREF() (value string, ok bool) {
 func (o *RoleBinding) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.account == nil &&
+		o.configManaged == nil &&
 		o.organization == nil &&
 		o.role == nil &&
 		o.subscription == nil &&
@@ -127,6 +129,29 @@ func (o *RoleBinding) GetAccount() (value *Account, ok bool) {
 	ok = o != nil && o.account != nil
 	if ok {
 		value = o.account
+	}
+	return
+}
+
+// ConfigManaged returns the value of the 'config_managed' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RoleBinding) ConfigManaged() bool {
+	if o != nil && o.configManaged != nil {
+		return *o.configManaged
+	}
+	return false
+}
+
+// GetConfigManaged returns the value of the 'config_managed' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RoleBinding) GetConfigManaged() (value bool, ok bool) {
+	ok = o != nil && o.configManaged != nil
+	if ok {
+		value = *o.configManaged
 	}
 	return
 }

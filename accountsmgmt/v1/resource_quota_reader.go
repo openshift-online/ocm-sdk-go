@@ -39,6 +39,7 @@ type resourceQuotaData struct {
 	Reserved             *int    "json:\"reserved,omitempty\""
 	ResourceName         *string "json:\"resource_name,omitempty\""
 	ResourceType         *string "json:\"resource_type,omitempty\""
+	Type                 *string "json:\"type,omitempty\""
 }
 
 // MarshalResourceQuota writes a value of the 'resource_quota' to the given target,
@@ -78,6 +79,7 @@ func (o *ResourceQuota) wrap() (data *resourceQuotaData, err error) {
 	data.Reserved = o.reserved
 	data.ResourceName = o.resourceName
 	data.ResourceType = o.resourceType
+	data.Type = o.type_
 	return
 }
 
@@ -130,5 +132,6 @@ func (d *resourceQuotaData) unwrap() (object *ResourceQuota, err error) {
 	object.reserved = d.Reserved
 	object.resourceName = d.ResourceName
 	object.resourceType = d.ResourceType
+	object.type_ = d.Type
 	return
 }

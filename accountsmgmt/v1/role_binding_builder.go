@@ -23,14 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type RoleBindingBuilder struct {
-	id           *string
-	href         *string
-	link         bool
-	account      *AccountBuilder
-	organization *OrganizationBuilder
-	role         *RoleBuilder
-	subscription *SubscriptionBuilder
-	type_        *string
+	id            *string
+	href          *string
+	link          bool
+	account       *AccountBuilder
+	configManaged *bool
+	organization  *OrganizationBuilder
+	role          *RoleBuilder
+	subscription  *SubscriptionBuilder
+	type_         *string
 }
 
 // NewRoleBinding creates a new builder of 'role_binding' objects.
@@ -62,6 +63,15 @@ func (b *RoleBindingBuilder) Link(value bool) *RoleBindingBuilder {
 //
 func (b *RoleBindingBuilder) Account(value *AccountBuilder) *RoleBindingBuilder {
 	b.account = value
+	return b
+}
+
+// ConfigManaged sets the value of the 'config_managed' attribute
+// to the given value.
+//
+//
+func (b *RoleBindingBuilder) ConfigManaged(value bool) *RoleBindingBuilder {
+	b.configManaged = &value
 	return b
 }
 
@@ -114,6 +124,7 @@ func (b *RoleBindingBuilder) Copy(object *RoleBinding) *RoleBindingBuilder {
 	} else {
 		b.account = nil
 	}
+	b.configManaged = object.configManaged
 	if object.organization != nil {
 		b.organization = NewOrganization().Copy(object.organization)
 	} else {
@@ -144,6 +155,9 @@ func (b *RoleBindingBuilder) Build() (object *RoleBinding, err error) {
 		if err != nil {
 			return
 		}
+	}
+	if b.configManaged != nil {
+		object.configManaged = b.configManaged
 	}
 	if b.organization != nil {
 		object.organization, err = b.organization.Build()
