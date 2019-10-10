@@ -43,30 +43,7 @@ fmt:
 
 .PHONY: lint
 lint:
-	golangci-lint run \
-		--no-config \
-		--issues-exit-code=1 \
-		--deadline=15m \
-		--skip-dirs=accountsmgmt \
-		--skip-dirs=authorizations \
-		--skip-dirs=clustersmgmt \
-		--skip-dirs=errors \
-		--skip-dirs=helpers \
-		--disable-all \
-		--enable=deadcode \
-		--enable=gas \
-		--enable=goconst \
-		--enable=gofmt \
-		--enable=golint \
-		--enable=ineffassign \
-		--enable=interfacer \
-		--enable=lll \
-		--enable=megacheck \
-		--enable=misspell \
-		--enable=structcheck \
-		--enable=unconvert \
-		--enable=varcheck \
-		$(NULL)
+	golangci-lint run
 
 .PHONY: generate
 generate: model metamodel
