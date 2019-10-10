@@ -32,6 +32,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/openshift-online/ocm-sdk-go/accountsmgmt"
+	"github.com/openshift-online/ocm-sdk-go/authorizations"
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
 )
 
@@ -596,6 +597,11 @@ func (c *Connection) AccountsMgmt() *accountsmgmt.Client {
 // ClustersMgmt returns the client for the clusters management service.
 func (c *Connection) ClustersMgmt() *clustersmgmt.Client {
 	return clustersmgmt.NewClient(c, "/api/clusters_mgmt", "/api/clusters_mgmt")
+}
+
+// Authorizations returns the client for the authorizations service.
+func (c *Connection) Authorizations() *authorizations.Client {
+	return authorizations.NewClient(c, "/api/authorizations", "/api/authorizations")
 }
 
 // Close releases all the resources used by the connection. It is very important to allways close it
