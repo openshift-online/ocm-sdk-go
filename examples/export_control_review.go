@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This example shows how to use run of the metric queries provided for clusters management service.
+// This example shows how to use the export control review resource.
 
 package main
 
@@ -24,7 +24,7 @@ import (
 	"os"
 
 	"github.com/openshift-online/ocm-sdk-go"
-	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	azv1 "github.com/openshift-online/ocm-sdk-go/authorizations/v1"
 )
 
 func main() {
@@ -52,25 +52,28 @@ func main() {
 	}
 	defer connection.Close()
 
-	// Get the client for the resource that manages the the metrics query that we want to use:
-	resource := connection.ClustersMgmt().V1().
-		Clusters().
-		Cluster("...").
-		MetricQueries().
-		CPUTotalByNodeRolesOS()
+	// Get the client for the resource that manages export control review:
+	resource := connection.Authorizations().V1().ExportControlReview()
 
-	// Send the request to run the query:
-	response, err := resource.Get().SendContext(ctx)
+	// Build the request:
+	reviewRequest, err := azv1.NewExportControlReviewRequest().
+		AccountUsername("alice").
+		Build()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't build request: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Send the request:
+	postResponse, err := resource.Post().
+		Request(reviewRequest).
+		SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't run metrics query: %v\n", err)
 		os.Exit(1)
 	}
 
 	// Print the results:
-	response.Body().CPUTotals().Each(func(node *cmv1.CPUTotalNodeRoleOSMetricNode) bool {
-		fmt.Printf("Node roles: %v\n", node.NodeRoles())
-		fmt.Printf("Operating system: %s\n", node.OperatingSystem())
-		fmt.Printf("CPU total: %f\n", node.CPUTotal())
-		return true
-	})
+	reviewResponse := postResponse.Response()
+	fmt.Printf("Restricted: %v\n", reviewResponse.Restricted())
 }

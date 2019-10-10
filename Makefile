@@ -15,7 +15,7 @@
 #
 
 # Details of the model to use:
-model_version:=v0.0.10
+model_version:=v0.0.11
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
@@ -44,6 +44,7 @@ lint:
 		--issues-exit-code=1 \
 		--deadline=15m \
 		--skip-dirs=accountsmgmt \
+		--skip-dirs=authorizations \
 		--skip-dirs=clustersmgmt \
 		--skip-dirs=errors \
 		--skip-dirs=helpers \
