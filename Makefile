@@ -14,6 +14,10 @@
 # limitations under the License.
 #
 
+# Enable Go modules:
+export GO111MODULE=on
+export GOPROXY=https://proxy.golang.org
+
 # Details of the model to use:
 model_version:=v0.0.11
 model_url:=https://github.com/openshift-online/ocm-api-model.git
