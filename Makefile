@@ -49,6 +49,7 @@ lint:
 generate: model metamodel
 	rm -rf \
 		accountsmgmt \
+		authorizations \
 		clustersmgmt \
 		errors \
 		helpers
