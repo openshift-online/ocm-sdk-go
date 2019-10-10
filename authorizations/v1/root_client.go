@@ -44,6 +44,17 @@ func NewRootClient(transport http.RoundTripper, path string, metric string) *Roo
 	return client
 }
 
+// AccessReview returns the target 'access_review' resource.
+//
+// Reference to the resource that is used to submit access review requests.
+func (c *RootClient) AccessReview() *AccessReviewClient {
+	return NewAccessReviewClient(
+		c.transport,
+		path.Join(c.path, "access_review"),
+		path.Join(c.metric, "access_review"),
+	)
+}
+
 // ExportControlReview returns the target 'export_control_review' resource.
 //
 // Reference to the resource that is used to submit export control review requests.
@@ -52,5 +63,16 @@ func (c *RootClient) ExportControlReview() *ExportControlReviewClient {
 		c.transport,
 		path.Join(c.path, "export_control_review"),
 		path.Join(c.metric, "export_control_review"),
+	)
+}
+
+// SelfAccessReview returns the target 'self_access_review' resource.
+//
+// Reference to the resource that is used to submit self access review requests.
+func (c *RootClient) SelfAccessReview() *SelfAccessReviewClient {
+	return NewSelfAccessReviewClient(
+		c.transport,
+		path.Join(c.path, "self_access_review"),
+		path.Join(c.metric, "self_access_review"),
 	)
 }
