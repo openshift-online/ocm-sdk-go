@@ -28,10 +28,20 @@ import (
 // RootServer represents the interface the manages the 'root' resource.
 type RootServer interface {
 
+	// AccessReview returns the target 'access_review' resource.
+	//
+	// Reference to the resource that is used to submit access review requests.
+	AccessReview() AccessReviewServer
+
 	// ExportControlReview returns the target 'export_control_review' resource.
 	//
 	// Reference to the resource that is used to submit export control review requests.
 	ExportControlReview() ExportControlReviewServer
+
+	// SelfAccessReview returns the target 'self_access_review' resource.
+	//
+	// Reference to the resource that is used to submit self access review requests.
+	SelfAccessReview() SelfAccessReviewServer
 }
 
 // RootServerAdapter represents the structs that adapts Requests and Response to internal
@@ -45,12 +55,26 @@ func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdap
 	adapter := new(RootServerAdapter)
 	adapter.server = server
 	adapter.router = router
+	adapter.router.PathPrefix("/access_review").HandlerFunc(adapter.accessReviewHandler)
 	adapter.router.PathPrefix("/export_control_review").HandlerFunc(adapter.exportControlReviewHandler)
+	adapter.router.PathPrefix("/self_access_review").HandlerFunc(adapter.selfAccessReviewHandler)
 	return adapter
+}
+func (a *RootServerAdapter) accessReviewHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.AccessReview()
+	targetAdapter := NewAccessReviewServerAdapter(target, a.router.PathPrefix("/access_review").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
 }
 func (a *RootServerAdapter) exportControlReviewHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.ExportControlReview()
 	targetAdapter := NewExportControlReviewServerAdapter(target, a.router.PathPrefix("/export_control_review").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
+}
+func (a *RootServerAdapter) selfAccessReviewHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.SelfAccessReview()
+	targetAdapter := NewSelfAccessReviewServerAdapter(target, a.router.PathPrefix("/self_access_review").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
