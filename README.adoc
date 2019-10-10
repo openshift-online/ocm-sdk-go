@@ -125,6 +125,11 @@ accountsmgmt/v1::
 This package contains the types and clients for version 1 of the accounts
 management service.
 
+authorizations/v1::
+
+This package contains the types and clients for version 1 of the
+authorizations service.
+
 clustersmgmt/v1::
 
 This package contains the types and clients for version 1 of the clusters
@@ -172,7 +177,7 @@ closed when no longer needed.
 === Using _types_
 
 The Go types that correspond to the API data types live in the
-`accountsmgmt/v1` and `clustersmgmt/v1` packages. These types are pure data
+`accountsmgmt/v1`, `authorizations/v1`, and `clustersmgmt/v1` packages. These types are pure data
 containers, they don't have any logic or operation.  Instances can be created
 at will.
 
