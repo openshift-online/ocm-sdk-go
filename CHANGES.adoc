@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.41 Oct 10 2019
+
+- Update to model 0.0.11:
+** Add `export_control_review` resource.
+
 == 0.1.40 Oct 7 2019
 
 - Update to model 0.0.10:
