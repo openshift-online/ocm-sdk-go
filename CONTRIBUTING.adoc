@@ -8,12 +8,8 @@ link:https://github.com/openshift-online/ocm-api-model[ocm-api-model] will need 
 Fork and clone the link:https://github.com/openshift-online/ocm-api-model[ocm-api-model] repository to
 get started.
 
-Models are organized within ocm-api-model/models by api and version. For example, clusters-mgmt api types
-can be found in ocm-api-model/model/clusters_mgmt/v1.
-
-Add any new models or update existing models by hand. Note that all files should have the `.model` extension.
-These files are not golang files but are a very similar syntax. Use the existing types as references when adding
-new or updating existing types.
+The link:https://github.com/openshift-online/ocm-api-model/blob/master/README.adoc[OCM API Model README]
+contains all the information needed to create or update models.
 
 Submit an MR with any changes after validation. The MR should be reviewed before merge.
 
@@ -85,6 +81,9 @@ make generate
 
 In most cases, the ocm-api-model version will be incremented prior to generation. To increment the ocm-api-model
 version, update the `model_version` constant in link:./Makefile[].
+
+Whenever an update is made, ensure that the corresponding example in link:./examples/[] is also updated where
+necessary. Any new endpoints should have a new example created.
 
 == Releasing a new OCM SDK Version
 
