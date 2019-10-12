@@ -30,9 +30,9 @@ type OpenIDClaims struct {
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *OpenIDClaims) Empty() bool {
-	return o == nil || (o.email == nil &&
-		o.name == nil &&
-		o.preferredUsername == nil &&
+	return o == nil || (len(o.email) == 0 &&
+		len(o.name) == 0 &&
+		len(o.preferredUsername) == 0 &&
 		true)
 }
 

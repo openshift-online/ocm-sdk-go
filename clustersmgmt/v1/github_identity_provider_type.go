@@ -34,7 +34,7 @@ func (o *GithubIdentityProvider) Empty() bool {
 	return o == nil || (o.ca == nil &&
 		o.clientID == nil &&
 		o.hostname == nil &&
-		o.teams == nil &&
+		len(o.teams) == 0 &&
 		true)
 }
 

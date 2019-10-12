@@ -178,7 +178,7 @@ func (o *Cluster) Empty() bool {
 		o.network == nil &&
 		o.nodes == nil &&
 		o.openshiftVersion == nil &&
-		o.properties == nil &&
+		len(o.properties) == 0 &&
 		o.region == nil &&
 		o.state == nil &&
 		o.subscription == nil &&

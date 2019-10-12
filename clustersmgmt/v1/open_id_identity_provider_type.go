@@ -39,8 +39,8 @@ func (o *OpenIDIdentityProvider) Empty() bool {
 		o.claims == nil &&
 		o.clientID == nil &&
 		o.clientSecret == nil &&
-		o.extraAuthorizeParameters == nil &&
-		o.extraScopes == nil &&
+		len(o.extraAuthorizeParameters) == 0 &&
+		len(o.extraScopes) == 0 &&
 		true)
 }
 

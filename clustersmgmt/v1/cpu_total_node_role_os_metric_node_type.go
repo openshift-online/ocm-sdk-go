@@ -36,7 +36,7 @@ type CPUTotalNodeRoleOSMetricNode struct {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CPUTotalNodeRoleOSMetricNode) Empty() bool {
 	return o == nil || (o.cpuTotal == nil &&
-		o.nodeRoles == nil &&
+		len(o.nodeRoles) == 0 &&
 		o.operatingSystem == nil &&
 		o.time == nil &&
 		true)

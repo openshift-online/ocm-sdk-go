@@ -68,7 +68,7 @@ func NewDecoder(source interface{}) (decoder *json.Decoder, err error) {
 }
 
 // ParseInteger reads a string and parses it to integer,
-// if an error ocurred it returns a non-nil error.
+// if an error occurred it returns a non-nil error.
 func ParseInteger(query url.Values, parameterName string) (*int, error) {
 	values := query[parameterName]
 	count := len(values)
@@ -95,7 +95,7 @@ func ParseInteger(query url.Values, parameterName string) (*int, error) {
 }
 
 // ParseFloat reads a string and parses it to float,
-// if an error ocurred it returns a non-nil error.
+// if an error occurred it returns a non-nil error.
 func ParseFloat(query url.Values, parameterName string) (*float64, error) {
 	values := query[parameterName]
 	count := len(values)
@@ -138,7 +138,7 @@ func ParseString(query url.Values, parameterName string) (*string, error) {
 }
 
 // ParseBoolean reads a string and parses it to boolean,
-// if an error ocurred it returns a non-nil error.
+// if an error occurred it returns a non-nil error.
 func ParseBoolean(query url.Values, parameterName string) (*bool, error) {
 	values := query[parameterName]
 	count := len(values)
@@ -164,7 +164,7 @@ func ParseBoolean(query url.Values, parameterName string) (*bool, error) {
 }
 
 // ParseDate reads a string and parses it to a time.Time,
-// if an error ocurred it returns a non-nil error.
+// if an error occurred it returns a non-nil error.
 func ParseDate(query url.Values, parameterName string) (*time.Time, error) {
 	values := query[parameterName]
 	count := len(values)
