@@ -411,7 +411,14 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.nodes = nil
 	}
 	b.openshiftVersion = object.openshiftVersion
-	b.properties = object.properties
+	if len(object.properties) > 0 {
+		b.properties = make(map[string]string)
+		for key, value := range object.properties {
+			b.properties[key] = value
+		}
+	} else {
+		b.properties = nil
+	}
 	if object.region != nil {
 		b.region = NewCloudRegion().Copy(object.region)
 	} else {
@@ -536,7 +543,10 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		object.openshiftVersion = b.openshiftVersion
 	}
 	if b.properties != nil {
-		object.properties = b.properties
+		object.properties = make(map[string]string)
+		for key, value := range b.properties {
+			object.properties[key] = value
+		}
 	}
 	if b.region != nil {
 		object.region, err = b.region.Build()

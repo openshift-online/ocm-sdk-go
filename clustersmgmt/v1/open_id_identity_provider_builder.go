@@ -119,7 +119,14 @@ func (b *OpenIDIdentityProviderBuilder) Copy(object *OpenIDIdentityProvider) *Op
 	}
 	b.clientID = object.clientID
 	b.clientSecret = object.clientSecret
-	b.extraAuthorizeParameters = object.extraAuthorizeParameters
+	if len(object.extraAuthorizeParameters) > 0 {
+		b.extraAuthorizeParameters = make(map[string]string)
+		for key, value := range object.extraAuthorizeParameters {
+			b.extraAuthorizeParameters[key] = value
+		}
+	} else {
+		b.extraAuthorizeParameters = nil
+	}
 	if len(object.extraScopes) > 0 {
 		b.extraScopes = make([]string, len(object.extraScopes))
 		copy(b.extraScopes, object.extraScopes)
@@ -154,7 +161,10 @@ func (b *OpenIDIdentityProviderBuilder) Build() (object *OpenIDIdentityProvider,
 		object.clientSecret = b.clientSecret
 	}
 	if b.extraAuthorizeParameters != nil {
-		object.extraAuthorizeParameters = b.extraAuthorizeParameters
+		object.extraAuthorizeParameters = make(map[string]string)
+		for key, value := range b.extraAuthorizeParameters {
+			object.extraAuthorizeParameters[key] = value
+		}
 	}
 	if b.extraScopes != nil {
 		object.extraScopes = make([]string, len(b.extraScopes))
