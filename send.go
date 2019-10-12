@@ -107,13 +107,8 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 			return
 		}
 	case http.MethodPost, http.MethodPatch:
-		if request.Body == nil {
-			err = fmt.Errorf(
-				"request body is mandatory for the '%s' method",
-				request.Method,
-			)
-			return
-		}
+		// POST and PATCH don't need to have a body. It is up to the server to decide if
+		// this is acceptable.
 	default:
 		err = fmt.Errorf("method '%s' is not allowed", request.Method)
 		return
