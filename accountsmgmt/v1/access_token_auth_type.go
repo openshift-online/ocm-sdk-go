@@ -19,49 +19,74 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-// AccessToken represents the values of the 'access_token' type.
+// AccessTokenAuth represents the values of the 'access_token_auth' type.
 //
 //
-type AccessToken struct {
-	auths map[string]*AccessTokenAuth
+type AccessTokenAuth struct {
+	auth  *string
+	email *string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *AccessToken) Empty() bool {
-	return o == nil || (len(o.auths) == 0 &&
+func (o *AccessTokenAuth) Empty() bool {
+	return o == nil || (o.auth == nil &&
+		o.email == nil &&
 		true)
 }
 
-// Auths returns the value of the 'auths' attribute, or
+// Auth returns the value of the 'auth' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *AccessToken) Auths() map[string]*AccessTokenAuth {
-	if o == nil {
-		return nil
+func (o *AccessTokenAuth) Auth() string {
+	if o != nil && o.auth != nil {
+		return *o.auth
 	}
-	return o.auths
+	return ""
 }
 
-// GetAuths returns the value of the 'auths' attribute and
+// GetAuth returns the value of the 'auth' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *AccessToken) GetAuths() (value map[string]*AccessTokenAuth, ok bool) {
-	ok = o != nil && o.auths != nil
+func (o *AccessTokenAuth) GetAuth() (value string, ok bool) {
+	ok = o != nil && o.auth != nil
 	if ok {
-		value = o.auths
+		value = *o.auth
 	}
 	return
 }
 
-// AccessTokenList is a list of values of the 'access_token' type.
-type AccessTokenList struct {
-	items []*AccessToken
+// Email returns the value of the 'email' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *AccessTokenAuth) Email() string {
+	if o != nil && o.email != nil {
+		return *o.email
+	}
+	return ""
+}
+
+// GetEmail returns the value of the 'email' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *AccessTokenAuth) GetEmail() (value string, ok bool) {
+	ok = o != nil && o.email != nil
+	if ok {
+		value = *o.email
+	}
+	return
+}
+
+// AccessTokenAuthList is a list of values of the 'access_token_auth' type.
+type AccessTokenAuthList struct {
+	items []*AccessTokenAuth
 }
 
 // Len returns the length of the list.
-func (l *AccessTokenList) Len() int {
+func (l *AccessTokenAuthList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -69,13 +94,13 @@ func (l *AccessTokenList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *AccessTokenList) Empty() bool {
+func (l *AccessTokenAuthList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *AccessTokenList) Get(i int) *AccessToken {
+func (l *AccessTokenAuthList) Get(i int) *AccessTokenAuth {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -88,12 +113,12 @@ func (l *AccessTokenList) Get(i int) *AccessToken {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *AccessTokenList) Slice() []*AccessToken {
-	var slice []*AccessToken
+func (l *AccessTokenAuthList) Slice() []*AccessTokenAuth {
+	var slice []*AccessTokenAuth
 	if l == nil {
-		slice = make([]*AccessToken, 0)
+		slice = make([]*AccessTokenAuth, 0)
 	} else {
-		slice = make([]*AccessToken, len(l.items))
+		slice = make([]*AccessTokenAuth, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -102,7 +127,7 @@ func (l *AccessTokenList) Slice() []*AccessToken {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *AccessTokenList) Each(f func(item *AccessToken) bool) {
+func (l *AccessTokenAuthList) Each(f func(item *AccessTokenAuth) bool) {
 	if l == nil {
 		return
 	}
@@ -116,7 +141,7 @@ func (l *AccessTokenList) Each(f func(item *AccessToken) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *AccessTokenList) Range(f func(index int, item *AccessToken) bool) {
+func (l *AccessTokenAuthList) Range(f func(index int, item *AccessTokenAuth) bool) {
 	if l == nil {
 		return
 	}

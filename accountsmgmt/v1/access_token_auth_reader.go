@@ -23,15 +23,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// accessTokenData is the data structure used internally to marshal and unmarshal
-// objects of type 'access_token'.
-type accessTokenData struct {
-	Auths map[string]*accessTokenAuthData "json:\"auths,omitempty\""
+// accessTokenAuthData is the data structure used internally to marshal and unmarshal
+// objects of type 'access_token_auth'.
+type accessTokenAuthData struct {
+	Auth  *string "json:\"auth,omitempty\""
+	Email *string "json:\"email,omitempty\""
 }
 
-// MarshalAccessToken writes a value of the 'access_token' to the given target,
+// MarshalAccessTokenAuth writes a value of the 'access_token_auth' to the given target,
 // which can be a writer or a JSON encoder.
-func MarshalAccessToken(object *AccessToken, target interface{}) error {
+func MarshalAccessTokenAuth(object *AccessTokenAuth, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
 	if err != nil {
 		return err
@@ -43,31 +44,26 @@ func MarshalAccessToken(object *AccessToken, target interface{}) error {
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'access_token'
+// wrap is the method used internally to convert a value of the 'access_token_auth'
 // value to a JSON document.
-func (o *AccessToken) wrap() (data *accessTokenData, err error) {
+func (o *AccessTokenAuth) wrap() (data *accessTokenAuthData, err error) {
 	if o == nil {
 		return
 	}
-	data = new(accessTokenData)
-	data.Auths = make(map[string]*accessTokenAuthData)
-	for key, value := range o.auths {
-		data.Auths[key], err = value.wrap()
-		if err != nil {
-			return
-		}
-	}
+	data = new(accessTokenAuthData)
+	data.Auth = o.auth
+	data.Email = o.email
 	return
 }
 
-// UnmarshalAccessToken reads a value of the 'access_token' type from the given
+// UnmarshalAccessTokenAuth reads a value of the 'access_token_auth' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
-func UnmarshalAccessToken(source interface{}) (object *AccessToken, err error) {
+func UnmarshalAccessTokenAuth(source interface{}) (object *AccessTokenAuth, err error) {
 	decoder, err := helpers.NewDecoder(source)
 	if err != nil {
 		return
 	}
-	data := new(accessTokenData)
+	data := new(accessTokenAuthData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return
@@ -77,18 +73,13 @@ func UnmarshalAccessToken(source interface{}) (object *AccessToken, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'access_token' type.
-func (d *accessTokenData) unwrap() (object *AccessToken, err error) {
+// value of the 'access_token_auth' type.
+func (d *accessTokenAuthData) unwrap() (object *AccessTokenAuth, err error) {
 	if d == nil {
 		return
 	}
-	object = new(AccessToken)
-	object.auths = make(map[string]*AccessTokenAuth)
-	for key, value := range d.Auths {
-		object.auths[key], err = value.unwrap()
-		if err != nil {
-			return
-		}
-	}
+	object = new(AccessTokenAuth)
+	object.auth = d.Auth
+	object.email = d.Email
 	return
 }

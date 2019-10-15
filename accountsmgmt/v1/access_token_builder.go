@@ -23,6 +23,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type AccessTokenBuilder struct {
+	auths map[string]*AccessTokenAuthBuilder
 }
 
 // NewAccessToken creates a new builder of 'access_token' objects.
@@ -30,10 +31,27 @@ func NewAccessToken() *AccessTokenBuilder {
 	return new(AccessTokenBuilder)
 }
 
+// Auths sets the value of the 'auths' attribute
+// to the given value.
+//
+//
+func (b *AccessTokenBuilder) Auths(value map[string]*AccessTokenAuthBuilder) *AccessTokenBuilder {
+	b.auths = value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *AccessTokenBuilder) Copy(object *AccessToken) *AccessTokenBuilder {
 	if object == nil {
 		return b
+	}
+	if len(object.auths) > 0 {
+		b.auths = make(map[string]*AccessTokenAuthBuilder)
+		for key, value := range object.auths {
+			b.auths[key] = NewAccessTokenAuth().Copy(value)
+		}
+	} else {
+		b.auths = nil
 	}
 	return b
 }
@@ -41,5 +59,14 @@ func (b *AccessTokenBuilder) Copy(object *AccessToken) *AccessTokenBuilder {
 // Build creates a 'access_token' object using the configuration stored in the builder.
 func (b *AccessTokenBuilder) Build() (object *AccessToken, err error) {
 	object = new(AccessToken)
+	if b.auths != nil {
+		object.auths = make(map[string]*AccessTokenAuth)
+		for key, value := range b.auths {
+			object.auths[key], err = value.Build()
+			if err != nil {
+				return
+			}
+		}
+	}
 	return
 }
