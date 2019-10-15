@@ -109,9 +109,9 @@ func (r *ResourceQuotasAddServerResponse) Body(value *ResourceQuota) *ResourceQu
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ResourceQuotasAddServerResponse) SetStatusCode(status int) *ResourceQuotasAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ResourceQuotasAddServerResponse) Status(value int) *ResourceQuotasAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -258,9 +258,9 @@ func (r *ResourceQuotasListServerResponse) Total(value int) *ResourceQuotasListS
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ResourceQuotasListServerResponse) SetStatusCode(status int) *ResourceQuotasListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ResourceQuotasListServerResponse) Status(value int) *ResourceQuotasListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -290,30 +290,30 @@ type resourceQuotasListServerResponseData struct {
 	Total *int                  "json:\"total,omitempty\""
 }
 
-// ResourceQuotasServerAdapter represents the structs that adapts Requests and Response to internal
+// ResourceQuotasAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type ResourceQuotasServerAdapter struct {
+type ResourceQuotasAdapter struct {
 	server ResourceQuotasServer
 	router *mux.Router
 }
 
-func NewResourceQuotasServerAdapter(server ResourceQuotasServer, router *mux.Router) *ResourceQuotasServerAdapter {
-	adapter := new(ResourceQuotasServerAdapter)
+func NewResourceQuotasAdapter(server ResourceQuotasServer, router *mux.Router) *ResourceQuotasAdapter {
+	adapter := new(ResourceQuotasAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.resourceQuotaHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *ResourceQuotasServerAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ResourceQuotasAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.ResourceQuota(id)
-	targetAdapter := NewResourceQuotaServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewResourceQuotaAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ResourceQuotasServerAdapter) readResourceQuotasAddServerRequest(r *http.Request) (*ResourceQuotasAddServerRequest, error) {
+func (a *ResourceQuotasAdapter) readAddRequest(r *http.Request) (*ResourceQuotasAddServerRequest, error) {
 	var err error
 	result := new(ResourceQuotasAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +322,7 @@ func (a *ResourceQuotasServerAdapter) readResourceQuotasAddServerRequest(r *http
 	}
 	return result, err
 }
-func (a *ResourceQuotasServerAdapter) writeResourceQuotasAddServerResponse(w http.ResponseWriter, r *ResourceQuotasAddServerResponse) error {
+func (a *ResourceQuotasAdapter) writeAddResponse(w http.ResponseWriter, r *ResourceQuotasAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,38 +331,48 @@ func (a *ResourceQuotasServerAdapter) writeResourceQuotasAddServerResponse(w htt
 	}
 	return nil
 }
-func (a *ResourceQuotasServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readResourceQuotasAddServerRequest(r)
+func (a *ResourceQuotasAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ResourceQuotasAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(ResourceQuotasAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeResourceQuotasAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ResourceQuotasServerAdapter) readResourceQuotasListServerRequest(r *http.Request) (*ResourceQuotasListServerRequest, error) {
+func (a *ResourceQuotasAdapter) readListRequest(r *http.Request) (*ResourceQuotasListServerRequest, error) {
 	var err error
 	result := new(ResourceQuotasListServerRequest)
 	query := r.URL.Query()
@@ -380,7 +390,7 @@ func (a *ResourceQuotasServerAdapter) readResourceQuotasListServerRequest(r *htt
 	}
 	return result, err
 }
-func (a *ResourceQuotasServerAdapter) writeResourceQuotasListServerResponse(w http.ResponseWriter, r *ResourceQuotasListServerResponse) error {
+func (a *ResourceQuotasAdapter) writeListResponse(w http.ResponseWriter, r *ResourceQuotasListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -389,37 +399,47 @@ func (a *ResourceQuotasServerAdapter) writeResourceQuotasListServerResponse(w ht
 	}
 	return nil
 }
-func (a *ResourceQuotasServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readResourceQuotasListServerRequest(r)
+func (a *ResourceQuotasAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ResourceQuotasListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(ResourceQuotasListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeResourceQuotasListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ResourceQuotasServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *ResourceQuotasAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

@@ -54,9 +54,9 @@ type UserDeleteServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *UserDeleteServerResponse) SetStatusCode(status int) *UserDeleteServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *UserDeleteServerResponse) Status(value int) *UserDeleteServerResponse {
+	r.status = value
 	return r
 }
 
@@ -79,9 +79,9 @@ func (r *UserGetServerResponse) Body(value *User) *UserGetServerResponse {
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *UserGetServerResponse) SetStatusCode(status int) *UserGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *UserGetServerResponse) Status(value int) *UserGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -98,68 +98,78 @@ func (r *UserGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// UserServerAdapter represents the structs that adapts Requests and Response to internal
+// UserAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type UserServerAdapter struct {
+type UserAdapter struct {
 	server UserServer
 	router *mux.Router
 }
 
-func NewUserServerAdapter(server UserServer, router *mux.Router) *UserServerAdapter {
-	adapter := new(UserServerAdapter)
+func NewUserAdapter(server UserServer, router *mux.Router) *UserAdapter {
+	adapter := new(UserAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *UserServerAdapter) readUserDeleteServerRequest(r *http.Request) (*UserDeleteServerRequest, error) {
+func (a *UserAdapter) readDeleteRequest(r *http.Request) (*UserDeleteServerRequest, error) {
 	var err error
 	result := new(UserDeleteServerRequest)
 	return result, err
 }
-func (a *UserServerAdapter) writeUserDeleteServerResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
+func (a *UserAdapter) writeDeleteResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *UserServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readUserDeleteServerRequest(r)
+func (a *UserAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(UserDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
+	response := new(UserDeleteServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Delete: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeUserDeleteServerResponse(w, resp)
+	err = a.writeDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *UserServerAdapter) readUserGetServerRequest(r *http.Request) (*UserGetServerRequest, error) {
+func (a *UserAdapter) readGetRequest(r *http.Request) (*UserGetServerRequest, error) {
 	var err error
 	result := new(UserGetServerRequest)
 	return result, err
 }
-func (a *UserServerAdapter) writeUserGetServerResponse(w http.ResponseWriter, r *UserGetServerResponse) error {
+func (a *UserAdapter) writeGetResponse(w http.ResponseWriter, r *UserGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -168,37 +178,47 @@ func (a *UserServerAdapter) writeUserGetServerResponse(w http.ResponseWriter, r 
 	}
 	return nil
 }
-func (a *UserServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readUserGetServerRequest(r)
+func (a *UserAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(UserGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(UserGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeUserGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *UserServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *UserAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

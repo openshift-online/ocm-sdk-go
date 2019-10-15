@@ -98,9 +98,9 @@ func (r *ClusterAuthorizationsPostServerResponse) Response(value *ClusterAuthori
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClusterAuthorizationsPostServerResponse) SetStatusCode(status int) *ClusterAuthorizationsPostServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ClusterAuthorizationsPostServerResponse) Status(value int) *ClusterAuthorizationsPostServerResponse {
+	r.status = value
 	return r
 }
 
@@ -117,21 +117,21 @@ func (r *ClusterAuthorizationsPostServerResponse) marshal(writer io.Writer) erro
 	return err
 }
 
-// ClusterAuthorizationsServerAdapter represents the structs that adapts Requests and Response to internal
+// ClusterAuthorizationsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type ClusterAuthorizationsServerAdapter struct {
+type ClusterAuthorizationsAdapter struct {
 	server ClusterAuthorizationsServer
 	router *mux.Router
 }
 
-func NewClusterAuthorizationsServerAdapter(server ClusterAuthorizationsServer, router *mux.Router) *ClusterAuthorizationsServerAdapter {
-	adapter := new(ClusterAuthorizationsServerAdapter)
+func NewClusterAuthorizationsAdapter(server ClusterAuthorizationsServer, router *mux.Router) *ClusterAuthorizationsAdapter {
+	adapter := new(ClusterAuthorizationsAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.postHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
 	return adapter
 }
-func (a *ClusterAuthorizationsServerAdapter) readClusterAuthorizationsPostServerRequest(r *http.Request) (*ClusterAuthorizationsPostServerRequest, error) {
+func (a *ClusterAuthorizationsAdapter) readPostRequest(r *http.Request) (*ClusterAuthorizationsPostServerRequest, error) {
 	var err error
 	result := new(ClusterAuthorizationsPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -140,7 +140,7 @@ func (a *ClusterAuthorizationsServerAdapter) readClusterAuthorizationsPostServer
 	}
 	return result, err
 }
-func (a *ClusterAuthorizationsServerAdapter) writeClusterAuthorizationsPostServerResponse(w http.ResponseWriter, r *ClusterAuthorizationsPostServerResponse) error {
+func (a *ClusterAuthorizationsAdapter) writePostResponse(w http.ResponseWriter, r *ClusterAuthorizationsPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -149,37 +149,47 @@ func (a *ClusterAuthorizationsServerAdapter) writeClusterAuthorizationsPostServe
 	}
 	return nil
 }
-func (a *ClusterAuthorizationsServerAdapter) postHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClusterAuthorizationsPostServerRequest(r)
+func (a *ClusterAuthorizationsAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ClusterAuthorizationsPostServerResponse)
-	err = a.server.Post(r.Context(), req, resp)
+	response := new(ClusterAuthorizationsPostServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Post: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeClusterAuthorizationsPostServerResponse(w, resp)
+	err = a.writePostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ClusterAuthorizationsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAuthorizationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

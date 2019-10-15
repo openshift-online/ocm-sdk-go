@@ -58,9 +58,9 @@ func (r *AccessTokenPostServerResponse) Body(value *AccessToken) *AccessTokenPos
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *AccessTokenPostServerResponse) SetStatusCode(status int) *AccessTokenPostServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *AccessTokenPostServerResponse) Status(value int) *AccessTokenPostServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *AccessTokenPostServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// AccessTokenServerAdapter represents the structs that adapts Requests and Response to internal
+// AccessTokenAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type AccessTokenServerAdapter struct {
+type AccessTokenAdapter struct {
 	server AccessTokenServer
 	router *mux.Router
 }
 
-func NewAccessTokenServerAdapter(server AccessTokenServer, router *mux.Router) *AccessTokenServerAdapter {
-	adapter := new(AccessTokenServerAdapter)
+func NewAccessTokenAdapter(server AccessTokenServer, router *mux.Router) *AccessTokenAdapter {
+	adapter := new(AccessTokenAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.postHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
 	return adapter
 }
-func (a *AccessTokenServerAdapter) readAccessTokenPostServerRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {
+func (a *AccessTokenAdapter) readPostRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {
 	var err error
 	result := new(AccessTokenPostServerRequest)
 	return result, err
 }
-func (a *AccessTokenServerAdapter) writeAccessTokenPostServerResponse(w http.ResponseWriter, r *AccessTokenPostServerResponse) error {
+func (a *AccessTokenAdapter) writePostResponse(w http.ResponseWriter, r *AccessTokenPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *AccessTokenServerAdapter) writeAccessTokenPostServerResponse(w http.Res
 	}
 	return nil
 }
-func (a *AccessTokenServerAdapter) postHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readAccessTokenPostServerRequest(r)
+func (a *AccessTokenAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(AccessTokenPostServerResponse)
-	err = a.server.Post(r.Context(), req, resp)
+	response := new(AccessTokenPostServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Post: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeAccessTokenPostServerResponse(w, resp)
+	err = a.writePostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *AccessTokenServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *AccessTokenAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

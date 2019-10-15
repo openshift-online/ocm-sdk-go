@@ -109,9 +109,9 @@ func (r *OrganizationsAddServerResponse) Body(value *Organization) *Organization
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *OrganizationsAddServerResponse) SetStatusCode(status int) *OrganizationsAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *OrganizationsAddServerResponse) Status(value int) *OrganizationsAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -258,9 +258,9 @@ func (r *OrganizationsListServerResponse) Total(value int) *OrganizationsListSer
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *OrganizationsListServerResponse) SetStatusCode(status int) *OrganizationsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *OrganizationsListServerResponse) Status(value int) *OrganizationsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -290,30 +290,30 @@ type organizationsListServerResponseData struct {
 	Total *int                 "json:\"total,omitempty\""
 }
 
-// OrganizationsServerAdapter represents the structs that adapts Requests and Response to internal
+// OrganizationsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type OrganizationsServerAdapter struct {
+type OrganizationsAdapter struct {
 	server OrganizationsServer
 	router *mux.Router
 }
 
-func NewOrganizationsServerAdapter(server OrganizationsServer, router *mux.Router) *OrganizationsServerAdapter {
-	adapter := new(OrganizationsServerAdapter)
+func NewOrganizationsAdapter(server OrganizationsServer, router *mux.Router) *OrganizationsAdapter {
+	adapter := new(OrganizationsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.organizationHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *OrganizationsServerAdapter) organizationHandler(w http.ResponseWriter, r *http.Request) {
+func (a *OrganizationsAdapter) organizationHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Organization(id)
-	targetAdapter := NewOrganizationServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewOrganizationAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *OrganizationsServerAdapter) readOrganizationsAddServerRequest(r *http.Request) (*OrganizationsAddServerRequest, error) {
+func (a *OrganizationsAdapter) readAddRequest(r *http.Request) (*OrganizationsAddServerRequest, error) {
 	var err error
 	result := new(OrganizationsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +322,7 @@ func (a *OrganizationsServerAdapter) readOrganizationsAddServerRequest(r *http.R
 	}
 	return result, err
 }
-func (a *OrganizationsServerAdapter) writeOrganizationsAddServerResponse(w http.ResponseWriter, r *OrganizationsAddServerResponse) error {
+func (a *OrganizationsAdapter) writeAddResponse(w http.ResponseWriter, r *OrganizationsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,38 +331,48 @@ func (a *OrganizationsServerAdapter) writeOrganizationsAddServerResponse(w http.
 	}
 	return nil
 }
-func (a *OrganizationsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readOrganizationsAddServerRequest(r)
+func (a *OrganizationsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(OrganizationsAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(OrganizationsAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeOrganizationsAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *OrganizationsServerAdapter) readOrganizationsListServerRequest(r *http.Request) (*OrganizationsListServerRequest, error) {
+func (a *OrganizationsAdapter) readListRequest(r *http.Request) (*OrganizationsListServerRequest, error) {
 	var err error
 	result := new(OrganizationsListServerRequest)
 	query := r.URL.Query()
@@ -380,7 +390,7 @@ func (a *OrganizationsServerAdapter) readOrganizationsListServerRequest(r *http.
 	}
 	return result, err
 }
-func (a *OrganizationsServerAdapter) writeOrganizationsListServerResponse(w http.ResponseWriter, r *OrganizationsListServerResponse) error {
+func (a *OrganizationsAdapter) writeListResponse(w http.ResponseWriter, r *OrganizationsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -389,37 +399,47 @@ func (a *OrganizationsServerAdapter) writeOrganizationsListServerResponse(w http
 	}
 	return nil
 }
-func (a *OrganizationsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readOrganizationsListServerRequest(r)
+func (a *OrganizationsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(OrganizationsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(OrganizationsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeOrganizationsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *OrganizationsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *OrganizationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

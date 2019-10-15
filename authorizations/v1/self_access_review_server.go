@@ -98,9 +98,9 @@ func (r *SelfAccessReviewPostServerResponse) Response(value *SelfAccessReviewRes
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *SelfAccessReviewPostServerResponse) SetStatusCode(status int) *SelfAccessReviewPostServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *SelfAccessReviewPostServerResponse) Status(value int) *SelfAccessReviewPostServerResponse {
+	r.status = value
 	return r
 }
 
@@ -117,21 +117,21 @@ func (r *SelfAccessReviewPostServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// SelfAccessReviewServerAdapter represents the structs that adapts Requests and Response to internal
+// SelfAccessReviewAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type SelfAccessReviewServerAdapter struct {
+type SelfAccessReviewAdapter struct {
 	server SelfAccessReviewServer
 	router *mux.Router
 }
 
-func NewSelfAccessReviewServerAdapter(server SelfAccessReviewServer, router *mux.Router) *SelfAccessReviewServerAdapter {
-	adapter := new(SelfAccessReviewServerAdapter)
+func NewSelfAccessReviewAdapter(server SelfAccessReviewServer, router *mux.Router) *SelfAccessReviewAdapter {
+	adapter := new(SelfAccessReviewAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.postHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
 	return adapter
 }
-func (a *SelfAccessReviewServerAdapter) readSelfAccessReviewPostServerRequest(r *http.Request) (*SelfAccessReviewPostServerRequest, error) {
+func (a *SelfAccessReviewAdapter) readPostRequest(r *http.Request) (*SelfAccessReviewPostServerRequest, error) {
 	var err error
 	result := new(SelfAccessReviewPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -140,7 +140,7 @@ func (a *SelfAccessReviewServerAdapter) readSelfAccessReviewPostServerRequest(r 
 	}
 	return result, err
 }
-func (a *SelfAccessReviewServerAdapter) writeSelfAccessReviewPostServerResponse(w http.ResponseWriter, r *SelfAccessReviewPostServerResponse) error {
+func (a *SelfAccessReviewAdapter) writePostResponse(w http.ResponseWriter, r *SelfAccessReviewPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -149,37 +149,47 @@ func (a *SelfAccessReviewServerAdapter) writeSelfAccessReviewPostServerResponse(
 	}
 	return nil
 }
-func (a *SelfAccessReviewServerAdapter) postHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readSelfAccessReviewPostServerRequest(r)
+func (a *SelfAccessReviewAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(SelfAccessReviewPostServerResponse)
-	err = a.server.Post(r.Context(), req, resp)
+	response := new(SelfAccessReviewPostServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Post: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeSelfAccessReviewPostServerResponse(w, resp)
+	err = a.writePostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *SelfAccessReviewServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *SelfAccessReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

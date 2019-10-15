@@ -175,9 +175,9 @@ func (r *RegistriesListServerResponse) Total(value int) *RegistriesListServerRes
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RegistriesListServerResponse) SetStatusCode(status int) *RegistriesListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RegistriesListServerResponse) Status(value int) *RegistriesListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -207,29 +207,29 @@ type registriesListServerResponseData struct {
 	Total *int             "json:\"total,omitempty\""
 }
 
-// RegistriesServerAdapter represents the structs that adapts Requests and Response to internal
+// RegistriesAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RegistriesServerAdapter struct {
+type RegistriesAdapter struct {
 	server RegistriesServer
 	router *mux.Router
 }
 
-func NewRegistriesServerAdapter(server RegistriesServer, router *mux.Router) *RegistriesServerAdapter {
-	adapter := new(RegistriesServerAdapter)
+func NewRegistriesAdapter(server RegistriesServer, router *mux.Router) *RegistriesAdapter {
+	adapter := new(RegistriesAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.registryHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *RegistriesServerAdapter) registryHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RegistriesAdapter) registryHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Registry(id)
-	targetAdapter := NewRegistryServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewRegistryAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RegistriesServerAdapter) readRegistriesListServerRequest(r *http.Request) (*RegistriesListServerRequest, error) {
+func (a *RegistriesAdapter) readListRequest(r *http.Request) (*RegistriesListServerRequest, error) {
 	var err error
 	result := new(RegistriesListServerRequest)
 	query := r.URL.Query()
@@ -247,7 +247,7 @@ func (a *RegistriesServerAdapter) readRegistriesListServerRequest(r *http.Reques
 	}
 	return result, err
 }
-func (a *RegistriesServerAdapter) writeRegistriesListServerResponse(w http.ResponseWriter, r *RegistriesListServerResponse) error {
+func (a *RegistriesAdapter) writeListResponse(w http.ResponseWriter, r *RegistriesListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -256,37 +256,47 @@ func (a *RegistriesServerAdapter) writeRegistriesListServerResponse(w http.Respo
 	}
 	return nil
 }
-func (a *RegistriesServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRegistriesListServerRequest(r)
+func (a *RegistriesAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RegistriesListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(RegistriesListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRegistriesListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RegistriesServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RegistriesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

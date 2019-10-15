@@ -108,9 +108,9 @@ func (r *IdentityProvidersAddServerResponse) Body(value *IdentityProvider) *Iden
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *IdentityProvidersAddServerResponse) SetStatusCode(status int) *IdentityProvidersAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *IdentityProvidersAddServerResponse) Status(value int) *IdentityProvidersAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -173,9 +173,9 @@ func (r *IdentityProvidersListServerResponse) Total(value int) *IdentityProvider
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *IdentityProvidersListServerResponse) SetStatusCode(status int) *IdentityProvidersListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *IdentityProvidersListServerResponse) Status(value int) *IdentityProvidersListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -205,30 +205,30 @@ type identityProvidersListServerResponseData struct {
 	Total *int                     "json:\"total,omitempty\""
 }
 
-// IdentityProvidersServerAdapter represents the structs that adapts Requests and Response to internal
+// IdentityProvidersAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type IdentityProvidersServerAdapter struct {
+type IdentityProvidersAdapter struct {
 	server IdentityProvidersServer
 	router *mux.Router
 }
 
-func NewIdentityProvidersServerAdapter(server IdentityProvidersServer, router *mux.Router) *IdentityProvidersServerAdapter {
-	adapter := new(IdentityProvidersServerAdapter)
+func NewIdentityProvidersAdapter(server IdentityProvidersServer, router *mux.Router) *IdentityProvidersAdapter {
+	adapter := new(IdentityProvidersAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.identityProviderHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *IdentityProvidersServerAdapter) identityProviderHandler(w http.ResponseWriter, r *http.Request) {
+func (a *IdentityProvidersAdapter) identityProviderHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.IdentityProvider(id)
-	targetAdapter := NewIdentityProviderServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewIdentityProviderAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *IdentityProvidersServerAdapter) readIdentityProvidersAddServerRequest(r *http.Request) (*IdentityProvidersAddServerRequest, error) {
+func (a *IdentityProvidersAdapter) readAddRequest(r *http.Request) (*IdentityProvidersAddServerRequest, error) {
 	var err error
 	result := new(IdentityProvidersAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -237,7 +237,7 @@ func (a *IdentityProvidersServerAdapter) readIdentityProvidersAddServerRequest(r
 	}
 	return result, err
 }
-func (a *IdentityProvidersServerAdapter) writeIdentityProvidersAddServerResponse(w http.ResponseWriter, r *IdentityProvidersAddServerResponse) error {
+func (a *IdentityProvidersAdapter) writeAddResponse(w http.ResponseWriter, r *IdentityProvidersAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -246,43 +246,53 @@ func (a *IdentityProvidersServerAdapter) writeIdentityProvidersAddServerResponse
 	}
 	return nil
 }
-func (a *IdentityProvidersServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readIdentityProvidersAddServerRequest(r)
+func (a *IdentityProvidersAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(IdentityProvidersAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(IdentityProvidersAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeIdentityProvidersAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *IdentityProvidersServerAdapter) readIdentityProvidersListServerRequest(r *http.Request) (*IdentityProvidersListServerRequest, error) {
+func (a *IdentityProvidersAdapter) readListRequest(r *http.Request) (*IdentityProvidersListServerRequest, error) {
 	var err error
 	result := new(IdentityProvidersListServerRequest)
 	return result, err
 }
-func (a *IdentityProvidersServerAdapter) writeIdentityProvidersListServerResponse(w http.ResponseWriter, r *IdentityProvidersListServerResponse) error {
+func (a *IdentityProvidersAdapter) writeListResponse(w http.ResponseWriter, r *IdentityProvidersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -291,37 +301,47 @@ func (a *IdentityProvidersServerAdapter) writeIdentityProvidersListServerRespons
 	}
 	return nil
 }
-func (a *IdentityProvidersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readIdentityProvidersListServerRequest(r)
+func (a *IdentityProvidersAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(IdentityProvidersListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(IdentityProvidersListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeIdentityProvidersListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *IdentityProvidersServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *IdentityProvidersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

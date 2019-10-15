@@ -109,9 +109,9 @@ func (r *RolesAddServerResponse) Body(value *Role) *RolesAddServerResponse {
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RolesAddServerResponse) SetStatusCode(status int) *RolesAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RolesAddServerResponse) Status(value int) *RolesAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -258,9 +258,9 @@ func (r *RolesListServerResponse) Total(value int) *RolesListServerResponse {
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RolesListServerResponse) SetStatusCode(status int) *RolesListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RolesListServerResponse) Status(value int) *RolesListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -290,30 +290,30 @@ type rolesListServerResponseData struct {
 	Total *int         "json:\"total,omitempty\""
 }
 
-// RolesServerAdapter represents the structs that adapts Requests and Response to internal
+// RolesAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RolesServerAdapter struct {
+type RolesAdapter struct {
 	server RolesServer
 	router *mux.Router
 }
 
-func NewRolesServerAdapter(server RolesServer, router *mux.Router) *RolesServerAdapter {
-	adapter := new(RolesServerAdapter)
+func NewRolesAdapter(server RolesServer, router *mux.Router) *RolesAdapter {
+	adapter := new(RolesAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *RolesServerAdapter) roleHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RolesAdapter) roleHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Role(id)
-	targetAdapter := NewRoleServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewRoleAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RolesServerAdapter) readRolesAddServerRequest(r *http.Request) (*RolesAddServerRequest, error) {
+func (a *RolesAdapter) readAddRequest(r *http.Request) (*RolesAddServerRequest, error) {
 	var err error
 	result := new(RolesAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +322,7 @@ func (a *RolesServerAdapter) readRolesAddServerRequest(r *http.Request) (*RolesA
 	}
 	return result, err
 }
-func (a *RolesServerAdapter) writeRolesAddServerResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
+func (a *RolesAdapter) writeAddResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,38 +331,48 @@ func (a *RolesServerAdapter) writeRolesAddServerResponse(w http.ResponseWriter, 
 	}
 	return nil
 }
-func (a *RolesServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRolesAddServerRequest(r)
+func (a *RolesAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RolesAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(RolesAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRolesAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RolesServerAdapter) readRolesListServerRequest(r *http.Request) (*RolesListServerRequest, error) {
+func (a *RolesAdapter) readListRequest(r *http.Request) (*RolesListServerRequest, error) {
 	var err error
 	result := new(RolesListServerRequest)
 	query := r.URL.Query()
@@ -380,7 +390,7 @@ func (a *RolesServerAdapter) readRolesListServerRequest(r *http.Request) (*Roles
 	}
 	return result, err
 }
-func (a *RolesServerAdapter) writeRolesListServerResponse(w http.ResponseWriter, r *RolesListServerResponse) error {
+func (a *RolesAdapter) writeListResponse(w http.ResponseWriter, r *RolesListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -389,37 +399,47 @@ func (a *RolesServerAdapter) writeRolesListServerResponse(w http.ResponseWriter,
 	}
 	return nil
 }
-func (a *RolesServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRolesListServerRequest(r)
+func (a *RolesAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RolesListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(RolesListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRolesListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RolesServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RolesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

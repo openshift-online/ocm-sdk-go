@@ -63,9 +63,9 @@ func (r *ResourceQuotaGetServerResponse) Body(value *ResourceQuota) *ResourceQuo
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ResourceQuotaGetServerResponse) SetStatusCode(status int) *ResourceQuotaGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ResourceQuotaGetServerResponse) Status(value int) *ResourceQuotaGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -132,33 +132,33 @@ type ResourceQuotaUpdateServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ResourceQuotaUpdateServerResponse) SetStatusCode(status int) *ResourceQuotaUpdateServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ResourceQuotaUpdateServerResponse) Status(value int) *ResourceQuotaUpdateServerResponse {
+	r.status = value
 	return r
 }
 
-// ResourceQuotaServerAdapter represents the structs that adapts Requests and Response to internal
+// ResourceQuotaAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type ResourceQuotaServerAdapter struct {
+type ResourceQuotaAdapter struct {
 	server ResourceQuotaServer
 	router *mux.Router
 }
 
-func NewResourceQuotaServerAdapter(server ResourceQuotaServer, router *mux.Router) *ResourceQuotaServerAdapter {
-	adapter := new(ResourceQuotaServerAdapter)
+func NewResourceQuotaAdapter(server ResourceQuotaServer, router *mux.Router) *ResourceQuotaAdapter {
+	adapter := new(ResourceQuotaAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
+	adapter.router.Methods(http.MethodPatch).Path("").HandlerFunc(adapter.handlerUpdate)
 	return adapter
 }
-func (a *ResourceQuotaServerAdapter) readResourceQuotaGetServerRequest(r *http.Request) (*ResourceQuotaGetServerRequest, error) {
+func (a *ResourceQuotaAdapter) readGetRequest(r *http.Request) (*ResourceQuotaGetServerRequest, error) {
 	var err error
 	result := new(ResourceQuotaGetServerRequest)
 	return result, err
 }
-func (a *ResourceQuotaServerAdapter) writeResourceQuotaGetServerResponse(w http.ResponseWriter, r *ResourceQuotaGetServerResponse) error {
+func (a *ResourceQuotaAdapter) writeGetResponse(w http.ResponseWriter, r *ResourceQuotaGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -167,38 +167,48 @@ func (a *ResourceQuotaServerAdapter) writeResourceQuotaGetServerResponse(w http.
 	}
 	return nil
 }
-func (a *ResourceQuotaServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readResourceQuotaGetServerRequest(r)
+func (a *ResourceQuotaAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ResourceQuotaGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(ResourceQuotaGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeResourceQuotaGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ResourceQuotaServerAdapter) readResourceQuotaUpdateServerRequest(r *http.Request) (*ResourceQuotaUpdateServerRequest, error) {
+func (a *ResourceQuotaAdapter) readUpdateRequest(r *http.Request) (*ResourceQuotaUpdateServerRequest, error) {
 	var err error
 	result := new(ResourceQuotaUpdateServerRequest)
 	err = result.unmarshal(r.Body)
@@ -207,42 +217,52 @@ func (a *ResourceQuotaServerAdapter) readResourceQuotaUpdateServerRequest(r *htt
 	}
 	return result, err
 }
-func (a *ResourceQuotaServerAdapter) writeResourceQuotaUpdateServerResponse(w http.ResponseWriter, r *ResourceQuotaUpdateServerResponse) error {
+func (a *ResourceQuotaAdapter) writeUpdateResponse(w http.ResponseWriter, r *ResourceQuotaUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *ResourceQuotaServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readResourceQuotaUpdateServerRequest(r)
+func (a *ResourceQuotaAdapter) handlerUpdate(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readUpdateRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ResourceQuotaUpdateServerResponse)
-	err = a.server.Update(r.Context(), req, resp)
+	response := new(ResourceQuotaUpdateServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Update(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Update: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeResourceQuotaUpdateServerResponse(w, resp)
+	err = a.writeUpdateResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ResourceQuotaServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *ResourceQuotaAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

@@ -58,9 +58,9 @@ func (r *DashboardGetServerResponse) Body(value *Dashboard) *DashboardGetServerR
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *DashboardGetServerResponse) SetStatusCode(status int) *DashboardGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *DashboardGetServerResponse) Status(value int) *DashboardGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *DashboardGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// DashboardServerAdapter represents the structs that adapts Requests and Response to internal
+// DashboardAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type DashboardServerAdapter struct {
+type DashboardAdapter struct {
 	server DashboardServer
 	router *mux.Router
 }
 
-func NewDashboardServerAdapter(server DashboardServer, router *mux.Router) *DashboardServerAdapter {
-	adapter := new(DashboardServerAdapter)
+func NewDashboardAdapter(server DashboardServer, router *mux.Router) *DashboardAdapter {
+	adapter := new(DashboardAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *DashboardServerAdapter) readDashboardGetServerRequest(r *http.Request) (*DashboardGetServerRequest, error) {
+func (a *DashboardAdapter) readGetRequest(r *http.Request) (*DashboardGetServerRequest, error) {
 	var err error
 	result := new(DashboardGetServerRequest)
 	return result, err
 }
-func (a *DashboardServerAdapter) writeDashboardGetServerResponse(w http.ResponseWriter, r *DashboardGetServerResponse) error {
+func (a *DashboardAdapter) writeGetResponse(w http.ResponseWriter, r *DashboardGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *DashboardServerAdapter) writeDashboardGetServerResponse(w http.Response
 	}
 	return nil
 }
-func (a *DashboardServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readDashboardGetServerRequest(r)
+func (a *DashboardAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(DashboardGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(DashboardGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeDashboardGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *DashboardServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *DashboardAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

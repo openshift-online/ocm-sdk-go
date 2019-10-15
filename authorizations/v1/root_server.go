@@ -44,15 +44,15 @@ type RootServer interface {
 	SelfAccessReview() SelfAccessReviewServer
 }
 
-// RootServerAdapter represents the structs that adapts Requests and Response to internal
+// RootAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RootServerAdapter struct {
+type RootAdapter struct {
 	server RootServer
 	router *mux.Router
 }
 
-func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdapter {
-	adapter := new(RootServerAdapter)
+func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
+	adapter := new(RootAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/access_review").HandlerFunc(adapter.accessReviewHandler)
@@ -60,24 +60,24 @@ func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdap
 	adapter.router.PathPrefix("/self_access_review").HandlerFunc(adapter.selfAccessReviewHandler)
 	return adapter
 }
-func (a *RootServerAdapter) accessReviewHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) accessReviewHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.AccessReview()
-	targetAdapter := NewAccessReviewServerAdapter(target, a.router.PathPrefix("/access_review").Subrouter())
+	targetAdapter := NewAccessReviewAdapter(target, a.router.PathPrefix("/access_review").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) exportControlReviewHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) exportControlReviewHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.ExportControlReview()
-	targetAdapter := NewExportControlReviewServerAdapter(target, a.router.PathPrefix("/export_control_review").Subrouter())
+	targetAdapter := NewExportControlReviewAdapter(target, a.router.PathPrefix("/export_control_review").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) selfAccessReviewHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) selfAccessReviewHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.SelfAccessReview()
-	targetAdapter := NewSelfAccessReviewServerAdapter(target, a.router.PathPrefix("/self_access_review").Subrouter())
+	targetAdapter := NewSelfAccessReviewAdapter(target, a.router.PathPrefix("/self_access_review").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

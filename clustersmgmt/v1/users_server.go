@@ -108,9 +108,9 @@ func (r *UsersAddServerResponse) Body(value *User) *UsersAddServerResponse {
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *UsersAddServerResponse) SetStatusCode(status int) *UsersAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *UsersAddServerResponse) Status(value int) *UsersAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -173,9 +173,9 @@ func (r *UsersListServerResponse) Total(value int) *UsersListServerResponse {
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *UsersListServerResponse) SetStatusCode(status int) *UsersListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *UsersListServerResponse) Status(value int) *UsersListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -205,30 +205,30 @@ type usersListServerResponseData struct {
 	Total *int         "json:\"total,omitempty\""
 }
 
-// UsersServerAdapter represents the structs that adapts Requests and Response to internal
+// UsersAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type UsersServerAdapter struct {
+type UsersAdapter struct {
 	server UsersServer
 	router *mux.Router
 }
 
-func NewUsersServerAdapter(server UsersServer, router *mux.Router) *UsersServerAdapter {
-	adapter := new(UsersServerAdapter)
+func NewUsersAdapter(server UsersServer, router *mux.Router) *UsersAdapter {
+	adapter := new(UsersAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.userHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *UsersServerAdapter) userHandler(w http.ResponseWriter, r *http.Request) {
+func (a *UsersAdapter) userHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.User(id)
-	targetAdapter := NewUserServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewUserAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *UsersServerAdapter) readUsersAddServerRequest(r *http.Request) (*UsersAddServerRequest, error) {
+func (a *UsersAdapter) readAddRequest(r *http.Request) (*UsersAddServerRequest, error) {
 	var err error
 	result := new(UsersAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -237,7 +237,7 @@ func (a *UsersServerAdapter) readUsersAddServerRequest(r *http.Request) (*UsersA
 	}
 	return result, err
 }
-func (a *UsersServerAdapter) writeUsersAddServerResponse(w http.ResponseWriter, r *UsersAddServerResponse) error {
+func (a *UsersAdapter) writeAddResponse(w http.ResponseWriter, r *UsersAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -246,43 +246,53 @@ func (a *UsersServerAdapter) writeUsersAddServerResponse(w http.ResponseWriter, 
 	}
 	return nil
 }
-func (a *UsersServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readUsersAddServerRequest(r)
+func (a *UsersAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(UsersAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(UsersAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeUsersAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *UsersServerAdapter) readUsersListServerRequest(r *http.Request) (*UsersListServerRequest, error) {
+func (a *UsersAdapter) readListRequest(r *http.Request) (*UsersListServerRequest, error) {
 	var err error
 	result := new(UsersListServerRequest)
 	return result, err
 }
-func (a *UsersServerAdapter) writeUsersListServerResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
+func (a *UsersAdapter) writeListResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -291,37 +301,47 @@ func (a *UsersServerAdapter) writeUsersListServerResponse(w http.ResponseWriter,
 	}
 	return nil
 }
-func (a *UsersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readUsersListServerRequest(r)
+func (a *UsersAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(UsersListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(UsersListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeUsersListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *UsersServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *UsersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

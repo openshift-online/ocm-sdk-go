@@ -58,9 +58,9 @@ func (r *CurrentAccountGetServerResponse) Body(value *Account) *CurrentAccountGe
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *CurrentAccountGetServerResponse) SetStatusCode(status int) *CurrentAccountGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *CurrentAccountGetServerResponse) Status(value int) *CurrentAccountGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *CurrentAccountGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CurrentAccountServerAdapter represents the structs that adapts Requests and Response to internal
+// CurrentAccountAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type CurrentAccountServerAdapter struct {
+type CurrentAccountAdapter struct {
 	server CurrentAccountServer
 	router *mux.Router
 }
 
-func NewCurrentAccountServerAdapter(server CurrentAccountServer, router *mux.Router) *CurrentAccountServerAdapter {
-	adapter := new(CurrentAccountServerAdapter)
+func NewCurrentAccountAdapter(server CurrentAccountServer, router *mux.Router) *CurrentAccountAdapter {
+	adapter := new(CurrentAccountAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *CurrentAccountServerAdapter) readCurrentAccountGetServerRequest(r *http.Request) (*CurrentAccountGetServerRequest, error) {
+func (a *CurrentAccountAdapter) readGetRequest(r *http.Request) (*CurrentAccountGetServerRequest, error) {
 	var err error
 	result := new(CurrentAccountGetServerRequest)
 	return result, err
 }
-func (a *CurrentAccountServerAdapter) writeCurrentAccountGetServerResponse(w http.ResponseWriter, r *CurrentAccountGetServerResponse) error {
+func (a *CurrentAccountAdapter) writeGetResponse(w http.ResponseWriter, r *CurrentAccountGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *CurrentAccountServerAdapter) writeCurrentAccountGetServerResponse(w htt
 	}
 	return nil
 }
-func (a *CurrentAccountServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readCurrentAccountGetServerRequest(r)
+func (a *CurrentAccountAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(CurrentAccountGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(CurrentAccountGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeCurrentAccountGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *CurrentAccountServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *CurrentAccountAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

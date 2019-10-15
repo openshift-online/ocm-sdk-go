@@ -54,9 +54,9 @@ type PermissionDeleteServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *PermissionDeleteServerResponse) SetStatusCode(status int) *PermissionDeleteServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *PermissionDeleteServerResponse) Status(value int) *PermissionDeleteServerResponse {
+	r.status = value
 	return r
 }
 
@@ -79,9 +79,9 @@ func (r *PermissionGetServerResponse) Body(value *Permission) *PermissionGetServ
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *PermissionGetServerResponse) SetStatusCode(status int) *PermissionGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *PermissionGetServerResponse) Status(value int) *PermissionGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -98,68 +98,78 @@ func (r *PermissionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// PermissionServerAdapter represents the structs that adapts Requests and Response to internal
+// PermissionAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type PermissionServerAdapter struct {
+type PermissionAdapter struct {
 	server PermissionServer
 	router *mux.Router
 }
 
-func NewPermissionServerAdapter(server PermissionServer, router *mux.Router) *PermissionServerAdapter {
-	adapter := new(PermissionServerAdapter)
+func NewPermissionAdapter(server PermissionServer, router *mux.Router) *PermissionAdapter {
+	adapter := new(PermissionAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *PermissionServerAdapter) readPermissionDeleteServerRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
+func (a *PermissionAdapter) readDeleteRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
 	var err error
 	result := new(PermissionDeleteServerRequest)
 	return result, err
 }
-func (a *PermissionServerAdapter) writePermissionDeleteServerResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
+func (a *PermissionAdapter) writeDeleteResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *PermissionServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readPermissionDeleteServerRequest(r)
+func (a *PermissionAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(PermissionDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
+	response := new(PermissionDeleteServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Delete: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writePermissionDeleteServerResponse(w, resp)
+	err = a.writeDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *PermissionServerAdapter) readPermissionGetServerRequest(r *http.Request) (*PermissionGetServerRequest, error) {
+func (a *PermissionAdapter) readGetRequest(r *http.Request) (*PermissionGetServerRequest, error) {
 	var err error
 	result := new(PermissionGetServerRequest)
 	return result, err
 }
-func (a *PermissionServerAdapter) writePermissionGetServerResponse(w http.ResponseWriter, r *PermissionGetServerResponse) error {
+func (a *PermissionAdapter) writeGetResponse(w http.ResponseWriter, r *PermissionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -168,37 +178,47 @@ func (a *PermissionServerAdapter) writePermissionGetServerResponse(w http.Respon
 	}
 	return nil
 }
-func (a *PermissionServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readPermissionGetServerRequest(r)
+func (a *PermissionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(PermissionGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(PermissionGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writePermissionGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *PermissionServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *PermissionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

@@ -271,9 +271,9 @@ func (r *SubscriptionsListServerResponse) Total(value int) *SubscriptionsListSer
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *SubscriptionsListServerResponse) SetStatusCode(status int) *SubscriptionsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *SubscriptionsListServerResponse) Status(value int) *SubscriptionsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -303,29 +303,29 @@ type subscriptionsListServerResponseData struct {
 	Total *int                 "json:\"total,omitempty\""
 }
 
-// SubscriptionsServerAdapter represents the structs that adapts Requests and Response to internal
+// SubscriptionsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type SubscriptionsServerAdapter struct {
+type SubscriptionsAdapter struct {
 	server SubscriptionsServer
 	router *mux.Router
 }
 
-func NewSubscriptionsServerAdapter(server SubscriptionsServer, router *mux.Router) *SubscriptionsServerAdapter {
-	adapter := new(SubscriptionsServerAdapter)
+func NewSubscriptionsAdapter(server SubscriptionsServer, router *mux.Router) *SubscriptionsAdapter {
+	adapter := new(SubscriptionsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.subscriptionHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *SubscriptionsServerAdapter) subscriptionHandler(w http.ResponseWriter, r *http.Request) {
+func (a *SubscriptionsAdapter) subscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Subscription(id)
-	targetAdapter := NewSubscriptionServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewSubscriptionAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.Request) (*SubscriptionsListServerRequest, error) {
+func (a *SubscriptionsAdapter) readListRequest(r *http.Request) (*SubscriptionsListServerRequest, error) {
 	var err error
 	result := new(SubscriptionsListServerRequest)
 	query := r.URL.Query()
@@ -351,7 +351,7 @@ func (a *SubscriptionsServerAdapter) readSubscriptionsListServerRequest(r *http.
 	}
 	return result, err
 }
-func (a *SubscriptionsServerAdapter) writeSubscriptionsListServerResponse(w http.ResponseWriter, r *SubscriptionsListServerResponse) error {
+func (a *SubscriptionsAdapter) writeListResponse(w http.ResponseWriter, r *SubscriptionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -360,37 +360,47 @@ func (a *SubscriptionsServerAdapter) writeSubscriptionsListServerResponse(w http
 	}
 	return nil
 }
-func (a *SubscriptionsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readSubscriptionsListServerRequest(r)
+func (a *SubscriptionsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(SubscriptionsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(SubscriptionsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeSubscriptionsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *SubscriptionsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *SubscriptionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

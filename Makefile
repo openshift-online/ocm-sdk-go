@@ -19,11 +19,11 @@ export GO111MODULE=on
 export GOPROXY=https://proxy.golang.org
 
 # Details of the model to use:
-model_version:=v0.0.12
+model_version:=v0.0.13
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=v0.0.8
+metamodel_version:=v0.0.9
 metamodel_url:=https://github.com/openshift-online/ocm-api-metamodel.git
 
 .PHONY: examples

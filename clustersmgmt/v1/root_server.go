@@ -54,15 +54,15 @@ type RootServer interface {
 	Versions() VersionsServer
 }
 
-// RootServerAdapter represents the structs that adapts Requests and Response to internal
+// RootAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RootServerAdapter struct {
+type RootAdapter struct {
 	server RootServer
 	router *mux.Router
 }
 
-func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdapter {
-	adapter := new(RootServerAdapter)
+func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
+	adapter := new(RootAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/cloud_providers").HandlerFunc(adapter.cloudProvidersHandler)
@@ -72,36 +72,36 @@ func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdap
 	adapter.router.PathPrefix("/versions").HandlerFunc(adapter.versionsHandler)
 	return adapter
 }
-func (a *RootServerAdapter) cloudProvidersHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) cloudProvidersHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.CloudProviders()
-	targetAdapter := NewCloudProvidersServerAdapter(target, a.router.PathPrefix("/cloud_providers").Subrouter())
+	targetAdapter := NewCloudProvidersAdapter(target, a.router.PathPrefix("/cloud_providers").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) clustersHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) clustersHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Clusters()
-	targetAdapter := NewClustersServerAdapter(target, a.router.PathPrefix("/clusters").Subrouter())
+	targetAdapter := NewClustersAdapter(target, a.router.PathPrefix("/clusters").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) dashboardsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) dashboardsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Dashboards()
-	targetAdapter := NewDashboardsServerAdapter(target, a.router.PathPrefix("/dashboards").Subrouter())
+	targetAdapter := NewDashboardsAdapter(target, a.router.PathPrefix("/dashboards").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) flavoursHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) flavoursHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Flavours()
-	targetAdapter := NewFlavoursServerAdapter(target, a.router.PathPrefix("/flavours").Subrouter())
+	targetAdapter := NewFlavoursAdapter(target, a.router.PathPrefix("/flavours").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) versionsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) versionsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Versions()
-	targetAdapter := NewVersionsServerAdapter(target, a.router.PathPrefix("/versions").Subrouter())
+	targetAdapter := NewVersionsAdapter(target, a.router.PathPrefix("/versions").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

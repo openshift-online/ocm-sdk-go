@@ -98,9 +98,9 @@ func (r *ExportControlReviewPostServerResponse) Response(value *ExportControlRev
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ExportControlReviewPostServerResponse) SetStatusCode(status int) *ExportControlReviewPostServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ExportControlReviewPostServerResponse) Status(value int) *ExportControlReviewPostServerResponse {
+	r.status = value
 	return r
 }
 
@@ -117,21 +117,21 @@ func (r *ExportControlReviewPostServerResponse) marshal(writer io.Writer) error 
 	return err
 }
 
-// ExportControlReviewServerAdapter represents the structs that adapts Requests and Response to internal
+// ExportControlReviewAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type ExportControlReviewServerAdapter struct {
+type ExportControlReviewAdapter struct {
 	server ExportControlReviewServer
 	router *mux.Router
 }
 
-func NewExportControlReviewServerAdapter(server ExportControlReviewServer, router *mux.Router) *ExportControlReviewServerAdapter {
-	adapter := new(ExportControlReviewServerAdapter)
+func NewExportControlReviewAdapter(server ExportControlReviewServer, router *mux.Router) *ExportControlReviewAdapter {
+	adapter := new(ExportControlReviewAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.postHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
 	return adapter
 }
-func (a *ExportControlReviewServerAdapter) readExportControlReviewPostServerRequest(r *http.Request) (*ExportControlReviewPostServerRequest, error) {
+func (a *ExportControlReviewAdapter) readPostRequest(r *http.Request) (*ExportControlReviewPostServerRequest, error) {
 	var err error
 	result := new(ExportControlReviewPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -140,7 +140,7 @@ func (a *ExportControlReviewServerAdapter) readExportControlReviewPostServerRequ
 	}
 	return result, err
 }
-func (a *ExportControlReviewServerAdapter) writeExportControlReviewPostServerResponse(w http.ResponseWriter, r *ExportControlReviewPostServerResponse) error {
+func (a *ExportControlReviewAdapter) writePostResponse(w http.ResponseWriter, r *ExportControlReviewPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -149,37 +149,47 @@ func (a *ExportControlReviewServerAdapter) writeExportControlReviewPostServerRes
 	}
 	return nil
 }
-func (a *ExportControlReviewServerAdapter) postHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readExportControlReviewPostServerRequest(r)
+func (a *ExportControlReviewAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ExportControlReviewPostServerResponse)
-	err = a.server.Post(r.Context(), req, resp)
+	response := new(ExportControlReviewPostServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Post: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeExportControlReviewPostServerResponse(w, resp)
+	err = a.writePostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ExportControlReviewServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *ExportControlReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

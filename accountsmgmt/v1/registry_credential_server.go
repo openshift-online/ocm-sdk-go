@@ -58,9 +58,9 @@ func (r *RegistryCredentialGetServerResponse) Body(value *RegistryCredential) *R
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RegistryCredentialGetServerResponse) SetStatusCode(status int) *RegistryCredentialGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RegistryCredentialGetServerResponse) Status(value int) *RegistryCredentialGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *RegistryCredentialGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// RegistryCredentialServerAdapter represents the structs that adapts Requests and Response to internal
+// RegistryCredentialAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RegistryCredentialServerAdapter struct {
+type RegistryCredentialAdapter struct {
 	server RegistryCredentialServer
 	router *mux.Router
 }
 
-func NewRegistryCredentialServerAdapter(server RegistryCredentialServer, router *mux.Router) *RegistryCredentialServerAdapter {
-	adapter := new(RegistryCredentialServerAdapter)
+func NewRegistryCredentialAdapter(server RegistryCredentialServer, router *mux.Router) *RegistryCredentialAdapter {
+	adapter := new(RegistryCredentialAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *RegistryCredentialServerAdapter) readRegistryCredentialGetServerRequest(r *http.Request) (*RegistryCredentialGetServerRequest, error) {
+func (a *RegistryCredentialAdapter) readGetRequest(r *http.Request) (*RegistryCredentialGetServerRequest, error) {
 	var err error
 	result := new(RegistryCredentialGetServerRequest)
 	return result, err
 }
-func (a *RegistryCredentialServerAdapter) writeRegistryCredentialGetServerResponse(w http.ResponseWriter, r *RegistryCredentialGetServerResponse) error {
+func (a *RegistryCredentialAdapter) writeGetResponse(w http.ResponseWriter, r *RegistryCredentialGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *RegistryCredentialServerAdapter) writeRegistryCredentialGetServerRespon
 	}
 	return nil
 }
-func (a *RegistryCredentialServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRegistryCredentialGetServerRequest(r)
+func (a *RegistryCredentialAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RegistryCredentialGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(RegistryCredentialGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRegistryCredentialGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RegistryCredentialServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RegistryCredentialAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

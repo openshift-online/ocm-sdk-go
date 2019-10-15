@@ -109,9 +109,9 @@ func (r *RoleBindingsAddServerResponse) Body(value *RoleBinding) *RoleBindingsAd
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RoleBindingsAddServerResponse) SetStatusCode(status int) *RoleBindingsAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RoleBindingsAddServerResponse) Status(value int) *RoleBindingsAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -258,9 +258,9 @@ func (r *RoleBindingsListServerResponse) Total(value int) *RoleBindingsListServe
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RoleBindingsListServerResponse) SetStatusCode(status int) *RoleBindingsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RoleBindingsListServerResponse) Status(value int) *RoleBindingsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -290,30 +290,30 @@ type roleBindingsListServerResponseData struct {
 	Total *int                "json:\"total,omitempty\""
 }
 
-// RoleBindingsServerAdapter represents the structs that adapts Requests and Response to internal
+// RoleBindingsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RoleBindingsServerAdapter struct {
+type RoleBindingsAdapter struct {
 	server RoleBindingsServer
 	router *mux.Router
 }
 
-func NewRoleBindingsServerAdapter(server RoleBindingsServer, router *mux.Router) *RoleBindingsServerAdapter {
-	adapter := new(RoleBindingsServerAdapter)
+func NewRoleBindingsAdapter(server RoleBindingsServer, router *mux.Router) *RoleBindingsAdapter {
+	adapter := new(RoleBindingsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleBindingHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *RoleBindingsServerAdapter) roleBindingHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RoleBindingsAdapter) roleBindingHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.RoleBinding(id)
-	targetAdapter := NewRoleBindingServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewRoleBindingAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RoleBindingsServerAdapter) readRoleBindingsAddServerRequest(r *http.Request) (*RoleBindingsAddServerRequest, error) {
+func (a *RoleBindingsAdapter) readAddRequest(r *http.Request) (*RoleBindingsAddServerRequest, error) {
 	var err error
 	result := new(RoleBindingsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +322,7 @@ func (a *RoleBindingsServerAdapter) readRoleBindingsAddServerRequest(r *http.Req
 	}
 	return result, err
 }
-func (a *RoleBindingsServerAdapter) writeRoleBindingsAddServerResponse(w http.ResponseWriter, r *RoleBindingsAddServerResponse) error {
+func (a *RoleBindingsAdapter) writeAddResponse(w http.ResponseWriter, r *RoleBindingsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,38 +331,48 @@ func (a *RoleBindingsServerAdapter) writeRoleBindingsAddServerResponse(w http.Re
 	}
 	return nil
 }
-func (a *RoleBindingsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRoleBindingsAddServerRequest(r)
+func (a *RoleBindingsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RoleBindingsAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(RoleBindingsAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRoleBindingsAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RoleBindingsServerAdapter) readRoleBindingsListServerRequest(r *http.Request) (*RoleBindingsListServerRequest, error) {
+func (a *RoleBindingsAdapter) readListRequest(r *http.Request) (*RoleBindingsListServerRequest, error) {
 	var err error
 	result := new(RoleBindingsListServerRequest)
 	query := r.URL.Query()
@@ -380,7 +390,7 @@ func (a *RoleBindingsServerAdapter) readRoleBindingsListServerRequest(r *http.Re
 	}
 	return result, err
 }
-func (a *RoleBindingsServerAdapter) writeRoleBindingsListServerResponse(w http.ResponseWriter, r *RoleBindingsListServerResponse) error {
+func (a *RoleBindingsAdapter) writeListResponse(w http.ResponseWriter, r *RoleBindingsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -389,37 +399,47 @@ func (a *RoleBindingsServerAdapter) writeRoleBindingsListServerResponse(w http.R
 	}
 	return nil
 }
-func (a *RoleBindingsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRoleBindingsListServerRequest(r)
+func (a *RoleBindingsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RoleBindingsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(RoleBindingsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRoleBindingsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RoleBindingsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RoleBindingsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

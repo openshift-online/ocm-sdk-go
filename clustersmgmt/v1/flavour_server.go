@@ -58,9 +58,9 @@ func (r *FlavourGetServerResponse) Body(value *Flavour) *FlavourGetServerRespons
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *FlavourGetServerResponse) SetStatusCode(status int) *FlavourGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *FlavourGetServerResponse) Status(value int) *FlavourGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *FlavourGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// FlavourServerAdapter represents the structs that adapts Requests and Response to internal
+// FlavourAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type FlavourServerAdapter struct {
+type FlavourAdapter struct {
 	server FlavourServer
 	router *mux.Router
 }
 
-func NewFlavourServerAdapter(server FlavourServer, router *mux.Router) *FlavourServerAdapter {
-	adapter := new(FlavourServerAdapter)
+func NewFlavourAdapter(server FlavourServer, router *mux.Router) *FlavourAdapter {
+	adapter := new(FlavourAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *FlavourServerAdapter) readFlavourGetServerRequest(r *http.Request) (*FlavourGetServerRequest, error) {
+func (a *FlavourAdapter) readGetRequest(r *http.Request) (*FlavourGetServerRequest, error) {
 	var err error
 	result := new(FlavourGetServerRequest)
 	return result, err
 }
-func (a *FlavourServerAdapter) writeFlavourGetServerResponse(w http.ResponseWriter, r *FlavourGetServerResponse) error {
+func (a *FlavourAdapter) writeGetResponse(w http.ResponseWriter, r *FlavourGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *FlavourServerAdapter) writeFlavourGetServerResponse(w http.ResponseWrit
 	}
 	return nil
 }
-func (a *FlavourServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readFlavourGetServerRequest(r)
+func (a *FlavourAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(FlavourGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(FlavourGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeFlavourGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *FlavourServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *FlavourAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

@@ -89,9 +89,9 @@ type ClusterDeleteServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClusterDeleteServerResponse) SetStatusCode(status int) *ClusterDeleteServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ClusterDeleteServerResponse) Status(value int) *ClusterDeleteServerResponse {
+	r.status = value
 	return r
 }
 
@@ -114,9 +114,9 @@ func (r *ClusterGetServerResponse) Body(value *Cluster) *ClusterGetServerRespons
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClusterGetServerResponse) SetStatusCode(status int) *ClusterGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ClusterGetServerResponse) Status(value int) *ClusterGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -183,21 +183,21 @@ type ClusterUpdateServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClusterUpdateServerResponse) SetStatusCode(status int) *ClusterUpdateServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ClusterUpdateServerResponse) Status(value int) *ClusterUpdateServerResponse {
+	r.status = value
 	return r
 }
 
-// ClusterServerAdapter represents the structs that adapts Requests and Response to internal
+// ClusterAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type ClusterServerAdapter struct {
+type ClusterAdapter struct {
 	server ClusterServer
 	router *mux.Router
 }
 
-func NewClusterServerAdapter(server ClusterServer, router *mux.Router) *ClusterServerAdapter {
-	adapter := new(ClusterServerAdapter)
+func NewClusterAdapter(server ClusterServer, router *mux.Router) *ClusterAdapter {
+	adapter := new(ClusterAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/credentials").HandlerFunc(adapter.credentialsHandler)
@@ -206,94 +206,104 @@ func NewClusterServerAdapter(server ClusterServer, router *mux.Router) *ClusterS
 	adapter.router.PathPrefix("/logs").HandlerFunc(adapter.logsHandler)
 	adapter.router.PathPrefix("/metric_queries").HandlerFunc(adapter.metricQueriesHandler)
 	adapter.router.PathPrefix("/status").HandlerFunc(adapter.statusHandler)
-	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
+	adapter.router.Methods(http.MethodPatch).Path("").HandlerFunc(adapter.handlerUpdate)
 	return adapter
 }
-func (a *ClusterServerAdapter) credentialsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAdapter) credentialsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Credentials()
-	targetAdapter := NewCredentialsServerAdapter(target, a.router.PathPrefix("/credentials").Subrouter())
+	targetAdapter := NewCredentialsAdapter(target, a.router.PathPrefix("/credentials").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ClusterServerAdapter) groupsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAdapter) groupsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Groups()
-	targetAdapter := NewGroupsServerAdapter(target, a.router.PathPrefix("/groups").Subrouter())
+	targetAdapter := NewGroupsAdapter(target, a.router.PathPrefix("/groups").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ClusterServerAdapter) identityProvidersHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAdapter) identityProvidersHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.IdentityProviders()
-	targetAdapter := NewIdentityProvidersServerAdapter(target, a.router.PathPrefix("/identity_providers").Subrouter())
+	targetAdapter := NewIdentityProvidersAdapter(target, a.router.PathPrefix("/identity_providers").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ClusterServerAdapter) logsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAdapter) logsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Logs()
-	targetAdapter := NewLogsServerAdapter(target, a.router.PathPrefix("/logs").Subrouter())
+	targetAdapter := NewLogsAdapter(target, a.router.PathPrefix("/logs").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ClusterServerAdapter) metricQueriesHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAdapter) metricQueriesHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.MetricQueries()
-	targetAdapter := NewMetricQueriesServerAdapter(target, a.router.PathPrefix("/metric_queries").Subrouter())
+	targetAdapter := NewMetricQueriesAdapter(target, a.router.PathPrefix("/metric_queries").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ClusterServerAdapter) statusHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAdapter) statusHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Status()
-	targetAdapter := NewClusterStatusServerAdapter(target, a.router.PathPrefix("/status").Subrouter())
+	targetAdapter := NewClusterStatusAdapter(target, a.router.PathPrefix("/status").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ClusterServerAdapter) readClusterDeleteServerRequest(r *http.Request) (*ClusterDeleteServerRequest, error) {
+func (a *ClusterAdapter) readDeleteRequest(r *http.Request) (*ClusterDeleteServerRequest, error) {
 	var err error
 	result := new(ClusterDeleteServerRequest)
 	return result, err
 }
-func (a *ClusterServerAdapter) writeClusterDeleteServerResponse(w http.ResponseWriter, r *ClusterDeleteServerResponse) error {
+func (a *ClusterAdapter) writeDeleteResponse(w http.ResponseWriter, r *ClusterDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *ClusterServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClusterDeleteServerRequest(r)
+func (a *ClusterAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ClusterDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
+	response := new(ClusterDeleteServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Delete: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeClusterDeleteServerResponse(w, resp)
+	err = a.writeDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ClusterServerAdapter) readClusterGetServerRequest(r *http.Request) (*ClusterGetServerRequest, error) {
+func (a *ClusterAdapter) readGetRequest(r *http.Request) (*ClusterGetServerRequest, error) {
 	var err error
 	result := new(ClusterGetServerRequest)
 	return result, err
 }
-func (a *ClusterServerAdapter) writeClusterGetServerResponse(w http.ResponseWriter, r *ClusterGetServerResponse) error {
+func (a *ClusterAdapter) writeGetResponse(w http.ResponseWriter, r *ClusterGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -302,38 +312,48 @@ func (a *ClusterServerAdapter) writeClusterGetServerResponse(w http.ResponseWrit
 	}
 	return nil
 }
-func (a *ClusterServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClusterGetServerRequest(r)
+func (a *ClusterAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ClusterGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(ClusterGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeClusterGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ClusterServerAdapter) readClusterUpdateServerRequest(r *http.Request) (*ClusterUpdateServerRequest, error) {
+func (a *ClusterAdapter) readUpdateRequest(r *http.Request) (*ClusterUpdateServerRequest, error) {
 	var err error
 	result := new(ClusterUpdateServerRequest)
 	err = result.unmarshal(r.Body)
@@ -342,42 +362,52 @@ func (a *ClusterServerAdapter) readClusterUpdateServerRequest(r *http.Request) (
 	}
 	return result, err
 }
-func (a *ClusterServerAdapter) writeClusterUpdateServerResponse(w http.ResponseWriter, r *ClusterUpdateServerResponse) error {
+func (a *ClusterAdapter) writeUpdateResponse(w http.ResponseWriter, r *ClusterUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *ClusterServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClusterUpdateServerRequest(r)
+func (a *ClusterAdapter) handlerUpdate(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readUpdateRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ClusterUpdateServerResponse)
-	err = a.server.Update(r.Context(), req, resp)
+	response := new(ClusterUpdateServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Update(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Update: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeClusterUpdateServerResponse(w, resp)
+	err = a.writeUpdateResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ClusterServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

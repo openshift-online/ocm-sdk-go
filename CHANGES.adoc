@@ -3,6 +3,21 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.44 Oct 15 2019
+
+- Upate to model 0.0.13:
+** Added `AccessTokenAuth` type.
+** Added `auths` attribute to `AccessToken` type.
+
+- Update to metamodel 0.0.9:
+** Generate shorter adapter names.
+** Use constants from the `http` package.
+** Shorter _read_ and _write_ names.
+** Rename `SetStatusCode` to `Status`.
+** Improve naming of variables.
+** Set default status.
+** Move errors and helpers generators to separate files.
+
 == 0.1.43 Oct 10 2019
 
 - Update to model 0.0.12:

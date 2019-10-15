@@ -63,9 +63,9 @@ func (r *AccountGetServerResponse) Body(value *Account) *AccountGetServerRespons
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *AccountGetServerResponse) SetStatusCode(status int) *AccountGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *AccountGetServerResponse) Status(value int) *AccountGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -132,33 +132,33 @@ type AccountUpdateServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *AccountUpdateServerResponse) SetStatusCode(status int) *AccountUpdateServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *AccountUpdateServerResponse) Status(value int) *AccountUpdateServerResponse {
+	r.status = value
 	return r
 }
 
-// AccountServerAdapter represents the structs that adapts Requests and Response to internal
+// AccountAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type AccountServerAdapter struct {
+type AccountAdapter struct {
 	server AccountServer
 	router *mux.Router
 }
 
-func NewAccountServerAdapter(server AccountServer, router *mux.Router) *AccountServerAdapter {
-	adapter := new(AccountServerAdapter)
+func NewAccountAdapter(server AccountServer, router *mux.Router) *AccountAdapter {
+	adapter := new(AccountAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
+	adapter.router.Methods(http.MethodPatch).Path("").HandlerFunc(adapter.handlerUpdate)
 	return adapter
 }
-func (a *AccountServerAdapter) readAccountGetServerRequest(r *http.Request) (*AccountGetServerRequest, error) {
+func (a *AccountAdapter) readGetRequest(r *http.Request) (*AccountGetServerRequest, error) {
 	var err error
 	result := new(AccountGetServerRequest)
 	return result, err
 }
-func (a *AccountServerAdapter) writeAccountGetServerResponse(w http.ResponseWriter, r *AccountGetServerResponse) error {
+func (a *AccountAdapter) writeGetResponse(w http.ResponseWriter, r *AccountGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -167,38 +167,48 @@ func (a *AccountServerAdapter) writeAccountGetServerResponse(w http.ResponseWrit
 	}
 	return nil
 }
-func (a *AccountServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readAccountGetServerRequest(r)
+func (a *AccountAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(AccountGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(AccountGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeAccountGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *AccountServerAdapter) readAccountUpdateServerRequest(r *http.Request) (*AccountUpdateServerRequest, error) {
+func (a *AccountAdapter) readUpdateRequest(r *http.Request) (*AccountUpdateServerRequest, error) {
 	var err error
 	result := new(AccountUpdateServerRequest)
 	err = result.unmarshal(r.Body)
@@ -207,42 +217,52 @@ func (a *AccountServerAdapter) readAccountUpdateServerRequest(r *http.Request) (
 	}
 	return result, err
 }
-func (a *AccountServerAdapter) writeAccountUpdateServerResponse(w http.ResponseWriter, r *AccountUpdateServerResponse) error {
+func (a *AccountAdapter) writeUpdateResponse(w http.ResponseWriter, r *AccountUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *AccountServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readAccountUpdateServerRequest(r)
+func (a *AccountAdapter) handlerUpdate(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readUpdateRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(AccountUpdateServerResponse)
-	err = a.server.Update(r.Context(), req, resp)
+	response := new(AccountUpdateServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Update(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Update: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeAccountUpdateServerResponse(w, resp)
+	err = a.writeUpdateResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *AccountServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *AccountAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

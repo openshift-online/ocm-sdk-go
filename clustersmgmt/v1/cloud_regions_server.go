@@ -99,9 +99,9 @@ func (r *CloudRegionsListServerResponse) Total(value int) *CloudRegionsListServe
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *CloudRegionsListServerResponse) SetStatusCode(status int) *CloudRegionsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *CloudRegionsListServerResponse) Status(value int) *CloudRegionsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -131,34 +131,34 @@ type cloudRegionsListServerResponseData struct {
 	Total *int                "json:\"total,omitempty\""
 }
 
-// CloudRegionsServerAdapter represents the structs that adapts Requests and Response to internal
+// CloudRegionsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type CloudRegionsServerAdapter struct {
+type CloudRegionsAdapter struct {
 	server CloudRegionsServer
 	router *mux.Router
 }
 
-func NewCloudRegionsServerAdapter(server CloudRegionsServer, router *mux.Router) *CloudRegionsServerAdapter {
-	adapter := new(CloudRegionsServerAdapter)
+func NewCloudRegionsAdapter(server CloudRegionsServer, router *mux.Router) *CloudRegionsAdapter {
+	adapter := new(CloudRegionsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.regionHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *CloudRegionsServerAdapter) regionHandler(w http.ResponseWriter, r *http.Request) {
+func (a *CloudRegionsAdapter) regionHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Region(id)
-	targetAdapter := NewCloudRegionServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewCloudRegionAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *CloudRegionsServerAdapter) readCloudRegionsListServerRequest(r *http.Request) (*CloudRegionsListServerRequest, error) {
+func (a *CloudRegionsAdapter) readListRequest(r *http.Request) (*CloudRegionsListServerRequest, error) {
 	var err error
 	result := new(CloudRegionsListServerRequest)
 	return result, err
 }
-func (a *CloudRegionsServerAdapter) writeCloudRegionsListServerResponse(w http.ResponseWriter, r *CloudRegionsListServerResponse) error {
+func (a *CloudRegionsAdapter) writeListResponse(w http.ResponseWriter, r *CloudRegionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -167,37 +167,47 @@ func (a *CloudRegionsServerAdapter) writeCloudRegionsListServerResponse(w http.R
 	}
 	return nil
 }
-func (a *CloudRegionsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readCloudRegionsListServerRequest(r)
+func (a *CloudRegionsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(CloudRegionsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(CloudRegionsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeCloudRegionsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *CloudRegionsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *CloudRegionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

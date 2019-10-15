@@ -58,9 +58,9 @@ func (r *CloudRegionGetServerResponse) Body(value *CloudRegion) *CloudRegionGetS
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *CloudRegionGetServerResponse) SetStatusCode(status int) *CloudRegionGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *CloudRegionGetServerResponse) Status(value int) *CloudRegionGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *CloudRegionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CloudRegionServerAdapter represents the structs that adapts Requests and Response to internal
+// CloudRegionAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type CloudRegionServerAdapter struct {
+type CloudRegionAdapter struct {
 	server CloudRegionServer
 	router *mux.Router
 }
 
-func NewCloudRegionServerAdapter(server CloudRegionServer, router *mux.Router) *CloudRegionServerAdapter {
-	adapter := new(CloudRegionServerAdapter)
+func NewCloudRegionAdapter(server CloudRegionServer, router *mux.Router) *CloudRegionAdapter {
+	adapter := new(CloudRegionAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *CloudRegionServerAdapter) readCloudRegionGetServerRequest(r *http.Request) (*CloudRegionGetServerRequest, error) {
+func (a *CloudRegionAdapter) readGetRequest(r *http.Request) (*CloudRegionGetServerRequest, error) {
 	var err error
 	result := new(CloudRegionGetServerRequest)
 	return result, err
 }
-func (a *CloudRegionServerAdapter) writeCloudRegionGetServerResponse(w http.ResponseWriter, r *CloudRegionGetServerResponse) error {
+func (a *CloudRegionAdapter) writeGetResponse(w http.ResponseWriter, r *CloudRegionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *CloudRegionServerAdapter) writeCloudRegionGetServerResponse(w http.Resp
 	}
 	return nil
 }
-func (a *CloudRegionServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readCloudRegionGetServerRequest(r)
+func (a *CloudRegionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(CloudRegionGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(CloudRegionGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeCloudRegionGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *CloudRegionServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *CloudRegionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }
