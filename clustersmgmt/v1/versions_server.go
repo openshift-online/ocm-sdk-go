@@ -273,9 +273,9 @@ func (r *VersionsListServerResponse) Total(value int) *VersionsListServerRespons
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *VersionsListServerResponse) SetStatusCode(status int) *VersionsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *VersionsListServerResponse) Status(value int) *VersionsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -305,29 +305,29 @@ type versionsListServerResponseData struct {
 	Total *int            "json:\"total,omitempty\""
 }
 
-// VersionsServerAdapter represents the structs that adapts Requests and Response to internal
+// VersionsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type VersionsServerAdapter struct {
+type VersionsAdapter struct {
 	server VersionsServer
 	router *mux.Router
 }
 
-func NewVersionsServerAdapter(server VersionsServer, router *mux.Router) *VersionsServerAdapter {
-	adapter := new(VersionsServerAdapter)
+func NewVersionsAdapter(server VersionsServer, router *mux.Router) *VersionsAdapter {
+	adapter := new(VersionsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.versionHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *VersionsServerAdapter) versionHandler(w http.ResponseWriter, r *http.Request) {
+func (a *VersionsAdapter) versionHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Version(id)
-	targetAdapter := NewVersionServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewVersionAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *VersionsServerAdapter) readVersionsListServerRequest(r *http.Request) (*VersionsListServerRequest, error) {
+func (a *VersionsAdapter) readListRequest(r *http.Request) (*VersionsListServerRequest, error) {
 	var err error
 	result := new(VersionsListServerRequest)
 	query := r.URL.Query()
@@ -353,7 +353,7 @@ func (a *VersionsServerAdapter) readVersionsListServerRequest(r *http.Request) (
 	}
 	return result, err
 }
-func (a *VersionsServerAdapter) writeVersionsListServerResponse(w http.ResponseWriter, r *VersionsListServerResponse) error {
+func (a *VersionsAdapter) writeListResponse(w http.ResponseWriter, r *VersionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -362,37 +362,47 @@ func (a *VersionsServerAdapter) writeVersionsListServerResponse(w http.ResponseW
 	}
 	return nil
 }
-func (a *VersionsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readVersionsListServerRequest(r)
+func (a *VersionsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(VersionsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(VersionsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeVersionsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *VersionsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *VersionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

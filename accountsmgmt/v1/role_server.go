@@ -59,9 +59,9 @@ type RoleDeleteServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RoleDeleteServerResponse) SetStatusCode(status int) *RoleDeleteServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RoleDeleteServerResponse) Status(value int) *RoleDeleteServerResponse {
+	r.status = value
 	return r
 }
 
@@ -84,9 +84,9 @@ func (r *RoleGetServerResponse) Body(value *Role) *RoleGetServerResponse {
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RoleGetServerResponse) SetStatusCode(status int) *RoleGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RoleGetServerResponse) Status(value int) *RoleGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -153,75 +153,85 @@ type RoleUpdateServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RoleUpdateServerResponse) SetStatusCode(status int) *RoleUpdateServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RoleUpdateServerResponse) Status(value int) *RoleUpdateServerResponse {
+	r.status = value
 	return r
 }
 
-// RoleServerAdapter represents the structs that adapts Requests and Response to internal
+// RoleAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RoleServerAdapter struct {
+type RoleAdapter struct {
 	server RoleServer
 	router *mux.Router
 }
 
-func NewRoleServerAdapter(server RoleServer, router *mux.Router) *RoleServerAdapter {
-	adapter := new(RoleServerAdapter)
+func NewRoleAdapter(server RoleServer, router *mux.Router) *RoleAdapter {
+	adapter := new(RoleAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
-	adapter.router.Methods("PATCH").Path("").HandlerFunc(adapter.updateHandler)
+	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
+	adapter.router.Methods(http.MethodPatch).Path("").HandlerFunc(adapter.handlerUpdate)
 	return adapter
 }
-func (a *RoleServerAdapter) readRoleDeleteServerRequest(r *http.Request) (*RoleDeleteServerRequest, error) {
+func (a *RoleAdapter) readDeleteRequest(r *http.Request) (*RoleDeleteServerRequest, error) {
 	var err error
 	result := new(RoleDeleteServerRequest)
 	return result, err
 }
-func (a *RoleServerAdapter) writeRoleDeleteServerResponse(w http.ResponseWriter, r *RoleDeleteServerResponse) error {
+func (a *RoleAdapter) writeDeleteResponse(w http.ResponseWriter, r *RoleDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *RoleServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRoleDeleteServerRequest(r)
+func (a *RoleAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RoleDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
+	response := new(RoleDeleteServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Delete: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRoleDeleteServerResponse(w, resp)
+	err = a.writeDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RoleServerAdapter) readRoleGetServerRequest(r *http.Request) (*RoleGetServerRequest, error) {
+func (a *RoleAdapter) readGetRequest(r *http.Request) (*RoleGetServerRequest, error) {
 	var err error
 	result := new(RoleGetServerRequest)
 	return result, err
 }
-func (a *RoleServerAdapter) writeRoleGetServerResponse(w http.ResponseWriter, r *RoleGetServerResponse) error {
+func (a *RoleAdapter) writeGetResponse(w http.ResponseWriter, r *RoleGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -230,38 +240,48 @@ func (a *RoleServerAdapter) writeRoleGetServerResponse(w http.ResponseWriter, r 
 	}
 	return nil
 }
-func (a *RoleServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRoleGetServerRequest(r)
+func (a *RoleAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RoleGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(RoleGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRoleGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RoleServerAdapter) readRoleUpdateServerRequest(r *http.Request) (*RoleUpdateServerRequest, error) {
+func (a *RoleAdapter) readUpdateRequest(r *http.Request) (*RoleUpdateServerRequest, error) {
 	var err error
 	result := new(RoleUpdateServerRequest)
 	err = result.unmarshal(r.Body)
@@ -270,42 +290,52 @@ func (a *RoleServerAdapter) readRoleUpdateServerRequest(r *http.Request) (*RoleU
 	}
 	return result, err
 }
-func (a *RoleServerAdapter) writeRoleUpdateServerResponse(w http.ResponseWriter, r *RoleUpdateServerResponse) error {
+func (a *RoleAdapter) writeUpdateResponse(w http.ResponseWriter, r *RoleUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *RoleServerAdapter) updateHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRoleUpdateServerRequest(r)
+func (a *RoleAdapter) handlerUpdate(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readUpdateRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RoleUpdateServerResponse)
-	err = a.server.Update(r.Context(), req, resp)
+	response := new(RoleUpdateServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Update(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Update: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Update: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRoleUpdateServerResponse(w, resp)
+	err = a.writeUpdateResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RoleServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RoleAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

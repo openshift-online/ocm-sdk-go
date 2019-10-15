@@ -109,9 +109,9 @@ func (r *FlavoursAddServerResponse) Body(value *Flavour) *FlavoursAddServerRespo
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *FlavoursAddServerResponse) SetStatusCode(status int) *FlavoursAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *FlavoursAddServerResponse) Status(value int) *FlavoursAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -356,9 +356,9 @@ func (r *FlavoursListServerResponse) Total(value int) *FlavoursListServerRespons
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *FlavoursListServerResponse) SetStatusCode(status int) *FlavoursListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *FlavoursListServerResponse) Status(value int) *FlavoursListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -388,30 +388,30 @@ type flavoursListServerResponseData struct {
 	Total *int            "json:\"total,omitempty\""
 }
 
-// FlavoursServerAdapter represents the structs that adapts Requests and Response to internal
+// FlavoursAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type FlavoursServerAdapter struct {
+type FlavoursAdapter struct {
 	server FlavoursServer
 	router *mux.Router
 }
 
-func NewFlavoursServerAdapter(server FlavoursServer, router *mux.Router) *FlavoursServerAdapter {
-	adapter := new(FlavoursServerAdapter)
+func NewFlavoursAdapter(server FlavoursServer, router *mux.Router) *FlavoursAdapter {
+	adapter := new(FlavoursAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.flavourHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *FlavoursServerAdapter) flavourHandler(w http.ResponseWriter, r *http.Request) {
+func (a *FlavoursAdapter) flavourHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Flavour(id)
-	targetAdapter := NewFlavourServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewFlavourAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *FlavoursServerAdapter) readFlavoursAddServerRequest(r *http.Request) (*FlavoursAddServerRequest, error) {
+func (a *FlavoursAdapter) readAddRequest(r *http.Request) (*FlavoursAddServerRequest, error) {
 	var err error
 	result := new(FlavoursAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -420,7 +420,7 @@ func (a *FlavoursServerAdapter) readFlavoursAddServerRequest(r *http.Request) (*
 	}
 	return result, err
 }
-func (a *FlavoursServerAdapter) writeFlavoursAddServerResponse(w http.ResponseWriter, r *FlavoursAddServerResponse) error {
+func (a *FlavoursAdapter) writeAddResponse(w http.ResponseWriter, r *FlavoursAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -429,38 +429,48 @@ func (a *FlavoursServerAdapter) writeFlavoursAddServerResponse(w http.ResponseWr
 	}
 	return nil
 }
-func (a *FlavoursServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readFlavoursAddServerRequest(r)
+func (a *FlavoursAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(FlavoursAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(FlavoursAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeFlavoursAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *FlavoursServerAdapter) readFlavoursListServerRequest(r *http.Request) (*FlavoursListServerRequest, error) {
+func (a *FlavoursAdapter) readListRequest(r *http.Request) (*FlavoursListServerRequest, error) {
 	var err error
 	result := new(FlavoursListServerRequest)
 	query := r.URL.Query()
@@ -486,7 +496,7 @@ func (a *FlavoursServerAdapter) readFlavoursListServerRequest(r *http.Request) (
 	}
 	return result, err
 }
-func (a *FlavoursServerAdapter) writeFlavoursListServerResponse(w http.ResponseWriter, r *FlavoursListServerResponse) error {
+func (a *FlavoursAdapter) writeListResponse(w http.ResponseWriter, r *FlavoursListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -495,37 +505,47 @@ func (a *FlavoursServerAdapter) writeFlavoursListServerResponse(w http.ResponseW
 	}
 	return nil
 }
-func (a *FlavoursServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readFlavoursListServerRequest(r)
+func (a *FlavoursAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(FlavoursListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(FlavoursListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeFlavoursListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *FlavoursServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *FlavoursAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

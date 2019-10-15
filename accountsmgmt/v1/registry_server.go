@@ -58,9 +58,9 @@ func (r *RegistryGetServerResponse) Body(value *Registry) *RegistryGetServerResp
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RegistryGetServerResponse) SetStatusCode(status int) *RegistryGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RegistryGetServerResponse) Status(value int) *RegistryGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *RegistryGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// RegistryServerAdapter represents the structs that adapts Requests and Response to internal
+// RegistryAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RegistryServerAdapter struct {
+type RegistryAdapter struct {
 	server RegistryServer
 	router *mux.Router
 }
 
-func NewRegistryServerAdapter(server RegistryServer, router *mux.Router) *RegistryServerAdapter {
-	adapter := new(RegistryServerAdapter)
+func NewRegistryAdapter(server RegistryServer, router *mux.Router) *RegistryAdapter {
+	adapter := new(RegistryAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *RegistryServerAdapter) readRegistryGetServerRequest(r *http.Request) (*RegistryGetServerRequest, error) {
+func (a *RegistryAdapter) readGetRequest(r *http.Request) (*RegistryGetServerRequest, error) {
 	var err error
 	result := new(RegistryGetServerRequest)
 	return result, err
 }
-func (a *RegistryServerAdapter) writeRegistryGetServerResponse(w http.ResponseWriter, r *RegistryGetServerResponse) error {
+func (a *RegistryAdapter) writeGetResponse(w http.ResponseWriter, r *RegistryGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *RegistryServerAdapter) writeRegistryGetServerResponse(w http.ResponseWr
 	}
 	return nil
 }
-func (a *RegistryServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRegistryGetServerRequest(r)
+func (a *RegistryAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RegistryGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(RegistryGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRegistryGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RegistryServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RegistryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

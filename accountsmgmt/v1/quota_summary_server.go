@@ -221,9 +221,9 @@ func (r *QuotaSummaryListServerResponse) Total(value int) *QuotaSummaryListServe
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *QuotaSummaryListServerResponse) SetStatusCode(status int) *QuotaSummaryListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *QuotaSummaryListServerResponse) Status(value int) *QuotaSummaryListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -253,21 +253,21 @@ type quotaSummaryListServerResponseData struct {
 	Total *int                 "json:\"total,omitempty\""
 }
 
-// QuotaSummaryServerAdapter represents the structs that adapts Requests and Response to internal
+// QuotaSummaryAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type QuotaSummaryServerAdapter struct {
+type QuotaSummaryAdapter struct {
 	server QuotaSummaryServer
 	router *mux.Router
 }
 
-func NewQuotaSummaryServerAdapter(server QuotaSummaryServer, router *mux.Router) *QuotaSummaryServerAdapter {
-	adapter := new(QuotaSummaryServerAdapter)
+func NewQuotaSummaryAdapter(server QuotaSummaryServer, router *mux.Router) *QuotaSummaryAdapter {
+	adapter := new(QuotaSummaryAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *QuotaSummaryServerAdapter) readQuotaSummaryListServerRequest(r *http.Request) (*QuotaSummaryListServerRequest, error) {
+func (a *QuotaSummaryAdapter) readListRequest(r *http.Request) (*QuotaSummaryListServerRequest, error) {
 	var err error
 	result := new(QuotaSummaryListServerRequest)
 	query := r.URL.Query()
@@ -289,7 +289,7 @@ func (a *QuotaSummaryServerAdapter) readQuotaSummaryListServerRequest(r *http.Re
 	}
 	return result, err
 }
-func (a *QuotaSummaryServerAdapter) writeQuotaSummaryListServerResponse(w http.ResponseWriter, r *QuotaSummaryListServerResponse) error {
+func (a *QuotaSummaryAdapter) writeListResponse(w http.ResponseWriter, r *QuotaSummaryListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -298,37 +298,47 @@ func (a *QuotaSummaryServerAdapter) writeQuotaSummaryListServerResponse(w http.R
 	}
 	return nil
 }
-func (a *QuotaSummaryServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readQuotaSummaryListServerRequest(r)
+func (a *QuotaSummaryAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(QuotaSummaryListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(QuotaSummaryListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeQuotaSummaryListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *QuotaSummaryServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *QuotaSummaryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

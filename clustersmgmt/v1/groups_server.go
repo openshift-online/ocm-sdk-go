@@ -90,9 +90,9 @@ func (r *GroupsListServerResponse) Total(value int) *GroupsListServerResponse {
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *GroupsListServerResponse) SetStatusCode(status int) *GroupsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *GroupsListServerResponse) Status(value int) *GroupsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -122,34 +122,34 @@ type groupsListServerResponseData struct {
 	Total *int          "json:\"total,omitempty\""
 }
 
-// GroupsServerAdapter represents the structs that adapts Requests and Response to internal
+// GroupsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type GroupsServerAdapter struct {
+type GroupsAdapter struct {
 	server GroupsServer
 	router *mux.Router
 }
 
-func NewGroupsServerAdapter(server GroupsServer, router *mux.Router) *GroupsServerAdapter {
-	adapter := new(GroupsServerAdapter)
+func NewGroupsAdapter(server GroupsServer, router *mux.Router) *GroupsAdapter {
+	adapter := new(GroupsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.groupHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *GroupsServerAdapter) groupHandler(w http.ResponseWriter, r *http.Request) {
+func (a *GroupsAdapter) groupHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Group(id)
-	targetAdapter := NewGroupServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewGroupAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *GroupsServerAdapter) readGroupsListServerRequest(r *http.Request) (*GroupsListServerRequest, error) {
+func (a *GroupsAdapter) readListRequest(r *http.Request) (*GroupsListServerRequest, error) {
 	var err error
 	result := new(GroupsListServerRequest)
 	return result, err
 }
-func (a *GroupsServerAdapter) writeGroupsListServerResponse(w http.ResponseWriter, r *GroupsListServerResponse) error {
+func (a *GroupsAdapter) writeListResponse(w http.ResponseWriter, r *GroupsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -158,37 +158,47 @@ func (a *GroupsServerAdapter) writeGroupsListServerResponse(w http.ResponseWrite
 	}
 	return nil
 }
-func (a *GroupsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readGroupsListServerRequest(r)
+func (a *GroupsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(GroupsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(GroupsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeGroupsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *GroupsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *GroupsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

@@ -94,15 +94,15 @@ type RootServer interface {
 	Subscriptions() SubscriptionsServer
 }
 
-// RootServerAdapter represents the structs that adapts Requests and Response to internal
+// RootAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RootServerAdapter struct {
+type RootAdapter struct {
 	server RootServer
 	router *mux.Router
 }
 
-func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdapter {
-	adapter := new(RootServerAdapter)
+func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
+	adapter := new(RootAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/access_token").HandlerFunc(adapter.accessTokenHandler)
@@ -119,78 +119,78 @@ func NewRootServerAdapter(server RootServer, router *mux.Router) *RootServerAdap
 	adapter.router.PathPrefix("/subscriptions").HandlerFunc(adapter.subscriptionsHandler)
 	return adapter
 }
-func (a *RootServerAdapter) accessTokenHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) accessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.AccessToken()
-	targetAdapter := NewAccessTokenServerAdapter(target, a.router.PathPrefix("/access_token").Subrouter())
+	targetAdapter := NewAccessTokenAdapter(target, a.router.PathPrefix("/access_token").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) accountsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) accountsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Accounts()
-	targetAdapter := NewAccountsServerAdapter(target, a.router.PathPrefix("/accounts").Subrouter())
+	targetAdapter := NewAccountsAdapter(target, a.router.PathPrefix("/accounts").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) clusterAuthorizationsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) clusterAuthorizationsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.ClusterAuthorizations()
-	targetAdapter := NewClusterAuthorizationsServerAdapter(target, a.router.PathPrefix("/cluster_authorizations").Subrouter())
+	targetAdapter := NewClusterAuthorizationsAdapter(target, a.router.PathPrefix("/cluster_authorizations").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) clusterRegistrationsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) clusterRegistrationsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.ClusterRegistrations()
-	targetAdapter := NewClusterRegistrationsServerAdapter(target, a.router.PathPrefix("/cluster_registrations").Subrouter())
+	targetAdapter := NewClusterRegistrationsAdapter(target, a.router.PathPrefix("/cluster_registrations").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) currentAccountHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) currentAccountHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.CurrentAccount()
-	targetAdapter := NewCurrentAccountServerAdapter(target, a.router.PathPrefix("/current_account").Subrouter())
+	targetAdapter := NewCurrentAccountAdapter(target, a.router.PathPrefix("/current_account").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) organizationsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) organizationsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Organizations()
-	targetAdapter := NewOrganizationsServerAdapter(target, a.router.PathPrefix("/organizations").Subrouter())
+	targetAdapter := NewOrganizationsAdapter(target, a.router.PathPrefix("/organizations").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) permissionsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) permissionsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Permissions()
-	targetAdapter := NewPermissionsServerAdapter(target, a.router.PathPrefix("/permissions").Subrouter())
+	targetAdapter := NewPermissionsAdapter(target, a.router.PathPrefix("/permissions").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) registriesHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) registriesHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Registries()
-	targetAdapter := NewRegistriesServerAdapter(target, a.router.PathPrefix("/registries").Subrouter())
+	targetAdapter := NewRegistriesAdapter(target, a.router.PathPrefix("/registries").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) registryCredentialsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) registryCredentialsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.RegistryCredentials()
-	targetAdapter := NewRegistryCredentialsServerAdapter(target, a.router.PathPrefix("/registry_credentials").Subrouter())
+	targetAdapter := NewRegistryCredentialsAdapter(target, a.router.PathPrefix("/registry_credentials").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) roleBindingsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) roleBindingsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.RoleBindings()
-	targetAdapter := NewRoleBindingsServerAdapter(target, a.router.PathPrefix("/role_bindings").Subrouter())
+	targetAdapter := NewRoleBindingsAdapter(target, a.router.PathPrefix("/role_bindings").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) rolesHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) rolesHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Roles()
-	targetAdapter := NewRolesServerAdapter(target, a.router.PathPrefix("/roles").Subrouter())
+	targetAdapter := NewRolesAdapter(target, a.router.PathPrefix("/roles").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) subscriptionsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) subscriptionsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Subscriptions()
-	targetAdapter := NewSubscriptionsServerAdapter(target, a.router.PathPrefix("/subscriptions").Subrouter())
+	targetAdapter := NewSubscriptionsAdapter(target, a.router.PathPrefix("/subscriptions").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RootServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RootAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

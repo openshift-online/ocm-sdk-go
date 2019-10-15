@@ -58,9 +58,9 @@ func (r *VersionGetServerResponse) Body(value *Version) *VersionGetServerRespons
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *VersionGetServerResponse) SetStatusCode(status int) *VersionGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *VersionGetServerResponse) Status(value int) *VersionGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *VersionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// VersionServerAdapter represents the structs that adapts Requests and Response to internal
+// VersionAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type VersionServerAdapter struct {
+type VersionAdapter struct {
 	server VersionServer
 	router *mux.Router
 }
 
-func NewVersionServerAdapter(server VersionServer, router *mux.Router) *VersionServerAdapter {
-	adapter := new(VersionServerAdapter)
+func NewVersionAdapter(server VersionServer, router *mux.Router) *VersionAdapter {
+	adapter := new(VersionAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *VersionServerAdapter) readVersionGetServerRequest(r *http.Request) (*VersionGetServerRequest, error) {
+func (a *VersionAdapter) readGetRequest(r *http.Request) (*VersionGetServerRequest, error) {
 	var err error
 	result := new(VersionGetServerRequest)
 	return result, err
 }
-func (a *VersionServerAdapter) writeVersionGetServerResponse(w http.ResponseWriter, r *VersionGetServerResponse) error {
+func (a *VersionAdapter) writeGetResponse(w http.ResponseWriter, r *VersionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *VersionServerAdapter) writeVersionGetServerResponse(w http.ResponseWrit
 	}
 	return nil
 }
-func (a *VersionServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readVersionGetServerRequest(r)
+func (a *VersionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(VersionGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(VersionGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeVersionGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *VersionServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *VersionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

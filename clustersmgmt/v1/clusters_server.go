@@ -111,9 +111,9 @@ func (r *ClustersAddServerResponse) Body(value *Cluster) *ClustersAddServerRespo
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClustersAddServerResponse) SetStatusCode(status int) *ClustersAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ClustersAddServerResponse) Status(value int) *ClustersAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -360,9 +360,9 @@ func (r *ClustersListServerResponse) Total(value int) *ClustersListServerRespons
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClustersListServerResponse) SetStatusCode(status int) *ClustersListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ClustersListServerResponse) Status(value int) *ClustersListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -392,30 +392,30 @@ type clustersListServerResponseData struct {
 	Total *int            "json:\"total,omitempty\""
 }
 
-// ClustersServerAdapter represents the structs that adapts Requests and Response to internal
+// ClustersAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type ClustersServerAdapter struct {
+type ClustersAdapter struct {
 	server ClustersServer
 	router *mux.Router
 }
 
-func NewClustersServerAdapter(server ClustersServer, router *mux.Router) *ClustersServerAdapter {
-	adapter := new(ClustersServerAdapter)
+func NewClustersAdapter(server ClustersServer, router *mux.Router) *ClustersAdapter {
+	adapter := new(ClustersAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.clusterHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *ClustersServerAdapter) clusterHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ClustersAdapter) clusterHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Cluster(id)
-	targetAdapter := NewClusterServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewClusterAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *ClustersServerAdapter) readClustersAddServerRequest(r *http.Request) (*ClustersAddServerRequest, error) {
+func (a *ClustersAdapter) readAddRequest(r *http.Request) (*ClustersAddServerRequest, error) {
 	var err error
 	result := new(ClustersAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -424,7 +424,7 @@ func (a *ClustersServerAdapter) readClustersAddServerRequest(r *http.Request) (*
 	}
 	return result, err
 }
-func (a *ClustersServerAdapter) writeClustersAddServerResponse(w http.ResponseWriter, r *ClustersAddServerResponse) error {
+func (a *ClustersAdapter) writeAddResponse(w http.ResponseWriter, r *ClustersAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -433,38 +433,48 @@ func (a *ClustersServerAdapter) writeClustersAddServerResponse(w http.ResponseWr
 	}
 	return nil
 }
-func (a *ClustersServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClustersAddServerRequest(r)
+func (a *ClustersAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ClustersAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(ClustersAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeClustersAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ClustersServerAdapter) readClustersListServerRequest(r *http.Request) (*ClustersListServerRequest, error) {
+func (a *ClustersAdapter) readListRequest(r *http.Request) (*ClustersListServerRequest, error) {
 	var err error
 	result := new(ClustersListServerRequest)
 	query := r.URL.Query()
@@ -490,7 +500,7 @@ func (a *ClustersServerAdapter) readClustersListServerRequest(r *http.Request) (
 	}
 	return result, err
 }
-func (a *ClustersServerAdapter) writeClustersListServerResponse(w http.ResponseWriter, r *ClustersListServerResponse) error {
+func (a *ClustersAdapter) writeListResponse(w http.ResponseWriter, r *ClustersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -499,37 +509,47 @@ func (a *ClustersServerAdapter) writeClustersListServerResponse(w http.ResponseW
 	}
 	return nil
 }
-func (a *ClustersServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClustersListServerRequest(r)
+func (a *ClustersAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ClustersListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(ClustersListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeClustersListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ClustersServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *ClustersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

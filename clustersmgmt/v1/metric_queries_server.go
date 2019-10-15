@@ -35,26 +35,26 @@ type MetricQueriesServer interface {
 	CPUTotalByNodeRolesOS() CPUTotalByNodeRolesOSMetricQueryServer
 }
 
-// MetricQueriesServerAdapter represents the structs that adapts Requests and Response to internal
+// MetricQueriesAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type MetricQueriesServerAdapter struct {
+type MetricQueriesAdapter struct {
 	server MetricQueriesServer
 	router *mux.Router
 }
 
-func NewMetricQueriesServerAdapter(server MetricQueriesServer, router *mux.Router) *MetricQueriesServerAdapter {
-	adapter := new(MetricQueriesServerAdapter)
+func NewMetricQueriesAdapter(server MetricQueriesServer, router *mux.Router) *MetricQueriesAdapter {
+	adapter := new(MetricQueriesAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/cpu_total_by_node_roles_os").HandlerFunc(adapter.cpuTotalByNodeRolesOSHandler)
 	return adapter
 }
-func (a *MetricQueriesServerAdapter) cpuTotalByNodeRolesOSHandler(w http.ResponseWriter, r *http.Request) {
+func (a *MetricQueriesAdapter) cpuTotalByNodeRolesOSHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.CPUTotalByNodeRolesOS()
-	targetAdapter := NewCPUTotalByNodeRolesOSMetricQueryServerAdapter(target, a.router.PathPrefix("/cpu_total_by_node_roles_os").Subrouter())
+	targetAdapter := NewCPUTotalByNodeRolesOSMetricQueryAdapter(target, a.router.PathPrefix("/cpu_total_by_node_roles_os").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *MetricQueriesServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *MetricQueriesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

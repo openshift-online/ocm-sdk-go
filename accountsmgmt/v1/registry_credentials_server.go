@@ -109,9 +109,9 @@ func (r *RegistryCredentialsAddServerResponse) Body(value *RegistryCredential) *
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RegistryCredentialsAddServerResponse) SetStatusCode(status int) *RegistryCredentialsAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RegistryCredentialsAddServerResponse) Status(value int) *RegistryCredentialsAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -258,9 +258,9 @@ func (r *RegistryCredentialsListServerResponse) Total(value int) *RegistryCreden
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *RegistryCredentialsListServerResponse) SetStatusCode(status int) *RegistryCredentialsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *RegistryCredentialsListServerResponse) Status(value int) *RegistryCredentialsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -290,30 +290,30 @@ type registryCredentialsListServerResponseData struct {
 	Total *int                       "json:\"total,omitempty\""
 }
 
-// RegistryCredentialsServerAdapter represents the structs that adapts Requests and Response to internal
+// RegistryCredentialsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type RegistryCredentialsServerAdapter struct {
+type RegistryCredentialsAdapter struct {
 	server RegistryCredentialsServer
 	router *mux.Router
 }
 
-func NewRegistryCredentialsServerAdapter(server RegistryCredentialsServer, router *mux.Router) *RegistryCredentialsServerAdapter {
-	adapter := new(RegistryCredentialsServerAdapter)
+func NewRegistryCredentialsAdapter(server RegistryCredentialsServer, router *mux.Router) *RegistryCredentialsAdapter {
+	adapter := new(RegistryCredentialsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.registryCredentialHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *RegistryCredentialsServerAdapter) registryCredentialHandler(w http.ResponseWriter, r *http.Request) {
+func (a *RegistryCredentialsAdapter) registryCredentialHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.RegistryCredential(id)
-	targetAdapter := NewRegistryCredentialServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewRegistryCredentialAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsAddServerRequest(r *http.Request) (*RegistryCredentialsAddServerRequest, error) {
+func (a *RegistryCredentialsAdapter) readAddRequest(r *http.Request) (*RegistryCredentialsAddServerRequest, error) {
 	var err error
 	result := new(RegistryCredentialsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +322,7 @@ func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsAddServerReque
 	}
 	return result, err
 }
-func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsAddServerResponse(w http.ResponseWriter, r *RegistryCredentialsAddServerResponse) error {
+func (a *RegistryCredentialsAdapter) writeAddResponse(w http.ResponseWriter, r *RegistryCredentialsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,38 +331,48 @@ func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsAddServerResp
 	}
 	return nil
 }
-func (a *RegistryCredentialsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRegistryCredentialsAddServerRequest(r)
+func (a *RegistryCredentialsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RegistryCredentialsAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(RegistryCredentialsAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRegistryCredentialsAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsListServerRequest(r *http.Request) (*RegistryCredentialsListServerRequest, error) {
+func (a *RegistryCredentialsAdapter) readListRequest(r *http.Request) (*RegistryCredentialsListServerRequest, error) {
 	var err error
 	result := new(RegistryCredentialsListServerRequest)
 	query := r.URL.Query()
@@ -380,7 +390,7 @@ func (a *RegistryCredentialsServerAdapter) readRegistryCredentialsListServerRequ
 	}
 	return result, err
 }
-func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsListServerResponse(w http.ResponseWriter, r *RegistryCredentialsListServerResponse) error {
+func (a *RegistryCredentialsAdapter) writeListResponse(w http.ResponseWriter, r *RegistryCredentialsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -389,37 +399,47 @@ func (a *RegistryCredentialsServerAdapter) writeRegistryCredentialsListServerRes
 	}
 	return nil
 }
-func (a *RegistryCredentialsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readRegistryCredentialsListServerRequest(r)
+func (a *RegistryCredentialsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(RegistryCredentialsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(RegistryCredentialsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeRegistryCredentialsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *RegistryCredentialsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *RegistryCredentialsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

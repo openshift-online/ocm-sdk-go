@@ -58,9 +58,9 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) Body(value *CPUTotal
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) SetStatusCode(status int) *CPUTotalByNodeRolesOSMetricQueryGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) Status(value int) *CPUTotalByNodeRolesOSMetricQueryGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -77,26 +77,26 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) marshal(writer io.Wr
 	return err
 }
 
-// CPUTotalByNodeRolesOSMetricQueryServerAdapter represents the structs that adapts Requests and Response to internal
+// CPUTotalByNodeRolesOSMetricQueryAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type CPUTotalByNodeRolesOSMetricQueryServerAdapter struct {
+type CPUTotalByNodeRolesOSMetricQueryAdapter struct {
 	server CPUTotalByNodeRolesOSMetricQueryServer
 	router *mux.Router
 }
 
-func NewCPUTotalByNodeRolesOSMetricQueryServerAdapter(server CPUTotalByNodeRolesOSMetricQueryServer, router *mux.Router) *CPUTotalByNodeRolesOSMetricQueryServerAdapter {
-	adapter := new(CPUTotalByNodeRolesOSMetricQueryServerAdapter)
+func NewCPUTotalByNodeRolesOSMetricQueryAdapter(server CPUTotalByNodeRolesOSMetricQueryServer, router *mux.Router) *CPUTotalByNodeRolesOSMetricQueryAdapter {
+	adapter := new(CPUTotalByNodeRolesOSMetricQueryAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *CPUTotalByNodeRolesOSMetricQueryServerAdapter) readCPUTotalByNodeRolesOSMetricQueryGetServerRequest(r *http.Request) (*CPUTotalByNodeRolesOSMetricQueryGetServerRequest, error) {
+func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) readGetRequest(r *http.Request) (*CPUTotalByNodeRolesOSMetricQueryGetServerRequest, error) {
 	var err error
 	result := new(CPUTotalByNodeRolesOSMetricQueryGetServerRequest)
 	return result, err
 }
-func (a *CPUTotalByNodeRolesOSMetricQueryServerAdapter) writeCPUTotalByNodeRolesOSMetricQueryGetServerResponse(w http.ResponseWriter, r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) error {
+func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) writeGetResponse(w http.ResponseWriter, r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,37 +105,47 @@ func (a *CPUTotalByNodeRolesOSMetricQueryServerAdapter) writeCPUTotalByNodeRoles
 	}
 	return nil
 }
-func (a *CPUTotalByNodeRolesOSMetricQueryServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readCPUTotalByNodeRolesOSMetricQueryGetServerRequest(r)
+func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(CPUTotalByNodeRolesOSMetricQueryGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(CPUTotalByNodeRolesOSMetricQueryGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeCPUTotalByNodeRolesOSMetricQueryGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *CPUTotalByNodeRolesOSMetricQueryServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

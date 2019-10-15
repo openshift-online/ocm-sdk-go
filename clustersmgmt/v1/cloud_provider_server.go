@@ -64,9 +64,9 @@ func (r *CloudProviderGetServerResponse) Body(value *CloudProvider) *CloudProvid
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *CloudProviderGetServerResponse) SetStatusCode(status int) *CloudProviderGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *CloudProviderGetServerResponse) Status(value int) *CloudProviderGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -83,33 +83,33 @@ func (r *CloudProviderGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CloudProviderServerAdapter represents the structs that adapts Requests and Response to internal
+// CloudProviderAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type CloudProviderServerAdapter struct {
+type CloudProviderAdapter struct {
 	server CloudProviderServer
 	router *mux.Router
 }
 
-func NewCloudProviderServerAdapter(server CloudProviderServer, router *mux.Router) *CloudProviderServerAdapter {
-	adapter := new(CloudProviderServerAdapter)
+func NewCloudProviderAdapter(server CloudProviderServer, router *mux.Router) *CloudProviderAdapter {
+	adapter := new(CloudProviderAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/regions").HandlerFunc(adapter.regionsHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *CloudProviderServerAdapter) regionsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *CloudProviderAdapter) regionsHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.Regions()
-	targetAdapter := NewCloudRegionsServerAdapter(target, a.router.PathPrefix("/regions").Subrouter())
+	targetAdapter := NewCloudRegionsAdapter(target, a.router.PathPrefix("/regions").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *CloudProviderServerAdapter) readCloudProviderGetServerRequest(r *http.Request) (*CloudProviderGetServerRequest, error) {
+func (a *CloudProviderAdapter) readGetRequest(r *http.Request) (*CloudProviderGetServerRequest, error) {
 	var err error
 	result := new(CloudProviderGetServerRequest)
 	return result, err
 }
-func (a *CloudProviderServerAdapter) writeCloudProviderGetServerResponse(w http.ResponseWriter, r *CloudProviderGetServerResponse) error {
+func (a *CloudProviderAdapter) writeGetResponse(w http.ResponseWriter, r *CloudProviderGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -118,37 +118,47 @@ func (a *CloudProviderServerAdapter) writeCloudProviderGetServerResponse(w http.
 	}
 	return nil
 }
-func (a *CloudProviderServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readCloudProviderGetServerRequest(r)
+func (a *CloudProviderAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(CloudProviderGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(CloudProviderGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeCloudProviderGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *CloudProviderServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *CloudProviderAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

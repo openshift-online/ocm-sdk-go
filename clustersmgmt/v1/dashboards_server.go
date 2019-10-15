@@ -273,9 +273,9 @@ func (r *DashboardsListServerResponse) Total(value int) *DashboardsListServerRes
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *DashboardsListServerResponse) SetStatusCode(status int) *DashboardsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *DashboardsListServerResponse) Status(value int) *DashboardsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -305,29 +305,29 @@ type dashboardsListServerResponseData struct {
 	Total *int              "json:\"total,omitempty\""
 }
 
-// DashboardsServerAdapter represents the structs that adapts Requests and Response to internal
+// DashboardsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type DashboardsServerAdapter struct {
+type DashboardsAdapter struct {
 	server DashboardsServer
 	router *mux.Router
 }
 
-func NewDashboardsServerAdapter(server DashboardsServer, router *mux.Router) *DashboardsServerAdapter {
-	adapter := new(DashboardsServerAdapter)
+func NewDashboardsAdapter(server DashboardsServer, router *mux.Router) *DashboardsAdapter {
+	adapter := new(DashboardsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.dashboardHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *DashboardsServerAdapter) dashboardHandler(w http.ResponseWriter, r *http.Request) {
+func (a *DashboardsAdapter) dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Dashboard(id)
-	targetAdapter := NewDashboardServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewDashboardAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *DashboardsServerAdapter) readDashboardsListServerRequest(r *http.Request) (*DashboardsListServerRequest, error) {
+func (a *DashboardsAdapter) readListRequest(r *http.Request) (*DashboardsListServerRequest, error) {
 	var err error
 	result := new(DashboardsListServerRequest)
 	query := r.URL.Query()
@@ -353,7 +353,7 @@ func (a *DashboardsServerAdapter) readDashboardsListServerRequest(r *http.Reques
 	}
 	return result, err
 }
-func (a *DashboardsServerAdapter) writeDashboardsListServerResponse(w http.ResponseWriter, r *DashboardsListServerResponse) error {
+func (a *DashboardsAdapter) writeListResponse(w http.ResponseWriter, r *DashboardsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -362,37 +362,47 @@ func (a *DashboardsServerAdapter) writeDashboardsListServerResponse(w http.Respo
 	}
 	return nil
 }
-func (a *DashboardsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readDashboardsListServerRequest(r)
+func (a *DashboardsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(DashboardsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(DashboardsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeDashboardsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *DashboardsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *DashboardsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

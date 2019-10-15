@@ -99,9 +99,9 @@ func (r *ClusterRegistrationsPostServerResponse) Response(value *ClusterRegistra
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *ClusterRegistrationsPostServerResponse) SetStatusCode(status int) *ClusterRegistrationsPostServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *ClusterRegistrationsPostServerResponse) Status(value int) *ClusterRegistrationsPostServerResponse {
+	r.status = value
 	return r
 }
 
@@ -118,21 +118,21 @@ func (r *ClusterRegistrationsPostServerResponse) marshal(writer io.Writer) error
 	return err
 }
 
-// ClusterRegistrationsServerAdapter represents the structs that adapts Requests and Response to internal
+// ClusterRegistrationsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type ClusterRegistrationsServerAdapter struct {
+type ClusterRegistrationsAdapter struct {
 	server ClusterRegistrationsServer
 	router *mux.Router
 }
 
-func NewClusterRegistrationsServerAdapter(server ClusterRegistrationsServer, router *mux.Router) *ClusterRegistrationsServerAdapter {
-	adapter := new(ClusterRegistrationsServerAdapter)
+func NewClusterRegistrationsAdapter(server ClusterRegistrationsServer, router *mux.Router) *ClusterRegistrationsAdapter {
+	adapter := new(ClusterRegistrationsAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.postHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
 	return adapter
 }
-func (a *ClusterRegistrationsServerAdapter) readClusterRegistrationsPostServerRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {
+func (a *ClusterRegistrationsAdapter) readPostRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {
 	var err error
 	result := new(ClusterRegistrationsPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -141,7 +141,7 @@ func (a *ClusterRegistrationsServerAdapter) readClusterRegistrationsPostServerRe
 	}
 	return result, err
 }
-func (a *ClusterRegistrationsServerAdapter) writeClusterRegistrationsPostServerResponse(w http.ResponseWriter, r *ClusterRegistrationsPostServerResponse) error {
+func (a *ClusterRegistrationsAdapter) writePostResponse(w http.ResponseWriter, r *ClusterRegistrationsPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -150,37 +150,47 @@ func (a *ClusterRegistrationsServerAdapter) writeClusterRegistrationsPostServerR
 	}
 	return nil
 }
-func (a *ClusterRegistrationsServerAdapter) postHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readClusterRegistrationsPostServerRequest(r)
+func (a *ClusterRegistrationsAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(ClusterRegistrationsPostServerResponse)
-	err = a.server.Post(r.Context(), req, resp)
+	response := new(ClusterRegistrationsPostServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Post: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Post: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeClusterRegistrationsPostServerResponse(w, resp)
+	err = a.writePostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *ClusterRegistrationsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *ClusterRegistrationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

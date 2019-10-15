@@ -109,9 +109,9 @@ func (r *PermissionsAddServerResponse) Body(value *Permission) *PermissionsAddSe
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *PermissionsAddServerResponse) SetStatusCode(status int) *PermissionsAddServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *PermissionsAddServerResponse) Status(value int) *PermissionsAddServerResponse {
+	r.status = value
 	return r
 }
 
@@ -258,9 +258,9 @@ func (r *PermissionsListServerResponse) Total(value int) *PermissionsListServerR
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *PermissionsListServerResponse) SetStatusCode(status int) *PermissionsListServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *PermissionsListServerResponse) Status(value int) *PermissionsListServerResponse {
+	r.status = value
 	return r
 }
 
@@ -290,30 +290,30 @@ type permissionsListServerResponseData struct {
 	Total *int               "json:\"total,omitempty\""
 }
 
-// PermissionsServerAdapter represents the structs that adapts Requests and Response to internal
+// PermissionsAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type PermissionsServerAdapter struct {
+type PermissionsAdapter struct {
 	server PermissionsServer
 	router *mux.Router
 }
 
-func NewPermissionsServerAdapter(server PermissionsServer, router *mux.Router) *PermissionsServerAdapter {
-	adapter := new(PermissionsServerAdapter)
+func NewPermissionsAdapter(server PermissionsServer, router *mux.Router) *PermissionsAdapter {
+	adapter := new(PermissionsAdapter)
 	adapter.server = server
 	adapter.router = router
 	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.permissionHandler)
-	adapter.router.Methods("POST").Path("").HandlerFunc(adapter.addHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.listHandler)
+	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
 	return adapter
 }
-func (a *PermissionsServerAdapter) permissionHandler(w http.ResponseWriter, r *http.Request) {
+func (a *PermissionsAdapter) permissionHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	target := a.server.Permission(id)
-	targetAdapter := NewPermissionServerAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
+	targetAdapter := NewPermissionAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
 	targetAdapter.ServeHTTP(w, r)
 	return
 }
-func (a *PermissionsServerAdapter) readPermissionsAddServerRequest(r *http.Request) (*PermissionsAddServerRequest, error) {
+func (a *PermissionsAdapter) readAddRequest(r *http.Request) (*PermissionsAddServerRequest, error) {
 	var err error
 	result := new(PermissionsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +322,7 @@ func (a *PermissionsServerAdapter) readPermissionsAddServerRequest(r *http.Reque
 	}
 	return result, err
 }
-func (a *PermissionsServerAdapter) writePermissionsAddServerResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
+func (a *PermissionsAdapter) writeAddResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,38 +331,48 @@ func (a *PermissionsServerAdapter) writePermissionsAddServerResponse(w http.Resp
 	}
 	return nil
 }
-func (a *PermissionsServerAdapter) addHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readPermissionsAddServerRequest(r)
+func (a *PermissionsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(PermissionsAddServerResponse)
-	err = a.server.Add(r.Context(), req, resp)
+	response := new(PermissionsAddServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Add: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Add: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writePermissionsAddServerResponse(w, resp)
+	err = a.writeAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *PermissionsServerAdapter) readPermissionsListServerRequest(r *http.Request) (*PermissionsListServerRequest, error) {
+func (a *PermissionsAdapter) readListRequest(r *http.Request) (*PermissionsListServerRequest, error) {
 	var err error
 	result := new(PermissionsListServerRequest)
 	query := r.URL.Query()
@@ -380,7 +390,7 @@ func (a *PermissionsServerAdapter) readPermissionsListServerRequest(r *http.Requ
 	}
 	return result, err
 }
-func (a *PermissionsServerAdapter) writePermissionsListServerResponse(w http.ResponseWriter, r *PermissionsListServerResponse) error {
+func (a *PermissionsAdapter) writeListResponse(w http.ResponseWriter, r *PermissionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -389,37 +399,47 @@ func (a *PermissionsServerAdapter) writePermissionsListServerResponse(w http.Res
 	}
 	return nil
 }
-func (a *PermissionsServerAdapter) listHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readPermissionsListServerRequest(r)
+func (a *PermissionsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(PermissionsListServerResponse)
-	err = a.server.List(r.Context(), req, resp)
+	response := new(PermissionsListServerResponse)
+	response.status = http.StatusOK
+	err = a.server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method List: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method List: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writePermissionsListServerResponse(w, resp)
+	err = a.writeListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *PermissionsServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *PermissionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }

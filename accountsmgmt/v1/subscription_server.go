@@ -54,9 +54,9 @@ type SubscriptionDeleteServerResponse struct {
 	err    *errors.Error
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *SubscriptionDeleteServerResponse) SetStatusCode(status int) *SubscriptionDeleteServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *SubscriptionDeleteServerResponse) Status(value int) *SubscriptionDeleteServerResponse {
+	r.status = value
 	return r
 }
 
@@ -79,9 +79,9 @@ func (r *SubscriptionGetServerResponse) Body(value *Subscription) *SubscriptionG
 	return r
 }
 
-// SetStatusCode sets the status code for a give response and returns the response object.
-func (r *SubscriptionGetServerResponse) SetStatusCode(status int) *SubscriptionGetServerResponse {
-	r.status = status
+// Status sets the status code.
+func (r *SubscriptionGetServerResponse) Status(value int) *SubscriptionGetServerResponse {
+	r.status = value
 	return r
 }
 
@@ -98,68 +98,78 @@ func (r *SubscriptionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// SubscriptionServerAdapter represents the structs that adapts Requests and Response to internal
+// SubscriptionAdapter represents the structs that adapts Requests and Response to internal
 // structs.
-type SubscriptionServerAdapter struct {
+type SubscriptionAdapter struct {
 	server SubscriptionServer
 	router *mux.Router
 }
 
-func NewSubscriptionServerAdapter(server SubscriptionServer, router *mux.Router) *SubscriptionServerAdapter {
-	adapter := new(SubscriptionServerAdapter)
+func NewSubscriptionAdapter(server SubscriptionServer, router *mux.Router) *SubscriptionAdapter {
+	adapter := new(SubscriptionAdapter)
 	adapter.server = server
 	adapter.router = router
-	adapter.router.Methods("DELETE").Path("").HandlerFunc(adapter.deleteHandler)
-	adapter.router.Methods("GET").Path("").HandlerFunc(adapter.getHandler)
+	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
+	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
 	return adapter
 }
-func (a *SubscriptionServerAdapter) readSubscriptionDeleteServerRequest(r *http.Request) (*SubscriptionDeleteServerRequest, error) {
+func (a *SubscriptionAdapter) readDeleteRequest(r *http.Request) (*SubscriptionDeleteServerRequest, error) {
 	var err error
 	result := new(SubscriptionDeleteServerRequest)
 	return result, err
 }
-func (a *SubscriptionServerAdapter) writeSubscriptionDeleteServerResponse(w http.ResponseWriter, r *SubscriptionDeleteServerResponse) error {
+func (a *SubscriptionAdapter) writeDeleteResponse(w http.ResponseWriter, r *SubscriptionDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *SubscriptionServerAdapter) deleteHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readSubscriptionDeleteServerRequest(r)
+func (a *SubscriptionAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(SubscriptionDeleteServerResponse)
-	err = a.server.Delete(r.Context(), req, resp)
+	response := new(SubscriptionDeleteServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Delete: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Delete: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeSubscriptionDeleteServerResponse(w, resp)
+	err = a.writeDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *SubscriptionServerAdapter) readSubscriptionGetServerRequest(r *http.Request) (*SubscriptionGetServerRequest, error) {
+func (a *SubscriptionAdapter) readGetRequest(r *http.Request) (*SubscriptionGetServerRequest, error) {
 	var err error
 	result := new(SubscriptionGetServerRequest)
 	return result, err
 }
-func (a *SubscriptionServerAdapter) writeSubscriptionGetServerResponse(w http.ResponseWriter, r *SubscriptionGetServerResponse) error {
+func (a *SubscriptionAdapter) writeGetResponse(w http.ResponseWriter, r *SubscriptionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -168,37 +178,47 @@ func (a *SubscriptionServerAdapter) writeSubscriptionGetServerResponse(w http.Re
 	}
 	return nil
 }
-func (a *SubscriptionServerAdapter) getHandler(w http.ResponseWriter, r *http.Request) {
-	req, err := a.readSubscriptionGetServerRequest(r)
+func (a *SubscriptionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
+	request, err := a.readGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to read request from client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to read request from client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 		return
 	}
-	resp := new(SubscriptionGetServerResponse)
-	err = a.server.Get(r.Context(), req, resp)
+	response := new(SubscriptionGetServerResponse)
+	response.status = http.StatusOK
+	err = a.server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to run method Get: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to run method Get: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
-	err = a.writeSubscriptionGetServerResponse(w, resp)
+	err = a.writeGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf("An error occured while trying to write response for client: %v", err)
-		errorBody, _ := errors.NewError().
+		reason := fmt.Sprintf(
+			"An error occurred while trying to write response for client: %v",
+			err,
+		)
+		body, _ := errors.NewError().
 			Reason(reason).
 			ID("500").
 			Build()
-		errors.SendError(w, r, errorBody)
+		errors.SendError(w, r, body)
 	}
 }
-func (a *SubscriptionServerAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (a *SubscriptionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(w, r)
 }
