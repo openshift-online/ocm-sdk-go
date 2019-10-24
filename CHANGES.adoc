@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.45 Oct 24 2019
+
+- Update to model 0.0.14:
+** Added `SKU` type.
+** Improved organizations.
+** Improved roles.
+
 == 0.1.44 Oct 15 2019
 
 - Upate to model 0.0.13:
