@@ -253,6 +253,7 @@ type AccountsListRequest struct {
 	header    http.Header
 	order     *string
 	page      *int
+	search    *string
 	size      *int
 	total     *int
 }
@@ -299,6 +300,27 @@ func (r *AccountsListRequest) Page(value int) *AccountsListRequest {
 	return r
 }
 
+// Search sets the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the account
+// instead of the names of the columns of a table. For example, in order to
+// retrieve accounts with username starting with my:
+//
+// [source,sql]
+// ----
+// username like 'my%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *AccountsListRequest) Search(value string) *AccountsListRequest {
+	r.search = &value
+	return r
+}
+
 // Size sets the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
@@ -334,6 +356,9 @@ func (r *AccountsListRequest) SendContext(ctx context.Context) (result *Accounts
 	}
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.search != nil {
+		helpers.AddValue(&query, "search", *r.search)
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
