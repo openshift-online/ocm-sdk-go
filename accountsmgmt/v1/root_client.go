@@ -44,6 +44,18 @@ func NewRootClient(transport http.RoundTripper, path string, metric string) *Roo
 	return client
 }
 
+// SKUS returns the target 'SKUS' resource.
+//
+// Reference to the resource that manages the collection of
+// SKUS
+func (c *RootClient) SKUS() *SKUSClient {
+	return NewSKUSClient(
+		c.transport,
+		path.Join(c.path, "skus"),
+		path.Join(c.metric, "skus"),
+	)
+}
+
 // AccessToken returns the target 'access_token' resource.
 //
 // Reference to the resource that manages generates access tokens.

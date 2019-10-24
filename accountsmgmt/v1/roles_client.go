@@ -252,6 +252,7 @@ type RolesListRequest struct {
 	query     url.Values
 	header    http.Header
 	page      *int
+	search    *string
 	size      *int
 	total     *int
 }
@@ -275,6 +276,27 @@ func (r *RolesListRequest) Header(name string, value interface{}) *RolesListRequ
 // Default value is `1`.
 func (r *RolesListRequest) Page(value int) *RolesListRequest {
 	r.page = &value
+	return r
+}
+
+// Search sets the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the role
+// instead of the names of the columns of a table. For example, in order to
+// retrieve roles named starting with `Organization`:
+//
+// [source,sql]
+// ----
+// name like 'Organization%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *RolesListRequest) Search(value string) *RolesListRequest {
+	r.search = &value
 	return r
 }
 
@@ -310,6 +332,9 @@ func (r *RolesListRequest) SendContext(ctx context.Context) (result *RolesListRe
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.search != nil {
+		helpers.AddValue(&query, "search", *r.search)
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)

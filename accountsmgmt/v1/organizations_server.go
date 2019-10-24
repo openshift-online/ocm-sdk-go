@@ -130,9 +130,10 @@ func (r *OrganizationsAddServerResponse) marshal(writer io.Writer) error {
 
 // OrganizationsListServerRequest is the request for the 'list' method.
 type OrganizationsListServerRequest struct {
-	page  *int
-	size  *int
-	total *int
+	page   *int
+	search *string
+	size   *int
+	total  *int
 }
 
 // Page returns the value of the 'page' parameter.
@@ -157,6 +158,54 @@ func (r *OrganizationsListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
+	}
+	return
+}
+
+// Search returns the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the organization
+// instead of the names of the columns of a table. For example, in order to
+// retrieve organizations with name starting with my:
+//
+// [source,sql]
+// ----
+// name like 'my%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *OrganizationsListServerRequest) Search() string {
+	if r != nil && r.search != nil {
+		return *r.search
+	}
+	return ""
+}
+
+// GetSearch returns the value of the 'search' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the organization
+// instead of the names of the columns of a table. For example, in order to
+// retrieve organizations with name starting with my:
+//
+// [source,sql]
+// ----
+// name like 'my%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *OrganizationsListServerRequest) GetSearch() (value string, ok bool) {
+	ok = r != nil && r.search != nil
+	if ok {
+		value = *r.search
 	}
 	return
 }
@@ -377,6 +426,10 @@ func (a *OrganizationsAdapter) readListRequest(r *http.Request) (*OrganizationsL
 	result := new(OrganizationsListServerRequest)
 	query := r.URL.Query()
 	result.page, err = helpers.ParseInteger(query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}
