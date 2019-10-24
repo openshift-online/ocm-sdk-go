@@ -28,6 +28,12 @@ import (
 // RootServer represents the interface the manages the 'root' resource.
 type RootServer interface {
 
+	// SKUS returns the target 'SKUS' resource.
+	//
+	// Reference to the resource that manages the collection of
+	// SKUS
+	SKUS() SKUSServer
+
 	// AccessToken returns the target 'access_token' resource.
 	//
 	// Reference to the resource that manages generates access tokens.
@@ -105,6 +111,7 @@ func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
 	adapter := new(RootAdapter)
 	adapter.server = server
 	adapter.router = router
+	adapter.router.PathPrefix("/skus").HandlerFunc(adapter.skusHandler)
 	adapter.router.PathPrefix("/access_token").HandlerFunc(adapter.accessTokenHandler)
 	adapter.router.PathPrefix("/accounts").HandlerFunc(adapter.accountsHandler)
 	adapter.router.PathPrefix("/cluster_authorizations").HandlerFunc(adapter.clusterAuthorizationsHandler)
@@ -118,6 +125,12 @@ func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
 	adapter.router.PathPrefix("/roles").HandlerFunc(adapter.rolesHandler)
 	adapter.router.PathPrefix("/subscriptions").HandlerFunc(adapter.subscriptionsHandler)
 	return adapter
+}
+func (a *RootAdapter) skusHandler(w http.ResponseWriter, r *http.Request) {
+	target := a.server.SKUS()
+	targetAdapter := NewSKUSAdapter(target, a.router.PathPrefix("/skus").Subrouter())
+	targetAdapter.ServeHTTP(w, r)
+	return
 }
 func (a *RootAdapter) accessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	target := a.server.AccessToken()

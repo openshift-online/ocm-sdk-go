@@ -23,10 +23,11 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type OrganizationBuilder struct {
-	id   *string
-	href *string
-	link bool
-	name *string
+	id         *string
+	href       *string
+	link       bool
+	externalID *string
+	name       *string
 }
 
 // NewOrganization creates a new builder of 'organization' objects.
@@ -52,6 +53,15 @@ func (b *OrganizationBuilder) Link(value bool) *OrganizationBuilder {
 	return b
 }
 
+// ExternalID sets the value of the 'external_ID' attribute
+// to the given value.
+//
+//
+func (b *OrganizationBuilder) ExternalID(value string) *OrganizationBuilder {
+	b.externalID = &value
+	return b
+}
+
 // Name sets the value of the 'name' attribute
 // to the given value.
 //
@@ -69,6 +79,7 @@ func (b *OrganizationBuilder) Copy(object *Organization) *OrganizationBuilder {
 	b.id = object.id
 	b.href = object.href
 	b.link = object.link
+	b.externalID = object.externalID
 	b.name = object.name
 	return b
 }
@@ -79,6 +90,9 @@ func (b *OrganizationBuilder) Build() (object *Organization, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	if b.externalID != nil {
+		object.externalID = b.externalID
+	}
 	if b.name != nil {
 		object.name = b.name
 	}

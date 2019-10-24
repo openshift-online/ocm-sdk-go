@@ -19,42 +19,43 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-// OrganizationKind is the name of the type used to represent objects
-// of type 'organization'.
-const OrganizationKind = "Organization"
+// ResourceKind is the name of the type used to represent objects
+// of type 'resource'.
+const ResourceKind = "Resource"
 
-// OrganizationLinkKind is the name of the type used to represent links
-// to objects of type 'organization'.
-const OrganizationLinkKind = "OrganizationLink"
+// ResourceLinkKind is the name of the type used to represent links
+// to objects of type 'resource'.
+const ResourceLinkKind = "ResourceLink"
 
-// OrganizationNilKind is the name of the type used to nil references
-// to objects of type 'organization'.
-const OrganizationNilKind = "OrganizationNil"
+// ResourceNilKind is the name of the type used to nil references
+// to objects of type 'resource'.
+const ResourceNilKind = "ResourceNil"
 
-// Organization represents the values of the 'organization' type.
+// Resource represents the values of the 'resource' type.
 //
-//
-type Organization struct {
-	id         *string
-	href       *string
-	link       bool
-	externalID *string
-	name       *string
+// Identifies computing resources
+type Resource struct {
+	id           *string
+	href         *string
+	link         bool
+	allowed      *int
+	resourceName *string
+	resourceType *string
 }
 
 // Kind returns the name of the type of the object.
-func (o *Organization) Kind() string {
+func (o *Resource) Kind() string {
 	if o == nil {
-		return OrganizationNilKind
+		return ResourceNilKind
 	}
 	if o.link {
-		return OrganizationLinkKind
+		return ResourceLinkKind
 	}
-	return OrganizationKind
+	return ResourceKind
 }
 
 // ID returns the identifier of the object.
-func (o *Organization) ID() string {
+func (o *Resource) ID() string {
 	if o != nil && o.id != nil {
 		return *o.id
 	}
@@ -63,7 +64,7 @@ func (o *Organization) ID() string {
 
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
-func (o *Organization) GetID() (value string, ok bool) {
+func (o *Resource) GetID() (value string, ok bool) {
 	ok = o != nil && o.id != nil
 	if ok {
 		value = *o.id
@@ -72,12 +73,12 @@ func (o *Organization) GetID() (value string, ok bool) {
 }
 
 // Link returns true iif this is a link.
-func (o *Organization) Link() bool {
+func (o *Resource) Link() bool {
 	return o != nil && o.link
 }
 
 // HREF returns the link to the object.
-func (o *Organization) HREF() string {
+func (o *Resource) HREF() string {
 	if o != nil && o.href != nil {
 		return *o.href
 	}
@@ -86,7 +87,7 @@ func (o *Organization) HREF() string {
 
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
-func (o *Organization) GetHREF() (value string, ok bool) {
+func (o *Resource) GetHREF() (value string, ok bool) {
 	ok = o != nil && o.href != nil
 	if ok {
 		value = *o.href
@@ -95,96 +96,120 @@ func (o *Organization) GetHREF() (value string, ok bool) {
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *Organization) Empty() bool {
+func (o *Resource) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.externalID == nil &&
-		o.name == nil &&
+		o.allowed == nil &&
+		o.resourceName == nil &&
+		o.resourceType == nil &&
 		true)
 }
 
-// ExternalID returns the value of the 'external_ID' attribute, or
+// Allowed returns the value of the 'allowed' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
-func (o *Organization) ExternalID() string {
-	if o != nil && o.externalID != nil {
-		return *o.externalID
+// Number of allowed nodes
+func (o *Resource) Allowed() int {
+	if o != nil && o.allowed != nil {
+		return *o.allowed
 	}
-	return ""
+	return 0
 }
 
-// GetExternalID returns the value of the 'external_ID' attribute and
+// GetAllowed returns the value of the 'allowed' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
-func (o *Organization) GetExternalID() (value string, ok bool) {
-	ok = o != nil && o.externalID != nil
+// Number of allowed nodes
+func (o *Resource) GetAllowed() (value int, ok bool) {
+	ok = o != nil && o.allowed != nil
 	if ok {
-		value = *o.externalID
+		value = *o.allowed
 	}
 	return
 }
 
-// Name returns the value of the 'name' attribute, or
+// ResourceName returns the value of the 'resource_name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
-func (o *Organization) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+// platform-specific name, such as "M5.2Xlarge" for a type of EC2 node
+func (o *Resource) ResourceName() string {
+	if o != nil && o.resourceName != nil {
+		return *o.resourceName
 	}
 	return ""
 }
 
-// GetName returns the value of the 'name' attribute and
+// GetResourceName returns the value of the 'resource_name' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
-func (o *Organization) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+// platform-specific name, such as "M5.2Xlarge" for a type of EC2 node
+func (o *Resource) GetResourceName() (value string, ok bool) {
+	ok = o != nil && o.resourceName != nil
 	if ok {
-		value = *o.name
+		value = *o.resourceName
 	}
 	return
 }
 
-// OrganizationListKind is the name of the type used to represent list of
-// objects of type 'organization'.
-const OrganizationListKind = "OrganizationList"
+// ResourceType returns the value of the 'resource_type' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Resource) ResourceType() string {
+	if o != nil && o.resourceType != nil {
+		return *o.resourceType
+	}
+	return ""
+}
 
-// OrganizationListLinkKind is the name of the type used to represent links
-// to list of objects of type 'organization'.
-const OrganizationListLinkKind = "OrganizationListLink"
+// GetResourceType returns the value of the 'resource_type' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Resource) GetResourceType() (value string, ok bool) {
+	ok = o != nil && o.resourceType != nil
+	if ok {
+		value = *o.resourceType
+	}
+	return
+}
 
-// OrganizationNilKind is the name of the type used to nil lists of
-// objects of type 'organization'.
-const OrganizationListNilKind = "OrganizationListNil"
+// ResourceListKind is the name of the type used to represent list of
+// objects of type 'resource'.
+const ResourceListKind = "ResourceList"
 
-// OrganizationList is a list of values of the 'organization' type.
-type OrganizationList struct {
+// ResourceListLinkKind is the name of the type used to represent links
+// to list of objects of type 'resource'.
+const ResourceListLinkKind = "ResourceListLink"
+
+// ResourceNilKind is the name of the type used to nil lists of
+// objects of type 'resource'.
+const ResourceListNilKind = "ResourceListNil"
+
+// ResourceList is a list of values of the 'resource' type.
+type ResourceList struct {
 	href  *string
 	link  bool
-	items []*Organization
+	items []*Resource
 }
 
 // Kind returns the name of the type of the object.
-func (l *OrganizationList) Kind() string {
+func (l *ResourceList) Kind() string {
 	if l == nil {
-		return OrganizationListNilKind
+		return ResourceListNilKind
 	}
 	if l.link {
-		return OrganizationListLinkKind
+		return ResourceListLinkKind
 	}
-	return OrganizationListKind
+	return ResourceListKind
 }
 
 // Link returns true iif this is a link.
-func (l *OrganizationList) Link() bool {
+func (l *ResourceList) Link() bool {
 	return l != nil && l.link
 }
 
 // HREF returns the link to the list.
-func (l *OrganizationList) HREF() string {
+func (l *ResourceList) HREF() string {
 	if l != nil && l.href != nil {
 		return *l.href
 	}
@@ -193,7 +218,7 @@ func (l *OrganizationList) HREF() string {
 
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
-func (l *OrganizationList) GetHREF() (value string, ok bool) {
+func (l *ResourceList) GetHREF() (value string, ok bool) {
 	ok = l != nil && l.href != nil
 	if ok {
 		value = *l.href
@@ -202,7 +227,7 @@ func (l *OrganizationList) GetHREF() (value string, ok bool) {
 }
 
 // Len returns the length of the list.
-func (l *OrganizationList) Len() int {
+func (l *ResourceList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -210,13 +235,13 @@ func (l *OrganizationList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *OrganizationList) Empty() bool {
+func (l *ResourceList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *OrganizationList) Get(i int) *Organization {
+func (l *ResourceList) Get(i int) *Resource {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -229,12 +254,12 @@ func (l *OrganizationList) Get(i int) *Organization {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *OrganizationList) Slice() []*Organization {
-	var slice []*Organization
+func (l *ResourceList) Slice() []*Resource {
+	var slice []*Resource
 	if l == nil {
-		slice = make([]*Organization, 0)
+		slice = make([]*Resource, 0)
 	} else {
-		slice = make([]*Organization, len(l.items))
+		slice = make([]*Resource, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -243,7 +268,7 @@ func (l *OrganizationList) Slice() []*Organization {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *OrganizationList) Each(f func(item *Organization) bool) {
+func (l *ResourceList) Each(f func(item *Resource) bool) {
 	if l == nil {
 		return
 	}
@@ -257,7 +282,7 @@ func (l *OrganizationList) Each(f func(item *Organization) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *OrganizationList) Range(f func(index int, item *Organization) bool) {
+func (l *ResourceList) Range(f func(index int, item *Resource) bool) {
 	if l == nil {
 		return
 	}

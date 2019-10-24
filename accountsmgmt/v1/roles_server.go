@@ -130,9 +130,10 @@ func (r *RolesAddServerResponse) marshal(writer io.Writer) error {
 
 // RolesListServerRequest is the request for the 'list' method.
 type RolesListServerRequest struct {
-	page  *int
-	size  *int
-	total *int
+	page   *int
+	search *string
+	size   *int
+	total  *int
 }
 
 // Page returns the value of the 'page' parameter.
@@ -157,6 +158,54 @@ func (r *RolesListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
+	}
+	return
+}
+
+// Search returns the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the role
+// instead of the names of the columns of a table. For example, in order to
+// retrieve roles named starting with `Organization`:
+//
+// [source,sql]
+// ----
+// name like 'Organization%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *RolesListServerRequest) Search() string {
+	if r != nil && r.search != nil {
+		return *r.search
+	}
+	return ""
+}
+
+// GetSearch returns the value of the 'search' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the role
+// instead of the names of the columns of a table. For example, in order to
+// retrieve roles named starting with `Organization`:
+//
+// [source,sql]
+// ----
+// name like 'Organization%'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *RolesListServerRequest) GetSearch() (value string, ok bool) {
+	ok = r != nil && r.search != nil
+	if ok {
+		value = *r.search
 	}
 	return
 }
@@ -377,6 +426,10 @@ func (a *RolesAdapter) readListRequest(r *http.Request) (*RolesListServerRequest
 	result := new(RolesListServerRequest)
 	query := r.URL.Query()
 	result.page, err = helpers.ParseInteger(query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}
