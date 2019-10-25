@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // AccessReviewServer represents the interface the manages the 'access_review' resource.
@@ -117,21 +117,48 @@ func (r *AccessReviewPostServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// AccessReviewAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// AccessReviewAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the AccessReviewServer
+// interface.
 type AccessReviewAdapter struct {
 	server AccessReviewServer
-	router *mux.Router
 }
 
-func NewAccessReviewAdapter(server AccessReviewServer, router *mux.Router) *AccessReviewAdapter {
-	adapter := new(AccessReviewAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
-	return adapter
+// NewAccessReviewAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewAccessReviewAdapter(server AccessReviewServer) *AccessReviewAdapter {
+	return &AccessReviewAdapter{
+		server: server,
+	}
 }
-func (a *AccessReviewAdapter) readPostRequest(r *http.Request) (*AccessReviewPostServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *AccessReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchAccessReviewRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchAccessReviewRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchAccessReviewRequest(w http.ResponseWriter, r *http.Request, server AccessReviewServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptAccessReviewPostRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readAccessReviewPostRequest reads the given HTTP requests and translates it
+// into an object of type AccessReviewPostServerRequest.
+func readAccessReviewPostRequest(r *http.Request) (*AccessReviewPostServerRequest, error) {
 	var err error
 	result := new(AccessReviewPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -140,7 +167,10 @@ func (a *AccessReviewAdapter) readPostRequest(r *http.Request) (*AccessReviewPos
 	}
 	return result, err
 }
-func (a *AccessReviewAdapter) writePostResponse(w http.ResponseWriter, r *AccessReviewPostServerResponse) error {
+
+// writeAccessReviewPostResponse translates the given request object into an
+// HTTP response.
+func writeAccessReviewPostResponse(w http.ResponseWriter, r *AccessReviewPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -149,47 +179,37 @@ func (a *AccessReviewAdapter) writePostResponse(w http.ResponseWriter, r *Access
 	}
 	return nil
 }
-func (a *AccessReviewAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readPostRequest(r)
+
+// adaptAccessReviewPostRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptAccessReviewPostRequest(w http.ResponseWriter, r *http.Request, server AccessReviewServer) {
+	request, err := readAccessReviewPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(AccessReviewPostServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Post(r.Context(), request, response)
+	err = server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Post: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writePostResponse(w, response)
+	err = writeAccessReviewPostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *AccessReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

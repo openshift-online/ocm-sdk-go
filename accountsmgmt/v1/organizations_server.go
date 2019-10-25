@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -339,30 +338,51 @@ type organizationsListServerResponseData struct {
 	Total *int                 "json:\"total,omitempty\""
 }
 
-// OrganizationsAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// OrganizationsAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the OrganizationsServer
+// interface.
 type OrganizationsAdapter struct {
 	server OrganizationsServer
-	router *mux.Router
 }
 
-func NewOrganizationsAdapter(server OrganizationsServer, router *mux.Router) *OrganizationsAdapter {
-	adapter := new(OrganizationsAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.organizationHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewOrganizationsAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewOrganizationsAdapter(server OrganizationsServer) *OrganizationsAdapter {
+	return &OrganizationsAdapter{
+		server: server,
+	}
 }
-func (a *OrganizationsAdapter) organizationHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.Organization(id)
-	targetAdapter := NewOrganizationAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *OrganizationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchOrganizationsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *OrganizationsAdapter) readAddRequest(r *http.Request) (*OrganizationsAddServerRequest, error) {
+
+// dispatchOrganizationsRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchOrganizationsRequest(w http.ResponseWriter, r *http.Request, server OrganizationsServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptOrganizationsAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptOrganizationsListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.Organization(segments[0])
+			dispatchOrganizationRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readOrganizationsAddRequest reads the given HTTP requests and translates it
+// into an object of type OrganizationsAddServerRequest.
+func readOrganizationsAddRequest(r *http.Request) (*OrganizationsAddServerRequest, error) {
 	var err error
 	result := new(OrganizationsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -371,7 +391,10 @@ func (a *OrganizationsAdapter) readAddRequest(r *http.Request) (*OrganizationsAd
 	}
 	return result, err
 }
-func (a *OrganizationsAdapter) writeAddResponse(w http.ResponseWriter, r *OrganizationsAddServerResponse) error {
+
+// writeOrganizationsAddResponse translates the given request object into an
+// HTTP response.
+func writeOrganizationsAddResponse(w http.ResponseWriter, r *OrganizationsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -380,48 +403,44 @@ func (a *OrganizationsAdapter) writeAddResponse(w http.ResponseWriter, r *Organi
 	}
 	return nil
 }
-func (a *OrganizationsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptOrganizationsAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptOrganizationsAddRequest(w http.ResponseWriter, r *http.Request, server OrganizationsServer) {
+	request, err := readOrganizationsAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(OrganizationsAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writeOrganizationsAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *OrganizationsAdapter) readListRequest(r *http.Request) (*OrganizationsListServerRequest, error) {
+
+// readOrganizationsListRequest reads the given HTTP requests and translates it
+// into an object of type OrganizationsListServerRequest.
+func readOrganizationsListRequest(r *http.Request) (*OrganizationsListServerRequest, error) {
 	var err error
 	result := new(OrganizationsListServerRequest)
 	query := r.URL.Query()
@@ -443,7 +462,10 @@ func (a *OrganizationsAdapter) readListRequest(r *http.Request) (*OrganizationsL
 	}
 	return result, err
 }
-func (a *OrganizationsAdapter) writeListResponse(w http.ResponseWriter, r *OrganizationsListServerResponse) error {
+
+// writeOrganizationsListResponse translates the given request object into an
+// HTTP response.
+func writeOrganizationsListResponse(w http.ResponseWriter, r *OrganizationsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -452,47 +474,37 @@ func (a *OrganizationsAdapter) writeListResponse(w http.ResponseWriter, r *Organ
 	}
 	return nil
 }
-func (a *OrganizationsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptOrganizationsListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptOrganizationsListRequest(w http.ResponseWriter, r *http.Request, server OrganizationsServer) {
+	request, err := readOrganizationsListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(OrganizationsListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeOrganizationsListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *OrganizationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // PermissionServer represents the interface the manages the 'permission' resource.
@@ -98,78 +98,108 @@ func (r *PermissionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// PermissionAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// PermissionAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the PermissionServer
+// interface.
 type PermissionAdapter struct {
 	server PermissionServer
-	router *mux.Router
 }
 
-func NewPermissionAdapter(server PermissionServer, router *mux.Router) *PermissionAdapter {
-	adapter := new(PermissionAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewPermissionAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewPermissionAdapter(server PermissionServer) *PermissionAdapter {
+	return &PermissionAdapter{
+		server: server,
+	}
 }
-func (a *PermissionAdapter) readDeleteRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *PermissionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchPermissionRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchPermissionRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchPermissionRequest(w http.ResponseWriter, r *http.Request, server PermissionServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodDelete:
+			adaptPermissionDeleteRequest(w, r, server)
+		case http.MethodGet:
+			adaptPermissionGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readPermissionDeleteRequest reads the given HTTP requests and translates it
+// into an object of type PermissionDeleteServerRequest.
+func readPermissionDeleteRequest(r *http.Request) (*PermissionDeleteServerRequest, error) {
 	var err error
 	result := new(PermissionDeleteServerRequest)
 	return result, err
 }
-func (a *PermissionAdapter) writeDeleteResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
+
+// writePermissionDeleteResponse translates the given request object into an
+// HTTP response.
+func writePermissionDeleteResponse(w http.ResponseWriter, r *PermissionDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *PermissionAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readDeleteRequest(r)
+
+// adaptPermissionDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptPermissionDeleteRequest(w http.ResponseWriter, r *http.Request, server PermissionServer) {
+	request, err := readPermissionDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(PermissionDeleteServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Delete(r.Context(), request, response)
+	err = server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Delete: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeDeleteResponse(w, response)
+	err = writePermissionDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *PermissionAdapter) readGetRequest(r *http.Request) (*PermissionGetServerRequest, error) {
+
+// readPermissionGetRequest reads the given HTTP requests and translates it
+// into an object of type PermissionGetServerRequest.
+func readPermissionGetRequest(r *http.Request) (*PermissionGetServerRequest, error) {
 	var err error
 	result := new(PermissionGetServerRequest)
 	return result, err
 }
-func (a *PermissionAdapter) writeGetResponse(w http.ResponseWriter, r *PermissionGetServerResponse) error {
+
+// writePermissionGetResponse translates the given request object into an
+// HTTP response.
+func writePermissionGetResponse(w http.ResponseWriter, r *PermissionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -178,47 +208,37 @@ func (a *PermissionAdapter) writeGetResponse(w http.ResponseWriter, r *Permissio
 	}
 	return nil
 }
-func (a *PermissionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptPermissionGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptPermissionGetRequest(w http.ResponseWriter, r *http.Request, server PermissionServer) {
+	request, err := readPermissionGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(PermissionGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writePermissionGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *PermissionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

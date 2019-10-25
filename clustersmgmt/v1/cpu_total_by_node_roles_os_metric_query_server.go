@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // CPUTotalByNodeRolesOSMetricQueryServer represents the interface the manages the 'CPU_total_by_node_roles_OS_metric_query' resource.
@@ -77,26 +77,56 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) marshal(writer io.Wr
 	return err
 }
 
-// CPUTotalByNodeRolesOSMetricQueryAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// CPUTotalByNodeRolesOSMetricQueryAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the CPUTotalByNodeRolesOSMetricQueryServer
+// interface.
 type CPUTotalByNodeRolesOSMetricQueryAdapter struct {
 	server CPUTotalByNodeRolesOSMetricQueryServer
-	router *mux.Router
 }
 
-func NewCPUTotalByNodeRolesOSMetricQueryAdapter(server CPUTotalByNodeRolesOSMetricQueryServer, router *mux.Router) *CPUTotalByNodeRolesOSMetricQueryAdapter {
-	adapter := new(CPUTotalByNodeRolesOSMetricQueryAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewCPUTotalByNodeRolesOSMetricQueryAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewCPUTotalByNodeRolesOSMetricQueryAdapter(server CPUTotalByNodeRolesOSMetricQueryServer) *CPUTotalByNodeRolesOSMetricQueryAdapter {
+	return &CPUTotalByNodeRolesOSMetricQueryAdapter{
+		server: server,
+	}
 }
-func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) readGetRequest(r *http.Request) (*CPUTotalByNodeRolesOSMetricQueryGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchCPUTotalByNodeRolesOSMetricQueryRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchCPUTotalByNodeRolesOSMetricQueryRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchCPUTotalByNodeRolesOSMetricQueryRequest(w http.ResponseWriter, r *http.Request, server CPUTotalByNodeRolesOSMetricQueryServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptCPUTotalByNodeRolesOSMetricQueryGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readCPUTotalByNodeRolesOSMetricQueryGetRequest reads the given HTTP requests and translates it
+// into an object of type CPUTotalByNodeRolesOSMetricQueryGetServerRequest.
+func readCPUTotalByNodeRolesOSMetricQueryGetRequest(r *http.Request) (*CPUTotalByNodeRolesOSMetricQueryGetServerRequest, error) {
 	var err error
 	result := new(CPUTotalByNodeRolesOSMetricQueryGetServerRequest)
 	return result, err
 }
-func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) writeGetResponse(w http.ResponseWriter, r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) error {
+
+// writeCPUTotalByNodeRolesOSMetricQueryGetResponse translates the given request object into an
+// HTTP response.
+func writeCPUTotalByNodeRolesOSMetricQueryGetResponse(w http.ResponseWriter, r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) writeGetResponse(w http.Respon
 	}
 	return nil
 }
-func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptCPUTotalByNodeRolesOSMetricQueryGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptCPUTotalByNodeRolesOSMetricQueryGetRequest(w http.ResponseWriter, r *http.Request, server CPUTotalByNodeRolesOSMetricQueryServer) {
+	request, err := readCPUTotalByNodeRolesOSMetricQueryGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(CPUTotalByNodeRolesOSMetricQueryGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeCPUTotalByNodeRolesOSMetricQueryGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

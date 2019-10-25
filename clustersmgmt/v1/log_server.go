@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // LogServer represents the interface the manages the 'log' resource.
@@ -77,26 +77,56 @@ func (r *LogGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// LogAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// LogAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the LogServer
+// interface.
 type LogAdapter struct {
 	server LogServer
-	router *mux.Router
 }
 
-func NewLogAdapter(server LogServer, router *mux.Router) *LogAdapter {
-	adapter := new(LogAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewLogAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewLogAdapter(server LogServer) *LogAdapter {
+	return &LogAdapter{
+		server: server,
+	}
 }
-func (a *LogAdapter) readGetRequest(r *http.Request) (*LogGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *LogAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchLogRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchLogRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchLogRequest(w http.ResponseWriter, r *http.Request, server LogServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptLogGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readLogGetRequest reads the given HTTP requests and translates it
+// into an object of type LogGetServerRequest.
+func readLogGetRequest(r *http.Request) (*LogGetServerRequest, error) {
 	var err error
 	result := new(LogGetServerRequest)
 	return result, err
 }
-func (a *LogAdapter) writeGetResponse(w http.ResponseWriter, r *LogGetServerResponse) error {
+
+// writeLogGetResponse translates the given request object into an
+// HTTP response.
+func writeLogGetResponse(w http.ResponseWriter, r *LogGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *LogAdapter) writeGetResponse(w http.ResponseWriter, r *LogGetServerResp
 	}
 	return nil
 }
-func (a *LogAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptLogGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptLogGetRequest(w http.ResponseWriter, r *http.Request, server LogServer) {
+	request, err := readLogGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(LogGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeLogGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *LogAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

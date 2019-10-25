@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // UserServer represents the interface the manages the 'user' resource.
@@ -98,78 +98,108 @@ func (r *UserGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// UserAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// UserAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the UserServer
+// interface.
 type UserAdapter struct {
 	server UserServer
-	router *mux.Router
 }
 
-func NewUserAdapter(server UserServer, router *mux.Router) *UserAdapter {
-	adapter := new(UserAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewUserAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewUserAdapter(server UserServer) *UserAdapter {
+	return &UserAdapter{
+		server: server,
+	}
 }
-func (a *UserAdapter) readDeleteRequest(r *http.Request) (*UserDeleteServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *UserAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchUserRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchUserRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchUserRequest(w http.ResponseWriter, r *http.Request, server UserServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodDelete:
+			adaptUserDeleteRequest(w, r, server)
+		case http.MethodGet:
+			adaptUserGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readUserDeleteRequest reads the given HTTP requests and translates it
+// into an object of type UserDeleteServerRequest.
+func readUserDeleteRequest(r *http.Request) (*UserDeleteServerRequest, error) {
 	var err error
 	result := new(UserDeleteServerRequest)
 	return result, err
 }
-func (a *UserAdapter) writeDeleteResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
+
+// writeUserDeleteResponse translates the given request object into an
+// HTTP response.
+func writeUserDeleteResponse(w http.ResponseWriter, r *UserDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *UserAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readDeleteRequest(r)
+
+// adaptUserDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptUserDeleteRequest(w http.ResponseWriter, r *http.Request, server UserServer) {
+	request, err := readUserDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(UserDeleteServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Delete(r.Context(), request, response)
+	err = server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Delete: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeDeleteResponse(w, response)
+	err = writeUserDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *UserAdapter) readGetRequest(r *http.Request) (*UserGetServerRequest, error) {
+
+// readUserGetRequest reads the given HTTP requests and translates it
+// into an object of type UserGetServerRequest.
+func readUserGetRequest(r *http.Request) (*UserGetServerRequest, error) {
 	var err error
 	result := new(UserGetServerRequest)
 	return result, err
 }
-func (a *UserAdapter) writeGetResponse(w http.ResponseWriter, r *UserGetServerResponse) error {
+
+// writeUserGetResponse translates the given request object into an
+// HTTP response.
+func writeUserGetResponse(w http.ResponseWriter, r *UserGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -178,47 +208,37 @@ func (a *UserAdapter) writeGetResponse(w http.ResponseWriter, r *UserGetServerRe
 	}
 	return nil
 }
-func (a *UserAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptUserGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptUserGetRequest(w http.ResponseWriter, r *http.Request, server UserServer) {
+	request, err := readUserGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(UserGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeUserGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *UserAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // CloudRegionServer represents the interface the manages the 'cloud_region' resource.
@@ -77,26 +77,56 @@ func (r *CloudRegionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CloudRegionAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// CloudRegionAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the CloudRegionServer
+// interface.
 type CloudRegionAdapter struct {
 	server CloudRegionServer
-	router *mux.Router
 }
 
-func NewCloudRegionAdapter(server CloudRegionServer, router *mux.Router) *CloudRegionAdapter {
-	adapter := new(CloudRegionAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewCloudRegionAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewCloudRegionAdapter(server CloudRegionServer) *CloudRegionAdapter {
+	return &CloudRegionAdapter{
+		server: server,
+	}
 }
-func (a *CloudRegionAdapter) readGetRequest(r *http.Request) (*CloudRegionGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *CloudRegionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchCloudRegionRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchCloudRegionRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchCloudRegionRequest(w http.ResponseWriter, r *http.Request, server CloudRegionServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptCloudRegionGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readCloudRegionGetRequest reads the given HTTP requests and translates it
+// into an object of type CloudRegionGetServerRequest.
+func readCloudRegionGetRequest(r *http.Request) (*CloudRegionGetServerRequest, error) {
 	var err error
 	result := new(CloudRegionGetServerRequest)
 	return result, err
 }
-func (a *CloudRegionAdapter) writeGetResponse(w http.ResponseWriter, r *CloudRegionGetServerResponse) error {
+
+// writeCloudRegionGetResponse translates the given request object into an
+// HTTP response.
+func writeCloudRegionGetResponse(w http.ResponseWriter, r *CloudRegionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *CloudRegionAdapter) writeGetResponse(w http.ResponseWriter, r *CloudReg
 	}
 	return nil
 }
-func (a *CloudRegionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptCloudRegionGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptCloudRegionGetRequest(w http.ResponseWriter, r *http.Request, server CloudRegionServer) {
+	request, err := readCloudRegionGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(CloudRegionGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeCloudRegionGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *CloudRegionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

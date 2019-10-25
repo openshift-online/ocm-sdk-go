@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // UsersServer represents the interface the manages the 'users' resource.
@@ -205,30 +205,51 @@ type usersListServerResponseData struct {
 	Total *int         "json:\"total,omitempty\""
 }
 
-// UsersAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// UsersAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the UsersServer
+// interface.
 type UsersAdapter struct {
 	server UsersServer
-	router *mux.Router
 }
 
-func NewUsersAdapter(server UsersServer, router *mux.Router) *UsersAdapter {
-	adapter := new(UsersAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.userHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewUsersAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewUsersAdapter(server UsersServer) *UsersAdapter {
+	return &UsersAdapter{
+		server: server,
+	}
 }
-func (a *UsersAdapter) userHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.User(id)
-	targetAdapter := NewUserAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *UsersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchUsersRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *UsersAdapter) readAddRequest(r *http.Request) (*UsersAddServerRequest, error) {
+
+// dispatchUsersRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchUsersRequest(w http.ResponseWriter, r *http.Request, server UsersServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptUsersAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptUsersListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.User(segments[0])
+			dispatchUserRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readUsersAddRequest reads the given HTTP requests and translates it
+// into an object of type UsersAddServerRequest.
+func readUsersAddRequest(r *http.Request) (*UsersAddServerRequest, error) {
 	var err error
 	result := new(UsersAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -237,7 +258,10 @@ func (a *UsersAdapter) readAddRequest(r *http.Request) (*UsersAddServerRequest, 
 	}
 	return result, err
 }
-func (a *UsersAdapter) writeAddResponse(w http.ResponseWriter, r *UsersAddServerResponse) error {
+
+// writeUsersAddResponse translates the given request object into an
+// HTTP response.
+func writeUsersAddResponse(w http.ResponseWriter, r *UsersAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -246,53 +270,52 @@ func (a *UsersAdapter) writeAddResponse(w http.ResponseWriter, r *UsersAddServer
 	}
 	return nil
 }
-func (a *UsersAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptUsersAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptUsersAddRequest(w http.ResponseWriter, r *http.Request, server UsersServer) {
+	request, err := readUsersAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(UsersAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writeUsersAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *UsersAdapter) readListRequest(r *http.Request) (*UsersListServerRequest, error) {
+
+// readUsersListRequest reads the given HTTP requests and translates it
+// into an object of type UsersListServerRequest.
+func readUsersListRequest(r *http.Request) (*UsersListServerRequest, error) {
 	var err error
 	result := new(UsersListServerRequest)
 	return result, err
 }
-func (a *UsersAdapter) writeListResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
+
+// writeUsersListResponse translates the given request object into an
+// HTTP response.
+func writeUsersListResponse(w http.ResponseWriter, r *UsersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -301,47 +324,37 @@ func (a *UsersAdapter) writeListResponse(w http.ResponseWriter, r *UsersListServ
 	}
 	return nil
 }
-func (a *UsersAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptUsersListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptUsersListRequest(w http.ResponseWriter, r *http.Request, server UsersServer) {
+	request, err := readUsersListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(UsersListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeUsersListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *UsersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // VersionServer represents the interface the manages the 'version' resource.
@@ -77,26 +77,56 @@ func (r *VersionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// VersionAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// VersionAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the VersionServer
+// interface.
 type VersionAdapter struct {
 	server VersionServer
-	router *mux.Router
 }
 
-func NewVersionAdapter(server VersionServer, router *mux.Router) *VersionAdapter {
-	adapter := new(VersionAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewVersionAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewVersionAdapter(server VersionServer) *VersionAdapter {
+	return &VersionAdapter{
+		server: server,
+	}
 }
-func (a *VersionAdapter) readGetRequest(r *http.Request) (*VersionGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *VersionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchVersionRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchVersionRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchVersionRequest(w http.ResponseWriter, r *http.Request, server VersionServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptVersionGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readVersionGetRequest reads the given HTTP requests and translates it
+// into an object of type VersionGetServerRequest.
+func readVersionGetRequest(r *http.Request) (*VersionGetServerRequest, error) {
 	var err error
 	result := new(VersionGetServerRequest)
 	return result, err
 }
-func (a *VersionAdapter) writeGetResponse(w http.ResponseWriter, r *VersionGetServerResponse) error {
+
+// writeVersionGetResponse translates the given request object into an
+// HTTP response.
+func writeVersionGetResponse(w http.ResponseWriter, r *VersionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *VersionAdapter) writeGetResponse(w http.ResponseWriter, r *VersionGetSe
 	}
 	return nil
 }
-func (a *VersionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptVersionGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptVersionGetRequest(w http.ResponseWriter, r *http.Request, server VersionServer) {
+	request, err := readVersionGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(VersionGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeVersionGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *VersionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

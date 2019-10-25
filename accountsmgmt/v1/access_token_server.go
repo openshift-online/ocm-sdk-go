@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // AccessTokenServer represents the interface the manages the 'access_token' resource.
@@ -77,26 +77,56 @@ func (r *AccessTokenPostServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// AccessTokenAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// AccessTokenAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the AccessTokenServer
+// interface.
 type AccessTokenAdapter struct {
 	server AccessTokenServer
-	router *mux.Router
 }
 
-func NewAccessTokenAdapter(server AccessTokenServer, router *mux.Router) *AccessTokenAdapter {
-	adapter := new(AccessTokenAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
-	return adapter
+// NewAccessTokenAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewAccessTokenAdapter(server AccessTokenServer) *AccessTokenAdapter {
+	return &AccessTokenAdapter{
+		server: server,
+	}
 }
-func (a *AccessTokenAdapter) readPostRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *AccessTokenAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchAccessTokenRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchAccessTokenRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchAccessTokenRequest(w http.ResponseWriter, r *http.Request, server AccessTokenServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptAccessTokenPostRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readAccessTokenPostRequest reads the given HTTP requests and translates it
+// into an object of type AccessTokenPostServerRequest.
+func readAccessTokenPostRequest(r *http.Request) (*AccessTokenPostServerRequest, error) {
 	var err error
 	result := new(AccessTokenPostServerRequest)
 	return result, err
 }
-func (a *AccessTokenAdapter) writePostResponse(w http.ResponseWriter, r *AccessTokenPostServerResponse) error {
+
+// writeAccessTokenPostResponse translates the given request object into an
+// HTTP response.
+func writeAccessTokenPostResponse(w http.ResponseWriter, r *AccessTokenPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *AccessTokenAdapter) writePostResponse(w http.ResponseWriter, r *AccessT
 	}
 	return nil
 }
-func (a *AccessTokenAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readPostRequest(r)
+
+// adaptAccessTokenPostRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptAccessTokenPostRequest(w http.ResponseWriter, r *http.Request, server AccessTokenServer) {
+	request, err := readAccessTokenPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(AccessTokenPostServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Post(r.Context(), request, response)
+	err = server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Post: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writePostResponse(w, response)
+	err = writeAccessTokenPostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *AccessTokenAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

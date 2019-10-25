@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -339,30 +338,51 @@ type rolesListServerResponseData struct {
 	Total *int         "json:\"total,omitempty\""
 }
 
-// RolesAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RolesAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RolesServer
+// interface.
 type RolesAdapter struct {
 	server RolesServer
-	router *mux.Router
 }
 
-func NewRolesAdapter(server RolesServer, router *mux.Router) *RolesAdapter {
-	adapter := new(RolesAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewRolesAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRolesAdapter(server RolesServer) *RolesAdapter {
+	return &RolesAdapter{
+		server: server,
+	}
 }
-func (a *RolesAdapter) roleHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.Role(id)
-	targetAdapter := NewRoleAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *RolesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchRolesRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *RolesAdapter) readAddRequest(r *http.Request) (*RolesAddServerRequest, error) {
+
+// dispatchRolesRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRolesRequest(w http.ResponseWriter, r *http.Request, server RolesServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptRolesAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptRolesListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.Role(segments[0])
+			dispatchRoleRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readRolesAddRequest reads the given HTTP requests and translates it
+// into an object of type RolesAddServerRequest.
+func readRolesAddRequest(r *http.Request) (*RolesAddServerRequest, error) {
 	var err error
 	result := new(RolesAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -371,7 +391,10 @@ func (a *RolesAdapter) readAddRequest(r *http.Request) (*RolesAddServerRequest, 
 	}
 	return result, err
 }
-func (a *RolesAdapter) writeAddResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
+
+// writeRolesAddResponse translates the given request object into an
+// HTTP response.
+func writeRolesAddResponse(w http.ResponseWriter, r *RolesAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -380,48 +403,44 @@ func (a *RolesAdapter) writeAddResponse(w http.ResponseWriter, r *RolesAddServer
 	}
 	return nil
 }
-func (a *RolesAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptRolesAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRolesAddRequest(w http.ResponseWriter, r *http.Request, server RolesServer) {
+	request, err := readRolesAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RolesAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writeRolesAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *RolesAdapter) readListRequest(r *http.Request) (*RolesListServerRequest, error) {
+
+// readRolesListRequest reads the given HTTP requests and translates it
+// into an object of type RolesListServerRequest.
+func readRolesListRequest(r *http.Request) (*RolesListServerRequest, error) {
 	var err error
 	result := new(RolesListServerRequest)
 	query := r.URL.Query()
@@ -443,7 +462,10 @@ func (a *RolesAdapter) readListRequest(r *http.Request) (*RolesListServerRequest
 	}
 	return result, err
 }
-func (a *RolesAdapter) writeListResponse(w http.ResponseWriter, r *RolesListServerResponse) error {
+
+// writeRolesListResponse translates the given request object into an
+// HTTP response.
+func writeRolesListResponse(w http.ResponseWriter, r *RolesListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -452,47 +474,37 @@ func (a *RolesAdapter) writeListResponse(w http.ResponseWriter, r *RolesListServ
 	}
 	return nil
 }
-func (a *RolesAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptRolesListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRolesListRequest(w http.ResponseWriter, r *http.Request, server RolesServer) {
+	request, err := readRolesListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RolesListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeRolesListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *RolesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

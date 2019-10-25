@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // CredentialsServer represents the interface the manages the 'credentials' resource.
@@ -77,26 +77,56 @@ func (r *CredentialsGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CredentialsAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// CredentialsAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the CredentialsServer
+// interface.
 type CredentialsAdapter struct {
 	server CredentialsServer
-	router *mux.Router
 }
 
-func NewCredentialsAdapter(server CredentialsServer, router *mux.Router) *CredentialsAdapter {
-	adapter := new(CredentialsAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewCredentialsAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewCredentialsAdapter(server CredentialsServer) *CredentialsAdapter {
+	return &CredentialsAdapter{
+		server: server,
+	}
 }
-func (a *CredentialsAdapter) readGetRequest(r *http.Request) (*CredentialsGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *CredentialsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchCredentialsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchCredentialsRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchCredentialsRequest(w http.ResponseWriter, r *http.Request, server CredentialsServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptCredentialsGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readCredentialsGetRequest reads the given HTTP requests and translates it
+// into an object of type CredentialsGetServerRequest.
+func readCredentialsGetRequest(r *http.Request) (*CredentialsGetServerRequest, error) {
 	var err error
 	result := new(CredentialsGetServerRequest)
 	return result, err
 }
-func (a *CredentialsAdapter) writeGetResponse(w http.ResponseWriter, r *CredentialsGetServerResponse) error {
+
+// writeCredentialsGetResponse translates the given request object into an
+// HTTP response.
+func writeCredentialsGetResponse(w http.ResponseWriter, r *CredentialsGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *CredentialsAdapter) writeGetResponse(w http.ResponseWriter, r *Credenti
 	}
 	return nil
 }
-func (a *CredentialsAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptCredentialsGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptCredentialsGetRequest(w http.ResponseWriter, r *http.Request, server CredentialsServer) {
+	request, err := readCredentialsGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(CredentialsGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeCredentialsGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *CredentialsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

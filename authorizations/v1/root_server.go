@@ -22,7 +22,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RootServer represents the interface the manages the 'root' resource.
@@ -44,40 +45,48 @@ type RootServer interface {
 	SelfAccessReview() SelfAccessReviewServer
 }
 
-// RootAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RootAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RootServer
+// interface.
 type RootAdapter struct {
 	server RootServer
-	router *mux.Router
 }
 
-func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
-	adapter := new(RootAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/access_review").HandlerFunc(adapter.accessReviewHandler)
-	adapter.router.PathPrefix("/export_control_review").HandlerFunc(adapter.exportControlReviewHandler)
-	adapter.router.PathPrefix("/self_access_review").HandlerFunc(adapter.selfAccessReviewHandler)
-	return adapter
+// NewRootAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRootAdapter(server RootServer) *RootAdapter {
+	return &RootAdapter{
+		server: server,
+	}
 }
-func (a *RootAdapter) accessReviewHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.AccessReview()
-	targetAdapter := NewAccessReviewAdapter(target, a.router.PathPrefix("/access_review").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) exportControlReviewHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.ExportControlReview()
-	targetAdapter := NewExportControlReviewAdapter(target, a.router.PathPrefix("/export_control_review").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) selfAccessReviewHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.SelfAccessReview()
-	targetAdapter := NewSelfAccessReviewAdapter(target, a.router.PathPrefix("/self_access_review").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
+
+// ServeHTTP is the implementation of the http.Handler interface.
 func (a *RootAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
+	dispatchRootRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchRootRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRootRequest(w http.ResponseWriter, r *http.Request, server RootServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		case "access_review":
+			target := server.AccessReview()
+			dispatchAccessReviewRequest(w, r, target, segments[1:])
+		case "export_control_review":
+			target := server.ExportControlReview()
+			dispatchExportControlReviewRequest(w, r, target, segments[1:])
+		case "self_access_review":
+			target := server.SelfAccessReview()
+			dispatchSelfAccessReviewRequest(w, r, target, segments[1:])
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
 }

@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -231,29 +230,49 @@ type skusListServerResponseData struct {
 	Total *int        "json:\"total,omitempty\""
 }
 
-// SKUSAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// SKUSAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the SKUSServer
+// interface.
 type SKUSAdapter struct {
 	server SKUSServer
-	router *mux.Router
 }
 
-func NewSKUSAdapter(server SKUSServer, router *mux.Router) *SKUSAdapter {
-	adapter := new(SKUSAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.skuHandler)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewSKUSAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewSKUSAdapter(server SKUSServer) *SKUSAdapter {
+	return &SKUSAdapter{
+		server: server,
+	}
 }
-func (a *SKUSAdapter) skuHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.SKU(id)
-	targetAdapter := NewSKUAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *SKUSAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchSKUSRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *SKUSAdapter) readListRequest(r *http.Request) (*SKUSListServerRequest, error) {
+
+// dispatchSKUSRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchSKUSRequest(w http.ResponseWriter, r *http.Request, server SKUSServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptSKUSListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.SKU(segments[0])
+			dispatchSKURequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readSKUSListRequest reads the given HTTP requests and translates it
+// into an object of type SKUSListServerRequest.
+func readSKUSListRequest(r *http.Request) (*SKUSListServerRequest, error) {
 	var err error
 	result := new(SKUSListServerRequest)
 	query := r.URL.Query()
@@ -271,7 +290,10 @@ func (a *SKUSAdapter) readListRequest(r *http.Request) (*SKUSListServerRequest, 
 	}
 	return result, err
 }
-func (a *SKUSAdapter) writeListResponse(w http.ResponseWriter, r *SKUSListServerResponse) error {
+
+// writeSKUSListResponse translates the given request object into an
+// HTTP response.
+func writeSKUSListResponse(w http.ResponseWriter, r *SKUSListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -280,47 +302,37 @@ func (a *SKUSAdapter) writeListResponse(w http.ResponseWriter, r *SKUSListServer
 	}
 	return nil
 }
-func (a *SKUSAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptSKUSListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptSKUSListRequest(w http.ResponseWriter, r *http.Request, server SKUSServer) {
+	request, err := readSKUSListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(SKUSListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeSKUSListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *SKUSAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

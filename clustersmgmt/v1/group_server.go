@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // GroupServer represents the interface the manages the 'group' resource.
@@ -82,33 +82,59 @@ func (r *GroupGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// GroupAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// GroupAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the GroupServer
+// interface.
 type GroupAdapter struct {
 	server GroupServer
-	router *mux.Router
 }
 
-func NewGroupAdapter(server GroupServer, router *mux.Router) *GroupAdapter {
-	adapter := new(GroupAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/users").HandlerFunc(adapter.usersHandler)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewGroupAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewGroupAdapter(server GroupServer) *GroupAdapter {
+	return &GroupAdapter{
+		server: server,
+	}
 }
-func (a *GroupAdapter) usersHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Users()
-	targetAdapter := NewUsersAdapter(target, a.router.PathPrefix("/users").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *GroupAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchGroupRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *GroupAdapter) readGetRequest(r *http.Request) (*GroupGetServerRequest, error) {
+
+// dispatchGroupRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchGroupRequest(w http.ResponseWriter, r *http.Request, server GroupServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptGroupGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		case "users":
+			target := server.Users()
+			dispatchUsersRequest(w, r, target, segments[1:])
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readGroupGetRequest reads the given HTTP requests and translates it
+// into an object of type GroupGetServerRequest.
+func readGroupGetRequest(r *http.Request) (*GroupGetServerRequest, error) {
 	var err error
 	result := new(GroupGetServerRequest)
 	return result, err
 }
-func (a *GroupAdapter) writeGetResponse(w http.ResponseWriter, r *GroupGetServerResponse) error {
+
+// writeGroupGetResponse translates the given request object into an
+// HTTP response.
+func writeGroupGetResponse(w http.ResponseWriter, r *GroupGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -117,47 +143,37 @@ func (a *GroupAdapter) writeGetResponse(w http.ResponseWriter, r *GroupGetServer
 	}
 	return nil
 }
-func (a *GroupAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptGroupGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptGroupGetRequest(w http.ResponseWriter, r *http.Request, server GroupServer) {
+	request, err := readGroupGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(GroupGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeGroupGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *GroupAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

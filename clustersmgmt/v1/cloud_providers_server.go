@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -305,29 +304,49 @@ type cloudProvidersListServerResponseData struct {
 	Total *int                  "json:\"total,omitempty\""
 }
 
-// CloudProvidersAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// CloudProvidersAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the CloudProvidersServer
+// interface.
 type CloudProvidersAdapter struct {
 	server CloudProvidersServer
-	router *mux.Router
 }
 
-func NewCloudProvidersAdapter(server CloudProvidersServer, router *mux.Router) *CloudProvidersAdapter {
-	adapter := new(CloudProvidersAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.cloudProviderHandler)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewCloudProvidersAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewCloudProvidersAdapter(server CloudProvidersServer) *CloudProvidersAdapter {
+	return &CloudProvidersAdapter{
+		server: server,
+	}
 }
-func (a *CloudProvidersAdapter) cloudProviderHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.CloudProvider(id)
-	targetAdapter := NewCloudProviderAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *CloudProvidersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchCloudProvidersRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *CloudProvidersAdapter) readListRequest(r *http.Request) (*CloudProvidersListServerRequest, error) {
+
+// dispatchCloudProvidersRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchCloudProvidersRequest(w http.ResponseWriter, r *http.Request, server CloudProvidersServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptCloudProvidersListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.CloudProvider(segments[0])
+			dispatchCloudProviderRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readCloudProvidersListRequest reads the given HTTP requests and translates it
+// into an object of type CloudProvidersListServerRequest.
+func readCloudProvidersListRequest(r *http.Request) (*CloudProvidersListServerRequest, error) {
 	var err error
 	result := new(CloudProvidersListServerRequest)
 	query := r.URL.Query()
@@ -353,7 +372,10 @@ func (a *CloudProvidersAdapter) readListRequest(r *http.Request) (*CloudProvider
 	}
 	return result, err
 }
-func (a *CloudProvidersAdapter) writeListResponse(w http.ResponseWriter, r *CloudProvidersListServerResponse) error {
+
+// writeCloudProvidersListResponse translates the given request object into an
+// HTTP response.
+func writeCloudProvidersListResponse(w http.ResponseWriter, r *CloudProvidersListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -362,47 +384,37 @@ func (a *CloudProvidersAdapter) writeListResponse(w http.ResponseWriter, r *Clou
 	}
 	return nil
 }
-func (a *CloudProvidersAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptCloudProvidersListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptCloudProvidersListRequest(w http.ResponseWriter, r *http.Request, server CloudProvidersServer) {
+	request, err := readCloudProvidersListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(CloudProvidersListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeCloudProvidersListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *CloudProvidersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }
