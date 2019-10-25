@@ -22,7 +22,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // MetricQueriesServer represents the interface the manages the 'metric_queries' resource.
@@ -35,26 +36,42 @@ type MetricQueriesServer interface {
 	CPUTotalByNodeRolesOS() CPUTotalByNodeRolesOSMetricQueryServer
 }
 
-// MetricQueriesAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// MetricQueriesAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the MetricQueriesServer
+// interface.
 type MetricQueriesAdapter struct {
 	server MetricQueriesServer
-	router *mux.Router
 }
 
-func NewMetricQueriesAdapter(server MetricQueriesServer, router *mux.Router) *MetricQueriesAdapter {
-	adapter := new(MetricQueriesAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/cpu_total_by_node_roles_os").HandlerFunc(adapter.cpuTotalByNodeRolesOSHandler)
-	return adapter
+// NewMetricQueriesAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewMetricQueriesAdapter(server MetricQueriesServer) *MetricQueriesAdapter {
+	return &MetricQueriesAdapter{
+		server: server,
+	}
 }
-func (a *MetricQueriesAdapter) cpuTotalByNodeRolesOSHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.CPUTotalByNodeRolesOS()
-	targetAdapter := NewCPUTotalByNodeRolesOSMetricQueryAdapter(target, a.router.PathPrefix("/cpu_total_by_node_roles_os").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
+
+// ServeHTTP is the implementation of the http.Handler interface.
 func (a *MetricQueriesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
+	dispatchMetricQueriesRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchMetricQueriesRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchMetricQueriesRequest(w http.ResponseWriter, r *http.Request, server MetricQueriesServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		case "cpu_total_by_node_roles_os":
+			target := server.CPUTotalByNodeRolesOS()
+			dispatchCPUTotalByNodeRolesOSMetricQueryRequest(w, r, target, segments[1:])
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
 }

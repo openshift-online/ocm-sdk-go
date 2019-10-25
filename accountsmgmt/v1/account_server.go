@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // AccountServer represents the interface the manages the 'account' resource.
@@ -138,27 +138,58 @@ func (r *AccountUpdateServerResponse) Status(value int) *AccountUpdateServerResp
 	return r
 }
 
-// AccountAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// AccountAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the AccountServer
+// interface.
 type AccountAdapter struct {
 	server AccountServer
-	router *mux.Router
 }
 
-func NewAccountAdapter(server AccountServer, router *mux.Router) *AccountAdapter {
-	adapter := new(AccountAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	adapter.router.Methods(http.MethodPatch).Path("").HandlerFunc(adapter.handlerUpdate)
-	return adapter
+// NewAccountAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewAccountAdapter(server AccountServer) *AccountAdapter {
+	return &AccountAdapter{
+		server: server,
+	}
 }
-func (a *AccountAdapter) readGetRequest(r *http.Request) (*AccountGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *AccountAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchAccountRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchAccountRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchAccountRequest(w http.ResponseWriter, r *http.Request, server AccountServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptAccountGetRequest(w, r, server)
+		case http.MethodPatch:
+			adaptAccountUpdateRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readAccountGetRequest reads the given HTTP requests and translates it
+// into an object of type AccountGetServerRequest.
+func readAccountGetRequest(r *http.Request) (*AccountGetServerRequest, error) {
 	var err error
 	result := new(AccountGetServerRequest)
 	return result, err
 }
-func (a *AccountAdapter) writeGetResponse(w http.ResponseWriter, r *AccountGetServerResponse) error {
+
+// writeAccountGetResponse translates the given request object into an
+// HTTP response.
+func writeAccountGetResponse(w http.ResponseWriter, r *AccountGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -167,48 +198,44 @@ func (a *AccountAdapter) writeGetResponse(w http.ResponseWriter, r *AccountGetSe
 	}
 	return nil
 }
-func (a *AccountAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptAccountGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptAccountGetRequest(w http.ResponseWriter, r *http.Request, server AccountServer) {
+	request, err := readAccountGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(AccountGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeAccountGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *AccountAdapter) readUpdateRequest(r *http.Request) (*AccountUpdateServerRequest, error) {
+
+// readAccountUpdateRequest reads the given HTTP requests and translates it
+// into an object of type AccountUpdateServerRequest.
+func readAccountUpdateRequest(r *http.Request) (*AccountUpdateServerRequest, error) {
 	var err error
 	result := new(AccountUpdateServerRequest)
 	err = result.unmarshal(r.Body)
@@ -217,52 +244,45 @@ func (a *AccountAdapter) readUpdateRequest(r *http.Request) (*AccountUpdateServe
 	}
 	return result, err
 }
-func (a *AccountAdapter) writeUpdateResponse(w http.ResponseWriter, r *AccountUpdateServerResponse) error {
+
+// writeAccountUpdateResponse translates the given request object into an
+// HTTP response.
+func writeAccountUpdateResponse(w http.ResponseWriter, r *AccountUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *AccountAdapter) handlerUpdate(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readUpdateRequest(r)
+
+// adaptAccountUpdateRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptAccountUpdateRequest(w http.ResponseWriter, r *http.Request, server AccountServer) {
+	request, err := readAccountUpdateRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(AccountUpdateServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Update(r.Context(), request, response)
+	err = server.Update(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Update: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeUpdateResponse(w, response)
+	err = writeAccountUpdateResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *AccountAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

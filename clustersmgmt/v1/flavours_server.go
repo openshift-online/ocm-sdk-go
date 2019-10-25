@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -388,30 +387,51 @@ type flavoursListServerResponseData struct {
 	Total *int            "json:\"total,omitempty\""
 }
 
-// FlavoursAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// FlavoursAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the FlavoursServer
+// interface.
 type FlavoursAdapter struct {
 	server FlavoursServer
-	router *mux.Router
 }
 
-func NewFlavoursAdapter(server FlavoursServer, router *mux.Router) *FlavoursAdapter {
-	adapter := new(FlavoursAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.flavourHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewFlavoursAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewFlavoursAdapter(server FlavoursServer) *FlavoursAdapter {
+	return &FlavoursAdapter{
+		server: server,
+	}
 }
-func (a *FlavoursAdapter) flavourHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.Flavour(id)
-	targetAdapter := NewFlavourAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *FlavoursAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchFlavoursRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *FlavoursAdapter) readAddRequest(r *http.Request) (*FlavoursAddServerRequest, error) {
+
+// dispatchFlavoursRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchFlavoursRequest(w http.ResponseWriter, r *http.Request, server FlavoursServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptFlavoursAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptFlavoursListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.Flavour(segments[0])
+			dispatchFlavourRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readFlavoursAddRequest reads the given HTTP requests and translates it
+// into an object of type FlavoursAddServerRequest.
+func readFlavoursAddRequest(r *http.Request) (*FlavoursAddServerRequest, error) {
 	var err error
 	result := new(FlavoursAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -420,7 +440,10 @@ func (a *FlavoursAdapter) readAddRequest(r *http.Request) (*FlavoursAddServerReq
 	}
 	return result, err
 }
-func (a *FlavoursAdapter) writeAddResponse(w http.ResponseWriter, r *FlavoursAddServerResponse) error {
+
+// writeFlavoursAddResponse translates the given request object into an
+// HTTP response.
+func writeFlavoursAddResponse(w http.ResponseWriter, r *FlavoursAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -429,48 +452,44 @@ func (a *FlavoursAdapter) writeAddResponse(w http.ResponseWriter, r *FlavoursAdd
 	}
 	return nil
 }
-func (a *FlavoursAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptFlavoursAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptFlavoursAddRequest(w http.ResponseWriter, r *http.Request, server FlavoursServer) {
+	request, err := readFlavoursAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(FlavoursAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writeFlavoursAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *FlavoursAdapter) readListRequest(r *http.Request) (*FlavoursListServerRequest, error) {
+
+// readFlavoursListRequest reads the given HTTP requests and translates it
+// into an object of type FlavoursListServerRequest.
+func readFlavoursListRequest(r *http.Request) (*FlavoursListServerRequest, error) {
 	var err error
 	result := new(FlavoursListServerRequest)
 	query := r.URL.Query()
@@ -496,7 +515,10 @@ func (a *FlavoursAdapter) readListRequest(r *http.Request) (*FlavoursListServerR
 	}
 	return result, err
 }
-func (a *FlavoursAdapter) writeListResponse(w http.ResponseWriter, r *FlavoursListServerResponse) error {
+
+// writeFlavoursListResponse translates the given request object into an
+// HTTP response.
+func writeFlavoursListResponse(w http.ResponseWriter, r *FlavoursListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -505,47 +527,37 @@ func (a *FlavoursAdapter) writeListResponse(w http.ResponseWriter, r *FlavoursLi
 	}
 	return nil
 }
-func (a *FlavoursAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptFlavoursListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptFlavoursListRequest(w http.ResponseWriter, r *http.Request, server FlavoursServer) {
+	request, err := readFlavoursListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(FlavoursListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeFlavoursListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *FlavoursAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

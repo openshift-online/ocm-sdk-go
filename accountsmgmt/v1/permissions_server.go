@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -290,30 +289,51 @@ type permissionsListServerResponseData struct {
 	Total *int               "json:\"total,omitempty\""
 }
 
-// PermissionsAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// PermissionsAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the PermissionsServer
+// interface.
 type PermissionsAdapter struct {
 	server PermissionsServer
-	router *mux.Router
 }
 
-func NewPermissionsAdapter(server PermissionsServer, router *mux.Router) *PermissionsAdapter {
-	adapter := new(PermissionsAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.permissionHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewPermissionsAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewPermissionsAdapter(server PermissionsServer) *PermissionsAdapter {
+	return &PermissionsAdapter{
+		server: server,
+	}
 }
-func (a *PermissionsAdapter) permissionHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.Permission(id)
-	targetAdapter := NewPermissionAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *PermissionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchPermissionsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *PermissionsAdapter) readAddRequest(r *http.Request) (*PermissionsAddServerRequest, error) {
+
+// dispatchPermissionsRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchPermissionsRequest(w http.ResponseWriter, r *http.Request, server PermissionsServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptPermissionsAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptPermissionsListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.Permission(segments[0])
+			dispatchPermissionRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readPermissionsAddRequest reads the given HTTP requests and translates it
+// into an object of type PermissionsAddServerRequest.
+func readPermissionsAddRequest(r *http.Request) (*PermissionsAddServerRequest, error) {
 	var err error
 	result := new(PermissionsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +342,10 @@ func (a *PermissionsAdapter) readAddRequest(r *http.Request) (*PermissionsAddSer
 	}
 	return result, err
 }
-func (a *PermissionsAdapter) writeAddResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
+
+// writePermissionsAddResponse translates the given request object into an
+// HTTP response.
+func writePermissionsAddResponse(w http.ResponseWriter, r *PermissionsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,48 +354,44 @@ func (a *PermissionsAdapter) writeAddResponse(w http.ResponseWriter, r *Permissi
 	}
 	return nil
 }
-func (a *PermissionsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptPermissionsAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptPermissionsAddRequest(w http.ResponseWriter, r *http.Request, server PermissionsServer) {
+	request, err := readPermissionsAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(PermissionsAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writePermissionsAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *PermissionsAdapter) readListRequest(r *http.Request) (*PermissionsListServerRequest, error) {
+
+// readPermissionsListRequest reads the given HTTP requests and translates it
+// into an object of type PermissionsListServerRequest.
+func readPermissionsListRequest(r *http.Request) (*PermissionsListServerRequest, error) {
 	var err error
 	result := new(PermissionsListServerRequest)
 	query := r.URL.Query()
@@ -390,7 +409,10 @@ func (a *PermissionsAdapter) readListRequest(r *http.Request) (*PermissionsListS
 	}
 	return result, err
 }
-func (a *PermissionsAdapter) writeListResponse(w http.ResponseWriter, r *PermissionsListServerResponse) error {
+
+// writePermissionsListResponse translates the given request object into an
+// HTTP response.
+func writePermissionsListResponse(w http.ResponseWriter, r *PermissionsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -399,47 +421,37 @@ func (a *PermissionsAdapter) writeListResponse(w http.ResponseWriter, r *Permiss
 	}
 	return nil
 }
-func (a *PermissionsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptPermissionsListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptPermissionsListRequest(w http.ResponseWriter, r *http.Request, server PermissionsServer) {
+	request, err := readPermissionsListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(PermissionsListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writePermissionsListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *PermissionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

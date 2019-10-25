@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // IdentityProviderServer represents the interface the manages the 'identity_provider' resource.
@@ -98,78 +98,108 @@ func (r *IdentityProviderGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// IdentityProviderAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// IdentityProviderAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the IdentityProviderServer
+// interface.
 type IdentityProviderAdapter struct {
 	server IdentityProviderServer
-	router *mux.Router
 }
 
-func NewIdentityProviderAdapter(server IdentityProviderServer, router *mux.Router) *IdentityProviderAdapter {
-	adapter := new(IdentityProviderAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewIdentityProviderAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewIdentityProviderAdapter(server IdentityProviderServer) *IdentityProviderAdapter {
+	return &IdentityProviderAdapter{
+		server: server,
+	}
 }
-func (a *IdentityProviderAdapter) readDeleteRequest(r *http.Request) (*IdentityProviderDeleteServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *IdentityProviderAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchIdentityProviderRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchIdentityProviderRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchIdentityProviderRequest(w http.ResponseWriter, r *http.Request, server IdentityProviderServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodDelete:
+			adaptIdentityProviderDeleteRequest(w, r, server)
+		case http.MethodGet:
+			adaptIdentityProviderGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readIdentityProviderDeleteRequest reads the given HTTP requests and translates it
+// into an object of type IdentityProviderDeleteServerRequest.
+func readIdentityProviderDeleteRequest(r *http.Request) (*IdentityProviderDeleteServerRequest, error) {
 	var err error
 	result := new(IdentityProviderDeleteServerRequest)
 	return result, err
 }
-func (a *IdentityProviderAdapter) writeDeleteResponse(w http.ResponseWriter, r *IdentityProviderDeleteServerResponse) error {
+
+// writeIdentityProviderDeleteResponse translates the given request object into an
+// HTTP response.
+func writeIdentityProviderDeleteResponse(w http.ResponseWriter, r *IdentityProviderDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *IdentityProviderAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readDeleteRequest(r)
+
+// adaptIdentityProviderDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptIdentityProviderDeleteRequest(w http.ResponseWriter, r *http.Request, server IdentityProviderServer) {
+	request, err := readIdentityProviderDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(IdentityProviderDeleteServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Delete(r.Context(), request, response)
+	err = server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Delete: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeDeleteResponse(w, response)
+	err = writeIdentityProviderDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *IdentityProviderAdapter) readGetRequest(r *http.Request) (*IdentityProviderGetServerRequest, error) {
+
+// readIdentityProviderGetRequest reads the given HTTP requests and translates it
+// into an object of type IdentityProviderGetServerRequest.
+func readIdentityProviderGetRequest(r *http.Request) (*IdentityProviderGetServerRequest, error) {
 	var err error
 	result := new(IdentityProviderGetServerRequest)
 	return result, err
 }
-func (a *IdentityProviderAdapter) writeGetResponse(w http.ResponseWriter, r *IdentityProviderGetServerResponse) error {
+
+// writeIdentityProviderGetResponse translates the given request object into an
+// HTTP response.
+func writeIdentityProviderGetResponse(w http.ResponseWriter, r *IdentityProviderGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -178,47 +208,37 @@ func (a *IdentityProviderAdapter) writeGetResponse(w http.ResponseWriter, r *Ide
 	}
 	return nil
 }
-func (a *IdentityProviderAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptIdentityProviderGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptIdentityProviderGetRequest(w http.ResponseWriter, r *http.Request, server IdentityProviderServer) {
+	request, err := readIdentityProviderGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(IdentityProviderGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeIdentityProviderGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *IdentityProviderAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

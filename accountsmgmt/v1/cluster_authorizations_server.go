@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ClusterAuthorizationsServer represents the interface the manages the 'cluster_authorizations' resource.
@@ -117,21 +117,48 @@ func (r *ClusterAuthorizationsPostServerResponse) marshal(writer io.Writer) erro
 	return err
 }
 
-// ClusterAuthorizationsAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// ClusterAuthorizationsAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the ClusterAuthorizationsServer
+// interface.
 type ClusterAuthorizationsAdapter struct {
 	server ClusterAuthorizationsServer
-	router *mux.Router
 }
 
-func NewClusterAuthorizationsAdapter(server ClusterAuthorizationsServer, router *mux.Router) *ClusterAuthorizationsAdapter {
-	adapter := new(ClusterAuthorizationsAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
-	return adapter
+// NewClusterAuthorizationsAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewClusterAuthorizationsAdapter(server ClusterAuthorizationsServer) *ClusterAuthorizationsAdapter {
+	return &ClusterAuthorizationsAdapter{
+		server: server,
+	}
 }
-func (a *ClusterAuthorizationsAdapter) readPostRequest(r *http.Request) (*ClusterAuthorizationsPostServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *ClusterAuthorizationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchClusterAuthorizationsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchClusterAuthorizationsRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchClusterAuthorizationsRequest(w http.ResponseWriter, r *http.Request, server ClusterAuthorizationsServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptClusterAuthorizationsPostRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readClusterAuthorizationsPostRequest reads the given HTTP requests and translates it
+// into an object of type ClusterAuthorizationsPostServerRequest.
+func readClusterAuthorizationsPostRequest(r *http.Request) (*ClusterAuthorizationsPostServerRequest, error) {
 	var err error
 	result := new(ClusterAuthorizationsPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -140,7 +167,10 @@ func (a *ClusterAuthorizationsAdapter) readPostRequest(r *http.Request) (*Cluste
 	}
 	return result, err
 }
-func (a *ClusterAuthorizationsAdapter) writePostResponse(w http.ResponseWriter, r *ClusterAuthorizationsPostServerResponse) error {
+
+// writeClusterAuthorizationsPostResponse translates the given request object into an
+// HTTP response.
+func writeClusterAuthorizationsPostResponse(w http.ResponseWriter, r *ClusterAuthorizationsPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -149,47 +179,37 @@ func (a *ClusterAuthorizationsAdapter) writePostResponse(w http.ResponseWriter, 
 	}
 	return nil
 }
-func (a *ClusterAuthorizationsAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readPostRequest(r)
+
+// adaptClusterAuthorizationsPostRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptClusterAuthorizationsPostRequest(w http.ResponseWriter, r *http.Request, server ClusterAuthorizationsServer) {
+	request, err := readClusterAuthorizationsPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(ClusterAuthorizationsPostServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Post(r.Context(), request, response)
+	err = server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Post: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writePostResponse(w, response)
+	err = writeClusterAuthorizationsPostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *ClusterAuthorizationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

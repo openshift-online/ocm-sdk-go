@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ClusterStatusServer represents the interface the manages the 'cluster_status' resource.
@@ -77,26 +77,56 @@ func (r *ClusterStatusGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// ClusterStatusAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// ClusterStatusAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the ClusterStatusServer
+// interface.
 type ClusterStatusAdapter struct {
 	server ClusterStatusServer
-	router *mux.Router
 }
 
-func NewClusterStatusAdapter(server ClusterStatusServer, router *mux.Router) *ClusterStatusAdapter {
-	adapter := new(ClusterStatusAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewClusterStatusAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewClusterStatusAdapter(server ClusterStatusServer) *ClusterStatusAdapter {
+	return &ClusterStatusAdapter{
+		server: server,
+	}
 }
-func (a *ClusterStatusAdapter) readGetRequest(r *http.Request) (*ClusterStatusGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *ClusterStatusAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchClusterStatusRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchClusterStatusRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchClusterStatusRequest(w http.ResponseWriter, r *http.Request, server ClusterStatusServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptClusterStatusGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readClusterStatusGetRequest reads the given HTTP requests and translates it
+// into an object of type ClusterStatusGetServerRequest.
+func readClusterStatusGetRequest(r *http.Request) (*ClusterStatusGetServerRequest, error) {
 	var err error
 	result := new(ClusterStatusGetServerRequest)
 	return result, err
 }
-func (a *ClusterStatusAdapter) writeGetResponse(w http.ResponseWriter, r *ClusterStatusGetServerResponse) error {
+
+// writeClusterStatusGetResponse translates the given request object into an
+// HTTP response.
+func writeClusterStatusGetResponse(w http.ResponseWriter, r *ClusterStatusGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *ClusterStatusAdapter) writeGetResponse(w http.ResponseWriter, r *Cluste
 	}
 	return nil
 }
-func (a *ClusterStatusAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptClusterStatusGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptClusterStatusGetRequest(w http.ResponseWriter, r *http.Request, server ClusterStatusServer) {
+	request, err := readClusterStatusGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(ClusterStatusGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeClusterStatusGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *ClusterStatusAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

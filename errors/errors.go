@@ -276,15 +276,15 @@ var panicError, _ = NewError().
 	Build()
 
 // SendError writes a given error and status code to a response writer.
-// if an error occured it will log the error and exit.
+// if an error occurred it will log the error and exit.
 // This methods is used internaly and no backwards compatibily is guaranteed.
 func SendError(w http.ResponseWriter, r *http.Request, error *Error) {
-	w.Header().Set("Content-Type", "application/json")
 	status, err := strconv.Atoi(error.ID())
 	if err != nil {
 		SendPanic(w, r)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	err = error.MarshalError(w)
 	if err != nil {
@@ -297,7 +297,6 @@ func SendError(w http.ResponseWriter, r *http.Request, error *Error) {
 // This methods is used internaly and no backwards compatibily is guaranteed.
 func SendPanic(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	// Convert it to JSON:
 	err := panicError.MarshalError(w)
 	if err != nil {
 		glog.Errorf(
@@ -306,4 +305,56 @@ func SendPanic(w http.ResponseWriter, r *http.Request) {
 			err.Error(),
 		)
 	}
+}
+
+// SendNotFound sends a generic 404 error.
+func SendNotFound(w http.ResponseWriter, r *http.Request) {
+	reason := fmt.Sprintf(
+		"Can't find resource for path '%s''",
+		r.URL.Path,
+	)
+	body, err := NewError().
+		ID("404").
+		Reason(reason).
+		Build()
+	if err != nil {
+		SendPanic(w, r)
+		return
+	}
+	SendError(w, r, body)
+}
+
+// SendMethodNotSupported sends a generic 409 error.
+func SendMethodNotSupported(w http.ResponseWriter, r *http.Request) {
+	reason := fmt.Sprintf(
+		"Method '%s' isn't supported for path '%s''",
+		r.Method, r.URL.Path,
+	)
+	body, err := NewError().
+		ID("409").
+		Reason(reason).
+		Build()
+	if err != nil {
+		SendPanic(w, r)
+		return
+	}
+	SendError(w, r, body)
+}
+
+// SendInternalServerError sends a generic 500 error.
+func SendInternalServerError(w http.ResponseWriter, r *http.Request) {
+	reason := fmt.Sprintf(
+		"Can't process '%s' request for path '%s' due to an internal"+
+			"server error",
+		r.Method, r.URL.Path,
+	)
+	body, err := NewError().
+		ID("500").
+		Reason(reason).
+		Build()
+	if err != nil {
+		SendPanic(w, r)
+		return
+	}
+	SendError(w, r, body)
 }

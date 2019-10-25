@@ -22,7 +22,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RootServer represents the interface the manages the 'root' resource.
@@ -54,54 +55,54 @@ type RootServer interface {
 	Versions() VersionsServer
 }
 
-// RootAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RootAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RootServer
+// interface.
 type RootAdapter struct {
 	server RootServer
-	router *mux.Router
 }
 
-func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
-	adapter := new(RootAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/cloud_providers").HandlerFunc(adapter.cloudProvidersHandler)
-	adapter.router.PathPrefix("/clusters").HandlerFunc(adapter.clustersHandler)
-	adapter.router.PathPrefix("/dashboards").HandlerFunc(adapter.dashboardsHandler)
-	adapter.router.PathPrefix("/flavours").HandlerFunc(adapter.flavoursHandler)
-	adapter.router.PathPrefix("/versions").HandlerFunc(adapter.versionsHandler)
-	return adapter
+// NewRootAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRootAdapter(server RootServer) *RootAdapter {
+	return &RootAdapter{
+		server: server,
+	}
 }
-func (a *RootAdapter) cloudProvidersHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.CloudProviders()
-	targetAdapter := NewCloudProvidersAdapter(target, a.router.PathPrefix("/cloud_providers").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) clustersHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Clusters()
-	targetAdapter := NewClustersAdapter(target, a.router.PathPrefix("/clusters").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) dashboardsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Dashboards()
-	targetAdapter := NewDashboardsAdapter(target, a.router.PathPrefix("/dashboards").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) flavoursHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Flavours()
-	targetAdapter := NewFlavoursAdapter(target, a.router.PathPrefix("/flavours").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) versionsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Versions()
-	targetAdapter := NewVersionsAdapter(target, a.router.PathPrefix("/versions").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
+
+// ServeHTTP is the implementation of the http.Handler interface.
 func (a *RootAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
+	dispatchRootRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchRootRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRootRequest(w http.ResponseWriter, r *http.Request, server RootServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		case "cloud_providers":
+			target := server.CloudProviders()
+			dispatchCloudProvidersRequest(w, r, target, segments[1:])
+		case "clusters":
+			target := server.Clusters()
+			dispatchClustersRequest(w, r, target, segments[1:])
+		case "dashboards":
+			target := server.Dashboards()
+			dispatchDashboardsRequest(w, r, target, segments[1:])
+		case "flavours":
+			target := server.Flavours()
+			dispatchFlavoursRequest(w, r, target, segments[1:])
+		case "versions":
+			target := server.Versions()
+			dispatchVersionsRequest(w, r, target, segments[1:])
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
 }

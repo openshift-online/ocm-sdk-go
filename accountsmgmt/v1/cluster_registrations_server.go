@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ClusterRegistrationsServer represents the interface the manages the 'cluster_registrations' resource.
@@ -118,21 +118,48 @@ func (r *ClusterRegistrationsPostServerResponse) marshal(writer io.Writer) error
 	return err
 }
 
-// ClusterRegistrationsAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// ClusterRegistrationsAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the ClusterRegistrationsServer
+// interface.
 type ClusterRegistrationsAdapter struct {
 	server ClusterRegistrationsServer
-	router *mux.Router
 }
 
-func NewClusterRegistrationsAdapter(server ClusterRegistrationsServer, router *mux.Router) *ClusterRegistrationsAdapter {
-	adapter := new(ClusterRegistrationsAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
-	return adapter
+// NewClusterRegistrationsAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewClusterRegistrationsAdapter(server ClusterRegistrationsServer) *ClusterRegistrationsAdapter {
+	return &ClusterRegistrationsAdapter{
+		server: server,
+	}
 }
-func (a *ClusterRegistrationsAdapter) readPostRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *ClusterRegistrationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchClusterRegistrationsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchClusterRegistrationsRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchClusterRegistrationsRequest(w http.ResponseWriter, r *http.Request, server ClusterRegistrationsServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptClusterRegistrationsPostRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readClusterRegistrationsPostRequest reads the given HTTP requests and translates it
+// into an object of type ClusterRegistrationsPostServerRequest.
+func readClusterRegistrationsPostRequest(r *http.Request) (*ClusterRegistrationsPostServerRequest, error) {
 	var err error
 	result := new(ClusterRegistrationsPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -141,7 +168,10 @@ func (a *ClusterRegistrationsAdapter) readPostRequest(r *http.Request) (*Cluster
 	}
 	return result, err
 }
-func (a *ClusterRegistrationsAdapter) writePostResponse(w http.ResponseWriter, r *ClusterRegistrationsPostServerResponse) error {
+
+// writeClusterRegistrationsPostResponse translates the given request object into an
+// HTTP response.
+func writeClusterRegistrationsPostResponse(w http.ResponseWriter, r *ClusterRegistrationsPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -150,47 +180,37 @@ func (a *ClusterRegistrationsAdapter) writePostResponse(w http.ResponseWriter, r
 	}
 	return nil
 }
-func (a *ClusterRegistrationsAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readPostRequest(r)
+
+// adaptClusterRegistrationsPostRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptClusterRegistrationsPostRequest(w http.ResponseWriter, r *http.Request, server ClusterRegistrationsServer) {
+	request, err := readClusterRegistrationsPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(ClusterRegistrationsPostServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Post(r.Context(), request, response)
+	err = server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Post: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writePostResponse(w, response)
+	err = writeClusterRegistrationsPostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *ClusterRegistrationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

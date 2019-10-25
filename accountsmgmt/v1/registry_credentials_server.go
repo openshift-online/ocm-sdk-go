@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -290,30 +289,51 @@ type registryCredentialsListServerResponseData struct {
 	Total *int                       "json:\"total,omitempty\""
 }
 
-// RegistryCredentialsAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RegistryCredentialsAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RegistryCredentialsServer
+// interface.
 type RegistryCredentialsAdapter struct {
 	server RegistryCredentialsServer
-	router *mux.Router
 }
 
-func NewRegistryCredentialsAdapter(server RegistryCredentialsServer, router *mux.Router) *RegistryCredentialsAdapter {
-	adapter := new(RegistryCredentialsAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.registryCredentialHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewRegistryCredentialsAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRegistryCredentialsAdapter(server RegistryCredentialsServer) *RegistryCredentialsAdapter {
+	return &RegistryCredentialsAdapter{
+		server: server,
+	}
 }
-func (a *RegistryCredentialsAdapter) registryCredentialHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.RegistryCredential(id)
-	targetAdapter := NewRegistryCredentialAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *RegistryCredentialsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchRegistryCredentialsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *RegistryCredentialsAdapter) readAddRequest(r *http.Request) (*RegistryCredentialsAddServerRequest, error) {
+
+// dispatchRegistryCredentialsRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRegistryCredentialsRequest(w http.ResponseWriter, r *http.Request, server RegistryCredentialsServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptRegistryCredentialsAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptRegistryCredentialsListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.RegistryCredential(segments[0])
+			dispatchRegistryCredentialRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readRegistryCredentialsAddRequest reads the given HTTP requests and translates it
+// into an object of type RegistryCredentialsAddServerRequest.
+func readRegistryCredentialsAddRequest(r *http.Request) (*RegistryCredentialsAddServerRequest, error) {
 	var err error
 	result := new(RegistryCredentialsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +342,10 @@ func (a *RegistryCredentialsAdapter) readAddRequest(r *http.Request) (*RegistryC
 	}
 	return result, err
 }
-func (a *RegistryCredentialsAdapter) writeAddResponse(w http.ResponseWriter, r *RegistryCredentialsAddServerResponse) error {
+
+// writeRegistryCredentialsAddResponse translates the given request object into an
+// HTTP response.
+func writeRegistryCredentialsAddResponse(w http.ResponseWriter, r *RegistryCredentialsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,48 +354,44 @@ func (a *RegistryCredentialsAdapter) writeAddResponse(w http.ResponseWriter, r *
 	}
 	return nil
 }
-func (a *RegistryCredentialsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptRegistryCredentialsAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRegistryCredentialsAddRequest(w http.ResponseWriter, r *http.Request, server RegistryCredentialsServer) {
+	request, err := readRegistryCredentialsAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RegistryCredentialsAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writeRegistryCredentialsAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *RegistryCredentialsAdapter) readListRequest(r *http.Request) (*RegistryCredentialsListServerRequest, error) {
+
+// readRegistryCredentialsListRequest reads the given HTTP requests and translates it
+// into an object of type RegistryCredentialsListServerRequest.
+func readRegistryCredentialsListRequest(r *http.Request) (*RegistryCredentialsListServerRequest, error) {
 	var err error
 	result := new(RegistryCredentialsListServerRequest)
 	query := r.URL.Query()
@@ -390,7 +409,10 @@ func (a *RegistryCredentialsAdapter) readListRequest(r *http.Request) (*Registry
 	}
 	return result, err
 }
-func (a *RegistryCredentialsAdapter) writeListResponse(w http.ResponseWriter, r *RegistryCredentialsListServerResponse) error {
+
+// writeRegistryCredentialsListResponse translates the given request object into an
+// HTTP response.
+func writeRegistryCredentialsListResponse(w http.ResponseWriter, r *RegistryCredentialsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -399,47 +421,37 @@ func (a *RegistryCredentialsAdapter) writeListResponse(w http.ResponseWriter, r 
 	}
 	return nil
 }
-func (a *RegistryCredentialsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptRegistryCredentialsListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRegistryCredentialsListRequest(w http.ResponseWriter, r *http.Request, server RegistryCredentialsServer) {
+	request, err := readRegistryCredentialsListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RegistryCredentialsListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeRegistryCredentialsListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *RegistryCredentialsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

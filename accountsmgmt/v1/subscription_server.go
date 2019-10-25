@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // SubscriptionServer represents the interface the manages the 'subscription' resource.
@@ -98,78 +98,108 @@ func (r *SubscriptionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// SubscriptionAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// SubscriptionAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the SubscriptionServer
+// interface.
 type SubscriptionAdapter struct {
 	server SubscriptionServer
-	router *mux.Router
 }
 
-func NewSubscriptionAdapter(server SubscriptionServer, router *mux.Router) *SubscriptionAdapter {
-	adapter := new(SubscriptionAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewSubscriptionAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewSubscriptionAdapter(server SubscriptionServer) *SubscriptionAdapter {
+	return &SubscriptionAdapter{
+		server: server,
+	}
 }
-func (a *SubscriptionAdapter) readDeleteRequest(r *http.Request) (*SubscriptionDeleteServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *SubscriptionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchSubscriptionRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchSubscriptionRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchSubscriptionRequest(w http.ResponseWriter, r *http.Request, server SubscriptionServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodDelete:
+			adaptSubscriptionDeleteRequest(w, r, server)
+		case http.MethodGet:
+			adaptSubscriptionGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readSubscriptionDeleteRequest reads the given HTTP requests and translates it
+// into an object of type SubscriptionDeleteServerRequest.
+func readSubscriptionDeleteRequest(r *http.Request) (*SubscriptionDeleteServerRequest, error) {
 	var err error
 	result := new(SubscriptionDeleteServerRequest)
 	return result, err
 }
-func (a *SubscriptionAdapter) writeDeleteResponse(w http.ResponseWriter, r *SubscriptionDeleteServerResponse) error {
+
+// writeSubscriptionDeleteResponse translates the given request object into an
+// HTTP response.
+func writeSubscriptionDeleteResponse(w http.ResponseWriter, r *SubscriptionDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *SubscriptionAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readDeleteRequest(r)
+
+// adaptSubscriptionDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptSubscriptionDeleteRequest(w http.ResponseWriter, r *http.Request, server SubscriptionServer) {
+	request, err := readSubscriptionDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(SubscriptionDeleteServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Delete(r.Context(), request, response)
+	err = server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Delete: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeDeleteResponse(w, response)
+	err = writeSubscriptionDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *SubscriptionAdapter) readGetRequest(r *http.Request) (*SubscriptionGetServerRequest, error) {
+
+// readSubscriptionGetRequest reads the given HTTP requests and translates it
+// into an object of type SubscriptionGetServerRequest.
+func readSubscriptionGetRequest(r *http.Request) (*SubscriptionGetServerRequest, error) {
 	var err error
 	result := new(SubscriptionGetServerRequest)
 	return result, err
 }
-func (a *SubscriptionAdapter) writeGetResponse(w http.ResponseWriter, r *SubscriptionGetServerResponse) error {
+
+// writeSubscriptionGetResponse translates the given request object into an
+// HTTP response.
+func writeSubscriptionGetResponse(w http.ResponseWriter, r *SubscriptionGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -178,47 +208,37 @@ func (a *SubscriptionAdapter) writeGetResponse(w http.ResponseWriter, r *Subscri
 	}
 	return nil
 }
-func (a *SubscriptionAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptSubscriptionGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptSubscriptionGetRequest(w http.ResponseWriter, r *http.Request, server SubscriptionServer) {
+	request, err := readSubscriptionGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(SubscriptionGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeSubscriptionGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *SubscriptionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

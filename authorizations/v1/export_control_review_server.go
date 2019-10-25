@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ExportControlReviewServer represents the interface the manages the 'export_control_review' resource.
@@ -117,21 +117,48 @@ func (r *ExportControlReviewPostServerResponse) marshal(writer io.Writer) error 
 	return err
 }
 
-// ExportControlReviewAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// ExportControlReviewAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the ExportControlReviewServer
+// interface.
 type ExportControlReviewAdapter struct {
 	server ExportControlReviewServer
-	router *mux.Router
 }
 
-func NewExportControlReviewAdapter(server ExportControlReviewServer, router *mux.Router) *ExportControlReviewAdapter {
-	adapter := new(ExportControlReviewAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerPost)
-	return adapter
+// NewExportControlReviewAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewExportControlReviewAdapter(server ExportControlReviewServer) *ExportControlReviewAdapter {
+	return &ExportControlReviewAdapter{
+		server: server,
+	}
 }
-func (a *ExportControlReviewAdapter) readPostRequest(r *http.Request) (*ExportControlReviewPostServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *ExportControlReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchExportControlReviewRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchExportControlReviewRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchExportControlReviewRequest(w http.ResponseWriter, r *http.Request, server ExportControlReviewServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptExportControlReviewPostRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readExportControlReviewPostRequest reads the given HTTP requests and translates it
+// into an object of type ExportControlReviewPostServerRequest.
+func readExportControlReviewPostRequest(r *http.Request) (*ExportControlReviewPostServerRequest, error) {
 	var err error
 	result := new(ExportControlReviewPostServerRequest)
 	err = result.unmarshal(r.Body)
@@ -140,7 +167,10 @@ func (a *ExportControlReviewAdapter) readPostRequest(r *http.Request) (*ExportCo
 	}
 	return result, err
 }
-func (a *ExportControlReviewAdapter) writePostResponse(w http.ResponseWriter, r *ExportControlReviewPostServerResponse) error {
+
+// writeExportControlReviewPostResponse translates the given request object into an
+// HTTP response.
+func writeExportControlReviewPostResponse(w http.ResponseWriter, r *ExportControlReviewPostServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -149,47 +179,37 @@ func (a *ExportControlReviewAdapter) writePostResponse(w http.ResponseWriter, r 
 	}
 	return nil
 }
-func (a *ExportControlReviewAdapter) handlerPost(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readPostRequest(r)
+
+// adaptExportControlReviewPostRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptExportControlReviewPostRequest(w http.ResponseWriter, r *http.Request, server ExportControlReviewServer) {
+	request, err := readExportControlReviewPostRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(ExportControlReviewPostServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Post(r.Context(), request, response)
+	err = server.Post(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Post: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writePostResponse(w, response)
+	err = writeExportControlReviewPostResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *ExportControlReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

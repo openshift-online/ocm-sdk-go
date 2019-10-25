@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RoleServer represents the interface the manages the 'role' resource.
@@ -159,79 +159,110 @@ func (r *RoleUpdateServerResponse) Status(value int) *RoleUpdateServerResponse {
 	return r
 }
 
-// RoleAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RoleAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RoleServer
+// interface.
 type RoleAdapter struct {
 	server RoleServer
-	router *mux.Router
 }
 
-func NewRoleAdapter(server RoleServer, router *mux.Router) *RoleAdapter {
-	adapter := new(RoleAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	adapter.router.Methods(http.MethodPatch).Path("").HandlerFunc(adapter.handlerUpdate)
-	return adapter
+// NewRoleAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRoleAdapter(server RoleServer) *RoleAdapter {
+	return &RoleAdapter{
+		server: server,
+	}
 }
-func (a *RoleAdapter) readDeleteRequest(r *http.Request) (*RoleDeleteServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *RoleAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchRoleRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchRoleRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRoleRequest(w http.ResponseWriter, r *http.Request, server RoleServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodDelete:
+			adaptRoleDeleteRequest(w, r, server)
+		case http.MethodGet:
+			adaptRoleGetRequest(w, r, server)
+		case http.MethodPatch:
+			adaptRoleUpdateRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readRoleDeleteRequest reads the given HTTP requests and translates it
+// into an object of type RoleDeleteServerRequest.
+func readRoleDeleteRequest(r *http.Request) (*RoleDeleteServerRequest, error) {
 	var err error
 	result := new(RoleDeleteServerRequest)
 	return result, err
 }
-func (a *RoleAdapter) writeDeleteResponse(w http.ResponseWriter, r *RoleDeleteServerResponse) error {
+
+// writeRoleDeleteResponse translates the given request object into an
+// HTTP response.
+func writeRoleDeleteResponse(w http.ResponseWriter, r *RoleDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *RoleAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readDeleteRequest(r)
+
+// adaptRoleDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRoleDeleteRequest(w http.ResponseWriter, r *http.Request, server RoleServer) {
+	request, err := readRoleDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RoleDeleteServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Delete(r.Context(), request, response)
+	err = server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Delete: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeDeleteResponse(w, response)
+	err = writeRoleDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *RoleAdapter) readGetRequest(r *http.Request) (*RoleGetServerRequest, error) {
+
+// readRoleGetRequest reads the given HTTP requests and translates it
+// into an object of type RoleGetServerRequest.
+func readRoleGetRequest(r *http.Request) (*RoleGetServerRequest, error) {
 	var err error
 	result := new(RoleGetServerRequest)
 	return result, err
 }
-func (a *RoleAdapter) writeGetResponse(w http.ResponseWriter, r *RoleGetServerResponse) error {
+
+// writeRoleGetResponse translates the given request object into an
+// HTTP response.
+func writeRoleGetResponse(w http.ResponseWriter, r *RoleGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -240,48 +271,44 @@ func (a *RoleAdapter) writeGetResponse(w http.ResponseWriter, r *RoleGetServerRe
 	}
 	return nil
 }
-func (a *RoleAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptRoleGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRoleGetRequest(w http.ResponseWriter, r *http.Request, server RoleServer) {
+	request, err := readRoleGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RoleGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeRoleGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *RoleAdapter) readUpdateRequest(r *http.Request) (*RoleUpdateServerRequest, error) {
+
+// readRoleUpdateRequest reads the given HTTP requests and translates it
+// into an object of type RoleUpdateServerRequest.
+func readRoleUpdateRequest(r *http.Request) (*RoleUpdateServerRequest, error) {
 	var err error
 	result := new(RoleUpdateServerRequest)
 	err = result.unmarshal(r.Body)
@@ -290,52 +317,45 @@ func (a *RoleAdapter) readUpdateRequest(r *http.Request) (*RoleUpdateServerReque
 	}
 	return result, err
 }
-func (a *RoleAdapter) writeUpdateResponse(w http.ResponseWriter, r *RoleUpdateServerResponse) error {
+
+// writeRoleUpdateResponse translates the given request object into an
+// HTTP response.
+func writeRoleUpdateResponse(w http.ResponseWriter, r *RoleUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *RoleAdapter) handlerUpdate(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readUpdateRequest(r)
+
+// adaptRoleUpdateRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRoleUpdateRequest(w http.ResponseWriter, r *http.Request, server RoleServer) {
+	request, err := readRoleUpdateRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RoleUpdateServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Update(r.Context(), request, response)
+	err = server.Update(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Update: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeUpdateResponse(w, response)
+	err = writeRoleUpdateResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *RoleAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

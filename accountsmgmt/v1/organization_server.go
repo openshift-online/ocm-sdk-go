@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // OrganizationServer represents the interface the manages the 'organization' resource.
@@ -150,41 +150,64 @@ func (r *OrganizationUpdateServerResponse) Status(value int) *OrganizationUpdate
 	return r
 }
 
-// OrganizationAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// OrganizationAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the OrganizationServer
+// interface.
 type OrganizationAdapter struct {
 	server OrganizationServer
-	router *mux.Router
 }
 
-func NewOrganizationAdapter(server OrganizationServer, router *mux.Router) *OrganizationAdapter {
-	adapter := new(OrganizationAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/quota_summary").HandlerFunc(adapter.quotaSummaryHandler)
-	adapter.router.PathPrefix("/resource_quota").HandlerFunc(adapter.resourceQuotaHandler)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	adapter.router.Methods(http.MethodPatch).Path("").HandlerFunc(adapter.handlerUpdate)
-	return adapter
+// NewOrganizationAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewOrganizationAdapter(server OrganizationServer) *OrganizationAdapter {
+	return &OrganizationAdapter{
+		server: server,
+	}
 }
-func (a *OrganizationAdapter) quotaSummaryHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.QuotaSummary()
-	targetAdapter := NewQuotaSummaryAdapter(target, a.router.PathPrefix("/quota_summary").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *OrganizationAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchOrganizationRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *OrganizationAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.ResourceQuota()
-	targetAdapter := NewResourceQuotasAdapter(target, a.router.PathPrefix("/resource_quota").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// dispatchOrganizationRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchOrganizationRequest(w http.ResponseWriter, r *http.Request, server OrganizationServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptOrganizationGetRequest(w, r, server)
+		case http.MethodPatch:
+			adaptOrganizationUpdateRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		case "quota_summary":
+			target := server.QuotaSummary()
+			dispatchQuotaSummaryRequest(w, r, target, segments[1:])
+		case "resource_quota":
+			target := server.ResourceQuota()
+			dispatchResourceQuotasRequest(w, r, target, segments[1:])
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
 }
-func (a *OrganizationAdapter) readGetRequest(r *http.Request) (*OrganizationGetServerRequest, error) {
+
+// readOrganizationGetRequest reads the given HTTP requests and translates it
+// into an object of type OrganizationGetServerRequest.
+func readOrganizationGetRequest(r *http.Request) (*OrganizationGetServerRequest, error) {
 	var err error
 	result := new(OrganizationGetServerRequest)
 	return result, err
 }
-func (a *OrganizationAdapter) writeGetResponse(w http.ResponseWriter, r *OrganizationGetServerResponse) error {
+
+// writeOrganizationGetResponse translates the given request object into an
+// HTTP response.
+func writeOrganizationGetResponse(w http.ResponseWriter, r *OrganizationGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -193,48 +216,44 @@ func (a *OrganizationAdapter) writeGetResponse(w http.ResponseWriter, r *Organiz
 	}
 	return nil
 }
-func (a *OrganizationAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptOrganizationGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptOrganizationGetRequest(w http.ResponseWriter, r *http.Request, server OrganizationServer) {
+	request, err := readOrganizationGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(OrganizationGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeOrganizationGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *OrganizationAdapter) readUpdateRequest(r *http.Request) (*OrganizationUpdateServerRequest, error) {
+
+// readOrganizationUpdateRequest reads the given HTTP requests and translates it
+// into an object of type OrganizationUpdateServerRequest.
+func readOrganizationUpdateRequest(r *http.Request) (*OrganizationUpdateServerRequest, error) {
 	var err error
 	result := new(OrganizationUpdateServerRequest)
 	err = result.unmarshal(r.Body)
@@ -243,52 +262,45 @@ func (a *OrganizationAdapter) readUpdateRequest(r *http.Request) (*OrganizationU
 	}
 	return result, err
 }
-func (a *OrganizationAdapter) writeUpdateResponse(w http.ResponseWriter, r *OrganizationUpdateServerResponse) error {
+
+// writeOrganizationUpdateResponse translates the given request object into an
+// HTTP response.
+func writeOrganizationUpdateResponse(w http.ResponseWriter, r *OrganizationUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *OrganizationAdapter) handlerUpdate(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readUpdateRequest(r)
+
+// adaptOrganizationUpdateRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptOrganizationUpdateRequest(w http.ResponseWriter, r *http.Request, server OrganizationServer) {
+	request, err := readOrganizationUpdateRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(OrganizationUpdateServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Update(r.Context(), request, response)
+	err = server.Update(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Update: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeUpdateResponse(w, response)
+	err = writeOrganizationUpdateResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *OrganizationAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

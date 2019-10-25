@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RoleBindingServer represents the interface the manages the 'role_binding' resource.
@@ -98,78 +98,108 @@ func (r *RoleBindingGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// RoleBindingAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RoleBindingAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RoleBindingServer
+// interface.
 type RoleBindingAdapter struct {
 	server RoleBindingServer
-	router *mux.Router
 }
 
-func NewRoleBindingAdapter(server RoleBindingServer, router *mux.Router) *RoleBindingAdapter {
-	adapter := new(RoleBindingAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodDelete).Path("").HandlerFunc(adapter.handlerDelete)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewRoleBindingAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRoleBindingAdapter(server RoleBindingServer) *RoleBindingAdapter {
+	return &RoleBindingAdapter{
+		server: server,
+	}
 }
-func (a *RoleBindingAdapter) readDeleteRequest(r *http.Request) (*RoleBindingDeleteServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *RoleBindingAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchRoleBindingRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchRoleBindingRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRoleBindingRequest(w http.ResponseWriter, r *http.Request, server RoleBindingServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodDelete:
+			adaptRoleBindingDeleteRequest(w, r, server)
+		case http.MethodGet:
+			adaptRoleBindingGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readRoleBindingDeleteRequest reads the given HTTP requests and translates it
+// into an object of type RoleBindingDeleteServerRequest.
+func readRoleBindingDeleteRequest(r *http.Request) (*RoleBindingDeleteServerRequest, error) {
 	var err error
 	result := new(RoleBindingDeleteServerRequest)
 	return result, err
 }
-func (a *RoleBindingAdapter) writeDeleteResponse(w http.ResponseWriter, r *RoleBindingDeleteServerResponse) error {
+
+// writeRoleBindingDeleteResponse translates the given request object into an
+// HTTP response.
+func writeRoleBindingDeleteResponse(w http.ResponseWriter, r *RoleBindingDeleteServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	return nil
 }
-func (a *RoleBindingAdapter) handlerDelete(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readDeleteRequest(r)
+
+// adaptRoleBindingDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRoleBindingDeleteRequest(w http.ResponseWriter, r *http.Request, server RoleBindingServer) {
+	request, err := readRoleBindingDeleteRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RoleBindingDeleteServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Delete(r.Context(), request, response)
+	err = server.Delete(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Delete: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeDeleteResponse(w, response)
+	err = writeRoleBindingDeleteResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *RoleBindingAdapter) readGetRequest(r *http.Request) (*RoleBindingGetServerRequest, error) {
+
+// readRoleBindingGetRequest reads the given HTTP requests and translates it
+// into an object of type RoleBindingGetServerRequest.
+func readRoleBindingGetRequest(r *http.Request) (*RoleBindingGetServerRequest, error) {
 	var err error
 	result := new(RoleBindingGetServerRequest)
 	return result, err
 }
-func (a *RoleBindingAdapter) writeGetResponse(w http.ResponseWriter, r *RoleBindingGetServerResponse) error {
+
+// writeRoleBindingGetResponse translates the given request object into an
+// HTTP response.
+func writeRoleBindingGetResponse(w http.ResponseWriter, r *RoleBindingGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -178,47 +208,37 @@ func (a *RoleBindingAdapter) writeGetResponse(w http.ResponseWriter, r *RoleBind
 	}
 	return nil
 }
-func (a *RoleBindingAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptRoleBindingGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRoleBindingGetRequest(w http.ResponseWriter, r *http.Request, server RoleBindingServer) {
+	request, err := readRoleBindingGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RoleBindingGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeRoleBindingGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *RoleBindingAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

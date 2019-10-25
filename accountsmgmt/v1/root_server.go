@@ -22,7 +22,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RootServer represents the interface the manages the 'root' resource.
@@ -100,110 +101,78 @@ type RootServer interface {
 	Subscriptions() SubscriptionsServer
 }
 
-// RootAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RootAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RootServer
+// interface.
 type RootAdapter struct {
 	server RootServer
-	router *mux.Router
 }
 
-func NewRootAdapter(server RootServer, router *mux.Router) *RootAdapter {
-	adapter := new(RootAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/skus").HandlerFunc(adapter.skusHandler)
-	adapter.router.PathPrefix("/access_token").HandlerFunc(adapter.accessTokenHandler)
-	adapter.router.PathPrefix("/accounts").HandlerFunc(adapter.accountsHandler)
-	adapter.router.PathPrefix("/cluster_authorizations").HandlerFunc(adapter.clusterAuthorizationsHandler)
-	adapter.router.PathPrefix("/cluster_registrations").HandlerFunc(adapter.clusterRegistrationsHandler)
-	adapter.router.PathPrefix("/current_account").HandlerFunc(adapter.currentAccountHandler)
-	adapter.router.PathPrefix("/organizations").HandlerFunc(adapter.organizationsHandler)
-	adapter.router.PathPrefix("/permissions").HandlerFunc(adapter.permissionsHandler)
-	adapter.router.PathPrefix("/registries").HandlerFunc(adapter.registriesHandler)
-	adapter.router.PathPrefix("/registry_credentials").HandlerFunc(adapter.registryCredentialsHandler)
-	adapter.router.PathPrefix("/role_bindings").HandlerFunc(adapter.roleBindingsHandler)
-	adapter.router.PathPrefix("/roles").HandlerFunc(adapter.rolesHandler)
-	adapter.router.PathPrefix("/subscriptions").HandlerFunc(adapter.subscriptionsHandler)
-	return adapter
+// NewRootAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRootAdapter(server RootServer) *RootAdapter {
+	return &RootAdapter{
+		server: server,
+	}
 }
-func (a *RootAdapter) skusHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.SKUS()
-	targetAdapter := NewSKUSAdapter(target, a.router.PathPrefix("/skus").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) accessTokenHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.AccessToken()
-	targetAdapter := NewAccessTokenAdapter(target, a.router.PathPrefix("/access_token").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) accountsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Accounts()
-	targetAdapter := NewAccountsAdapter(target, a.router.PathPrefix("/accounts").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) clusterAuthorizationsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.ClusterAuthorizations()
-	targetAdapter := NewClusterAuthorizationsAdapter(target, a.router.PathPrefix("/cluster_authorizations").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) clusterRegistrationsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.ClusterRegistrations()
-	targetAdapter := NewClusterRegistrationsAdapter(target, a.router.PathPrefix("/cluster_registrations").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) currentAccountHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.CurrentAccount()
-	targetAdapter := NewCurrentAccountAdapter(target, a.router.PathPrefix("/current_account").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) organizationsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Organizations()
-	targetAdapter := NewOrganizationsAdapter(target, a.router.PathPrefix("/organizations").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) permissionsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Permissions()
-	targetAdapter := NewPermissionsAdapter(target, a.router.PathPrefix("/permissions").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) registriesHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Registries()
-	targetAdapter := NewRegistriesAdapter(target, a.router.PathPrefix("/registries").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) registryCredentialsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.RegistryCredentials()
-	targetAdapter := NewRegistryCredentialsAdapter(target, a.router.PathPrefix("/registry_credentials").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) roleBindingsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.RoleBindings()
-	targetAdapter := NewRoleBindingsAdapter(target, a.router.PathPrefix("/role_bindings").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) rolesHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Roles()
-	targetAdapter := NewRolesAdapter(target, a.router.PathPrefix("/roles").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
-func (a *RootAdapter) subscriptionsHandler(w http.ResponseWriter, r *http.Request) {
-	target := a.server.Subscriptions()
-	targetAdapter := NewSubscriptionsAdapter(target, a.router.PathPrefix("/subscriptions").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
-}
+
+// ServeHTTP is the implementation of the http.Handler interface.
 func (a *RootAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
+	dispatchRootRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchRootRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRootRequest(w http.ResponseWriter, r *http.Request, server RootServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		case "skus":
+			target := server.SKUS()
+			dispatchSKUSRequest(w, r, target, segments[1:])
+		case "access_token":
+			target := server.AccessToken()
+			dispatchAccessTokenRequest(w, r, target, segments[1:])
+		case "accounts":
+			target := server.Accounts()
+			dispatchAccountsRequest(w, r, target, segments[1:])
+		case "cluster_authorizations":
+			target := server.ClusterAuthorizations()
+			dispatchClusterAuthorizationsRequest(w, r, target, segments[1:])
+		case "cluster_registrations":
+			target := server.ClusterRegistrations()
+			dispatchClusterRegistrationsRequest(w, r, target, segments[1:])
+		case "current_account":
+			target := server.CurrentAccount()
+			dispatchCurrentAccountRequest(w, r, target, segments[1:])
+		case "organizations":
+			target := server.Organizations()
+			dispatchOrganizationsRequest(w, r, target, segments[1:])
+		case "permissions":
+			target := server.Permissions()
+			dispatchPermissionsRequest(w, r, target, segments[1:])
+		case "registries":
+			target := server.Registries()
+			dispatchRegistriesRequest(w, r, target, segments[1:])
+		case "registry_credentials":
+			target := server.RegistryCredentials()
+			dispatchRegistryCredentialsRequest(w, r, target, segments[1:])
+		case "role_bindings":
+			target := server.RoleBindings()
+			dispatchRoleBindingsRequest(w, r, target, segments[1:])
+		case "roles":
+			target := server.Roles()
+			dispatchRolesRequest(w, r, target, segments[1:])
+		case "subscriptions":
+			target := server.Subscriptions()
+			dispatchSubscriptionsRequest(w, r, target, segments[1:])
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
 }

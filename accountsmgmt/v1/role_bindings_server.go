@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -290,30 +289,51 @@ type roleBindingsListServerResponseData struct {
 	Total *int                "json:\"total,omitempty\""
 }
 
-// RoleBindingsAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// RoleBindingsAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the RoleBindingsServer
+// interface.
 type RoleBindingsAdapter struct {
 	server RoleBindingsServer
-	router *mux.Router
 }
 
-func NewRoleBindingsAdapter(server RoleBindingsServer, router *mux.Router) *RoleBindingsAdapter {
-	adapter := new(RoleBindingsAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.roleBindingHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewRoleBindingsAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewRoleBindingsAdapter(server RoleBindingsServer) *RoleBindingsAdapter {
+	return &RoleBindingsAdapter{
+		server: server,
+	}
 }
-func (a *RoleBindingsAdapter) roleBindingHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.RoleBinding(id)
-	targetAdapter := NewRoleBindingAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *RoleBindingsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchRoleBindingsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *RoleBindingsAdapter) readAddRequest(r *http.Request) (*RoleBindingsAddServerRequest, error) {
+
+// dispatchRoleBindingsRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchRoleBindingsRequest(w http.ResponseWriter, r *http.Request, server RoleBindingsServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptRoleBindingsAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptRoleBindingsListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.RoleBinding(segments[0])
+			dispatchRoleBindingRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readRoleBindingsAddRequest reads the given HTTP requests and translates it
+// into an object of type RoleBindingsAddServerRequest.
+func readRoleBindingsAddRequest(r *http.Request) (*RoleBindingsAddServerRequest, error) {
 	var err error
 	result := new(RoleBindingsAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +342,10 @@ func (a *RoleBindingsAdapter) readAddRequest(r *http.Request) (*RoleBindingsAddS
 	}
 	return result, err
 }
-func (a *RoleBindingsAdapter) writeAddResponse(w http.ResponseWriter, r *RoleBindingsAddServerResponse) error {
+
+// writeRoleBindingsAddResponse translates the given request object into an
+// HTTP response.
+func writeRoleBindingsAddResponse(w http.ResponseWriter, r *RoleBindingsAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,48 +354,44 @@ func (a *RoleBindingsAdapter) writeAddResponse(w http.ResponseWriter, r *RoleBin
 	}
 	return nil
 }
-func (a *RoleBindingsAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptRoleBindingsAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRoleBindingsAddRequest(w http.ResponseWriter, r *http.Request, server RoleBindingsServer) {
+	request, err := readRoleBindingsAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RoleBindingsAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writeRoleBindingsAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *RoleBindingsAdapter) readListRequest(r *http.Request) (*RoleBindingsListServerRequest, error) {
+
+// readRoleBindingsListRequest reads the given HTTP requests and translates it
+// into an object of type RoleBindingsListServerRequest.
+func readRoleBindingsListRequest(r *http.Request) (*RoleBindingsListServerRequest, error) {
 	var err error
 	result := new(RoleBindingsListServerRequest)
 	query := r.URL.Query()
@@ -390,7 +409,10 @@ func (a *RoleBindingsAdapter) readListRequest(r *http.Request) (*RoleBindingsLis
 	}
 	return result, err
 }
-func (a *RoleBindingsAdapter) writeListResponse(w http.ResponseWriter, r *RoleBindingsListServerResponse) error {
+
+// writeRoleBindingsListResponse translates the given request object into an
+// HTTP response.
+func writeRoleBindingsListResponse(w http.ResponseWriter, r *RoleBindingsListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -399,47 +421,37 @@ func (a *RoleBindingsAdapter) writeListResponse(w http.ResponseWriter, r *RoleBi
 	}
 	return nil
 }
-func (a *RoleBindingsAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptRoleBindingsListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptRoleBindingsListRequest(w http.ResponseWriter, r *http.Request, server RoleBindingsServer) {
+	request, err := readRoleBindingsListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(RoleBindingsListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeRoleBindingsListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *RoleBindingsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

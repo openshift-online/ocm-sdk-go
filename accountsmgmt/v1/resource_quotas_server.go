@@ -22,11 +22,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
@@ -290,30 +289,51 @@ type resourceQuotasListServerResponseData struct {
 	Total *int                  "json:\"total,omitempty\""
 }
 
-// ResourceQuotasAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// ResourceQuotasAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the ResourceQuotasServer
+// interface.
 type ResourceQuotasAdapter struct {
 	server ResourceQuotasServer
-	router *mux.Router
 }
 
-func NewResourceQuotasAdapter(server ResourceQuotasServer, router *mux.Router) *ResourceQuotasAdapter {
-	adapter := new(ResourceQuotasAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.PathPrefix("/{id}").HandlerFunc(adapter.resourceQuotaHandler)
-	adapter.router.Methods(http.MethodPost).Path("").HandlerFunc(adapter.handlerAdd)
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerList)
-	return adapter
+// NewResourceQuotasAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewResourceQuotasAdapter(server ResourceQuotasServer) *ResourceQuotasAdapter {
+	return &ResourceQuotasAdapter{
+		server: server,
+	}
 }
-func (a *ResourceQuotasAdapter) resourceQuotaHandler(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	target := a.server.ResourceQuota(id)
-	targetAdapter := NewResourceQuotaAdapter(target, a.router.PathPrefix("/{id}").Subrouter())
-	targetAdapter.ServeHTTP(w, r)
-	return
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *ResourceQuotasAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchResourceQuotasRequest(w, r, a.server, helpers.Segments(r.URL.Path))
 }
-func (a *ResourceQuotasAdapter) readAddRequest(r *http.Request) (*ResourceQuotasAddServerRequest, error) {
+
+// dispatchResourceQuotasRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchResourceQuotasRequest(w http.ResponseWriter, r *http.Request, server ResourceQuotasServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodPost:
+			adaptResourceQuotasAddRequest(w, r, server)
+		case http.MethodGet:
+			adaptResourceQuotasListRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			target := server.ResourceQuota(segments[0])
+			dispatchResourceQuotaRequest(w, r, target, segments[1:])
+		}
+	}
+}
+
+// readResourceQuotasAddRequest reads the given HTTP requests and translates it
+// into an object of type ResourceQuotasAddServerRequest.
+func readResourceQuotasAddRequest(r *http.Request) (*ResourceQuotasAddServerRequest, error) {
 	var err error
 	result := new(ResourceQuotasAddServerRequest)
 	err = result.unmarshal(r.Body)
@@ -322,7 +342,10 @@ func (a *ResourceQuotasAdapter) readAddRequest(r *http.Request) (*ResourceQuotas
 	}
 	return result, err
 }
-func (a *ResourceQuotasAdapter) writeAddResponse(w http.ResponseWriter, r *ResourceQuotasAddServerResponse) error {
+
+// writeResourceQuotasAddResponse translates the given request object into an
+// HTTP response.
+func writeResourceQuotasAddResponse(w http.ResponseWriter, r *ResourceQuotasAddServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -331,48 +354,44 @@ func (a *ResourceQuotasAdapter) writeAddResponse(w http.ResponseWriter, r *Resou
 	}
 	return nil
 }
-func (a *ResourceQuotasAdapter) handlerAdd(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readAddRequest(r)
+
+// adaptResourceQuotasAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptResourceQuotasAddRequest(w http.ResponseWriter, r *http.Request, server ResourceQuotasServer) {
+	request, err := readResourceQuotasAddRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(ResourceQuotasAddServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Add(r.Context(), request, response)
+	err = server.Add(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Add: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeAddResponse(w, response)
+	err = writeResourceQuotasAddResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
 }
-func (a *ResourceQuotasAdapter) readListRequest(r *http.Request) (*ResourceQuotasListServerRequest, error) {
+
+// readResourceQuotasListRequest reads the given HTTP requests and translates it
+// into an object of type ResourceQuotasListServerRequest.
+func readResourceQuotasListRequest(r *http.Request) (*ResourceQuotasListServerRequest, error) {
 	var err error
 	result := new(ResourceQuotasListServerRequest)
 	query := r.URL.Query()
@@ -390,7 +409,10 @@ func (a *ResourceQuotasAdapter) readListRequest(r *http.Request) (*ResourceQuota
 	}
 	return result, err
 }
-func (a *ResourceQuotasAdapter) writeListResponse(w http.ResponseWriter, r *ResourceQuotasListServerResponse) error {
+
+// writeResourceQuotasListResponse translates the given request object into an
+// HTTP response.
+func writeResourceQuotasListResponse(w http.ResponseWriter, r *ResourceQuotasListServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -399,47 +421,37 @@ func (a *ResourceQuotasAdapter) writeListResponse(w http.ResponseWriter, r *Reso
 	}
 	return nil
 }
-func (a *ResourceQuotasAdapter) handlerList(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readListRequest(r)
+
+// adaptResourceQuotasListRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptResourceQuotasListRequest(w http.ResponseWriter, r *http.Request, server ResourceQuotasServer) {
+	request, err := readResourceQuotasListRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(ResourceQuotasListServerResponse)
 	response.status = http.StatusOK
-	err = a.server.List(r.Context(), request, response)
+	err = server.List(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method List: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeListResponse(w, response)
+	err = writeResourceQuotasListResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *ResourceQuotasAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }

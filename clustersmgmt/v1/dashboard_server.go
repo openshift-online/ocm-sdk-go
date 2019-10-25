@@ -22,12 +22,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // DashboardServer represents the interface the manages the 'dashboard' resource.
@@ -77,26 +77,56 @@ func (r *DashboardGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// DashboardAdapter represents the structs that adapts Requests and Response to internal
-// structs.
+// DashboardAdapter is an HTTP handler that knows how to translate HTTP requests
+// into calls to the methods of an object that implements the DashboardServer
+// interface.
 type DashboardAdapter struct {
 	server DashboardServer
-	router *mux.Router
 }
 
-func NewDashboardAdapter(server DashboardServer, router *mux.Router) *DashboardAdapter {
-	adapter := new(DashboardAdapter)
-	adapter.server = server
-	adapter.router = router
-	adapter.router.Methods(http.MethodGet).Path("").HandlerFunc(adapter.handlerGet)
-	return adapter
+// NewDashboardAdapter creates a new adapter that will translate HTTP requests
+// into calls to the given server.
+func NewDashboardAdapter(server DashboardServer) *DashboardAdapter {
+	return &DashboardAdapter{
+		server: server,
+	}
 }
-func (a *DashboardAdapter) readGetRequest(r *http.Request) (*DashboardGetServerRequest, error) {
+
+// ServeHTTP is the implementation of the http.Handler interface.
+func (a *DashboardAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dispatchDashboardRequest(w, r, a.server, helpers.Segments(r.URL.Path))
+}
+
+// dispatchDashboardRequest navigates the servers tree rooted at the given server
+// till it finds one that matches the given set of path segments, and then invokes
+// the corresponding server.
+func dispatchDashboardRequest(w http.ResponseWriter, r *http.Request, server DashboardServer, segments []string) {
+	if len(segments) == 0 {
+		switch r.Method {
+		case http.MethodGet:
+			adaptDashboardGetRequest(w, r, server)
+		default:
+			errors.SendMethodNotSupported(w, r)
+		}
+	} else {
+		switch segments[0] {
+		default:
+			errors.SendNotFound(w, r)
+		}
+	}
+}
+
+// readDashboardGetRequest reads the given HTTP requests and translates it
+// into an object of type DashboardGetServerRequest.
+func readDashboardGetRequest(r *http.Request) (*DashboardGetServerRequest, error) {
 	var err error
 	result := new(DashboardGetServerRequest)
 	return result, err
 }
-func (a *DashboardAdapter) writeGetResponse(w http.ResponseWriter, r *DashboardGetServerResponse) error {
+
+// writeDashboardGetResponse translates the given request object into an
+// HTTP response.
+func writeDashboardGetResponse(w http.ResponseWriter, r *DashboardGetServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
 	err := r.marshal(w)
@@ -105,47 +135,37 @@ func (a *DashboardAdapter) writeGetResponse(w http.ResponseWriter, r *DashboardG
 	}
 	return nil
 }
-func (a *DashboardAdapter) handlerGet(w http.ResponseWriter, r *http.Request) {
-	request, err := a.readGetRequest(r)
+
+// adaptDashboardGetRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptDashboardGetRequest(w http.ResponseWriter, r *http.Request, server DashboardServer) {
+	request, err := readDashboardGetRequest(r)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to read request from client: %v",
-			err,
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
 		return
 	}
 	response := new(DashboardGetServerResponse)
 	response.status = http.StatusOK
-	err = a.server.Get(r.Context(), request, response)
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to run method Get: %v",
-			err,
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		errors.SendInternalServerError(w, r)
+		return
 	}
-	err = a.writeGetResponse(w, response)
+	err = writeDashboardGetResponse(w, response)
 	if err != nil {
-		reason := fmt.Sprintf(
-			"An error occurred while trying to write response for client: %v",
-			err,
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
 		)
-		body, _ := errors.NewError().
-			Reason(reason).
-			ID("500").
-			Build()
-		errors.SendError(w, r, body)
+		return
 	}
-}
-func (a *DashboardAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	a.router.ServeHTTP(w, r)
 }
