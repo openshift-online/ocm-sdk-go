@@ -3,6 +3,18 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.48 Oct 27 2019
+
+- Update to model 0.0.16:
+** Added `ResourceReview` resource to the authorizations service.
+
+- Update to metamodel 0.0.11:
+** Improve parsing of initialisms.
+** Fix the method not allowed code.
+** Send not found when server returns `nil` target.
+** Generate service and version servers.
+** Don't generate files with execution permission.
+
 == 0.1.47 Oct 25 2019
 
 - Update to metamodel 0.0.10:
