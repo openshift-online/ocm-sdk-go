@@ -338,30 +338,10 @@ type rolesListServerResponseData struct {
 	Total *int         "json:\"total,omitempty\""
 }
 
-// RolesAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the RolesServer
-// interface.
-type RolesAdapter struct {
-	server RolesServer
-}
-
-// NewRolesAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewRolesAdapter(server RolesServer) *RolesAdapter {
-	return &RolesAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *RolesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchRolesRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchRolesRequest navigates the servers tree rooted at the given server
+// dispatchRoles navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchRolesRequest(w http.ResponseWriter, r *http.Request, server RolesServer, segments []string) {
+func dispatchRoles(w http.ResponseWriter, r *http.Request, server RolesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -369,13 +349,18 @@ func dispatchRolesRequest(w http.ResponseWriter, r *http.Request, server RolesSe
 		case http.MethodGet:
 			adaptRolesListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Role(segments[0])
-			dispatchRoleRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchRole(w, r, target, segments[1:])
 		}
 	}
 }

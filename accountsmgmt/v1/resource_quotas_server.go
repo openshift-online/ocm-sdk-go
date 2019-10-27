@@ -289,30 +289,10 @@ type resourceQuotasListServerResponseData struct {
 	Total *int                  "json:\"total,omitempty\""
 }
 
-// ResourceQuotasAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the ResourceQuotasServer
-// interface.
-type ResourceQuotasAdapter struct {
-	server ResourceQuotasServer
-}
-
-// NewResourceQuotasAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewResourceQuotasAdapter(server ResourceQuotasServer) *ResourceQuotasAdapter {
-	return &ResourceQuotasAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *ResourceQuotasAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchResourceQuotasRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchResourceQuotasRequest navigates the servers tree rooted at the given server
+// dispatchResourceQuotas navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchResourceQuotasRequest(w http.ResponseWriter, r *http.Request, server ResourceQuotasServer, segments []string) {
+func dispatchResourceQuotas(w http.ResponseWriter, r *http.Request, server ResourceQuotasServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -320,13 +300,18 @@ func dispatchResourceQuotasRequest(w http.ResponseWriter, r *http.Request, serve
 		case http.MethodGet:
 			adaptResourceQuotasListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.ResourceQuota(segments[0])
-			dispatchResourceQuotaRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchResourceQuota(w, r, target, segments[1:])
 		}
 	}
 }

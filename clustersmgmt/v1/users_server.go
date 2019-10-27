@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // UsersServer represents the interface the manages the 'users' resource.
@@ -205,30 +204,10 @@ type usersListServerResponseData struct {
 	Total *int         "json:\"total,omitempty\""
 }
 
-// UsersAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the UsersServer
-// interface.
-type UsersAdapter struct {
-	server UsersServer
-}
-
-// NewUsersAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewUsersAdapter(server UsersServer) *UsersAdapter {
-	return &UsersAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *UsersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchUsersRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchUsersRequest navigates the servers tree rooted at the given server
+// dispatchUsers navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchUsersRequest(w http.ResponseWriter, r *http.Request, server UsersServer, segments []string) {
+func dispatchUsers(w http.ResponseWriter, r *http.Request, server UsersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -236,13 +215,18 @@ func dispatchUsersRequest(w http.ResponseWriter, r *http.Request, server UsersSe
 		case http.MethodGet:
 			adaptUsersListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.User(segments[0])
-			dispatchUserRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchUser(w, r, target, segments[1:])
 		}
 	}
 }

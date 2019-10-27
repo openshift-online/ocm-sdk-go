@@ -289,30 +289,10 @@ type permissionsListServerResponseData struct {
 	Total *int               "json:\"total,omitempty\""
 }
 
-// PermissionsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the PermissionsServer
-// interface.
-type PermissionsAdapter struct {
-	server PermissionsServer
-}
-
-// NewPermissionsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewPermissionsAdapter(server PermissionsServer) *PermissionsAdapter {
-	return &PermissionsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *PermissionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchPermissionsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchPermissionsRequest navigates the servers tree rooted at the given server
+// dispatchPermissions navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchPermissionsRequest(w http.ResponseWriter, r *http.Request, server PermissionsServer, segments []string) {
+func dispatchPermissions(w http.ResponseWriter, r *http.Request, server PermissionsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -320,13 +300,18 @@ func dispatchPermissionsRequest(w http.ResponseWriter, r *http.Request, server P
 		case http.MethodGet:
 			adaptPermissionsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Permission(segments[0])
-			dispatchPermissionRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchPermission(w, r, target, segments[1:])
 		}
 	}
 }

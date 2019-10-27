@@ -302,42 +302,27 @@ type subscriptionsListServerResponseData struct {
 	Total *int                 "json:\"total,omitempty\""
 }
 
-// SubscriptionsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the SubscriptionsServer
-// interface.
-type SubscriptionsAdapter struct {
-	server SubscriptionsServer
-}
-
-// NewSubscriptionsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewSubscriptionsAdapter(server SubscriptionsServer) *SubscriptionsAdapter {
-	return &SubscriptionsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *SubscriptionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchSubscriptionsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchSubscriptionsRequest navigates the servers tree rooted at the given server
+// dispatchSubscriptions navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchSubscriptionsRequest(w http.ResponseWriter, r *http.Request, server SubscriptionsServer, segments []string) {
+func dispatchSubscriptions(w http.ResponseWriter, r *http.Request, server SubscriptionsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptSubscriptionsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Subscription(segments[0])
-			dispatchSubscriptionRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchSubscription(w, r, target, segments[1:])
 		}
 	}
 }

@@ -289,30 +289,10 @@ type registryCredentialsListServerResponseData struct {
 	Total *int                       "json:\"total,omitempty\""
 }
 
-// RegistryCredentialsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the RegistryCredentialsServer
-// interface.
-type RegistryCredentialsAdapter struct {
-	server RegistryCredentialsServer
-}
-
-// NewRegistryCredentialsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewRegistryCredentialsAdapter(server RegistryCredentialsServer) *RegistryCredentialsAdapter {
-	return &RegistryCredentialsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *RegistryCredentialsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchRegistryCredentialsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchRegistryCredentialsRequest navigates the servers tree rooted at the given server
+// dispatchRegistryCredentials navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchRegistryCredentialsRequest(w http.ResponseWriter, r *http.Request, server RegistryCredentialsServer, segments []string) {
+func dispatchRegistryCredentials(w http.ResponseWriter, r *http.Request, server RegistryCredentialsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -320,13 +300,18 @@ func dispatchRegistryCredentialsRequest(w http.ResponseWriter, r *http.Request, 
 		case http.MethodGet:
 			adaptRegistryCredentialsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.RegistryCredential(segments[0])
-			dispatchRegistryCredentialRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchRegistryCredential(w, r, target, segments[1:])
 		}
 	}
 }

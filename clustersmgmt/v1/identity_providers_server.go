@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // IdentityProvidersServer represents the interface the manages the 'identity_providers' resource.
@@ -205,30 +204,10 @@ type identityProvidersListServerResponseData struct {
 	Total *int                     "json:\"total,omitempty\""
 }
 
-// IdentityProvidersAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the IdentityProvidersServer
-// interface.
-type IdentityProvidersAdapter struct {
-	server IdentityProvidersServer
-}
-
-// NewIdentityProvidersAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewIdentityProvidersAdapter(server IdentityProvidersServer) *IdentityProvidersAdapter {
-	return &IdentityProvidersAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *IdentityProvidersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchIdentityProvidersRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchIdentityProvidersRequest navigates the servers tree rooted at the given server
+// dispatchIdentityProviders navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchIdentityProvidersRequest(w http.ResponseWriter, r *http.Request, server IdentityProvidersServer, segments []string) {
+func dispatchIdentityProviders(w http.ResponseWriter, r *http.Request, server IdentityProvidersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -236,13 +215,18 @@ func dispatchIdentityProvidersRequest(w http.ResponseWriter, r *http.Request, se
 		case http.MethodGet:
 			adaptIdentityProvidersListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.IdentityProvider(segments[0])
-			dispatchIdentityProviderRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchIdentityProvider(w, r, target, segments[1:])
 		}
 	}
 }

@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // SubscriptionServer represents the interface the manages the 'subscription' resource.
@@ -98,30 +97,10 @@ func (r *SubscriptionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// SubscriptionAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the SubscriptionServer
-// interface.
-type SubscriptionAdapter struct {
-	server SubscriptionServer
-}
-
-// NewSubscriptionAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewSubscriptionAdapter(server SubscriptionServer) *SubscriptionAdapter {
-	return &SubscriptionAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *SubscriptionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchSubscriptionRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchSubscriptionRequest navigates the servers tree rooted at the given server
+// dispatchSubscription navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchSubscriptionRequest(w http.ResponseWriter, r *http.Request, server SubscriptionServer, segments []string) {
+func dispatchSubscription(w http.ResponseWriter, r *http.Request, server SubscriptionServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodDelete:
@@ -129,12 +108,14 @@ func dispatchSubscriptionRequest(w http.ResponseWriter, r *http.Request, server 
 		case http.MethodGet:
 			adaptSubscriptionGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

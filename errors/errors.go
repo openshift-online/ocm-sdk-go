@@ -324,14 +324,14 @@ func SendNotFound(w http.ResponseWriter, r *http.Request) {
 	SendError(w, r, body)
 }
 
-// SendMethodNotSupported sends a generic 409 error.
-func SendMethodNotSupported(w http.ResponseWriter, r *http.Request) {
+// SendMethodNotAllowed sends a generic 405 error.
+func SendMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 	reason := fmt.Sprintf(
 		"Method '%s' isn't supported for path '%s''",
 		r.Method, r.URL.Path,
 	)
 	body, err := NewError().
-		ID("409").
+		ID("405").
 		Reason(reason).
 		Build()
 	if err != nil {

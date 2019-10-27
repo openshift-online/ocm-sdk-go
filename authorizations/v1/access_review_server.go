@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // AccessReviewServer represents the interface the manages the 'access_review' resource.
@@ -117,41 +116,23 @@ func (r *AccessReviewPostServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// AccessReviewAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the AccessReviewServer
-// interface.
-type AccessReviewAdapter struct {
-	server AccessReviewServer
-}
-
-// NewAccessReviewAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewAccessReviewAdapter(server AccessReviewServer) *AccessReviewAdapter {
-	return &AccessReviewAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *AccessReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchAccessReviewRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchAccessReviewRequest navigates the servers tree rooted at the given server
+// dispatchAccessReview navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchAccessReviewRequest(w http.ResponseWriter, r *http.Request, server AccessReviewServer, segments []string) {
+func dispatchAccessReview(w http.ResponseWriter, r *http.Request, server AccessReviewServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
 			adaptAccessReviewPostRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

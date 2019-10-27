@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RegistryCredentialServer represents the interface the manages the 'registry_credential' resource.
@@ -77,41 +76,23 @@ func (r *RegistryCredentialGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// RegistryCredentialAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the RegistryCredentialServer
-// interface.
-type RegistryCredentialAdapter struct {
-	server RegistryCredentialServer
-}
-
-// NewRegistryCredentialAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewRegistryCredentialAdapter(server RegistryCredentialServer) *RegistryCredentialAdapter {
-	return &RegistryCredentialAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *RegistryCredentialAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchRegistryCredentialRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchRegistryCredentialRequest navigates the servers tree rooted at the given server
+// dispatchRegistryCredential navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchRegistryCredentialRequest(w http.ResponseWriter, r *http.Request, server RegistryCredentialServer, segments []string) {
+func dispatchRegistryCredential(w http.ResponseWriter, r *http.Request, server RegistryCredentialServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptRegistryCredentialGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

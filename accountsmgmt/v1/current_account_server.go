@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // CurrentAccountServer represents the interface the manages the 'current_account' resource.
@@ -77,41 +76,23 @@ func (r *CurrentAccountGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CurrentAccountAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the CurrentAccountServer
-// interface.
-type CurrentAccountAdapter struct {
-	server CurrentAccountServer
-}
-
-// NewCurrentAccountAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewCurrentAccountAdapter(server CurrentAccountServer) *CurrentAccountAdapter {
-	return &CurrentAccountAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *CurrentAccountAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchCurrentAccountRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchCurrentAccountRequest navigates the servers tree rooted at the given server
+// dispatchCurrentAccount navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchCurrentAccountRequest(w http.ResponseWriter, r *http.Request, server CurrentAccountServer, segments []string) {
+func dispatchCurrentAccount(w http.ResponseWriter, r *http.Request, server CurrentAccountServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptCurrentAccountGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

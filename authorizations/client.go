@@ -44,8 +44,8 @@ func NewClient(transport http.RoundTripper, path string, metric string) *Client 
 }
 
 // V1 returns a reference to a client for version 'v1'.
-func (c *Client) V1() *v1.RootClient {
-	return v1.NewRootClient(
+func (c *Client) V1() *v1.Client {
+	return v1.NewClient(
 		c.transport,
 		path.Join(c.path, "v1"),
 		path.Join(c.metric, "v1"),

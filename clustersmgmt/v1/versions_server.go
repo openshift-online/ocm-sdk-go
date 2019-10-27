@@ -304,42 +304,27 @@ type versionsListServerResponseData struct {
 	Total *int            "json:\"total,omitempty\""
 }
 
-// VersionsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the VersionsServer
-// interface.
-type VersionsAdapter struct {
-	server VersionsServer
-}
-
-// NewVersionsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewVersionsAdapter(server VersionsServer) *VersionsAdapter {
-	return &VersionsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *VersionsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchVersionsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchVersionsRequest navigates the servers tree rooted at the given server
+// dispatchVersions navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchVersionsRequest(w http.ResponseWriter, r *http.Request, server VersionsServer, segments []string) {
+func dispatchVersions(w http.ResponseWriter, r *http.Request, server VersionsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptVersionsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Version(segments[0])
-			dispatchVersionRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchVersion(w, r, target, segments[1:])
 		}
 	}
 }

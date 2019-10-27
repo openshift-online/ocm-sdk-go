@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // SKUServer represents the interface the manages the 'SKU' resource.
@@ -77,41 +76,23 @@ func (r *SKUGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// SKUAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the SKUServer
-// interface.
-type SKUAdapter struct {
-	server SKUServer
-}
-
-// NewSKUAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewSKUAdapter(server SKUServer) *SKUAdapter {
-	return &SKUAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *SKUAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchSKURequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchSKURequest navigates the servers tree rooted at the given server
+// dispatchSKU navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchSKURequest(w http.ResponseWriter, r *http.Request, server SKUServer, segments []string) {
+func dispatchSKU(w http.ResponseWriter, r *http.Request, server SKUServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptSKUGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

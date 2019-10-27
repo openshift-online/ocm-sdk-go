@@ -252,41 +252,23 @@ type quotaSummaryListServerResponseData struct {
 	Total *int                 "json:\"total,omitempty\""
 }
 
-// QuotaSummaryAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the QuotaSummaryServer
-// interface.
-type QuotaSummaryAdapter struct {
-	server QuotaSummaryServer
-}
-
-// NewQuotaSummaryAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewQuotaSummaryAdapter(server QuotaSummaryServer) *QuotaSummaryAdapter {
-	return &QuotaSummaryAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *QuotaSummaryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchQuotaSummaryRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchQuotaSummaryRequest navigates the servers tree rooted at the given server
+// dispatchQuotaSummary navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchQuotaSummaryRequest(w http.ResponseWriter, r *http.Request, server QuotaSummaryServer, segments []string) {
+func dispatchQuotaSummary(w http.ResponseWriter, r *http.Request, server QuotaSummaryServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptQuotaSummaryListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

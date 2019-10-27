@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // PermissionServer represents the interface the manages the 'permission' resource.
@@ -98,30 +97,10 @@ func (r *PermissionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// PermissionAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the PermissionServer
-// interface.
-type PermissionAdapter struct {
-	server PermissionServer
-}
-
-// NewPermissionAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewPermissionAdapter(server PermissionServer) *PermissionAdapter {
-	return &PermissionAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *PermissionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchPermissionRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchPermissionRequest navigates the servers tree rooted at the given server
+// dispatchPermission navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchPermissionRequest(w http.ResponseWriter, r *http.Request, server PermissionServer, segments []string) {
+func dispatchPermission(w http.ResponseWriter, r *http.Request, server PermissionServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodDelete:
@@ -129,12 +108,14 @@ func dispatchPermissionRequest(w http.ResponseWriter, r *http.Request, server Pe
 		case http.MethodGet:
 			adaptPermissionGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

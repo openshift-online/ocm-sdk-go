@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // GroupsServer represents the interface the manages the 'groups' resource.
@@ -122,42 +121,27 @@ type groupsListServerResponseData struct {
 	Total *int          "json:\"total,omitempty\""
 }
 
-// GroupsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the GroupsServer
-// interface.
-type GroupsAdapter struct {
-	server GroupsServer
-}
-
-// NewGroupsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewGroupsAdapter(server GroupsServer) *GroupsAdapter {
-	return &GroupsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *GroupsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchGroupsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchGroupsRequest navigates the servers tree rooted at the given server
+// dispatchGroups navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchGroupsRequest(w http.ResponseWriter, r *http.Request, server GroupsServer, segments []string) {
+func dispatchGroups(w http.ResponseWriter, r *http.Request, server GroupsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptGroupsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Group(segments[0])
-			dispatchGroupRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchGroup(w, r, target, segments[1:])
 		}
 	}
 }

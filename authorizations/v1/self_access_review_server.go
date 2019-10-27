@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // SelfAccessReviewServer represents the interface the manages the 'self_access_review' resource.
@@ -117,41 +116,23 @@ func (r *SelfAccessReviewPostServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// SelfAccessReviewAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the SelfAccessReviewServer
-// interface.
-type SelfAccessReviewAdapter struct {
-	server SelfAccessReviewServer
-}
-
-// NewSelfAccessReviewAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewSelfAccessReviewAdapter(server SelfAccessReviewServer) *SelfAccessReviewAdapter {
-	return &SelfAccessReviewAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *SelfAccessReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchSelfAccessReviewRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchSelfAccessReviewRequest navigates the servers tree rooted at the given server
+// dispatchSelfAccessReview navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchSelfAccessReviewRequest(w http.ResponseWriter, r *http.Request, server SelfAccessReviewServer, segments []string) {
+func dispatchSelfAccessReview(w http.ResponseWriter, r *http.Request, server SelfAccessReviewServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
 			adaptSelfAccessReviewPostRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

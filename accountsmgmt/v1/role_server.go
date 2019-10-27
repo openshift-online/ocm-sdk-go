@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RoleServer represents the interface the manages the 'role' resource.
@@ -159,30 +158,10 @@ func (r *RoleUpdateServerResponse) Status(value int) *RoleUpdateServerResponse {
 	return r
 }
 
-// RoleAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the RoleServer
-// interface.
-type RoleAdapter struct {
-	server RoleServer
-}
-
-// NewRoleAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewRoleAdapter(server RoleServer) *RoleAdapter {
-	return &RoleAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *RoleAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchRoleRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchRoleRequest navigates the servers tree rooted at the given server
+// dispatchRole navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchRoleRequest(w http.ResponseWriter, r *http.Request, server RoleServer, segments []string) {
+func dispatchRole(w http.ResponseWriter, r *http.Request, server RoleServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodDelete:
@@ -192,12 +171,14 @@ func dispatchRoleRequest(w http.ResponseWriter, r *http.Request, server RoleServ
 		case http.MethodPatch:
 			adaptRoleUpdateRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

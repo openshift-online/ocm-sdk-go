@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ExportControlReviewServer represents the interface the manages the 'export_control_review' resource.
@@ -117,41 +116,23 @@ func (r *ExportControlReviewPostServerResponse) marshal(writer io.Writer) error 
 	return err
 }
 
-// ExportControlReviewAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the ExportControlReviewServer
-// interface.
-type ExportControlReviewAdapter struct {
-	server ExportControlReviewServer
-}
-
-// NewExportControlReviewAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewExportControlReviewAdapter(server ExportControlReviewServer) *ExportControlReviewAdapter {
-	return &ExportControlReviewAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *ExportControlReviewAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchExportControlReviewRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchExportControlReviewRequest navigates the servers tree rooted at the given server
+// dispatchExportControlReview navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchExportControlReviewRequest(w http.ResponseWriter, r *http.Request, server ExportControlReviewServer, segments []string) {
+func dispatchExportControlReview(w http.ResponseWriter, r *http.Request, server ExportControlReviewServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
 			adaptExportControlReviewPostRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

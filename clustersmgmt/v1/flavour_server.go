@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // FlavourServer represents the interface the manages the 'flavour' resource.
@@ -77,41 +76,23 @@ func (r *FlavourGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// FlavourAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the FlavourServer
-// interface.
-type FlavourAdapter struct {
-	server FlavourServer
-}
-
-// NewFlavourAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewFlavourAdapter(server FlavourServer) *FlavourAdapter {
-	return &FlavourAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *FlavourAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchFlavourRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchFlavourRequest navigates the servers tree rooted at the given server
+// dispatchFlavour navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchFlavourRequest(w http.ResponseWriter, r *http.Request, server FlavourServer, segments []string) {
+func dispatchFlavour(w http.ResponseWriter, r *http.Request, server FlavourServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptFlavourGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

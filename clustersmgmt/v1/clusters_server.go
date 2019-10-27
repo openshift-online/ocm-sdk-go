@@ -391,30 +391,10 @@ type clustersListServerResponseData struct {
 	Total *int            "json:\"total,omitempty\""
 }
 
-// ClustersAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the ClustersServer
-// interface.
-type ClustersAdapter struct {
-	server ClustersServer
-}
-
-// NewClustersAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewClustersAdapter(server ClustersServer) *ClustersAdapter {
-	return &ClustersAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *ClustersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchClustersRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchClustersRequest navigates the servers tree rooted at the given server
+// dispatchClusters navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchClustersRequest(w http.ResponseWriter, r *http.Request, server ClustersServer, segments []string) {
+func dispatchClusters(w http.ResponseWriter, r *http.Request, server ClustersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -422,13 +402,18 @@ func dispatchClustersRequest(w http.ResponseWriter, r *http.Request, server Clus
 		case http.MethodGet:
 			adaptClustersListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Cluster(segments[0])
-			dispatchClusterRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchCluster(w, r, target, segments[1:])
 		}
 	}
 }

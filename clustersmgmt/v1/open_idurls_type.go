@@ -19,7 +19,7 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIDURLs represents the values of the 'open_IDUR_ls' type.
+// OpenIDURLs represents the values of the 'open_IDURLs' type.
 //
 // _OpenID_ identity provider URLs.
 type OpenIDURLs struct {
@@ -105,7 +105,7 @@ func (o *OpenIDURLs) GetUserInfo() (value string, ok bool) {
 	return
 }
 
-// OpenIDURLsList is a list of values of the 'open_IDUR_ls' type.
+// OpenIDURLsList is a list of values of the 'open_IDURLs' type.
 type OpenIDURLsList struct {
 	items []*OpenIDURLs
 }

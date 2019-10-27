@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // OrganizationServer represents the interface the manages the 'organization' resource.
@@ -150,30 +149,10 @@ func (r *OrganizationUpdateServerResponse) Status(value int) *OrganizationUpdate
 	return r
 }
 
-// OrganizationAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the OrganizationServer
-// interface.
-type OrganizationAdapter struct {
-	server OrganizationServer
-}
-
-// NewOrganizationAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewOrganizationAdapter(server OrganizationServer) *OrganizationAdapter {
-	return &OrganizationAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *OrganizationAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchOrganizationRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchOrganizationRequest navigates the servers tree rooted at the given server
+// dispatchOrganization navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchOrganizationRequest(w http.ResponseWriter, r *http.Request, server OrganizationServer, segments []string) {
+func dispatchOrganization(w http.ResponseWriter, r *http.Request, server OrganizationServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
@@ -181,18 +160,28 @@ func dispatchOrganizationRequest(w http.ResponseWriter, r *http.Request, server 
 		case http.MethodPatch:
 			adaptOrganizationUpdateRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		case "quota_summary":
 			target := server.QuotaSummary()
-			dispatchQuotaSummaryRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchQuotaSummary(w, r, target, segments[1:])
 		case "resource_quota":
 			target := server.ResourceQuota()
-			dispatchResourceQuotasRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchResourceQuotas(w, r, target, segments[1:])
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }
