@@ -289,30 +289,10 @@ type roleBindingsListServerResponseData struct {
 	Total *int                "json:\"total,omitempty\""
 }
 
-// RoleBindingsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the RoleBindingsServer
-// interface.
-type RoleBindingsAdapter struct {
-	server RoleBindingsServer
-}
-
-// NewRoleBindingsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewRoleBindingsAdapter(server RoleBindingsServer) *RoleBindingsAdapter {
-	return &RoleBindingsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *RoleBindingsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchRoleBindingsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchRoleBindingsRequest navigates the servers tree rooted at the given server
+// dispatchRoleBindings navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchRoleBindingsRequest(w http.ResponseWriter, r *http.Request, server RoleBindingsServer, segments []string) {
+func dispatchRoleBindings(w http.ResponseWriter, r *http.Request, server RoleBindingsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -320,13 +300,18 @@ func dispatchRoleBindingsRequest(w http.ResponseWriter, r *http.Request, server 
 		case http.MethodGet:
 			adaptRoleBindingsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.RoleBinding(segments[0])
-			dispatchRoleBindingRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchRoleBinding(w, r, target, segments[1:])
 		}
 	}
 }

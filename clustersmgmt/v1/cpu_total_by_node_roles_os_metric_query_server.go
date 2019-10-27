@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // CPUTotalByNodeRolesOSMetricQueryServer represents the interface the manages the 'CPU_total_by_node_roles_OS_metric_query' resource.
@@ -77,41 +76,23 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) marshal(writer io.Wr
 	return err
 }
 
-// CPUTotalByNodeRolesOSMetricQueryAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the CPUTotalByNodeRolesOSMetricQueryServer
-// interface.
-type CPUTotalByNodeRolesOSMetricQueryAdapter struct {
-	server CPUTotalByNodeRolesOSMetricQueryServer
-}
-
-// NewCPUTotalByNodeRolesOSMetricQueryAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewCPUTotalByNodeRolesOSMetricQueryAdapter(server CPUTotalByNodeRolesOSMetricQueryServer) *CPUTotalByNodeRolesOSMetricQueryAdapter {
-	return &CPUTotalByNodeRolesOSMetricQueryAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *CPUTotalByNodeRolesOSMetricQueryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchCPUTotalByNodeRolesOSMetricQueryRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchCPUTotalByNodeRolesOSMetricQueryRequest navigates the servers tree rooted at the given server
+// dispatchCPUTotalByNodeRolesOSMetricQuery navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchCPUTotalByNodeRolesOSMetricQueryRequest(w http.ResponseWriter, r *http.Request, server CPUTotalByNodeRolesOSMetricQueryServer, segments []string) {
+func dispatchCPUTotalByNodeRolesOSMetricQuery(w http.ResponseWriter, r *http.Request, server CPUTotalByNodeRolesOSMetricQueryServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptCPUTotalByNodeRolesOSMetricQueryGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

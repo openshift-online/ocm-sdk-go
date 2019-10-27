@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // LogServer represents the interface the manages the 'log' resource.
@@ -77,41 +76,23 @@ func (r *LogGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// LogAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the LogServer
-// interface.
-type LogAdapter struct {
-	server LogServer
-}
-
-// NewLogAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewLogAdapter(server LogServer) *LogAdapter {
-	return &LogAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *LogAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchLogRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchLogRequest navigates the servers tree rooted at the given server
+// dispatchLog navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchLogRequest(w http.ResponseWriter, r *http.Request, server LogServer, segments []string) {
+func dispatchLog(w http.ResponseWriter, r *http.Request, server LogServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptLogGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

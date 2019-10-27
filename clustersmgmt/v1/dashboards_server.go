@@ -304,42 +304,27 @@ type dashboardsListServerResponseData struct {
 	Total *int              "json:\"total,omitempty\""
 }
 
-// DashboardsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the DashboardsServer
-// interface.
-type DashboardsAdapter struct {
-	server DashboardsServer
-}
-
-// NewDashboardsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewDashboardsAdapter(server DashboardsServer) *DashboardsAdapter {
-	return &DashboardsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *DashboardsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchDashboardsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchDashboardsRequest navigates the servers tree rooted at the given server
+// dispatchDashboards navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchDashboardsRequest(w http.ResponseWriter, r *http.Request, server DashboardsServer, segments []string) {
+func dispatchDashboards(w http.ResponseWriter, r *http.Request, server DashboardsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptDashboardsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Dashboard(segments[0])
-			dispatchDashboardRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchDashboard(w, r, target, segments[1:])
 		}
 	}
 }

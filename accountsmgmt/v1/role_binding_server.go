@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RoleBindingServer represents the interface the manages the 'role_binding' resource.
@@ -98,30 +97,10 @@ func (r *RoleBindingGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// RoleBindingAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the RoleBindingServer
-// interface.
-type RoleBindingAdapter struct {
-	server RoleBindingServer
-}
-
-// NewRoleBindingAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewRoleBindingAdapter(server RoleBindingServer) *RoleBindingAdapter {
-	return &RoleBindingAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *RoleBindingAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchRoleBindingRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchRoleBindingRequest navigates the servers tree rooted at the given server
+// dispatchRoleBinding navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchRoleBindingRequest(w http.ResponseWriter, r *http.Request, server RoleBindingServer, segments []string) {
+func dispatchRoleBinding(w http.ResponseWriter, r *http.Request, server RoleBindingServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodDelete:
@@ -129,12 +108,14 @@ func dispatchRoleBindingRequest(w http.ResponseWriter, r *http.Request, server R
 		case http.MethodGet:
 			adaptRoleBindingGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

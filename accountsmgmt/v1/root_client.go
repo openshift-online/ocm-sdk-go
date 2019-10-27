@@ -24,20 +24,20 @@ import (
 	"path"
 )
 
-// RootClient is the client of the 'root' resource.
+// Client is the client of the 'root' resource.
 //
 // Root of the tree of resources of the clusters management service.
-type RootClient struct {
+type Client struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewRootClient creates a new client for the 'root'
+// NewClient creates a new client for the 'root'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRootClient(transport http.RoundTripper, path string, metric string) *RootClient {
-	client := new(RootClient)
+func NewClient(transport http.RoundTripper, path string, metric string) *Client {
+	client := new(Client)
 	client.transport = transport
 	client.path = path
 	client.metric = metric
@@ -48,7 +48,7 @@ func NewRootClient(transport http.RoundTripper, path string, metric string) *Roo
 //
 // Reference to the resource that manages the collection of
 // SKUS
-func (c *RootClient) SKUS() *SKUSClient {
+func (c *Client) SKUS() *SKUSClient {
 	return NewSKUSClient(
 		c.transport,
 		path.Join(c.path, "skus"),
@@ -59,7 +59,7 @@ func (c *RootClient) SKUS() *SKUSClient {
 // AccessToken returns the target 'access_token' resource.
 //
 // Reference to the resource that manages generates access tokens.
-func (c *RootClient) AccessToken() *AccessTokenClient {
+func (c *Client) AccessToken() *AccessTokenClient {
 	return NewAccessTokenClient(
 		c.transport,
 		path.Join(c.path, "access_token"),
@@ -70,7 +70,7 @@ func (c *RootClient) AccessToken() *AccessTokenClient {
 // Accounts returns the target 'accounts' resource.
 //
 // Reference to the resource that manages the collection of accounts.
-func (c *RootClient) Accounts() *AccountsClient {
+func (c *Client) Accounts() *AccountsClient {
 	return NewAccountsClient(
 		c.transport,
 		path.Join(c.path, "accounts"),
@@ -81,7 +81,7 @@ func (c *RootClient) Accounts() *AccountsClient {
 // ClusterAuthorizations returns the target 'cluster_authorizations' resource.
 //
 // Reference to the resource that manages cluster authorizations.
-func (c *RootClient) ClusterAuthorizations() *ClusterAuthorizationsClient {
+func (c *Client) ClusterAuthorizations() *ClusterAuthorizationsClient {
 	return NewClusterAuthorizationsClient(
 		c.transport,
 		path.Join(c.path, "cluster_authorizations"),
@@ -92,7 +92,7 @@ func (c *RootClient) ClusterAuthorizations() *ClusterAuthorizationsClient {
 // ClusterRegistrations returns the target 'cluster_registrations' resource.
 //
 // Reference to the resource that manages cluster registrations.
-func (c *RootClient) ClusterRegistrations() *ClusterRegistrationsClient {
+func (c *Client) ClusterRegistrations() *ClusterRegistrationsClient {
 	return NewClusterRegistrationsClient(
 		c.transport,
 		path.Join(c.path, "cluster_registrations"),
@@ -104,7 +104,7 @@ func (c *RootClient) ClusterRegistrations() *ClusterRegistrationsClient {
 //
 // Reference to the resource that manages the current authenticated
 // acount.
-func (c *RootClient) CurrentAccount() *CurrentAccountClient {
+func (c *Client) CurrentAccount() *CurrentAccountClient {
 	return NewCurrentAccountClient(
 		c.transport,
 		path.Join(c.path, "current_account"),
@@ -116,7 +116,7 @@ func (c *RootClient) CurrentAccount() *CurrentAccountClient {
 //
 // Reference to the resource that manages the collection of
 // organizations.
-func (c *RootClient) Organizations() *OrganizationsClient {
+func (c *Client) Organizations() *OrganizationsClient {
 	return NewOrganizationsClient(
 		c.transport,
 		path.Join(c.path, "organizations"),
@@ -127,7 +127,7 @@ func (c *RootClient) Organizations() *OrganizationsClient {
 // Permissions returns the target 'permissions' resource.
 //
 // Reference to the resource that manages the collection of permissions.
-func (c *RootClient) Permissions() *PermissionsClient {
+func (c *Client) Permissions() *PermissionsClient {
 	return NewPermissionsClient(
 		c.transport,
 		path.Join(c.path, "permissions"),
@@ -138,7 +138,7 @@ func (c *RootClient) Permissions() *PermissionsClient {
 // Registries returns the target 'registries' resource.
 //
 // Reference to the resource that manages the collection of registries.
-func (c *RootClient) Registries() *RegistriesClient {
+func (c *Client) Registries() *RegistriesClient {
 	return NewRegistriesClient(
 		c.transport,
 		path.Join(c.path, "registries"),
@@ -150,7 +150,7 @@ func (c *RootClient) Registries() *RegistriesClient {
 //
 // Reference to the resource that manages the collection of registry
 // credentials.
-func (c *RootClient) RegistryCredentials() *RegistryCredentialsClient {
+func (c *Client) RegistryCredentials() *RegistryCredentialsClient {
 	return NewRegistryCredentialsClient(
 		c.transport,
 		path.Join(c.path, "registry_credentials"),
@@ -162,7 +162,7 @@ func (c *RootClient) RegistryCredentials() *RegistryCredentialsClient {
 //
 // Reference to the resource that manages the collection of role
 // bindings.
-func (c *RootClient) RoleBindings() *RoleBindingsClient {
+func (c *Client) RoleBindings() *RoleBindingsClient {
 	return NewRoleBindingsClient(
 		c.transport,
 		path.Join(c.path, "role_bindings"),
@@ -173,7 +173,7 @@ func (c *RootClient) RoleBindings() *RoleBindingsClient {
 // Roles returns the target 'roles' resource.
 //
 // Reference to the resource that manages the collection of roles.
-func (c *RootClient) Roles() *RolesClient {
+func (c *Client) Roles() *RolesClient {
 	return NewRolesClient(
 		c.transport,
 		path.Join(c.path, "roles"),
@@ -185,7 +185,7 @@ func (c *RootClient) Roles() *RolesClient {
 //
 // Reference to the resource that manages the collection of
 // subscriptions.
-func (c *RootClient) Subscriptions() *SubscriptionsClient {
+func (c *Client) Subscriptions() *SubscriptionsClient {
 	return NewSubscriptionsClient(
 		c.transport,
 		path.Join(c.path, "subscriptions"),

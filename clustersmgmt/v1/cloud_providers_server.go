@@ -304,42 +304,27 @@ type cloudProvidersListServerResponseData struct {
 	Total *int                  "json:\"total,omitempty\""
 }
 
-// CloudProvidersAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the CloudProvidersServer
-// interface.
-type CloudProvidersAdapter struct {
-	server CloudProvidersServer
-}
-
-// NewCloudProvidersAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewCloudProvidersAdapter(server CloudProvidersServer) *CloudProvidersAdapter {
-	return &CloudProvidersAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *CloudProvidersAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchCloudProvidersRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchCloudProvidersRequest navigates the servers tree rooted at the given server
+// dispatchCloudProviders navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchCloudProvidersRequest(w http.ResponseWriter, r *http.Request, server CloudProvidersServer, segments []string) {
+func dispatchCloudProviders(w http.ResponseWriter, r *http.Request, server CloudProvidersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptCloudProvidersListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.CloudProvider(segments[0])
-			dispatchCloudProviderRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchCloudProvider(w, r, target, segments[1:])
 		}
 	}
 }

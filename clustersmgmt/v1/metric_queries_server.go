@@ -23,7 +23,6 @@ import (
 	"net/http"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // MetricQueriesServer represents the interface the manages the 'metric_queries' resource.
@@ -36,42 +35,28 @@ type MetricQueriesServer interface {
 	CPUTotalByNodeRolesOS() CPUTotalByNodeRolesOSMetricQueryServer
 }
 
-// MetricQueriesAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the MetricQueriesServer
-// interface.
-type MetricQueriesAdapter struct {
-	server MetricQueriesServer
-}
-
-// NewMetricQueriesAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewMetricQueriesAdapter(server MetricQueriesServer) *MetricQueriesAdapter {
-	return &MetricQueriesAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *MetricQueriesAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchMetricQueriesRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchMetricQueriesRequest navigates the servers tree rooted at the given server
+// dispatchMetricQueries navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchMetricQueriesRequest(w http.ResponseWriter, r *http.Request, server MetricQueriesServer, segments []string) {
+func dispatchMetricQueries(w http.ResponseWriter, r *http.Request, server MetricQueriesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		case "cpu_total_by_node_roles_os":
 			target := server.CPUTotalByNodeRolesOS()
-			dispatchCPUTotalByNodeRolesOSMetricQueryRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchCPUTotalByNodeRolesOSMetricQuery(w, r, target, segments[1:])
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

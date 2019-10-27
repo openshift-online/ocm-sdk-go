@@ -24,20 +24,20 @@ import (
 	"path"
 )
 
-// RootClient is the client of the 'root' resource.
+// Client is the client of the 'root' resource.
 //
 // Root of the tree of resources of the authorization service.
-type RootClient struct {
+type Client struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewRootClient creates a new client for the 'root'
+// NewClient creates a new client for the 'root'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRootClient(transport http.RoundTripper, path string, metric string) *RootClient {
-	client := new(RootClient)
+func NewClient(transport http.RoundTripper, path string, metric string) *Client {
+	client := new(Client)
 	client.transport = transport
 	client.path = path
 	client.metric = metric
@@ -47,7 +47,7 @@ func NewRootClient(transport http.RoundTripper, path string, metric string) *Roo
 // AccessReview returns the target 'access_review' resource.
 //
 // Reference to the resource that is used to submit access review requests.
-func (c *RootClient) AccessReview() *AccessReviewClient {
+func (c *Client) AccessReview() *AccessReviewClient {
 	return NewAccessReviewClient(
 		c.transport,
 		path.Join(c.path, "access_review"),
@@ -58,7 +58,7 @@ func (c *RootClient) AccessReview() *AccessReviewClient {
 // ExportControlReview returns the target 'export_control_review' resource.
 //
 // Reference to the resource that is used to submit export control review requests.
-func (c *RootClient) ExportControlReview() *ExportControlReviewClient {
+func (c *Client) ExportControlReview() *ExportControlReviewClient {
 	return NewExportControlReviewClient(
 		c.transport,
 		path.Join(c.path, "export_control_review"),
@@ -69,7 +69,7 @@ func (c *RootClient) ExportControlReview() *ExportControlReviewClient {
 // SelfAccessReview returns the target 'self_access_review' resource.
 //
 // Reference to the resource that is used to submit self access review requests.
-func (c *RootClient) SelfAccessReview() *SelfAccessReviewClient {
+func (c *Client) SelfAccessReview() *SelfAccessReviewClient {
 	return NewSelfAccessReviewClient(
 		c.transport,
 		path.Join(c.path, "self_access_review"),

@@ -24,20 +24,20 @@ import (
 	"path"
 )
 
-// RootClient is the client of the 'root' resource.
+// Client is the client of the 'root' resource.
 //
 // Root of the tree of resources of the clusters management service.
-type RootClient struct {
+type Client struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewRootClient creates a new client for the 'root'
+// NewClient creates a new client for the 'root'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewRootClient(transport http.RoundTripper, path string, metric string) *RootClient {
-	client := new(RootClient)
+func NewClient(transport http.RoundTripper, path string, metric string) *Client {
+	client := new(Client)
 	client.transport = transport
 	client.path = path
 	client.metric = metric
@@ -47,7 +47,7 @@ func NewRootClient(transport http.RoundTripper, path string, metric string) *Roo
 // CloudProviders returns the target 'cloud_providers' resource.
 //
 // Reference to the resource that manages the collection of cloud providers.
-func (c *RootClient) CloudProviders() *CloudProvidersClient {
+func (c *Client) CloudProviders() *CloudProvidersClient {
 	return NewCloudProvidersClient(
 		c.transport,
 		path.Join(c.path, "cloud_providers"),
@@ -58,7 +58,7 @@ func (c *RootClient) CloudProviders() *CloudProvidersClient {
 // Clusters returns the target 'clusters' resource.
 //
 // Reference to the resource that manages the collection of clusters.
-func (c *RootClient) Clusters() *ClustersClient {
+func (c *Client) Clusters() *ClustersClient {
 	return NewClustersClient(
 		c.transport,
 		path.Join(c.path, "clusters"),
@@ -69,7 +69,7 @@ func (c *RootClient) Clusters() *ClustersClient {
 // Dashboards returns the target 'dashboards' resource.
 //
 // Reference to the resource that manages the collection of dashboards.
-func (c *RootClient) Dashboards() *DashboardsClient {
+func (c *Client) Dashboards() *DashboardsClient {
 	return NewDashboardsClient(
 		c.transport,
 		path.Join(c.path, "dashboards"),
@@ -80,7 +80,7 @@ func (c *RootClient) Dashboards() *DashboardsClient {
 // Flavours returns the target 'flavours' resource.
 //
 // Reference to the service that manages the collection of flavours.
-func (c *RootClient) Flavours() *FlavoursClient {
+func (c *Client) Flavours() *FlavoursClient {
 	return NewFlavoursClient(
 		c.transport,
 		path.Join(c.path, "flavours"),
@@ -91,7 +91,7 @@ func (c *RootClient) Flavours() *FlavoursClient {
 // Versions returns the target 'versions' resource.
 //
 // Reference to the resource that manage the collection of versions.
-func (c *RootClient) Versions() *VersionsClient {
+func (c *Client) Versions() *VersionsClient {
 	return NewVersionsClient(
 		c.transport,
 		path.Join(c.path, "versions"),

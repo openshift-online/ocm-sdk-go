@@ -24,14 +24,14 @@ import (
 )
 
 // openIDURLsData is the data structure used internally to marshal and unmarshal
-// objects of type 'open_IDUR_ls'.
+// objects of type 'open_IDURLs'.
 type openIDURLsData struct {
 	Authorize *string "json:\"authorize,omitempty\""
 	Token     *string "json:\"token,omitempty\""
 	UserInfo  *string "json:\"user_info,omitempty\""
 }
 
-// MarshalOpenIDURLs writes a value of the 'open_IDUR_ls' to the given target,
+// MarshalOpenIDURLs writes a value of the 'open_IDURLs' to the given target,
 // which can be a writer or a JSON encoder.
 func MarshalOpenIDURLs(object *OpenIDURLs, target interface{}) error {
 	encoder, err := helpers.NewEncoder(target)
@@ -45,7 +45,7 @@ func MarshalOpenIDURLs(object *OpenIDURLs, target interface{}) error {
 	return encoder.Encode(data)
 }
 
-// wrap is the method used internally to convert a value of the 'open_IDUR_ls'
+// wrap is the method used internally to convert a value of the 'open_IDURLs'
 // value to a JSON document.
 func (o *OpenIDURLs) wrap() (data *openIDURLsData, err error) {
 	if o == nil {
@@ -58,7 +58,7 @@ func (o *OpenIDURLs) wrap() (data *openIDURLsData, err error) {
 	return
 }
 
-// UnmarshalOpenIDURLs reads a value of the 'open_IDUR_ls' type from the given
+// UnmarshalOpenIDURLs reads a value of the 'open_IDURLs' type from the given
 // source, which can be an slice of bytes, a string, a reader or a JSON decoder.
 func UnmarshalOpenIDURLs(source interface{}) (object *OpenIDURLs, err error) {
 	decoder, err := helpers.NewDecoder(source)
@@ -75,7 +75,7 @@ func UnmarshalOpenIDURLs(source interface{}) (object *OpenIDURLs, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// value of the 'open_IDUR_ls' type.
+// value of the 'open_IDURLs' type.
 func (d *openIDURLsData) unwrap() (object *OpenIDURLs, err error) {
 	if d == nil {
 		return

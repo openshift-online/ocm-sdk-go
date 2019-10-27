@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // RegistryServer represents the interface the manages the 'registry' resource.
@@ -77,41 +76,23 @@ func (r *RegistryGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// RegistryAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the RegistryServer
-// interface.
-type RegistryAdapter struct {
-	server RegistryServer
-}
-
-// NewRegistryAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewRegistryAdapter(server RegistryServer) *RegistryAdapter {
-	return &RegistryAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *RegistryAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchRegistryRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchRegistryRequest navigates the servers tree rooted at the given server
+// dispatchRegistry navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchRegistryRequest(w http.ResponseWriter, r *http.Request, server RegistryServer, segments []string) {
+func dispatchRegistry(w http.ResponseWriter, r *http.Request, server RegistryServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptRegistryGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

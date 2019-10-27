@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // AccessTokenServer represents the interface the manages the 'access_token' resource.
@@ -77,41 +76,23 @@ func (r *AccessTokenPostServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// AccessTokenAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the AccessTokenServer
-// interface.
-type AccessTokenAdapter struct {
-	server AccessTokenServer
-}
-
-// NewAccessTokenAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewAccessTokenAdapter(server AccessTokenServer) *AccessTokenAdapter {
-	return &AccessTokenAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *AccessTokenAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchAccessTokenRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchAccessTokenRequest navigates the servers tree rooted at the given server
+// dispatchAccessToken navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchAccessTokenRequest(w http.ResponseWriter, r *http.Request, server AccessTokenServer, segments []string) {
+func dispatchAccessToken(w http.ResponseWriter, r *http.Request, server AccessTokenServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
 			adaptAccessTokenPostRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

@@ -338,30 +338,10 @@ type organizationsListServerResponseData struct {
 	Total *int                 "json:\"total,omitempty\""
 }
 
-// OrganizationsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the OrganizationsServer
-// interface.
-type OrganizationsAdapter struct {
-	server OrganizationsServer
-}
-
-// NewOrganizationsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewOrganizationsAdapter(server OrganizationsServer) *OrganizationsAdapter {
-	return &OrganizationsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *OrganizationsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchOrganizationsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchOrganizationsRequest navigates the servers tree rooted at the given server
+// dispatchOrganizations navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchOrganizationsRequest(w http.ResponseWriter, r *http.Request, server OrganizationsServer, segments []string) {
+func dispatchOrganizations(w http.ResponseWriter, r *http.Request, server OrganizationsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodPost:
@@ -369,13 +349,18 @@ func dispatchOrganizationsRequest(w http.ResponseWriter, r *http.Request, server
 		case http.MethodGet:
 			adaptOrganizationsListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.Organization(segments[0])
-			dispatchOrganizationRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchOrganization(w, r, target, segments[1:])
 		}
 	}
 }

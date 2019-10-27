@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ClusterStatusServer represents the interface the manages the 'cluster_status' resource.
@@ -77,41 +76,23 @@ func (r *ClusterStatusGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// ClusterStatusAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the ClusterStatusServer
-// interface.
-type ClusterStatusAdapter struct {
-	server ClusterStatusServer
-}
-
-// NewClusterStatusAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewClusterStatusAdapter(server ClusterStatusServer) *ClusterStatusAdapter {
-	return &ClusterStatusAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *ClusterStatusAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchClusterStatusRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchClusterStatusRequest navigates the servers tree rooted at the given server
+// dispatchClusterStatus navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchClusterStatusRequest(w http.ResponseWriter, r *http.Request, server ClusterStatusServer, segments []string) {
+func dispatchClusterStatus(w http.ResponseWriter, r *http.Request, server ClusterStatusServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptClusterStatusGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

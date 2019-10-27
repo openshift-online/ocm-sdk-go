@@ -24,10 +24,10 @@ import (
 )
 
 // openIDURLsListData is type used internally to marshal and unmarshal lists of objects
-// of type 'open_IDUR_ls'.
+// of type 'open_IDURLs'.
 type openIDURLsListData []*openIDURLsData
 
-// UnmarshalOpenIDURLsList reads a list of values of the 'open_IDUR_ls'
+// UnmarshalOpenIDURLsList reads a list of values of the 'open_IDURLs'
 // from the given source, which can be a slice of bytes, a string, an io.Reader or a
 // json.Decoder.
 func UnmarshalOpenIDURLsList(source interface{}) (list *OpenIDURLsList, err error) {
@@ -45,7 +45,7 @@ func UnmarshalOpenIDURLsList(source interface{}) (list *OpenIDURLsList, err erro
 }
 
 // wrap is the method used internally to convert a list of values of the
-// 'open_IDUR_ls' value to a JSON document.
+// 'open_IDURLs' value to a JSON document.
 func (l *OpenIDURLsList) wrap() (data openIDURLsListData, err error) {
 	if l == nil {
 		return
@@ -61,7 +61,7 @@ func (l *OpenIDURLsList) wrap() (data openIDURLsListData, err error) {
 }
 
 // unwrap is the function used internally to convert the JSON unmarshalled data to a
-// list of values of the 'open_IDUR_ls' type.
+// list of values of the 'open_IDURLs' type.
 func (d openIDURLsListData) unwrap() (list *OpenIDURLsList, err error) {
 	if d == nil {
 		return

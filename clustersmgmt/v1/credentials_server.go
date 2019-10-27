@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // CredentialsServer represents the interface the manages the 'credentials' resource.
@@ -77,41 +76,23 @@ func (r *CredentialsGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CredentialsAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the CredentialsServer
-// interface.
-type CredentialsAdapter struct {
-	server CredentialsServer
-}
-
-// NewCredentialsAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewCredentialsAdapter(server CredentialsServer) *CredentialsAdapter {
-	return &CredentialsAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *CredentialsAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchCredentialsRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchCredentialsRequest navigates the servers tree rooted at the given server
+// dispatchCredentials navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchCredentialsRequest(w http.ResponseWriter, r *http.Request, server CredentialsServer, segments []string) {
+func dispatchCredentials(w http.ResponseWriter, r *http.Request, server CredentialsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptCredentialsGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

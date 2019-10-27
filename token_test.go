@@ -22,18 +22,16 @@ import (
 	"net/http"
 	"time"
 
-	// nolint
-	. "github.com/onsi/ginkgo"
-	// nolint
-	. "github.com/onsi/gomega"
-	// nolint
-	. "github.com/onsi/gomega/ghttp"
+	. "github.com/onsi/ginkgo" // nolint
+	. "github.com/onsi/gomega" // nolint
+
+	"github.com/onsi/gomega/ghttp"
 )
 
 var _ = Describe("Tokens", func() {
 	// Servers used during the tests:
-	var oidServer *Server
-	var apiServer *Server
+	var oidServer *ghttp.Server
+	var apiServer *ghttp.Server
 
 	// Logger used during the testss:
 	var logger Logger
@@ -42,8 +40,8 @@ var _ = Describe("Tokens", func() {
 		var err error
 
 		// Create the servers:
-		oidServer = NewServer()
-		apiServer = NewServer()
+		oidServer = ghttp.NewServer()
+		apiServer = ghttp.NewServer()
 
 		// Create the logger:
 		logger, err = NewStdLoggerBuilder().
@@ -67,7 +65,7 @@ var _ = Describe("Tokens", func() {
 
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyRefreshGrant(refreshToken),
 					RespondWithTokens(accessToken, refreshToken),
 				),
@@ -96,10 +94,12 @@ var _ = Describe("Tokens", func() {
 			refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 			// Configure the server:
-			oidServer.AppendHandlers(CombineHandlers(
-				VerifyRefreshGrant(refreshToken),
-				RespondWithTokens(accessToken, refreshToken),
-			))
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					VerifyRefreshGrant(refreshToken),
+					RespondWithTokens(accessToken, refreshToken),
+				),
+			)
 
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
@@ -130,7 +130,7 @@ var _ = Describe("Tokens", func() {
 
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyRefreshGrant(refreshToken),
 					RespondWithTokens(validAccess, refreshToken),
 				),
@@ -160,7 +160,7 @@ var _ = Describe("Tokens", func() {
 
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyRefreshGrant(refreshToken),
 					RespondWithTokens(secondAccess, refreshToken),
 				),
@@ -248,7 +248,7 @@ var _ = Describe("Tokens", func() {
 
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("myuser", "mypassword"),
 					RespondWithTokens(accessToken, refreshToken),
 				),
@@ -279,11 +279,11 @@ var _ = Describe("Tokens", func() {
 
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("myuser", "mypassword"),
 					RespondWithTokens(expiredAccess, refreshToken),
 				),
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyRefreshGrant(refreshToken),
 					RespondWithTokens(validAccess, refreshToken),
 				),
@@ -319,11 +319,11 @@ var _ = Describe("Tokens", func() {
 
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("myuser", "mypassword"),
 					RespondWithTokens(expiredAccess, expiredRefresh),
 				),
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("myuser", "mypassword"),
 					RespondWithTokens(validAccess, validRefresh),
 				),
@@ -359,11 +359,11 @@ var _ = Describe("Tokens", func() {
 
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("myuser", "mypassword"),
 					RespondWithTokens(expiredAccess, expiredRefresh),
 				),
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("myuser", "mypassword"),
 					RespondWithTokens(validAccess, validRefresh),
 				),
@@ -393,7 +393,7 @@ var _ = Describe("Tokens", func() {
 		It("Fails with wrong user name", func() {
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("baduser", "mypassword"),
 					RespondWithError("bad_user", "Bad user"),
 				),
@@ -417,7 +417,7 @@ var _ = Describe("Tokens", func() {
 		It("Fails with wrong password", func() {
 			// Configure the server:
 			oidServer.AppendHandlers(
-				CombineHandlers(
+				ghttp.CombineHandlers(
 					VerifyPasswordGrant("myuser", "badpassword"),
 					RespondWithError("bad_password", "Bad password"),
 				),
@@ -486,21 +486,21 @@ var _ = Describe("Tokens", func() {
 })
 
 func VerifyPasswordGrant(user, password string) http.HandlerFunc {
-	return CombineHandlers(
-		VerifyRequest(http.MethodPost, "/"),
-		VerifyContentType("application/x-www-form-urlencoded"),
-		VerifyFormKV("grant_type", "password"),
-		VerifyFormKV("username", user),
-		VerifyFormKV("password", password),
+	return ghttp.CombineHandlers(
+		ghttp.VerifyRequest(http.MethodPost, "/"),
+		ghttp.VerifyContentType("application/x-www-form-urlencoded"),
+		ghttp.VerifyFormKV("grant_type", "password"),
+		ghttp.VerifyFormKV("username", user),
+		ghttp.VerifyFormKV("password", password),
 	)
 }
 
 func VerifyRefreshGrant(refreshToken string) http.HandlerFunc {
-	return CombineHandlers(
-		VerifyRequest(http.MethodPost, "/"),
-		VerifyContentType("application/x-www-form-urlencoded"),
-		VerifyFormKV("grant_type", "refresh_token"),
-		VerifyFormKV("refresh_token", refreshToken),
+	return ghttp.CombineHandlers(
+		ghttp.VerifyRequest(http.MethodPost, "/"),
+		ghttp.VerifyContentType("application/x-www-form-urlencoded"),
+		ghttp.VerifyFormKV("grant_type", "refresh_token"),
+		ghttp.VerifyFormKV("refresh_token", refreshToken),
 	)
 }
 

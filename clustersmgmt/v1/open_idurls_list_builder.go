@@ -20,12 +20,12 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // OpenIDURLsListBuilder contains the data and logic needed to build
-// 'open_IDUR_ls' objects.
+// 'open_IDURLs' objects.
 type OpenIDURLsListBuilder struct {
 	items []*OpenIDURLsBuilder
 }
 
-// NewOpenIDURLsList creates a new builder of 'open_IDUR_ls' objects.
+// NewOpenIDURLsList creates a new builder of 'open_IDURLs' objects.
 func NewOpenIDURLsList() *OpenIDURLsListBuilder {
 	return new(OpenIDURLsListBuilder)
 }
@@ -37,7 +37,7 @@ func (b *OpenIDURLsListBuilder) Items(values ...*OpenIDURLsBuilder) *OpenIDURLsL
 	return b
 }
 
-// Build creates a list of 'open_IDUR_ls' objects using the
+// Build creates a list of 'open_IDURLs' objects using the
 // configuration stored in the builder.
 func (b *OpenIDURLsListBuilder) Build() (list *OpenIDURLsList, err error) {
 	items := make([]*OpenIDURLs, len(b.items))

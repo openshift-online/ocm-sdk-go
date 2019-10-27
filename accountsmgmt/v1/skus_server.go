@@ -230,42 +230,27 @@ type skusListServerResponseData struct {
 	Total *int        "json:\"total,omitempty\""
 }
 
-// SKUSAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the SKUSServer
-// interface.
-type SKUSAdapter struct {
-	server SKUSServer
-}
-
-// NewSKUSAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewSKUSAdapter(server SKUSServer) *SKUSAdapter {
-	return &SKUSAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *SKUSAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchSKUSRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchSKUSRequest navigates the servers tree rooted at the given server
+// dispatchSKUS navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchSKUSRequest(w http.ResponseWriter, r *http.Request, server SKUSServer, segments []string) {
+func dispatchSKUS(w http.ResponseWriter, r *http.Request, server SKUSServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptSKUSListRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			target := server.SKU(segments[0])
-			dispatchSKURequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchSKU(w, r, target, segments[1:])
 		}
 	}
 }

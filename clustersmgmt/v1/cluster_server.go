@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ClusterServer represents the interface the manages the 'cluster' resource.
@@ -189,30 +188,10 @@ func (r *ClusterUpdateServerResponse) Status(value int) *ClusterUpdateServerResp
 	return r
 }
 
-// ClusterAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the ClusterServer
-// interface.
-type ClusterAdapter struct {
-	server ClusterServer
-}
-
-// NewClusterAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewClusterAdapter(server ClusterServer) *ClusterAdapter {
-	return &ClusterAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *ClusterAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchClusterRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchClusterRequest navigates the servers tree rooted at the given server
+// dispatchCluster navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchClusterRequest(w http.ResponseWriter, r *http.Request, server ClusterServer, segments []string) {
+func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodDelete:
@@ -222,30 +201,56 @@ func dispatchClusterRequest(w http.ResponseWriter, r *http.Request, server Clust
 		case http.MethodPatch:
 			adaptClusterUpdateRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		case "credentials":
 			target := server.Credentials()
-			dispatchCredentialsRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchCredentials(w, r, target, segments[1:])
 		case "groups":
 			target := server.Groups()
-			dispatchGroupsRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchGroups(w, r, target, segments[1:])
 		case "identity_providers":
 			target := server.IdentityProviders()
-			dispatchIdentityProvidersRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchIdentityProviders(w, r, target, segments[1:])
 		case "logs":
 			target := server.Logs()
-			dispatchLogsRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchLogs(w, r, target, segments[1:])
 		case "metric_queries":
 			target := server.MetricQueries()
-			dispatchMetricQueriesRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchMetricQueries(w, r, target, segments[1:])
 		case "status":
 			target := server.Status()
-			dispatchClusterStatusRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchClusterStatus(w, r, target, segments[1:])
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

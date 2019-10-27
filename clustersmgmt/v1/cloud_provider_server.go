@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // CloudProviderServer represents the interface the manages the 'cloud_provider' resource.
@@ -83,44 +82,30 @@ func (r *CloudProviderGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// CloudProviderAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the CloudProviderServer
-// interface.
-type CloudProviderAdapter struct {
-	server CloudProviderServer
-}
-
-// NewCloudProviderAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewCloudProviderAdapter(server CloudProviderServer) *CloudProviderAdapter {
-	return &CloudProviderAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *CloudProviderAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchCloudProviderRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchCloudProviderRequest navigates the servers tree rooted at the given server
+// dispatchCloudProvider navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchCloudProviderRequest(w http.ResponseWriter, r *http.Request, server CloudProviderServer, segments []string) {
+func dispatchCloudProvider(w http.ResponseWriter, r *http.Request, server CloudProviderServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptCloudProviderGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		case "regions":
 			target := server.Regions()
-			dispatchCloudRegionsRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchCloudRegions(w, r, target, segments[1:])
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // GroupServer represents the interface the manages the 'group' resource.
@@ -82,44 +81,30 @@ func (r *GroupGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// GroupAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the GroupServer
-// interface.
-type GroupAdapter struct {
-	server GroupServer
-}
-
-// NewGroupAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewGroupAdapter(server GroupServer) *GroupAdapter {
-	return &GroupAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *GroupAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchGroupRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchGroupRequest navigates the servers tree rooted at the given server
+// dispatchGroup navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchGroupRequest(w http.ResponseWriter, r *http.Request, server GroupServer, segments []string) {
+func dispatchGroup(w http.ResponseWriter, r *http.Request, server GroupServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptGroupGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		case "users":
 			target := server.Users()
-			dispatchUsersRequest(w, r, target, segments[1:])
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchUsers(w, r, target, segments[1:])
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

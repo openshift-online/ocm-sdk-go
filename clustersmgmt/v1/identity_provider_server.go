@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // IdentityProviderServer represents the interface the manages the 'identity_provider' resource.
@@ -98,30 +97,10 @@ func (r *IdentityProviderGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// IdentityProviderAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the IdentityProviderServer
-// interface.
-type IdentityProviderAdapter struct {
-	server IdentityProviderServer
-}
-
-// NewIdentityProviderAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewIdentityProviderAdapter(server IdentityProviderServer) *IdentityProviderAdapter {
-	return &IdentityProviderAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *IdentityProviderAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchIdentityProviderRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchIdentityProviderRequest navigates the servers tree rooted at the given server
+// dispatchIdentityProvider navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchIdentityProviderRequest(w http.ResponseWriter, r *http.Request, server IdentityProviderServer, segments []string) {
+func dispatchIdentityProvider(w http.ResponseWriter, r *http.Request, server IdentityProviderServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodDelete:
@@ -129,12 +108,14 @@ func dispatchIdentityProviderRequest(w http.ResponseWriter, r *http.Request, ser
 		case http.MethodGet:
 			adaptIdentityProviderGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

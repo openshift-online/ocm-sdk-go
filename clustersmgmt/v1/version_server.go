@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // VersionServer represents the interface the manages the 'version' resource.
@@ -77,41 +76,23 @@ func (r *VersionGetServerResponse) marshal(writer io.Writer) error {
 	return err
 }
 
-// VersionAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the VersionServer
-// interface.
-type VersionAdapter struct {
-	server VersionServer
-}
-
-// NewVersionAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewVersionAdapter(server VersionServer) *VersionAdapter {
-	return &VersionAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *VersionAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchVersionRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchVersionRequest navigates the servers tree rooted at the given server
+// dispatchVersion navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchVersionRequest(w http.ResponseWriter, r *http.Request, server VersionServer, segments []string) {
+func dispatchVersion(w http.ResponseWriter, r *http.Request, server VersionServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
 			adaptVersionGetRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

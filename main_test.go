@@ -24,14 +24,11 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	. "github.com/onsi/ginkgo" // nolint
+	. "github.com/onsi/gomega" // nolint
 
-	// nolint
-	. "github.com/onsi/ginkgo"
-	// nolint
-	. "github.com/onsi/gomega"
-	// nolint
-	. "github.com/onsi/gomega/ghttp"
+	"github.com/dgrijalva/jwt-go"
+	"github.com/onsi/gomega/ghttp"
 )
 
 func TestClient(t *testing.T) {
@@ -114,7 +111,7 @@ func RespondWithJSONTemplate(statusCode int, source string, args ...interface{})
 		source, err,
 	)
 
-	return RespondWith(
+	return ghttp.RespondWith(
 		statusCode,
 		buffer.Bytes(),
 		http.Header{

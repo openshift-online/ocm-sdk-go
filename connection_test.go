@@ -21,10 +21,8 @@ package sdk
 import (
 	"time"
 
-	// nolint
-	. "github.com/onsi/ginkgo"
-	// nolint
-	. "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo" // nolint
+	. "github.com/onsi/gomega" // nolint
 )
 
 var _ = Describe("Connection", func() {

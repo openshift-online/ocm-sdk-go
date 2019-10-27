@@ -22,18 +22,16 @@ import (
 	"net/http"
 	"time"
 
-	// nolint
-	. "github.com/onsi/ginkgo"
-	// nolint
-	. "github.com/onsi/gomega"
-	// nolint
-	. "github.com/onsi/gomega/ghttp"
+	. "github.com/onsi/ginkgo" // nolint
+	. "github.com/onsi/gomega" // nolint
+
+	"github.com/onsi/gomega/ghttp"
 )
 
 var _ = Describe("Methods", func() {
 	// Servers used during the tests:
-	var oidServer *Server
-	var apiServer *Server
+	var oidServer *ghttp.Server
+	var apiServer *ghttp.Server
 
 	// Logger used during the testss:
 	var logger Logger
@@ -49,15 +47,15 @@ var _ = Describe("Methods", func() {
 		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
-		oidServer = NewServer()
+		oidServer = ghttp.NewServer()
 		oidServer.AppendHandlers(
-			CombineHandlers(
+			ghttp.CombineHandlers(
 				RespondWithTokens(accessToken, refreshToken),
 			),
 		)
 
 		// Create the API server:
-		apiServer = NewServer()
+		apiServer = ghttp.NewServer()
 
 		// Create the logger:
 		logger, err = NewStdLoggerBuilder().
@@ -90,7 +88,7 @@ var _ = Describe("Methods", func() {
 		It("Sends path", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				VerifyRequest(http.MethodGet, "/mypath"),
+				ghttp.VerifyRequest(http.MethodGet, "/mypath"),
 			)
 
 			// Send the request:
@@ -103,7 +101,7 @@ var _ = Describe("Methods", func() {
 		It("Sends accept header", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				VerifyHeaderKV("Accept", "application/json"),
+				ghttp.VerifyHeaderKV("Accept", "application/json"),
 			)
 
 			// Send the request:
@@ -116,7 +114,7 @@ var _ = Describe("Methods", func() {
 		It("Sends one query parameter", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				VerifyFormKV("myparameter", "myvalue"),
+				ghttp.VerifyFormKV("myparameter", "myvalue"),
 			)
 
 			// Send the request:
@@ -130,9 +128,9 @@ var _ = Describe("Methods", func() {
 		It("Sends two query parameters", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				CombineHandlers(
-					VerifyFormKV("myparameter", "myvalue"),
-					VerifyFormKV("yourparameter", "yourvalue"),
+				ghttp.CombineHandlers(
+					ghttp.VerifyFormKV("myparameter", "myvalue"),
+					ghttp.VerifyFormKV("yourparameter", "yourvalue"),
 				),
 			)
 
@@ -148,7 +146,7 @@ var _ = Describe("Methods", func() {
 		It("Sends one header", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				VerifyHeaderKV("myheader", "myvalue"),
+				ghttp.VerifyHeaderKV("myheader", "myvalue"),
 			)
 
 			// Send the request:
@@ -162,9 +160,9 @@ var _ = Describe("Methods", func() {
 		It("Sends two headers", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				CombineHandlers(
-					VerifyHeaderKV("myheader", "myvalue"),
-					VerifyHeaderKV("yourheader", "yourvalue"),
+				ghttp.CombineHandlers(
+					ghttp.VerifyHeaderKV("myheader", "myvalue"),
+					ghttp.VerifyHeaderKV("yourheader", "yourvalue"),
 				),
 			)
 
@@ -180,7 +178,7 @@ var _ = Describe("Methods", func() {
 		It("Receives body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				RespondWith(http.StatusOK, "mybody"),
+				ghttp.RespondWith(http.StatusOK, "mybody"),
 			)
 
 			// Send the request:
@@ -197,7 +195,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 200", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				RespondWith(http.StatusOK, nil),
+				ghttp.RespondWith(http.StatusOK, nil),
 			)
 
 			// Send the request:
@@ -212,7 +210,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 400", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				RespondWith(http.StatusBadRequest, nil),
+				ghttp.RespondWith(http.StatusBadRequest, nil),
 			)
 
 			// Send the request:
@@ -227,7 +225,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 500", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				RespondWith(http.StatusInternalServerError, nil),
+				ghttp.RespondWith(http.StatusInternalServerError, nil),
 			)
 
 			// Send the request:
@@ -254,7 +252,7 @@ var _ = Describe("Methods", func() {
 		It("Accepts empty body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				RespondWith(http.StatusOK, nil),
+				ghttp.RespondWith(http.StatusOK, nil),
 			)
 
 			// Send the request:
@@ -271,7 +269,7 @@ var _ = Describe("Methods", func() {
 		It("Accepts empty body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				RespondWith(http.StatusOK, nil),
+				ghttp.RespondWith(http.StatusOK, nil),
 			)
 
 			// Send the request:

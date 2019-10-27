@@ -27,7 +27,6 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ResourceQuotaServer represents the interface the manages the 'resource_quota' resource.
@@ -138,30 +137,10 @@ func (r *ResourceQuotaUpdateServerResponse) Status(value int) *ResourceQuotaUpda
 	return r
 }
 
-// ResourceQuotaAdapter is an HTTP handler that knows how to translate HTTP requests
-// into calls to the methods of an object that implements the ResourceQuotaServer
-// interface.
-type ResourceQuotaAdapter struct {
-	server ResourceQuotaServer
-}
-
-// NewResourceQuotaAdapter creates a new adapter that will translate HTTP requests
-// into calls to the given server.
-func NewResourceQuotaAdapter(server ResourceQuotaServer) *ResourceQuotaAdapter {
-	return &ResourceQuotaAdapter{
-		server: server,
-	}
-}
-
-// ServeHTTP is the implementation of the http.Handler interface.
-func (a *ResourceQuotaAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	dispatchResourceQuotaRequest(w, r, a.server, helpers.Segments(r.URL.Path))
-}
-
-// dispatchResourceQuotaRequest navigates the servers tree rooted at the given server
+// dispatchResourceQuota navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchResourceQuotaRequest(w http.ResponseWriter, r *http.Request, server ResourceQuotaServer, segments []string) {
+func dispatchResourceQuota(w http.ResponseWriter, r *http.Request, server ResourceQuotaServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case http.MethodGet:
@@ -169,12 +148,14 @@ func dispatchResourceQuotaRequest(w http.ResponseWriter, r *http.Request, server
 		case http.MethodPatch:
 			adaptResourceQuotaUpdateRequest(w, r, server)
 		default:
-			errors.SendMethodNotSupported(w, r)
+			errors.SendMethodNotAllowed(w, r)
+			return
 		}
 	} else {
 		switch segments[0] {
 		default:
 			errors.SendNotFound(w, r)
+			return
 		}
 	}
 }

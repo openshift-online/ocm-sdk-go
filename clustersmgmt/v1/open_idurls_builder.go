@@ -19,7 +19,7 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// OpenIDURLsBuilder contains the data and logic needed to build 'open_IDUR_ls' objects.
+// OpenIDURLsBuilder contains the data and logic needed to build 'open_IDURLs' objects.
 //
 // _OpenID_ identity provider URLs.
 type OpenIDURLsBuilder struct {
@@ -28,7 +28,7 @@ type OpenIDURLsBuilder struct {
 	userInfo  *string
 }
 
-// NewOpenIDURLs creates a new builder of 'open_IDUR_ls' objects.
+// NewOpenIDURLs creates a new builder of 'open_IDURLs' objects.
 func NewOpenIDURLs() *OpenIDURLsBuilder {
 	return new(OpenIDURLsBuilder)
 }
@@ -71,7 +71,7 @@ func (b *OpenIDURLsBuilder) Copy(object *OpenIDURLs) *OpenIDURLsBuilder {
 	return b
 }
 
-// Build creates a 'open_IDUR_ls' object using the configuration stored in the builder.
+// Build creates a 'open_IDURLs' object using the configuration stored in the builder.
 func (b *OpenIDURLsBuilder) Build() (object *OpenIDURLs, err error) {
 	object = new(OpenIDURLs)
 	if b.authorize != nil {
