@@ -66,6 +66,17 @@ func (c *Client) ExportControlReview() *ExportControlReviewClient {
 	)
 }
 
+// ResourceReview returns the target 'resource_review' resource.
+//
+// Reference to the resource that is used to submit resource review requests.
+func (c *Client) ResourceReview() *ResourceReviewClient {
+	return NewResourceReviewClient(
+		c.transport,
+		path.Join(c.path, "resource_review"),
+		path.Join(c.metric, "resource_review"),
+	)
+}
+
 // SelfAccessReview returns the target 'self_access_review' resource.
 //
 // Reference to the resource that is used to submit self access review requests.

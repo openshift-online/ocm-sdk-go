@@ -38,6 +38,11 @@ type Server interface {
 	// Reference to the resource that is used to submit export control review requests.
 	ExportControlReview() ExportControlReviewServer
 
+	// ResourceReview returns the target 'resource_review' resource.
+	//
+	// Reference to the resource that is used to submit resource review requests.
+	ResourceReview() ResourceReviewServer
+
 	// SelfAccessReview returns the target 'self_access_review' resource.
 	//
 	// Reference to the resource that is used to submit self access review requests.
@@ -70,6 +75,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 				return
 			}
 			dispatchExportControlReview(w, r, target, segments[1:])
+		case "resource_review":
+			target := server.ResourceReview()
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchResourceReview(w, r, target, segments[1:])
 		case "self_access_review":
 			target := server.SelfAccessReview()
 			if target == nil {
