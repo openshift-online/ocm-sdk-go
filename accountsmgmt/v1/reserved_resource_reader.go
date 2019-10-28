@@ -20,17 +20,21 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import (
+	time "time"
+
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // reservedResourceData is the data structure used internally to marshal and unmarshal
 // objects of type 'reserved_resource'.
 type reservedResourceData struct {
-	BYOC                 *bool   "json:\"byoc,omitempty\""
-	AvailabilityZoneType *string "json:\"availability_zone_type,omitempty\""
-	Count                *int    "json:\"count,omitempty\""
-	ResourceName         *string "json:\"resource_name,omitempty\""
-	ResourceType         *string "json:\"resource_type,omitempty\""
+	BYOC                 *bool      "json:\"byoc,omitempty\""
+	AvailabilityZoneType *string    "json:\"availability_zone_type,omitempty\""
+	Count                *int       "json:\"count,omitempty\""
+	CreatedAt            *time.Time "json:\"created_at,omitempty\""
+	ResourceName         *string    "json:\"resource_name,omitempty\""
+	ResourceType         *string    "json:\"resource_type,omitempty\""
+	UpdatedAt            *time.Time "json:\"updated_at,omitempty\""
 }
 
 // MarshalReservedResource writes a value of the 'reserved_resource' to the given target,
@@ -57,8 +61,10 @@ func (o *ReservedResource) wrap() (data *reservedResourceData, err error) {
 	data.BYOC = o.byoc
 	data.AvailabilityZoneType = o.availabilityZoneType
 	data.Count = o.count
+	data.CreatedAt = o.createdAt
 	data.ResourceName = o.resourceName
 	data.ResourceType = o.resourceType
+	data.UpdatedAt = o.updatedAt
 	return
 }
 
@@ -88,7 +94,9 @@ func (d *reservedResourceData) unwrap() (object *ReservedResource, err error) {
 	object.byoc = d.BYOC
 	object.availabilityZoneType = d.AvailabilityZoneType
 	object.count = d.Count
+	object.createdAt = d.CreatedAt
 	object.resourceName = d.ResourceName
 	object.resourceType = d.ResourceType
+	object.updatedAt = d.UpdatedAt
 	return
 }

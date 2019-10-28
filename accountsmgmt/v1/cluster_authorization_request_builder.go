@@ -23,13 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationRequestBuilder struct {
-	byoc             *bool
-	accountUsername  *string
-	availabilityZone *string
-	clusterID        *string
-	managed          *bool
-	reserve          *bool
-	resources        []*ReservedResourceBuilder
+	byoc              *bool
+	accountUsername   *string
+	availabilityZone  *string
+	clusterID         *string
+	disconnected      *bool
+	displayName       *string
+	externalClusterID *string
+	managed           *bool
+	reserve           *bool
+	resources         []*ReservedResourceBuilder
 }
 
 // NewClusterAuthorizationRequest creates a new builder of 'cluster_authorization_request' objects.
@@ -73,6 +76,33 @@ func (b *ClusterAuthorizationRequestBuilder) ClusterID(value string) *ClusterAut
 	return b
 }
 
+// Disconnected sets the value of the 'disconnected' attribute
+// to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) Disconnected(value bool) *ClusterAuthorizationRequestBuilder {
+	b.disconnected = &value
+	return b
+}
+
+// DisplayName sets the value of the 'display_name' attribute
+// to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) DisplayName(value string) *ClusterAuthorizationRequestBuilder {
+	b.displayName = &value
+	return b
+}
+
+// ExternalClusterID sets the value of the 'external_cluster_ID' attribute
+// to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) ExternalClusterID(value string) *ClusterAuthorizationRequestBuilder {
+	b.externalClusterID = &value
+	return b
+}
+
 // Managed sets the value of the 'managed' attribute
 // to the given value.
 //
@@ -110,6 +140,9 @@ func (b *ClusterAuthorizationRequestBuilder) Copy(object *ClusterAuthorizationRe
 	b.accountUsername = object.accountUsername
 	b.availabilityZone = object.availabilityZone
 	b.clusterID = object.clusterID
+	b.disconnected = object.disconnected
+	b.displayName = object.displayName
+	b.externalClusterID = object.externalClusterID
 	b.managed = object.managed
 	b.reserve = object.reserve
 	if object.resources != nil && len(object.resources.items) > 0 {
@@ -137,6 +170,15 @@ func (b *ClusterAuthorizationRequestBuilder) Build() (object *ClusterAuthorizati
 	}
 	if b.clusterID != nil {
 		object.clusterID = b.clusterID
+	}
+	if b.disconnected != nil {
+		object.disconnected = b.disconnected
+	}
+	if b.displayName != nil {
+		object.displayName = b.displayName
+	}
+	if b.externalClusterID != nil {
+		object.externalClusterID = b.externalClusterID
 	}
 	if b.managed != nil {
 		object.managed = b.managed
