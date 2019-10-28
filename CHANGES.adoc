@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.49 Oct 28 2019
+
+- Update to model 0.0.17:
+** Added `Disconnected`, `DisplayName` and `ExternalClusterID` attributes to the
+   cluster authorization request type.
+
 == 0.1.48 Oct 27 2019
 
 - Update to model 0.0.16:
