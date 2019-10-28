@@ -26,13 +26,16 @@ import (
 // clusterAuthorizationRequestData is the data structure used internally to marshal and unmarshal
 // objects of type 'cluster_authorization_request'.
 type clusterAuthorizationRequestData struct {
-	BYOC             *bool                    "json:\"byoc,omitempty\""
-	AccountUsername  *string                  "json:\"account_username,omitempty\""
-	AvailabilityZone *string                  "json:\"availability_zone,omitempty\""
-	ClusterID        *string                  "json:\"cluster_id,omitempty\""
-	Managed          *bool                    "json:\"managed,omitempty\""
-	Reserve          *bool                    "json:\"reserve,omitempty\""
-	Resources        reservedResourceListData "json:\"resources,omitempty\""
+	BYOC              *bool                    "json:\"byoc,omitempty\""
+	AccountUsername   *string                  "json:\"account_username,omitempty\""
+	AvailabilityZone  *string                  "json:\"availability_zone,omitempty\""
+	ClusterID         *string                  "json:\"cluster_id,omitempty\""
+	Disconnected      *bool                    "json:\"disconnected,omitempty\""
+	DisplayName       *string                  "json:\"display_name,omitempty\""
+	ExternalClusterID *string                  "json:\"external_cluster_id,omitempty\""
+	Managed           *bool                    "json:\"managed,omitempty\""
+	Reserve           *bool                    "json:\"reserve,omitempty\""
+	Resources         reservedResourceListData "json:\"resources,omitempty\""
 }
 
 // MarshalClusterAuthorizationRequest writes a value of the 'cluster_authorization_request' to the given target,
@@ -60,6 +63,9 @@ func (o *ClusterAuthorizationRequest) wrap() (data *clusterAuthorizationRequestD
 	data.AccountUsername = o.accountUsername
 	data.AvailabilityZone = o.availabilityZone
 	data.ClusterID = o.clusterID
+	data.Disconnected = o.disconnected
+	data.DisplayName = o.displayName
+	data.ExternalClusterID = o.externalClusterID
 	data.Managed = o.managed
 	data.Reserve = o.reserve
 	data.Resources, err = o.resources.wrap()
@@ -96,6 +102,9 @@ func (d *clusterAuthorizationRequestData) unwrap() (object *ClusterAuthorization
 	object.accountUsername = d.AccountUsername
 	object.availabilityZone = d.AvailabilityZone
 	object.clusterID = d.ClusterID
+	object.disconnected = d.Disconnected
+	object.displayName = d.DisplayName
+	object.externalClusterID = d.ExternalClusterID
 	object.managed = d.Managed
 	object.reserve = d.Reserve
 	object.resources, err = d.Resources.unwrap()

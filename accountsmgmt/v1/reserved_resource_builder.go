@@ -19,6 +19,10 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
+import (
+	time "time"
+)
+
 // ReservedResourceBuilder contains the data and logic needed to build 'reserved_resource' objects.
 //
 //
@@ -26,8 +30,10 @@ type ReservedResourceBuilder struct {
 	byoc                 *bool
 	availabilityZoneType *string
 	count                *int
+	createdAt            *time.Time
 	resourceName         *string
 	resourceType         *string
+	updatedAt            *time.Time
 }
 
 // NewReservedResource creates a new builder of 'reserved_resource' objects.
@@ -62,6 +68,15 @@ func (b *ReservedResourceBuilder) Count(value int) *ReservedResourceBuilder {
 	return b
 }
 
+// CreatedAt sets the value of the 'created_at' attribute
+// to the given value.
+//
+//
+func (b *ReservedResourceBuilder) CreatedAt(value time.Time) *ReservedResourceBuilder {
+	b.createdAt = &value
+	return b
+}
+
 // ResourceName sets the value of the 'resource_name' attribute
 // to the given value.
 //
@@ -80,6 +95,15 @@ func (b *ReservedResourceBuilder) ResourceType(value string) *ReservedResourceBu
 	return b
 }
 
+// UpdatedAt sets the value of the 'updated_at' attribute
+// to the given value.
+//
+//
+func (b *ReservedResourceBuilder) UpdatedAt(value time.Time) *ReservedResourceBuilder {
+	b.updatedAt = &value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *ReservedResourceBuilder) Copy(object *ReservedResource) *ReservedResourceBuilder {
 	if object == nil {
@@ -88,8 +112,10 @@ func (b *ReservedResourceBuilder) Copy(object *ReservedResource) *ReservedResour
 	b.byoc = object.byoc
 	b.availabilityZoneType = object.availabilityZoneType
 	b.count = object.count
+	b.createdAt = object.createdAt
 	b.resourceName = object.resourceName
 	b.resourceType = object.resourceType
+	b.updatedAt = object.updatedAt
 	return b
 }
 
@@ -105,11 +131,17 @@ func (b *ReservedResourceBuilder) Build() (object *ReservedResource, err error) 
 	if b.count != nil {
 		object.count = b.count
 	}
+	if b.createdAt != nil {
+		object.createdAt = b.createdAt
+	}
 	if b.resourceName != nil {
 		object.resourceName = b.resourceName
 	}
 	if b.resourceType != nil {
 		object.resourceType = b.resourceType
+	}
+	if b.updatedAt != nil {
+		object.updatedAt = b.updatedAt
 	}
 	return
 }

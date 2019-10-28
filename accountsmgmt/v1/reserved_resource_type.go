@@ -19,6 +19,10 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
+import (
+	time "time"
+)
+
 // ReservedResource represents the values of the 'reserved_resource' type.
 //
 //
@@ -26,8 +30,10 @@ type ReservedResource struct {
 	byoc                 *bool
 	availabilityZoneType *string
 	count                *int
+	createdAt            *time.Time
 	resourceName         *string
 	resourceType         *string
+	updatedAt            *time.Time
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -35,8 +41,10 @@ func (o *ReservedResource) Empty() bool {
 	return o == nil || (o.byoc == nil &&
 		o.availabilityZoneType == nil &&
 		o.count == nil &&
+		o.createdAt == nil &&
 		o.resourceName == nil &&
 		o.resourceType == nil &&
+		o.updatedAt == nil &&
 		true)
 }
 
@@ -109,6 +117,29 @@ func (o *ReservedResource) GetCount() (value int, ok bool) {
 	return
 }
 
+// CreatedAt returns the value of the 'created_at' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ReservedResource) CreatedAt() time.Time {
+	if o != nil && o.createdAt != nil {
+		return *o.createdAt
+	}
+	return time.Time{}
+}
+
+// GetCreatedAt returns the value of the 'created_at' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ReservedResource) GetCreatedAt() (value time.Time, ok bool) {
+	ok = o != nil && o.createdAt != nil
+	if ok {
+		value = *o.createdAt
+	}
+	return
+}
+
 // ResourceName returns the value of the 'resource_name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -151,6 +182,29 @@ func (o *ReservedResource) GetResourceType() (value string, ok bool) {
 	ok = o != nil && o.resourceType != nil
 	if ok {
 		value = *o.resourceType
+	}
+	return
+}
+
+// UpdatedAt returns the value of the 'updated_at' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ReservedResource) UpdatedAt() time.Time {
+	if o != nil && o.updatedAt != nil {
+		return *o.updatedAt
+	}
+	return time.Time{}
+}
+
+// GetUpdatedAt returns the value of the 'updated_at' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ReservedResource) GetUpdatedAt() (value time.Time, ok bool) {
+	ok = o != nil && o.updatedAt != nil
+	if ok {
+		value = *o.updatedAt
 	}
 	return
 }

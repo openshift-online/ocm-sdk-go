@@ -23,13 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationRequest struct {
-	byoc             *bool
-	accountUsername  *string
-	availabilityZone *string
-	clusterID        *string
-	managed          *bool
-	reserve          *bool
-	resources        *ReservedResourceList
+	byoc              *bool
+	accountUsername   *string
+	availabilityZone  *string
+	clusterID         *string
+	disconnected      *bool
+	displayName       *string
+	externalClusterID *string
+	managed           *bool
+	reserve           *bool
+	resources         *ReservedResourceList
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -38,6 +41,9 @@ func (o *ClusterAuthorizationRequest) Empty() bool {
 		o.accountUsername == nil &&
 		o.availabilityZone == nil &&
 		o.clusterID == nil &&
+		o.disconnected == nil &&
+		o.displayName == nil &&
+		o.externalClusterID == nil &&
 		o.managed == nil &&
 		o.reserve == nil &&
 		o.resources.Empty() &&
@@ -132,6 +138,75 @@ func (o *ClusterAuthorizationRequest) GetClusterID() (value string, ok bool) {
 	ok = o != nil && o.clusterID != nil
 	if ok {
 		value = *o.clusterID
+	}
+	return
+}
+
+// Disconnected returns the value of the 'disconnected' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) Disconnected() bool {
+	if o != nil && o.disconnected != nil {
+		return *o.disconnected
+	}
+	return false
+}
+
+// GetDisconnected returns the value of the 'disconnected' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetDisconnected() (value bool, ok bool) {
+	ok = o != nil && o.disconnected != nil
+	if ok {
+		value = *o.disconnected
+	}
+	return
+}
+
+// DisplayName returns the value of the 'display_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) DisplayName() string {
+	if o != nil && o.displayName != nil {
+		return *o.displayName
+	}
+	return ""
+}
+
+// GetDisplayName returns the value of the 'display_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetDisplayName() (value string, ok bool) {
+	ok = o != nil && o.displayName != nil
+	if ok {
+		value = *o.displayName
+	}
+	return
+}
+
+// ExternalClusterID returns the value of the 'external_cluster_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) ExternalClusterID() string {
+	if o != nil && o.externalClusterID != nil {
+		return *o.externalClusterID
+	}
+	return ""
+}
+
+// GetExternalClusterID returns the value of the 'external_cluster_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetExternalClusterID() (value string, ok bool) {
+	ok = o != nil && o.externalClusterID != nil
+	if ok {
+		value = *o.externalClusterID
 	}
 	return
 }
