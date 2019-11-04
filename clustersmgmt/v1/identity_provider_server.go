@@ -103,9 +103,9 @@ func (r *IdentityProviderGetServerResponse) marshal(writer io.Writer) error {
 func dispatchIdentityProvider(w http.ResponseWriter, r *http.Request, server IdentityProviderServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodDelete:
+		case "DELETE":
 			adaptIdentityProviderDeleteRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptIdentityProviderGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -150,7 +150,7 @@ func adaptIdentityProviderDeleteRequest(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 	response := new(IdentityProviderDeleteServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -204,7 +204,7 @@ func adaptIdentityProviderGetRequest(w http.ResponseWriter, r *http.Request, ser
 		return
 	}
 	response := new(IdentityProviderGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

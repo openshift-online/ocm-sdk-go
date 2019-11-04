@@ -138,7 +138,7 @@ func (r *ResourceQuotasAddRequest) SendContext(ctx context.Context) (result *Res
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
@@ -323,7 +323,7 @@ func (r *ResourceQuotasListRequest) SendContext(ctx context.Context) (result *Re
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

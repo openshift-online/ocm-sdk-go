@@ -112,7 +112,7 @@ func (r *ResourceQuotaGetRequest) SendContext(ctx context.Context) (result *Reso
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}
@@ -256,7 +256,7 @@ func (r *ResourceQuotaUpdateRequest) SendContext(ctx context.Context) (result *R
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPatch,
+		Method: "PATCH",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),

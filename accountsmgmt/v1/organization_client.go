@@ -137,7 +137,7 @@ func (r *OrganizationGetRequest) SendContext(ctx context.Context) (result *Organ
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}
@@ -281,7 +281,7 @@ func (r *OrganizationUpdateRequest) SendContext(ctx context.Context) (result *Or
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPatch,
+		Method: "PATCH",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),

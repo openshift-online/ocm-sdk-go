@@ -122,7 +122,7 @@ func (r *ExportControlReviewPostServerResponse) marshal(writer io.Writer) error 
 func dispatchExportControlReview(w http.ResponseWriter, r *http.Request, server ExportControlReviewServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptExportControlReviewPostRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -175,7 +175,7 @@ func adaptExportControlReviewPostRequest(w http.ResponseWriter, r *http.Request,
 		return
 	}
 	response := new(ExportControlReviewPostServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

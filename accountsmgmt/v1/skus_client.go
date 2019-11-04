@@ -164,7 +164,7 @@ func (r *SKUSListRequest) SendContext(ctx context.Context) (result *SKUSListResp
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

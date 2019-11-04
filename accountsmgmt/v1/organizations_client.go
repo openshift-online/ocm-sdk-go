@@ -138,7 +138,7 @@ func (r *OrganizationsAddRequest) SendContext(ctx context.Context) (result *Orga
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
@@ -348,7 +348,7 @@ func (r *OrganizationsListRequest) SendContext(ctx context.Context) (result *Org
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

@@ -295,9 +295,9 @@ type registryCredentialsListServerResponseData struct {
 func dispatchRegistryCredentials(w http.ResponseWriter, r *http.Request, server RegistryCredentialsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptRegistryCredentialsAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptRegistryCredentialsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -354,7 +354,7 @@ func adaptRegistryCredentialsAddRequest(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 	response := new(RegistryCredentialsAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -421,7 +421,7 @@ func adaptRegistryCredentialsListRequest(w http.ResponseWriter, r *http.Request,
 		return
 	}
 	response := new(RegistryCredentialsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

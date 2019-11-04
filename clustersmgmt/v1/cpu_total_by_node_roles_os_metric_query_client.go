@@ -100,7 +100,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) SendContext(ctx context.Con
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

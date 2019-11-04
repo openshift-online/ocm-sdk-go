@@ -82,7 +82,7 @@ func (r *FlavourGetServerResponse) marshal(writer io.Writer) error {
 func dispatchFlavour(w http.ResponseWriter, r *http.Request, server FlavourServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptFlavourGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptFlavourGetRequest(w http.ResponseWriter, r *http.Request, server Flavo
 		return
 	}
 	response := new(FlavourGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

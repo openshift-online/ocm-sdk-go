@@ -82,7 +82,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetServerResponse) marshal(writer io.Wr
 func dispatchCPUTotalByNodeRolesOSMetricQuery(w http.ResponseWriter, r *http.Request, server CPUTotalByNodeRolesOSMetricQueryServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptCPUTotalByNodeRolesOSMetricQueryGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptCPUTotalByNodeRolesOSMetricQueryGetRequest(w http.ResponseWriter, r *h
 		return
 	}
 	response := new(CPUTotalByNodeRolesOSMetricQueryGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

@@ -138,7 +138,7 @@ func (r *AccountsAddRequest) SendContext(ctx context.Context) (result *AccountsA
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
@@ -372,7 +372,7 @@ func (r *AccountsListRequest) SendContext(ctx context.Context) (result *Accounts
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

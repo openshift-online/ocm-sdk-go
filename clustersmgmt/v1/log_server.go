@@ -82,7 +82,7 @@ func (r *LogGetServerResponse) marshal(writer io.Writer) error {
 func dispatchLog(w http.ResponseWriter, r *http.Request, server LogServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptLogGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptLogGetRequest(w http.ResponseWriter, r *http.Request, server LogServer
 		return
 	}
 	response := new(LogGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

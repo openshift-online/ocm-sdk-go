@@ -115,7 +115,7 @@ func (r *SelfAccessReviewPostRequest) SendContext(ctx context.Context) (result *
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),

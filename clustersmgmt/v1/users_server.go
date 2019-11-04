@@ -210,9 +210,9 @@ type usersListServerResponseData struct {
 func dispatchUsers(w http.ResponseWriter, r *http.Request, server UsersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptUsersAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptUsersListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -269,7 +269,7 @@ func adaptUsersAddRequest(w http.ResponseWriter, r *http.Request, server UsersSe
 		return
 	}
 	response := new(UsersAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -323,7 +323,7 @@ func adaptUsersListRequest(w http.ResponseWriter, r *http.Request, server UsersS
 		return
 	}
 	response := new(UsersListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

@@ -123,7 +123,7 @@ func (r *ClusterRegistrationsPostServerResponse) marshal(writer io.Writer) error
 func dispatchClusterRegistrations(w http.ResponseWriter, r *http.Request, server ClusterRegistrationsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptClusterRegistrationsPostRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -176,7 +176,7 @@ func adaptClusterRegistrationsPostRequest(w http.ResponseWriter, r *http.Request
 		return
 	}
 	response := new(ClusterRegistrationsPostServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

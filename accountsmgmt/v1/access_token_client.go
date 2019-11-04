@@ -99,7 +99,7 @@ func (r *AccessTokenPostRequest) SendContext(ctx context.Context) (result *Acces
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 	}

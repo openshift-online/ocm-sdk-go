@@ -397,9 +397,9 @@ type clustersListServerResponseData struct {
 func dispatchClusters(w http.ResponseWriter, r *http.Request, server ClustersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptClustersAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptClustersListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -456,7 +456,7 @@ func adaptClustersAddRequest(w http.ResponseWriter, r *http.Request, server Clus
 		return
 	}
 	response := new(ClustersAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -531,7 +531,7 @@ func adaptClustersListRequest(w http.ResponseWriter, r *http.Request, server Clu
 		return
 	}
 	response := new(ClustersListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

@@ -115,7 +115,7 @@ func (r *ExportControlReviewPostRequest) SendContext(ctx context.Context) (resul
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),

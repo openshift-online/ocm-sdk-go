@@ -164,11 +164,11 @@ func (r *RoleUpdateServerResponse) Status(value int) *RoleUpdateServerResponse {
 func dispatchRole(w http.ResponseWriter, r *http.Request, server RoleServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodDelete:
+		case "DELETE":
 			adaptRoleDeleteRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptRoleGetRequest(w, r, server)
-		case http.MethodPatch:
+		case "PATCH":
 			adaptRoleUpdateRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -213,7 +213,7 @@ func adaptRoleDeleteRequest(w http.ResponseWriter, r *http.Request, server RoleS
 		return
 	}
 	response := new(RoleDeleteServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -267,7 +267,7 @@ func adaptRoleGetRequest(w http.ResponseWriter, r *http.Request, server RoleServ
 		return
 	}
 	response := new(RoleGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -321,7 +321,7 @@ func adaptRoleUpdateRequest(w http.ResponseWriter, r *http.Request, server RoleS
 		return
 	}
 	response := new(RoleUpdateServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

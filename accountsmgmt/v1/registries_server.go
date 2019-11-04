@@ -212,7 +212,7 @@ type registriesListServerResponseData struct {
 func dispatchRegistries(w http.ResponseWriter, r *http.Request, server RegistriesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptRegistriesListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -278,7 +278,7 @@ func adaptRegistriesListRequest(w http.ResponseWriter, r *http.Request, server R
 		return
 	}
 	response := new(RegistriesListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

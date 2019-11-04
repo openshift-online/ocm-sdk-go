@@ -122,7 +122,7 @@ func (r *AccessReviewPostServerResponse) marshal(writer io.Writer) error {
 func dispatchAccessReview(w http.ResponseWriter, r *http.Request, server AccessReviewServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptAccessReviewPostRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -175,7 +175,7 @@ func adaptAccessReviewPostRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(AccessReviewPostServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

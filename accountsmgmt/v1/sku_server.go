@@ -82,7 +82,7 @@ func (r *SKUGetServerResponse) marshal(writer io.Writer) error {
 func dispatchSKU(w http.ResponseWriter, r *http.Request, server SKUServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptSKUGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptSKUGetRequest(w http.ResponseWriter, r *http.Request, server SKUServer
 		return
 	}
 	response := new(SKUGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

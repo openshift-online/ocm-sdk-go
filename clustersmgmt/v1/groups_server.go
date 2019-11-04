@@ -127,7 +127,7 @@ type groupsListServerResponseData struct {
 func dispatchGroups(w http.ResponseWriter, r *http.Request, server GroupsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptGroupsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -180,7 +180,7 @@ func adaptGroupsListRequest(w http.ResponseWriter, r *http.Request, server Group
 		return
 	}
 	response := new(GroupsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

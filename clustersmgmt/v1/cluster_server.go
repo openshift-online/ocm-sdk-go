@@ -194,11 +194,11 @@ func (r *ClusterUpdateServerResponse) Status(value int) *ClusterUpdateServerResp
 func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodDelete:
+		case "DELETE":
 			adaptClusterDeleteRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptClusterGetRequest(w, r, server)
-		case http.MethodPatch:
+		case "PATCH":
 			adaptClusterUpdateRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -285,7 +285,7 @@ func adaptClusterDeleteRequest(w http.ResponseWriter, r *http.Request, server Cl
 		return
 	}
 	response := new(ClusterDeleteServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -339,7 +339,7 @@ func adaptClusterGetRequest(w http.ResponseWriter, r *http.Request, server Clust
 		return
 	}
 	response := new(ClusterGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -393,7 +393,7 @@ func adaptClusterUpdateRequest(w http.ResponseWriter, r *http.Request, server Cl
 		return
 	}
 	response := new(ClusterUpdateServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

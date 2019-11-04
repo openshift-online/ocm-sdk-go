@@ -310,7 +310,7 @@ type cloudProvidersListServerResponseData struct {
 func dispatchCloudProviders(w http.ResponseWriter, r *http.Request, server CloudProvidersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptCloudProvidersListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -384,7 +384,7 @@ func adaptCloudProvidersListRequest(w http.ResponseWriter, r *http.Request, serv
 		return
 	}
 	response := new(CloudProvidersListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

@@ -344,9 +344,9 @@ type organizationsListServerResponseData struct {
 func dispatchOrganizations(w http.ResponseWriter, r *http.Request, server OrganizationsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptOrganizationsAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptOrganizationsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -403,7 +403,7 @@ func adaptOrganizationsAddRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(OrganizationsAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -474,7 +474,7 @@ func adaptOrganizationsListRequest(w http.ResponseWriter, r *http.Request, serve
 		return
 	}
 	response := new(OrganizationsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

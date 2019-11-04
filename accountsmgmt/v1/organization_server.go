@@ -155,9 +155,9 @@ func (r *OrganizationUpdateServerResponse) Status(value int) *OrganizationUpdate
 func dispatchOrganization(w http.ResponseWriter, r *http.Request, server OrganizationServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptOrganizationGetRequest(w, r, server)
-		case http.MethodPatch:
+		case "PATCH":
 			adaptOrganizationUpdateRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -220,7 +220,7 @@ func adaptOrganizationGetRequest(w http.ResponseWriter, r *http.Request, server 
 		return
 	}
 	response := new(OrganizationGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -274,7 +274,7 @@ func adaptOrganizationUpdateRequest(w http.ResponseWriter, r *http.Request, serv
 		return
 	}
 	response := new(OrganizationUpdateServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

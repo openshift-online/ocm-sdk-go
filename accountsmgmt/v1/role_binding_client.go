@@ -110,7 +110,7 @@ func (r *RoleBindingDeleteRequest) SendContext(ctx context.Context) (result *Rol
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodDelete,
+		Method: "DELETE",
 		URL:    uri,
 		Header: header,
 	}
@@ -196,7 +196,7 @@ func (r *RoleBindingGetRequest) SendContext(ctx context.Context) (result *RoleBi
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

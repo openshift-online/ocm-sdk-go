@@ -99,7 +99,7 @@ func (r *VersionGetRequest) SendContext(ctx context.Context) (result *VersionGet
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

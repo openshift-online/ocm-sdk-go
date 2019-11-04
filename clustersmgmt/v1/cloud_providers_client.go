@@ -202,7 +202,7 @@ func (r *CloudProvidersListRequest) SendContext(ctx context.Context) (result *Cl
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

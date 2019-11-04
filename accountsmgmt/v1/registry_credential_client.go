@@ -99,7 +99,7 @@ func (r *RegistryCredentialGetRequest) SendContext(ctx context.Context) (result 
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

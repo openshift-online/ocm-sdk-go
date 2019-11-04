@@ -82,7 +82,7 @@ func (r *VersionGetServerResponse) marshal(writer io.Writer) error {
 func dispatchVersion(w http.ResponseWriter, r *http.Request, server VersionServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptVersionGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptVersionGetRequest(w http.ResponseWriter, r *http.Request, server Versi
 		return
 	}
 	response := new(VersionGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

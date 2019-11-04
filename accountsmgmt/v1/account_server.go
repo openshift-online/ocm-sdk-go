@@ -143,9 +143,9 @@ func (r *AccountUpdateServerResponse) Status(value int) *AccountUpdateServerResp
 func dispatchAccount(w http.ResponseWriter, r *http.Request, server AccountServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptAccountGetRequest(w, r, server)
-		case http.MethodPatch:
+		case "PATCH":
 			adaptAccountUpdateRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -194,7 +194,7 @@ func adaptAccountGetRequest(w http.ResponseWriter, r *http.Request, server Accou
 		return
 	}
 	response := new(AccountGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -248,7 +248,7 @@ func adaptAccountUpdateRequest(w http.ResponseWriter, r *http.Request, server Ac
 		return
 	}
 	response := new(AccountUpdateServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

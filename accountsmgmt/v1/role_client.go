@@ -123,7 +123,7 @@ func (r *RoleDeleteRequest) SendContext(ctx context.Context) (result *RoleDelete
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodDelete,
+		Method: "DELETE",
 		URL:    uri,
 		Header: header,
 	}
@@ -209,7 +209,7 @@ func (r *RoleGetRequest) SendContext(ctx context.Context) (result *RoleGetRespon
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}
@@ -353,7 +353,7 @@ func (r *RoleUpdateRequest) SendContext(ctx context.Context) (result *RoleUpdate
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPatch,
+		Method: "PATCH",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),

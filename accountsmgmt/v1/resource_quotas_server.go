@@ -295,9 +295,9 @@ type resourceQuotasListServerResponseData struct {
 func dispatchResourceQuotas(w http.ResponseWriter, r *http.Request, server ResourceQuotasServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptResourceQuotasAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptResourceQuotasListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -354,7 +354,7 @@ func adaptResourceQuotasAddRequest(w http.ResponseWriter, r *http.Request, serve
 		return
 	}
 	response := new(ResourceQuotasAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -421,7 +421,7 @@ func adaptResourceQuotasListRequest(w http.ResponseWriter, r *http.Request, serv
 		return
 	}
 	response := new(ResourceQuotasListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

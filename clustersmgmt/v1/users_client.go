@@ -138,7 +138,7 @@ func (r *UsersAddRequest) SendContext(ctx context.Context) (result *UsersAddResp
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
@@ -282,7 +282,7 @@ func (r *UsersListRequest) SendContext(ctx context.Context) (result *UsersListRe
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}
