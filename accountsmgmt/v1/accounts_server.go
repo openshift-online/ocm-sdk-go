@@ -391,9 +391,9 @@ type accountsListServerResponseData struct {
 func dispatchAccounts(w http.ResponseWriter, r *http.Request, server AccountsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptAccountsAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptAccountsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -450,7 +450,7 @@ func adaptAccountsAddRequest(w http.ResponseWriter, r *http.Request, server Acco
 		return
 	}
 	response := new(AccountsAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -525,7 +525,7 @@ func adaptAccountsListRequest(w http.ResponseWriter, r *http.Request, server Acc
 		return
 	}
 	response := new(AccountsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

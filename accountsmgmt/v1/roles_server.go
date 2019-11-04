@@ -344,9 +344,9 @@ type rolesListServerResponseData struct {
 func dispatchRoles(w http.ResponseWriter, r *http.Request, server RolesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptRolesAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptRolesListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -403,7 +403,7 @@ func adaptRolesAddRequest(w http.ResponseWriter, r *http.Request, server RolesSe
 		return
 	}
 	response := new(RolesAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -474,7 +474,7 @@ func adaptRolesListRequest(w http.ResponseWriter, r *http.Request, server RolesS
 		return
 	}
 	response := new(RolesListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

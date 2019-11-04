@@ -122,7 +122,7 @@ func (r *SelfAccessReviewPostServerResponse) marshal(writer io.Writer) error {
 func dispatchSelfAccessReview(w http.ResponseWriter, r *http.Request, server SelfAccessReviewServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptSelfAccessReviewPostRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -175,7 +175,7 @@ func adaptSelfAccessReviewPostRequest(w http.ResponseWriter, r *http.Request, se
 		return
 	}
 	response := new(SelfAccessReviewPostServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

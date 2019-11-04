@@ -103,9 +103,9 @@ func (r *PermissionGetServerResponse) marshal(writer io.Writer) error {
 func dispatchPermission(w http.ResponseWriter, r *http.Request, server PermissionServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodDelete:
+		case "DELETE":
 			adaptPermissionDeleteRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptPermissionGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -150,7 +150,7 @@ func adaptPermissionDeleteRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(PermissionDeleteServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -204,7 +204,7 @@ func adaptPermissionGetRequest(w http.ResponseWriter, r *http.Request, server Pe
 		return
 	}
 	response := new(PermissionGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

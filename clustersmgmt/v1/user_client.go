@@ -110,7 +110,7 @@ func (r *UserDeleteRequest) SendContext(ctx context.Context) (result *UserDelete
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodDelete,
+		Method: "DELETE",
 		URL:    uri,
 		Header: header,
 	}
@@ -196,7 +196,7 @@ func (r *UserGetRequest) SendContext(ctx context.Context) (result *UserGetRespon
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

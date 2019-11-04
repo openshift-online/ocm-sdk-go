@@ -310,7 +310,7 @@ type versionsListServerResponseData struct {
 func dispatchVersions(w http.ResponseWriter, r *http.Request, server VersionsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptVersionsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -384,7 +384,7 @@ func adaptVersionsListRequest(w http.ResponseWriter, r *http.Request, server Ver
 		return
 	}
 	response := new(VersionsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

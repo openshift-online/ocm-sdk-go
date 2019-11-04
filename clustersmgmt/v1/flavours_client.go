@@ -138,7 +138,7 @@ func (r *FlavoursAddRequest) SendContext(ctx context.Context) (result *FlavoursA
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
@@ -373,7 +373,7 @@ func (r *FlavoursListRequest) SendContext(ctx context.Context) (result *Flavours
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

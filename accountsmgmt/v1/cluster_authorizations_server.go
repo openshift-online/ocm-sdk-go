@@ -122,7 +122,7 @@ func (r *ClusterAuthorizationsPostServerResponse) marshal(writer io.Writer) erro
 func dispatchClusterAuthorizations(w http.ResponseWriter, r *http.Request, server ClusterAuthorizationsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptClusterAuthorizationsPostRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -175,7 +175,7 @@ func adaptClusterAuthorizationsPostRequest(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	response := new(ClusterAuthorizationsPostServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

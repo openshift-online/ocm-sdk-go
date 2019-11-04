@@ -295,9 +295,9 @@ type permissionsListServerResponseData struct {
 func dispatchPermissions(w http.ResponseWriter, r *http.Request, server PermissionsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptPermissionsAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptPermissionsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -354,7 +354,7 @@ func adaptPermissionsAddRequest(w http.ResponseWriter, r *http.Request, server P
 		return
 	}
 	response := new(PermissionsAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -421,7 +421,7 @@ func adaptPermissionsListRequest(w http.ResponseWriter, r *http.Request, server 
 		return
 	}
 	response := new(PermissionsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

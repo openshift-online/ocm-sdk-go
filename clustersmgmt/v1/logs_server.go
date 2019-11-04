@@ -127,7 +127,7 @@ type logsListServerResponseData struct {
 func dispatchLogs(w http.ResponseWriter, r *http.Request, server LogsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptLogsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -180,7 +180,7 @@ func adaptLogsListRequest(w http.ResponseWriter, r *http.Request, server LogsSer
 		return
 	}
 	response := new(LogsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

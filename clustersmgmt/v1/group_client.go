@@ -111,7 +111,7 @@ func (r *GroupGetRequest) SendContext(ctx context.Context) (result *GroupGetResp
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

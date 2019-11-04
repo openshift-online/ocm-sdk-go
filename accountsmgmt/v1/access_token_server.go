@@ -82,7 +82,7 @@ func (r *AccessTokenPostServerResponse) marshal(writer io.Writer) error {
 func dispatchAccessToken(w http.ResponseWriter, r *http.Request, server AccessTokenServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptAccessTokenPostRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptAccessTokenPostRequest(w http.ResponseWriter, r *http.Request, server 
 		return
 	}
 	response := new(AccessTokenPostServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

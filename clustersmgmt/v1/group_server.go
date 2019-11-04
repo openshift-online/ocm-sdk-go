@@ -87,7 +87,7 @@ func (r *GroupGetServerResponse) marshal(writer io.Writer) error {
 func dispatchGroup(w http.ResponseWriter, r *http.Request, server GroupServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptGroupGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -143,7 +143,7 @@ func adaptGroupGetRequest(w http.ResponseWriter, r *http.Request, server GroupSe
 		return
 	}
 	response := new(GroupGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

@@ -99,7 +99,7 @@ func (r *CurrentAccountGetRequest) SendContext(ctx context.Context) (result *Cur
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

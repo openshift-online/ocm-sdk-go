@@ -258,7 +258,7 @@ type quotaSummaryListServerResponseData struct {
 func dispatchQuotaSummary(w http.ResponseWriter, r *http.Request, server QuotaSummaryServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptQuotaSummaryListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -324,7 +324,7 @@ func adaptQuotaSummaryListRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(QuotaSummaryListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

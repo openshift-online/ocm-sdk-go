@@ -103,9 +103,9 @@ func (r *RoleBindingGetServerResponse) marshal(writer io.Writer) error {
 func dispatchRoleBinding(w http.ResponseWriter, r *http.Request, server RoleBindingServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodDelete:
+		case "DELETE":
 			adaptRoleBindingDeleteRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptRoleBindingGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -150,7 +150,7 @@ func adaptRoleBindingDeleteRequest(w http.ResponseWriter, r *http.Request, serve
 		return
 	}
 	response := new(RoleBindingDeleteServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -204,7 +204,7 @@ func adaptRoleBindingGetRequest(w http.ResponseWriter, r *http.Request, server R
 		return
 	}
 	response := new(RoleBindingGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

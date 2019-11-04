@@ -82,7 +82,7 @@ func (r *CredentialsGetServerResponse) marshal(writer io.Writer) error {
 func dispatchCredentials(w http.ResponseWriter, r *http.Request, server CredentialsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptCredentialsGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptCredentialsGetRequest(w http.ResponseWriter, r *http.Request, server C
 		return
 	}
 	response := new(CredentialsGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

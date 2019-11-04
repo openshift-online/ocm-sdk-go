@@ -103,9 +103,9 @@ func (r *SubscriptionGetServerResponse) marshal(writer io.Writer) error {
 func dispatchSubscription(w http.ResponseWriter, r *http.Request, server SubscriptionServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodDelete:
+		case "DELETE":
 			adaptSubscriptionDeleteRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptSubscriptionGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -150,7 +150,7 @@ func adaptSubscriptionDeleteRequest(w http.ResponseWriter, r *http.Request, serv
 		return
 	}
 	response := new(SubscriptionDeleteServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -204,7 +204,7 @@ func adaptSubscriptionGetRequest(w http.ResponseWriter, r *http.Request, server 
 		return
 	}
 	response := new(SubscriptionGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

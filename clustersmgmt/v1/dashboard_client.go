@@ -99,7 +99,7 @@ func (r *DashboardGetRequest) SendContext(ctx context.Context) (result *Dashboar
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

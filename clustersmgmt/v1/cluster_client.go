@@ -190,7 +190,7 @@ func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *Cluster
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodDelete,
+		Method: "DELETE",
 		URL:    uri,
 		Header: header,
 	}
@@ -276,7 +276,7 @@ func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGet
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}
@@ -420,7 +420,7 @@ func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *Cluster
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPatch,
+		Method: "PATCH",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),

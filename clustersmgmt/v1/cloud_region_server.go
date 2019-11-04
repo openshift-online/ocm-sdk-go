@@ -82,7 +82,7 @@ func (r *CloudRegionGetServerResponse) marshal(writer io.Writer) error {
 func dispatchCloudRegion(w http.ResponseWriter, r *http.Request, server CloudRegionServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptCloudRegionGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptCloudRegionGetRequest(w http.ResponseWriter, r *http.Request, server C
 		return
 	}
 	response := new(CloudRegionGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

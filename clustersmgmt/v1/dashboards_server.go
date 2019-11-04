@@ -310,7 +310,7 @@ type dashboardsListServerResponseData struct {
 func dispatchDashboards(w http.ResponseWriter, r *http.Request, server DashboardsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptDashboardsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -384,7 +384,7 @@ func adaptDashboardsListRequest(w http.ResponseWriter, r *http.Request, server D
 		return
 	}
 	response := new(DashboardsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

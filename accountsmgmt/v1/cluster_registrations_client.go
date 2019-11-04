@@ -116,7 +116,7 @@ func (r *ClusterRegistrationsPostRequest) SendContext(ctx context.Context) (resu
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),

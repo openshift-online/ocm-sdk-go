@@ -210,9 +210,9 @@ type identityProvidersListServerResponseData struct {
 func dispatchIdentityProviders(w http.ResponseWriter, r *http.Request, server IdentityProvidersServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptIdentityProvidersAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptIdentityProvidersListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -269,7 +269,7 @@ func adaptIdentityProvidersAddRequest(w http.ResponseWriter, r *http.Request, se
 		return
 	}
 	response := new(IdentityProvidersAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -323,7 +323,7 @@ func adaptIdentityProvidersListRequest(w http.ResponseWriter, r *http.Request, s
 		return
 	}
 	response := new(IdentityProvidersListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

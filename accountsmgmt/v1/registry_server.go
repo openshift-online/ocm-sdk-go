@@ -82,7 +82,7 @@ func (r *RegistryGetServerResponse) marshal(writer io.Writer) error {
 func dispatchRegistry(w http.ResponseWriter, r *http.Request, server RegistryServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptRegistryGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptRegistryGetRequest(w http.ResponseWriter, r *http.Request, server Regi
 		return
 	}
 	response := new(RegistryGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

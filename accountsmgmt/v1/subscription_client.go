@@ -110,7 +110,7 @@ func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *Su
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodDelete,
+		Method: "DELETE",
 		URL:    uri,
 		Header: header,
 	}
@@ -196,7 +196,7 @@ func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *Subsc
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

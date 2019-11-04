@@ -88,7 +88,7 @@ func (r *CloudProviderGetServerResponse) marshal(writer io.Writer) error {
 func dispatchCloudProvider(w http.ResponseWriter, r *http.Request, server CloudProviderServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptCloudProviderGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -144,7 +144,7 @@ func adaptCloudProviderGetRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(CloudProviderGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

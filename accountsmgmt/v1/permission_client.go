@@ -110,7 +110,7 @@ func (r *PermissionDeleteRequest) SendContext(ctx context.Context) (result *Perm
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodDelete,
+		Method: "DELETE",
 		URL:    uri,
 		Header: header,
 	}
@@ -196,7 +196,7 @@ func (r *PermissionGetRequest) SendContext(ctx context.Context) (result *Permiss
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

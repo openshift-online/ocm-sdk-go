@@ -103,9 +103,9 @@ func (r *UserGetServerResponse) marshal(writer io.Writer) error {
 func dispatchUser(w http.ResponseWriter, r *http.Request, server UserServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodDelete:
+		case "DELETE":
 			adaptUserDeleteRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptUserGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -150,7 +150,7 @@ func adaptUserDeleteRequest(w http.ResponseWriter, r *http.Request, server UserS
 		return
 	}
 	response := new(UserDeleteServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -204,7 +204,7 @@ func adaptUserGetRequest(w http.ResponseWriter, r *http.Request, server UserServ
 		return
 	}
 	response := new(UserGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

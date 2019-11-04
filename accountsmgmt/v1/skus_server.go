@@ -236,7 +236,7 @@ type skusListServerResponseData struct {
 func dispatchSKUS(w http.ResponseWriter, r *http.Request, server SKUSServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptSKUSListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -302,7 +302,7 @@ func adaptSKUSListRequest(w http.ResponseWriter, r *http.Request, server SKUSSer
 		return
 	}
 	response := new(SKUSListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

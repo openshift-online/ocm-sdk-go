@@ -393,9 +393,9 @@ type flavoursListServerResponseData struct {
 func dispatchFlavours(w http.ResponseWriter, r *http.Request, server FlavoursServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptFlavoursAddRequest(w, r, server)
-		case http.MethodGet:
+		case "GET":
 			adaptFlavoursListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -452,7 +452,7 @@ func adaptFlavoursAddRequest(w http.ResponseWriter, r *http.Request, server Flav
 		return
 	}
 	response := new(FlavoursAddServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -527,7 +527,7 @@ func adaptFlavoursListRequest(w http.ResponseWriter, r *http.Request, server Fla
 		return
 	}
 	response := new(FlavoursListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

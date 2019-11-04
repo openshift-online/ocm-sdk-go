@@ -136,7 +136,7 @@ type cloudRegionsListServerResponseData struct {
 func dispatchCloudRegions(w http.ResponseWriter, r *http.Request, server CloudRegionsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptCloudRegionsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -189,7 +189,7 @@ func adaptCloudRegionsListRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(CloudRegionsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

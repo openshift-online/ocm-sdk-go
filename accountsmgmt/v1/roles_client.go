@@ -138,7 +138,7 @@ func (r *RolesAddRequest) SendContext(ctx context.Context) (result *RolesAddResp
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodPost,
+		Method: "POST",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
@@ -348,7 +348,7 @@ func (r *RolesListRequest) SendContext(ctx context.Context) (result *RolesListRe
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

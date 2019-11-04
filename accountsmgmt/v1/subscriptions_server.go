@@ -308,7 +308,7 @@ type subscriptionsListServerResponseData struct {
 func dispatchSubscriptions(w http.ResponseWriter, r *http.Request, server SubscriptionsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptSubscriptionsListRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -382,7 +382,7 @@ func adaptSubscriptionsListRequest(w http.ResponseWriter, r *http.Request, serve
 		return
 	}
 	response := new(SubscriptionsListServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

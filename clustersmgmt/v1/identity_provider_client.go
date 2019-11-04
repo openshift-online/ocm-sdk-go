@@ -110,7 +110,7 @@ func (r *IdentityProviderDeleteRequest) SendContext(ctx context.Context) (result
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodDelete,
+		Method: "DELETE",
 		URL:    uri,
 		Header: header,
 	}
@@ -196,7 +196,7 @@ func (r *IdentityProviderGetRequest) SendContext(ctx context.Context) (result *I
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: http.MethodGet,
+		Method: "GET",
 		URL:    uri,
 		Header: header,
 	}

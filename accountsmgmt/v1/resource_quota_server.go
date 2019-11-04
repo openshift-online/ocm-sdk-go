@@ -143,9 +143,9 @@ func (r *ResourceQuotaUpdateServerResponse) Status(value int) *ResourceQuotaUpda
 func dispatchResourceQuota(w http.ResponseWriter, r *http.Request, server ResourceQuotaServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptResourceQuotaGetRequest(w, r, server)
-		case http.MethodPatch:
+		case "PATCH":
 			adaptResourceQuotaUpdateRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -194,7 +194,7 @@ func adaptResourceQuotaGetRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(ResourceQuotaGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
@@ -248,7 +248,7 @@ func adaptResourceQuotaUpdateRequest(w http.ResponseWriter, r *http.Request, ser
 		return
 	}
 	response := new(ResourceQuotaUpdateServerResponse)
-	response.status = http.StatusOK
+	response.status = 204
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

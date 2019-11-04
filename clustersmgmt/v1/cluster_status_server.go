@@ -82,7 +82,7 @@ func (r *ClusterStatusGetServerResponse) marshal(writer io.Writer) error {
 func dispatchClusterStatus(w http.ResponseWriter, r *http.Request, server ClusterStatusServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodGet:
+		case "GET":
 			adaptClusterStatusGetRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -131,7 +131,7 @@ func adaptClusterStatusGetRequest(w http.ResponseWriter, r *http.Request, server
 		return
 	}
 	response := new(ClusterStatusGetServerResponse)
-	response.status = http.StatusOK
+	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

@@ -123,7 +123,7 @@ func (r *ResourceReviewPostServerResponse) marshal(writer io.Writer) error {
 func dispatchResourceReview(w http.ResponseWriter, r *http.Request, server ResourceReviewServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case http.MethodPost:
+		case "POST":
 			adaptResourceReviewPostRequest(w, r, server)
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -176,7 +176,7 @@ func adaptResourceReviewPostRequest(w http.ResponseWriter, r *http.Request, serv
 		return
 	}
 	response := new(ResourceReviewPostServerResponse)
-	response.status = http.StatusOK
+	response.status = 201
 	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
