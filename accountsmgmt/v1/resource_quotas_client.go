@@ -252,6 +252,7 @@ type ResourceQuotasListRequest struct {
 	query     url.Values
 	header    http.Header
 	page      *int
+	search    *string
 	size      *int
 	total     *int
 }
@@ -275,6 +276,27 @@ func (r *ResourceQuotasListRequest) Header(name string, value interface{}) *Reso
 // Default value is `1`.
 func (r *ResourceQuotasListRequest) Page(value int) *ResourceQuotasListRequest {
 	r.page = &value
+	return r
+}
+
+// Search sets the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the account
+// instead of the names of the columns of a table. For example, in order to
+// retrieve resource quota with resource_type cluster.aws:
+//
+// [source,sql]
+// ----
+// resource_type = 'cluster.aws'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *ResourceQuotasListRequest) Search(value string) *ResourceQuotasListRequest {
+	r.search = &value
 	return r
 }
 
@@ -310,6 +332,9 @@ func (r *ResourceQuotasListRequest) SendContext(ctx context.Context) (result *Re
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.search != nil {
+		helpers.AddValue(&query, "search", *r.search)
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)

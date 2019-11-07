@@ -129,9 +129,10 @@ func (r *RoleBindingsAddServerResponse) marshal(writer io.Writer) error {
 
 // RoleBindingsListServerRequest is the request for the 'list' method.
 type RoleBindingsListServerRequest struct {
-	page  *int
-	size  *int
-	total *int
+	page   *int
+	search *string
+	size   *int
+	total  *int
 }
 
 // Page returns the value of the 'page' parameter.
@@ -156,6 +157,54 @@ func (r *RoleBindingsListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
+	}
+	return
+}
+
+// Search returns the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the role binding
+// instead of the names of the columns of a table. For example, in order to
+// retrieve role bindings with role_id AuthenticatedUser:
+//
+// [source,sql]
+// ----
+// role_id = 'AuthenticatedUser'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *RoleBindingsListServerRequest) Search() string {
+	if r != nil && r.search != nil {
+		return *r.search
+	}
+	return ""
+}
+
+// GetSearch returns the value of the 'search' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the role binding
+// instead of the names of the columns of a table. For example, in order to
+// retrieve role bindings with role_id AuthenticatedUser:
+//
+// [source,sql]
+// ----
+// role_id = 'AuthenticatedUser'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *RoleBindingsListServerRequest) GetSearch() (value string, ok bool) {
+	ok = r != nil && r.search != nil
+	if ok {
+		value = *r.search
 	}
 	return
 }
@@ -381,6 +430,10 @@ func readRoleBindingsListRequest(r *http.Request) (*RoleBindingsListServerReques
 	result := new(RoleBindingsListServerRequest)
 	query := r.URL.Query()
 	result.page, err = helpers.ParseInteger(query, "page")
+	if err != nil {
+		return nil, err
+	}
+	result.search, err = helpers.ParseString(query, "search")
 	if err != nil {
 		return nil, err
 	}

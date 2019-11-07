@@ -252,6 +252,7 @@ type RoleBindingsListRequest struct {
 	query     url.Values
 	header    http.Header
 	page      *int
+	search    *string
 	size      *int
 	total     *int
 }
@@ -275,6 +276,27 @@ func (r *RoleBindingsListRequest) Header(name string, value interface{}) *RoleBi
 // Default value is `1`.
 func (r *RoleBindingsListRequest) Page(value int) *RoleBindingsListRequest {
 	r.page = &value
+	return r
+}
+
+// Search sets the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause
+// of an SQL statement, but using the names of the attributes of the role binding
+// instead of the names of the columns of a table. For example, in order to
+// retrieve role bindings with role_id AuthenticatedUser:
+//
+// [source,sql]
+// ----
+// role_id = 'AuthenticatedUser'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// items that the user has permission to see will be returned.
+func (r *RoleBindingsListRequest) Search(value string) *RoleBindingsListRequest {
+	r.search = &value
 	return r
 }
 
@@ -310,6 +332,9 @@ func (r *RoleBindingsListRequest) SendContext(ctx context.Context) (result *Role
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.search != nil {
+		helpers.AddValue(&query, "search", *r.search)
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
