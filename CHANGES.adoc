@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.51 Nov 7 2019
+
+- Update to model 0.0.18:
+** Added support to search role bindings and resource quota.
+
 == 0.1.50 Nov 4 2019
 
 - Update to metamodel 0.0.12:
