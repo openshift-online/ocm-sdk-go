@@ -35,15 +35,18 @@ const RoleBindingNilKind = "RoleBindingNil"
 //
 //
 type RoleBinding struct {
-	id            *string
-	href          *string
-	link          bool
-	account       *Account
-	configManaged *bool
-	organization  *Organization
-	role          *Role
-	subscription  *Subscription
-	type_         *string
+	id             *string
+	href           *string
+	link           bool
+	account        *Account
+	accountID      *string
+	configManaged  *bool
+	organization   *Organization
+	organizationID *string
+	role           *Role
+	roleID         *string
+	subscription   *Subscription
+	type_          *string
 }
 
 // Kind returns the name of the type of the object.
@@ -102,9 +105,12 @@ func (o *RoleBinding) GetHREF() (value string, ok bool) {
 func (o *RoleBinding) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.account == nil &&
+		o.accountID == nil &&
 		o.configManaged == nil &&
 		o.organization == nil &&
+		o.organizationID == nil &&
 		o.role == nil &&
+		o.roleID == nil &&
 		o.subscription == nil &&
 		o.type_ == nil &&
 		true)
@@ -129,6 +135,29 @@ func (o *RoleBinding) GetAccount() (value *Account, ok bool) {
 	ok = o != nil && o.account != nil
 	if ok {
 		value = o.account
+	}
+	return
+}
+
+// AccountID returns the value of the 'account_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RoleBinding) AccountID() string {
+	if o != nil && o.accountID != nil {
+		return *o.accountID
+	}
+	return ""
+}
+
+// GetAccountID returns the value of the 'account_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RoleBinding) GetAccountID() (value string, ok bool) {
+	ok = o != nil && o.accountID != nil
+	if ok {
+		value = *o.accountID
 	}
 	return
 }
@@ -179,6 +208,29 @@ func (o *RoleBinding) GetOrganization() (value *Organization, ok bool) {
 	return
 }
 
+// OrganizationID returns the value of the 'organization_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RoleBinding) OrganizationID() string {
+	if o != nil && o.organizationID != nil {
+		return *o.organizationID
+	}
+	return ""
+}
+
+// GetOrganizationID returns the value of the 'organization_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RoleBinding) GetOrganizationID() (value string, ok bool) {
+	ok = o != nil && o.organizationID != nil
+	if ok {
+		value = *o.organizationID
+	}
+	return
+}
+
 // Role returns the value of the 'role' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -198,6 +250,29 @@ func (o *RoleBinding) GetRole() (value *Role, ok bool) {
 	ok = o != nil && o.role != nil
 	if ok {
 		value = o.role
+	}
+	return
+}
+
+// RoleID returns the value of the 'role_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RoleBinding) RoleID() string {
+	if o != nil && o.roleID != nil {
+		return *o.roleID
+	}
+	return ""
+}
+
+// GetRoleID returns the value of the 'role_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RoleBinding) GetRoleID() (value string, ok bool) {
+	ok = o != nil && o.roleID != nil
+	if ok {
+		value = *o.roleID
 	}
 	return
 }

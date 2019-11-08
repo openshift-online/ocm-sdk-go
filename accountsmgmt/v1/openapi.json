@@ -2499,14 +2499,23 @@
           "account": {
             "$ref": "#/components/schemas/Account"
           },
+          "account_id": {
+            "type": "string"
+          },
           "config_managed": {
             "type": "boolean"
           },
           "organization": {
             "$ref": "#/components/schemas/Organization"
           },
+          "organization_id": {
+            "type": "string"
+          },
           "role": {
             "$ref": "#/components/schemas/Role"
+          },
+          "role_id": {
+            "type": "string"
           },
           "subscription": {
             "$ref": "#/components/schemas/Subscription"
