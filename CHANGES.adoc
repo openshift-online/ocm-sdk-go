@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.52 Nov 8 2019
+
+- Update to model 0.0.19:
+** Added identifiers to role binding type.
+
 == 0.1.51 Nov 7 2019
 
 - Update to model 0.0.18:
