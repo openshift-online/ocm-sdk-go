@@ -158,6 +158,18 @@ func (c *Client) RegistryCredentials() *RegistryCredentialsClient {
 	)
 }
 
+// ResourceQuota returns the target 'resource_quotas' resource.
+//
+// Reference to the resource that manages the collection of resource
+// quota.
+func (c *Client) ResourceQuota() *ResourceQuotasClient {
+	return NewResourceQuotasClient(
+		c.transport,
+		path.Join(c.path, "resource_quota"),
+		path.Join(c.metric, "resource_quota"),
+	)
+}
+
 // RoleBindings returns the target 'role_bindings' resource.
 //
 // Reference to the resource that manages the collection of role
