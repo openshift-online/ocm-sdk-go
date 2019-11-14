@@ -52,6 +52,17 @@ func NewResourceQuotaClient(transport http.RoundTripper, path string, metric str
 	return client
 }
 
+// Delete creates a request for the 'delete' method.
+//
+// Deletes the resource quota.
+func (c *ResourceQuotaClient) Delete() *ResourceQuotaDeleteRequest {
+	request := new(ResourceQuotaDeleteRequest)
+	request.transport = c.transport
+	request.path = c.path
+	request.metric = c.metric
+	return request
+}
+
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the resource quota.
@@ -72,6 +83,92 @@ func (c *ResourceQuotaClient) Update() *ResourceQuotaUpdateRequest {
 	request.path = c.path
 	request.metric = c.metric
 	return request
+}
+
+// ResourceQuotaDeleteRequest is the request for the 'delete' method.
+type ResourceQuotaDeleteRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *ResourceQuotaDeleteRequest) Parameter(name string, value interface{}) *ResourceQuotaDeleteRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *ResourceQuotaDeleteRequest) Header(name string, value interface{}) *ResourceQuotaDeleteRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *ResourceQuotaDeleteRequest) Send() (result *ResourceQuotaDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ResourceQuotaDeleteRequest) SendContext(ctx context.Context) (result *ResourceQuotaDeleteResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: "DELETE",
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = new(ResourceQuotaDeleteResponse)
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// ResourceQuotaDeleteResponse is the response for the 'delete' method.
+type ResourceQuotaDeleteResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *ResourceQuotaDeleteResponse) Status() int {
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *ResourceQuotaDeleteResponse) Header() http.Header {
+	return r.header
+}
+
+// Error returns the response error.
+func (r *ResourceQuotaDeleteResponse) Error() *errors.Error {
+	return r.err
 }
 
 // ResourceQuotaGetRequest is the request for the 'get' method.
