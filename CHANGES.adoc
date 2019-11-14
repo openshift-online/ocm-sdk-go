@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.53 Nov 14 2019
+
+- Update to model 0.0.20:
+** Query resource quota from root and delete by identifier.
+
+- Update to metamodel 0.0.13:
+** Fix imports of `helpers` and `errors` packages.
+
 == 0.1.52 Nov 8 2019
 
 - Update to model 0.0.19:
