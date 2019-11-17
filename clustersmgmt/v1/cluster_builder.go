@@ -69,6 +69,7 @@ type ClusterBuilder struct {
 	api                 *ClusterAPIBuilder
 	aws                 *AWSBuilder
 	dns                 *DNSBuilder
+	addons              []*AddOnBuilder
 	cloudProvider       *CloudProviderBuilder
 	console             *ClusterConsoleBuilder
 	creationTimestamp   *time.Time
@@ -139,6 +140,16 @@ func (b *ClusterBuilder) AWS(value *AWSBuilder) *ClusterBuilder {
 // DNS settings of the cluster.
 func (b *ClusterBuilder) DNS(value *DNSBuilder) *ClusterBuilder {
 	b.dns = value
+	return b
+}
+
+// Addons sets the value of the 'addons' attribute
+// to the given values.
+//
+//
+func (b *ClusterBuilder) Addons(values ...*AddOnBuilder) *ClusterBuilder {
+	b.addons = make([]*AddOnBuilder, len(values))
+	copy(b.addons, values)
 	return b
 }
 
@@ -357,6 +368,14 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.dns = nil
 	}
+	if object.addons != nil && len(object.addons.items) > 0 {
+		b.addons = make([]*AddOnBuilder, len(object.addons.items))
+		for i, item := range object.addons.items {
+			b.addons[i] = NewAddOn().Copy(item)
+		}
+	} else {
+		b.addons = nil
+	}
 	if object.cloudProvider != nil {
 		b.cloudProvider = NewCloudProvider().Copy(object.cloudProvider)
 	} else {
@@ -460,6 +479,16 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		object.dns, err = b.dns.Build()
 		if err != nil {
 			return
+		}
+	}
+	if b.addons != nil {
+		object.addons = new(AddOnList)
+		object.addons.items = make([]*AddOn, len(b.addons))
+		for i, item := range b.addons {
+			object.addons.items[i], err = item.Build()
+			if err != nil {
+				return
+			}
 		}
 	}
 	if b.cloudProvider != nil {

@@ -25,6 +25,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -71,6 +72,18 @@ func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
 	request.path = c.path
 	request.metric = c.metric
 	return request
+}
+
+// ReservedResources returns the target 'subscription_reserved_resources' resource.
+//
+// Reference to the resource that manages the collection of resources reserved by the
+// subscription.
+func (c *SubscriptionClient) ReservedResources() *SubscriptionReservedResourcesClient {
+	return NewSubscriptionReservedResourcesClient(
+		c.transport,
+		path.Join(c.path, "reserved_resources"),
+		path.Join(c.metric, "reserved_resources"),
+	)
 }
 
 // SubscriptionPollRequest is the request for the Poll method.

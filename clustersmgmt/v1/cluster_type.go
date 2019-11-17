@@ -81,6 +81,7 @@ type Cluster struct {
 	api                 *ClusterAPI
 	aws                 *AWS
 	dns                 *DNS
+	addons              *AddOnList
 	cloudProvider       *CloudProvider
 	console             *ClusterConsole
 	creationTimestamp   *time.Time
@@ -162,6 +163,7 @@ func (o *Cluster) Empty() bool {
 		o.api == nil &&
 		o.aws == nil &&
 		o.dns == nil &&
+		o.addons.Empty() &&
 		o.cloudProvider == nil &&
 		o.console == nil &&
 		o.creationTimestamp == nil &&
@@ -251,6 +253,29 @@ func (o *Cluster) GetDNS() (value *DNS, ok bool) {
 	ok = o != nil && o.dns != nil
 	if ok {
 		value = o.dns
+	}
+	return
+}
+
+// Addons returns the value of the 'addons' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// List of add-ons on this cluster.
+func (o *Cluster) Addons() *AddOnList {
+	if o == nil {
+		return nil
+	}
+	return o.addons
+}
+
+// GetAddons returns the value of the 'addons' attribute and
+// a flag indicating if the attribute has a value.
+//
+// List of add-ons on this cluster.
+func (o *Cluster) GetAddons() (value *AddOnList, ok bool) {
+	ok = o != nil && o.addons != nil
+	if ok {
+		value = o.addons
 	}
 	return
 }

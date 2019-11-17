@@ -35,6 +35,7 @@ type clusterData struct {
 	API                 *clusterAPIData               "json:\"api,omitempty\""
 	AWS                 *awsData                      "json:\"aws,omitempty\""
 	DNS                 *dnsData                      "json:\"dns,omitempty\""
+	Addons              *addOnListLinkData            "json:\"addons,omitempty\""
 	CloudProvider       *cloudProviderData            "json:\"cloud_provider,omitempty\""
 	Console             *clusterConsoleData           "json:\"console,omitempty\""
 	CreationTimestamp   *time.Time                    "json:\"creation_timestamp,omitempty\""
@@ -96,6 +97,10 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 		return
 	}
 	data.DNS, err = o.dns.wrap()
+	if err != nil {
+		return
+	}
+	data.Addons, err = o.addons.wrapLink()
 	if err != nil {
 		return
 	}
@@ -206,6 +211,10 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 		return
 	}
 	object.dns, err = d.DNS.unwrap()
+	if err != nil {
+		return
+	}
+	object.addons, err = d.Addons.unwrapLink()
 	if err != nil {
 		return
 	}
