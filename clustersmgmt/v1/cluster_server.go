@@ -47,6 +47,11 @@ type ClusterServer interface {
 	// Updates the cluster.
 	Update(ctx context.Context, request *ClusterUpdateServerRequest, response *ClusterUpdateServerResponse) error
 
+	// Addons returns the target 'add_ons' resource.
+	//
+	// Refrence to the resource that manages the collection of add-ons installed on this cluster.
+	Addons() AddOnsServer
+
 	// Credentials returns the target 'credentials' resource.
 	//
 	// Reference to the resource that manages the credentials of the cluster.
@@ -206,6 +211,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 		}
 	} else {
 		switch segments[0] {
+		case "addons":
+			target := server.Addons()
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchAddOns(w, r, target, segments[1:])
 		case "credentials":
 			target := server.Credentials()
 			if target == nil {
