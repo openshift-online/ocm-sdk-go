@@ -138,80 +138,9 @@ var _ = Describe("Connection", func() {
 		Expect(clientSecret).To(Equal(DefaultClientSecret))
 	})
 
-	It("Selects deprecated OpenID with user name and password", func() {
-		connection, err := NewConnectionBuilder().
-			User("myuser", "mypassword").
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-		defer connection.Close()
-		tokenURL := connection.TokenURL()
-		Expect(tokenURL).To(Equal(deprecatedTokenURL))
-		clientID, clientSecret := connection.Client()
-		Expect(clientID).To(Equal(deprecatedClientID))
-		Expect(clientSecret).To(Equal(deprecatedClientSecret))
-	})
-
-	It("Selects deprecated OpenID server with deprecated access token", func() {
-		accessToken := DeprecatedToken("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
-			Tokens(accessToken).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-		defer connection.Close()
-		tokenURL := connection.TokenURL()
-		Expect(tokenURL).To(Equal(deprecatedTokenURL))
-		clientID, clientSecret := connection.Client()
-		Expect(clientID).To(Equal(deprecatedClientID))
-		Expect(clientSecret).To(Equal(deprecatedClientSecret))
-	})
-
-	It("Selects deprecated OpenID server with deprecated refresh token", func() {
-		refreshToken := DeprecatedToken("Refresh", 10*time.Hour)
-		connection, err := NewConnectionBuilder().
-			Tokens(refreshToken).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-		defer connection.Close()
-		tokenURL := connection.TokenURL()
-		Expect(tokenURL).To(Equal(deprecatedTokenURL))
-		clientID, clientSecret := connection.Client()
-		Expect(clientID).To(Equal(deprecatedClientID))
-		Expect(clientSecret).To(Equal(deprecatedClientSecret))
-	})
-
-	It("Selects deprecated OpenID server with deprecated offline access token", func() {
-		offlineToken := DeprecatedToken("Offline", 0)
-		connection, err := NewConnectionBuilder().
-			Tokens(offlineToken).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-		defer connection.Close()
-		tokenURL := connection.TokenURL()
-		Expect(tokenURL).To(Equal(deprecatedTokenURL))
-		clientID, clientSecret := connection.Client()
-		Expect(clientID).To(Equal(deprecatedClientID))
-		Expect(clientSecret).To(Equal(deprecatedClientSecret))
-	})
-
 	It("Honours explicitly provided OpenID server with user name and password", func() {
 		connection, err := NewConnectionBuilder().
 			User("myuser", "mypassword").
-			TokenURL(DefaultTokenURL).
-			Client(DefaultClientID, DefaultClientSecret).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-		defer connection.Close()
-		tokenURL := connection.TokenURL()
-		Expect(tokenURL).To(Equal(DefaultTokenURL))
-		clientID, clientSecret := connection.Client()
-		Expect(clientID).To(Equal(DefaultClientID))
-		Expect(clientSecret).To(Equal(DefaultClientSecret))
-	})
-
-	It("Honours explicitly provided OpenID server with deprecated token", func() {
-		offlineToken := DeprecatedToken("Offline", 0)
-		connection, err := NewConnectionBuilder().
-			Tokens(offlineToken).
 			TokenURL(DefaultTokenURL).
 			Client(DefaultClientID, DefaultClientSecret).
 			Build()
