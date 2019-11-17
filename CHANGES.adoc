@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.55 Nov 17 2019
+
+- Update to model 0.0.21:
+** Added add-on resources and types.
+** Added subscription reserved resources collection.
+
 == 0.1.54 Nov 17 2019
 
 - Drop support for _developers.redhat.com_.
