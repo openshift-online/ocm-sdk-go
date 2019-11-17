@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.54 Nov 17 2019
+
+- Drop support for _developers.redhat.com_.
+
+- Update to metamodel 0.0.14:
+** Add `Poll` method to clients that have a `Get` method.
+
 == 0.1.53 Nov 14 2019
 
 - Update to model 0.0.20:
