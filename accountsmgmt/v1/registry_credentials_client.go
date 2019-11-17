@@ -192,16 +192,25 @@ type RegistryCredentialsAddResponse struct {
 
 // Status returns the response status code.
 func (r *RegistryCredentialsAddResponse) Status() int {
+	if r == nil {
+		return 0
+	}
 	return r.status
 }
 
 // Header returns header of the response.
 func (r *RegistryCredentialsAddResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
 	return r.header
 }
 
 // Error returns the response error.
 func (r *RegistryCredentialsAddResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
 	return r.err
 }
 
@@ -366,16 +375,25 @@ type RegistryCredentialsListResponse struct {
 
 // Status returns the response status code.
 func (r *RegistryCredentialsListResponse) Status() int {
+	if r == nil {
+		return 0
+	}
 	return r.status
 }
 
 // Header returns header of the response.
 func (r *RegistryCredentialsListResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
 	return r.header
 }
 
 // Error returns the response error.
 func (r *RegistryCredentialsListResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
 	return r.err
 }
 

@@ -192,16 +192,25 @@ type IdentityProvidersAddResponse struct {
 
 // Status returns the response status code.
 func (r *IdentityProvidersAddResponse) Status() int {
+	if r == nil {
+		return 0
+	}
 	return r.status
 }
 
 // Header returns header of the response.
 func (r *IdentityProvidersAddResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
 	return r.header
 }
 
 // Error returns the response error.
 func (r *IdentityProvidersAddResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
 	return r.err
 }
 
@@ -325,16 +334,25 @@ type IdentityProvidersListResponse struct {
 
 // Status returns the response status code.
 func (r *IdentityProvidersListResponse) Status() int {
+	if r == nil {
+		return 0
+	}
 	return r.status
 }
 
 // Header returns header of the response.
 func (r *IdentityProvidersListResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
 	return r.header
 }
 
 // Error returns the response error.
 func (r *IdentityProvidersListResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
 	return r.err
 }
 
