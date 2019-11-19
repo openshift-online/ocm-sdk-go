@@ -3,12 +3,17 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.58 Nov 17 2019
+== 0.1.58 Nov 19 2019
+
+- Update to metamodel 0.0.16:
+** Add simple conversion from AsciiDoc to Markdown.
+
+== 0.1.57 Nov 19 2019
 
 - Update to metamodel 0.0.15:
 ** Add support for the version metadata resource.
 
-== 0.1.56 Nov 17 2019
+== 0.1.56 Nov 19 2019
 
 - Update to model 0.0.22:
 ** Add `socket_total_by_node_roles_os` metric query.
