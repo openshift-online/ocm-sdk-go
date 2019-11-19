@@ -1631,7 +1631,7 @@
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries": {
       
     },
-    "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries/CPU_total_by_node_roles_OS": {
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries/socket_total_by_node_roles_OS": {
       "get": {
         "description": "Retrieves the metrics.",
         "parameters": [
@@ -1649,7 +1649,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CPUTotalsNodeRoleOSMetricNode"
+                  "$ref": "#/components/schemas/SocketTotalsNodeRoleOSMetricNode"
                 }
               }
             }
@@ -2452,6 +2452,11 @@
               "$ref": "#/components/schemas/IdentityProvider"
             }
           },
+          "load_balancer_quota": {
+            "description": "Load Balancer quota to be assigned to the cluster.",
+            "type": "integer",
+            "format": "int32"
+          },
           "managed": {
             "description": "Flag indicating if the cluster is managed (by Red Hat) or\nself-managed by the user.",
             "type": "boolean"
@@ -2494,6 +2499,10 @@
           "state": {
             "description": "Overall state of the cluster.",
             "$ref": "#/components/schemas/ClusterState"
+          },
+          "storage_quota": {
+            "description": "Storage quota to be assigned to the cluster.",
+            "$ref": "#/components/schemas/Value"
           },
           "subscription": {
             "description": "Link to the subscription that comes from the account management service when the cluster\nis registered.",
@@ -3052,6 +3061,42 @@
             "description": "Numeric value of the sample.",
             "type": "number",
             "format": "float"
+          }
+        }
+      },
+      "SocketTotalNodeRoleOSMetricNode": {
+        "description": "Representation of information from telemetry about a the socket capacity\nby node role and OS.",
+        "properties": {
+          "node_roles": {
+            "description": "Representation of the node role for a cluster.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "operating_system": {
+            "description": "The operating system.",
+            "type": "string"
+          },
+          "socket_total": {
+            "description": "The total socket capacity of nodes with this set of roles and operating system.",
+            "type": "number",
+            "format": "float"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SocketTotalsNodeRoleOSMetricNode": {
+        "description": "Representation of information from telemetry about the socket capacity by node\nrole and OS of a cluster.",
+        "properties": {
+          "socket_totals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SocketTotalNodeRoleOSMetricNode"
+            }
           }
         }
       },

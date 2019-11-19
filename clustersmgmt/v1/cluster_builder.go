@@ -79,6 +79,7 @@ type ClusterBuilder struct {
 	flavour             *FlavourBuilder
 	groups              []*GroupBuilder
 	identityProviders   []*IdentityProviderBuilder
+	loadBalancerQuota   *int
 	managed             *bool
 	metrics             *ClusterMetricsBuilder
 	multiAZ             *bool
@@ -89,6 +90,7 @@ type ClusterBuilder struct {
 	properties          map[string]string
 	region              *CloudRegionBuilder
 	state               *ClusterState
+	storageQuota        *ValueBuilder
 	subscription        *SubscriptionBuilder
 	version             *VersionBuilder
 }
@@ -237,6 +239,15 @@ func (b *ClusterBuilder) IdentityProviders(values ...*IdentityProviderBuilder) *
 	return b
 }
 
+// LoadBalancerQuota sets the value of the 'load_balancer_quota' attribute
+// to the given value.
+//
+//
+func (b *ClusterBuilder) LoadBalancerQuota(value int) *ClusterBuilder {
+	b.loadBalancerQuota = &value
+	return b
+}
+
 // Managed sets the value of the 'managed' attribute
 // to the given value.
 //
@@ -327,6 +338,32 @@ func (b *ClusterBuilder) State(value ClusterState) *ClusterBuilder {
 	return b
 }
 
+// StorageQuota sets the value of the 'storage_quota' attribute
+// to the given value.
+//
+// Numeric value and the unit used to measure it.
+//
+// Units are not mandatory, and they're not specified for some resources. For
+// resources that use bytes, the accepted units are:
+//
+// - 1 B = 1 byte
+// - 1 KB = 10^3 bytes
+// - 1 MB = 10^6 bytes
+// - 1 GB = 10^9 bytes
+// - 1 TB = 10^12 bytes
+// - 1 PB = 10^15 bytes
+//
+// - 1 B = 1 byte
+// - 1 KiB = 2^10 bytes
+// - 1 MiB = 2^20 bytes
+// - 1 GiB = 2^30 bytes
+// - 1 TiB = 2^40 bytes
+// - 1 PiB = 2^50 bytes
+func (b *ClusterBuilder) StorageQuota(value *ValueBuilder) *ClusterBuilder {
+	b.storageQuota = value
+	return b
+}
+
 // Subscription sets the value of the 'subscription' attribute
 // to the given value.
 //
@@ -411,6 +448,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.identityProviders = nil
 	}
+	b.loadBalancerQuota = object.loadBalancerQuota
 	b.managed = object.managed
 	if object.metrics != nil {
 		b.metrics = NewClusterMetrics().Copy(object.metrics)
@@ -444,6 +482,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.region = nil
 	}
 	b.state = object.state
+	if object.storageQuota != nil {
+		b.storageQuota = NewValue().Copy(object.storageQuota)
+	} else {
+		b.storageQuota = nil
+	}
 	if object.subscription != nil {
 		b.subscription = NewSubscription().Copy(object.subscription)
 	} else {
@@ -541,6 +584,9 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			}
 		}
 	}
+	if b.loadBalancerQuota != nil {
+		object.loadBalancerQuota = b.loadBalancerQuota
+	}
 	if b.managed != nil {
 		object.managed = b.managed
 	}
@@ -585,6 +631,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	if b.state != nil {
 		object.state = b.state
+	}
+	if b.storageQuota != nil {
+		object.storageQuota, err = b.storageQuota.Build()
+		if err != nil {
+			return
+		}
 	}
 	if b.subscription != nil {
 		object.subscription, err = b.subscription.Build()
