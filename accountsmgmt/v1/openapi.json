@@ -19,6 +19,33 @@
     }
   ],
   "paths": {
+    "/api/accounts_mgmt/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/SKUS": {
       "get": {
         "description": "Retrieves a list of SKUS.",
@@ -98,7 +125,7 @@
         }
       }
     },
-    "/api/accounts_mgmt/v1/SKUS/{SKU_id}": {
+    "/api/accounts_mgmt/v1/SKUS/{sku_id}": {
       "get": {
         "description": "Retrieves the details of the SKU.",
         "parameters": [
@@ -2404,6 +2431,15 @@
   },
   "components": {
     "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
       "SKU": {
         "description": "Identifies computing resources",
         "properties": {

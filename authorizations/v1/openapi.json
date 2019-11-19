@@ -19,6 +19,33 @@
     }
   ],
   "paths": {
+    "/api/authorizations/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/authorizations/v1/access_review": {
       "post": {
         "description": "Reviews a user's access to a resource",
@@ -178,6 +205,15 @@
   },
   "components": {
     "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
       "AccessReviewRequest": {
         "description": "Representation of an access review",
         "properties": {
