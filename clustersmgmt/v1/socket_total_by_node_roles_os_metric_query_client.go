@@ -31,20 +31,20 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// CPUTotalByNodeRolesOSMetricQueryClient is the client of the 'CPU_total_by_node_roles_OS_metric_query' resource.
+// SocketTotalByNodeRolesOSMetricQueryClient is the client of the 'socket_total_by_node_roles_OS_metric_query' resource.
 //
-// Total cpu capacity in the cluster by node role and operating system.
-type CPUTotalByNodeRolesOSMetricQueryClient struct {
+// Total socket capacity in the cluster by node role and operating system.
+type SocketTotalByNodeRolesOSMetricQueryClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewCPUTotalByNodeRolesOSMetricQueryClient creates a new client for the 'CPU_total_by_node_roles_OS_metric_query'
+// NewSocketTotalByNodeRolesOSMetricQueryClient creates a new client for the 'socket_total_by_node_roles_OS_metric_query'
 // resource using the given transport to sned the requests and receive the
 // responses.
-func NewCPUTotalByNodeRolesOSMetricQueryClient(transport http.RoundTripper, path string, metric string) *CPUTotalByNodeRolesOSMetricQueryClient {
-	client := new(CPUTotalByNodeRolesOSMetricQueryClient)
+func NewSocketTotalByNodeRolesOSMetricQueryClient(transport http.RoundTripper, path string, metric string) *SocketTotalByNodeRolesOSMetricQueryClient {
+	client := new(SocketTotalByNodeRolesOSMetricQueryClient)
 	client.transport = transport
 	client.path = path
 	client.metric = metric
@@ -54,43 +54,43 @@ func NewCPUTotalByNodeRolesOSMetricQueryClient(transport http.RoundTripper, path
 // Get creates a request for the 'get' method.
 //
 // Retrieves the metrics.
-func (c *CPUTotalByNodeRolesOSMetricQueryClient) Get() *CPUTotalByNodeRolesOSMetricQueryGetRequest {
-	request := new(CPUTotalByNodeRolesOSMetricQueryGetRequest)
+func (c *SocketTotalByNodeRolesOSMetricQueryClient) Get() *SocketTotalByNodeRolesOSMetricQueryGetRequest {
+	request := new(SocketTotalByNodeRolesOSMetricQueryGetRequest)
 	request.transport = c.transport
 	request.path = c.path
 	request.metric = c.metric
 	return request
 }
 
-// CPUTotalByNodeRolesOSMetricQueryPollRequest is the request for the Poll method.
-type CPUTotalByNodeRolesOSMetricQueryPollRequest struct {
-	request    *CPUTotalByNodeRolesOSMetricQueryGetRequest
+// SocketTotalByNodeRolesOSMetricQueryPollRequest is the request for the Poll method.
+type SocketTotalByNodeRolesOSMetricQueryPollRequest struct {
+	request    *SocketTotalByNodeRolesOSMetricQueryGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) Parameter(name string, value interface{}) *CPUTotalByNodeRolesOSMetricQueryPollRequest {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollRequest) Parameter(name string, value interface{}) *SocketTotalByNodeRolesOSMetricQueryPollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) Header(name string, value interface{}) *CPUTotalByNodeRolesOSMetricQueryPollRequest {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollRequest) Header(name string, value interface{}) *SocketTotalByNodeRolesOSMetricQueryPollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) Interval(value time.Duration) *CPUTotalByNodeRolesOSMetricQueryPollRequest {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollRequest) Interval(value time.Duration) *SocketTotalByNodeRolesOSMetricQueryPollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) Status(value int) *CPUTotalByNodeRolesOSMetricQueryPollRequest {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollRequest) Status(value int) *SocketTotalByNodeRolesOSMetricQueryPollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -98,9 +98,9 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) Status(value int) *CPUTota
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) Predicate(value func(*CPUTotalByNodeRolesOSMetricQueryGetResponse) bool) *CPUTotalByNodeRolesOSMetricQueryPollRequest {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollRequest) Predicate(value func(*SocketTotalByNodeRolesOSMetricQueryGetResponse) bool) *SocketTotalByNodeRolesOSMetricQueryPollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*CPUTotalByNodeRolesOSMetricQueryGetResponse))
+		return value(response.(*SocketTotalByNodeRolesOSMetricQueryGetResponse))
 	})
 	return r
 }
@@ -110,11 +110,11 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) Predicate(value func(*CPUT
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) StartContext(ctx context.Context) (response *CPUTotalByNodeRolesOSMetricQueryPollResponse, err error) {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollRequest) StartContext(ctx context.Context) (response *SocketTotalByNodeRolesOSMetricQueryPollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &CPUTotalByNodeRolesOSMetricQueryPollResponse{
-			response: result.(*CPUTotalByNodeRolesOSMetricQueryGetResponse),
+		response = &SocketTotalByNodeRolesOSMetricQueryPollResponse{
+			response: result.(*SocketTotalByNodeRolesOSMetricQueryGetResponse),
 		}
 	}
 	return
@@ -122,7 +122,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) StartContext(ctx context.C
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -131,13 +131,13 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollRequest) task(ctx context.Context) 
 	return
 }
 
-// CPUTotalByNodeRolesOSMetricQueryPollResponse is the response for the Poll method.
-type CPUTotalByNodeRolesOSMetricQueryPollResponse struct {
-	response *CPUTotalByNodeRolesOSMetricQueryGetResponse
+// SocketTotalByNodeRolesOSMetricQueryPollResponse is the response for the Poll method.
+type SocketTotalByNodeRolesOSMetricQueryPollResponse struct {
+	response *SocketTotalByNodeRolesOSMetricQueryGetResponse
 }
 
 // Status returns the response status code.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Status() int {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -145,7 +145,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Header() http.Header {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -153,7 +153,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Error() *errors.Error {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -163,7 +163,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Body() *CPUTotalsNodeRoleOSMetricNode {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollResponse) Body() *SocketTotalsNodeRoleOSMetricNode {
 	return r.response.Body()
 }
 
@@ -171,20 +171,20 @@ func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) Body() *CPUTotalsNodeRole
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *CPUTotalByNodeRolesOSMetricQueryPollResponse) GetBody() (value *CPUTotalsNodeRoleOSMetricNode, ok bool) {
+func (r *SocketTotalByNodeRolesOSMetricQueryPollResponse) GetBody() (value *SocketTotalsNodeRoleOSMetricNode, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *CPUTotalByNodeRolesOSMetricQueryClient) Poll() *CPUTotalByNodeRolesOSMetricQueryPollRequest {
-	return &CPUTotalByNodeRolesOSMetricQueryPollRequest{
+func (c *SocketTotalByNodeRolesOSMetricQueryClient) Poll() *SocketTotalByNodeRolesOSMetricQueryPollRequest {
+	return &SocketTotalByNodeRolesOSMetricQueryPollRequest{
 		request: c.Get(),
 	}
 }
 
-// CPUTotalByNodeRolesOSMetricQueryGetRequest is the request for the 'get' method.
-type CPUTotalByNodeRolesOSMetricQueryGetRequest struct {
+// SocketTotalByNodeRolesOSMetricQueryGetRequest is the request for the 'get' method.
+type SocketTotalByNodeRolesOSMetricQueryGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -193,13 +193,13 @@ type CPUTotalByNodeRolesOSMetricQueryGetRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) Parameter(name string, value interface{}) *CPUTotalByNodeRolesOSMetricQueryGetRequest {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetRequest) Parameter(name string, value interface{}) *SocketTotalByNodeRolesOSMetricQueryGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) Header(name string, value interface{}) *CPUTotalByNodeRolesOSMetricQueryGetRequest {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetRequest) Header(name string, value interface{}) *SocketTotalByNodeRolesOSMetricQueryGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -208,12 +208,12 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) Header(name string, value i
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) Send() (result *CPUTotalByNodeRolesOSMetricQueryGetResponse, err error) {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetRequest) Send() (result *SocketTotalByNodeRolesOSMetricQueryGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) SendContext(ctx context.Context) (result *CPUTotalByNodeRolesOSMetricQueryGetResponse, err error) {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetRequest) SendContext(ctx context.Context) (result *SocketTotalByNodeRolesOSMetricQueryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -233,7 +233,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) SendContext(ctx context.Con
 		return
 	}
 	defer response.Body.Close()
-	result = new(CPUTotalByNodeRolesOSMetricQueryGetResponse)
+	result = new(SocketTotalByNodeRolesOSMetricQueryGetResponse)
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -251,16 +251,16 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) SendContext(ctx context.Con
 	return
 }
 
-// CPUTotalByNodeRolesOSMetricQueryGetResponse is the response for the 'get' method.
-type CPUTotalByNodeRolesOSMetricQueryGetResponse struct {
+// SocketTotalByNodeRolesOSMetricQueryGetResponse is the response for the 'get' method.
+type SocketTotalByNodeRolesOSMetricQueryGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *CPUTotalsNodeRoleOSMetricNode
+	body   *SocketTotalsNodeRoleOSMetricNode
 }
 
 // Status returns the response status code.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Status() int {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -268,7 +268,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Header() http.Header {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -276,7 +276,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Error() *errors.Error {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -286,7 +286,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Body() *CPUTotalsNodeRoleOSMetricNode {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetResponse) Body() *SocketTotalsNodeRoleOSMetricNode {
 	if r == nil {
 		return nil
 	}
@@ -297,7 +297,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) Body() *CPUTotalsNodeRoleO
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) GetBody() (value *CPUTotalsNodeRoleOSMetricNode, ok bool) {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetResponse) GetBody() (value *SocketTotalsNodeRoleOSMetricNode, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -307,10 +307,10 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) GetBody() (value *CPUTotal
 
 // unmarshal is the method used internally to unmarshal responses to the
 // 'get' method.
-func (r *CPUTotalByNodeRolesOSMetricQueryGetResponse) unmarshal(reader io.Reader) error {
+func (r *SocketTotalByNodeRolesOSMetricQueryGetResponse) unmarshal(reader io.Reader) error {
 	var err error
 	decoder := json.NewDecoder(reader)
-	data := new(cpuTotalsNodeRoleOSMetricNodeData)
+	data := new(socketTotalsNodeRoleOSMetricNodeData)
 	err = decoder.Decode(data)
 	if err != nil {
 		return err

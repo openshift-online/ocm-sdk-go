@@ -45,6 +45,7 @@ type clusterData struct {
 	Flavour             *flavourData                  "json:\"flavour,omitempty\""
 	Groups              *groupListLinkData            "json:\"groups,omitempty\""
 	IdentityProviders   *identityProviderListLinkData "json:\"identity_providers,omitempty\""
+	LoadBalancerQuota   *int                          "json:\"load_balancer_quota,omitempty\""
 	Managed             *bool                         "json:\"managed,omitempty\""
 	Metrics             *clusterMetricsData           "json:\"metrics,omitempty\""
 	MultiAZ             *bool                         "json:\"multi_az,omitempty\""
@@ -55,6 +56,7 @@ type clusterData struct {
 	Properties          map[string]string             "json:\"properties,omitempty\""
 	Region              *cloudRegionData              "json:\"region,omitempty\""
 	State               *ClusterState                 "json:\"state,omitempty\""
+	StorageQuota        *valueData                    "json:\"storage_quota,omitempty\""
 	Subscription        *subscriptionData             "json:\"subscription,omitempty\""
 	Version             *versionData                  "json:\"version,omitempty\""
 }
@@ -128,6 +130,7 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 	if err != nil {
 		return
 	}
+	data.LoadBalancerQuota = o.loadBalancerQuota
 	data.Managed = o.managed
 	data.Metrics, err = o.metrics.wrap()
 	if err != nil {
@@ -150,6 +153,10 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 		return
 	}
 	data.State = o.state
+	data.StorageQuota, err = o.storageQuota.wrap()
+	if err != nil {
+		return
+	}
 	data.Subscription, err = o.subscription.wrap()
 	if err != nil {
 		return
@@ -242,6 +249,7 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 	if err != nil {
 		return
 	}
+	object.loadBalancerQuota = d.LoadBalancerQuota
 	object.managed = d.Managed
 	object.metrics, err = d.Metrics.unwrap()
 	if err != nil {
@@ -264,6 +272,10 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 		return
 	}
 	object.state = d.State
+	object.storageQuota, err = d.StorageQuota.unwrap()
+	if err != nil {
+		return
+	}
 	object.subscription, err = d.Subscription.unwrap()
 	if err != nil {
 		return
