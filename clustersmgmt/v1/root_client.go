@@ -44,6 +44,15 @@ func NewClient(transport http.RoundTripper, path string, metric string) *Client 
 	return client
 }
 
+// Creates a new request for the method that retrieves the metadata.
+func (c *Client) Get() *MetadataRequest {
+	return &MetadataRequest{
+		transport: c.transport,
+		path:      c.path,
+		metric:    c.metric,
+	}
+}
+
 // Addons returns the target 'add_ons' resource.
 //
 // Reference to the resource that manages the collection of add-ons.

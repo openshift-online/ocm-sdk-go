@@ -19,6 +19,33 @@
     }
   ],
   "paths": {
+    "/api/clusters_mgmt/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/addons": {
       "post": {
         "description": "Create a new add-on and add it to the collection of add-ons.",
@@ -2137,6 +2164,15 @@
   },
   "components": {
     "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
       "AWS": {
         "description": "_Amazon Web Services_ specific settings of a cluster.",
         "properties": {
