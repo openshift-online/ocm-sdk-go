@@ -2777,11 +2777,31 @@
           },
           "nodes": {
             "description": "Number of nodes that will be used by default when creating a cluster that uses\nthis flavour.\n\nThese can be overriden specifying in the cluster itself a different number of nodes.\n",
-            "$ref": "#/components/schemas/ClusterNodes"
+            "$ref": "#/components/schemas/FlavourNodes"
           },
           "version": {
             "description": "Version of _OpenShift_ that will be used to create the cluster.\n",
             "type": "string"
+          }
+        }
+      },
+      "FlavourNodes": {
+        "description": "Counts of different classes of nodes inside a flavour.\n",
+        "properties": {
+          "compute": {
+            "description": "Number of compute nodes of the cluster.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "infra": {
+            "description": "Number of infra nodes of the cluster.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "master": {
+            "description": "Number of master nodes of the cluster.\n",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
