@@ -42,7 +42,7 @@ type Flavour struct {
 	aws     *AWS
 	name    *string
 	network *Network
-	nodes   *ClusterNodes
+	nodes   *FlavourNodes
 	version *string
 }
 
@@ -199,7 +199,7 @@ func (o *Flavour) GetNetwork() (value *Network, ok bool) {
 // this flavour.
 //
 // These can be overriden specifying in the cluster itself a different number of nodes.
-func (o *Flavour) Nodes() *ClusterNodes {
+func (o *Flavour) Nodes() *FlavourNodes {
 	if o == nil {
 		return nil
 	}
@@ -213,7 +213,7 @@ func (o *Flavour) Nodes() *ClusterNodes {
 // this flavour.
 //
 // These can be overriden specifying in the cluster itself a different number of nodes.
-func (o *Flavour) GetNodes() (value *ClusterNodes, ok bool) {
+func (o *Flavour) GetNodes() (value *FlavourNodes, ok bool) {
 	ok = o != nil && o.nodes != nil
 	if ok {
 		value = o.nodes

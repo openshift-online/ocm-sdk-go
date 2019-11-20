@@ -34,7 +34,7 @@ type flavourData struct {
 	AWS     *awsData          "json:\"aws,omitempty\""
 	Name    *string           "json:\"name,omitempty\""
 	Network *networkData      "json:\"network,omitempty\""
-	Nodes   *clusterNodesData "json:\"nodes,omitempty\""
+	Nodes   *flavourNodesData "json:\"nodes,omitempty\""
 	Version *string           "json:\"version,omitempty\""
 }
 

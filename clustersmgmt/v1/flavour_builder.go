@@ -30,7 +30,7 @@ type FlavourBuilder struct {
 	aws     *AWSBuilder
 	name    *string
 	network *NetworkBuilder
-	nodes   *ClusterNodesBuilder
+	nodes   *FlavourNodesBuilder
 	version *string
 }
 
@@ -87,8 +87,8 @@ func (b *FlavourBuilder) Network(value *NetworkBuilder) *FlavourBuilder {
 // Nodes sets the value of the 'nodes' attribute
 // to the given value.
 //
-// Counts of different classes of nodes inside a cluster.
-func (b *FlavourBuilder) Nodes(value *ClusterNodesBuilder) *FlavourBuilder {
+// Counts of different classes of nodes inside a flavour.
+func (b *FlavourBuilder) Nodes(value *FlavourNodesBuilder) *FlavourBuilder {
 	b.nodes = value
 	return b
 }
@@ -122,7 +122,7 @@ func (b *FlavourBuilder) Copy(object *Flavour) *FlavourBuilder {
 		b.network = nil
 	}
 	if object.nodes != nil {
-		b.nodes = NewClusterNodes().Copy(object.nodes)
+		b.nodes = NewFlavourNodes().Copy(object.nodes)
 	} else {
 		b.nodes = nil
 	}
