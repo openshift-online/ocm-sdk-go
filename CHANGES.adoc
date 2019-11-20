@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.59 Nov 20 2019
+
+- Update to model 0.0.23:
+** Add infra nodes to `FlavourNodes`.
+** Refactor flavour nodes.
+
 == 0.1.58 Nov 19 2019
 
 - Update to metamodel 0.0.16:
