@@ -260,6 +260,8 @@ type IdentityProvidersListRequest struct {
 	metric    string
 	query     url.Values
 	header    http.Header
+	page      *int
+	size      *int
 }
 
 // Parameter adds a query parameter.
@@ -274,6 +276,22 @@ func (r *IdentityProvidersListRequest) Header(name string, value interface{}) *I
 	return r
 }
 
+// Page sets the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+func (r *IdentityProvidersListRequest) Page(value int) *IdentityProvidersListRequest {
+	r.page = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Number of items contained in the returned page.
+func (r *IdentityProvidersListRequest) Size(value int) *IdentityProvidersListRequest {
+	r.size = &value
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -285,6 +303,12 @@ func (r *IdentityProvidersListRequest) Send() (result *IdentityProvidersListResp
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IdentityProvidersListRequest) SendContext(ctx context.Context) (result *IdentityProvidersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
+	if r.page != nil {
+		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.size != nil {
+		helpers.AddValue(&query, "size", *r.size)
+	}
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,

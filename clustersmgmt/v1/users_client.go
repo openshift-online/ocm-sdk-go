@@ -260,6 +260,8 @@ type UsersListRequest struct {
 	metric    string
 	query     url.Values
 	header    http.Header
+	page      *int
+	size      *int
 }
 
 // Parameter adds a query parameter.
@@ -274,6 +276,22 @@ func (r *UsersListRequest) Header(name string, value interface{}) *UsersListRequ
 	return r
 }
 
+// Page sets the value of the 'page' parameter.
+//
+// Index of the requested page, where one corresponds to the first page.
+func (r *UsersListRequest) Page(value int) *UsersListRequest {
+	r.page = &value
+	return r
+}
+
+// Size sets the value of the 'size' parameter.
+//
+// Number of items contained in the returned page.
+func (r *UsersListRequest) Size(value int) *UsersListRequest {
+	r.size = &value
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -285,6 +303,12 @@ func (r *UsersListRequest) Send() (result *UsersListResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UsersListRequest) SendContext(ctx context.Context) (result *UsersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
+	if r.page != nil {
+		helpers.AddValue(&query, "page", *r.page)
+	}
+	if r.size != nil {
+		helpers.AddValue(&query, "size", *r.size)
+	}
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
 		Path:     r.path,

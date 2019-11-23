@@ -3,6 +3,19 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.60 Nov 23 2019
+
+- Update to model 0.0.24:
+** Fix directions of paging parameters.
+** Fix direction of `Body` parameter of `Update`.
+** Add default values to paging parameters.
+** Update to metamodel 0.0.17.
+
+- Update to metamodel 0.0.17:
+** Add semantic checks.
+** Add support for default values.
+** Check default values of paging parameters.
+
 == 0.1.59 Nov 20 2019
 
 - Update to model 0.0.23:

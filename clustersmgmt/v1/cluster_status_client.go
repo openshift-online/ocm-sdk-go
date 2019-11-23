@@ -160,19 +160,19 @@ func (r *ClusterStatusPollResponse) Error() *errors.Error {
 	return r.response.Error()
 }
 
-// Status_ returns the value of the 'status' parameter.
+// Body returns the value of the 'body' parameter.
 //
 //
-func (r *ClusterStatusPollResponse) Status_() *ClusterStatus {
-	return r.response.Status_()
+func (r *ClusterStatusPollResponse) Body() *ClusterStatus {
+	return r.response.Body()
 }
 
-// GetStatus_ returns the value of the 'status' parameter and
+// GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ClusterStatusPollResponse) GetStatus_() (value *ClusterStatus, ok bool) {
-	return r.response.GetStatus_()
+func (r *ClusterStatusPollResponse) GetBody() (value *ClusterStatus, ok bool) {
+	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
@@ -253,10 +253,10 @@ func (r *ClusterStatusGetRequest) SendContext(ctx context.Context) (result *Clus
 
 // ClusterStatusGetResponse is the response for the 'get' method.
 type ClusterStatusGetResponse struct {
-	status  int
-	header  http.Header
-	err     *errors.Error
-	status_ *ClusterStatus
+	status int
+	header http.Header
+	err    *errors.Error
+	body   *ClusterStatus
 }
 
 // Status returns the response status code.
@@ -283,24 +283,24 @@ func (r *ClusterStatusGetResponse) Error() *errors.Error {
 	return r.err
 }
 
-// Status_ returns the value of the 'status' parameter.
+// Body returns the value of the 'body' parameter.
 //
 //
-func (r *ClusterStatusGetResponse) Status_() *ClusterStatus {
+func (r *ClusterStatusGetResponse) Body() *ClusterStatus {
 	if r == nil {
 		return nil
 	}
-	return r.status_
+	return r.body
 }
 
-// GetStatus_ returns the value of the 'status' parameter and
+// GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ClusterStatusGetResponse) GetStatus_() (value *ClusterStatus, ok bool) {
-	ok = r != nil && r.status_ != nil
+func (r *ClusterStatusGetResponse) GetBody() (value *ClusterStatus, ok bool) {
+	ok = r != nil && r.body != nil
 	if ok {
-		value = r.status_
+		value = r.body
 	}
 	return
 }
@@ -315,7 +315,7 @@ func (r *ClusterStatusGetResponse) unmarshal(reader io.Reader) error {
 	if err != nil {
 		return err
 	}
-	r.status_, err = data.unwrap()
+	r.body, err = data.unwrap()
 	if err != nil {
 		return err
 	}

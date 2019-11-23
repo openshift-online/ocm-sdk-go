@@ -263,7 +263,6 @@ type RolesListRequest struct {
 	page      *int
 	search    *string
 	size      *int
-	total     *int
 }
 
 // Parameter adds a query parameter.
@@ -281,8 +280,6 @@ func (r *RolesListRequest) Header(name string, value interface{}) *RolesListRequ
 // Page sets the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
 func (r *RolesListRequest) Page(value int) *RolesListRequest {
 	r.page = &value
 	return r
@@ -312,19 +309,8 @@ func (r *RolesListRequest) Search(value string) *RolesListRequest {
 // Size sets the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
 func (r *RolesListRequest) Size(value int) *RolesListRequest {
 	r.size = &value
-	return r
-}
-
-// Total sets the value of the 'total' parameter.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *RolesListRequest) Total(value int) *RolesListRequest {
-	r.total = &value
 	return r
 }
 
@@ -347,9 +333,6 @@ func (r *RolesListRequest) SendContext(ctx context.Context) (result *RolesListRe
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
-	}
-	if r.total != nil {
-		helpers.AddValue(&query, "total", *r.total)
 	}
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -447,8 +430,6 @@ func (r *RolesListResponse) GetItems() (value *RoleList, ok bool) {
 // Page returns the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
 func (r *RolesListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
@@ -460,8 +441,6 @@ func (r *RolesListResponse) Page() int {
 // a flag indicating if the parameter has a value.
 //
 // Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
 func (r *RolesListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
@@ -473,8 +452,6 @@ func (r *RolesListResponse) GetPage() (value int, ok bool) {
 // Size returns the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
 func (r *RolesListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
@@ -486,8 +463,6 @@ func (r *RolesListResponse) Size() int {
 // a flag indicating if the parameter has a value.
 //
 // Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
 func (r *RolesListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {

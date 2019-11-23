@@ -150,12 +150,34 @@ func (r *ResourceQuotaUpdateServerRequest) unmarshal(reader io.Reader) error {
 type ResourceQuotaUpdateServerResponse struct {
 	status int
 	err    *errors.Error
+	body   *ResourceQuota
+}
+
+// Body sets the value of the 'body' parameter.
+//
+//
+func (r *ResourceQuotaUpdateServerResponse) Body(value *ResourceQuota) *ResourceQuotaUpdateServerResponse {
+	r.body = value
+	return r
 }
 
 // Status sets the status code.
 func (r *ResourceQuotaUpdateServerResponse) Status(value int) *ResourceQuotaUpdateServerResponse {
 	r.status = value
 	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'update' method.
+func (r *ResourceQuotaUpdateServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data, err := r.body.wrap()
+	if err != nil {
+		return err
+	}
+	err = encoder.Encode(data)
+	return err
 }
 
 // dispatchResourceQuota navigates the servers tree rooted at the given server
@@ -304,6 +326,10 @@ func readResourceQuotaUpdateRequest(r *http.Request) (*ResourceQuotaUpdateServer
 func writeResourceQuotaUpdateResponse(w http.ResponseWriter, r *ResourceQuotaUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

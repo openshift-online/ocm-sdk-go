@@ -52,7 +52,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -69,7 +69,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -93,12 +93,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -242,7 +242,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -259,16 +259,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -292,12 +283,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -381,7 +372,14 @@
         },
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Account"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error.\n",
@@ -547,7 +545,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -564,16 +562,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -597,12 +586,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -686,7 +675,14 @@
         },
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error.\n",
@@ -714,7 +710,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -731,16 +727,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -764,12 +751,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -852,7 +839,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -869,16 +856,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -902,12 +880,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -1039,7 +1017,14 @@
         },
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceQuota"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error.\n",
@@ -1097,7 +1082,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1106,16 +1091,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1139,12 +1115,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -1240,7 +1216,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1249,16 +1225,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1282,12 +1249,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -1393,7 +1360,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1402,16 +1369,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1435,12 +1393,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -1546,7 +1504,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1563,16 +1521,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1596,12 +1545,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -1712,7 +1661,14 @@
         },
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceQuota"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error.\n",
@@ -1770,7 +1726,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1787,16 +1743,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1820,12 +1767,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -1958,7 +1905,7 @@
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1975,16 +1922,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2008,12 +1946,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -2124,7 +2062,14 @@
         },
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error.\n",
@@ -2153,7 +2098,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2170,16 +2115,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2203,12 +2139,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
@@ -2311,7 +2247,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2320,16 +2256,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "total",
-            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2353,12 +2280,12 @@
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n\nDefault value is `1`.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
                       "type": "integer",
                       "format": "int32"
                     },
