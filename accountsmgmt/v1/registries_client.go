@@ -82,7 +82,6 @@ type RegistriesListRequest struct {
 	header    http.Header
 	page      *int
 	size      *int
-	total     *int
 }
 
 // Parameter adds a query parameter.
@@ -100,8 +99,6 @@ func (r *RegistriesListRequest) Header(name string, value interface{}) *Registri
 // Page sets the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
 func (r *RegistriesListRequest) Page(value int) *RegistriesListRequest {
 	r.page = &value
 	return r
@@ -110,19 +107,8 @@ func (r *RegistriesListRequest) Page(value int) *RegistriesListRequest {
 // Size sets the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
 func (r *RegistriesListRequest) Size(value int) *RegistriesListRequest {
 	r.size = &value
-	return r
-}
-
-// Total sets the value of the 'total' parameter.
-//
-// Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *RegistriesListRequest) Total(value int) *RegistriesListRequest {
-	r.total = &value
 	return r
 }
 
@@ -142,9 +128,6 @@ func (r *RegistriesListRequest) SendContext(ctx context.Context) (result *Regist
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
-	}
-	if r.total != nil {
-		helpers.AddValue(&query, "total", *r.total)
 	}
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -242,8 +225,6 @@ func (r *RegistriesListResponse) GetItems() (value *RegistryList, ok bool) {
 // Page returns the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
 func (r *RegistriesListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
@@ -255,8 +236,6 @@ func (r *RegistriesListResponse) Page() int {
 // a flag indicating if the parameter has a value.
 //
 // Index of the requested page, where one corresponds to the first page.
-//
-// Default value is `1`.
 func (r *RegistriesListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
@@ -268,8 +247,6 @@ func (r *RegistriesListResponse) GetPage() (value int, ok bool) {
 // Size returns the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
 func (r *RegistriesListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
@@ -281,8 +258,6 @@ func (r *RegistriesListResponse) Size() int {
 // a flag indicating if the parameter has a value.
 //
 // Maximum number of items that will be contained in the returned page.
-//
-// Default value is `100`.
 func (r *RegistriesListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {

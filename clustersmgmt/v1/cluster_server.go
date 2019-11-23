@@ -185,12 +185,34 @@ func (r *ClusterUpdateServerRequest) unmarshal(reader io.Reader) error {
 type ClusterUpdateServerResponse struct {
 	status int
 	err    *errors.Error
+	body   *Cluster
+}
+
+// Body sets the value of the 'body' parameter.
+//
+//
+func (r *ClusterUpdateServerResponse) Body(value *Cluster) *ClusterUpdateServerResponse {
+	r.body = value
+	return r
 }
 
 // Status sets the status code.
 func (r *ClusterUpdateServerResponse) Status(value int) *ClusterUpdateServerResponse {
 	r.status = value
 	return r
+}
+
+// marshall is the method used internally to marshal responses for the
+// 'update' method.
+func (r *ClusterUpdateServerResponse) marshal(writer io.Writer) error {
+	var err error
+	encoder := json.NewEncoder(writer)
+	data, err := r.body.wrap()
+	if err != nil {
+		return err
+	}
+	err = encoder.Encode(data)
+	return err
 }
 
 // dispatchCluster navigates the servers tree rooted at the given server
@@ -388,6 +410,10 @@ func readClusterUpdateRequest(r *http.Request) (*ClusterUpdateServerRequest, err
 func writeClusterUpdateResponse(w http.ResponseWriter, r *ClusterUpdateServerResponse) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(r.status)
+	err := r.marshal(w)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
