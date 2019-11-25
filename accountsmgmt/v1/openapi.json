@@ -16,6 +16,10 @@
     {
       "description": "Production",
       "url": "https://api.openshift.com"
+    },
+    {
+      "description": "Stage",
+      "url": "https://api.stage.openshift.com"
     }
   ],
   "paths": {
@@ -2949,6 +2953,13 @@
             "additionalProperties": "true"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },
