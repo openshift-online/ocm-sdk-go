@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.61 Nov 25 2019
+
+- Update to metamodel 0.0.18:
+** Add stage URL and `securitySchemes` to the generated _OpenAPI_
+   specifications.
+
 == 0.1.60 Nov 23 2019
 
 - Update to model 0.0.24:
