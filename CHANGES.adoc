@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.62 Nov 28 2019
+
+- Update to model 0.0.25:
+** Allow patching role binding.
+
 == 0.1.61 Nov 25 2019
 
 - Update to metamodel 0.0.18:
