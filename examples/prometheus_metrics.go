@@ -54,7 +54,7 @@ func main() {
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
-		Metrics("my").
+		Metrics("api_outbound").
 		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
