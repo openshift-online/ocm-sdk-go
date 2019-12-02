@@ -28,14 +28,16 @@ import (
 // flavourData is the data structure used internally to marshal and unmarshal
 // objects of type 'flavour'.
 type flavourData struct {
-	Kind    *string           "json:\"kind,omitempty\""
-	ID      *string           "json:\"id,omitempty\""
-	HREF    *string           "json:\"href,omitempty\""
-	AWS     *awsData          "json:\"aws,omitempty\""
-	Name    *string           "json:\"name,omitempty\""
-	Network *networkData      "json:\"network,omitempty\""
-	Nodes   *flavourNodesData "json:\"nodes,omitempty\""
-	Version *string           "json:\"version,omitempty\""
+	Kind                *string           "json:\"kind,omitempty\""
+	ID                  *string           "json:\"id,omitempty\""
+	HREF                *string           "json:\"href,omitempty\""
+	AWS                 *awsFlavourData   "json:\"aws,omitempty\""
+	ComputeInstanceType *string           "json:\"compute_instance_type,omitempty\""
+	InfraInstanceType   *string           "json:\"infra_instance_type,omitempty\""
+	MasterInstanceType  *string           "json:\"master_instance_type,omitempty\""
+	Name                *string           "json:\"name,omitempty\""
+	Network             *networkData      "json:\"network,omitempty\""
+	Nodes               *flavourNodesData "json:\"nodes,omitempty\""
 }
 
 // MarshalFlavour writes a value of the 'flavour' to the given target,
@@ -71,6 +73,9 @@ func (o *Flavour) wrap() (data *flavourData, err error) {
 	if err != nil {
 		return
 	}
+	data.ComputeInstanceType = o.computeInstanceType
+	data.InfraInstanceType = o.infraInstanceType
+	data.MasterInstanceType = o.masterInstanceType
 	data.Name = o.name
 	data.Network, err = o.network.wrap()
 	if err != nil {
@@ -80,7 +85,6 @@ func (o *Flavour) wrap() (data *flavourData, err error) {
 	if err != nil {
 		return
 	}
-	data.Version = o.version
 	return
 }
 
@@ -129,6 +133,9 @@ func (d *flavourData) unwrap() (object *Flavour, err error) {
 	if err != nil {
 		return
 	}
+	object.computeInstanceType = d.ComputeInstanceType
+	object.infraInstanceType = d.InfraInstanceType
+	object.masterInstanceType = d.MasterInstanceType
 	object.name = d.Name
 	object.network, err = d.Network.unwrap()
 	if err != nil {
@@ -138,6 +145,5 @@ func (d *flavourData) unwrap() (object *Flavour, err error) {
 	if err != nil {
 		return
 	}
-	object.version = d.Version
 	return
 }

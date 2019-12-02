@@ -68,6 +68,7 @@ type ClusterBuilder struct {
 	link                bool
 	api                 *ClusterAPIBuilder
 	aws                 *AWSBuilder
+	byoc                *bool
 	dns                 *DNSBuilder
 	addons              []*AddOnBuilder
 	cloudProvider       *CloudProviderBuilder
@@ -133,6 +134,15 @@ func (b *ClusterBuilder) API(value *ClusterAPIBuilder) *ClusterBuilder {
 // _Amazon Web Services_ specific settings of a cluster.
 func (b *ClusterBuilder) AWS(value *AWSBuilder) *ClusterBuilder {
 	b.aws = value
+	return b
+}
+
+// BYOC sets the value of the 'BYOC' attribute
+// to the given value.
+//
+//
+func (b *ClusterBuilder) BYOC(value bool) *ClusterBuilder {
+	b.byoc = &value
 	return b
 }
 
@@ -400,6 +410,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.aws = nil
 	}
+	b.byoc = object.byoc
 	if object.dns != nil {
 		b.dns = NewDNS().Copy(object.dns)
 	} else {
@@ -517,6 +528,9 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		if err != nil {
 			return
 		}
+	}
+	if b.byoc != nil {
+		object.byoc = b.byoc
 	}
 	if b.dns != nil {
 		object.dns, err = b.dns.Build()

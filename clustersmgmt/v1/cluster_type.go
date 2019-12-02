@@ -80,6 +80,7 @@ type Cluster struct {
 	link                bool
 	api                 *ClusterAPI
 	aws                 *AWS
+	byoc                *bool
 	dns                 *DNS
 	addons              *AddOnList
 	cloudProvider       *CloudProvider
@@ -164,6 +165,7 @@ func (o *Cluster) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.api == nil &&
 		o.aws == nil &&
+		o.byoc == nil &&
 		o.dns == nil &&
 		o.addons.Empty() &&
 		o.cloudProvider == nil &&
@@ -234,6 +236,29 @@ func (o *Cluster) GetAWS() (value *AWS, ok bool) {
 	ok = o != nil && o.aws != nil
 	if ok {
 		value = o.aws
+	}
+	return
+}
+
+// BYOC returns the value of the 'BYOC' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Flag indicating if the cluster is BYOC (customer cloud subscription).
+func (o *Cluster) BYOC() bool {
+	if o != nil && o.byoc != nil {
+		return *o.byoc
+	}
+	return false
+}
+
+// GetBYOC returns the value of the 'BYOC' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Flag indicating if the cluster is BYOC (customer cloud subscription).
+func (o *Cluster) GetBYOC() (value bool, ok bool) {
+	ok = o != nil && o.byoc != nil
+	if ok {
+		value = *o.byoc
 	}
 	return
 }
