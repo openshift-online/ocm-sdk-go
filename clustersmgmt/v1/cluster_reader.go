@@ -34,6 +34,7 @@ type clusterData struct {
 	HREF                *string                       "json:\"href,omitempty\""
 	API                 *clusterAPIData               "json:\"api,omitempty\""
 	AWS                 *awsData                      "json:\"aws,omitempty\""
+	BYOC                *bool                         "json:\"byoc,omitempty\""
 	DNS                 *dnsData                      "json:\"dns,omitempty\""
 	Addons              *addOnListLinkData            "json:\"addons,omitempty\""
 	CloudProvider       *cloudProviderData            "json:\"cloud_provider,omitempty\""
@@ -98,6 +99,7 @@ func (o *Cluster) wrap() (data *clusterData, err error) {
 	if err != nil {
 		return
 	}
+	data.BYOC = o.byoc
 	data.DNS, err = o.dns.wrap()
 	if err != nil {
 		return
@@ -217,6 +219,7 @@ func (d *clusterData) unwrap() (object *Cluster, err error) {
 	if err != nil {
 		return
 	}
+	object.byoc = d.BYOC
 	object.dns, err = d.DNS.unwrap()
 	if err != nil {
 		return
