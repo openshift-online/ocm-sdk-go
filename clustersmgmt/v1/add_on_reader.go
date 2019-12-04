@@ -28,14 +28,16 @@ import (
 // addOnData is the data structure used internally to marshal and unmarshal
 // objects of type 'add_on'.
 type addOnData struct {
-	Kind        *string "json:\"kind,omitempty\""
-	ID          *string "json:\"id,omitempty\""
-	HREF        *string "json:\"href,omitempty\""
-	Description *string "json:\"description,omitempty\""
-	Enabled     *bool   "json:\"enabled,omitempty\""
-	Icon        *string "json:\"icon,omitempty\""
-	Label       *string "json:\"label,omitempty\""
-	Name        *string "json:\"name,omitempty\""
+	Kind         *string  "json:\"kind,omitempty\""
+	ID           *string  "json:\"id,omitempty\""
+	HREF         *string  "json:\"href,omitempty\""
+	Description  *string  "json:\"description,omitempty\""
+	Enabled      *bool    "json:\"enabled,omitempty\""
+	Icon         *string  "json:\"icon,omitempty\""
+	Label        *string  "json:\"label,omitempty\""
+	Name         *string  "json:\"name,omitempty\""
+	ResourceCost *float64 "json:\"resource_cost,omitempty\""
+	ResourceName *string  "json:\"resource_name,omitempty\""
 }
 
 // MarshalAddOn writes a value of the 'add_on' to the given target,
@@ -72,6 +74,8 @@ func (o *AddOn) wrap() (data *addOnData, err error) {
 	data.Icon = o.icon
 	data.Label = o.label
 	data.Name = o.name
+	data.ResourceCost = o.resourceCost
+	data.ResourceName = o.resourceName
 	return
 }
 
@@ -121,5 +125,7 @@ func (d *addOnData) unwrap() (object *AddOn, err error) {
 	object.icon = d.Icon
 	object.label = d.Label
 	object.name = d.Name
+	object.resourceCost = d.ResourceCost
+	object.resourceName = d.ResourceName
 	return
 }

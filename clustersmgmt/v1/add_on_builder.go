@@ -23,14 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on that can be installed in a cluster.
 type AddOnBuilder struct {
-	id          *string
-	href        *string
-	link        bool
-	description *string
-	enabled     *bool
-	icon        *string
-	label       *string
-	name        *string
+	id           *string
+	href         *string
+	link         bool
+	description  *string
+	enabled      *bool
+	icon         *string
+	label        *string
+	name         *string
+	resourceCost *float64
+	resourceName *string
 }
 
 // NewAddOn creates a new builder of 'add_on' objects.
@@ -101,6 +103,24 @@ func (b *AddOnBuilder) Name(value string) *AddOnBuilder {
 	return b
 }
 
+// ResourceCost sets the value of the 'resource_cost' attribute
+// to the given value.
+//
+//
+func (b *AddOnBuilder) ResourceCost(value float64) *AddOnBuilder {
+	b.resourceCost = &value
+	return b
+}
+
+// ResourceName sets the value of the 'resource_name' attribute
+// to the given value.
+//
+//
+func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
+	b.resourceName = &value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	if object == nil {
@@ -114,6 +134,8 @@ func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	b.icon = object.icon
 	b.label = object.label
 	b.name = object.name
+	b.resourceCost = object.resourceCost
+	b.resourceName = object.resourceName
 	return b
 }
 
@@ -137,6 +159,12 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 	}
 	if b.name != nil {
 		object.name = b.name
+	}
+	if b.resourceCost != nil {
+		object.resourceCost = b.resourceCost
+	}
+	if b.resourceName != nil {
+		object.resourceName = b.resourceName
 	}
 	return
 }
