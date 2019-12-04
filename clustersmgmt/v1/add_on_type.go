@@ -35,14 +35,16 @@ const AddOnNilKind = "AddOnNil"
 //
 // Representation of an add-on that can be installed in a cluster.
 type AddOn struct {
-	id          *string
-	href        *string
-	link        bool
-	description *string
-	enabled     *bool
-	icon        *string
-	label       *string
-	name        *string
+	id           *string
+	href         *string
+	link         bool
+	description  *string
+	enabled      *bool
+	icon         *string
+	label        *string
+	name         *string
+	resourceCost *float64
+	resourceName *string
 }
 
 // Kind returns the name of the type of the object.
@@ -105,6 +107,8 @@ func (o *AddOn) Empty() bool {
 		o.icon == nil &&
 		o.label == nil &&
 		o.name == nil &&
+		o.resourceCost == nil &&
+		o.resourceName == nil &&
 		true)
 }
 
@@ -219,6 +223,52 @@ func (o *AddOn) GetName() (value string, ok bool) {
 	ok = o != nil && o.name != nil
 	if ok {
 		value = *o.name
+	}
+	return
+}
+
+// ResourceCost returns the value of the 'resource_cost' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Used to determine how many units of quota an add-on consumes per resource name.
+func (o *AddOn) ResourceCost() float64 {
+	if o != nil && o.resourceCost != nil {
+		return *o.resourceCost
+	}
+	return 0.0
+}
+
+// GetResourceCost returns the value of the 'resource_cost' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Used to determine how many units of quota an add-on consumes per resource name.
+func (o *AddOn) GetResourceCost() (value float64, ok bool) {
+	ok = o != nil && o.resourceCost != nil
+	if ok {
+		value = *o.resourceCost
+	}
+	return
+}
+
+// ResourceName returns the value of the 'resource_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Used to determine from where to reserve quota for this add-on.
+func (o *AddOn) ResourceName() string {
+	if o != nil && o.resourceName != nil {
+		return *o.resourceName
+	}
+	return ""
+}
+
+// GetResourceName returns the value of the 'resource_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Used to determine from where to reserve quota for this add-on.
+func (o *AddOn) GetResourceName() (value string, ok bool) {
+	ok = o != nil && o.resourceName != nil
+	if ok {
+		value = *o.resourceName
 	}
 	return
 }
