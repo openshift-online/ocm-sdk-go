@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.64 Dec 4 2019
+
+- Update to model 0.0.27:
+** Add `resource_name` and `resource_cost` attributes to the add-on type.
+
 == 0.1.63 Dec 2 2019
 
 - Update to model 0.0.26:
