@@ -82,7 +82,7 @@ type Cluster struct {
 	aws                 *AWS
 	byoc                *bool
 	dns                 *DNS
-	addons              *AddOnList
+	addons              *AddOnInstallationList
 	cloudProvider       *CloudProvider
 	console             *ClusterConsole
 	creationTimestamp   *time.Time
@@ -290,7 +290,7 @@ func (o *Cluster) GetDNS() (value *DNS, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // List of add-ons on this cluster.
-func (o *Cluster) Addons() *AddOnList {
+func (o *Cluster) Addons() *AddOnInstallationList {
 	if o == nil {
 		return nil
 	}
@@ -301,7 +301,7 @@ func (o *Cluster) Addons() *AddOnList {
 // a flag indicating if the attribute has a value.
 //
 // List of add-ons on this cluster.
-func (o *Cluster) GetAddons() (value *AddOnList, ok bool) {
+func (o *Cluster) GetAddons() (value *AddOnInstallationList, ok bool) {
 	ok = o != nil && o.addons != nil
 	if ok {
 		value = o.addons

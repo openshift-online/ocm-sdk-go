@@ -70,7 +70,7 @@ type ClusterBuilder struct {
 	aws                 *AWSBuilder
 	byoc                *bool
 	dns                 *DNSBuilder
-	addons              []*AddOnBuilder
+	addons              []*AddOnInstallationBuilder
 	cloudProvider       *CloudProviderBuilder
 	console             *ClusterConsoleBuilder
 	creationTimestamp   *time.Time
@@ -159,8 +159,8 @@ func (b *ClusterBuilder) DNS(value *DNSBuilder) *ClusterBuilder {
 // to the given values.
 //
 //
-func (b *ClusterBuilder) Addons(values ...*AddOnBuilder) *ClusterBuilder {
-	b.addons = make([]*AddOnBuilder, len(values))
+func (b *ClusterBuilder) Addons(values ...*AddOnInstallationBuilder) *ClusterBuilder {
+	b.addons = make([]*AddOnInstallationBuilder, len(values))
 	copy(b.addons, values)
 	return b
 }
@@ -417,9 +417,9 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.dns = nil
 	}
 	if object.addons != nil && len(object.addons.items) > 0 {
-		b.addons = make([]*AddOnBuilder, len(object.addons.items))
+		b.addons = make([]*AddOnInstallationBuilder, len(object.addons.items))
 		for i, item := range object.addons.items {
-			b.addons[i] = NewAddOn().Copy(item)
+			b.addons[i] = NewAddOnInstallation().Copy(item)
 		}
 	} else {
 		b.addons = nil
@@ -539,8 +539,8 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		}
 	}
 	if b.addons != nil {
-		object.addons = new(AddOnList)
-		object.addons.items = make([]*AddOn, len(b.addons))
+		object.addons = new(AddOnInstallationList)
+		object.addons.items = make([]*AddOnInstallation, len(b.addons))
 		for i, item := range b.addons {
 			object.addons.items[i], err = item.Build()
 			if err != nil {

@@ -2430,6 +2430,31 @@
           }
         }
       },
+      "AddOnInstallation": {
+        "description": "Representation of an add-on installation in a cluster.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnInstallation' if this is a complete object or 'AddOnInstallationLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "addon": {
+            "description": "Link to add-on attached to this cluster.\n",
+            "$ref": "#/components/schemas/AddOn"
+          },
+          "cluster": {
+            "description": "ID used to identify the cluster that this add-on is attached to.\n",
+            "$ref": "#/components/schemas/Cluster"
+          }
+        }
+      },
       "AdminCredentials": {
         "description": "Temporary administrator credentials generated during the installation of the\ncluster.\n",
         "properties": {
@@ -2532,7 +2557,7 @@
             "description": "List of add-ons on this cluster.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AddOn"
+              "$ref": "#/components/schemas/AddOnInstallation"
             }
           },
           "cloud_provider": {
