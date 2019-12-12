@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.67 Dec 12 2019
+
+- Don't check kinds of add-ons installations.
+
 == 0.1.66 Dec 12 2019
 
 - Update to model 0.0.29:
