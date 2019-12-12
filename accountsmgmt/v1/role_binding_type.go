@@ -46,6 +46,7 @@ type RoleBinding struct {
 	role           *Role
 	roleID         *string
 	subscription   *Subscription
+	subscriptionID *string
 	type_          *string
 }
 
@@ -112,6 +113,7 @@ func (o *RoleBinding) Empty() bool {
 		o.role == nil &&
 		o.roleID == nil &&
 		o.subscription == nil &&
+		o.subscriptionID == nil &&
 		o.type_ == nil &&
 		true)
 }
@@ -296,6 +298,29 @@ func (o *RoleBinding) GetSubscription() (value *Subscription, ok bool) {
 	ok = o != nil && o.subscription != nil
 	if ok {
 		value = o.subscription
+	}
+	return
+}
+
+// SubscriptionID returns the value of the 'subscription_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *RoleBinding) SubscriptionID() string {
+	if o != nil && o.subscriptionID != nil {
+		return *o.subscriptionID
+	}
+	return ""
+}
+
+// GetSubscriptionID returns the value of the 'subscription_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *RoleBinding) GetSubscriptionID() (value string, ok bool) {
+	ok = o != nil && o.subscriptionID != nil
+	if ok {
+		value = *o.subscriptionID
 	}
 	return
 }

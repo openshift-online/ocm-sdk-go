@@ -2918,6 +2918,9 @@
           "subscription": {
             "$ref": "#/components/schemas/Subscription"
           },
+          "subscription_id": {
+            "type": "string"
+          },
           "type": {
             "type": "string"
           }
