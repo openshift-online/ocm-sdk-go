@@ -20,8 +20,6 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
-	"fmt"
-
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
@@ -105,20 +103,7 @@ func (d *addOnData) unwrap() (object *AddOn, err error) {
 	object.id = d.ID
 	object.href = d.HREF
 	if d.Kind != nil {
-		switch *d.Kind {
-		case AddOnKind:
-			object.link = false
-		case AddOnLinkKind:
-			object.link = true
-		default:
-			err = fmt.Errorf(
-				"expected kind '%s' or '%s' but got '%s'",
-				AddOnKind,
-				AddOnLinkKind,
-				*d.Kind,
-			)
-			return
-		}
+		object.link = *d.Kind == AddOnLinkKind
 	}
 	object.description = d.Description
 	object.enabled = d.Enabled

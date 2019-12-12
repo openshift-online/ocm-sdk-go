@@ -127,26 +127,8 @@ func (d *addOnInstallationListLinkData) unwrapLink() (list *AddOnInstallationLis
 	list = new(AddOnInstallationList)
 	list.items = items
 	list.href = d.HREF
-	// TODO: We can't currently do this because the server is returning an incorrect kind
-	// for add-on installations.
-	/*
-		if d.Kind != nil {
-			switch *d.Kind {
-			case AddOnInstallationListKind:
-				list.link = false
-			case AddOnInstallationListLinkKind:
-				list.link = true
-			default:
-				err = fmt.Errorf(
-					"expected kind '%s' or '%s' but got '%s'",
-					AddOnInstallationListKind,
-					AddOnInstallationListLinkKind,
-					*d.Kind,
-				)
-				return
-			}
-		}
-	*/
-	list.link = true
+	if d.Kind != nil {
+		list.link = *d.Kind == AddOnInstallationListLinkKind
+	}
 	return
 }
