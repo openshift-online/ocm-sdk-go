@@ -20,8 +20,6 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
-	"fmt"
-
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
@@ -129,21 +127,26 @@ func (d *addOnInstallationListLinkData) unwrapLink() (list *AddOnInstallationLis
 	list = new(AddOnInstallationList)
 	list.items = items
 	list.href = d.HREF
-	if d.Kind != nil {
-		switch *d.Kind {
-		case AddOnInstallationListKind:
-			list.link = false
-		case AddOnInstallationListLinkKind:
-			list.link = true
-		default:
-			err = fmt.Errorf(
-				"expected kind '%s' or '%s' but got '%s'",
-				AddOnInstallationListKind,
-				AddOnInstallationListLinkKind,
-				*d.Kind,
-			)
-			return
+	// TODO: We can't currently do this because the server is returning an incorrect kind
+	// for add-on installations.
+	/*
+		if d.Kind != nil {
+			switch *d.Kind {
+			case AddOnInstallationListKind:
+				list.link = false
+			case AddOnInstallationListLinkKind:
+				list.link = true
+			default:
+				err = fmt.Errorf(
+					"expected kind '%s' or '%s' but got '%s'",
+					AddOnInstallationListKind,
+					AddOnInstallationListLinkKind,
+					*d.Kind,
+				)
+				return
+			}
 		}
-	}
+	*/
+	list.link = true
 	return
 }

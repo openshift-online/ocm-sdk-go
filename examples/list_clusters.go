@@ -73,7 +73,7 @@ func main() {
 
 		// Display the page:
 		response.Items().Each(func(cluster *cmv1.Cluster) bool {
-			fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
+			fmt.Printf("%s - %s - %s\n", cluster.ID(), cluster.Name(), cluster.State())
 			return true
 		})
 
