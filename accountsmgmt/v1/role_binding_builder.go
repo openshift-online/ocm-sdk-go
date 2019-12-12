@@ -34,6 +34,7 @@ type RoleBindingBuilder struct {
 	role           *RoleBuilder
 	roleID         *string
 	subscription   *SubscriptionBuilder
+	subscriptionID *string
 	type_          *string
 }
 
@@ -132,6 +133,15 @@ func (b *RoleBindingBuilder) Subscription(value *SubscriptionBuilder) *RoleBindi
 	return b
 }
 
+// SubscriptionID sets the value of the 'subscription_ID' attribute
+// to the given value.
+//
+//
+func (b *RoleBindingBuilder) SubscriptionID(value string) *RoleBindingBuilder {
+	b.subscriptionID = &value
+	return b
+}
+
 // Type sets the value of the 'type' attribute
 // to the given value.
 //
@@ -173,6 +183,7 @@ func (b *RoleBindingBuilder) Copy(object *RoleBinding) *RoleBindingBuilder {
 	} else {
 		b.subscription = nil
 	}
+	b.subscriptionID = object.subscriptionID
 	b.type_ = object.type_
 	return b
 }
@@ -218,6 +229,9 @@ func (b *RoleBindingBuilder) Build() (object *RoleBinding, err error) {
 		if err != nil {
 			return
 		}
+	}
+	if b.subscriptionID != nil {
+		object.subscriptionID = b.subscriptionID
 	}
 	if b.type_ != nil {
 		object.type_ = b.type_

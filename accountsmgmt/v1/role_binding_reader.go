@@ -39,6 +39,7 @@ type roleBindingData struct {
 	Role           *roleData         "json:\"role,omitempty\""
 	RoleID         *string           "json:\"role_id,omitempty\""
 	Subscription   *subscriptionData "json:\"subscription,omitempty\""
+	SubscriptionID *string           "json:\"subscription_id,omitempty\""
 	Type           *string           "json:\"type,omitempty\""
 }
 
@@ -91,6 +92,7 @@ func (o *RoleBinding) wrap() (data *roleBindingData, err error) {
 	if err != nil {
 		return
 	}
+	data.SubscriptionID = o.subscriptionID
 	data.Type = o.type_
 	return
 }
@@ -156,6 +158,7 @@ func (d *roleBindingData) unwrap() (object *RoleBinding, err error) {
 	if err != nil {
 		return
 	}
+	object.subscriptionID = d.SubscriptionID
 	object.type_ = d.Type
 	return
 }
