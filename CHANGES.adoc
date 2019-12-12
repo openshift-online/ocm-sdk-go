@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.68 Dec 12 2019
+
+- Update to metamodel 0.0.19:
+** Don't fail on wrong kind.
+
 == 0.1.67 Dec 12 2019
 
 - Don't check kinds of add-ons installations.
