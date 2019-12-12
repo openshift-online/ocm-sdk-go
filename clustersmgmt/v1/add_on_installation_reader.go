@@ -98,27 +98,9 @@ func (d *addOnInstallationData) unwrap() (object *AddOnInstallation, err error) 
 	object = new(AddOnInstallation)
 	object.id = d.ID
 	object.href = d.HREF
-	// TODO: We can't currently do this because the server is returning an incorrect kind for
-	// add-ons.
-	/*
-		if d.Kind != nil {
-			switch *d.Kind {
-			case AddOnInstallationKind:
-				object.link = false
-			case AddOnInstallationLinkKind:
-				object.link = true
-			default:
-				err = fmt.Errorf(
-					"expected kind '%s' or '%s' but got '%s'",
-					AddOnInstallationKind,
-					AddOnInstallationLinkKind,
-					*d.Kind,
-				)
-				return
-			}
-		}
-	*/
-	object.link = false
+	if d.Kind != nil {
+		object.link = *d.Kind == AddOnInstallationLinkKind
+	}
 	object.addon, err = d.Addon.unwrap()
 	if err != nil {
 		return
