@@ -2484,6 +2484,9 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "ban_code": {
+            "type": "string"
+          },
           "ban_description": {
             "type": "string"
           },
