@@ -371,10 +371,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Extract the bearer token from the authorization header:
 	header := r.Header.Get("Authorization")
 	if header == "" {
-		h.logger.Info(
-			ctx,
-			"Request doesn't contain the 'Authorization' header",
-		)
 		h.sendError(
 			w, r,
 			"Request doesn't contain the 'Authorization' header",
@@ -383,11 +379,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	matches := bearerRE.FindStringSubmatch(header)
 	if len(matches) != 3 {
-		h.logger.Info(
-			ctx,
-			"Authorization header '%s' is malformed",
-			header,
-		)
 		h.sendError(
 			w, r,
 			"Authorization header '%s' is malformed",
@@ -398,11 +389,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	typ := matches[1]
 	bearer := matches[2]
 	if !strings.EqualFold(typ, "Bearer") {
-		h.logger.Info(
-			ctx,
-			"Authentication type '%s' isn't supported",
-			typ,
-		)
 		h.sendError(
 			w, r,
 			"Authentication type '%s' isn't supported",
@@ -668,11 +654,6 @@ func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 	if err != nil {
 		switch typed := err.(type) {
 		case *jwt.ValidationError:
-			h.logger.Info(
-				ctx,
-				"Bearer token '%s' isn't valid: %v",
-				bearer, err,
-			)
 			switch {
 			case typed.Errors&jwt.ValidationErrorMalformed != 0:
 				h.sendError(
@@ -711,11 +692,6 @@ func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 				)
 			}
 		default:
-			h.logger.Info(
-				ctx,
-				"Can't parse bearer token '%s' is malformed: %v",
-				bearer, err,
-			)
 			h.sendError(
 				w, r,
 				"Bearer token is malformed",
