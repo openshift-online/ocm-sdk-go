@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.71 Dec 19 2019
+
+- Authentication handler sends 401 instead of 511.
+- Authentication handler sends the `WWW-Authenticate` response header.
+- Authentication handler doesn't send authentication failures to the log.
+
 == 0.1.70 Dec 18 2019
 
 - Update to metamodel 0.0.20:
