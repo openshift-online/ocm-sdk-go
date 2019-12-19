@@ -373,7 +373,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		)
 		h.sendError(
 			w, r,
-			http.StatusNetworkAuthenticationRequired,
 			"Request doesn't contain the 'Authorization' header",
 		)
 		return
@@ -387,7 +386,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		)
 		h.sendError(
 			w, r,
-			http.StatusUnauthorized,
 			"Authorization header '%s' is malformed",
 			header,
 		)
@@ -403,7 +401,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		)
 		h.sendError(
 			w, r,
-			http.StatusUnauthorized,
 			"Authentication type '%s' isn't supported",
 			typ,
 		)
@@ -676,43 +673,36 @@ func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 			case typed.Errors&jwt.ValidationErrorMalformed != 0:
 				h.sendError(
 					w, r,
-					http.StatusUnauthorized,
 					"Bearer token is malformed",
 				)
 			case typed.Errors&jwt.ValidationErrorUnverifiable != 0:
 				h.sendError(
 					w, r,
-					http.StatusUnauthorized,
 					"Bearer token can't be verified",
 				)
 			case typed.Errors&jwt.ValidationErrorSignatureInvalid != 0:
 				h.sendError(
 					w, r,
-					http.StatusUnauthorized,
 					"Signature of bearer token isn't valid",
 				)
 			case typed.Errors&jwt.ValidationErrorExpired != 0:
 				h.sendError(
 					w, r,
-					http.StatusUnauthorized,
 					"Bearer token is expired",
 				)
 			case typed.Errors&jwt.ValidationErrorIssuedAt != 0:
 				h.sendError(
 					w, r,
-					http.StatusUnauthorized,
 					"Bearer token was issued in the future",
 				)
 			case typed.Errors&jwt.ValidationErrorNotValidYet != 0:
 				h.sendError(
 					w, r,
-					http.StatusUnauthorized,
 					"Bearer token isn't valid yet",
 				)
 			default:
 				h.sendError(
 					w, r,
-					http.StatusUnauthorized,
 					"Bearer token isn't valid",
 				)
 			}
@@ -724,7 +714,6 @@ func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 			)
 			h.sendError(
 				w, r,
-				http.StatusUnauthorized,
 				"Bearer token is malformed",
 			)
 		}
@@ -746,7 +735,6 @@ func (h *Handler) checkClaims(w http.ResponseWriter, r *http.Request,
 	if !strings.EqualFold(value, "Bearer") {
 		h.sendError(
 			w, r,
-			http.StatusUnauthorized,
 			"Bearer token type '%s' isn't supported",
 			value,
 		)
@@ -776,7 +764,6 @@ func (h *Handler) checkTimeClaim(w http.ResponseWriter, r *http.Request,
 	if !ok {
 		h.sendError(
 			w, r,
-			http.StatusUnauthorized,
 			"Bearer token claim '%s' contains incorrect time value '%v'",
 			name, value,
 		)
@@ -799,7 +786,6 @@ func (h *Handler) checkStringClaim(w http.ResponseWriter, r *http.Request,
 	if !ok {
 		h.sendError(
 			w, r,
-			http.StatusUnauthorized,
 			"Bearer token claim '%s' contains incorrect text value '%v'",
 			name, value,
 		)
@@ -816,7 +802,6 @@ func (h *Handler) checkClaim(w http.ResponseWriter, r *http.Request, claims jwt.
 	if !ok {
 		h.sendError(
 			w, r,
-			http.StatusUnauthorized,
 			"Bearer token doesn't contain required claim '%s'",
 			name,
 		)
@@ -853,7 +838,6 @@ func (h *Handler) checkACL(w http.ResponseWriter, r *http.Request, claims jwt.Ma
 	// No match, so the access is denied:
 	h.sendError(
 		w, r,
-		http.StatusUnauthorized,
 		"Access denied",
 	)
 	return false
@@ -861,12 +845,11 @@ func (h *Handler) checkACL(w http.ResponseWriter, r *http.Request, claims jwt.Ma
 
 // sendError sends an error response to the client with the given status code and with a message
 // compossed using the given format and arguments as the fmt.Sprintf function does.
-func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, status int, format string,
-	args ...interface{}) {
+func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format string, args ...interface{}) {
 	response, err := errors.NewError().
-		ID(fmt.Sprintf("%d", status)).
-		HREF(fmt.Sprintf("%s/%d", h.errorHrefPrefix, status)).
-		Code(fmt.Sprintf("%s-%d", h.errorCodePrefix, status)).
+		ID(fmt.Sprintf("%d", http.StatusUnauthorized)).
+		HREF(fmt.Sprintf("%s/%d", h.errorHrefPrefix, http.StatusUnauthorized)).
+		Code(fmt.Sprintf("%s-%d", h.errorCodePrefix, http.StatusUnauthorized)).
 		Reason(fmt.Sprintf(format, args...)).
 		Build()
 	if err != nil {

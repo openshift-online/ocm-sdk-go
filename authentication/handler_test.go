@@ -225,12 +225,12 @@ var _ = Describe("Handler", func() {
 		handler.ServeHTTP(recorder, request)
 
 		// Verify that the request is rejected:
-		Expect(recorder.Code).To(Equal(http.StatusNetworkAuthenticationRequired))
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
 		Expect(recorder.Body).To(MatchJSON(`{
 			"kind": "Error",
-			"id": "511",
-			"href": "/api/clusters_mgmt/v1/errors/511",
-			"code": "CLUSTERS-MGMT-511",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
 			"reason": "Request doesn't contain the 'Authorization' header"
 		}`))
 	})
