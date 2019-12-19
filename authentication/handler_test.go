@@ -1286,4 +1286,33 @@ var _ = Describe("Handler", func() {
 			"reason": "Access denied"
 		}`))
 	})
+
+	It("Returns expected headers", func() {
+		// Prepare the next handler, which should never be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			Service("clusters_mgmt").
+			Version("v1").
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request with a bad token:
+		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		header := recorder.Header().Get("WWW-Authenticate")
+		Expect(header).To(Equal("Bearer realm=\"clusters_mgmt/v1\""))
+	})
 })

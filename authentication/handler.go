@@ -61,6 +61,8 @@ type HandlerBuilder struct {
 // header.
 type Handler struct {
 	logger          sdk.Logger
+	service         string
+	version         string
 	errorHrefPrefix string
 	errorCodePrefix string
 	publicPaths     []*regexp.Regexp
@@ -304,6 +306,8 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 	// Create and populate the object:
 	handler = &Handler{
 		logger:          b.logger,
+		service:         b.service,
+		version:         b.version,
 		errorHrefPrefix: errorHrefPrefix,
 		errorCodePrefix: errorCodePrefix,
 		publicPaths:     public,
@@ -846,6 +850,13 @@ func (h *Handler) checkACL(w http.ResponseWriter, r *http.Request, claims jwt.Ma
 // sendError sends an error response to the client with the given status code and with a message
 // compossed using the given format and arguments as the fmt.Sprintf function does.
 func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format string, args ...interface{}) {
+	// Prepare the headers:
+	w.Header().Set(
+		"WWW-Authenticate",
+		fmt.Sprintf("Bearer realm=\"%s/%s\"", h.service, h.version),
+	)
+
+	// Prepare the body:
 	response, err := errors.NewError().
 		ID(fmt.Sprintf("%d", http.StatusUnauthorized)).
 		HREF(fmt.Sprintf("%s/%d", h.errorHrefPrefix, http.StatusUnauthorized)).
@@ -856,6 +867,8 @@ func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format strin
 		h.logger.Error(r.Context(), "Can't build error response: %v", err)
 		errors.SendPanic(w, r)
 	}
+
+	// Send the response:
 	errors.SendError(w, r, response)
 }
 
