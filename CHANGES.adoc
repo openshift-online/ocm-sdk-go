@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.73 Dec 24 2019
+
+- Update to model 0.0.32:
+** Replace `AddOns` with `AddOnInstallations`.
+
 == 0.1.72 Dec 19 2019
 
 - Update to model 0.0.31:
