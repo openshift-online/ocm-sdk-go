@@ -2946,6 +2946,10 @@
           "cluster_id": {
             "type": "string"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
           "creator": {
             "description": "Link to the account that created the subscription.\n",
             "$ref": "#/components/schemas/Account"
@@ -2969,6 +2973,10 @@
           },
           "registry_credential": {
             "$ref": "#/components/schemas/RegistryCredential"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
