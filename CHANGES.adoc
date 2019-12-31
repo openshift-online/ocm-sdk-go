@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.74 Dec 31 2019
+
+- Update to model 0.0.33:
+** Adding the CreatedAt and UpdatedAt fields to the Subscription type.
+
 == 0.1.73 Dec 24 2019
 
 - Update to model 0.0.32:
