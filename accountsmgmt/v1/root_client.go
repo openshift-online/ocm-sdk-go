@@ -112,7 +112,7 @@ func (c *Client) ClusterRegistrations() *ClusterRegistrationsClient {
 // CurrentAccess returns the target 'roles' resource.
 //
 // Reference to the resource that manages the current authenticated
-// acount.
+// account.
 func (c *Client) CurrentAccess() *RolesClient {
 	return NewRolesClient(
 		c.transport,
@@ -124,7 +124,7 @@ func (c *Client) CurrentAccess() *RolesClient {
 // CurrentAccount returns the target 'current_account' resource.
 //
 // Reference to the resource that manages the current authenticated
-// acount.
+// account.
 func (c *Client) CurrentAccount() *CurrentAccountClient {
 	return NewCurrentAccountClient(
 		c.transport,

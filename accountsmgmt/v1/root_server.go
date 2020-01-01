@@ -57,13 +57,13 @@ type Server interface {
 	// CurrentAccess returns the target 'roles' resource.
 	//
 	// Reference to the resource that manages the current authenticated
-	// acount.
+	// account.
 	CurrentAccess() RolesServer
 
 	// CurrentAccount returns the target 'current_account' resource.
 	//
 	// Reference to the resource that manages the current authenticated
-	// acount.
+	// account.
 	CurrentAccount() CurrentAccountServer
 
 	// Organizations returns the target 'organizations' resource.
