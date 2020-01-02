@@ -3,11 +3,6 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.75 Jan 01 2020
-
-- Update to model 0.0.35:
-** Added CurrentAccess Support
-
 == 0.1.74 Dec 31 2019
 
 - Update to model 0.0.33:
