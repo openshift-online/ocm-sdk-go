@@ -50,6 +50,128 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/AWS_infrastructure_access_roles": {
+      "get": {
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to sort the roles\ndescending by dislay_name the value should be:\n\n\n```\ndisplay_name desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nrole with a name starting with `my`the value should be:\n\n\n```\ndisplay_name like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the roles\nthat the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of roles.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/AWS_infrastructure_access_roles/{aws_infrastructure_access_role_id}": {
+      "get": {
+        "description": "Retrieves the details of the aws infrastructure access role.\n",
+        "parameters": [
+          {
+            "name": "aws_infrastructure_access_role_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/addons": {
       "post": {
         "description": "Create a new add-on and add it to the collection of add-ons.\n",
@@ -2179,11 +2301,23 @@
         }
       },
       "AWSFlavour": {
-        "description": "Volume specification for different classes of nodes inside a flavour.\n",
+        "description": "Specification for different classes of nodes inside a flavour.\n",
         "properties": {
+          "compute_instance_type": {
+            "description": "AWS default instance type for the worker volume.\n\nUser can be overridden specifying in the cluster itself a type for compute node.\n",
+            "type": "string"
+          },
+          "infra_instance_type": {
+            "description": "AWS default instance type for the infra volume.\n",
+            "type": "string"
+          },
           "infra_volume": {
             "description": "Infra volume specification.\n",
             "$ref": "#/components/schemas/AWSVolume"
+          },
+          "master_instance_type": {
+            "description": "AWS default instance type for the master volume.\n",
+            "type": "string"
           },
           "master_volume": {
             "description": "Master volume specification.\n",
@@ -2192,6 +2326,31 @@
           "worker_volume": {
             "description": "Worker volume specification.\n",
             "$ref": "#/components/schemas/AWSVolume"
+          }
+        }
+      },
+      "AWSInfrastructureAccessRole": {
+        "description": "A set of acces permissions for AWS resources\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSInfrastructureAccessRole' if this is a complete object or 'AWSInfrastructureAccessRoleLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the role.\n",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "Human friendly identifier of the role, for example `Read only`.\n",
+            "type": "string"
           }
         }
       },
@@ -2255,6 +2414,23 @@
         "properties": {
           "base_domain": {
             "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the name of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n\n```\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n\n```\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).\n",
+            "type": "string"
+          }
+        }
+      },
+      "GCPFlavour": {
+        "description": "Specification for different classes of nodes inside a flavour.\n",
+        "properties": {
+          "compute_instance_type": {
+            "description": "GCP default instance type for the worker volume.\n\nUser can be overridden specifying in the cluster itself a type for compute node.\n",
+            "type": "string"
+          },
+          "infra_instance_type": {
+            "description": "GCP default instance type for the infra volume.\n",
+            "type": "string"
+          },
+          "master_instance_type": {
+            "description": "GCP default instance type for the master volume.\n",
             "type": "string"
           }
         }
@@ -2830,31 +3006,23 @@
             "type": "string"
           },
           "aws": {
-            "description": "Default _Amazon Web Services_ settings of the cluster.\n\nThese can be overriden specifying in the clsuter itself a different set of settings.\n",
+            "description": "Default _Amazon Web Services_ settings of the cluster.\n",
             "$ref": "#/components/schemas/AWSFlavour"
           },
-          "compute_instance_type": {
-            "description": "AWS default instance type for the worker volume.\n\nTins can be overriden specifying in the cluster itself a type for compute node.\n",
-            "type": "string"
-          },
-          "infra_instance_type": {
-            "description": "AWS default instance type for the infra volume.\n",
-            "type": "string"
-          },
-          "master_instance_type": {
-            "description": "AWS default instance type for the master volume.\n",
-            "type": "string"
+          "gcp": {
+            "description": "Default _Google Cloud Platform_ settings of the cluster.\n",
+            "$ref": "#/components/schemas/GCPFlavour"
           },
           "name": {
             "description": "Human friendly identifier of the cluster, for example `4`.\n\nNOTE: Currently for all flavours the `id` and `name` attributes have exactly the\nsame values.\n",
             "type": "string"
           },
           "network": {
-            "description": "Default network settings of the cluster.\n\nThese can be overriden specifying in the cluster itself a different set of settings.\n",
+            "description": "Default network settings of the cluster.\n\nThese can be overridden specifying in the cluster itself a different set of settings.\n",
             "$ref": "#/components/schemas/Network"
           },
           "nodes": {
-            "description": "Number of nodes that will be used by default when creating a cluster that uses\nthis flavour.\n\nThese can be overriden specifying in the cluster itself a different number of nodes.\n",
+            "description": "Number of nodes that will be used by default when creating a cluster that uses\nthis flavour.\n\nThese can be overridden specifying in the cluster itself a different number of nodes.\n",
             "$ref": "#/components/schemas/FlavourNodes"
           }
         }

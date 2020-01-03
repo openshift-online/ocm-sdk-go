@@ -26,9 +26,12 @@ import (
 // awsFlavourData is the data structure used internally to marshal and unmarshal
 // objects of type 'AWS_flavour'.
 type awsFlavourData struct {
-	InfraVolume  *awsVolumeData "json:\"infra_volume,omitempty\""
-	MasterVolume *awsVolumeData "json:\"master_volume,omitempty\""
-	WorkerVolume *awsVolumeData "json:\"worker_volume,omitempty\""
+	ComputeInstanceType *string        "json:\"compute_instance_type,omitempty\""
+	InfraInstanceType   *string        "json:\"infra_instance_type,omitempty\""
+	InfraVolume         *awsVolumeData "json:\"infra_volume,omitempty\""
+	MasterInstanceType  *string        "json:\"master_instance_type,omitempty\""
+	MasterVolume        *awsVolumeData "json:\"master_volume,omitempty\""
+	WorkerVolume        *awsVolumeData "json:\"worker_volume,omitempty\""
 }
 
 // MarshalAWSFlavour writes a value of the 'AWS_flavour' to the given target,
@@ -52,10 +55,13 @@ func (o *AWSFlavour) wrap() (data *awsFlavourData, err error) {
 		return
 	}
 	data = new(awsFlavourData)
+	data.ComputeInstanceType = o.computeInstanceType
+	data.InfraInstanceType = o.infraInstanceType
 	data.InfraVolume, err = o.infraVolume.wrap()
 	if err != nil {
 		return
 	}
+	data.MasterInstanceType = o.masterInstanceType
 	data.MasterVolume, err = o.masterVolume.wrap()
 	if err != nil {
 		return
@@ -90,10 +96,13 @@ func (d *awsFlavourData) unwrap() (object *AWSFlavour, err error) {
 		return
 	}
 	object = new(AWSFlavour)
+	object.computeInstanceType = d.ComputeInstanceType
+	object.infraInstanceType = d.InfraInstanceType
 	object.infraVolume, err = d.InfraVolume.unwrap()
 	if err != nil {
 		return
 	}
+	object.masterInstanceType = d.MasterInstanceType
 	object.masterVolume, err = d.MasterVolume.unwrap()
 	if err != nil {
 		return

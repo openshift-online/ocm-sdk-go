@@ -53,6 +53,18 @@ func (c *Client) Get() *MetadataRequest {
 	}
 }
 
+// AWSInfrastructureAccessRoles returns the target 'AWS_infrastructure_access_roles' resource.
+//
+// Reference to the resource that manages the collection of AWS
+// infrastructure access roles.
+func (c *Client) AWSInfrastructureAccessRoles() *AWSInfrastructureAccessRolesClient {
+	return NewAWSInfrastructureAccessRolesClient(
+		c.transport,
+		path.Join(c.path, "aws_infrastructure_access_roles"),
+		path.Join(c.metric, "aws_infrastructure_access_roles"),
+	)
+}
+
 // Addons returns the target 'add_ons' resource.
 //
 // Reference to the resource that manages the collection of add-ons.
