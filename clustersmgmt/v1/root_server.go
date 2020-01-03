@@ -28,6 +28,12 @@ import (
 // Server represents the interface the manages the 'root' resource.
 type Server interface {
 
+	// AWSInfrastructureAccessRoles returns the target 'AWS_infrastructure_access_roles' resource.
+	//
+	// Reference to the resource that manages the collection of AWS
+	// infrastructure access roles.
+	AWSInfrastructureAccessRoles() AWSInfrastructureAccessRolesServer
+
 	// Addons returns the target 'add_ons' resource.
 	//
 	// Reference to the resource that manages the collection of add-ons.
@@ -71,6 +77,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 		}
 	} else {
 		switch segments[0] {
+		case "aws_infrastructure_access_roles":
+			target := server.AWSInfrastructureAccessRoles()
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchAWSInfrastructureAccessRoles(w, r, target, segments[1:])
 		case "addons":
 			target := server.Addons()
 			if target == nil {

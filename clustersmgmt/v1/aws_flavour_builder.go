@@ -21,16 +21,37 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // AWSFlavourBuilder contains the data and logic needed to build 'AWS_flavour' objects.
 //
-// Volume specification for different classes of nodes inside a flavour.
+// Specification for different classes of nodes inside a flavour.
 type AWSFlavourBuilder struct {
-	infraVolume  *AWSVolumeBuilder
-	masterVolume *AWSVolumeBuilder
-	workerVolume *AWSVolumeBuilder
+	computeInstanceType *string
+	infraInstanceType   *string
+	infraVolume         *AWSVolumeBuilder
+	masterInstanceType  *string
+	masterVolume        *AWSVolumeBuilder
+	workerVolume        *AWSVolumeBuilder
 }
 
 // NewAWSFlavour creates a new builder of 'AWS_flavour' objects.
 func NewAWSFlavour() *AWSFlavourBuilder {
 	return new(AWSFlavourBuilder)
+}
+
+// ComputeInstanceType sets the value of the 'compute_instance_type' attribute
+// to the given value.
+//
+//
+func (b *AWSFlavourBuilder) ComputeInstanceType(value string) *AWSFlavourBuilder {
+	b.computeInstanceType = &value
+	return b
+}
+
+// InfraInstanceType sets the value of the 'infra_instance_type' attribute
+// to the given value.
+//
+//
+func (b *AWSFlavourBuilder) InfraInstanceType(value string) *AWSFlavourBuilder {
+	b.infraInstanceType = &value
+	return b
 }
 
 // InfraVolume sets the value of the 'infra_volume' attribute
@@ -39,6 +60,15 @@ func NewAWSFlavour() *AWSFlavourBuilder {
 // Holds settings for an AWS storage volume.
 func (b *AWSFlavourBuilder) InfraVolume(value *AWSVolumeBuilder) *AWSFlavourBuilder {
 	b.infraVolume = value
+	return b
+}
+
+// MasterInstanceType sets the value of the 'master_instance_type' attribute
+// to the given value.
+//
+//
+func (b *AWSFlavourBuilder) MasterInstanceType(value string) *AWSFlavourBuilder {
+	b.masterInstanceType = &value
 	return b
 }
 
@@ -65,11 +95,14 @@ func (b *AWSFlavourBuilder) Copy(object *AWSFlavour) *AWSFlavourBuilder {
 	if object == nil {
 		return b
 	}
+	b.computeInstanceType = object.computeInstanceType
+	b.infraInstanceType = object.infraInstanceType
 	if object.infraVolume != nil {
 		b.infraVolume = NewAWSVolume().Copy(object.infraVolume)
 	} else {
 		b.infraVolume = nil
 	}
+	b.masterInstanceType = object.masterInstanceType
 	if object.masterVolume != nil {
 		b.masterVolume = NewAWSVolume().Copy(object.masterVolume)
 	} else {
@@ -86,11 +119,20 @@ func (b *AWSFlavourBuilder) Copy(object *AWSFlavour) *AWSFlavourBuilder {
 // Build creates a 'AWS_flavour' object using the configuration stored in the builder.
 func (b *AWSFlavourBuilder) Build() (object *AWSFlavour, err error) {
 	object = new(AWSFlavour)
+	if b.computeInstanceType != nil {
+		object.computeInstanceType = b.computeInstanceType
+	}
+	if b.infraInstanceType != nil {
+		object.infraInstanceType = b.infraInstanceType
+	}
 	if b.infraVolume != nil {
 		object.infraVolume, err = b.infraVolume.Build()
 		if err != nil {
 			return
 		}
+	}
+	if b.masterInstanceType != nil {
+		object.masterInstanceType = b.masterInstanceType
 	}
 	if b.masterVolume != nil {
 		object.masterVolume, err = b.masterVolume.Build()
