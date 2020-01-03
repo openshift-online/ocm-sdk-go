@@ -3,15 +3,21 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.75 Jan 01 2020
+== 0.1.76 Jan 3 2020
+
+- Update to model 0.0.36:
+** Add types and resources for AWS infrastructure access roles.
+** Add GCP flavour and change AWS flavour to contain also the instance type.
+
+== 0.1.75 Jan 1 2020
 
 - Update to model 0.0.35:
-** Added CurrentAccess Support
+** Add `CurrentAccess` support.
 
 == 0.1.74 Dec 31 2019
 
 - Update to model 0.0.33:
-** Adding the CreatedAt and UpdatedAt fields to the Subscription type.
+** Add the `CreatedAt` and `UpdatedAt` attributes to the `Subscription` type.
 
 == 0.1.73 Dec 24 2019
 
