@@ -21,8 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"context"
-	"encoding/json"
-	"io"
 	"net/http"
 	"net/url"
 	"path"
@@ -41,25 +39,25 @@ type AWSInfrastructureAccessRolesClient struct {
 }
 
 // NewAWSInfrastructureAccessRolesClient creates a new client for the 'AWS_infrastructure_access_roles'
-// resource using the given transport to sned the requests and receive the
+// resource using the given transport to send the requests and receive the
 // responses.
 func NewAWSInfrastructureAccessRolesClient(transport http.RoundTripper, path string, metric string) *AWSInfrastructureAccessRolesClient {
-	client := new(AWSInfrastructureAccessRolesClient)
-	client.transport = transport
-	client.path = path
-	client.metric = metric
-	return client
+	return &AWSInfrastructureAccessRolesClient{
+		transport: transport,
+		path:      path,
+		metric:    metric,
+	}
 }
 
 // List creates a request for the 'list' method.
 //
 //
 func (c *AWSInfrastructureAccessRolesClient) List() *AWSInfrastructureAccessRolesListRequest {
-	request := new(AWSInfrastructureAccessRolesListRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+	return &AWSInfrastructureAccessRolesListRequest{
+		transport: c.transport,
+		path:      c.path,
+		metric:    c.metric,
+	}
 }
 
 // AWSInfrastructureAccessRole returns the target 'AWS_infrastructure_access_role' resource for the given identifier.
@@ -197,7 +195,7 @@ func (r *AWSInfrastructureAccessRolesListRequest) SendContext(ctx context.Contex
 		return
 	}
 	defer response.Body.Close()
-	result = new(AWSInfrastructureAccessRolesListResponse)
+	result = &AWSInfrastructureAccessRolesListResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -208,7 +206,7 @@ func (r *AWSInfrastructureAccessRolesListRequest) SendContext(ctx context.Contex
 		err = result.err
 		return
 	}
-	err = result.unmarshal(response.Body)
+	err = readAWSInfrastructureAccessRolesListResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -338,33 +336,4 @@ func (r *AWSInfrastructureAccessRolesListResponse) GetTotal() (value int, ok boo
 		value = *r.total
 	}
 	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'list' method.
-func (r *AWSInfrastructureAccessRolesListResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(awsInfrastructureAccessRolesListResponseData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.items, err = data.Items.unwrap()
-	if err != nil {
-		return err
-	}
-	r.page = data.Page
-	r.size = data.Size
-	r.total = data.Total
-	return err
-}
-
-// awsInfrastructureAccessRolesListResponseData is the structure used internally to unmarshal
-// the response of the 'list' method.
-type awsInfrastructureAccessRolesListResponseData struct {
-	Items awsInfrastructureAccessRoleListData "json:\"items,omitempty\""
-	Page  *int                                "json:\"page,omitempty\""
-	Size  *int                                "json:\"size,omitempty\""
-	Total *int                                "json:\"total,omitempty\""
 }

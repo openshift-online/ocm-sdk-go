@@ -36,8 +36,7 @@ func NewAWSFlavour() *AWSFlavourBuilder {
 	return new(AWSFlavourBuilder)
 }
 
-// ComputeInstanceType sets the value of the 'compute_instance_type' attribute
-// to the given value.
+// ComputeInstanceType sets the value of the 'compute_instance_type' attribute to the given value.
 //
 //
 func (b *AWSFlavourBuilder) ComputeInstanceType(value string) *AWSFlavourBuilder {
@@ -45,8 +44,7 @@ func (b *AWSFlavourBuilder) ComputeInstanceType(value string) *AWSFlavourBuilder
 	return b
 }
 
-// InfraInstanceType sets the value of the 'infra_instance_type' attribute
-// to the given value.
+// InfraInstanceType sets the value of the 'infra_instance_type' attribute to the given value.
 //
 //
 func (b *AWSFlavourBuilder) InfraInstanceType(value string) *AWSFlavourBuilder {
@@ -54,8 +52,7 @@ func (b *AWSFlavourBuilder) InfraInstanceType(value string) *AWSFlavourBuilder {
 	return b
 }
 
-// InfraVolume sets the value of the 'infra_volume' attribute
-// to the given value.
+// InfraVolume sets the value of the 'infra_volume' attribute to the given value.
 //
 // Holds settings for an AWS storage volume.
 func (b *AWSFlavourBuilder) InfraVolume(value *AWSVolumeBuilder) *AWSFlavourBuilder {
@@ -63,8 +60,7 @@ func (b *AWSFlavourBuilder) InfraVolume(value *AWSVolumeBuilder) *AWSFlavourBuil
 	return b
 }
 
-// MasterInstanceType sets the value of the 'master_instance_type' attribute
-// to the given value.
+// MasterInstanceType sets the value of the 'master_instance_type' attribute to the given value.
 //
 //
 func (b *AWSFlavourBuilder) MasterInstanceType(value string) *AWSFlavourBuilder {
@@ -72,8 +68,7 @@ func (b *AWSFlavourBuilder) MasterInstanceType(value string) *AWSFlavourBuilder 
 	return b
 }
 
-// MasterVolume sets the value of the 'master_volume' attribute
-// to the given value.
+// MasterVolume sets the value of the 'master_volume' attribute to the given value.
 //
 // Holds settings for an AWS storage volume.
 func (b *AWSFlavourBuilder) MasterVolume(value *AWSVolumeBuilder) *AWSFlavourBuilder {
@@ -81,8 +76,7 @@ func (b *AWSFlavourBuilder) MasterVolume(value *AWSVolumeBuilder) *AWSFlavourBui
 	return b
 }
 
-// WorkerVolume sets the value of the 'worker_volume' attribute
-// to the given value.
+// WorkerVolume sets the value of the 'worker_volume' attribute to the given value.
 //
 // Holds settings for an AWS storage volume.
 func (b *AWSFlavourBuilder) WorkerVolume(value *AWSVolumeBuilder) *AWSFlavourBuilder {
@@ -119,21 +113,15 @@ func (b *AWSFlavourBuilder) Copy(object *AWSFlavour) *AWSFlavourBuilder {
 // Build creates a 'AWS_flavour' object using the configuration stored in the builder.
 func (b *AWSFlavourBuilder) Build() (object *AWSFlavour, err error) {
 	object = new(AWSFlavour)
-	if b.computeInstanceType != nil {
-		object.computeInstanceType = b.computeInstanceType
-	}
-	if b.infraInstanceType != nil {
-		object.infraInstanceType = b.infraInstanceType
-	}
+	object.computeInstanceType = b.computeInstanceType
+	object.infraInstanceType = b.infraInstanceType
 	if b.infraVolume != nil {
 		object.infraVolume, err = b.infraVolume.Build()
 		if err != nil {
 			return
 		}
 	}
-	if b.masterInstanceType != nil {
-		object.masterInstanceType = b.masterInstanceType
-	}
+	object.masterInstanceType = b.masterInstanceType
 	if b.masterVolume != nil {
 		object.masterVolume, err = b.masterVolume.Build()
 		if err != nil {

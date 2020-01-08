@@ -21,8 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/servicelogs/v1
 
 import (
 	"context"
-	"encoding/json"
-	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -41,36 +39,36 @@ type LogEntryClient struct {
 }
 
 // NewLogEntryClient creates a new client for the 'log_entry'
-// resource using the given transport to sned the requests and receive the
+// resource using the given transport to send the requests and receive the
 // responses.
 func NewLogEntryClient(transport http.RoundTripper, path string, metric string) *LogEntryClient {
-	client := new(LogEntryClient)
-	client.transport = transport
-	client.path = path
-	client.metric = metric
-	return client
+	return &LogEntryClient{
+		transport: transport,
+		path:      path,
+		metric:    metric,
+	}
 }
 
 // Delete creates a request for the 'delete' method.
 //
 // Deletes the log entry.
 func (c *LogEntryClient) Delete() *LogEntryDeleteRequest {
-	request := new(LogEntryDeleteRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+	return &LogEntryDeleteRequest{
+		transport: c.transport,
+		path:      c.path,
+		metric:    c.metric,
+	}
 }
 
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the log entry.
 func (c *LogEntryClient) Get() *LogEntryGetRequest {
-	request := new(LogEntryGetRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+	return &LogEntryGetRequest{
+		transport: c.transport,
+		path:      c.path,
+		metric:    c.metric,
+	}
 }
 
 // LogEntryPollRequest is the request for the Poll method.
@@ -244,7 +242,7 @@ func (r *LogEntryDeleteRequest) SendContext(ctx context.Context) (result *LogEnt
 		return
 	}
 	defer response.Body.Close()
-	result = new(LogEntryDeleteResponse)
+	result = &LogEntryDeleteResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -339,7 +337,7 @@ func (r *LogEntryGetRequest) SendContext(ctx context.Context) (result *LogEntryG
 		return
 	}
 	defer response.Body.Close()
-	result = new(LogEntryGetResponse)
+	result = &LogEntryGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -350,7 +348,7 @@ func (r *LogEntryGetRequest) SendContext(ctx context.Context) (result *LogEntryG
 		err = result.err
 		return
 	}
-	err = result.unmarshal(response.Body)
+	err = readLogEntryGetResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -409,21 +407,4 @@ func (r *LogEntryGetResponse) GetBody() (value *LogEntry, ok bool) {
 		value = r.body
 	}
 	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'get' method.
-func (r *LogEntryGetResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(logEntryData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
 }

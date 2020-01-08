@@ -21,8 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"context"
-	"encoding/json"
-	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -41,25 +39,25 @@ type FlavourClient struct {
 }
 
 // NewFlavourClient creates a new client for the 'flavour'
-// resource using the given transport to sned the requests and receive the
+// resource using the given transport to send the requests and receive the
 // responses.
 func NewFlavourClient(transport http.RoundTripper, path string, metric string) *FlavourClient {
-	client := new(FlavourClient)
-	client.transport = transport
-	client.path = path
-	client.metric = metric
-	return client
+	return &FlavourClient{
+		transport: transport,
+		path:      path,
+		metric:    metric,
+	}
 }
 
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the cluster flavour.
 func (c *FlavourClient) Get() *FlavourGetRequest {
-	request := new(FlavourGetRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+	return &FlavourGetRequest{
+		transport: c.transport,
+		path:      c.path,
+		metric:    c.metric,
+	}
 }
 
 // FlavourPollRequest is the request for the Poll method.
@@ -233,7 +231,7 @@ func (r *FlavourGetRequest) SendContext(ctx context.Context) (result *FlavourGet
 		return
 	}
 	defer response.Body.Close()
-	result = new(FlavourGetResponse)
+	result = &FlavourGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -244,7 +242,7 @@ func (r *FlavourGetRequest) SendContext(ctx context.Context) (result *FlavourGet
 		err = result.err
 		return
 	}
-	err = result.unmarshal(response.Body)
+	err = readFlavourGetResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -303,21 +301,4 @@ func (r *FlavourGetResponse) GetBody() (value *Flavour, ok bool) {
 		value = r.body
 	}
 	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'get' method.
-func (r *FlavourGetResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(flavourData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
 }

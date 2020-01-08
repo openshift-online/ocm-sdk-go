@@ -53,9 +53,6 @@
     "/api/service_logs/v1/cluster_logs": {
       "post": {
         "description": "Creates a new log entry.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {

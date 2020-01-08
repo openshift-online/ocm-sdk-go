@@ -37,6 +37,19 @@ func (b *GCPFlavourListBuilder) Items(values ...*GCPFlavourBuilder) *GCPFlavourL
 	return b
 }
 
+// Copy copies the items of the given list into this builder, discarding any previous items.
+func (b *GCPFlavourListBuilder) Copy(list *GCPFlavourList) *GCPFlavourListBuilder {
+	if list == nil || list.items == nil {
+		b.items = nil
+	} else {
+		b.items = make([]*GCPFlavourBuilder, len(list.items))
+		for i, v := range list.items {
+			b.items[i] = NewGCPFlavour().Copy(v)
+		}
+	}
+	return b
+}
+
 // Build creates a list of 'GCP_flavour' objects using the
 // configuration stored in the builder.
 func (b *GCPFlavourListBuilder) Build() (list *GCPFlavourList, err error) {

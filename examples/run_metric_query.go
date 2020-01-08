@@ -24,7 +24,6 @@ import (
 	"os"
 
 	"github.com/openshift-online/ocm-sdk-go"
-	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -67,10 +66,9 @@ func main() {
 	}
 
 	// Print the results:
-	response.Body().CPUTotals().Each(func(node *cmv1.CPUTotalNodeRoleOSMetricNode) bool {
+	for _, node := range response.Body().CPUTotals() {
 		fmt.Printf("Node roles: %v\n", node.NodeRoles())
 		fmt.Printf("Operating system: %s\n", node.OperatingSystem())
 		fmt.Printf("CPU total: %f\n", node.CPUTotal())
-		return true
-	})
+	}
 }

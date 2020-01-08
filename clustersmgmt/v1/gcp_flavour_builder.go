@@ -33,8 +33,7 @@ func NewGCPFlavour() *GCPFlavourBuilder {
 	return new(GCPFlavourBuilder)
 }
 
-// ComputeInstanceType sets the value of the 'compute_instance_type' attribute
-// to the given value.
+// ComputeInstanceType sets the value of the 'compute_instance_type' attribute to the given value.
 //
 //
 func (b *GCPFlavourBuilder) ComputeInstanceType(value string) *GCPFlavourBuilder {
@@ -42,8 +41,7 @@ func (b *GCPFlavourBuilder) ComputeInstanceType(value string) *GCPFlavourBuilder
 	return b
 }
 
-// InfraInstanceType sets the value of the 'infra_instance_type' attribute
-// to the given value.
+// InfraInstanceType sets the value of the 'infra_instance_type' attribute to the given value.
 //
 //
 func (b *GCPFlavourBuilder) InfraInstanceType(value string) *GCPFlavourBuilder {
@@ -51,8 +49,7 @@ func (b *GCPFlavourBuilder) InfraInstanceType(value string) *GCPFlavourBuilder {
 	return b
 }
 
-// MasterInstanceType sets the value of the 'master_instance_type' attribute
-// to the given value.
+// MasterInstanceType sets the value of the 'master_instance_type' attribute to the given value.
 //
 //
 func (b *GCPFlavourBuilder) MasterInstanceType(value string) *GCPFlavourBuilder {
@@ -74,14 +71,8 @@ func (b *GCPFlavourBuilder) Copy(object *GCPFlavour) *GCPFlavourBuilder {
 // Build creates a 'GCP_flavour' object using the configuration stored in the builder.
 func (b *GCPFlavourBuilder) Build() (object *GCPFlavour, err error) {
 	object = new(GCPFlavour)
-	if b.computeInstanceType != nil {
-		object.computeInstanceType = b.computeInstanceType
-	}
-	if b.infraInstanceType != nil {
-		object.infraInstanceType = b.infraInstanceType
-	}
-	if b.masterInstanceType != nil {
-		object.masterInstanceType = b.masterInstanceType
-	}
+	object.computeInstanceType = b.computeInstanceType
+	object.infraInstanceType = b.infraInstanceType
+	object.masterInstanceType = b.masterInstanceType
 	return
 }

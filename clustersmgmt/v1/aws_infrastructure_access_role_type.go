@@ -148,16 +148,16 @@ func (o *AWSInfrastructureAccessRole) GetDisplayName() (value string, ok bool) {
 	return
 }
 
-// AWSInfrastructureAccessRoleListKind is the name of the type used to represent list of
-// objects of type 'AWS_infrastructure_access_role'.
+// AWSInfrastructureAccessRoleListKind is the name of the type used to represent list of objects of
+// type 'AWS_infrastructure_access_role'.
 const AWSInfrastructureAccessRoleListKind = "AWSInfrastructureAccessRoleList"
 
-// AWSInfrastructureAccessRoleListLinkKind is the name of the type used to represent links
-// to list of objects of type 'AWS_infrastructure_access_role'.
+// AWSInfrastructureAccessRoleListLinkKind is the name of the type used to represent links to list
+// of objects of type 'AWS_infrastructure_access_role'.
 const AWSInfrastructureAccessRoleListLinkKind = "AWSInfrastructureAccessRoleListLink"
 
-// AWSInfrastructureAccessRoleNilKind is the name of the type used to nil lists of
-// objects of type 'AWS_infrastructure_access_role'.
+// AWSInfrastructureAccessRoleNilKind is the name of the type used to nil lists of objects of
+// type 'AWS_infrastructure_access_role'.
 const AWSInfrastructureAccessRoleListNilKind = "AWSInfrastructureAccessRoleListNil"
 
 // AWSInfrastructureAccessRoleList is a list of values of the 'AWS_infrastructure_access_role' type.

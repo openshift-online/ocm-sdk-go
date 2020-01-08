@@ -37,6 +37,19 @@ func (b *AWSInfrastructureAccessRoleListBuilder) Items(values ...*AWSInfrastruct
 	return b
 }
 
+// Copy copies the items of the given list into this builder, discarding any previous items.
+func (b *AWSInfrastructureAccessRoleListBuilder) Copy(list *AWSInfrastructureAccessRoleList) *AWSInfrastructureAccessRoleListBuilder {
+	if list == nil || list.items == nil {
+		b.items = nil
+	} else {
+		b.items = make([]*AWSInfrastructureAccessRoleBuilder, len(list.items))
+		for i, v := range list.items {
+			b.items[i] = NewAWSInfrastructureAccessRole().Copy(v)
+		}
+	}
+	return b
+}
+
 // Build creates a list of 'AWS_infrastructure_access_role' objects using the
 // configuration stored in the builder.
 func (b *AWSInfrastructureAccessRoleListBuilder) Build() (list *AWSInfrastructureAccessRoleList, err error) {

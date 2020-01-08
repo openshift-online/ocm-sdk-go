@@ -99,9 +99,6 @@ func (o *MachineType) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *MachineType) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.cpu == nil &&
-		o.cloudProvider == nil &&
-		o.memory == nil &&
 		o.name == nil &&
 		true)
 }
@@ -198,16 +195,16 @@ func (o *MachineType) GetName() (value string, ok bool) {
 	return
 }
 
-// MachineTypeListKind is the name of the type used to represent list of
-// objects of type 'machine_type'.
+// MachineTypeListKind is the name of the type used to represent list of objects of
+// type 'machine_type'.
 const MachineTypeListKind = "MachineTypeList"
 
-// MachineTypeListLinkKind is the name of the type used to represent links
-// to list of objects of type 'machine_type'.
+// MachineTypeListLinkKind is the name of the type used to represent links to list
+// of objects of type 'machine_type'.
 const MachineTypeListLinkKind = "MachineTypeListLink"
 
-// MachineTypeNilKind is the name of the type used to nil lists of
-// objects of type 'machine_type'.
+// MachineTypeNilKind is the name of the type used to nil lists of objects of
+// type 'machine_type'.
 const MachineTypeListNilKind = "MachineTypeListNil"
 
 // MachineTypeList is a list of values of the 'machine_type' type.

@@ -55,8 +55,7 @@ func (b *MachineTypeBuilder) Link(value bool) *MachineTypeBuilder {
 	return b
 }
 
-// CPU sets the value of the 'CPU' attribute
-// to the given value.
+// CPU sets the value of the 'CPU' attribute to the given value.
 //
 // Numeric value and the unit used to measure it.
 //
@@ -81,8 +80,7 @@ func (b *MachineTypeBuilder) CPU(value *ValueBuilder) *MachineTypeBuilder {
 	return b
 }
 
-// CloudProvider sets the value of the 'cloud_provider' attribute
-// to the given value.
+// CloudProvider sets the value of the 'cloud_provider' attribute to the given value.
 //
 // Cloud provider.
 func (b *MachineTypeBuilder) CloudProvider(value *CloudProviderBuilder) *MachineTypeBuilder {
@@ -90,8 +88,7 @@ func (b *MachineTypeBuilder) CloudProvider(value *CloudProviderBuilder) *Machine
 	return b
 }
 
-// Memory sets the value of the 'memory' attribute
-// to the given value.
+// Memory sets the value of the 'memory' attribute to the given value.
 //
 // Numeric value and the unit used to measure it.
 //
@@ -116,8 +113,7 @@ func (b *MachineTypeBuilder) Memory(value *ValueBuilder) *MachineTypeBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
-// to the given value.
+// Name sets the value of the 'name' attribute to the given value.
 //
 //
 func (b *MachineTypeBuilder) Name(value string) *MachineTypeBuilder {
@@ -176,8 +172,6 @@ func (b *MachineTypeBuilder) Build() (object *MachineType, err error) {
 			return
 		}
 	}
-	if b.name != nil {
-		object.name = b.name
-	}
+	object.name = b.name
 	return
 }

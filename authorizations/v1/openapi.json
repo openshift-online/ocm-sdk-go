@@ -53,9 +53,6 @@
     "/api/authorizations/v1/access_review": {
       "post": {
         "description": "Reviews a user's access to a resource\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -92,9 +89,6 @@
     "/api/authorizations/v1/export_control_review": {
       "post": {
         "description": "Screens a user by account user name.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -131,9 +125,6 @@
     "/api/authorizations/v1/resource_review": {
       "post": {
         "description": "Returns the list of identifiers of the resources that an account can\nperform the specified action upon.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -170,9 +161,6 @@
     "/api/authorizations/v1/self_access_review": {
       "post": {
         "description": "Reviews a user's access to a resource\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {

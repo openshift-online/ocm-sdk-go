@@ -62,8 +62,7 @@ func (b *LogEntryBuilder) Link(value bool) *LogEntryBuilder {
 	return b
 }
 
-// ClusterUUID sets the value of the 'cluster_UUID' attribute
-// to the given value.
+// ClusterUUID sets the value of the 'cluster_UUID' attribute to the given value.
 //
 //
 func (b *LogEntryBuilder) ClusterUUID(value string) *LogEntryBuilder {
@@ -71,8 +70,7 @@ func (b *LogEntryBuilder) ClusterUUID(value string) *LogEntryBuilder {
 	return b
 }
 
-// Description sets the value of the 'description' attribute
-// to the given value.
+// Description sets the value of the 'description' attribute to the given value.
 //
 //
 func (b *LogEntryBuilder) Description(value string) *LogEntryBuilder {
@@ -80,8 +78,7 @@ func (b *LogEntryBuilder) Description(value string) *LogEntryBuilder {
 	return b
 }
 
-// InternalOnly sets the value of the 'internal_only' attribute
-// to the given value.
+// InternalOnly sets the value of the 'internal_only' attribute to the given value.
 //
 //
 func (b *LogEntryBuilder) InternalOnly(value bool) *LogEntryBuilder {
@@ -89,8 +86,7 @@ func (b *LogEntryBuilder) InternalOnly(value bool) *LogEntryBuilder {
 	return b
 }
 
-// ServiceName sets the value of the 'service_name' attribute
-// to the given value.
+// ServiceName sets the value of the 'service_name' attribute to the given value.
 //
 //
 func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
@@ -98,8 +94,7 @@ func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
 	return b
 }
 
-// Severity sets the value of the 'severity' attribute
-// to the given value.
+// Severity sets the value of the 'severity' attribute to the given value.
 //
 //
 func (b *LogEntryBuilder) Severity(value Severity) *LogEntryBuilder {
@@ -107,8 +102,7 @@ func (b *LogEntryBuilder) Severity(value Severity) *LogEntryBuilder {
 	return b
 }
 
-// Summary sets the value of the 'summary' attribute
-// to the given value.
+// Summary sets the value of the 'summary' attribute to the given value.
 //
 //
 func (b *LogEntryBuilder) Summary(value string) *LogEntryBuilder {
@@ -116,8 +110,7 @@ func (b *LogEntryBuilder) Summary(value string) *LogEntryBuilder {
 	return b
 }
 
-// Timestamp sets the value of the 'timestamp' attribute
-// to the given value.
+// Timestamp sets the value of the 'timestamp' attribute to the given value.
 //
 //
 func (b *LogEntryBuilder) Timestamp(value time.Time) *LogEntryBuilder {
@@ -149,26 +142,12 @@ func (b *LogEntryBuilder) Build() (object *LogEntry, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.clusterUUID != nil {
-		object.clusterUUID = b.clusterUUID
-	}
-	if b.description != nil {
-		object.description = b.description
-	}
-	if b.internalOnly != nil {
-		object.internalOnly = b.internalOnly
-	}
-	if b.serviceName != nil {
-		object.serviceName = b.serviceName
-	}
-	if b.severity != nil {
-		object.severity = b.severity
-	}
-	if b.summary != nil {
-		object.summary = b.summary
-	}
-	if b.timestamp != nil {
-		object.timestamp = b.timestamp
-	}
+	object.clusterUUID = b.clusterUUID
+	object.description = b.description
+	object.internalOnly = b.internalOnly
+	object.serviceName = b.serviceName
+	object.severity = b.severity
+	object.summary = b.summary
+	object.timestamp = b.timestamp
 	return
 }

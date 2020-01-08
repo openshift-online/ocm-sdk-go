@@ -44,18 +44,17 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			errors.SendMethodNotAllowed(w, r)
 			return
 		}
-	} else {
-		switch segments[0] {
-		case "cluster_logs":
-			target := server.ClusterLogs()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchClusterLogs(w, r, target, segments[1:])
-		default:
+	}
+	switch segments[0] {
+	case "cluster_logs":
+		target := server.ClusterLogs()
+		if target == nil {
 			errors.SendNotFound(w, r)
 			return
 		}
+		dispatchClusterLogs(w, r, target, segments[1:])
+	default:
+		errors.SendNotFound(w, r)
+		return
 	}
 }

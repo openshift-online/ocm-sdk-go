@@ -168,9 +168,6 @@
     "/api/accounts_mgmt/v1/access_token": {
       "post": {
         "description": "Returns access token generated from registries in docker format.\n",
-        "parameters": [
-          
-        ],
         "responses": {
           "201": {
             "description": "Success.\n",
@@ -198,9 +195,6 @@
     "/api/accounts_mgmt/v1/accounts": {
       "post": {
         "description": "Creates a new account.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -401,9 +395,6 @@
     "/api/accounts_mgmt/v1/cluster_authorizations": {
       "post": {
         "description": "Authorizes new cluster creation against an existing subscription.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -440,9 +431,6 @@
     "/api/accounts_mgmt/v1/cluster_registrations": {
       "post": {
         "description": "Finds or creates a cluster registration with a registry credential\ntoken and cluster identifier.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -479,9 +467,6 @@
     "/api/accounts_mgmt/v1/current_access": {
       "post": {
         "description": "Creates a new role.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -701,9 +686,6 @@
     "/api/accounts_mgmt/v1/current_account": {
       "get": {
         "description": "Retrieves the details of the account.\n",
-        "parameters": [
-          
-        ],
         "responses": {
           "200": {
             "description": "Success.\n",
@@ -731,9 +713,6 @@
     "/api/accounts_mgmt/v1/organizations": {
       "post": {
         "description": "Creates a new organization.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1268,9 +1247,6 @@
     "/api/accounts_mgmt/v1/permissions": {
       "post": {
         "description": "Creates a new permission.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1546,9 +1522,6 @@
     "/api/accounts_mgmt/v1/registry_credentials": {
       "post": {
         "description": "Creates a new registry credential.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1690,9 +1663,6 @@
     "/api/accounts_mgmt/v1/resource_quota": {
       "post": {
         "description": "Creates a new resource quota.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1912,9 +1882,6 @@
     "/api/accounts_mgmt/v1/role_bindings": {
       "post": {
         "description": "Creates a new role binding.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2134,9 +2101,6 @@
     "/api/accounts_mgmt/v1/roles": {
       "post": {
         "description": "Creates a new role.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {

@@ -21,10 +21,12 @@ package errors // github.com/openshift-online/ocm-sdk-go/errors
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 
 	"github.com/golang/glog"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
@@ -186,70 +188,73 @@ func (e *Error) Error() string {
 // UnmarshalError reads an error from the given which can be an slice of bytes, a
 // string, a reader or a JSON decoder.
 func UnmarshalError(source interface{}) (object *Error, err error) {
-	decoder, err := helpers.NewDecoder(source)
+	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	data := new(errorData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return
-	}
-	object, err = data.unwrap()
+	object = readError(iterator)
+	err = iterator.Error
 	return
 }
-
-// MarshalError writes an error to the given destination which can be an slice of bytes, a
-// string, a reader or a JSON decoder.
-func MarshalError(object *Error, target interface{}) error {
-	encoder, err := helpers.NewEncoder(target)
-	if err != nil {
-		return err
+func readError(iterator *jsoniter.Iterator) *Error {
+	object := &Error{}
+	for {
+		field := iterator.ReadObject()
+		if field == "" {
+			break
+		}
+		switch field {
+		case "id":
+			value := iterator.ReadString()
+			object.id = &value
+		case "href":
+			value := iterator.ReadString()
+			object.href = &value
+		case "code":
+			value := iterator.ReadString()
+			object.code = &value
+		case "reason":
+			value := iterator.ReadString()
+			object.reason = &value
+		default:
+			iterator.ReadAny()
+		}
 	}
-	data, err := object.wrap()
-	if err != nil {
-		return err
-	}
-	return encoder.Encode(data)
+	return object
 }
 
-// errorData is the data structure used internally to marshal and unmarshal errors.
-type errorData struct {
-	Kind   *string "json:\"kind,omitempty\""
-	ID     *string "json:\"id,omitempty\""
-	HREF   *string "json:\"href,omitempty\""
-	Code   *string "json:\"code,omitempty\""
-	Reason *string "json:\"reason,omitempty\""
+// MarshalError writes an error to the given writer.
+func MarshalError(e *Error, writer io.Writer) error {
+	stream := helpers.NewStream(writer)
+	writeError(e, stream)
+	stream.Flush()
+	return stream.Error
 }
-
-// unwrap is the method used internally to convert the JSON unmarshalled data to an
-// error.
-func (d *errorData) unwrap() (object *Error, err error) {
-	if d == nil {
-		return
+func writeError(e *Error, stream *jsoniter.Stream) {
+	stream.WriteObjectStart()
+	stream.WriteObjectField("kind")
+	stream.WriteString(ErrorKind)
+	if e.id != nil {
+		stream.WriteMore()
+		stream.WriteObjectField("id")
+		stream.WriteString(*e.id)
 	}
-	object = new(Error)
-	object.id = d.ID
-	object.href = d.HREF
-	object.code = d.Code
-	object.reason = d.Reason
-	return
-}
-
-// wrap is the method used internally to convert the JSON unmarshalled data to an
-// error.
-func (e *Error) wrap() (data *errorData, err error) {
-	if e == nil {
-		return
+	if e.href != nil {
+		stream.WriteMore()
+		stream.WriteObjectField("href")
+		stream.WriteString(*e.href)
 	}
-	data = new(errorData)
-	data.ID = e.id
-	data.HREF = e.href
-	data.Kind = new(string)
-	*data.Kind = ErrorKind
-	data.Code = e.code
-	data.Reason = e.reason
-	return
+	if e.code != nil {
+		stream.WriteMore()
+		stream.WriteObjectField("code")
+		stream.WriteString(*e.code)
+	}
+	if e.reason != nil {
+		stream.WriteMore()
+		stream.WriteObjectField("reason")
+		stream.WriteString(*e.reason)
+	}
+	stream.WriteObjectEnd()
 }
 
 var panicID = "1000"

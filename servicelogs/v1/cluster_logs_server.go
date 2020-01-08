@@ -21,13 +21,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/servicelogs/v1
 
 import (
 	"context"
-	"encoding/json"
-	"io"
 	"net/http"
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 // ClusterLogsServer represents the interface the manages the 'cluster_logs' resource.
@@ -76,23 +73,6 @@ func (r *ClusterLogsAddServerRequest) GetBody() (value *LogEntry, ok bool) {
 	return
 }
 
-// unmarshal is the method used internally to unmarshal request to the
-// 'add' method.
-func (r *ClusterLogsAddServerRequest) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(logEntryData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
-}
-
 // ClusterLogsAddServerResponse is the response for the 'add' method.
 type ClusterLogsAddServerResponse struct {
 	status int
@@ -112,19 +92,6 @@ func (r *ClusterLogsAddServerResponse) Body(value *LogEntry) *ClusterLogsAddServ
 func (r *ClusterLogsAddServerResponse) Status(value int) *ClusterLogsAddServerResponse {
 	r.status = value
 	return r
-}
-
-// marshall is the method used internally to marshal responses for the
-// 'add' method.
-func (r *ClusterLogsAddServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data, err := r.body.wrap()
-	if err != nil {
-		return err
-	}
-	err = encoder.Encode(data)
-	return err
 }
 
 // ClusterLogsListServerRequest is the request for the 'list' method.
@@ -322,32 +289,6 @@ func (r *ClusterLogsListServerResponse) Status(value int) *ClusterLogsListServer
 	return r
 }
 
-// marshall is the method used internally to marshal responses for the
-// 'list' method.
-func (r *ClusterLogsListServerResponse) marshal(writer io.Writer) error {
-	var err error
-	encoder := json.NewEncoder(writer)
-	data := new(clusterLogsListServerResponseData)
-	data.Items, err = r.items.wrap()
-	if err != nil {
-		return err
-	}
-	data.Page = r.page
-	data.Size = r.size
-	data.Total = r.total
-	err = encoder.Encode(data)
-	return err
-}
-
-// clusterLogsListServerResponseData is the structure used internally to write the request of the
-// 'list' method.
-type clusterLogsListServerResponseData struct {
-	Items logEntryListData "json:\"items,omitempty\""
-	Page  *int             "json:\"page,omitempty\""
-	Size  *int             "json:\"size,omitempty\""
-	Total *int             "json:\"total,omitempty\""
-}
-
 // dispatchClusterLogs navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
@@ -356,54 +297,32 @@ func dispatchClusterLogs(w http.ResponseWriter, r *http.Request, server ClusterL
 		switch r.Method {
 		case "POST":
 			adaptClusterLogsAddRequest(w, r, server)
+			return
 		case "GET":
 			adaptClusterLogsListRequest(w, r, server)
+			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
 			return
 		}
-	} else {
-		switch segments[0] {
-		default:
-			target := server.LogEntry(segments[0])
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchLogEntry(w, r, target, segments[1:])
+	}
+	switch segments[0] {
+	default:
+		target := server.LogEntry(segments[0])
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
 		}
+		dispatchLogEntry(w, r, target, segments[1:])
 	}
-}
-
-// readClusterLogsAddRequest reads the given HTTP requests and translates it
-// into an object of type ClusterLogsAddServerRequest.
-func readClusterLogsAddRequest(r *http.Request) (*ClusterLogsAddServerRequest, error) {
-	var err error
-	result := new(ClusterLogsAddServerRequest)
-	err = result.unmarshal(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
-}
-
-// writeClusterLogsAddResponse translates the given request object into an
-// HTTP response.
-func writeClusterLogsAddResponse(w http.ResponseWriter, r *ClusterLogsAddServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // adaptClusterLogsAddRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
 func adaptClusterLogsAddRequest(w http.ResponseWriter, r *http.Request, server ClusterLogsServer) {
-	request, err := readClusterLogsAddRequest(r)
+	request := &ClusterLogsAddServerRequest{}
+	err := readClusterLogsAddRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -412,7 +331,7 @@ func adaptClusterLogsAddRequest(w http.ResponseWriter, r *http.Request, server C
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := new(ClusterLogsAddServerResponse)
+	response := &ClusterLogsAddServerResponse{}
 	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
@@ -423,7 +342,7 @@ func adaptClusterLogsAddRequest(w http.ResponseWriter, r *http.Request, server C
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeClusterLogsAddResponse(w, response)
+	err = writeClusterLogsAddResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
@@ -433,54 +352,12 @@ func adaptClusterLogsAddRequest(w http.ResponseWriter, r *http.Request, server C
 	}
 }
 
-// readClusterLogsListRequest reads the given HTTP requests and translates it
-// into an object of type ClusterLogsListServerRequest.
-func readClusterLogsListRequest(r *http.Request) (*ClusterLogsListServerRequest, error) {
-	var err error
-	result := new(ClusterLogsListServerRequest)
-	query := r.URL.Query()
-	result.order, err = helpers.ParseString(query, "order")
-	if err != nil {
-		return nil, err
-	}
-	result.page, err = helpers.ParseInteger(query, "page")
-	if err != nil {
-		return nil, err
-	}
-	if result.page == nil {
-		result.page = helpers.NewInteger(1)
-	}
-	result.search, err = helpers.ParseString(query, "search")
-	if err != nil {
-		return nil, err
-	}
-	result.size, err = helpers.ParseInteger(query, "size")
-	if err != nil {
-		return nil, err
-	}
-	if result.size == nil {
-		result.size = helpers.NewInteger(100)
-	}
-	return result, err
-}
-
-// writeClusterLogsListResponse translates the given request object into an
-// HTTP response.
-func writeClusterLogsListResponse(w http.ResponseWriter, r *ClusterLogsListServerResponse) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(r.status)
-	err := r.marshal(w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 // adaptClusterLogsListRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
 func adaptClusterLogsListRequest(w http.ResponseWriter, r *http.Request, server ClusterLogsServer) {
-	request, err := readClusterLogsListRequest(r)
+	request := &ClusterLogsListServerRequest{}
+	err := readClusterLogsListRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -489,7 +366,7 @@ func adaptClusterLogsListRequest(w http.ResponseWriter, r *http.Request, server 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := new(ClusterLogsListServerResponse)
+	response := &ClusterLogsListServerResponse{}
 	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
@@ -500,7 +377,7 @@ func adaptClusterLogsListRequest(w http.ResponseWriter, r *http.Request, server 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeClusterLogsListResponse(w, response)
+	err = writeClusterLogsListResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

@@ -57,8 +57,7 @@ func (b *FlavourBuilder) Link(value bool) *FlavourBuilder {
 	return b
 }
 
-// AWS sets the value of the 'AWS' attribute
-// to the given value.
+// AWS sets the value of the 'AWS' attribute to the given value.
 //
 // Specification for different classes of nodes inside a flavour.
 func (b *FlavourBuilder) AWS(value *AWSFlavourBuilder) *FlavourBuilder {
@@ -66,8 +65,7 @@ func (b *FlavourBuilder) AWS(value *AWSFlavourBuilder) *FlavourBuilder {
 	return b
 }
 
-// GCP sets the value of the 'GCP' attribute
-// to the given value.
+// GCP sets the value of the 'GCP' attribute to the given value.
 //
 // Specification for different classes of nodes inside a flavour.
 func (b *FlavourBuilder) GCP(value *GCPFlavourBuilder) *FlavourBuilder {
@@ -75,8 +73,7 @@ func (b *FlavourBuilder) GCP(value *GCPFlavourBuilder) *FlavourBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
-// to the given value.
+// Name sets the value of the 'name' attribute to the given value.
 //
 //
 func (b *FlavourBuilder) Name(value string) *FlavourBuilder {
@@ -84,8 +81,7 @@ func (b *FlavourBuilder) Name(value string) *FlavourBuilder {
 	return b
 }
 
-// Network sets the value of the 'network' attribute
-// to the given value.
+// Network sets the value of the 'network' attribute to the given value.
 //
 // Network configuration of a cluster.
 func (b *FlavourBuilder) Network(value *NetworkBuilder) *FlavourBuilder {
@@ -93,8 +89,7 @@ func (b *FlavourBuilder) Network(value *NetworkBuilder) *FlavourBuilder {
 	return b
 }
 
-// Nodes sets the value of the 'nodes' attribute
-// to the given value.
+// Nodes sets the value of the 'nodes' attribute to the given value.
 //
 // Counts of different classes of nodes inside a flavour.
 func (b *FlavourBuilder) Nodes(value *FlavourNodesBuilder) *FlavourBuilder {
@@ -152,9 +147,7 @@ func (b *FlavourBuilder) Build() (object *Flavour, err error) {
 			return
 		}
 	}
-	if b.name != nil {
-		object.name = b.name
-	}
+	object.name = b.name
 	if b.network != nil {
 		object.network, err = b.network.Build()
 		if err != nil {

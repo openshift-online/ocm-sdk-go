@@ -163,34 +163,21 @@ func (o *Cluster) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Cluster) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.api == nil &&
-		o.aws == nil &&
 		o.byoc == nil &&
-		o.dns == nil &&
-		o.addons.Empty() &&
-		o.cloudProvider == nil &&
-		o.console == nil &&
+		o.addons.Len() == 0 &&
 		o.creationTimestamp == nil &&
 		o.displayName == nil &&
 		o.expirationTimestamp == nil &&
 		o.externalID == nil &&
-		o.flavour == nil &&
-		o.groups.Empty() &&
-		o.identityProviders.Empty() &&
+		o.groups.Len() == 0 &&
+		o.identityProviders.Len() == 0 &&
 		o.loadBalancerQuota == nil &&
 		o.managed == nil &&
-		o.metrics == nil &&
 		o.multiAZ == nil &&
 		o.name == nil &&
-		o.network == nil &&
-		o.nodes == nil &&
 		o.openshiftVersion == nil &&
 		len(o.properties) == 0 &&
-		o.region == nil &&
 		o.state == nil &&
-		o.storageQuota == nil &&
-		o.subscription == nil &&
-		o.version == nil &&
 		true)
 }
 
@@ -870,16 +857,16 @@ func (o *Cluster) GetVersion() (value *Version, ok bool) {
 	return
 }
 
-// ClusterListKind is the name of the type used to represent list of
-// objects of type 'cluster'.
+// ClusterListKind is the name of the type used to represent list of objects of
+// type 'cluster'.
 const ClusterListKind = "ClusterList"
 
-// ClusterListLinkKind is the name of the type used to represent links
-// to list of objects of type 'cluster'.
+// ClusterListLinkKind is the name of the type used to represent links to list
+// of objects of type 'cluster'.
 const ClusterListLinkKind = "ClusterListLink"
 
-// ClusterNilKind is the name of the type used to nil lists of
-// objects of type 'cluster'.
+// ClusterNilKind is the name of the type used to nil lists of objects of
+// type 'cluster'.
 const ClusterListNilKind = "ClusterListNil"
 
 // ClusterList is a list of values of the 'cluster' type.

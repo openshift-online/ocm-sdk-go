@@ -37,6 +37,19 @@ func (b *MachineTypeListBuilder) Items(values ...*MachineTypeBuilder) *MachineTy
 	return b
 }
 
+// Copy copies the items of the given list into this builder, discarding any previous items.
+func (b *MachineTypeListBuilder) Copy(list *MachineTypeList) *MachineTypeListBuilder {
+	if list == nil || list.items == nil {
+		b.items = nil
+	} else {
+		b.items = make([]*MachineTypeBuilder, len(list.items))
+		for i, v := range list.items {
+			b.items[i] = NewMachineType().Copy(v)
+		}
+	}
+	return b
+}
+
 // Build creates a list of 'machine_type' objects using the
 // configuration stored in the builder.
 func (b *MachineTypeListBuilder) Build() (list *MachineTypeList, err error) {

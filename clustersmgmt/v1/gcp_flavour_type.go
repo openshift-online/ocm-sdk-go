@@ -109,8 +109,22 @@ func (o *GCPFlavour) GetMasterInstanceType() (value string, ok bool) {
 	return
 }
 
+// GCPFlavourListKind is the name of the type used to represent list of objects of
+// type 'GCP_flavour'.
+const GCPFlavourListKind = "GCPFlavourList"
+
+// GCPFlavourListLinkKind is the name of the type used to represent links to list
+// of objects of type 'GCP_flavour'.
+const GCPFlavourListLinkKind = "GCPFlavourListLink"
+
+// GCPFlavourNilKind is the name of the type used to nil lists of objects of
+// type 'GCP_flavour'.
+const GCPFlavourListNilKind = "GCPFlavourListNil"
+
 // GCPFlavourList is a list of values of the 'GCP_flavour' type.
 type GCPFlavourList struct {
+	href  *string
+	link  bool
 	items []*GCPFlavour
 }
 

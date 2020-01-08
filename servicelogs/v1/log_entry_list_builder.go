@@ -37,6 +37,19 @@ func (b *LogEntryListBuilder) Items(values ...*LogEntryBuilder) *LogEntryListBui
 	return b
 }
 
+// Copy copies the items of the given list into this builder, discarding any previous items.
+func (b *LogEntryListBuilder) Copy(list *LogEntryList) *LogEntryListBuilder {
+	if list == nil || list.items == nil {
+		b.items = nil
+	} else {
+		b.items = make([]*LogEntryBuilder, len(list.items))
+		for i, v := range list.items {
+			b.items[i] = NewLogEntry().Copy(v)
+		}
+	}
+	return b
+}
+
 // Build creates a list of 'log_entry' objects using the
 // configuration stored in the builder.
 func (b *LogEntryListBuilder) Build() (list *LogEntryList, err error) {

@@ -149,17 +149,16 @@ func loadYAML(ctx context.Context, data []byte) (result map[string]*cmv1.AddOn, 
 	if err != nil {
 		return
 	}
-	list, err := cmv1.UnmarshalAddOnList(data)
+	items, err := cmv1.UnmarshalAddOnList(data)
 	if err != nil {
 		return
 	}
 
 	// Populate the map:
 	result = map[string]*cmv1.AddOn{}
-	list.Each(func(item *cmv1.AddOn) bool {
+	for _, item := range items {
 		result[item.ID()] = item
-		return true
-	})
+	}
 
 	return
 }

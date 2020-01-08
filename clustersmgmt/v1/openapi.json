@@ -175,9 +175,6 @@
     "/api/clusters_mgmt/v1/addons": {
       "post": {
         "description": "Create a new add-on and add it to the collection of add-ons.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -649,9 +646,6 @@
     "/api/clusters_mgmt/v1/clusters": {
       "post": {
         "description": "Provision a new cluster and add it to the collection of clusters.\n\nSee the `register_cluster` method for adding an existing cluster.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1792,9 +1786,6 @@
         }
       }
     },
-    "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries": {
-      
-    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries/socket_total_by_node_roles_OS": {
       "get": {
         "description": "Retrieves the metrics.\n",
@@ -1992,9 +1983,6 @@
     "/api/clusters_mgmt/v1/flavours": {
       "post": {
         "description": "Adds a new cluster flavour.\n",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "content": {
             "application/json": {
