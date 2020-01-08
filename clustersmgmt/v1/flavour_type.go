@@ -101,11 +101,7 @@ func (o *Flavour) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Flavour) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.aws == nil &&
-		o.gcp == nil &&
 		o.name == nil &&
-		o.network == nil &&
-		o.nodes == nil &&
 		true)
 }
 
@@ -240,16 +236,16 @@ func (o *Flavour) GetNodes() (value *FlavourNodes, ok bool) {
 	return
 }
 
-// FlavourListKind is the name of the type used to represent list of
-// objects of type 'flavour'.
+// FlavourListKind is the name of the type used to represent list of objects of
+// type 'flavour'.
 const FlavourListKind = "FlavourList"
 
-// FlavourListLinkKind is the name of the type used to represent links
-// to list of objects of type 'flavour'.
+// FlavourListLinkKind is the name of the type used to represent links to list
+// of objects of type 'flavour'.
 const FlavourListLinkKind = "FlavourListLink"
 
-// FlavourNilKind is the name of the type used to nil lists of
-// objects of type 'flavour'.
+// FlavourNilKind is the name of the type used to nil lists of objects of
+// type 'flavour'.
 const FlavourListNilKind = "FlavourListNil"
 
 // FlavourList is a list of values of the 'flavour' type.

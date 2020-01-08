@@ -53,8 +53,7 @@ func (b *AWSInfrastructureAccessRoleBuilder) Link(value bool) *AWSInfrastructure
 	return b
 }
 
-// Description sets the value of the 'description' attribute
-// to the given value.
+// Description sets the value of the 'description' attribute to the given value.
 //
 //
 func (b *AWSInfrastructureAccessRoleBuilder) Description(value string) *AWSInfrastructureAccessRoleBuilder {
@@ -62,8 +61,7 @@ func (b *AWSInfrastructureAccessRoleBuilder) Description(value string) *AWSInfra
 	return b
 }
 
-// DisplayName sets the value of the 'display_name' attribute
-// to the given value.
+// DisplayName sets the value of the 'display_name' attribute to the given value.
 //
 //
 func (b *AWSInfrastructureAccessRoleBuilder) DisplayName(value string) *AWSInfrastructureAccessRoleBuilder {
@@ -90,11 +88,7 @@ func (b *AWSInfrastructureAccessRoleBuilder) Build() (object *AWSInfrastructureA
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.description != nil {
-		object.description = b.description
-	}
-	if b.displayName != nil {
-		object.displayName = b.displayName
-	}
+	object.description = b.description
+	object.displayName = b.displayName
 	return
 }

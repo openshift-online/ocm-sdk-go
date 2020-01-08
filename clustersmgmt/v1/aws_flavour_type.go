@@ -35,10 +35,7 @@ type AWSFlavour struct {
 func (o *AWSFlavour) Empty() bool {
 	return o == nil || (o.computeInstanceType == nil &&
 		o.infraInstanceType == nil &&
-		o.infraVolume == nil &&
 		o.masterInstanceType == nil &&
-		o.masterVolume == nil &&
-		o.workerVolume == nil &&
 		true)
 }
 
@@ -184,8 +181,22 @@ func (o *AWSFlavour) GetWorkerVolume() (value *AWSVolume, ok bool) {
 	return
 }
 
+// AWSFlavourListKind is the name of the type used to represent list of objects of
+// type 'AWS_flavour'.
+const AWSFlavourListKind = "AWSFlavourList"
+
+// AWSFlavourListLinkKind is the name of the type used to represent links to list
+// of objects of type 'AWS_flavour'.
+const AWSFlavourListLinkKind = "AWSFlavourListLink"
+
+// AWSFlavourNilKind is the name of the type used to nil lists of objects of
+// type 'AWS_flavour'.
+const AWSFlavourListNilKind = "AWSFlavourListNil"
+
 // AWSFlavourList is a list of values of the 'AWS_flavour' type.
 type AWSFlavourList struct {
+	href  *string
+	link  bool
 	items []*AWSFlavour
 }
 

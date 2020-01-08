@@ -273,16 +273,16 @@ func (o *AddOn) GetResourceName() (value string, ok bool) {
 	return
 }
 
-// AddOnListKind is the name of the type used to represent list of
-// objects of type 'add_on'.
+// AddOnListKind is the name of the type used to represent list of objects of
+// type 'add_on'.
 const AddOnListKind = "AddOnList"
 
-// AddOnListLinkKind is the name of the type used to represent links
-// to list of objects of type 'add_on'.
+// AddOnListLinkKind is the name of the type used to represent links to list
+// of objects of type 'add_on'.
 const AddOnListLinkKind = "AddOnListLink"
 
-// AddOnNilKind is the name of the type used to nil lists of
-// objects of type 'add_on'.
+// AddOnNilKind is the name of the type used to nil lists of objects of
+// type 'add_on'.
 const AddOnListNilKind = "AddOnListNil"
 
 // AddOnList is a list of values of the 'add_on' type.

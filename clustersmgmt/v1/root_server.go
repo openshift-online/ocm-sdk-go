@@ -80,67 +80,66 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			errors.SendMethodNotAllowed(w, r)
 			return
 		}
-	} else {
-		switch segments[0] {
-		case "aws_infrastructure_access_roles":
-			target := server.AWSInfrastructureAccessRoles()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchAWSInfrastructureAccessRoles(w, r, target, segments[1:])
-		case "addons":
-			target := server.Addons()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchAddOns(w, r, target, segments[1:])
-		case "cloud_providers":
-			target := server.CloudProviders()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchCloudProviders(w, r, target, segments[1:])
-		case "clusters":
-			target := server.Clusters()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchClusters(w, r, target, segments[1:])
-		case "dashboards":
-			target := server.Dashboards()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchDashboards(w, r, target, segments[1:])
-		case "flavours":
-			target := server.Flavours()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchFlavours(w, r, target, segments[1:])
-		case "machine_types":
-			target := server.MachineTypes()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchMachineTypes(w, r, target, segments[1:])
-		case "versions":
-			target := server.Versions()
-			if target == nil {
-				errors.SendNotFound(w, r)
-				return
-			}
-			dispatchVersions(w, r, target, segments[1:])
-		default:
+	}
+	switch segments[0] {
+	case "aws_infrastructure_access_roles":
+		target := server.AWSInfrastructureAccessRoles()
+		if target == nil {
 			errors.SendNotFound(w, r)
 			return
 		}
+		dispatchAWSInfrastructureAccessRoles(w, r, target, segments[1:])
+	case "addons":
+		target := server.Addons()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchAddOns(w, r, target, segments[1:])
+	case "cloud_providers":
+		target := server.CloudProviders()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchCloudProviders(w, r, target, segments[1:])
+	case "clusters":
+		target := server.Clusters()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchClusters(w, r, target, segments[1:])
+	case "dashboards":
+		target := server.Dashboards()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchDashboards(w, r, target, segments[1:])
+	case "flavours":
+		target := server.Flavours()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchFlavours(w, r, target, segments[1:])
+	case "machine_types":
+		target := server.MachineTypes()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchMachineTypes(w, r, target, segments[1:])
+	case "versions":
+		target := server.Versions()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchVersions(w, r, target, segments[1:])
+	default:
+		errors.SendNotFound(w, r)
+		return
 	}
 }

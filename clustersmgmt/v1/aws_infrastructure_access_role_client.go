@@ -21,8 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"context"
-	"encoding/json"
-	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -41,25 +39,25 @@ type AWSInfrastructureAccessRoleClient struct {
 }
 
 // NewAWSInfrastructureAccessRoleClient creates a new client for the 'AWS_infrastructure_access_role'
-// resource using the given transport to sned the requests and receive the
+// resource using the given transport to send the requests and receive the
 // responses.
 func NewAWSInfrastructureAccessRoleClient(transport http.RoundTripper, path string, metric string) *AWSInfrastructureAccessRoleClient {
-	client := new(AWSInfrastructureAccessRoleClient)
-	client.transport = transport
-	client.path = path
-	client.metric = metric
-	return client
+	return &AWSInfrastructureAccessRoleClient{
+		transport: transport,
+		path:      path,
+		metric:    metric,
+	}
 }
 
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the aws infrastructure access role.
 func (c *AWSInfrastructureAccessRoleClient) Get() *AWSInfrastructureAccessRoleGetRequest {
-	request := new(AWSInfrastructureAccessRoleGetRequest)
-	request.transport = c.transport
-	request.path = c.path
-	request.metric = c.metric
-	return request
+	return &AWSInfrastructureAccessRoleGetRequest{
+		transport: c.transport,
+		path:      c.path,
+		metric:    c.metric,
+	}
 }
 
 // AWSInfrastructureAccessRolePollRequest is the request for the Poll method.
@@ -233,7 +231,7 @@ func (r *AWSInfrastructureAccessRoleGetRequest) SendContext(ctx context.Context)
 		return
 	}
 	defer response.Body.Close()
-	result = new(AWSInfrastructureAccessRoleGetResponse)
+	result = &AWSInfrastructureAccessRoleGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -244,7 +242,7 @@ func (r *AWSInfrastructureAccessRoleGetRequest) SendContext(ctx context.Context)
 		err = result.err
 		return
 	}
-	err = result.unmarshal(response.Body)
+	err = readAWSInfrastructureAccessRoleGetResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -303,21 +301,4 @@ func (r *AWSInfrastructureAccessRoleGetResponse) GetBody() (value *AWSInfrastruc
 		value = r.body
 	}
 	return
-}
-
-// unmarshal is the method used internally to unmarshal responses to the
-// 'get' method.
-func (r *AWSInfrastructureAccessRoleGetResponse) unmarshal(reader io.Reader) error {
-	var err error
-	decoder := json.NewDecoder(reader)
-	data := new(awsInfrastructureAccessRoleData)
-	err = decoder.Decode(data)
-	if err != nil {
-		return err
-	}
-	r.body, err = data.unwrap()
-	if err != nil {
-		return err
-	}
-	return err
 }

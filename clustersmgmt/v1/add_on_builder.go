@@ -58,8 +58,7 @@ func (b *AddOnBuilder) Link(value bool) *AddOnBuilder {
 	return b
 }
 
-// Description sets the value of the 'description' attribute
-// to the given value.
+// Description sets the value of the 'description' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) Description(value string) *AddOnBuilder {
@@ -67,8 +66,7 @@ func (b *AddOnBuilder) Description(value string) *AddOnBuilder {
 	return b
 }
 
-// Enabled sets the value of the 'enabled' attribute
-// to the given value.
+// Enabled sets the value of the 'enabled' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) Enabled(value bool) *AddOnBuilder {
@@ -76,8 +74,7 @@ func (b *AddOnBuilder) Enabled(value bool) *AddOnBuilder {
 	return b
 }
 
-// Icon sets the value of the 'icon' attribute
-// to the given value.
+// Icon sets the value of the 'icon' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) Icon(value string) *AddOnBuilder {
@@ -85,8 +82,7 @@ func (b *AddOnBuilder) Icon(value string) *AddOnBuilder {
 	return b
 }
 
-// Label sets the value of the 'label' attribute
-// to the given value.
+// Label sets the value of the 'label' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) Label(value string) *AddOnBuilder {
@@ -94,8 +90,7 @@ func (b *AddOnBuilder) Label(value string) *AddOnBuilder {
 	return b
 }
 
-// Name sets the value of the 'name' attribute
-// to the given value.
+// Name sets the value of the 'name' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) Name(value string) *AddOnBuilder {
@@ -103,8 +98,7 @@ func (b *AddOnBuilder) Name(value string) *AddOnBuilder {
 	return b
 }
 
-// ResourceCost sets the value of the 'resource_cost' attribute
-// to the given value.
+// ResourceCost sets the value of the 'resource_cost' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) ResourceCost(value float64) *AddOnBuilder {
@@ -112,8 +106,7 @@ func (b *AddOnBuilder) ResourceCost(value float64) *AddOnBuilder {
 	return b
 }
 
-// ResourceName sets the value of the 'resource_name' attribute
-// to the given value.
+// ResourceName sets the value of the 'resource_name' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
@@ -145,26 +138,12 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	if b.description != nil {
-		object.description = b.description
-	}
-	if b.enabled != nil {
-		object.enabled = b.enabled
-	}
-	if b.icon != nil {
-		object.icon = b.icon
-	}
-	if b.label != nil {
-		object.label = b.label
-	}
-	if b.name != nil {
-		object.name = b.name
-	}
-	if b.resourceCost != nil {
-		object.resourceCost = b.resourceCost
-	}
-	if b.resourceName != nil {
-		object.resourceName = b.resourceName
-	}
+	object.description = b.description
+	object.enabled = b.enabled
+	object.icon = b.icon
+	object.label = b.label
+	object.name = b.name
+	object.resourceCost = b.resourceCost
+	object.resourceName = b.resourceName
 	return
 }

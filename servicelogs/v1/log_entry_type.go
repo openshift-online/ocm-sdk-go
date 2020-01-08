@@ -277,16 +277,16 @@ func (o *LogEntry) GetTimestamp() (value time.Time, ok bool) {
 	return
 }
 
-// LogEntryListKind is the name of the type used to represent list of
-// objects of type 'log_entry'.
+// LogEntryListKind is the name of the type used to represent list of objects of
+// type 'log_entry'.
 const LogEntryListKind = "LogEntryList"
 
-// LogEntryListLinkKind is the name of the type used to represent links
-// to list of objects of type 'log_entry'.
+// LogEntryListLinkKind is the name of the type used to represent links to list
+// of objects of type 'log_entry'.
 const LogEntryListLinkKind = "LogEntryListLink"
 
-// LogEntryNilKind is the name of the type used to nil lists of
-// objects of type 'log_entry'.
+// LogEntryNilKind is the name of the type used to nil lists of objects of
+// type 'log_entry'.
 const LogEntryListNilKind = "LogEntryListNil"
 
 // LogEntryList is a list of values of the 'log_entry' type.
