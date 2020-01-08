@@ -27,6 +27,7 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/openshift-online/ocm-sdk-go/servicelogs"
 )
 
 // Server is the interface of the top level server.
@@ -40,6 +41,9 @@ type Server interface {
 
 	// ClustersMgmt returns the server for service 'clusters_mgmt'.
 	ClustersMgmt() clustersmgmt.Server
+
+	// ServiceLogs returns the server for service 'service_logs'.
+	ServiceLogs() servicelogs.Server
 }
 
 // Dispatch navigates the servers tree till it finds one that matches the given set
@@ -72,6 +76,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 				return
 			}
 			clustersmgmt.Dispatch(w, r, service, segments[1:])
+		case "service_logs":
+			service := server.ServiceLogs()
+			if service == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			servicelogs.Dispatch(w, r, service, segments[1:])
 		default:
 			errors.SendNotFound(w, r)
 			return

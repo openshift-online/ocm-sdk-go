@@ -1,0 +1,350 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1",
+    "title": "service_logs",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "contact": {
+      "name": "OCM Feedback",
+      "email": "ocm-feedback@redhat.com"
+    }
+  },
+  "servers": [
+    {
+      "description": "Production",
+      "url": "https://api.openshift.com"
+    },
+    {
+      "description": "Stage",
+      "url": "https://api.stage.openshift.com"
+    }
+  ],
+  "paths": {
+    "/api/service_logs/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.\n",
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service_logs/v1/cluster_logs": {
+      "post": {
+        "description": "Creates a new log entry.\n",
+        "parameters": [
+          
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogEntry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogEntry"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of cluster logs.\n",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement. For example, in order to sort the\ncluster logs descending by name identifier the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the cluster logs\ninstead of the names of the columns of a table. For example, in order to\nretrieve cluster logs with service_name starting with my:\n\n\n```\nservice_name like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of Cluster logs.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogEntry"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service_logs/v1/cluster_logs/{log_entry_id}": {
+      "delete": {
+        "description": "Deletes the log entry.\n",
+        "parameters": [
+          {
+            "name": "log_entry_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success.\n"
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the log entry.\n",
+        "parameters": [
+          {
+            "name": "log_entry_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogEntry"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Metadata": {
+        "description": "Version metadata.\n",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.\n",
+            "type": "string"
+          }
+        }
+      },
+      "LogEntry": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LogEntry' if this is a complete object or 'LogEntryLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "cluster_uuid": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "internal_only": {
+            "description": "A flag that indicates whether the log entry should be internal/private only\n",
+            "type": "boolean"
+          },
+          "service_name": {
+            "description": "The name of the service who created the log\n",
+            "type": "string"
+          },
+          "severity": {
+            "description": "Log severity for the specific log entry\n",
+            "$ref": "#/components/schemas/Severity"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Severity": {
+        "type": "string",
+        "enum": [
+          "debug",
+          "error",
+          "fatal",
+          "info",
+          "warning"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will always be 'Error'\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Numeric identifier of the error.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "code": {
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.\n",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Human readable description of the error.\n",
+            "type": "string"
+          },
+          "details": {
+            "description": "Extra information about the error.\n",
+            "type": "object",
+            "additionalProperties": "true"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": [
+        
+      ]
+    }
+  ]
+}

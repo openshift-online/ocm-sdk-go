@@ -2148,6 +2148,93 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/machine_types": {
+      "get": {
+        "description": "Retrieves the list of machine types.\n",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the machine type\ninstead of the names of the columns of a table. For example, in order to sort the\nmachine types descending by name identifier the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the machine type\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the machine types with a name starting with `A` the value should be:\n\n\n```\nname like 'A%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the machine\ntypes that the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of cloud providers.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MachineType"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/versions": {
       "get": {
         "description": "Retrieves a list of versions.\n",
@@ -3228,6 +3315,39 @@
           },
           "content": {
             "description": "Content of the log.\n",
+            "type": "string"
+          }
+        }
+      },
+      "MachineType": {
+        "description": "Machine type.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'MachineType' if this is a complete object or 'MachineTypeLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "cpu": {
+            "description": "The amount of cpu's of the machine type.\n",
+            "$ref": "#/components/schemas/Value"
+          },
+          "cloud_provider": {
+            "description": "Link to the cloud provider that the machine type belongs to.\n",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
+          "memory": {
+            "description": "The amount of memory of the machine type.\n",
+            "$ref": "#/components/schemas/Value"
+          },
+          "name": {
+            "description": "Human friendly identifier of the machine type, for example `r5.xlarge - Memory Optimized`.\n",
             "type": "string"
           }
         }
