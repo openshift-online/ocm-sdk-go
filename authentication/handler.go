@@ -509,10 +509,11 @@ func (h *Handler) loadKeysFile(ctx context.Context, file string) error {
 
 // loadKeysURL loads a JSON we key set from an URL.
 func (h *Handler) loadKeysURL(ctx context.Context, addr string) error {
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, addr, nil)
+	request, err := http.NewRequest(http.MethodGet, addr, nil)
 	if err != nil {
 		return err
 	}
+	request = request.WithContext(ctx)
 	response, err := h.keysClient.Do(request)
 	if err != nil {
 		return err
