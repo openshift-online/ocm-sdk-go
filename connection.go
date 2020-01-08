@@ -564,7 +564,7 @@ func (c *Connection) Authorizations() *authorizations.Client {
 
 // ServiceLogs returns the client for the logs service.
 func (c *Connection) ServiceLogs() *servicelogs.Client {
-	return servicelogs.NewClient(c, "/api/servicelogs", "/api/servicelogs")
+	return servicelogs.NewClient(c, "/api/service_logs", "/api/service_logs")
 }
 
 // Close releases all the resources used by the connection. It is very important to allways close it
