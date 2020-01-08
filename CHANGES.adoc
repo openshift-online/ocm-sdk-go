@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.77 Jan 8 2020
+
+- Don't require Go 1.13.
+- Update to model 0.0.37:
+** Add new `service_logs` service.
+** Add types and resources for machine types.
+
 == 0.1.76 Jan 3 2020
 
 - Update to model 0.0.36:
