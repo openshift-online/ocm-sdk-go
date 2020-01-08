@@ -59,6 +59,11 @@ type Server interface {
 	// Reference to the service that manages the collection of flavours.
 	Flavours() FlavoursServer
 
+	// MachineTypes returns the target 'machine_types' resource.
+	//
+	// Reference to the resource that manage the collection of machine types.
+	MachineTypes() MachineTypesServer
+
 	// Versions returns the target 'versions' resource.
 	//
 	// Reference to the resource that manage the collection of versions.
@@ -119,6 +124,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 				return
 			}
 			dispatchFlavours(w, r, target, segments[1:])
+		case "machine_types":
+			target := server.MachineTypes()
+			if target == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			dispatchMachineTypes(w, r, target, segments[1:])
 		case "versions":
 			target := server.Versions()
 			if target == nil {

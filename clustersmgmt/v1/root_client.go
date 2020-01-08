@@ -120,6 +120,17 @@ func (c *Client) Flavours() *FlavoursClient {
 	)
 }
 
+// MachineTypes returns the target 'machine_types' resource.
+//
+// Reference to the resource that manage the collection of machine types.
+func (c *Client) MachineTypes() *MachineTypesClient {
+	return NewMachineTypesClient(
+		c.transport,
+		path.Join(c.path, "machine_types"),
+		path.Join(c.metric, "machine_types"),
+	)
+}
+
 // Versions returns the target 'versions' resource.
 //
 // Reference to the resource that manage the collection of versions.
