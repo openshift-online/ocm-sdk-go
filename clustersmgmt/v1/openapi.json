@@ -50,128 +50,6 @@
         }
       }
     },
-    "/api/clusters_mgmt/v1/AWS_infrastructure_access_roles": {
-      "get": {
-        "parameters": [
-          {
-            "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to sort the roles\ndescending by dislay_name the value should be:\n\n\n```\ndisplay_name desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nrole with a name starting with `my`the value should be:\n\n\n```\ndisplay_name like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the roles\nthat the user has permission to see will be returned.\n",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "description": "Retrieved list of roles.\n",
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
-                      }
-                    },
-                    "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/clusters_mgmt/v1/AWS_infrastructure_access_roles/{aws_infrastructure_access_role_id}": {
-      "get": {
-        "description": "Retrieves the details of the aws infrastructure access role.\n",
-        "parameters": [
-          {
-            "name": "aws_infrastructure_access_role_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/clusters_mgmt/v1/addons": {
       "post": {
         "description": "Create a new add-on and add it to the collection of add-ons.\n",
@@ -382,6 +260,128 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AddOn"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/aws_infrastructure_access_roles": {
+      "get": {
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to sort the roles\ndescending by dislay_name the value should be:\n\n\n```\ndisplay_name desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nrole with a name starting with `my`the value should be:\n\n\n```\ndisplay_name like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the roles\nthat the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of roles.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/aws_infrastructure_access_roles/{aws_infrastructure_access_role_id}": {
+      "get": {
+        "description": "Retrieves the details of the aws infrastructure access role.\n",
+        "parameters": [
+          {
+            "name": "aws_infrastructure_access_role_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
                 }
               }
             }
@@ -1786,7 +1786,7 @@
         }
       }
     },
-    "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries/socket_total_by_node_roles_OS": {
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries/socket_total_by_node_roles_os": {
       "get": {
         "description": "Retrieves the metrics.\n",
         "parameters": [
