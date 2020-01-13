@@ -284,11 +284,6 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	}
 
 	// Check the response status and content type:
-	code = response.StatusCode
-	if response.StatusCode != http.StatusOK {
-		err = fmt.Errorf("token response status is: %s", response.Status)
-		return
-	}
 	header = response.Header
 	content := header.Get("Content-Type")
 	if content != "application/json" {
@@ -309,6 +304,10 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 			return
 		}
 		err = fmt.Errorf("%s", *msg.Error)
+		return
+	}
+	if response.StatusCode != http.StatusOK {
+		err = fmt.Errorf("token response status is: %s", response.Status)
 		return
 	}
 	if msg.TokenType != nil && *msg.TokenType != "bearer" {
