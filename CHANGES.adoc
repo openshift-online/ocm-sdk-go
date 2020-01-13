@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.80 Jan 13 2020
+
+- Add body details in case of error from token provider.
+
 == 0.1.79 Jan 9 2020
 
 - Update to metamodel 0.0.22:
