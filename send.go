@@ -31,6 +31,17 @@ import (
 )
 
 func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, err error) {
+	for _, callback := range c.preCallbacks {
+		request = callback.Pre(request)
+	}
+	response, err = c.roundTrip(request)
+	for _, callback := range c.postCallbacks {
+		response, err = callback.Post(response, err)
+	}
+	return
+}
+
+func (c *Connection) roundTrip(request *http.Request) (response *http.Response, err error) {
 	// Check if the connection is closed:
 	err = c.checkClosed()
 	if err != nil {

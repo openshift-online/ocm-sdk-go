@@ -52,23 +52,35 @@ var DefaultScopes = []string{
 	"openid",
 }
 
+// PreRequest allows pre processing on the request, allowing also manipulation by returning a different request.
+type PreRequest interface {
+	Pre(request *http.Request) *http.Request
+}
+
+// PostRequest allows post processing on the response, allowing also manipulation by returning a different response.
+type PostRequest interface {
+	Post(response *http.Response, err error) (*http.Response, error)
+}
+
 // ConnectionBuilder contains the configuration and logic needed to create connections to
 // `api.openshift.com`. Don't create instances of this type directly, use the NewConnectionBuilder
 // function instead.
 type ConnectionBuilder struct {
 	// Basic attributes:
-	logger       Logger
-	trustedCAs   *x509.CertPool
-	insecure     bool
-	tokenURL     string
-	clientID     string
-	clientSecret string
-	apiURL       string
-	agent        string
-	user         string
-	password     string
-	tokens       []string
-	scopes       []string
+	logger        Logger
+	trustedCAs    *x509.CertPool
+	insecure      bool
+	tokenURL      string
+	clientID      string
+	clientSecret  string
+	apiURL        string
+	agent         string
+	user          string
+	password      string
+	tokens        []string
+	scopes        []string
+	preCallbacks  []PreRequest
+	postCallbacks []PostRequest
 
 	// Metrics:
 	subsystem string
@@ -78,23 +90,25 @@ type ConnectionBuilder struct {
 // of this type directly, use the builder instead.
 type Connection struct {
 	// Basic attributes:
-	closed       bool
-	logger       Logger
-	trustedCAs   *x509.CertPool
-	insecure     bool
-	client       *http.Client
-	tokenURL     *url.URL
-	clientID     string
-	clientSecret string
-	apiURL       *url.URL
-	agent        string
-	user         string
-	password     string
-	tokenMutex   *sync.Mutex
-	tokenParser  *jwt.Parser
-	accessToken  *jwt.Token
-	refreshToken *jwt.Token
-	scopes       []string
+	closed        bool
+	logger        Logger
+	trustedCAs    *x509.CertPool
+	insecure      bool
+	client        *http.Client
+	tokenURL      *url.URL
+	clientID      string
+	clientSecret  string
+	apiURL        *url.URL
+	agent         string
+	user          string
+	password      string
+	tokenMutex    *sync.Mutex
+	tokenParser   *jwt.Parser
+	accessToken   *jwt.Token
+	refreshToken  *jwt.Token
+	scopes        []string
+	preCallbacks  []PreRequest
+	postCallbacks []PostRequest
 
 	// Metrics:
 	tokenCountMetric    *prometheus.CounterVec
@@ -252,6 +266,20 @@ func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder 
 // certificates and host names and it isn't recommended for a production environment.
 func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 	b.insecure = flag
+	return b
+}
+
+// PreRequest adds a pre request callback to the connection.
+// The callbacks will be called by adding order, before the request is sent.
+func (b *ConnectionBuilder) PreRequest(callback PreRequest) *ConnectionBuilder {
+	b.preCallbacks = append(b.preCallbacks, callback)
+	return b
+}
+
+// PostRequest adds a post request callback to the connection.
+// The callbacks will be called by adding order, after the response is received.
+func (b *ConnectionBuilder) PostRequest(callback PostRequest) *ConnectionBuilder {
+	b.postCallbacks = append(b.postCallbacks, callback)
 	return b
 }
 
@@ -466,21 +494,23 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 
 	// Allocate and populate the connection object:
 	connection = &Connection{
-		logger:       logger,
-		trustedCAs:   b.trustedCAs,
-		insecure:     b.insecure,
-		client:       client,
-		tokenURL:     tokenURL,
-		clientID:     clientID,
-		clientSecret: clientSecret,
-		apiURL:       apiURL,
-		agent:        agent,
-		user:         b.user,
-		password:     b.password,
-		tokenParser:  tokenParser,
-		accessToken:  accessToken,
-		refreshToken: refreshToken,
-		scopes:       scopes,
+		logger:        logger,
+		trustedCAs:    b.trustedCAs,
+		insecure:      b.insecure,
+		client:        client,
+		tokenURL:      tokenURL,
+		clientID:      clientID,
+		clientSecret:  clientSecret,
+		apiURL:        apiURL,
+		agent:         agent,
+		user:          b.user,
+		password:      b.password,
+		tokenParser:   tokenParser,
+		accessToken:   accessToken,
+		refreshToken:  refreshToken,
+		scopes:        scopes,
+		preCallbacks:  b.preCallbacks,
+		postCallbacks: b.postCallbacks,
 	}
 
 	// Create the mutex that protects token manipulations:

@@ -41,11 +41,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	loggingCallback := sdk.NewLoggingCallback(logger)
+
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
+		PreRequest(loggingCallback).
+		PostRequest(loggingCallback).
 		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
