@@ -302,7 +302,7 @@ func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 // code, for example if it wasn't possible to open the connection, or if there was a timeout waiting
 // for the response.
 //
-// Note that setting this attribute is not enougth to have metrics published, you also need to
+// Note that setting this attribute is not enough to have metrics published, you also need to
 // create and start a metrics server, as described in the documentation of the Prometheus library.
 func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
 	b.subsystem = value
@@ -503,7 +503,7 @@ func (c *Connection) Logger() Logger {
 	return c.logger
 }
 
-// TokenURL returns the URL that the connectionis using request OpenID access tokens.
+// TokenURL returns the URL that the connection is using request OpenID access tokens.
 func (c *Connection) TokenURL() string {
 	return c.tokenURL.String()
 }
@@ -567,7 +567,7 @@ func (c *Connection) ServiceLogs() *servicelogs.Client {
 	return servicelogs.NewClient(c, "/api/service_logs", "/api/service_logs")
 }
 
-// Close releases all the resources used by the connection. It is very important to allways close it
+// Close releases all the resources used by the connection. It is very important to always close it
 // once it is no longer needed, as otherwise those resources may be leaked. Trying to use a
 // connection that has been closed will result in a error.
 func (c *Connection) Close() error {
