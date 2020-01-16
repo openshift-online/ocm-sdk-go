@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.81 Jan 16 2020
+
+-  Add ability to intercept request and response using a transport middleware
+   of type `http.RoundTripper`.
+
 == 0.1.80 Jan 13 2020
 
 - Add body details in case of error from token provider.
