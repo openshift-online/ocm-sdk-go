@@ -19,6 +19,8 @@ limitations under the License.
 package sdk
 
 import (
+	"github.com/onsi/gomega/gbytes"
+	"net/http"
 	"time"
 
 	. "github.com/onsi/ginkgo" // nolint
@@ -152,4 +154,39 @@ var _ = Describe("Connection", func() {
 		Expect(clientID).To(Equal(DefaultClientID))
 		Expect(clientSecret).To(Equal(DefaultClientSecret))
 	})
+
+	It("Use transport wrapper", func() {
+		transport := NewTestTransport()
+		connection, err := NewConnectionBuilder().
+			User("test", "test").
+			TransportWrapper(func(wrapped http.RoundTripper) http.RoundTripper {
+				return transport
+			}).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		defer connection.Close()
+		_, _, err = connection.Tokens()
+		Expect(transport.called).To(BeTrue())
+		Expect(err).To(HaveOccurred())
+	})
 })
+
+type TestTransport struct {
+	called bool
+}
+
+func (t *TestTransport) RoundTrip(request *http.Request) (response *http.Response, err error) {
+	t.called = true
+	header := http.Header{}
+	header.Add("Content-type", "application/json")
+	response = &http.Response{
+		StatusCode: 401,
+		Header:     header,
+		Body:       gbytes.NewBuffer(),
+	}
+	return response, nil
+}
+
+func NewTestTransport() *TestTransport {
+	return &TestTransport{called: false}
+}
