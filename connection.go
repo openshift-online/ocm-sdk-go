@@ -57,22 +57,28 @@ var DefaultScopes = []string{
 // function instead.
 type ConnectionBuilder struct {
 	// Basic attributes:
-	logger       Logger
-	trustedCAs   *x509.CertPool
-	insecure     bool
-	tokenURL     string
-	clientID     string
-	clientSecret string
-	apiURL       string
-	agent        string
-	user         string
-	password     string
-	tokens       []string
-	scopes       []string
+	logger           Logger
+	trustedCAs       *x509.CertPool
+	insecure         bool
+	tokenURL         string
+	clientID         string
+	clientSecret     string
+	apiURL           string
+	agent            string
+	user             string
+	password         string
+	tokens           []string
+	scopes           []string
+	transportWrapper TransportWrapper
 
 	// Metrics:
 	subsystem string
 }
+
+// TransportWrapper is a wrapper for a transport of type http.RoundTripper.
+// Creating a transport wrapper, enables to preform actions and manipulations on the transport
+// request and response.
+type TransportWrapper func(http.RoundTripper) http.RoundTripper
 
 // Connection contains the data needed to connect to the `api.openshift.com`. Don't create instances
 // of this type directly, use the builder instead.
@@ -252,6 +258,13 @@ func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder 
 // certificates and host names and it isn't recommended for a production environment.
 func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 	b.insecure = flag
+	return b
+}
+
+// TransportWrapper allows setting a transportWrapper layer into the connection for capturing and
+// manipulating the request or response.
+func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) *ConnectionBuilder {
+	b.transportWrapper = transportWrapper
 	return b
 }
 
@@ -454,15 +467,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 
 	// Create the HTTP client:
-	// #nosec 402
-	client := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: b.insecure,
-				RootCAs:            b.trustedCAs,
-			},
-		},
-	}
+	client := &http.Client{Transport: b.createTransport()}
 
 	// Allocate and populate the connection object:
 	connection = &Connection{
@@ -496,6 +501,20 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 
 	return
+}
+
+func (b *ConnectionBuilder) createTransport() http.RoundTripper {
+	var transport http.RoundTripper
+	// #nosec 402
+	transport = &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: b.insecure,
+			RootCAs:            b.trustedCAs,
+		}}
+	if b.transportWrapper != nil {
+		transport = b.transportWrapper(transport)
+	}
+	return transport
 }
 
 // Logger returns the logger that is used by the connection.
