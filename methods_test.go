@@ -39,6 +39,8 @@ var _ = Describe("Methods", func() {
 	// Connection used during the tests:
 	var connection *Connection
 
+	jsonHeader := http.Header{"Content-Type": []string{"application/json"}}
+
 	BeforeEach(func() {
 		var err error
 
@@ -88,7 +90,10 @@ var _ = Describe("Methods", func() {
 		It("Sends path", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.VerifyRequest(http.MethodGet, "/mypath"),
+				ghttp.CombineHandlers(
+					ghttp.VerifyRequest(http.MethodGet, "/mypath"),
+					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				),
 			)
 
 			// Send the request:
@@ -101,7 +106,10 @@ var _ = Describe("Methods", func() {
 		It("Sends accept header", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.VerifyHeaderKV("Accept", "application/json"),
+				ghttp.CombineHandlers(
+					ghttp.VerifyHeaderKV("Accept", "application/json"),
+					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				),
 			)
 
 			// Send the request:
@@ -114,7 +122,10 @@ var _ = Describe("Methods", func() {
 		It("Sends one query parameter", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.VerifyFormKV("myparameter", "myvalue"),
+				ghttp.CombineHandlers(
+					ghttp.VerifyFormKV("myparameter", "myvalue"),
+					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				),
 			)
 
 			// Send the request:
@@ -131,6 +142,7 @@ var _ = Describe("Methods", func() {
 				ghttp.CombineHandlers(
 					ghttp.VerifyFormKV("myparameter", "myvalue"),
 					ghttp.VerifyFormKV("yourparameter", "yourvalue"),
+					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
 				),
 			)
 
@@ -146,7 +158,10 @@ var _ = Describe("Methods", func() {
 		It("Sends one header", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.VerifyHeaderKV("myheader", "myvalue"),
+				ghttp.CombineHandlers(
+					ghttp.VerifyHeaderKV("myheader", "myvalue"),
+					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				),
 			)
 
 			// Send the request:
@@ -163,6 +178,7 @@ var _ = Describe("Methods", func() {
 				ghttp.CombineHandlers(
 					ghttp.VerifyHeaderKV("myheader", "myvalue"),
 					ghttp.VerifyHeaderKV("yourheader", "yourvalue"),
+					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
 				),
 			)
 
@@ -178,7 +194,7 @@ var _ = Describe("Methods", func() {
 		It("Receives body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, "mybody"),
+				ghttp.RespondWith(http.StatusOK, `{"test":"mybody"}`, jsonHeader),
 			)
 
 			// Send the request:
@@ -188,14 +204,14 @@ var _ = Describe("Methods", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
-			Expect(response.String()).To(Equal("mybody"))
-			Expect(response.Bytes()).To(Equal([]byte("mybody")))
+			Expect(response.String()).To(Equal(`{"test":"mybody"}`))
+			Expect(response.Bytes()).To(Equal([]byte(`{"test":"mybody"}`)))
 		})
 
 		It("Receives status code 200", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil),
+				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
 			)
 
 			// Send the request:
@@ -210,7 +226,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 400", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusBadRequest, nil),
+				ghttp.RespondWith(http.StatusBadRequest, nil, jsonHeader),
 			)
 
 			// Send the request:
@@ -225,7 +241,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 500", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusInternalServerError, nil),
+				ghttp.RespondWith(http.StatusInternalServerError, nil, jsonHeader),
 			)
 
 			// Send the request:
@@ -252,7 +268,7 @@ var _ = Describe("Methods", func() {
 		It("Accepts empty body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil),
+				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
 			)
 
 			// Send the request:
@@ -269,7 +285,7 @@ var _ = Describe("Methods", func() {
 		It("Accepts empty body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil),
+				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
 			)
 
 			// Send the request:
@@ -279,6 +295,57 @@ var _ = Describe("Methods", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
+		})
+	})
+
+	Describe("JSON header", func() {
+		It("It should ignore letter case", func() {
+			// Configure the server:
+			apiServer.AppendHandlers(
+				ghttp.RespondWith(http.StatusOK, nil, http.Header{"cOnTeNt-TyPe": []string{"AppLicaTion/JSON"}}),
+			)
+
+			// Send the request:
+			response, err := connection.Get().Path("/mypath").Send()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.Status()).To(Equal(http.StatusOK))
+		})
+
+		It("It should error if not json", func() {
+			// Configure the server:
+			apiServer.AppendHandlers(
+				ghttp.RespondWith(http.StatusOK, "test", http.Header{"Content-Type": []string{"application/html"}}),
+			)
+
+			// Send the request:
+			response, err := connection.Get().Path("/mypath").Send()
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("expected JSON"))
+			Expect(err.Error()).To(ContainSubstring("request:"))
+			Expect(err.Error()).To(ContainSubstring("response status:"))
+			Expect(err.Error()).To(ContainSubstring("response body: test"))
+			Expect(response).To(BeNil())
+		})
+
+		It("It should trim response", func() {
+			// Configure the server:
+			longText := `<textarea class="Playground-input js-playgroundCodeEl" ` +
+				`spellcheck="false" aria-label="Try Go">` +
+				"// You can edit this code! // Click here and start typing. " +
+				`package main import "fmt" ` +
+				`func main() { fmt.Println("Hello, 世界") } </textarea>`
+			longText = longText + longText + longText
+			apiServer.AppendHandlers(
+				ghttp.RespondWith(http.StatusOK, longText, http.Header{"Content-Type": []string{"application/html"}}),
+			)
+
+			// Send the request:
+			response, err := connection.Get().Path("/mypath").Send()
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring(`<textarea class="Playground-input`))
+			Expect(len(err.Error()) < 400).To(BeTrue())
+			Expect(response).To(BeNil())
 		})
 	})
 })
