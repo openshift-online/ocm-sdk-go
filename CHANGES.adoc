@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.82 Jan 23 2020
+
+- Update to model 0.0.38:
+** Add `search` and `order` parameters to the method that lists registry
+   credentials.
+** Add `labels` parameter to the method that lists subscriptions.
+** Add types and resources for management of AWS infrastructure access roles.
+
 == 0.1.81 Jan 16 2020
 
 -  Add ability to intercept request and response using a transport middleware
