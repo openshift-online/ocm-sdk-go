@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"bytes"
@@ -33,20 +33,20 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// RegistryCredentialsClient is the client of the 'registry_credentials' resource.
+// AWSInfrastructureAccessRoleGrantsClient is the client of the 'AWS_infrastructure_access_role_grants' resource.
 //
-// Manages the collection of registry credentials.
-type RegistryCredentialsClient struct {
+// Manages the collection of AWS infrastructure access role grants.
+type AWSInfrastructureAccessRoleGrantsClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewRegistryCredentialsClient creates a new client for the 'registry_credentials'
+// NewAWSInfrastructureAccessRoleGrantsClient creates a new client for the 'AWS_infrastructure_access_role_grants'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRegistryCredentialsClient(transport http.RoundTripper, path string, metric string) *RegistryCredentialsClient {
-	return &RegistryCredentialsClient{
+func NewAWSInfrastructureAccessRoleGrantsClient(transport http.RoundTripper, path string, metric string) *AWSInfrastructureAccessRoleGrantsClient {
+	return &AWSInfrastructureAccessRoleGrantsClient{
 		transport: transport,
 		path:      path,
 		metric:    metric,
@@ -55,9 +55,10 @@ func NewRegistryCredentialsClient(transport http.RoundTripper, path string, metr
 
 // Add creates a request for the 'add' method.
 //
-// Creates a new registry credential.
-func (c *RegistryCredentialsClient) Add() *RegistryCredentialsAddRequest {
-	return &RegistryCredentialsAddRequest{
+// Create a new AWS infrastructure access role grant and add it to the collection of
+// AWS infrastructure access role grants on the cluster.
+func (c *AWSInfrastructureAccessRoleGrantsClient) Add() *AWSInfrastructureAccessRoleGrantsAddRequest {
+	return &AWSInfrastructureAccessRoleGrantsAddRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
@@ -66,52 +67,52 @@ func (c *RegistryCredentialsClient) Add() *RegistryCredentialsAddRequest {
 
 // List creates a request for the 'list' method.
 //
-// Retrieves the list of accounts.
-func (c *RegistryCredentialsClient) List() *RegistryCredentialsListRequest {
-	return &RegistryCredentialsListRequest{
+// Retrieves the list of AWS infrastructure access role grants.
+func (c *AWSInfrastructureAccessRoleGrantsClient) List() *AWSInfrastructureAccessRoleGrantsListRequest {
+	return &AWSInfrastructureAccessRoleGrantsListRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
 	}
 }
 
-// RegistryCredential returns the target 'registry_credential' resource for the given identifier.
+// AWSInfrastructureAccessRoleGrant returns the target 'AWS_infrastructure_access_role_grant' resource for the given identifier.
 //
-// Reference to the service that manages an specific registry credential.
-func (c *RegistryCredentialsClient) RegistryCredential(id string) *RegistryCredentialClient {
-	return NewRegistryCredentialClient(
+// Returns a reference to the service that manages a specific AWS infrastructure access role grant.
+func (c *AWSInfrastructureAccessRoleGrantsClient) AWSInfrastructureAccessRoleGrant(id string) *AWSInfrastructureAccessRoleGrantClient {
+	return NewAWSInfrastructureAccessRoleGrantClient(
 		c.transport,
 		path.Join(c.path, id),
 		path.Join(c.metric, "-"),
 	)
 }
 
-// RegistryCredentialsAddRequest is the request for the 'add' method.
-type RegistryCredentialsAddRequest struct {
+// AWSInfrastructureAccessRoleGrantsAddRequest is the request for the 'add' method.
+type AWSInfrastructureAccessRoleGrantsAddRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 	query     url.Values
 	header    http.Header
-	body      *RegistryCredential
+	body      *AWSInfrastructureAccessRoleGrant
 }
 
 // Parameter adds a query parameter.
-func (r *RegistryCredentialsAddRequest) Parameter(name string, value interface{}) *RegistryCredentialsAddRequest {
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Parameter(name string, value interface{}) *AWSInfrastructureAccessRoleGrantsAddRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *RegistryCredentialsAddRequest) Header(name string, value interface{}) *RegistryCredentialsAddRequest {
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Header(name string, value interface{}) *AWSInfrastructureAccessRoleGrantsAddRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Body sets the value of the 'body' parameter.
 //
-// Registry credential data.
-func (r *RegistryCredentialsAddRequest) Body(value *RegistryCredential) *RegistryCredentialsAddRequest {
+// Description of the AWS infrastructure access role grant.
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Body(value *AWSInfrastructureAccessRoleGrant) *AWSInfrastructureAccessRoleGrantsAddRequest {
 	r.body = value
 	return r
 }
@@ -120,16 +121,16 @@ func (r *RegistryCredentialsAddRequest) Body(value *RegistryCredential) *Registr
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *RegistryCredentialsAddRequest) Send() (result *RegistryCredentialsAddResponse, err error) {
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Send() (result *AWSInfrastructureAccessRoleGrantsAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result *RegistryCredentialsAddResponse, err error) {
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) SendContext(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	buffer := &bytes.Buffer{}
-	err = writeRegistryCredentialsAddRequest(r, buffer)
+	err = writeAWSInfrastructureAccessRoleGrantsAddRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -151,7 +152,7 @@ func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result
 		return
 	}
 	defer response.Body.Close()
-	result = &RegistryCredentialsAddResponse{}
+	result = &AWSInfrastructureAccessRoleGrantsAddResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -162,7 +163,7 @@ func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result
 		err = result.err
 		return
 	}
-	err = readRegistryCredentialsAddResponse(result, response.Body)
+	err = readAWSInfrastructureAccessRoleGrantsAddResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -171,24 +172,24 @@ func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result
 
 // marshall is the method used internally to marshal requests for the
 // 'add' method.
-func (r *RegistryCredentialsAddRequest) marshal(writer io.Writer) error {
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) marshal(writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	r.stream(stream)
 	return stream.Error
 }
-func (r *RegistryCredentialsAddRequest) stream(stream *jsoniter.Stream) {
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) stream(stream *jsoniter.Stream) {
 }
 
-// RegistryCredentialsAddResponse is the response for the 'add' method.
-type RegistryCredentialsAddResponse struct {
+// AWSInfrastructureAccessRoleGrantsAddResponse is the response for the 'add' method.
+type AWSInfrastructureAccessRoleGrantsAddResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *RegistryCredential
+	body   *AWSInfrastructureAccessRoleGrant
 }
 
 // Status returns the response status code.
-func (r *RegistryCredentialsAddResponse) Status() int {
+func (r *AWSInfrastructureAccessRoleGrantsAddResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -196,7 +197,7 @@ func (r *RegistryCredentialsAddResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *RegistryCredentialsAddResponse) Header() http.Header {
+func (r *AWSInfrastructureAccessRoleGrantsAddResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -204,7 +205,7 @@ func (r *RegistryCredentialsAddResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *RegistryCredentialsAddResponse) Error() *errors.Error {
+func (r *AWSInfrastructureAccessRoleGrantsAddResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -213,8 +214,8 @@ func (r *RegistryCredentialsAddResponse) Error() *errors.Error {
 
 // Body returns the value of the 'body' parameter.
 //
-// Registry credential data.
-func (r *RegistryCredentialsAddResponse) Body() *RegistryCredential {
+// Description of the AWS infrastructure access role grant.
+func (r *AWSInfrastructureAccessRoleGrantsAddResponse) Body() *AWSInfrastructureAccessRoleGrant {
 	if r == nil {
 		return nil
 	}
@@ -224,8 +225,8 @@ func (r *RegistryCredentialsAddResponse) Body() *RegistryCredential {
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Registry credential data.
-func (r *RegistryCredentialsAddResponse) GetBody() (value *RegistryCredential, ok bool) {
+// Description of the AWS infrastructure access role grant.
+func (r *AWSInfrastructureAccessRoleGrantsAddResponse) GetBody() (value *AWSInfrastructureAccessRoleGrant, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -233,8 +234,8 @@ func (r *RegistryCredentialsAddResponse) GetBody() (value *RegistryCredential, o
 	return
 }
 
-// RegistryCredentialsListRequest is the request for the 'list' method.
-type RegistryCredentialsListRequest struct {
+// AWSInfrastructureAccessRoleGrantsListRequest is the request for the 'list' method.
+type AWSInfrastructureAccessRoleGrantsListRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -247,13 +248,13 @@ type RegistryCredentialsListRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *RegistryCredentialsListRequest) Parameter(name string, value interface{}) *RegistryCredentialsListRequest {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Parameter(name string, value interface{}) *AWSInfrastructureAccessRoleGrantsListRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *RegistryCredentialsListRequest) Header(name string, value interface{}) *RegistryCredentialsListRequest {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Header(name string, value interface{}) *AWSInfrastructureAccessRoleGrantsListRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -263,17 +264,18 @@ func (r *RegistryCredentialsListRequest) Header(name string, value interface{}) 
 // Order criteria.
 //
 // The syntax of this parameter is similar to the syntax of the _order by_ clause of
-// a SQL statement. For example, in order to sort the
-// RegistryCredentials descending by username the value should be:
+// a SQL statement, but using the names of the attributes of the AWS infrastructure access role grant
+// instead of the names of the columns of a table. For example, in order to sort the
+// AWS infrastructure access role grants descending by user ARN the value should be:
 //
 // [source,sql]
 // ----
-// username desc
+// user_arn desc
 // ----
 //
 // If the parameter isn't provided, or if the value is empty, then the order of the
 // results is undefined.
-func (r *RegistryCredentialsListRequest) Order(value string) *RegistryCredentialsListRequest {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Order(value string) *AWSInfrastructureAccessRoleGrantsListRequest {
 	r.order = &value
 	return r
 }
@@ -281,7 +283,7 @@ func (r *RegistryCredentialsListRequest) Order(value string) *RegistryCredential
 // Page sets the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *RegistryCredentialsListRequest) Page(value int) *RegistryCredentialsListRequest {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Page(value int) *AWSInfrastructureAccessRoleGrantsListRequest {
 	r.page = &value
 	return r
 }
@@ -290,19 +292,19 @@ func (r *RegistryCredentialsListRequest) Page(value int) *RegistryCredentialsLis
 //
 // Search criteria.
 //
-// The syntax of this parameter is similar to the syntax of the _where_ clause of a
-// SQL statement, but using the names of the attributes of the RegistryCredentials instead
-// of the names of the columns of a table. For example, in order to retrieve all the
-// RegistryCredentials for a user the value should be:
+// The syntax of this parameter is similar to the syntax of the _where_ clause of an
+// SQL statement, but using the names of the attributes of the AWS infrastructure access role grant
+// instead of the names of the columns of a table. For example, in order to retrieve
+// all the AWS infrastructure access role grants with a user ARN starting with `user` the value should be:
 //
 // [source,sql]
 // ----
-// username = 'abcxyz...'
+// user_arn like '%user'
 // ----
 //
-// If the parameter isn't provided, or if the value is empty, then all the
-// RegistryCredentials that the user has permission to see will be returned.
-func (r *RegistryCredentialsListRequest) Search(value string) *RegistryCredentialsListRequest {
+// If the parameter isn't provided, or if the value is empty, then all the AWS
+// infrastructure access role grants that the user has permission to see will be returned.
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Search(value string) *AWSInfrastructureAccessRoleGrantsListRequest {
 	r.search = &value
 	return r
 }
@@ -310,7 +312,7 @@ func (r *RegistryCredentialsListRequest) Search(value string) *RegistryCredentia
 // Size sets the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
-func (r *RegistryCredentialsListRequest) Size(value int) *RegistryCredentialsListRequest {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Size(value int) *AWSInfrastructureAccessRoleGrantsListRequest {
 	r.size = &value
 	return r
 }
@@ -319,12 +321,12 @@ func (r *RegistryCredentialsListRequest) Size(value int) *RegistryCredentialsLis
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *RegistryCredentialsListRequest) Send() (result *RegistryCredentialsListResponse, err error) {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Send() (result *AWSInfrastructureAccessRoleGrantsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *RegistryCredentialsListRequest) SendContext(ctx context.Context) (result *RegistryCredentialsListResponse, err error) {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) SendContext(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)
@@ -356,7 +358,7 @@ func (r *RegistryCredentialsListRequest) SendContext(ctx context.Context) (resul
 		return
 	}
 	defer response.Body.Close()
-	result = &RegistryCredentialsListResponse{}
+	result = &AWSInfrastructureAccessRoleGrantsListResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -367,26 +369,26 @@ func (r *RegistryCredentialsListRequest) SendContext(ctx context.Context) (resul
 		err = result.err
 		return
 	}
-	err = readRegistryCredentialsListResponse(result, response.Body)
+	err = readAWSInfrastructureAccessRoleGrantsListResponse(result, response.Body)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// RegistryCredentialsListResponse is the response for the 'list' method.
-type RegistryCredentialsListResponse struct {
+// AWSInfrastructureAccessRoleGrantsListResponse is the response for the 'list' method.
+type AWSInfrastructureAccessRoleGrantsListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	items  *RegistryCredentialList
+	items  *AWSInfrastructureAccessRoleGrantList
 	page   *int
 	size   *int
 	total  *int
 }
 
 // Status returns the response status code.
-func (r *RegistryCredentialsListResponse) Status() int {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -394,7 +396,7 @@ func (r *RegistryCredentialsListResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *RegistryCredentialsListResponse) Header() http.Header {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -402,7 +404,7 @@ func (r *RegistryCredentialsListResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *RegistryCredentialsListResponse) Error() *errors.Error {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -411,8 +413,8 @@ func (r *RegistryCredentialsListResponse) Error() *errors.Error {
 
 // Items returns the value of the 'items' parameter.
 //
-// Retrieved list of registry credentials.
-func (r *RegistryCredentialsListResponse) Items() *RegistryCredentialList {
+// Retrieved list of AWS infrastructure access role grants.
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) Items() *AWSInfrastructureAccessRoleGrantList {
 	if r == nil {
 		return nil
 	}
@@ -422,8 +424,8 @@ func (r *RegistryCredentialsListResponse) Items() *RegistryCredentialList {
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Retrieved list of registry credentials.
-func (r *RegistryCredentialsListResponse) GetItems() (value *RegistryCredentialList, ok bool) {
+// Retrieved list of AWS infrastructure access role grants.
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) GetItems() (value *AWSInfrastructureAccessRoleGrantList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
 		value = r.items
@@ -434,7 +436,7 @@ func (r *RegistryCredentialsListResponse) GetItems() (value *RegistryCredentialL
 // Page returns the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *RegistryCredentialsListResponse) Page() int {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
 	}
@@ -445,7 +447,7 @@ func (r *RegistryCredentialsListResponse) Page() int {
 // a flag indicating if the parameter has a value.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *RegistryCredentialsListResponse) GetPage() (value int, ok bool) {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
@@ -456,7 +458,7 @@ func (r *RegistryCredentialsListResponse) GetPage() (value int, ok bool) {
 // Size returns the value of the 'size' parameter.
 //
 // Maximum number of items that will be contained in the returned page.
-func (r *RegistryCredentialsListResponse) Size() int {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
 	}
@@ -467,7 +469,7 @@ func (r *RegistryCredentialsListResponse) Size() int {
 // a flag indicating if the parameter has a value.
 //
 // Maximum number of items that will be contained in the returned page.
-func (r *RegistryCredentialsListResponse) GetSize() (value int, ok bool) {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
 		value = *r.size
@@ -479,7 +481,7 @@ func (r *RegistryCredentialsListResponse) GetSize() (value int, ok bool) {
 //
 // Total number of items of the collection that match the search criteria,
 // regardless of the size of the page.
-func (r *RegistryCredentialsListResponse) Total() int {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
 	}
@@ -491,7 +493,7 @@ func (r *RegistryCredentialsListResponse) Total() int {
 //
 // Total number of items of the collection that match the search criteria,
 // regardless of the size of the page.
-func (r *RegistryCredentialsListResponse) GetTotal() (value int, ok bool) {
+func (r *AWSInfrastructureAccessRoleGrantsListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {
 		value = *r.total

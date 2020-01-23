@@ -87,6 +87,18 @@ func (c *ClusterClient) Update() *ClusterUpdateRequest {
 	}
 }
 
+// AWSInfrastructureAccessRoleGrants returns the target 'AWS_infrastructure_access_role_grants' resource.
+//
+// Refrence to the resource that manages the collection of AWS infrastructure
+// access role grants on this cluster.
+func (c *ClusterClient) AWSInfrastructureAccessRoleGrants() *AWSInfrastructureAccessRoleGrantsClient {
+	return NewAWSInfrastructureAccessRoleGrantsClient(
+		c.transport,
+		path.Join(c.path, "aws_infrastructure_access_role_grants"),
+		path.Join(c.metric, "aws_infrastructure_access_role_grants"),
+	)
+}
+
 // Addons returns the target 'add_on_installations' resource.
 //
 // Refrence to the resource that manages the collection of add-ons installed on this cluster.

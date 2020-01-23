@@ -96,8 +96,56 @@ func (r *RegistryCredentialsAddServerResponse) Status(value int) *RegistryCreden
 
 // RegistryCredentialsListServerRequest is the request for the 'list' method.
 type RegistryCredentialsListServerRequest struct {
-	page *int
-	size *int
+	order  *string
+	page   *int
+	search *string
+	size   *int
+}
+
+// Order returns the value of the 'order' parameter.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// RegistryCredentials descending by username the value should be:
+//
+// [source,sql]
+// ----
+// username desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *RegistryCredentialsListServerRequest) Order() string {
+	if r != nil && r.order != nil {
+		return *r.order
+	}
+	return ""
+}
+
+// GetOrder returns the value of the 'order' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Order criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _order by_ clause of
+// a SQL statement. For example, in order to sort the
+// RegistryCredentials descending by username the value should be:
+//
+// [source,sql]
+// ----
+// username desc
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then the order of the
+// results is undefined.
+func (r *RegistryCredentialsListServerRequest) GetOrder() (value string, ok bool) {
+	ok = r != nil && r.order != nil
+	if ok {
+		value = *r.order
+	}
+	return
 }
 
 // Page returns the value of the 'page' parameter.
@@ -118,6 +166,54 @@ func (r *RegistryCredentialsListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
+	}
+	return
+}
+
+// Search returns the value of the 'search' parameter.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the RegistryCredentials instead
+// of the names of the columns of a table. For example, in order to retrieve all the
+// RegistryCredentials for a user the value should be:
+//
+// [source,sql]
+// ----
+// username = 'abcxyz...'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// RegistryCredentials that the user has permission to see will be returned.
+func (r *RegistryCredentialsListServerRequest) Search() string {
+	if r != nil && r.search != nil {
+		return *r.search
+	}
+	return ""
+}
+
+// GetSearch returns the value of the 'search' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Search criteria.
+//
+// The syntax of this parameter is similar to the syntax of the _where_ clause of a
+// SQL statement, but using the names of the attributes of the RegistryCredentials instead
+// of the names of the columns of a table. For example, in order to retrieve all the
+// RegistryCredentials for a user the value should be:
+//
+// [source,sql]
+// ----
+// username = 'abcxyz...'
+// ----
+//
+// If the parameter isn't provided, or if the value is empty, then all the
+// RegistryCredentials that the user has permission to see will be returned.
+func (r *RegistryCredentialsListServerRequest) GetSearch() (value string, ok bool) {
+	ok = r != nil && r.search != nil
+	if ok {
+		value = *r.search
 	}
 	return
 }

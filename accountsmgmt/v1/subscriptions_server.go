@@ -43,10 +43,45 @@ type SubscriptionsServer interface {
 
 // SubscriptionsListServerRequest is the request for the 'list' method.
 type SubscriptionsListServerRequest struct {
+	labels *string
 	order  *string
 	page   *int
 	search *string
 	size   *int
+}
+
+// Labels returns the value of the 'labels' parameter.
+//
+// Filter subscriptions by a comma separated list of labels:
+//
+// [source]
+// ----
+// env=staging,department=sales
+// ----
+//
+func (r *SubscriptionsListServerRequest) Labels() string {
+	if r != nil && r.labels != nil {
+		return *r.labels
+	}
+	return ""
+}
+
+// GetLabels returns the value of the 'labels' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Filter subscriptions by a comma separated list of labels:
+//
+// [source]
+// ----
+// env=staging,department=sales
+// ----
+//
+func (r *SubscriptionsListServerRequest) GetLabels() (value string, ok bool) {
+	ok = r != nil && r.labels != nil
+	if ok {
+		value = *r.labels
+	}
+	return
 }
 
 // Order returns the value of the 'order' parameter.

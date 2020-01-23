@@ -82,6 +82,17 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeAWS(object.aws, stream)
 		count++
 	}
+	if object.awsInfrastructureAccessRoleGrants != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("aws_infrastructure_access_role_grants")
+		stream.WriteObjectStart()
+		stream.WriteObjectField("items")
+		writeAWSInfrastructureAccessRoleGrantList(object.awsInfrastructureAccessRoleGrants.items, stream)
+		stream.WriteObjectEnd()
+		count++
+	}
 	if object.byoc != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -354,6 +365,27 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "aws":
 			value := readAWS(iterator)
 			object.aws = value
+		case "aws_infrastructure_access_role_grants":
+			value := &AWSInfrastructureAccessRoleGrantList{}
+			for {
+				field := iterator.ReadObject()
+				if field == "" {
+					break
+				}
+				switch field {
+				case "kind":
+					text := iterator.ReadString()
+					value.link = text == AWSInfrastructureAccessRoleGrantListLinkKind
+				case "href":
+					text := iterator.ReadString()
+					value.href = &text
+				case "items":
+					value.items = readAWSInfrastructureAccessRoleGrantList(iterator)
+				default:
+					iterator.ReadAny()
+				}
+			}
+			object.awsInfrastructureAccessRoleGrants = value
 		case "byoc":
 			value := iterator.ReadBool()
 			object.byoc = &value

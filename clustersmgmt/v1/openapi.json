@@ -1084,6 +1084,220 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws_infrastructure_access_role_grants": {
+      "post": {
+        "description": "Create a new AWS infrastructure access role grant and add it to the collection of\nAWS infrastructure access role grants on the cluster.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of AWS infrastructure access role grants.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the AWS infrastructure access role grant\ninstead of the names of the columns of a table. For example, in order to sort the\nAWS infrastructure access role grants descending by user ARN the value should be:\n\n\n```\nuser_arn desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the AWS infrastructure access role grant\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the AWS infrastructure access role grants with a user ARN starting with `user` the value should be:\n\n\n```\nuser_arn like '%user'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the AWS\ninfrastructure access role grants that the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of AWS infrastructure access role grants.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws_infrastructure_access_role_grants/{aws_infrastructure_access_role_grant_id}": {
+      "delete": {
+        "description": "Deletes the AWS infrastructure access role grant.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "aws_infrastructure_access_role_grant_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success.\n"
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the AWS infrastructure access role grant.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "aws_infrastructure_access_role_grant_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/credentials": {
       "get": {
         "description": "Retrieves the details of the credentials of a cluster.\n",
@@ -2429,6 +2643,52 @@
           }
         }
       },
+      "AWSInfrastructureAccessRoleGrant": {
+        "description": "Representation of an AWS infrastructure access role grant.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSInfrastructureAccessRoleGrant' if this is a complete object or 'AWSInfrastructureAccessRoleGrantLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "console_url": {
+            "description": "URL to switch to the role in AWS console.\n",
+            "type": "string"
+          },
+          "role": {
+            "description": "Link to AWS infrastructure access role. \n",
+            "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
+          },
+          "state": {
+            "description": "State of the grant.\n",
+            "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrantState"
+          },
+          "state_description": {
+            "description": "Description of the state.\nWill be empty unless state is 'Failed'.\n",
+            "type": "string"
+          },
+          "user_arn": {
+            "description": "The user AWS IAM ARN we want to grant the role.\n",
+            "type": "string"
+          }
+        }
+      },
+      "AWSInfrastructureAccessRoleGrantState": {
+        "description": "State of an AWS incfrastructure access role grant.\n",
+        "type": "string",
+        "enum": [
+          "failed",
+          "pending",
+          "ready"
+        ]
+      },
       "AWSVolume": {
         "description": "Holds settings for an AWS storage volume.\n",
         "properties": {
@@ -2745,6 +3005,13 @@
           "aws": {
             "description": "Amazon Web Services settings of the cluster.\n",
             "$ref": "#/components/schemas/AWS"
+          },
+          "aws_infrastructure_access_role_grants": {
+            "description": "List of AWS infrastructure access role grants on this cluster.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
+            }
           },
           "byoc": {
             "description": "Flag indicating if the cluster is BYOC (customer cloud subscription).\n",
