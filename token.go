@@ -96,7 +96,7 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 		return
 	}
 
-	// Now we know that both the access and refresh tokens are unavaiable, expired or about to
+	// Now we know that both the access and refresh tokens are unavailable, expired or about to
 	// expire. So we need to check if we have other credentials that can be used to request a
 	// new token, and use them.
 	havePassword := c.user != "" && c.password != ""
@@ -112,7 +112,7 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 
 	// Here we know that the access and refresh tokens are unavailable, expired or about to
 	// expire. We also know that we don't have credentials to request new ones. But we could
-	// still use the refresh token if it isn't completely exired.
+	// still use the refresh token if it isn't completely expired.
 	if c.refreshToken != nil && refreshLeft > 0 {
 		c.logger.Warn(
 			ctx,
