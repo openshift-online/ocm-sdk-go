@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"io"
@@ -26,13 +26,25 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func readSubscriptionsListRequest(request *SubscriptionsListServerRequest, r *http.Request) error {
+func readAWSInfrastructureAccessRoleGrantsAddRequest(request *AWSInfrastructureAccessRoleGrantsAddServerRequest, r *http.Request) error {
+	var err error
+	request.body, err = UnmarshalAWSInfrastructureAccessRoleGrant(r.Body)
+	return err
+}
+func writeAWSInfrastructureAccessRoleGrantsAddRequest(request *AWSInfrastructureAccessRoleGrantsAddRequest, writer io.Writer) error {
+	return MarshalAWSInfrastructureAccessRoleGrant(request.body, writer)
+}
+func readAWSInfrastructureAccessRoleGrantsAddResponse(response *AWSInfrastructureAccessRoleGrantsAddResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalAWSInfrastructureAccessRoleGrant(reader)
+	return err
+}
+func writeAWSInfrastructureAccessRoleGrantsAddResponse(response *AWSInfrastructureAccessRoleGrantsAddServerResponse, w http.ResponseWriter) error {
+	return MarshalAWSInfrastructureAccessRoleGrant(response.body, w)
+}
+func readAWSInfrastructureAccessRoleGrantsListRequest(request *AWSInfrastructureAccessRoleGrantsListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()
-	request.labels, err = helpers.ParseString(query, "labels")
-	if err != nil {
-		return err
-	}
 	request.order, err = helpers.ParseString(query, "order")
 	if err != nil {
 		return err
@@ -57,10 +69,10 @@ func readSubscriptionsListRequest(request *SubscriptionsListServerRequest, r *ht
 	}
 	return nil
 }
-func writeSubscriptionsListRequest(request *SubscriptionsListRequest, writer io.Writer) error {
+func writeAWSInfrastructureAccessRoleGrantsListRequest(request *AWSInfrastructureAccessRoleGrantsListRequest, writer io.Writer) error {
 	return nil
 }
-func readSubscriptionsListResponse(response *SubscriptionsListResponse, reader io.Reader) error {
+func readAWSInfrastructureAccessRoleGrantsListResponse(response *AWSInfrastructureAccessRoleGrantsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {
 		return err
@@ -81,8 +93,8 @@ func readSubscriptionsListResponse(response *SubscriptionsListResponse, reader i
 			value := iterator.ReadInt()
 			response.total = &value
 		case "items":
-			items := readSubscriptionList(iterator)
-			response.items = &SubscriptionList{
+			items := readAWSInfrastructureAccessRoleGrantList(iterator)
+			response.items = &AWSInfrastructureAccessRoleGrantList{
 				items: items,
 			}
 		default:
@@ -91,12 +103,12 @@ func readSubscriptionsListResponse(response *SubscriptionsListResponse, reader i
 	}
 	return iterator.Error
 }
-func writeSubscriptionsListResponse(response *SubscriptionsListServerResponse, w http.ResponseWriter) error {
+func writeAWSInfrastructureAccessRoleGrantsListResponse(response *AWSInfrastructureAccessRoleGrantsListServerResponse, w http.ResponseWriter) error {
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
 	count := 1
-	stream.WriteString(SubscriptionListKind)
+	stream.WriteString(AWSInfrastructureAccessRoleGrantListKind)
 	if response.items != nil && response.items.href != nil {
 		stream.WriteMore()
 		stream.WriteObjectField("href")
@@ -133,7 +145,7 @@ func writeSubscriptionsListResponse(response *SubscriptionsListServerResponse, w
 				stream.WriteMore()
 			}
 			stream.WriteObjectField("items")
-			writeSubscriptionList(response.items.items, stream)
+			writeAWSInfrastructureAccessRoleGrantList(response.items.items, stream)
 			count++
 		}
 	}

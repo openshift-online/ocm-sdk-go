@@ -78,6 +78,7 @@ type SubscriptionsListRequest struct {
 	metric    string
 	query     url.Values
 	header    http.Header
+	labels    *string
 	order     *string
 	page      *int
 	search    *string
@@ -93,6 +94,20 @@ func (r *SubscriptionsListRequest) Parameter(name string, value interface{}) *Su
 // Header adds a request header.
 func (r *SubscriptionsListRequest) Header(name string, value interface{}) *SubscriptionsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Labels sets the value of the 'labels' parameter.
+//
+// Filter subscriptions by a comma separated list of labels:
+//
+// [source]
+// ----
+// env=staging,department=sales
+// ----
+//
+func (r *SubscriptionsListRequest) Labels(value string) *SubscriptionsListRequest {
+	r.labels = &value
 	return r
 }
 
@@ -164,6 +179,9 @@ func (r *SubscriptionsListRequest) Send() (result *SubscriptionsListResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *SubscriptionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
+	if r.labels != nil {
+		helpers.AddValue(&query, "labels", *r.labels)
+	}
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)
 	}

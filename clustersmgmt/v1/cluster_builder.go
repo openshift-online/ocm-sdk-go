@@ -63,37 +63,38 @@ import (
 // attributes are mandatory when creation a cluster with your own Amazon Web
 // Services account.
 type ClusterBuilder struct {
-	id                  *string
-	href                *string
-	link                bool
-	api                 *ClusterAPIBuilder
-	aws                 *AWSBuilder
-	byoc                *bool
-	dns                 *DNSBuilder
-	addons              *AddOnInstallationListBuilder
-	cloudProvider       *CloudProviderBuilder
-	console             *ClusterConsoleBuilder
-	creationTimestamp   *time.Time
-	displayName         *string
-	expirationTimestamp *time.Time
-	externalID          *string
-	flavour             *FlavourBuilder
-	groups              *GroupListBuilder
-	identityProviders   *IdentityProviderListBuilder
-	loadBalancerQuota   *int
-	managed             *bool
-	metrics             *ClusterMetricsBuilder
-	multiAZ             *bool
-	name                *string
-	network             *NetworkBuilder
-	nodes               *ClusterNodesBuilder
-	openshiftVersion    *string
-	properties          map[string]string
-	region              *CloudRegionBuilder
-	state               *ClusterState
-	storageQuota        *ValueBuilder
-	subscription        *SubscriptionBuilder
-	version             *VersionBuilder
+	id                                *string
+	href                              *string
+	link                              bool
+	api                               *ClusterAPIBuilder
+	aws                               *AWSBuilder
+	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantListBuilder
+	byoc                              *bool
+	dns                               *DNSBuilder
+	addons                            *AddOnInstallationListBuilder
+	cloudProvider                     *CloudProviderBuilder
+	console                           *ClusterConsoleBuilder
+	creationTimestamp                 *time.Time
+	displayName                       *string
+	expirationTimestamp               *time.Time
+	externalID                        *string
+	flavour                           *FlavourBuilder
+	groups                            *GroupListBuilder
+	identityProviders                 *IdentityProviderListBuilder
+	loadBalancerQuota                 *int
+	managed                           *bool
+	metrics                           *ClusterMetricsBuilder
+	multiAZ                           *bool
+	name                              *string
+	network                           *NetworkBuilder
+	nodes                             *ClusterNodesBuilder
+	openshiftVersion                  *string
+	properties                        map[string]string
+	region                            *CloudRegionBuilder
+	state                             *ClusterState
+	storageQuota                      *ValueBuilder
+	subscription                      *SubscriptionBuilder
+	version                           *VersionBuilder
 }
 
 // NewCluster creates a new builder of 'cluster' objects.
@@ -132,6 +133,14 @@ func (b *ClusterBuilder) API(value *ClusterAPIBuilder) *ClusterBuilder {
 // _Amazon Web Services_ specific settings of a cluster.
 func (b *ClusterBuilder) AWS(value *AWSBuilder) *ClusterBuilder {
 	b.aws = value
+	return b
+}
+
+// AWSInfrastructureAccessRoleGrants sets the value of the 'AWS_infrastructure_access_role_grants' attribute to the given values.
+//
+//
+func (b *ClusterBuilder) AWSInfrastructureAccessRoleGrants(value *AWSInfrastructureAccessRoleGrantListBuilder) *ClusterBuilder {
+	b.awsInfrastructureAccessRoleGrants = value
 	return b
 }
 
@@ -379,6 +388,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.aws = nil
 	}
+	if object.awsInfrastructureAccessRoleGrants != nil {
+		b.awsInfrastructureAccessRoleGrants = NewAWSInfrastructureAccessRoleGrantList().Copy(object.awsInfrastructureAccessRoleGrants)
+	} else {
+		b.awsInfrastructureAccessRoleGrants = nil
+	}
 	b.byoc = object.byoc
 	if object.dns != nil {
 		b.dns = NewDNS().Copy(object.dns)
@@ -485,6 +499,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	if b.aws != nil {
 		object.aws, err = b.aws.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.awsInfrastructureAccessRoleGrants != nil {
+		object.awsInfrastructureAccessRoleGrants, err = b.awsInfrastructureAccessRoleGrants.Build()
 		if err != nil {
 			return
 		}

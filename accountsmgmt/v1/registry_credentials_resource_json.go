@@ -45,12 +45,20 @@ func writeRegistryCredentialsAddResponse(response *RegistryCredentialsAddServerR
 func readRegistryCredentialsListRequest(request *RegistryCredentialsListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()
+	request.order, err = helpers.ParseString(query, "order")
+	if err != nil {
+		return err
+	}
 	request.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return err
 	}
 	if request.page == nil {
 		request.page = helpers.NewInteger(1)
+	}
+	request.search, err = helpers.ParseString(query, "search")
+	if err != nil {
+		return err
 	}
 	request.size, err = helpers.ParseInteger(query, "size")
 	if err != nil {

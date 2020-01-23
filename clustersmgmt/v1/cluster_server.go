@@ -45,6 +45,12 @@ type ClusterServer interface {
 	// Updates the cluster.
 	Update(ctx context.Context, request *ClusterUpdateServerRequest, response *ClusterUpdateServerResponse) error
 
+	// AWSInfrastructureAccessRoleGrants returns the target 'AWS_infrastructure_access_role_grants' resource.
+	//
+	// Refrence to the resource that manages the collection of AWS infrastructure
+	// access role grants on this cluster.
+	AWSInfrastructureAccessRoleGrants() AWSInfrastructureAccessRoleGrantsServer
+
 	// Addons returns the target 'add_on_installations' resource.
 	//
 	// Refrence to the resource that manages the collection of add-ons installed on this cluster.
@@ -191,6 +197,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 		}
 	}
 	switch segments[0] {
+	case "aws_infrastructure_access_role_grants":
+		target := server.AWSInfrastructureAccessRoleGrants()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchAWSInfrastructureAccessRoleGrants(w, r, target, segments[1:])
 	case "addons":
 		target := server.Addons()
 		if target == nil {
