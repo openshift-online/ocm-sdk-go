@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.83 Feb 3 2020
+
+- Check content type of HTTP responses and return an error if it isn't JSON.
+- Update to model 0.0.39:
+** Add types and resources for cluster operator metrics.
+** Add `deleting` and `removed` states to AWS infrastructure access role grant
+   status.
+
 == 0.1.82 Jan 23 2020
 
 - Update to model 0.0.38:
