@@ -56,6 +56,17 @@ func (c *MetricQueriesClient) CPUTotalByNodeRolesOS() *CPUTotalByNodeRolesOSMetr
 	)
 }
 
+// ClusterOperators returns the target 'cluster_operators_metric_query' resource.
+//
+// Reference to the resource that retrieves the cluster operator status metrics.
+func (c *MetricQueriesClient) ClusterOperators() *ClusterOperatorsMetricQueryClient {
+	return NewClusterOperatorsMetricQueryClient(
+		c.transport,
+		path.Join(c.path, "cluster_operators"),
+		path.Join(c.metric, "cluster_operators"),
+	)
+}
+
 // SocketTotalByNodeRolesOS returns the target 'socket_total_by_node_roles_OS_metric_query' resource.
 //
 // Reference to the resource that retrieves the total socket

@@ -23,10 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 type AWSInfrastructureAccessRoleGrantState string
 
 const (
+	// The access role grant is in the process of being deleted.
+	AWSInfrastructureAccessRoleGrantStateDeleting AWSInfrastructureAccessRoleGrantState = "deleting"
 	// The attempt to grant access role to user ARN failed.
 	AWSInfrastructureAccessRoleGrantStateFailed AWSInfrastructureAccessRoleGrantState = "failed"
 	// The access role grant in pending.
 	AWSInfrastructureAccessRoleGrantStatePending AWSInfrastructureAccessRoleGrantState = "pending"
 	// Access role has been granted to user.
 	AWSInfrastructureAccessRoleGrantStateReady AWSInfrastructureAccessRoleGrantState = "ready"
+	// This ia a special state intended for the user know
+	// that the access role grant has been removed by SRE.
+	// The user can delete this grant from the DB.
+	AWSInfrastructureAccessRoleGrantStateRemoved AWSInfrastructureAccessRoleGrantState = "removed"
 )

@@ -2684,9 +2684,11 @@
         "description": "State of an AWS incfrastructure access role grant.\n",
         "type": "string",
         "enum": [
+          "deleting",
           "failed",
           "pending",
-          "ready"
+          "ready",
+          "removed"
         ]
       },
       "AWSVolume": {
@@ -3250,6 +3252,47 @@
             "description": "Total number of nodes of the cluster.\n",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "ClusterOperatorInfo": {
+        "properties": {
+          "condition": {
+            "$ref": "#/components/schemas/ClusterOperatorState"
+          },
+          "name": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "ClusterOperatorState": {
+        "description": "Overall state of a cluster operator.\n",
+        "type": "string",
+        "enum": [
+          "available",
+          "degraded",
+          "failing",
+          "upgrading"
+        ]
+      },
+      "ClusterOperatorsInfo": {
+        "description": "Provides detailed information about the operators installed on the cluster.\n",
+        "properties": {
+          "operators": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClusterOperatorInfo"
+            }
           }
         }
       },
