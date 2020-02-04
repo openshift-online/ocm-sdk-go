@@ -328,46 +328,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
-		request.Header.Set("Authorization", "Bearer "+bearer)
-		recorder := httptest.NewRecorder()
-		handler.ServeHTTP(recorder, request)
-
-		// Verify that the request is rejected:
-		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
-		Expect(recorder.Body).To(MatchJSON(`{
-			"kind": "Error",
-			"id": "401",
-			"href": "/api/clusters_mgmt/v1/errors/401",
-			"code": "CLUSTERS-MGMT-401",
-			"reason": "Bearer token is expired"
-		}`))
-	})
-
-	It("Rejects expired bearer token", func() {
-		// Prepare the next handler, which should not be called:
-		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			Expect(true).To(BeFalse())
-			w.WriteHeader(http.StatusBadRequest)
-		})
-
-		// Prepare the expired token:
-		bearer := IssueBearer(jwt.MapClaims{
-			"exp": time.Now().Add(-1 * time.Hour).Unix(),
-		})
-
-		// Prepare the handler:
-		handler, err := NewHandler().
-			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
-			KeysFile(keysFile).
-			Next(next).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-
-		// Send the request with a bad type and a good token:
+		// Send the request with the expired token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -391,7 +352,7 @@ var _ = Describe("Handler", func() {
 			w.WriteHeader(http.StatusBadRequest)
 		})
 
-		// Prepare the not yet valid token:
+		// Prepare a token without the 'typ' claim:
 		bearer := IssueBearer(jwt.MapClaims{
 			"typ": nil,
 		})
@@ -406,7 +367,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request with the bad token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -430,7 +391,7 @@ var _ = Describe("Handler", func() {
 			w.WriteHeader(http.StatusBadRequest)
 		})
 
-		// Prepare the not yet valid token:
+		// Prepare a refresh token:
 		bearer := IssueBearer(jwt.MapClaims{
 			"typ": "Refresh",
 		})
@@ -445,7 +406,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request with the bad token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -469,7 +430,7 @@ var _ = Describe("Handler", func() {
 			w.WriteHeader(http.StatusBadRequest)
 		})
 
-		// Prepare the not yet valid token:
+		// Prepare an offline access token:
 		bearer := IssueBearer(jwt.MapClaims{
 			"typ": "Offline",
 		})
@@ -484,7 +445,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request with the bad token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -508,7 +469,7 @@ var _ = Describe("Handler", func() {
 			w.WriteHeader(http.StatusBadRequest)
 		})
 
-		// Prepare the not yet valid token:
+		// Prepare the token without the 'iat' claim:
 		bearer := IssueBearer(jwt.MapClaims{
 			"iat": nil,
 		})
@@ -523,7 +484,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request with the bad token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -547,7 +508,7 @@ var _ = Describe("Handler", func() {
 			w.WriteHeader(http.StatusBadRequest)
 		})
 
-		// Prepare the not yet valid token:
+		// Prepare the token without the 'exp' claim:
 		bearer := IssueBearer(jwt.MapClaims{
 			"exp": nil,
 		})
@@ -562,7 +523,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request with the bad token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -586,7 +547,7 @@ var _ = Describe("Handler", func() {
 			w.WriteHeader(http.StatusBadRequest)
 		})
 
-		// Prepare the not yet valid token:
+		// Prepare a token issued in the future:
 		now := time.Now()
 		iat := now.Add(1 * time.Minute)
 		exp := iat.Add(1 * time.Minute)
@@ -605,7 +566,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request with the bad token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -649,7 +610,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request with a bad token:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -685,7 +646,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -717,38 +678,9 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a good token:
+		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
-		recorder := httptest.NewRecorder()
-		handler.ServeHTTP(recorder, request)
-
-		// Verify the response:
-		Expect(recorder.Code).To(Equal(http.StatusOK))
-	})
-
-	It("Doesn't require authorization header for public URL", func() {
-		// Prepare the next handler:
-		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			actual, err := BearerFromContext(r.Context())
-			Expect(err).ToNot(HaveOccurred())
-			Expect(actual).To(BeEmpty())
-			w.WriteHeader(http.StatusOK)
-		})
-
-		// Prepare the handler:
-		handler, err := NewHandler().
-			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
-			KeysFile(keysFile).
-			Public("^/public(/.*)?$").
-			Next(next).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-
-		// Send the request without the authorization header:
-		request := httptest.NewRequest(http.MethodGet, "/public", nil)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
 
@@ -805,7 +737,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad token:
+		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/public", nil)
 		request.Header.Set("Authorization", "Bad junk")
 		recorder := httptest.NewRecorder()
@@ -837,7 +769,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad token:
+		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/public", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -906,7 +838,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad token:
+		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/public", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -980,7 +912,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad type and a good token:
+		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
@@ -1048,6 +980,7 @@ var _ = Describe("Handler", func() {
 
 		// Prepare the token:
 		bearer := IssueBearer(nil)
+
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
@@ -1183,7 +1116,7 @@ var _ = Describe("Handler", func() {
 		err = firstACL.Close()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Prepare the first ACL:
+		// Prepare the second ACL:
 		secondACL, err := ioutil.TempFile("", "acl-*.yml")
 		Expect(err).ToNot(HaveOccurred())
 		_, err = secondACL.WriteString(`
@@ -1304,7 +1237,7 @@ var _ = Describe("Handler", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
-		// Send the request with a bad token:
+		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/private", nil)
 		request.Header.Set("Authorization", "Bearer junk")
 		recorder := httptest.NewRecorder()
