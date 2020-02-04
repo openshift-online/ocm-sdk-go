@@ -82,7 +82,7 @@ func NewHandler() *HandlerBuilder {
 	return &HandlerBuilder{}
 }
 
-// Logger sets the logger that the middleware will use to send messages to the logger. This is
+// Logger sets the logger that the middleware will use to send messages to the log. This is
 // mandatory.
 func (b *HandlerBuilder) Logger(value sdk.Logger) *HandlerBuilder {
 	b.logger = value
@@ -125,8 +125,8 @@ func (b *HandlerBuilder) Version(value string) *HandlerBuilder {
 	return b
 }
 
-// Public sets a regular expression that define the parts of the URL space that considered public,
-// and therefore require not authentication. This method may be called multiple times and then all
+// Public sets a regular expression that defines the parts of the URL space that considered public,
+// and therefore require no authentication. This method may be called multiple times and then all
 // the given regular expressions will be used to check what parts of the URL space are public.
 func (b *HandlerBuilder) Public(value string) *HandlerBuilder {
 	b.publicPaths = append(b.publicPaths, value)
@@ -202,7 +202,7 @@ func (b *HandlerBuilder) Next(value http.Handler) *HandlerBuilder {
 	return b
 }
 
-// Build uses the data stored in the builder to create a new authentication middleware.
+// Build uses the data stored in the builder to create a new authentication handler.
 func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 	// Check parameters:
 	if b.logger == nil {
@@ -278,7 +278,7 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 		}
 	}
 
-	// Create the bearer token tokenParser:
+	// Create the bearer token parser:
 	tokenParser := &jwt.Parser{}
 
 	// Make copies of the lists of keys files and URLs:
@@ -404,7 +404,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// The library that we use considers token valid if the claims that it checks don't exist,
+	// The library that we use considers tokens valid if the claims that it checks don't exist,
 	// but we want to reject those tokens, so we need to do some additional validations:
 	ok = h.checkClaims(w, r, claims)
 	if !ok {
@@ -416,6 +416,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
+
 	// Add the token to the context:
 	ctx = ContextWithToken(ctx, token)
 	r = r.WithContext(ctx)
@@ -638,7 +639,7 @@ func (h *Handler) parseKey(data keyData) (key interface{}, err error) {
 }
 
 // checkToken checks if the token is valid. If it is valid it returns the parsed token, the
-// claims and true. If it isn't valid it sends an error response to the client and return false.
+// claims and true. If it isn't valid it sends an error response to the client and returns false.
 func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 	bearer string) (token *jwt.Token, claims jwt.MapClaims, ok bool) {
 	// Get the context:
@@ -706,7 +707,7 @@ func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 }
 
 // checkClaims checks that the required claims are present and that they have valid values. If
-// something is wrong it send an error response to the client and returns false.
+// something is wrong it sends an error response to the client and returns false.
 func (h *Handler) checkClaims(w http.ResponseWriter, r *http.Request,
 	claims jwt.MapClaims) bool {
 	value, ok := h.checkStringClaim(w, r, claims, "typ")
@@ -734,7 +735,7 @@ func (h *Handler) checkClaims(w http.ResponseWriter, r *http.Request,
 
 // checkTimeClaim checks that the given claim exists and that the value is a time. If it doesn't
 // exist or it has a wrong type it sends an error response to the client and returns false. If it
-// exist it returns its value and true.
+// exists it returns its value and true.
 func (h *Handler) checkTimeClaim(w http.ResponseWriter, r *http.Request,
 	claims jwt.MapClaims, name string) (result time.Time, ok bool) {
 	value, ok := h.checkClaim(w, r, claims, name)
@@ -756,7 +757,7 @@ func (h *Handler) checkTimeClaim(w http.ResponseWriter, r *http.Request,
 
 // checkStringClaim checks that the given claim exists and that the value is a string. If it doesn't
 // exist or it has a wrong type it sends an error response to the client and returns false. If it
-// exist it returns its value and true.
+// exists it returns its value and true.
 func (h *Handler) checkStringClaim(w http.ResponseWriter, r *http.Request,
 	claims jwt.MapClaims, name string) (result string, ok bool) {
 	value, ok := h.checkClaim(w, r, claims, name)
@@ -776,7 +777,7 @@ func (h *Handler) checkStringClaim(w http.ResponseWriter, r *http.Request,
 }
 
 // checkClaim checks that the given claim exists. If it doesn't exist it sends an error response to
-// the client and returns false. If it exist it returns its value and true.
+// the client and returns false. If it exists it returns its value and true.
 func (h *Handler) checkClaim(w http.ResponseWriter, r *http.Request, claims jwt.MapClaims,
 	name string) (value interface{}, ok bool) {
 	value, ok = claims[name]
@@ -793,7 +794,7 @@ func (h *Handler) checkClaim(w http.ResponseWriter, r *http.Request, claims jwt.
 
 // checkACL checks if the given set of claims match at least one of the items of the access control
 // list. If there is no match it sends an error response to the client and returns false. If there
-// is a match it or the ACL is empty it returns true.
+// is a match or the ACL is empty it returns true.
 func (h *Handler) checkACL(w http.ResponseWriter, r *http.Request, claims jwt.MapClaims) bool {
 	// If there are no ACL items we consider that there are no restrictions, therefore we
 	// return true immediately:
