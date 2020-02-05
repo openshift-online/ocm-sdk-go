@@ -23,12 +23,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 type ClusterOperatorState string
 
 const (
-	//
+	// Operator is working normally.
 	ClusterOperatorStateAvailable ClusterOperatorState = "available"
-	//
+	// Operator is partially working, there is an issue.
 	ClusterOperatorStateDegraded ClusterOperatorState = "degraded"
-	//
+	// Operator is not running or not working.
 	ClusterOperatorStateFailing ClusterOperatorState = "failing"
-	//
+	// Operator is upgrading to newer version, possibly degraded until upgrade completes.
 	ClusterOperatorStateUpgrading ClusterOperatorState = "upgrading"
 )

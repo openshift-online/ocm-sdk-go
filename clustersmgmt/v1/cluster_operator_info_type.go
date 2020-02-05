@@ -47,7 +47,7 @@ func (o *ClusterOperatorInfo) Empty() bool {
 // Condition returns the value of the 'condition' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// Operator status.  Empty string if unknown.
 func (o *ClusterOperatorInfo) Condition() ClusterOperatorState {
 	if o != nil && o.condition != nil {
 		return *o.condition
@@ -58,7 +58,7 @@ func (o *ClusterOperatorInfo) Condition() ClusterOperatorState {
 // GetCondition returns the value of the 'condition' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// Operator status.  Empty string if unknown.
 func (o *ClusterOperatorInfo) GetCondition() (value ClusterOperatorState, ok bool) {
 	ok = o != nil && o.condition != nil
 	if ok {
@@ -70,7 +70,7 @@ func (o *ClusterOperatorInfo) GetCondition() (value ClusterOperatorState, ok boo
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// Name of the operator.
 func (o *ClusterOperatorInfo) Name() string {
 	if o != nil && o.name != nil {
 		return *o.name
@@ -81,7 +81,7 @@ func (o *ClusterOperatorInfo) Name() string {
 // GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// Name of the operator.
 func (o *ClusterOperatorInfo) GetName() (value string, ok bool) {
 	ok = o != nil && o.name != nil
 	if ok {
@@ -93,7 +93,7 @@ func (o *ClusterOperatorInfo) GetName() (value string, ok bool) {
 // Reason returns the value of the 'reason' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// Extra detail on condition, if available.  Empty string if unknown.
 func (o *ClusterOperatorInfo) Reason() string {
 	if o != nil && o.reason != nil {
 		return *o.reason
@@ -104,7 +104,7 @@ func (o *ClusterOperatorInfo) Reason() string {
 // GetReason returns the value of the 'reason' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// Extra detail on condition, if available.  Empty string if unknown.
 func (o *ClusterOperatorInfo) GetReason() (value string, ok bool) {
 	ok = o != nil && o.reason != nil
 	if ok {
@@ -116,7 +116,7 @@ func (o *ClusterOperatorInfo) GetReason() (value string, ok bool) {
 // Time returns the value of the 'time' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// Time when the sample was obtained, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format.
 func (o *ClusterOperatorInfo) Time() time.Time {
 	if o != nil && o.time != nil {
 		return *o.time
@@ -127,7 +127,7 @@ func (o *ClusterOperatorInfo) Time() time.Time {
 // GetTime returns the value of the 'time' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// Time when the sample was obtained, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format.
 func (o *ClusterOperatorInfo) GetTime() (value time.Time, ok bool) {
 	ok = o != nil && o.time != nil
 	if ok {
@@ -139,7 +139,7 @@ func (o *ClusterOperatorInfo) GetTime() (value time.Time, ok bool) {
 // Version returns the value of the 'version' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// Current version of the operator.  Empty string if unknown.
 func (o *ClusterOperatorInfo) Version() string {
 	if o != nil && o.version != nil {
 		return *o.version
@@ -150,7 +150,7 @@ func (o *ClusterOperatorInfo) Version() string {
 // GetVersion returns the value of the 'version' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// Current version of the operator.  Empty string if unknown.
 func (o *ClusterOperatorInfo) GetVersion() (value string, ok bool) {
 	ok = o != nil && o.version != nil
 	if ok {

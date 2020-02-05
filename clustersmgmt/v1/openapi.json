@@ -2348,6 +2348,49 @@
             }
           }
         }
+      },
+      "patch": {
+        "description": "Updates the flavour.\n\nAttributes that can be updated are:\n\n- `nodes.infra`\n- `aws.infra_volume`\n- `aws.infra_instance_type`\n- `gcp.infra_instance_type`\n",
+        "parameters": [
+          {
+            "name": "flavour_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Flavour"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flavour"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/clusters_mgmt/v1/machine_types": {
@@ -3258,19 +3301,24 @@
       "ClusterOperatorInfo": {
         "properties": {
           "condition": {
+            "description": "Operator status.  Empty string if unknown.\n",
             "$ref": "#/components/schemas/ClusterOperatorState"
           },
           "name": {
+            "description": "Name of the operator.\n",
             "type": "string"
           },
           "reason": {
+            "description": "Extra detail on condition, if available.  Empty string if unknown.\n",
             "type": "string"
           },
           "time": {
+            "description": "Time when the sample was obtained, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format.\n",
             "type": "string",
             "format": "date-time"
           },
           "version": {
+            "description": "Current version of the operator.  Empty string if unknown.\n",
             "type": "string"
           }
         }
