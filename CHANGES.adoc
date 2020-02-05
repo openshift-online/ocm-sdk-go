@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.84 Feb 5 2020
+
+- Add method to update flavour.
+
 == 0.1.83 Feb 3 2020
 
 - Check content type of HTTP responses and return an error if it isn't JSON.
