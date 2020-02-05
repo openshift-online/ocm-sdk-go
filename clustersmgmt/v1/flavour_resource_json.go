@@ -38,3 +38,19 @@ func readFlavourGetResponse(response *FlavourGetResponse, reader io.Reader) erro
 func writeFlavourGetResponse(response *FlavourGetServerResponse, w http.ResponseWriter) error {
 	return MarshalFlavour(response.body, w)
 }
+func readFlavourUpdateRequest(request *FlavourUpdateServerRequest, r *http.Request) error {
+	var err error
+	request.body, err = UnmarshalFlavour(r.Body)
+	return err
+}
+func writeFlavourUpdateRequest(request *FlavourUpdateRequest, writer io.Writer) error {
+	return MarshalFlavour(request.body, writer)
+}
+func readFlavourUpdateResponse(response *FlavourUpdateResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalFlavour(reader)
+	return err
+}
+func writeFlavourUpdateResponse(response *FlavourUpdateServerResponse, w http.ResponseWriter) error {
+	return MarshalFlavour(response.body, w)
+}
