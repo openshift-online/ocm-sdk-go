@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.85 Feb 12 2020
+
+- Update to metamodel 0.0.23:
+** Fix missing _OpenAPI_ paths due to incorrect use of `append`.
+
 == 0.1.84 Feb 5 2020
 
 - Add method to update flavour.
