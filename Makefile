@@ -26,7 +26,7 @@ model_version:=v0.0.40
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=v0.0.22
+metamodel_version:=v0.0.23
 metamodel_url:=https://github.com/openshift-online/ocm-api-metamodel.git
 
 .PHONY: examples
@@ -56,12 +56,15 @@ generate: model metamodel
 		clustersmgmt \
 		servicelogs \
 		errors \
-		helpers
-	metamodel/ocm-metamodel-tool \
-		generate \
+		helpers \
+		openapi
+	metamodel/metamodel generate go \
 		--model=model/model \
 		--base=github.com/openshift-online/ocm-sdk-go \
 		--output=.
+	metamodel/metamodel generate openapi \
+		--model=model/model \
+		--output=openapi
 
 .PHONY: model
 model:
