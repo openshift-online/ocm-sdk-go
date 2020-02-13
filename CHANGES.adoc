@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.86 Feb 13 2020
+
+- Update to model 0.0.41:
+** Add `target_namespace` and `install_mode` attributes to `AddOn` type.
+** Add `state` attribute to `AWSInfrastructureAccessRole` type.
+
 == 0.1.85 Feb 12 2020
 
 - Update to metamodel 0.0.23:
