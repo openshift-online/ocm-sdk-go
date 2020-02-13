@@ -257,7 +257,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 				}
 				censoredBody.WriteString(url.QueryEscape(name) + "=") // #nosec G104
 
-				if isRedactField(name) {
+				if redactFields[name] {
 					censoredBody.WriteString(redactionStr) // #nosec G104
 				} else {
 					censoredBody.WriteString(url.QueryEscape(value)) // #nosec G104
