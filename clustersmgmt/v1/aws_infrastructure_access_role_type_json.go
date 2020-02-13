@@ -80,6 +80,14 @@ func writeAWSInfrastructureAccessRole(object *AWSInfrastructureAccessRole, strea
 		stream.WriteString(*object.displayName)
 		count++
 	}
+	if object.state != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("state")
+		stream.WriteString(string(*object.state))
+		count++
+	}
 	stream.WriteObjectEnd()
 }
 
@@ -119,6 +127,10 @@ func readAWSInfrastructureAccessRole(iterator *jsoniter.Iterator) *AWSInfrastruc
 		case "display_name":
 			value := iterator.ReadString()
 			object.displayName = &value
+		case "state":
+			text := iterator.ReadString()
+			value := AWSInfrastructureAccessRoleState(text)
+			object.state = &value
 		default:
 			iterator.ReadAny()
 		}

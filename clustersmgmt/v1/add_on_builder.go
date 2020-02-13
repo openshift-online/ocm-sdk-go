@@ -23,16 +23,18 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on that can be installed in a cluster.
 type AddOnBuilder struct {
-	id           *string
-	href         *string
-	link         bool
-	description  *string
-	enabled      *bool
-	icon         *string
-	label        *string
-	name         *string
-	resourceCost *float64
-	resourceName *string
+	id              *string
+	href            *string
+	link            bool
+	description     *string
+	enabled         *bool
+	icon            *string
+	installMode     *AddOnInstallMode
+	label           *string
+	name            *string
+	resourceCost    *float64
+	resourceName    *string
+	targetNamespace *string
 }
 
 // NewAddOn creates a new builder of 'add_on' objects.
@@ -82,6 +84,14 @@ func (b *AddOnBuilder) Icon(value string) *AddOnBuilder {
 	return b
 }
 
+// InstallMode sets the value of the 'install_mode' attribute to the given value.
+//
+// Representation of an add-on InstallMode field.
+func (b *AddOnBuilder) InstallMode(value AddOnInstallMode) *AddOnBuilder {
+	b.installMode = &value
+	return b
+}
+
 // Label sets the value of the 'label' attribute to the given value.
 //
 //
@@ -114,6 +124,14 @@ func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
 	return b
 }
 
+// TargetNamespace sets the value of the 'target_namespace' attribute to the given value.
+//
+//
+func (b *AddOnBuilder) TargetNamespace(value string) *AddOnBuilder {
+	b.targetNamespace = &value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	if object == nil {
@@ -125,10 +143,12 @@ func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	b.description = object.description
 	b.enabled = object.enabled
 	b.icon = object.icon
+	b.installMode = object.installMode
 	b.label = object.label
 	b.name = object.name
 	b.resourceCost = object.resourceCost
 	b.resourceName = object.resourceName
+	b.targetNamespace = object.targetNamespace
 	return b
 }
 
@@ -141,9 +161,11 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 	object.description = b.description
 	object.enabled = b.enabled
 	object.icon = b.icon
+	object.installMode = b.installMode
 	object.label = b.label
 	object.name = b.name
 	object.resourceCost = b.resourceCost
 	object.resourceName = b.resourceName
+	object.targetNamespace = b.targetNamespace
 	return
 }

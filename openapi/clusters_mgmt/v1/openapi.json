@@ -2754,6 +2754,10 @@
           "display_name": {
             "description": "Human friendly identifier of the role, for example `Read only`.\n",
             "type": "string"
+          },
+          "state": {
+            "description": "State of the role.\n",
+            "$ref": "#/components/schemas/AWSInfrastructureAccessRoleState"
           }
         }
       },
@@ -2777,7 +2781,7 @@
             "type": "string"
           },
           "role": {
-            "description": "Link to AWS infrastructure access role. \n",
+            "description": "Link to AWS infrastructure access role.\nGrant must use a 'valid' role. \n",
             "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
           },
           "state": {
@@ -2803,6 +2807,15 @@
           "pending",
           "ready",
           "removed"
+        ]
+      },
+      "AWSInfrastructureAccessRoleState": {
+        "description": "State of an AWS infrastructure access role.\n",
+        "type": "string",
+        "enum": [
+          "invalid",
+          "removed",
+          "valid"
         ]
       },
       "AWSVolume": {
@@ -2988,6 +3001,10 @@
             "description": "Base64-encoded icon representing an add-on. The icon should be in PNG format.\n",
             "type": "string"
           },
+          "install_mode": {
+            "description": "The mode in which the addon is deployed.\n",
+            "$ref": "#/components/schemas/AddOnInstallMode"
+          },
           "label": {
             "description": "Label used to attach to a cluster deployment when add-on is installed.\n",
             "type": "string"
@@ -3004,8 +3021,20 @@
           "resource_name": {
             "description": "Used to determine from where to reserve quota for this add-on.\n",
             "type": "string"
+          },
+          "target_namespace": {
+            "description": "The namespace in which the addon CRD exists.\n",
+            "type": "string"
           }
         }
+      },
+      "AddOnInstallMode": {
+        "description": "Representation of an add-on InstallMode field.\n",
+        "type": "string",
+        "enum": [
+          "all_namespaces",
+          "single_namespace"
+        ]
       },
       "AddOnInstallation": {
         "description": "Representation of an add-on installation in a cluster.\n",

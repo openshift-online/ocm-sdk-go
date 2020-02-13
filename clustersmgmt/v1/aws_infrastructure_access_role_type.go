@@ -40,6 +40,7 @@ type AWSInfrastructureAccessRole struct {
 	link        bool
 	description *string
 	displayName *string
+	state       *AWSInfrastructureAccessRoleState
 }
 
 // Kind returns the name of the type of the object.
@@ -99,6 +100,7 @@ func (o *AWSInfrastructureAccessRole) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.description == nil &&
 		o.displayName == nil &&
+		o.state == nil &&
 		true)
 }
 
@@ -144,6 +146,29 @@ func (o *AWSInfrastructureAccessRole) GetDisplayName() (value string, ok bool) {
 	ok = o != nil && o.displayName != nil
 	if ok {
 		value = *o.displayName
+	}
+	return
+}
+
+// State returns the value of the 'state' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// State of the role.
+func (o *AWSInfrastructureAccessRole) State() AWSInfrastructureAccessRoleState {
+	if o != nil && o.state != nil {
+		return *o.state
+	}
+	return AWSInfrastructureAccessRoleState("")
+}
+
+// GetState returns the value of the 'state' attribute and
+// a flag indicating if the attribute has a value.
+//
+// State of the role.
+func (o *AWSInfrastructureAccessRole) GetState() (value AWSInfrastructureAccessRoleState, ok bool) {
+	ok = o != nil && o.state != nil
+	if ok {
+		value = *o.state
 	}
 	return
 }
