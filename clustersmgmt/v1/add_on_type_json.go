@@ -88,6 +88,14 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		stream.WriteString(*object.icon)
 		count++
 	}
+	if object.installMode != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("install_mode")
+		stream.WriteString(string(*object.installMode))
+		count++
+	}
 	if object.label != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -118,6 +126,14 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("resource_name")
 		stream.WriteString(*object.resourceName)
+		count++
+	}
+	if object.targetNamespace != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("target_namespace")
+		stream.WriteString(*object.targetNamespace)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -162,6 +178,10 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 		case "icon":
 			value := iterator.ReadString()
 			object.icon = &value
+		case "install_mode":
+			text := iterator.ReadString()
+			value := AddOnInstallMode(text)
+			object.installMode = &value
 		case "label":
 			value := iterator.ReadString()
 			object.label = &value
@@ -174,6 +194,9 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 		case "resource_name":
 			value := iterator.ReadString()
 			object.resourceName = &value
+		case "target_namespace":
+			value := iterator.ReadString()
+			object.targetNamespace = &value
 		default:
 			iterator.ReadAny()
 		}

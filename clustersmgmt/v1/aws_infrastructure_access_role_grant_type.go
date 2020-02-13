@@ -134,6 +134,7 @@ func (o *AWSInfrastructureAccessRoleGrant) GetConsoleURL() (value string, ok boo
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Link to AWS infrastructure access role.
+// Grant must use a 'valid' role.
 func (o *AWSInfrastructureAccessRoleGrant) Role() *AWSInfrastructureAccessRole {
 	if o == nil {
 		return nil
@@ -145,6 +146,7 @@ func (o *AWSInfrastructureAccessRoleGrant) Role() *AWSInfrastructureAccessRole {
 // a flag indicating if the attribute has a value.
 //
 // Link to AWS infrastructure access role.
+// Grant must use a 'valid' role.
 func (o *AWSInfrastructureAccessRoleGrant) GetRole() (value *AWSInfrastructureAccessRole, ok bool) {
 	ok = o != nil && o.role != nil
 	if ok {

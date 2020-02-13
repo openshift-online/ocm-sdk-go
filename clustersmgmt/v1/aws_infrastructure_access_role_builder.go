@@ -28,6 +28,7 @@ type AWSInfrastructureAccessRoleBuilder struct {
 	link        bool
 	description *string
 	displayName *string
+	state       *AWSInfrastructureAccessRoleState
 }
 
 // NewAWSInfrastructureAccessRole creates a new builder of 'AWS_infrastructure_access_role' objects.
@@ -69,6 +70,14 @@ func (b *AWSInfrastructureAccessRoleBuilder) DisplayName(value string) *AWSInfra
 	return b
 }
 
+// State sets the value of the 'state' attribute to the given value.
+//
+// State of an AWS infrastructure access role.
+func (b *AWSInfrastructureAccessRoleBuilder) State(value AWSInfrastructureAccessRoleState) *AWSInfrastructureAccessRoleBuilder {
+	b.state = &value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *AWSInfrastructureAccessRoleBuilder) Copy(object *AWSInfrastructureAccessRole) *AWSInfrastructureAccessRoleBuilder {
 	if object == nil {
@@ -79,6 +88,7 @@ func (b *AWSInfrastructureAccessRoleBuilder) Copy(object *AWSInfrastructureAcces
 	b.link = object.link
 	b.description = object.description
 	b.displayName = object.displayName
+	b.state = object.state
 	return b
 }
 
@@ -90,5 +100,6 @@ func (b *AWSInfrastructureAccessRoleBuilder) Build() (object *AWSInfrastructureA
 	object.link = b.link
 	object.description = b.description
 	object.displayName = b.displayName
+	object.state = b.state
 	return
 }
