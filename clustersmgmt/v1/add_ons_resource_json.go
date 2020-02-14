@@ -104,6 +104,8 @@ func readAddOnsListResponse(response *AddOnsListResponse, reader io.Reader) erro
 	return iterator.Error
 }
 func writeAddOnsListResponse(response *AddOnsListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")

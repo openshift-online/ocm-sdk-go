@@ -104,6 +104,8 @@ func readAccountsListResponse(response *AccountsListResponse, reader io.Reader) 
 	return iterator.Error
 }
 func writeAccountsListResponse(response *AccountsListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")

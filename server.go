@@ -49,6 +49,13 @@ type Server interface {
 // Dispatch navigates the servers tree till it finds one that matches the given set
 // of path segments, and then invokes it.
 func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []string) {
+	if len(segments) > 0 && segments[0] == "api" {
+		dispatch(w, r, server, segments[1:])
+		return
+	}
+	errors.SendNotFound(w, r)
+}
+func dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []string) {
 	if len(segments) == 0 {
 		// TODO: This should send the metadata.
 		errors.SendMethodNotAllowed(w, r)

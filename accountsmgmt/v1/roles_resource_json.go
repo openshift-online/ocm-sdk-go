@@ -100,6 +100,8 @@ func readRolesListResponse(response *RolesListResponse, reader io.Reader) error 
 	return iterator.Error
 }
 func writeRolesListResponse(response *RolesListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
