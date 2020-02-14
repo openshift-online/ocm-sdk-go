@@ -3,6 +3,17 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.87 Feb 14 2020
+
+- Preserver order of attributes of JSON documents sent to the log when debug
+  mode is enabled.
+- Update to metamodel 0.0.24:
+** Add `Content-Type` to responses sent by the generated server code.
+** Don't require developer to explicitly remove the `/api` when using the
+   server code.
+** Remove redundant quotes from error responses sent by the generated
+   server code.
+
 == 0.1.86 Feb 13 2020
 
 - Update to model 0.0.41:
