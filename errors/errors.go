@@ -299,7 +299,7 @@ func SendPanic(w http.ResponseWriter, r *http.Request) {
 // SendNotFound sends a generic 404 error.
 func SendNotFound(w http.ResponseWriter, r *http.Request) {
 	reason := fmt.Sprintf(
-		"Can't find resource for path '%s''",
+		"Can't find resource for path '%s'",
 		r.URL.Path,
 	)
 	body, err := NewError().
@@ -316,7 +316,7 @@ func SendNotFound(w http.ResponseWriter, r *http.Request) {
 // SendMethodNotAllowed sends a generic 405 error.
 func SendMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 	reason := fmt.Sprintf(
-		"Method '%s' isn't supported for path '%s''",
+		"Method '%s' isn't supported for path '%s'",
 		r.Method, r.URL.Path,
 	)
 	body, err := NewError().

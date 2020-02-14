@@ -104,6 +104,8 @@ func readClustersListResponse(response *ClustersListResponse, reader io.Reader) 
 	return iterator.Error
 }
 func writeClustersListResponse(response *ClustersListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")

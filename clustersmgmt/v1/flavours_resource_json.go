@@ -104,6 +104,8 @@ func readFlavoursListResponse(response *FlavoursListResponse, reader io.Reader) 
 	return iterator.Error
 }
 func writeFlavoursListResponse(response *FlavoursListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")

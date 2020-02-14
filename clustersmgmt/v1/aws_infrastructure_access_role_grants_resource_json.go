@@ -104,6 +104,8 @@ func readAWSInfrastructureAccessRoleGrantsListResponse(response *AWSInfrastructu
 	return iterator.Error
 }
 func writeAWSInfrastructureAccessRoleGrantsListResponse(response *AWSInfrastructureAccessRoleGrantsListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")

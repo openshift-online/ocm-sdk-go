@@ -88,6 +88,8 @@ func readVersionsListResponse(response *VersionsListResponse, reader io.Reader) 
 	return iterator.Error
 }
 func writeVersionsListResponse(response *VersionsListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")

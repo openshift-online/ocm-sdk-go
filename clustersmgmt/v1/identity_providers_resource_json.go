@@ -96,6 +96,8 @@ func readIdentityProvidersListResponse(response *IdentityProvidersListResponse, 
 	return iterator.Error
 }
 func writeIdentityProvidersListResponse(response *IdentityProvidersListServerResponse, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
