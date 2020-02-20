@@ -768,7 +768,7 @@ func (h *Handler) checkACL(w http.ResponseWriter, r *http.Request, claims jwt.Ma
 }
 
 // sendError sends an error response to the client with the given status code and with a message
-// compossed using the given format and arguments as the fmt.Sprintf function does.
+// composed using the given format and arguments as the fmt.Sprintf function does.
 func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format string, args ...interface{}) {
 	// Get the context:
 	ctx := r.Context()
