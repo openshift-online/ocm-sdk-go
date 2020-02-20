@@ -31,7 +31,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/openshift-online/ocm-sdk-go"
+	sdk "github.com/openshift-online/ocm-sdk-go"
 )
 
 func TestAuthentication(t *testing.T) {

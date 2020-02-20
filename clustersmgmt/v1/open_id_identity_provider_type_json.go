@@ -87,7 +87,7 @@ func writeOpenIDIdentityProvider(object *OpenIDIdentityProvider, stream *jsonite
 		stream.WriteObjectStart()
 		keys := make([]string, len(object.extraAuthorizeParameters))
 		i := 0
-		for key, _ := range object.extraAuthorizeParameters {
+		for key := range object.extraAuthorizeParameters {
 			keys[i] = key
 			i++
 		}

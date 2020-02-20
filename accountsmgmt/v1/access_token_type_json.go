@@ -47,7 +47,7 @@ func writeAccessToken(object *AccessToken, stream *jsoniter.Stream) {
 		stream.WriteObjectStart()
 		keys := make([]string, len(object.auths))
 		i := 0
-		for key, _ := range object.auths {
+		for key := range object.auths {
 			keys[i] = key
 			i++
 		}

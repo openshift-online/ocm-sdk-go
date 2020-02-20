@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/ocm-sdk-go"
+	sdk "github.com/openshift-online/ocm-sdk-go"
 )
 
 func main() {
@@ -66,7 +66,7 @@ func main() {
 	}
 
 	// Print the results:
-	for _, operator := range response.Body().Operators(){
+	for _, operator := range response.Body().Operators() {
 		fmt.Printf("Name: %v\n", operator.Name())
 		fmt.Printf("Reason: %s\n", operator.Reason())
 		fmt.Printf("Time: %f\n", operator.Time())
