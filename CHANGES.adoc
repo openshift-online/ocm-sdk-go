@@ -3,6 +3,60 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.0.88 Feb 20 2020
+
+- Remove _service_ and _version_ parameters from the builder of the
+authentication handler. This is a backwards compatibility breaking change
+that requires changes in the code that creates the authentication handler. For
+example, if the current code is like this:
++
+[source,go]
+----
+handler, err := authentication.NewHandler().
+        Logger(logger).
+        Service("clusters_mgmt").
+        Version("v1").
+        Public("...").
+        KeysFile("...").
+        KeysURL("...").
+        ACLFile("...").
+        Next(next).
+        Build()
+if err != nil {
+        ...
+}
+----
++
+It will need to be changed to this:
++
+[source,go]
+----
+handler, err := authentication.NewHandler().
+        Logger(logger).
+        Public("...").
+        KeysFile("...").
+        KeysURL("...").
+        ACLFile("...").
+        Next(next).
+        Build()
+if err != nil {
+        ...
+}
+----
++
+Note that the only change required is removing the calls to the `Service` and
+`Version` methods of the builder. The handler will now extract those values
+from the request URL.
++
+This is specially important for programs that use the same authentication
+handler for multiple services.
+
+- Update to metamodel 0.0.25:
+** Run the `gofmt` command only once for all generated files instead of running
+   it once per each generated file.
+** Avoid generating code with constructs that would then be simplified by the
+   `-s` flag of the `gofmt` command.
+
 == 0.1.87 Feb 14 2020
 
 - Preserver order of attributes of JSON documents sent to the log when debug
