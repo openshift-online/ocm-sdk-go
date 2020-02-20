@@ -46,8 +46,6 @@ import (
 // create objects of this type directly, use the NewHandler function instead.
 type HandlerBuilder struct {
 	logger       sdk.Logger
-	service      string
-	version      string
 	publicPaths  []string
 	keysFiles    []string
 	keysURLs     []string
@@ -60,20 +58,16 @@ type HandlerBuilder struct {
 // Handler is an HTTP handler that checks authentication using the JWT tokens from the authorization
 // header.
 type Handler struct {
-	logger          sdk.Logger
-	service         string
-	version         string
-	errorHrefPrefix string
-	errorCodePrefix string
-	publicPaths     []*regexp.Regexp
-	tokenParser     *jwt.Parser
-	keysFiles       []string
-	keysURLs        []string
-	keysClient      *http.Client
-	keys            *sync.Map
-	lastKeyReload   time.Time
-	aclItems        map[string]*regexp.Regexp
-	next            http.Handler
+	logger        sdk.Logger
+	publicPaths   []*regexp.Regexp
+	tokenParser   *jwt.Parser
+	keysFiles     []string
+	keysURLs      []string
+	keysClient    *http.Client
+	keys          *sync.Map
+	lastKeyReload time.Time
+	aclItems      map[string]*regexp.Regexp
+	next          http.Handler
 }
 
 // NewHandler creates a builder that can then be configured and used to create authentication
@@ -86,42 +80,6 @@ func NewHandler() *HandlerBuilder {
 // mandatory.
 func (b *HandlerBuilder) Logger(value sdk.Logger) *HandlerBuilder {
 	b.logger = value
-	return b
-}
-
-// Service sets the identifier of the service that will be used to generate codes of error
-// responses. For example, if the value is `clusters_mgmt` then the body of the unauthorized
-// response will look like this:
-//
-// {
-//     "kind": "Error",
-//     "id": "401",
-//     "href": "/api/clusters_mgmt/v1/errors/401",
-//     "code": "CLUSTERS-MGMT-401",
-//     "reason": "Authentication failed"
-// }
-//
-// This is mandatory.
-func (b *HandlerBuilder) Service(value string) *HandlerBuilder {
-	b.service = value
-	return b
-}
-
-// Version sets the identifier of the version that will be used to generate codes of error
-// responses. For example, if the value is `v1` then the body of the unauthorized response will look
-// like this:
-//
-// {
-//     "kind": "Error",
-//     "id": "401",
-//     "href": "/api/clusters_mgmt/v1/errors/401",
-//     "code": "CLUSTERS-MGMT-401",
-//     "reason": "Authentication failed"
-// }
-//
-// This is mandatory.
-func (b *HandlerBuilder) Version(value string) *HandlerBuilder {
-	b.version = value
 	return b
 }
 
@@ -209,14 +167,6 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 		err = fmt.Errorf("logger is mandatory")
 		return
 	}
-	if b.service == "" {
-		err = fmt.Errorf("service is mandatory")
-		return
-	}
-	if b.version == "" {
-		err = fmt.Errorf("version is mandatory")
-		return
-	}
 	if b.next == nil {
 		err = fmt.Errorf("next handler is mandatory")
 		return
@@ -299,25 +249,17 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 		}
 	}
 
-	// Calculate the prefixes used to generate error messages:
-	errorHrefPrefix := fmt.Sprintf("/api/%s/%s/errors", b.service, b.version)
-	errorCodePrefix := strings.ToUpper(strings.ReplaceAll(b.service, "_", "-"))
-
 	// Create and populate the object:
 	handler = &Handler{
-		logger:          b.logger,
-		service:         b.service,
-		version:         b.version,
-		errorHrefPrefix: errorHrefPrefix,
-		errorCodePrefix: errorCodePrefix,
-		publicPaths:     public,
-		tokenParser:     tokenParser,
-		keysFiles:       keysFiles,
-		keysURLs:        keysURLs,
-		keysClient:      keysClient,
-		keys:            keys,
-		aclItems:        aclItems,
-		next:            b.next,
+		logger:      b.logger,
+		publicPaths: public,
+		tokenParser: tokenParser,
+		keysFiles:   keysFiles,
+		keysURLs:    keysURLs,
+		keysClient:  keysClient,
+		keys:        keys,
+		aclItems:    aclItems,
+		next:        b.next,
 	}
 
 	return
@@ -828,26 +770,39 @@ func (h *Handler) checkACL(w http.ResponseWriter, r *http.Request, claims jwt.Ma
 // sendError sends an error response to the client with the given status code and with a message
 // compossed using the given format and arguments as the fmt.Sprintf function does.
 func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format string, args ...interface{}) {
-	// Prepare the headers:
-	w.Header().Set(
-		"WWW-Authenticate",
-		fmt.Sprintf("Bearer realm=\"%s/%s\"", h.service, h.version),
-	)
+	// Get the context:
+	ctx := r.Context()
 
 	// Prepare the body:
-	response, err := errors.NewError().
-		ID(fmt.Sprintf("%d", http.StatusUnauthorized)).
-		HREF(fmt.Sprintf("%s/%d", h.errorHrefPrefix, http.StatusUnauthorized)).
-		Code(fmt.Sprintf("%s-%d", h.errorCodePrefix, http.StatusUnauthorized)).
-		Reason(fmt.Sprintf(format, args...)).
-		Build()
+	segments := strings.Split(r.URL.Path, "/")
+	realm := ""
+	builder := errors.NewError()
+	builder.ID(fmt.Sprintf("%d", http.StatusUnauthorized))
+	if len(segments) >= 4 {
+		prefix := segments[1]
+		service := segments[2]
+		version := segments[3]
+		builder.HREF(fmt.Sprintf(
+			"/%s/%s/%s/errors/%d",
+			prefix, service, version, http.StatusUnauthorized,
+		))
+		builder.Code(fmt.Sprintf(
+			"%s-%d",
+			strings.ToUpper(strings.ReplaceAll(service, "_", "-")),
+			http.StatusUnauthorized,
+		))
+		realm = fmt.Sprintf("%s/%s", service, version)
+	}
+	builder.Reason(fmt.Sprintf(format, args...))
+	body, err := builder.Build()
 	if err != nil {
-		h.logger.Error(r.Context(), "Can't build error response: %v", err)
+		h.logger.Error(ctx, "Can't build error response: %v", err)
 		errors.SendPanic(w, r)
 	}
 
 	// Send the response:
-	errors.SendError(w, r, response)
+	w.Header().Set("WWW-Authenticate", fmt.Sprintf("Bearer realm=\"%s\"", realm))
+	errors.SendError(w, r, body)
 }
 
 // Regular expression used to extract the bearer token from the authorization header:
