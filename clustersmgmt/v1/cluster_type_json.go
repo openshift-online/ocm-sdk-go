@@ -270,7 +270,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteObjectStart()
 		keys := make([]string, len(object.properties))
 		i := 0
-		for key, _ := range object.properties {
+		for key := range object.properties {
 			keys[i] = key
 			i++
 		}

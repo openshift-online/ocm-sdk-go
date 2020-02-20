@@ -27,7 +27,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/openshift-online/ocm-sdk-go"
+	sdk "github.com/openshift-online/ocm-sdk-go"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 )
 

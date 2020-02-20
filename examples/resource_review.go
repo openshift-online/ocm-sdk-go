@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/ocm-sdk-go"
+	sdk "github.com/openshift-online/ocm-sdk-go"
 	azv1 "github.com/openshift-online/ocm-sdk-go/authorizations/v1"
 )
 

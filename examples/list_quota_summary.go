@@ -24,7 +24,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/openshift-online/ocm-sdk-go"
+	sdk "github.com/openshift-online/ocm-sdk-go"
 	amv1 "github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1"
 )
 

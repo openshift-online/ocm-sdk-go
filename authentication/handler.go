@@ -38,7 +38,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ghodss/yaml"
 
-	"github.com/openshift-online/ocm-sdk-go"
+	sdk "github.com/openshift-online/ocm-sdk-go"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 

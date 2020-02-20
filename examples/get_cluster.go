@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/openshift-online/ocm-sdk-go"
+	sdk "github.com/openshift-online/ocm-sdk-go"
 )
 
 func main() {

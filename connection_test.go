@@ -19,9 +19,10 @@ limitations under the License.
 package sdk
 
 import (
-	"github.com/onsi/gomega/gbytes"
 	"net/http"
 	"time"
+
+	"github.com/onsi/gomega/gbytes"
 
 	. "github.com/onsi/ginkgo" // nolint
 	. "github.com/onsi/gomega" // nolint
