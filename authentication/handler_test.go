@@ -41,49 +41,11 @@ var _ = Describe("Handler", func() {
 
 		// Try to create the handler:
 		_, err := NewHandler().
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(err.Error()).To(ContainSubstring("logger"))
-		Expect(err.Error()).To(ContainSubstring("mandatory"))
-	})
-
-	It("Can't be built without a service identifier", func() {
-		// Prepare the next handler:
-		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-		})
-
-		// Try to create the handler:
-		_, err := NewHandler().
-			Logger(logger).
-			Version("v1").
-			KeysFile(keysFile).
-			Next(next).
-			Build()
-		Expect(err).To(HaveOccurred())
-		Expect(err.Error()).To(ContainSubstring("service"))
-		Expect(err.Error()).To(ContainSubstring("mandatory"))
-	})
-
-	It("Can't be built without a version identifier", func() {
-		// Prepare the next handler:
-		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-		})
-
-		// Try to create the handler:
-		_, err := NewHandler().
-			Logger(logger).
-			Service("clusters_mgmt").
-			KeysFile(keysFile).
-			Next(next).
-			Build()
-		Expect(err).To(HaveOccurred())
-		Expect(err.Error()).To(ContainSubstring("version"))
 		Expect(err.Error()).To(ContainSubstring("mandatory"))
 	})
 
@@ -96,8 +58,6 @@ var _ = Describe("Handler", func() {
 		// Try to create the handler:
 		_, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			Next(next).
 			Build()
 		Expect(err).To(HaveOccurred())
@@ -112,8 +72,6 @@ var _ = Describe("Handler", func() {
 		// Try to create the handler:
 		_, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile("/does/not/exist").
 			Next(next).
 			Build()
@@ -130,8 +88,6 @@ var _ = Describe("Handler", func() {
 		// Try to create the handler:
 		_, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysURL("junk").
 			Next(next).
 			Build()
@@ -148,8 +104,6 @@ var _ = Describe("Handler", func() {
 		// Try to create the handler:
 		_, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysURL("http://api.openshift.com/.well-known/jwks.json").
 			Next(next).
 			Build()
@@ -165,8 +119,6 @@ var _ = Describe("Handler", func() {
 		// Try to create the handler:
 		_, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
@@ -182,8 +134,6 @@ var _ = Describe("Handler", func() {
 		// Try to create the handler:
 		_, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysURL("https://api.openshift.com/.well-known/jwks.json").
 			Next(next).
 			Build()
@@ -193,8 +143,6 @@ var _ = Describe("Handler", func() {
 	It("Can't be built without a next handler", func() {
 		_, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Build()
 		Expect(err).To(HaveOccurred())
@@ -212,15 +160,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
 
@@ -248,15 +194,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with a bad type and a good token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bad "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -282,15 +226,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with a bad type and a good token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer bad")
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -321,15 +263,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with the expired token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -360,15 +300,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with the bad token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -399,15 +337,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with the bad token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -438,15 +374,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with the bad token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -477,15 +411,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with the bad token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -516,15 +448,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with the bad token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -559,15 +489,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with the bad token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -603,15 +531,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request with a bad token:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -639,15 +565,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -671,15 +595,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -700,16 +622,14 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
-			Public("^/public(/.*)?$").
+			Public("^/api/clusters_mgmt/v1/public(/.*)?$").
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request without the authorization header:
-		request := httptest.NewRequest(http.MethodGet, "/public", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/public", nil)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
 
@@ -729,16 +649,14 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
-			Public("^/public(/.*)?$").
+			Public("^/api/clusters_mgmt/v1/public(/.*)?$").
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/public", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/public", nil)
 		request.Header.Set("Authorization", "Bad junk")
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -761,16 +679,14 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
-			Public("^/public(/.*)?$").
+			Public("^/api/clusters_mgmt/v1/public(/.*)?$").
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/public", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/public", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -791,24 +707,22 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
-			Public("^/public(/.*)?$").
-			Public("^/open(/.*)?$").
+			Public("^/api/clusters_mgmt/v1/public(/.*)?$").
+			Public("^/api/clusters_mgmt/v1/open(/.*)?$").
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send a request for one of the public URLs:
-		request := httptest.NewRequest(http.MethodGet, "/public", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/public", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
 		Expect(recorder.Code).To(Equal(http.StatusOK))
 
 		// Send a request for another of the public URLs:
-		request = httptest.NewRequest(http.MethodGet, "/open", nil)
+		request = httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/open", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder = httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -830,16 +744,14 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
-			Public("^/public(/.*)?$").
+			Public("^/api/clusters_mgmt/v1/public(/.*)?$").
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/public", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/public", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -868,15 +780,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysURL(server.URL()).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -904,8 +814,6 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysURL(server.URL()).
 			KeysInsecure(true).
 			Next(next).
@@ -913,7 +821,7 @@ var _ = Describe("Handler", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -939,15 +847,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send a request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -984,8 +890,6 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			ACLFile(acl.Name()).
@@ -993,7 +897,7 @@ var _ = Describe("Handler", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -1033,8 +937,6 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			ACLFile(acl.Name()).
@@ -1042,7 +944,7 @@ var _ = Describe("Handler", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -1082,8 +984,6 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			ACLFile(acl.Name()).
@@ -1091,7 +991,7 @@ var _ = Describe("Handler", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -1144,8 +1044,6 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			ACLFile(firstACL.Name()).
@@ -1154,7 +1052,7 @@ var _ = Describe("Handler", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -1195,8 +1093,6 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			ACLFile(acl.Name()).
@@ -1204,7 +1100,7 @@ var _ = Describe("Handler", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -1230,15 +1126,13 @@ var _ = Describe("Handler", func() {
 		// Prepare the handler:
 		handler, err := NewHandler().
 			Logger(logger).
-			Service("clusters_mgmt").
-			Version("v1").
 			KeysFile(keysFile).
 			Next(next).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		request := httptest.NewRequest(http.MethodGet, "/private", nil)
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer junk")
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
@@ -1247,5 +1141,83 @@ var _ = Describe("Handler", func() {
 		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
 		header := recorder.Header().Get("WWW-Authenticate")
 		Expect(header).To(Equal("Bearer realm=\"clusters_mgmt/v1\""))
+	})
+
+	It("Supports multiple services and versions", func() {
+		// Prepare the next handler, which should never be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Prepare the variables that we will use for the checks:
+		var (
+			request  *http.Request
+			recorder *httptest.ResponseRecorder
+		)
+
+		// Check a request for 'clusters_mgmt/v1':
+		request = httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		recorder = httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Bearer token is malformed"
+		}`))
+
+		// Check a request for 'clusters_mgmt/v2':
+		request = httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v2/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		recorder = httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v2/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Bearer token is malformed"
+		}`))
+
+		// Check a request for 'accounts_mgmt/v1':
+		request = httptest.NewRequest(http.MethodGet, "/api/accounts_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		recorder = httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/accounts_mgmt/v1/errors/401",
+			"code": "ACCOUNTS-MGMT-401",
+			"reason": "Bearer token is malformed"
+		}`))
+
+		// Check a request for 'accounts_mgmt/v2':
+		request = httptest.NewRequest(http.MethodGet, "/api/accounts_mgmt/v2/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		recorder = httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/accounts_mgmt/v2/errors/401",
+			"code": "ACCOUNTS-MGMT-401",
+			"reason": "Bearer token is malformed"
+		}`))
 	})
 })
