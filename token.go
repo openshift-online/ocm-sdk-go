@@ -31,8 +31,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cenkalti/backoff/v4"
 	"github.com/dgrijalva/jwt-go"
-
 	"github.com/openshift-online/ocm-sdk-go/internal"
 )
 
@@ -49,7 +49,23 @@ func (c *Connection) Tokens() (access, refresh string, err error) {
 // TokensContext returns the access and refresh tokens that is currently in use by the connection.
 // If it is necessary to request a new token because it wasn't requested yet, or because it is
 // expired, this method will do it and will return an error if it fails.
+// The function will retry the operation in an exponential-backoff method.
 func (c *Connection) TokensContext(ctx context.Context) (access, refresh string, err error) {
+	operation := func() error {
+		c.logger.Debug(ctx, "trying to get tokens")
+		access, refresh, err = c.tokensContext(ctx)
+		if err != nil {
+			c.logger.Debug(ctx, "failed to get tokens, will attempt to retry")
+		}
+		return err
+	}
+	backoffMethod := backoff.NewExponentialBackOff()
+	backoffMethod.MaxElapsedTime = time.Second * 15
+	err = backoff.Retry(operation, backoffMethod)
+	return access, refresh, err
+}
+
+func (c *Connection) tokensContext(ctx context.Context) (access, refresh string, err error) {
 	// We need to make sure that this method isn't execute concurrently, as we will be updating
 	// multiple attributes of the connection:
 	c.tokenMutex.Lock()
@@ -311,7 +327,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 		return
 	}
 	if response.StatusCode != http.StatusOK {
-		err = fmt.Errorf("token response status is: %s", response.Status)
+		err = fmt.Errorf("token response status code is '%d'", response.StatusCode)
 		return
 	}
 	if result.TokenType != nil && *result.TokenType != "bearer" {
