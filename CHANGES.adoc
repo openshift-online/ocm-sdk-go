@@ -3,7 +3,37 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.0.88 Feb 20 2020
+== 0.1.89 Feb 26 2020
+
+- Update to metamodel 0.0.26.
++
+The more relevant change in the new version of the metamodel is the new
+`operation_id` attribute added to error objects and error messages. An error
+object like this:
++
+[source,json]
+----
+{
+  "kind": "Error",
+  "id": "401",
+  "href": "/api/clusters_mgmt/v1/errors/401",
+  "code": "CLUSTERS-MGMT-401",
+  "reason": "My reason",
+  "operation_id": "456"
+}
+----
++
+Will result in the following error string (in one single line):
++
+....
+identifier is '401', code is 'CLUSTERS-MGMT-401' and
+operation identifier is '456': My reason
+....
++
+This addresses issue https://github.com/openshift-online/ocm-sdk-go/issues/150[150].
+
+
+== 0.1.88 Feb 20 2020
 
 - Remove _service_ and _version_ parameters from the builder of the
 authentication handler. This is a backwards compatibility breaking change
