@@ -24,6 +24,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/golang/glog"
 	jsoniter "github.com/json-iterator/go"
@@ -38,57 +39,67 @@ const ErrorNilKind = "ErrorNil"
 
 // ErrorBuilder is a builder for the error type.
 type ErrorBuilder struct {
-	id     *string
-	href   *string
-	code   *string
-	reason *string
+	id          *string
+	href        *string
+	code        *string
+	reason      *string
+	operationID *string
 }
 
 // Error represents errors.
 type Error struct {
-	id     *string
-	href   *string
-	code   *string
-	reason *string
+	id          *string
+	href        *string
+	code        *string
+	reason      *string
+	operationID *string
 }
 
-// NewError returns a new ErrorBuilder
+// NewError creates a new builder that can then be used to create error objects.
 func NewError() *ErrorBuilder {
-	return new(ErrorBuilder)
+	return &ErrorBuilder{}
 }
 
-// ID sets the id field for the ErrorBuilder
-func (e *ErrorBuilder) ID(id string) *ErrorBuilder {
-	e.id = &id
-	return e
+// ID sets the identifier of the error.
+func (b *ErrorBuilder) ID(value string) *ErrorBuilder {
+	b.id = &value
+	return b
 }
 
-// HREF sets the href field for the ErrorBuilder
-func (e *ErrorBuilder) HREF(href string) *ErrorBuilder {
-	e.href = &href
-	return e
+// HREF sets the link of the error.
+func (b *ErrorBuilder) HREF(value string) *ErrorBuilder {
+	b.href = &value
+	return b
 }
 
-// Code sets the cpde field for the ErrorBuilder
-func (e *ErrorBuilder) Code(code string) *ErrorBuilder {
-	e.code = &code
-	return e
+// Code sets the code of the error.
+func (b *ErrorBuilder) Code(value string) *ErrorBuilder {
+	b.code = &value
+	return b
 }
 
-// Reason sets the reason field for the ErrorBuilder
-func (e *ErrorBuilder) Reason(reason string) *ErrorBuilder {
-	e.reason = &reason
-	return e
+// Reason sets the reason of the error.
+func (b *ErrorBuilder) Reason(value string) *ErrorBuilder {
+	b.reason = &value
+	return b
 }
 
-// Build builds a new error type or returns an error.
-func (e *ErrorBuilder) Build() (*Error, error) {
-	err := new(Error)
-	err.reason = e.reason
-	err.code = e.code
-	err.id = e.id
-	err.href = e.href
-	return err, nil
+// OperationID sets the identifier of the operation that caused the error.
+func (b *ErrorBuilder) OperationID(value string) *ErrorBuilder {
+	b.operationID = &value
+	return b
+}
+
+// Build uses the information stored in the builder to create a new error object.
+func (b *ErrorBuilder) Build() (result *Error, err error) {
+	result = &Error{
+		id:          b.id,
+		href:        b.href,
+		code:        b.code,
+		reason:      b.reason,
+		operationID: b.operationID,
+	}
+	return
 }
 
 // Kind returns the name of the type of the error.
@@ -171,22 +182,62 @@ func (e *Error) GetReason() (value string, ok bool) {
 	return
 }
 
-// Error is the implementation of the error interface.
-func (e *Error) Error() string {
-	if e.reason != nil {
-		return *e.reason
+// OperationID returns the identifier of the operation that caused the error.
+func (e *Error) OperationID() string {
+	if e != nil && e.operationID != nil {
+		return *e.operationID
 	}
-	if e.code != nil {
-		return *e.code
-	}
-	if e.id != nil {
-		return *e.id
-	}
-	return "unknown error"
+	return ""
 }
 
-// UnmarshalError reads an error from the given which can be an slice of bytes, a
-// string, a reader or a JSON decoder.
+// GetOperationID returns the identifier of the operation that caused the error and
+// a flag indicating if that identifier does have a value.
+func (e *Error) GetOperationID() (value string, ok bool) {
+	ok = e != nil && e.operationID != nil
+	if ok {
+		value = *e.operationID
+	}
+	return
+}
+
+// Error is the implementation of the error interface.
+func (e *Error) Error() string {
+	chunks := make([]string, 0, 3)
+	if e.id != nil && *e.id != "" {
+		chunks = append(chunks, fmt.Sprintf("identifier is '%s'", *e.id))
+	}
+	if e.code != nil && *e.code != "" {
+		chunks = append(chunks, fmt.Sprintf("code is '%s'", *e.code))
+	}
+	if e.operationID != nil && *e.operationID != "" {
+		chunks = append(chunks, fmt.Sprintf("operation identifier is '%s'", *e.operationID))
+	}
+	var result string
+	size := len(chunks)
+	if size == 1 {
+		result = chunks[0]
+	} else if size > 1 {
+		result = strings.Join(chunks[0:size-1], ", ") + " and " + chunks[size-1]
+	}
+	if e.reason != nil && *e.reason != "" {
+		if result != "" {
+			result = result + ": "
+		}
+		result = result + *e.reason
+	}
+	if result == "" {
+		result = "unknown error"
+	}
+	return result
+}
+
+// String returns a string representing the error.
+func (e *Error) String() string {
+	return e.Error()
+}
+
+// UnmarshalError reads an error from the given source which can be an slice of
+// bytes, a string, a reader or a JSON decoder.
 func UnmarshalError(source interface{}) (object *Error, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
@@ -216,6 +267,9 @@ func readError(iterator *jsoniter.Iterator) *Error {
 		case "reason":
 			value := iterator.ReadString()
 			object.reason = &value
+		case "operation_id":
+			value := iterator.ReadString()
+			object.operationID = &value
 		default:
 			iterator.ReadAny()
 		}
@@ -253,6 +307,11 @@ func writeError(e *Error, stream *jsoniter.Stream) {
 		stream.WriteMore()
 		stream.WriteObjectField("reason")
 		stream.WriteString(*e.reason)
+	}
+	if e.operationID != nil {
+		stream.WriteMore()
+		stream.WriteObjectField("operation_id")
+		stream.WriteString(*e.operationID)
 	}
 	stream.WriteObjectEnd()
 }
