@@ -245,27 +245,6 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	}
 
 	// Send the HTTP request:
-	if c.logger.DebugEnabled() {
-		var censoredBody bytes.Buffer
-		// Unlike real url.Values.Encode(), this doesn't sort keys.
-		for name, values := range form {
-			for _, value := range values {
-				// Buffer.Write*() don't require error checking but golangci-lint v1.10.2
-				// on Jenkins flags them (maybe https://github.com/securego/gosec/issues/267).
-				if censoredBody.Len() > 0 {
-					censoredBody.WriteByte('&') // #nosec G104
-				}
-				censoredBody.WriteString(url.QueryEscape(name) + "=") // #nosec G104
-
-				if redactFields[name] {
-					censoredBody.WriteString(redactionStr) // #nosec G104
-				} else {
-					censoredBody.WriteString(url.QueryEscape(value)) // #nosec G104
-				}
-			}
-		}
-		c.dumpRequest(ctx, request, censoredBody.Bytes())
-	}
 	response, err := c.client.Do(request)
 	if err != nil {
 		err = fmt.Errorf("can't send request: %v", err)
@@ -278,9 +257,6 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	if err != nil {
 		err = fmt.Errorf("can't read response: %v", err)
 		return
-	}
-	if c.logger.DebugEnabled() {
-		c.dumpResponse(ctx, response, body)
 	}
 
 	// Check the response status and content type:
