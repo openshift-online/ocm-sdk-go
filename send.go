@@ -138,28 +138,6 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 	}
 	request.Header.Set("Accept", "application/json")
 
-	// If debug is enabled then we need to read the complete body in memory, in order to send it
-	// to the log, and we need to replace the original with a reader that reads it from memory:
-	if c.logger.DebugEnabled() {
-		if request.Body != nil {
-			var body []byte
-			body, err = ioutil.ReadAll(request.Body)
-			if err != nil {
-				err = fmt.Errorf("can't read request body: %v", err)
-				return
-			}
-			err = request.Body.Close()
-			if err != nil {
-				err = fmt.Errorf("can't close request body: %v", err)
-				return
-			}
-			c.dumpRequest(ctx, request, body)
-			request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
-		} else {
-			c.dumpRequest(ctx, request, nil)
-		}
-	}
-
 	// Send the request and get the response:
 	response, err = c.client.Do(request)
 	if err != nil {
@@ -167,34 +145,13 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 		return
 	}
 
-	// If debug is enabled then we need to read the complete response body in memory, in order
-	// to send it the log, and we need to replace the original with a reader that reads it from
-	// memory:
-	if c.logger.DebugEnabled() {
-		if response.Body != nil {
-			var body []byte
-			body, err = ioutil.ReadAll(response.Body)
-			if err != nil {
-				err = fmt.Errorf("can't read response body: %v", err)
-				return
-			}
-			err = response.Body.Close()
-			if err != nil {
-				err = fmt.Errorf("can't close response body: %v", err)
-				return
-			}
-			c.dumpResponse(ctx, response, body)
-			response.Body = ioutil.NopCloser(bytes.NewBuffer(body))
-		} else {
-			c.dumpResponse(ctx, response, nil)
-		}
-	}
-
-	// check if json
+	// Check that the response content type is JSON:
 	if !strings.EqualFold(response.Header.Get("Content-Type"), "application/json") {
-		err = fmt.Errorf("expected JSON content type but received '%s'; %s",
+		err = fmt.Errorf(
+			"expected JSON content type but received '%s'; %s",
 			response.Header.Get("Content-Type"),
-			getResponseInfo(response))
+			getResponseInfo(response),
+		)
 		return
 	}
 
