@@ -263,6 +263,33 @@ var _ = Describe("Methods", func() {
 			Expect(err.Error()).To(ContainSubstring("mandatory"))
 			Expect(response).To(BeNil())
 		})
+
+		It("Honors cookies", func() {
+			// Configure the server:
+			apiServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					RespondWithCookie("mycookie", "myvalue"),
+					RespondWithJSONTemplate(http.StatusOK, "{}"),
+				),
+				ghttp.CombineHandlers(
+					VerifyCookie("mycookie", "myvalue"),
+					RespondWithJSONTemplate(http.StatusOK, "{}"),
+				),
+			)
+
+			// Send first request. The server will respond setting a cookie.
+			_, err := connection.Get().
+				Path("/mypath").
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Send second request, which should include the cookie returned by the
+			// server in the first response.
+			_, err = connection.Get().
+				Path("/mypath").
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+		})
 	})
 
 	Describe("Post", func() {

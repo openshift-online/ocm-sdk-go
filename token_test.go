@@ -127,7 +127,7 @@ var _ = Describe("Tokens", func() {
 		It("Refreshes the access token request if it is expired", func() {
 			// Generate the tokens:
 			expiredAccess := DefaultToken("Bearer", -5*time.Minute)
-			validAccess := DefaultToken("Bearer", -5*time.Minute)
+			validAccess := DefaultToken("Bearer", 5*time.Minute)
 			refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 			// Configure the server:
@@ -315,6 +315,45 @@ var _ = Describe("Tokens", func() {
 				Expect(message).To(ContainSubstring("Veryyyyyy"))
 				Expect(message).To(ContainSubstring("..."))
 			})
+		})
+
+		It("Honors cookies", func() {
+			// Generate the tokens:
+			expiredAccess := DefaultToken("Bearer", -5*time.Minute)
+			validAccess := DefaultToken("Bearer", 5*time.Minute)
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+
+			// Configure the server:
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					RespondWithCookie("mycookie", "myvalue"),
+					RespondWithTokens(expiredAccess, refreshToken),
+				),
+				ghttp.CombineHandlers(
+					VerifyCookie("mycookie", "myvalue"),
+					RespondWithTokens(validAccess, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(expiredAccess, refreshToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Request the tokens the first time. This will return an expired access
+			// token and a valid refresh token.
+			_, _, err = connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Request the tokens a second time, therefore forcing a refresh grant which
+			// should honor the cookies returned in the first attempt:
+			_, _, err = connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
 		})
 	})
 
@@ -514,6 +553,45 @@ var _ = Describe("Tokens", func() {
 			// Get the tokens:
 			_, _, err = connection.Tokens()
 			Expect(err).To(HaveOccurred())
+		})
+
+		It("Honors cookies", func() {
+			// Generate the tokens:
+			expiredAccess := DefaultToken("Bearer", -5*time.Minute)
+			validAccess := DefaultToken("Bearer", 5*time.Minute)
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+
+			// Configure the server:
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					RespondWithCookie("mycookie", "myvalue"),
+					RespondWithTokens(expiredAccess, refreshToken),
+				),
+				ghttp.CombineHandlers(
+					VerifyCookie("mycookie", "myvalue"),
+					RespondWithTokens(validAccess, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				User("myuser", "mypassword").
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Request the tokens the first time. This will return an expired access
+			// token and a valid refresh token.
+			_, _, err = connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Request the tokens a second time, therefore forcing a refresh grant which
+			// should honor the cookies returned in the first attempt:
+			_, _, err = connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
 		})
 	})
 
@@ -757,6 +835,45 @@ var _ = Describe("Tokens", func() {
 			// Get the tokens:
 			_, _, err = connection.Tokens()
 			Expect(err).To(HaveOccurred())
+		})
+
+		It("Honors cookies", func() {
+			// Generate the tokens:
+			expiredAccess := DefaultToken("Bearer", -5*time.Minute)
+			validAccess := DefaultToken("Bearer", 5*time.Minute)
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+
+			// Configure the server:
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					RespondWithCookie("mycookie", "myvalue"),
+					RespondWithTokens(expiredAccess, refreshToken),
+				),
+				ghttp.CombineHandlers(
+					VerifyCookie("mycookie", "myvalue"),
+					RespondWithTokens(validAccess, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Client("myclient", "mysecret").
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Request the tokens the first time. This will return an expired access
+			// token and a valid refresh token.
+			_, _, err = connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Request the tokens a second time, therefore forcing a refresh grant which
+			// should honor the cookies returned in the first attempt:
+			_, _, err = connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
 		})
 	})
 })

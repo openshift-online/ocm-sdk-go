@@ -120,6 +120,28 @@ func RespondWithJSONTemplate(statusCode int, source string, args ...interface{})
 	)
 }
 
+// RespondWithCookie responds to the request adding a cookie with the given name and value.
+func RespondWithCookie(name, value string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.SetCookie(w, &http.Cookie{
+			Name:  name,
+			Value: value,
+		})
+		return
+	}
+}
+
+// VerifyCookie checks that the request contains a cookie with the given name and value.
+func VerifyCookie(name, value string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie(name)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(cookie).ToNot(BeNil())
+		Expect(cookie.Value).To(Equal(value))
+		return
+	}
+}
+
 // DefaultToken generates a token issued by the default OpenID server and with the given type and
 // with the given life. If the life is zero the token will never expire. If the life is positive the
 // token will be valid, and expire after that time.  If the life is negative the token will be
