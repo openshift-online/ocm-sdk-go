@@ -252,18 +252,16 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	}
 	defer response.Body.Close()
 
+	// Check that the response content type is JSON:
+	err = c.checkContentType(response)
+	if err != nil {
+		return
+	}
+
 	// Read the response body:
 	body, err = ioutil.ReadAll(response.Body)
 	if err != nil {
 		err = fmt.Errorf("can't read response: %v", err)
-		return
-	}
-
-	// Check the response status and content type:
-	header = response.Header
-	content := header.Get("Content-Type")
-	if content != "application/json" {
-		err = fmt.Errorf("expected 'application/json' but got '%s'", content)
 		return
 	}
 

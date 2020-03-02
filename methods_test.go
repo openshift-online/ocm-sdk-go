@@ -19,7 +19,9 @@ limitations under the License.
 package sdk
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	. "github.com/onsi/ginkgo" // nolint
@@ -261,7 +263,6 @@ var _ = Describe("Methods", func() {
 			Expect(err.Error()).To(ContainSubstring("mandatory"))
 			Expect(response).To(BeNil())
 		})
-
 	})
 
 	Describe("Post", func() {
@@ -298,54 +299,78 @@ var _ = Describe("Methods", func() {
 		})
 	})
 
-	Describe("JSON header", func() {
+	When("Server doesn't return JSON content type", func() {
 		It("It should ignore letter case", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil, http.Header{"cOnTeNt-TyPe": []string{"AppLicaTion/JSON"}}),
+				ghttp.RespondWith(
+					http.StatusOK, nil, http.Header{
+						"cOnTeNt-TyPe": []string{
+							"AppLicaTion/JSON",
+						},
+					},
+				),
 			)
 
 			// Send the request:
-			response, err := connection.Get().Path("/mypath").Send()
+			response, err := connection.Get().
+				Path("/api/clusters_mgmt/v1/clusters").
+				Send()
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
 		})
 
-		It("It should error if not json", func() {
+		It("Adds complete content to error message if it is short", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, "test", http.Header{"Content-Type": []string{"application/html"}}),
+				ghttp.RespondWith(
+					http.StatusBadGateway,
+					`Service not available`,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
 			)
 
-			// Send the request:
-			response, err := connection.Get().Path("/mypath").Send()
+			// Try to get the access token:
+			_, err := connection.Get().
+				Path("/api/clusters_mgmt/v1/clusters").
+				Send()
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("expected JSON"))
-			Expect(err.Error()).To(ContainSubstring("request:"))
-			Expect(err.Error()).To(ContainSubstring("response status:"))
-			Expect(err.Error()).To(ContainSubstring("response body: test"))
-			Expect(response).To(BeNil())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("text/plain"))
+			Expect(message).To(ContainSubstring("Service not available"))
 		})
 
-		It("It should trim response", func() {
+		It("Adds summary of content if it is too long", func() {
+			// Calculate a long message:
+			content := fmt.Sprintf("Ver%s long", strings.Repeat("y", 1000))
+
 			// Configure the server:
-			longText := `<textarea class="Playground-input js-playgroundCodeEl" ` +
-				`spellcheck="false" aria-label="Try Go">` +
-				"// You can edit this code! // Click here and start typing. " +
-				`package main import "fmt" ` +
-				`func main() { fmt.Println("Hello, 世界") } </textarea>`
-			longText = longText + longText + longText
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, longText, http.Header{"Content-Type": []string{"application/html"}}),
+				ghttp.RespondWith(
+					http.StatusBadGateway,
+					content,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
 			)
 
-			// Send the request:
-			response, err := connection.Get().Path("/mypath").Send()
+			// Try to get the access token:
+			_, err := connection.Get().
+				Path("/api/clusters_mgmt/v1/clusters").
+				Send()
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring(`<textarea class="Playground-input`))
-			Expect(len(err.Error()) < 400).To(BeTrue())
-			Expect(response).To(BeNil())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("text/plain"))
+			Expect(message).To(ContainSubstring("Veryyyyyy"))
+			Expect(message).To(ContainSubstring("..."))
 		})
 	})
 })

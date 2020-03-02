@@ -19,7 +19,9 @@ limitations under the License.
 package sdk
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	. "github.com/onsi/ginkgo" // nolint
@@ -33,7 +35,7 @@ var _ = Describe("Tokens", func() {
 	var oidServer *ghttp.Server
 	var apiServer *ghttp.Server
 
-	// Logger used during the testss:
+	// Logger used during the tests:
 	var logger Logger
 
 	BeforeEach(func() {
@@ -237,6 +239,82 @@ var _ = Describe("Tokens", func() {
 			// Get the tokens:
 			_, _, err = connection.Tokens()
 			Expect(err).To(HaveOccurred())
+		})
+
+		When("The server doesn't return JSON content type", func() {
+			It("Adds complete content to error message if it is short", func() {
+				// Generate the refresh token:
+				refreshToken := DefaultToken("Refresh", 10*time.Hour)
+
+				// Configure the server:
+				oidServer.AppendHandlers(
+					ghttp.RespondWith(
+						http.StatusServiceUnavailable,
+						`Service unavailable`,
+						http.Header{
+							"Content-Type": []string{
+								"text/plain",
+							},
+						},
+					),
+				)
+
+				// Create the connection:
+				connection, err := NewConnectionBuilder().
+					Logger(logger).
+					TokenURL(oidServer.URL()).
+					URL(apiServer.URL()).
+					Tokens(refreshToken).
+					Build()
+				Expect(err).ToNot(HaveOccurred())
+				defer connection.Close()
+
+				// Try to get the access token:
+				_, _, err = connection.Tokens()
+				Expect(err).To(HaveOccurred())
+				message := err.Error()
+				Expect(message).To(ContainSubstring("text/plain"))
+				Expect(message).To(ContainSubstring("Service unavailable"))
+			})
+
+			It("Adds summary of content if it is too long", func() {
+				// Generate the refresh token:
+				refreshToken := DefaultToken("Refresh", 10*time.Hour)
+
+				// Calculate a long message:
+				content := fmt.Sprintf("Ver%s long", strings.Repeat("y", 1000))
+
+				// Configure the server:
+				oidServer.AppendHandlers(
+					ghttp.RespondWith(
+						http.StatusServiceUnavailable,
+						content,
+						http.Header{
+							"Content-Type": []string{
+								"text/plain",
+							},
+						},
+					),
+				)
+
+				// Create the connection:
+				connection, err := NewConnectionBuilder().
+					Logger(logger).
+					TokenURL(oidServer.URL()).
+					URL(apiServer.URL()).
+					Tokens(refreshToken).
+					Build()
+				Expect(err).ToNot(HaveOccurred())
+				defer connection.Close()
+
+				// Try to get the access token:
+				_, _, err = connection.Tokens()
+				Expect(err).To(HaveOccurred())
+				message := err.Error()
+				Expect(message).To(ContainSubstring("text/plain"))
+				Expect(message).To(ContainSubstring("Veryyyyyy"))
+				Expect(message).To(ContainSubstring("..."))
+			})
 		})
 	})
 
@@ -482,7 +560,6 @@ var _ = Describe("Tokens", func() {
 			Expect(returnedRefresh).To(BeEmpty())
 		})
 	})
-
 })
 
 func VerifyPasswordGrant(user, password string) http.HandlerFunc {
