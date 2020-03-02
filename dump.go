@@ -24,6 +24,7 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
+	"mime"
 	"net/http"
 	"net/url"
 	"sort"
@@ -163,7 +164,21 @@ func (d *dumpRoundTripper) dumpResponse(ctx context.Context, response *http.Resp
 // dumpBody checks the content type used in the given header and then it dumps the given body in a
 // format suitable for that content type.
 func (d *dumpRoundTripper) dumpBody(ctx context.Context, header http.Header, body []byte) {
-	switch header.Get("Content-Type") {
+	// Try to parse the content type:
+	var mediaType string
+	contentType := header.Get("Content-Type")
+	if contentType != "" {
+		var err error
+		mediaType, _, err = mime.ParseMediaType(contentType)
+		if err != nil {
+			d.logger.Error(ctx, "Can't parse content type '%s': %v", contentType, err)
+		}
+	} else {
+		mediaType = contentType
+	}
+
+	// Dump the body according to the content type:
+	switch mediaType {
 	case "application/x-www-form-urlencoded":
 		d.dumpForm(ctx, body)
 	case "application/json", "":
@@ -215,8 +230,8 @@ func (d *dumpRoundTripper) dumpForm(ctx context.Context, data []byte) {
 			if buffer.Len() > 0 {
 				buffer.WriteByte('&') // #nosec G104
 			}
-			buffer.WriteString(key) // #nosec G104
-			buffer.WriteByte('=') // #nosec G104
+			buffer.WriteString(key)      // #nosec G104
+			buffer.WriteByte('=')        // #nosec G104
 			buffer.WriteString(redacted) // #nosec G104
 		}
 	}
