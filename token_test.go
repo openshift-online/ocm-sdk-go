@@ -837,6 +837,43 @@ var _ = Describe("Tokens", func() {
 			Expect(err).To(HaveOccurred())
 		})
 
+		It("Requests new tokens if server returns 'invalid_grant' for refresh", func() {
+			// Generate the tokens:
+			oldAccess := DefaultToken("Bearer", -5*time.Second)
+			oldRefresh := DefaultToken("Refresh", 10*time.Hour)
+			newAccess := DefaultToken("Bearer", 5*time.Second)
+			newRefresh := DefaultToken("Refresh", 10*time.Hour)
+
+			// Configure the server:
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					VerifyRefreshGrant(oldRefresh),
+					RespondWithError("invalid_grant", "Session not active"),
+				),
+				ghttp.CombineHandlers(
+					VerifyClientCredentialsGrant("myclient", "mysecret"),
+					RespondWithTokens(newAccess, newRefresh),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Client("myclient", "mysecret").
+				Tokens(oldAccess, oldRefresh).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Get the tokens:
+			returnedAccess, returnedRefresh, err := connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(newAccess))
+			Expect(returnedRefresh).To(Equal(newRefresh))
+		})
+
 		It("Honors cookies", func() {
 			// Generate the tokens:
 			expiredAccess := DefaultToken("Bearer", -5*time.Minute)
