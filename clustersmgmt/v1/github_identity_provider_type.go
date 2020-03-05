@@ -23,16 +23,18 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `github` identity providers.
 type GithubIdentityProvider struct {
-	ca       *string
-	clientID *string
-	hostname *string
-	teams    []string
+	ca           *string
+	clientID     *string
+	clientSecret *string
+	hostname     *string
+	teams        []string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *GithubIdentityProvider) Empty() bool {
 	return o == nil || (o.ca == nil &&
 		o.clientID == nil &&
+		o.clientSecret == nil &&
 		o.hostname == nil &&
 		len(o.teams) == 0 &&
 		true)
@@ -80,6 +82,29 @@ func (o *GithubIdentityProvider) GetClientID() (value string, ok bool) {
 	ok = o != nil && o.clientID != nil
 	if ok {
 		value = *o.clientID
+	}
+	return
+}
+
+// ClientSecret returns the value of the 'client_secret' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Client secret.
+func (o *GithubIdentityProvider) ClientSecret() string {
+	if o != nil && o.clientSecret != nil {
+		return *o.clientSecret
+	}
+	return ""
+}
+
+// GetClientSecret returns the value of the 'client_secret' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Client secret.
+func (o *GithubIdentityProvider) GetClientSecret() (value string, ok bool) {
+	ok = o != nil && o.clientSecret != nil
+	if ok {
+		value = *o.clientSecret
 	}
 	return
 }
