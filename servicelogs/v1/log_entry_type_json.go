@@ -97,6 +97,14 @@ func writeLogEntry(object *LogEntry, stream *jsoniter.Stream) {
 		stream.WriteString(*object.serviceName)
 		count++
 	}
+	if object.serviceName != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("service_name")
+		stream.WriteString(*object.serviceName)
+		count++
+	}
 	if object.severity != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -163,6 +171,9 @@ func readLogEntry(iterator *jsoniter.Iterator) *LogEntry {
 		case "internal_only":
 			value := iterator.ReadBool()
 			object.internalOnly = &value
+		case "service_name":
+			value := iterator.ReadString()
+			object.serviceName = &value
 		case "service_name":
 			value := iterator.ReadString()
 			object.serviceName = &value

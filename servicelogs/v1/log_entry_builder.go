@@ -34,6 +34,7 @@ type LogEntryBuilder struct {
 	description  *string
 	internalOnly *bool
 	serviceName  *string
+	serviceName  *string
 	severity     *Severity
 	summary      *string
 	timestamp    *time.Time
@@ -94,6 +95,14 @@ func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
 	return b
 }
 
+// ServiceName sets the value of the 'service_name' attribute to the given value.
+//
+//
+func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
+	b.serviceName = &value
+	return b
+}
+
 // Severity sets the value of the 'severity' attribute to the given value.
 //
 //
@@ -130,6 +139,7 @@ func (b *LogEntryBuilder) Copy(object *LogEntry) *LogEntryBuilder {
 	b.description = object.description
 	b.internalOnly = object.internalOnly
 	b.serviceName = object.serviceName
+	b.serviceName = object.serviceName
 	b.severity = object.severity
 	b.summary = object.summary
 	b.timestamp = object.timestamp
@@ -145,6 +155,7 @@ func (b *LogEntryBuilder) Build() (object *LogEntry, err error) {
 	object.clusterUUID = b.clusterUUID
 	object.description = b.description
 	object.internalOnly = b.internalOnly
+	object.serviceName = b.serviceName
 	object.serviceName = b.serviceName
 	object.severity = b.severity
 	object.summary = b.summary
