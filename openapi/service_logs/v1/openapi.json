@@ -261,24 +261,27 @@
             "type": "string"
           },
           "cluster_uuid": {
+            "description": "External cluster ID.\n",
             "type": "string"
           },
           "description": {
+            "description": "Full description of the log entry content (supports Markdown format as well).\n",
             "type": "string"
           },
           "internal_only": {
-            "description": "A flag that indicates whether the log entry should be internal/private only\n",
+            "description": "A flag that indicates whether the log entry should be internal/private only.\n",
             "type": "boolean"
           },
           "service_name": {
-            "description": "The name of the service who created the log\n",
+            "description": "The name of the service who created the log.\n",
             "type": "string"
           },
           "severity": {
-            "description": "Log severity for the specific log entry\n",
+            "description": "Log severity for the specific log entry.\n",
             "$ref": "#/components/schemas/Severity"
           },
           "summary": {
+            "description": "Title of the log entry.\n",
             "type": "string"
           },
           "timestamp": {
