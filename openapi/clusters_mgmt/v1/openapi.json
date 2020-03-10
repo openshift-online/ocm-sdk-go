@@ -3660,15 +3660,22 @@
             "type": "string"
           },
           "client_secret": {
-            "description": "Client secret.\n",
+            "description": "Client secret of a registered _GitHub_ OAuth application.\n",
             "type": "string"
           },
           "hostname": {
             "description": "For _GitHub Enterprise_ you must provide the host name of your instance, such as\n`example.com`. This value must match the _GitHub Enterprise_ host name value in the\n`/setup/settings` file and cannot include a port number.\n\nFor plain _GitHub_ omit this parameter.\n",
             "type": "string"
           },
+          "organizations": {
+            "description": "Optional list of organizations. Cannot be used in combination with the Teams field.\n",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "teams": {
-            "description": "Optional list of temas. Cannot be used in combination with the organizations field.\n",
+            "description": "Optional list of teams. Cannot be used in combination with the Organizations field.\n",
             "type": "array",
             "items": {
               "type": "string"
