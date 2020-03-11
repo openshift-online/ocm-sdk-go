@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.92 Mar 11 2020
+
+- Update to model 0.0.45:
+** Add Organizations field to GitHub IDP
+
 == 0.1.91 Mar 5 2020
 
 - Update to model 0.0.42:
