@@ -3048,6 +3048,10 @@
             "description": "Name of the add-on.\n",
             "type": "string"
           },
+          "operator_name": {
+            "description": "The name of the operator installed by this add-on.\n",
+            "type": "string"
+          },
           "resource_cost": {
             "description": "Used to determine how many units of quota an add-on consumes per resource name.\n",
             "type": "number",
@@ -3093,8 +3097,41 @@
           "cluster": {
             "description": "ID used to identify the cluster that this add-on is attached to.\n",
             "$ref": "#/components/schemas/Cluster"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the add-on was initially installed in the cluster.\n",
+            "type": "string",
+            "format": "date-time"
+          },
+          "operator_version": {
+            "description": "Version of the operator installed by the add-on.\n",
+            "type": "string"
+          },
+          "state": {
+            "description": "Overall state of the add-on installation.\n",
+            "$ref": "#/components/schemas/AddOnInstallationState"
+          },
+          "state_description": {
+            "description": "Reason for the current State.\n",
+            "type": "string"
+          },
+          "updated_timestamp": {
+            "description": "Date and time when the add-on installation information was last updated.\n",
+            "type": "string",
+            "format": "date-time"
           }
         }
+      },
+      "AddOnInstallationState": {
+        "description": "Representation of an add-on installation State field.\n",
+        "type": "string",
+        "enum": [
+          "deleting",
+          "failed",
+          "installing",
+          "pending",
+          "ready"
+        ]
       },
       "AdminCredentials": {
         "description": "Temporary administrator credentials generated during the installation of the\ncluster.\n",
