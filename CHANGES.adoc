@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.93 Mar 18 2020
+
+- Update to model 0.0.46:
+** Add missing fields for add-on installation
+** Add operator name to add-ons
+
 == 0.1.92 Mar 11 2020
 
 - Update to model 0.0.45:
