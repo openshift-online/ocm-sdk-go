@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.93 Mar 19 2020
+
+- Update to model 0.0.47:
+** Add ClusterAdminEnabled flag.
+** Add PullSecrets endpoint.
+** Fix `LDAPIdentityProvider` attribute name.
+
+
 == 0.1.93 Mar 18 2020
 
 - Update to model 0.0.46:
