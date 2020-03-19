@@ -1297,6 +1297,42 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/pull_secrets": {
+      "post": {
+        "description": "Returns access token generated from registries in docker format.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PullSecretsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessToken"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/registries": {
       "get": {
         "description": "Retrieves a list of registries.\n",
@@ -2873,6 +2909,13 @@
           },
           "href": {
             "description": "Self link.\n",
+            "type": "string"
+          }
+        }
+      },
+      "PullSecretsRequest": {
+        "properties": {
+          "external_resource_id": {
             "type": "string"
           }
         }

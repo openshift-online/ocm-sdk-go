@@ -73,6 +73,7 @@ type ClusterBuilder struct {
 	dns                               *DNSBuilder
 	addons                            *AddOnInstallationListBuilder
 	cloudProvider                     *CloudProviderBuilder
+	clusterAdminEnabled               *bool
 	console                           *ClusterConsoleBuilder
 	creationTimestamp                 *time.Time
 	displayName                       *string
@@ -173,6 +174,14 @@ func (b *ClusterBuilder) Addons(value *AddOnInstallationListBuilder) *ClusterBui
 // Cloud provider.
 func (b *ClusterBuilder) CloudProvider(value *CloudProviderBuilder) *ClusterBuilder {
 	b.cloudProvider = value
+	return b
+}
+
+// ClusterAdminEnabled sets the value of the 'cluster_admin_enabled' attribute to the given value.
+//
+//
+func (b *ClusterBuilder) ClusterAdminEnabled(value bool) *ClusterBuilder {
+	b.clusterAdminEnabled = &value
 	return b
 }
 
@@ -409,6 +418,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.cloudProvider = nil
 	}
+	b.clusterAdminEnabled = object.clusterAdminEnabled
 	if object.console != nil {
 		b.console = NewClusterConsole().Copy(object.console)
 	} else {
@@ -528,6 +538,7 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			return
 		}
 	}
+	object.clusterAdminEnabled = b.clusterAdminEnabled
 	if b.console != nil {
 		object.console, err = b.console.Build()
 		if err != nil {
