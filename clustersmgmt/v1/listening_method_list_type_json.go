@@ -26,46 +26,47 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalOpenIDURLsList writes a list of values of the 'open_IDURLs' type to
+// MarshalListeningMethodList writes a list of values of the 'listening_method' type to
 // the given writer.
-func MarshalOpenIDURLsList(list []*OpenIDURLs, writer io.Writer) error {
+func MarshalListeningMethodList(list []ListeningMethod, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeOpenIDURLsList(list, stream)
+	writeListeningMethodList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeOpenIDURLsList writes a list of value of the 'open_IDURLs' type to
+// writeListeningMethodList writes a list of value of the 'listening_method' type to
 // the given stream.
-func writeOpenIDURLsList(list []*OpenIDURLs, stream *jsoniter.Stream) {
+func writeListeningMethodList(list []ListeningMethod, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeOpenIDURLs(value, stream)
+		stream.WriteString(string(value))
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalOpenIDURLsList reads a list of values of the 'open_IDURLs' type
+// UnmarshalListeningMethodList reads a list of values of the 'listening_method' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalOpenIDURLsList(source interface{}) (items []*OpenIDURLs, err error) {
+func UnmarshalListeningMethodList(source interface{}) (items []ListeningMethod, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readOpenIDURLsList(iterator)
+	items = readListeningMethodList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readOpenIDURLsList reads list of values of the ''open_IDURLs' type from
+// readListeningMethodList reads list of values of the ''listening_method' type from
 // the given iterator.
-func readOpenIDURLsList(iterator *jsoniter.Iterator) []*OpenIDURLs {
-	list := []*OpenIDURLs{}
+func readListeningMethodList(iterator *jsoniter.Iterator) []ListeningMethod {
+	list := []ListeningMethod{}
 	for iterator.ReadArray() {
-		item := readOpenIDURLs(iterator)
+		text := iterator.ReadString()
+		item := ListeningMethod(text)
 		list = append(list, item)
 	}
 	return list
