@@ -3,7 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.93 Mar 19 2020
+== 0.1.95 Mar 22 2020
+
+- Update to model 0.0.48:
+** Fix `OpenID` attributes.
+** Add Cluster API listening method.
+
+== 0.1.94 Mar 19 2020
 
 - Update to model 0.0.47:
 ** Add ClusterAdminEnabled flag.
