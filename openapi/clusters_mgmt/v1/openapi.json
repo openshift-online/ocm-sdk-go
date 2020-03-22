@@ -3394,6 +3394,10 @@
           "url": {
             "description": "The URL of the API server of the cluster.\n",
             "type": "string"
+          },
+          "listening": {
+            "description": "The listening method of the API server.\n",
+            "$ref": "#/components/schemas/ListeningMethod"
           }
         }
       },
@@ -3864,6 +3868,14 @@
           "open_id"
         ]
       },
+      "ListeningMethod": {
+        "description": "Cluster components listening method.\n",
+        "type": "string",
+        "enum": [
+          "external",
+          "internal"
+        ]
+      },
       "Log": {
         "description": "Log of the cluster.\n",
         "properties": {
@@ -3984,10 +3996,6 @@
             "description": "Certificate bunde to use to validate server certificates for the configured URL.\n",
             "type": "string"
           },
-          "urls": {
-            "description": "URLs of the provider.\n",
-            "$ref": "#/components/schemas/OpenIDURLs"
-          },
           "claims": {
             "description": "Claims used to configure the provider.\n",
             "$ref": "#/components/schemas/OpenIDClaims"
@@ -4013,22 +4021,9 @@
             "items": {
               "type": "string"
             }
-          }
-        }
-      },
-      "OpenIDURLs": {
-        "description": "_OpenID_ identity provider URLs.\n",
-        "properties": {
-          "authorize": {
-            "description": "Authorization endpoint described in the _OpenID_ specification. Must use HTTPS.\n",
-            "type": "string"
           },
-          "token": {
-            "description": "Token endpoint described in the _OpenID_ specification. Must use HTTPS.\n",
-            "type": "string"
-          },
-          "user_info": {
-            "description": "User information endpoint described in the _OpenID_ specification. Must use HTTPS.\n",
+          "issuer": {
+            "description": "The URL that the OpenID Provider asserts as the Issuer Identifier\n",
             "type": "string"
           }
         }
