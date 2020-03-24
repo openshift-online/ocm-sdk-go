@@ -82,6 +82,7 @@ type ClusterBuilder struct {
 	flavour                           *FlavourBuilder
 	groups                            *GroupListBuilder
 	identityProviders                 *IdentityProviderListBuilder
+	ingresses                         *IngressListBuilder
 	loadBalancerQuota                 *int
 	managed                           *bool
 	metrics                           *ClusterMetricsBuilder
@@ -247,6 +248,14 @@ func (b *ClusterBuilder) Groups(value *GroupListBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) IdentityProviders(value *IdentityProviderListBuilder) *ClusterBuilder {
 	b.identityProviders = value
+	return b
+}
+
+// Ingresses sets the value of the 'ingresses' attribute to the given values.
+//
+//
+func (b *ClusterBuilder) Ingresses(value *IngressListBuilder) *ClusterBuilder {
+	b.ingresses = value
 	return b
 }
 
@@ -443,6 +452,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.identityProviders = nil
 	}
+	if object.ingresses != nil {
+		b.ingresses = NewIngressList().Copy(object.ingresses)
+	} else {
+		b.ingresses = nil
+	}
 	b.loadBalancerQuota = object.loadBalancerQuota
 	b.managed = object.managed
 	if object.metrics != nil {
@@ -563,6 +577,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	if b.identityProviders != nil {
 		object.identityProviders, err = b.identityProviders.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.ingresses != nil {
+		object.ingresses, err = b.ingresses.Build()
 		if err != nil {
 			return
 		}

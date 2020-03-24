@@ -94,6 +94,7 @@ type Cluster struct {
 	flavour                           *Flavour
 	groups                            *GroupList
 	identityProviders                 *IdentityProviderList
+	ingresses                         *IngressList
 	loadBalancerQuota                 *int
 	managed                           *bool
 	metrics                           *ClusterMetrics
@@ -175,6 +176,7 @@ func (o *Cluster) Empty() bool {
 		o.externalID == nil &&
 		o.groups.Len() == 0 &&
 		o.identityProviders.Len() == 0 &&
+		o.ingresses.Len() == 0 &&
 		o.loadBalancerQuota == nil &&
 		o.managed == nil &&
 		o.multiAZ == nil &&
@@ -557,6 +559,29 @@ func (o *Cluster) GetIdentityProviders() (value *IdentityProviderList, ok bool) 
 	ok = o != nil && o.identityProviders != nil
 	if ok {
 		value = o.identityProviders
+	}
+	return
+}
+
+// Ingresses returns the value of the 'ingresses' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// List of ingresses on this cluster.
+func (o *Cluster) Ingresses() *IngressList {
+	if o == nil {
+		return nil
+	}
+	return o.ingresses
+}
+
+// GetIngresses returns the value of the 'ingresses' attribute and
+// a flag indicating if the attribute has a value.
+//
+// List of ingresses on this cluster.
+func (o *Cluster) GetIngresses() (value *IngressList, ok bool) {
+	ok = o != nil && o.ingresses != nil
+	if ok {
+		value = o.ingresses
 	}
 	return
 }
