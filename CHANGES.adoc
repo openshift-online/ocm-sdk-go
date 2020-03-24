@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.96 Mar 24 2020
+
+- Update to model 0.0.50
+** Add Ingress type
+** Add sockets to cluster_metrics_type
+
 == 0.1.95 Mar 22 2020
 
 - Update to model 0.0.48:
