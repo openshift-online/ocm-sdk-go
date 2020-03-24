@@ -3326,6 +3326,13 @@
               "$ref": "#/components/schemas/IdentityProvider"
             }
           },
+          "ingresses": {
+            "description": "List of ingresses on this cluster.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ingress"
+            }
+          },
           "load_balancer_quota": {
             "description": "Load Balancer quota to be assigned to the cluster.\n",
             "type": "integer",
@@ -3480,8 +3487,12 @@
             "description": "The number of nodes provisioned for the cluster.\n",
             "$ref": "#/components/schemas/ClusterNodes"
           },
+          "sockets": {
+            "description": "The amount of sockets provisioned and used in the cluster.\n",
+            "$ref": "#/components/schemas/ClusterMetric"
+          },
           "storage": {
-            "description": "The amount of storage provisioned and used in the cluster.\n\nWARNING: This isn't currently populated. \n",
+            "description": "The amount of storage provisioned and used in the cluster.\n\nWARNING: This isn't currently populated.\n",
             "$ref": "#/components/schemas/ClusterMetric"
           }
         }
@@ -3867,6 +3878,46 @@
           "google",
           "open_id"
         ]
+      },
+      "Ingress": {
+        "description": "Representation of an ingress.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Ingress' if this is a complete object or 'IngressLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "dns_name": {
+            "description": "DNS Name of the ingress.\n",
+            "type": "string"
+          },
+          "cluster": {
+            "description": "ID used to identify the cluster that this ingress is attached to. \n",
+            "$ref": "#/components/schemas/Cluster"
+          },
+          "default": {
+            "description": "Indicates if this is the default ingress.\n",
+            "type": "boolean"
+          },
+          "listening": {
+            "description": "Listening method of the ingress\n",
+            "$ref": "#/components/schemas/ListeningMethod"
+          },
+          "route_selectors": {
+            "description": "A set of labels for the ingress. \n",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
       },
       "ListeningMethod": {
         "description": "Cluster components listening method.\n",

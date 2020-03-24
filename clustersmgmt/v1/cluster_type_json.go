@@ -206,6 +206,17 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteObjectEnd()
 		count++
 	}
+	if object.ingresses != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("ingresses")
+		stream.WriteObjectStart()
+		stream.WriteObjectField("items")
+		writeIngressList(object.ingresses.items, stream)
+		stream.WriteObjectEnd()
+		count++
+	}
 	if object.loadBalancerQuota != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -495,6 +506,27 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 				}
 			}
 			object.identityProviders = value
+		case "ingresses":
+			value := &IngressList{}
+			for {
+				field := iterator.ReadObject()
+				if field == "" {
+					break
+				}
+				switch field {
+				case "kind":
+					text := iterator.ReadString()
+					value.link = text == IngressListLinkKind
+				case "href":
+					text := iterator.ReadString()
+					value.href = &text
+				case "items":
+					value.items = readIngressList(iterator)
+				default:
+					iterator.ReadAny()
+				}
+			}
+			object.ingresses = value
 		case "load_balancer_quota":
 			value := iterator.ReadInt()
 			object.loadBalancerQuota = &value
