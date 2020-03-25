@@ -23,45 +23,45 @@ import (
 	time "time"
 )
 
-// OrganizationKind is the name of the type used to represent objects
-// of type 'organization'.
-const OrganizationKind = "Organization"
+// LabelKind is the name of the type used to represent objects
+// of type 'label'.
+const LabelKind = "Label"
 
-// OrganizationLinkKind is the name of the type used to represent links
-// to objects of type 'organization'.
-const OrganizationLinkKind = "OrganizationLink"
+// LabelLinkKind is the name of the type used to represent links
+// to objects of type 'label'.
+const LabelLinkKind = "LabelLink"
 
-// OrganizationNilKind is the name of the type used to nil references
-// to objects of type 'organization'.
-const OrganizationNilKind = "OrganizationNil"
+// LabelNilKind is the name of the type used to nil references
+// to objects of type 'label'.
+const LabelNilKind = "LabelNil"
 
-// Organization represents the values of the 'organization' type.
+// Label represents the values of the 'label' type.
 //
 //
-type Organization struct {
-	id           *string
-	href         *string
-	link         bool
-	createdAt    *time.Time
-	ebsAccountID *string
-	externalID   *string
-	name         *string
-	updatedAt    *time.Time
+type Label struct {
+	id        *string
+	href      *string
+	link      bool
+	createdAt *time.Time
+	internal  *bool
+	key       *string
+	updatedAt *time.Time
+	value     *string
 }
 
 // Kind returns the name of the type of the object.
-func (o *Organization) Kind() string {
+func (o *Label) Kind() string {
 	if o == nil {
-		return OrganizationNilKind
+		return LabelNilKind
 	}
 	if o.link {
-		return OrganizationLinkKind
+		return LabelLinkKind
 	}
-	return OrganizationKind
+	return LabelKind
 }
 
 // ID returns the identifier of the object.
-func (o *Organization) ID() string {
+func (o *Label) ID() string {
 	if o != nil && o.id != nil {
 		return *o.id
 	}
@@ -70,7 +70,7 @@ func (o *Organization) ID() string {
 
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
-func (o *Organization) GetID() (value string, ok bool) {
+func (o *Label) GetID() (value string, ok bool) {
 	ok = o != nil && o.id != nil
 	if ok {
 		value = *o.id
@@ -79,12 +79,12 @@ func (o *Organization) GetID() (value string, ok bool) {
 }
 
 // Link returns true iif this is a link.
-func (o *Organization) Link() bool {
+func (o *Label) Link() bool {
 	return o != nil && o.link
 }
 
 // HREF returns the link to the object.
-func (o *Organization) HREF() string {
+func (o *Label) HREF() string {
 	if o != nil && o.href != nil {
 		return *o.href
 	}
@@ -93,7 +93,7 @@ func (o *Organization) HREF() string {
 
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
-func (o *Organization) GetHREF() (value string, ok bool) {
+func (o *Label) GetHREF() (value string, ok bool) {
 	ok = o != nil && o.href != nil
 	if ok {
 		value = *o.href
@@ -102,13 +102,13 @@ func (o *Organization) GetHREF() (value string, ok bool) {
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *Organization) Empty() bool {
+func (o *Label) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.createdAt == nil &&
-		o.ebsAccountID == nil &&
-		o.externalID == nil &&
-		o.name == nil &&
+		o.internal == nil &&
+		o.key == nil &&
 		o.updatedAt == nil &&
+		o.value == nil &&
 		true)
 }
 
@@ -116,7 +116,7 @@ func (o *Organization) Empty() bool {
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Organization) CreatedAt() time.Time {
+func (o *Label) CreatedAt() time.Time {
 	if o != nil && o.createdAt != nil {
 		return *o.createdAt
 	}
@@ -127,7 +127,7 @@ func (o *Organization) CreatedAt() time.Time {
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Organization) GetCreatedAt() (value time.Time, ok bool) {
+func (o *Label) GetCreatedAt() (value time.Time, ok bool) {
 	ok = o != nil && o.createdAt != nil
 	if ok {
 		value = *o.createdAt
@@ -135,71 +135,48 @@ func (o *Organization) GetCreatedAt() (value time.Time, ok bool) {
 	return
 }
 
-// EbsAccountID returns the value of the 'ebs_account_ID' attribute, or
+// Internal returns the value of the 'internal' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Organization) EbsAccountID() string {
-	if o != nil && o.ebsAccountID != nil {
-		return *o.ebsAccountID
+func (o *Label) Internal() bool {
+	if o != nil && o.internal != nil {
+		return *o.internal
 	}
-	return ""
+	return false
 }
 
-// GetEbsAccountID returns the value of the 'ebs_account_ID' attribute and
+// GetInternal returns the value of the 'internal' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Organization) GetEbsAccountID() (value string, ok bool) {
-	ok = o != nil && o.ebsAccountID != nil
+func (o *Label) GetInternal() (value bool, ok bool) {
+	ok = o != nil && o.internal != nil
 	if ok {
-		value = *o.ebsAccountID
+		value = *o.internal
 	}
 	return
 }
 
-// ExternalID returns the value of the 'external_ID' attribute, or
+// Key returns the value of the 'key' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Organization) ExternalID() string {
-	if o != nil && o.externalID != nil {
-		return *o.externalID
+func (o *Label) Key() string {
+	if o != nil && o.key != nil {
+		return *o.key
 	}
 	return ""
 }
 
-// GetExternalID returns the value of the 'external_ID' attribute and
+// GetKey returns the value of the 'key' attribute and
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Organization) GetExternalID() (value string, ok bool) {
-	ok = o != nil && o.externalID != nil
+func (o *Label) GetKey() (value string, ok bool) {
+	ok = o != nil && o.key != nil
 	if ok {
-		value = *o.externalID
-	}
-	return
-}
-
-// Name returns the value of the 'name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-//
-func (o *Organization) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
-	}
-	return ""
-}
-
-// GetName returns the value of the 'name' attribute and
-// a flag indicating if the attribute has a value.
-//
-//
-func (o *Organization) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
-	if ok {
-		value = *o.name
+		value = *o.key
 	}
 	return
 }
@@ -208,7 +185,7 @@ func (o *Organization) GetName() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 //
-func (o *Organization) UpdatedAt() time.Time {
+func (o *Label) UpdatedAt() time.Time {
 	if o != nil && o.updatedAt != nil {
 		return *o.updatedAt
 	}
@@ -219,7 +196,7 @@ func (o *Organization) UpdatedAt() time.Time {
 // a flag indicating if the attribute has a value.
 //
 //
-func (o *Organization) GetUpdatedAt() (value time.Time, ok bool) {
+func (o *Label) GetUpdatedAt() (value time.Time, ok bool) {
 	ok = o != nil && o.updatedAt != nil
 	if ok {
 		value = *o.updatedAt
@@ -227,43 +204,66 @@ func (o *Organization) GetUpdatedAt() (value time.Time, ok bool) {
 	return
 }
 
-// OrganizationListKind is the name of the type used to represent list of objects of
-// type 'organization'.
-const OrganizationListKind = "OrganizationList"
+// Value returns the value of the 'value' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Label) Value() string {
+	if o != nil && o.value != nil {
+		return *o.value
+	}
+	return ""
+}
 
-// OrganizationListLinkKind is the name of the type used to represent links to list
-// of objects of type 'organization'.
-const OrganizationListLinkKind = "OrganizationListLink"
+// GetValue returns the value of the 'value' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Label) GetValue() (value string, ok bool) {
+	ok = o != nil && o.value != nil
+	if ok {
+		value = *o.value
+	}
+	return
+}
 
-// OrganizationNilKind is the name of the type used to nil lists of objects of
-// type 'organization'.
-const OrganizationListNilKind = "OrganizationListNil"
+// LabelListKind is the name of the type used to represent list of objects of
+// type 'label'.
+const LabelListKind = "LabelList"
 
-// OrganizationList is a list of values of the 'organization' type.
-type OrganizationList struct {
+// LabelListLinkKind is the name of the type used to represent links to list
+// of objects of type 'label'.
+const LabelListLinkKind = "LabelListLink"
+
+// LabelNilKind is the name of the type used to nil lists of objects of
+// type 'label'.
+const LabelListNilKind = "LabelListNil"
+
+// LabelList is a list of values of the 'label' type.
+type LabelList struct {
 	href  *string
 	link  bool
-	items []*Organization
+	items []*Label
 }
 
 // Kind returns the name of the type of the object.
-func (l *OrganizationList) Kind() string {
+func (l *LabelList) Kind() string {
 	if l == nil {
-		return OrganizationListNilKind
+		return LabelListNilKind
 	}
 	if l.link {
-		return OrganizationListLinkKind
+		return LabelListLinkKind
 	}
-	return OrganizationListKind
+	return LabelListKind
 }
 
 // Link returns true iif this is a link.
-func (l *OrganizationList) Link() bool {
+func (l *LabelList) Link() bool {
 	return l != nil && l.link
 }
 
 // HREF returns the link to the list.
-func (l *OrganizationList) HREF() string {
+func (l *LabelList) HREF() string {
 	if l != nil && l.href != nil {
 		return *l.href
 	}
@@ -272,7 +272,7 @@ func (l *OrganizationList) HREF() string {
 
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
-func (l *OrganizationList) GetHREF() (value string, ok bool) {
+func (l *LabelList) GetHREF() (value string, ok bool) {
 	ok = l != nil && l.href != nil
 	if ok {
 		value = *l.href
@@ -281,7 +281,7 @@ func (l *OrganizationList) GetHREF() (value string, ok bool) {
 }
 
 // Len returns the length of the list.
-func (l *OrganizationList) Len() int {
+func (l *LabelList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -289,13 +289,13 @@ func (l *OrganizationList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *OrganizationList) Empty() bool {
+func (l *LabelList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *OrganizationList) Get(i int) *Organization {
+func (l *LabelList) Get(i int) *Label {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -308,12 +308,12 @@ func (l *OrganizationList) Get(i int) *Organization {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *OrganizationList) Slice() []*Organization {
-	var slice []*Organization
+func (l *LabelList) Slice() []*Label {
+	var slice []*Label
 	if l == nil {
-		slice = make([]*Organization, 0)
+		slice = make([]*Label, 0)
 	} else {
-		slice = make([]*Organization, len(l.items))
+		slice = make([]*Label, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -322,7 +322,7 @@ func (l *OrganizationList) Slice() []*Organization {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *OrganizationList) Each(f func(item *Organization) bool) {
+func (l *LabelList) Each(f func(item *Label) bool) {
 	if l == nil {
 		return
 	}
@@ -336,7 +336,7 @@ func (l *OrganizationList) Each(f func(item *Organization) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *OrganizationList) Range(f func(index int, item *Organization) bool) {
+func (l *LabelList) Range(f func(index int, item *Label) bool) {
 	if l == nil {
 		return
 	}

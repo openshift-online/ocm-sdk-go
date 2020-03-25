@@ -2834,7 +2834,7 @@
         }
       },
       "AWSInfrastructureAccessRoleGrantState": {
-        "description": "State of an AWS incfrastructure access role grant.\n",
+        "description": "State of an AWS infrastructure access role grant.\n",
         "type": "string",
         "enum": [
           "deleting",
