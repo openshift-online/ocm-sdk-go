@@ -2374,6 +2374,22 @@
         "description": "Retrieves a list of subscriptions.\n",
         "parameters": [
           {
+            "name": "fetchaccounts_accounts",
+            "description": "If true, includes the account reference information in the output. Could slow request response time.\n",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "fetchlabels_labels",
+            "description": "If true, includes the labels on a subscription in the output. Could slow request response time.\n",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "labels",
             "description": "Filter subscriptions by a comma separated list of labels:\n\n[source]\n```\nenv=staging,department=sales\n```\n\n",
             "in": "query",
@@ -2466,7 +2482,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}": {
       "delete": {
-        "description": "Deletes the subscription.\n",
+        "description": "Deletes the subscription by ID.\n",
         "parameters": [
           {
             "name": "subscription_id",
@@ -2493,7 +2509,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the subscription.\n",
+        "description": "Retrieves the details of the subscription by ID.\n",
         "parameters": [
           {
             "name": "subscription_id",
@@ -2505,6 +2521,49 @@
         ],
         "responses": {
           "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subscription"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a subscription\n",
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Subscription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -2739,6 +2798,10 @@
           "banned": {
             "type": "boolean"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
           "email": {
             "type": "string"
           },
@@ -2748,11 +2811,15 @@
           "last_name": {
             "type": "string"
           },
-          "name": {
-            "type": "string"
-          },
           "organization": {
             "$ref": "#/components/schemas/Organization"
+          },
+          "service_account": {
+            "type": "boolean"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           },
           "username": {
             "type": "string"
@@ -2850,6 +2917,39 @@
           }
         }
       },
+      "Label": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Label' if this is a complete object or 'LabelLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "internal": {
+            "type": "boolean"
+          },
+          "key": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
       "Organization": {
         "properties": {
           "kind": {
@@ -2864,11 +2964,22 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ebs_account_id": {
+            "type": "string"
+          },
           "external_id": {
             "type": "string"
           },
           "name": {
             "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -2891,9 +3002,6 @@
           },
           "resource_type": {
             "type": "string"
-          },
-          "role_id": {
-            "type": "string"
           }
         }
       },
@@ -2910,8 +3018,21 @@
           "href": {
             "description": "Self link.\n",
             "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
           }
         }
+      },
+      "ProductBundleEnum": {
+        "description": "Usage of Subscription.\n",
+        "type": "string",
+        "enum": [
+          
+        ]
       },
       "PullSecretsRequest": {
         "properties": {
@@ -2967,6 +3088,10 @@
           "cloud_alias": {
             "type": "boolean"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
           "name": {
             "type": "string"
           },
@@ -2978,6 +3103,10 @@
           },
           "type": {
             "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -2998,11 +3127,22 @@
           "account": {
             "$ref": "#/components/schemas/Account"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "external_resource_id": {
+            "type": "string"
+          },
           "registry": {
             "$ref": "#/components/schemas/Registry"
           },
           "token": {
             "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           },
           "username": {
             "type": "string"
@@ -3052,10 +3192,19 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "byoc": {
+            "type": "boolean"
+          },
+          "sku": {
+            "type": "string"
+          },
           "allowed": {
             "description": "Number of allowed nodes\n",
             "type": "integer",
             "format": "int32"
+          },
+          "availability_zone_type": {
+            "type": "string"
           },
           "resource_name": {
             "description": "platform-specific name, such as \"M5.2Xlarge\" for a type of EC2 node\n",
@@ -3093,12 +3242,12 @@
           "availability_zone_type": {
             "type": "string"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
           "organization_id": {
             "type": "string"
-          },
-          "reserved": {
-            "type": "integer",
-            "format": "int32"
           },
           "resource_name": {
             "type": "string"
@@ -3108,6 +3257,10 @@
           },
           "type": {
             "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -3159,6 +3312,10 @@
           "config_managed": {
             "type": "boolean"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
           "organization": {
             "$ref": "#/components/schemas/Organization"
           },
@@ -3179,8 +3336,19 @@
           },
           "type": {
             "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
+      },
+      "ServiceLevelEnum": {
+        "description": "Service Level of Subscription.\n",
+        "type": "string",
+        "enum": [
+          
+        ]
       },
       "Subscription": {
         "properties": {
@@ -3199,6 +3367,13 @@
           "cluster_id": {
             "type": "string"
           },
+          "consumer_uuid": {
+            "type": "string"
+          },
+          "cpu_total": {
+            "type": "integer",
+            "format": "int32"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time"
@@ -3213,10 +3388,24 @@
           "external_cluster_id": {
             "type": "string"
           },
-          "last_telemetry_date": {
-            "description": "Last telemetry authorization request for this subscription.\n",
+          "labels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Label"
+            }
+          },
+          "last_reconcile_date": {
+            "description": "Last time this subscription were reconciled about cluster usage\n",
             "type": "string",
             "format": "date-time"
+          },
+          "last_telemetry_date": {
+            "description": "Last telemetry authorization request for this  cluster/subscription in Unix time\n",
+            "type": "string",
+            "format": "date-time"
+          },
+          "managed": {
+            "type": "boolean"
           },
           "organization_id": {
             "type": "string"
@@ -3224,14 +3413,54 @@
           "plan": {
             "$ref": "#/components/schemas/Plan"
           },
-          "registry_credential": {
-            "$ref": "#/components/schemas/RegistryCredential"
+          "product_bundle": {
+            "$ref": "#/components/schemas/ProductBundleEnum"
+          },
+          "service_level": {
+            "$ref": "#/components/schemas/ServiceLevelEnum"
+          },
+          "socket_total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          },
+          "support_level": {
+            "$ref": "#/components/schemas/SupportLevelEnum"
+          },
+          "system_units": {
+            "$ref": "#/components/schemas/SystemUnitsEnum"
           },
           "updated_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/UsageEnum"
           }
         }
+      },
+      "SupportLevelEnum": {
+        "description": "Support Level of Subscription.\n",
+        "type": "string",
+        "enum": [
+          
+        ]
+      },
+      "SystemUnitsEnum": {
+        "description": "Usage of Subscription.\n",
+        "type": "string",
+        "enum": [
+          
+        ]
+      },
+      "UsageEnum": {
+        "description": "Usage of Subscription.\n",
+        "type": "string",
+        "enum": [
+          
+        ]
       },
       "Error": {
         "type": "object",

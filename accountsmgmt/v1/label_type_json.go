@@ -21,21 +21,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import (
 	"io"
+	"time"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalResource writes a value of the 'resource' type to the given writer.
-func MarshalResource(object *Resource, writer io.Writer) error {
+// MarshalLabel writes a value of the 'label' type to the given writer.
+func MarshalLabel(object *Label, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeResource(object, stream)
+	writeLabel(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeResource writes a value of the 'resource' type to the given stream.
-func writeResource(object *Resource, stream *jsoniter.Stream) {
+// writeLabel writes a value of the 'label' type to the given stream.
+func writeLabel(object *Label, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	if count > 0 {
@@ -43,9 +44,9 @@ func writeResource(object *Resource, stream *jsoniter.Stream) {
 	}
 	stream.WriteObjectField("kind")
 	if object.link {
-		stream.WriteString(ResourceLinkKind)
+		stream.WriteString(LabelLinkKind)
 	} else {
-		stream.WriteString(ResourceKind)
+		stream.WriteString(LabelKind)
 	}
 	count++
 	if object.id != nil {
@@ -64,72 +65,64 @@ func writeResource(object *Resource, stream *jsoniter.Stream) {
 		stream.WriteString(*object.href)
 		count++
 	}
-	if object.byoc != nil {
+	if object.createdAt != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("byoc")
-		stream.WriteBool(*object.byoc)
+		stream.WriteObjectField("created_at")
+		stream.WriteString((*object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.sku != nil {
+	if object.internal != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("sku")
-		stream.WriteString(*object.sku)
+		stream.WriteObjectField("internal")
+		stream.WriteBool(*object.internal)
 		count++
 	}
-	if object.allowed != nil {
+	if object.key != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("allowed")
-		stream.WriteInt(*object.allowed)
+		stream.WriteObjectField("key")
+		stream.WriteString(*object.key)
 		count++
 	}
-	if object.availabilityZoneType != nil {
+	if object.updatedAt != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("availability_zone_type")
-		stream.WriteString(*object.availabilityZoneType)
+		stream.WriteObjectField("updated_at")
+		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
 		count++
 	}
-	if object.resourceName != nil {
+	if object.value != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("resource_name")
-		stream.WriteString(*object.resourceName)
-		count++
-	}
-	if object.resourceType != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteObjectField("value")
+		stream.WriteString(*object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalResource reads a value of the 'resource' type from the given
+// UnmarshalLabel reads a value of the 'label' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalResource(source interface{}) (object *Resource, err error) {
+func UnmarshalLabel(source interface{}) (object *Label, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readResource(iterator)
+	object = readLabel(iterator)
 	err = iterator.Error
 	return
 }
 
-// readResource reads a value of the 'resource' type from the given iterator.
-func readResource(iterator *jsoniter.Iterator) *Resource {
-	object := &Resource{}
+// readLabel reads a value of the 'label' type from the given iterator.
+func readLabel(iterator *jsoniter.Iterator) *Label {
+	object := &Label{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
@@ -138,31 +131,36 @@ func readResource(iterator *jsoniter.Iterator) *Resource {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == ResourceLinkKind
+			object.link = value == LabelLinkKind
 		case "id":
 			value := iterator.ReadString()
 			object.id = &value
 		case "href":
 			value := iterator.ReadString()
 			object.href = &value
-		case "byoc":
+		case "created_at":
+			text := iterator.ReadString()
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.createdAt = &value
+		case "internal":
 			value := iterator.ReadBool()
-			object.byoc = &value
-		case "sku":
+			object.internal = &value
+		case "key":
 			value := iterator.ReadString()
-			object.sku = &value
-		case "allowed":
-			value := iterator.ReadInt()
-			object.allowed = &value
-		case "availability_zone_type":
+			object.key = &value
+		case "updated_at":
+			text := iterator.ReadString()
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.updatedAt = &value
+		case "value":
 			value := iterator.ReadString()
-			object.availabilityZoneType = &value
-		case "resource_name":
-			value := iterator.ReadString()
-			object.resourceName = &value
-		case "resource_type":
-			value := iterator.ReadString()
-			object.resourceType = &value
+			object.value = &value
 		default:
 			iterator.ReadAny()
 		}
