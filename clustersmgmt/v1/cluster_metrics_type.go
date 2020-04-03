@@ -23,13 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Cluster metrics received via telemetry.
 type ClusterMetrics struct {
-	cpu                *ClusterMetric
-	computeNodesCPU    *ClusterMetric
-	computeNodesMemory *ClusterMetric
-	memory             *ClusterMetric
-	nodes              *ClusterNodes
-	sockets            *ClusterMetric
-	storage            *ClusterMetric
+	cpu                 *ClusterMetric
+	alertsFiring        *ClusterAlertsFiring
+	computeNodesCPU     *ClusterMetric
+	computeNodesMemory  *ClusterMetric
+	memory              *ClusterMetric
+	nodes               *ClusterNodes
+	operatorsConditions *ClusterOperatorsConditions
+	sockets             *ClusterMetric
+	storage             *ClusterMetric
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -56,6 +58,29 @@ func (o *ClusterMetrics) GetCPU() (value *ClusterMetric, ok bool) {
 	ok = o != nil && o.cpu != nil
 	if ok {
 		value = o.cpu
+	}
+	return
+}
+
+// AlertsFiring returns the value of the 'alerts_firing' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// AlertsFiring contains information about alerts firing.
+func (o *ClusterMetrics) AlertsFiring() *ClusterAlertsFiring {
+	if o == nil {
+		return nil
+	}
+	return o.alertsFiring
+}
+
+// GetAlertsFiring returns the value of the 'alerts_firing' attribute and
+// a flag indicating if the attribute has a value.
+//
+// AlertsFiring contains information about alerts firing.
+func (o *ClusterMetrics) GetAlertsFiring() (value *ClusterAlertsFiring, ok bool) {
+	ok = o != nil && o.alertsFiring != nil
+	if ok {
+		value = o.alertsFiring
 	}
 	return
 }
@@ -148,6 +173,29 @@ func (o *ClusterMetrics) GetNodes() (value *ClusterNodes, ok bool) {
 	ok = o != nil && o.nodes != nil
 	if ok {
 		value = o.nodes
+	}
+	return
+}
+
+// OperatorsConditions returns the value of the 'operators_conditions' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// OperatorsConditions contains information about operator conditions in the cluster.
+func (o *ClusterMetrics) OperatorsConditions() *ClusterOperatorsConditions {
+	if o == nil {
+		return nil
+	}
+	return o.operatorsConditions
+}
+
+// GetOperatorsConditions returns the value of the 'operators_conditions' attribute and
+// a flag indicating if the attribute has a value.
+//
+// OperatorsConditions contains information about operator conditions in the cluster.
+func (o *ClusterMetrics) GetOperatorsConditions() (value *ClusterOperatorsConditions, ok bool) {
+	ok = o != nil && o.operatorsConditions != nil
+	if ok {
+		value = o.operatorsConditions
 	}
 	return
 }

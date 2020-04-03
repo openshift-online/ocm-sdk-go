@@ -81,6 +81,11 @@ type ClusterServer interface {
 	// Reference to the resource that manages metrics queries for the cluster.
 	MetricQueries() MetricQueriesServer
 
+	// Product returns the target 'product' resource.
+	//
+	// Reference to the resource that manages the product type of the cluster
+	Product() ProductServer
+
 	// Status returns the target 'cluster_status' resource.
 	//
 	// Reference to the resource that manages the detailed status of the cluster.
@@ -246,6 +251,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 			return
 		}
 		dispatchMetricQueries(w, r, target, segments[1:])
+	case "product":
+		target := server.Product()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchProduct(w, r, target, segments[1:])
 	case "status":
 		target := server.Status()
 		if target == nil {

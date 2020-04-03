@@ -131,6 +131,17 @@ func (c *Client) MachineTypes() *MachineTypesClient {
 	)
 }
 
+// Products returns the target 'products' resource.
+//
+// Reference to the resource that manages the collection of products.
+func (c *Client) Products() *ProductsClient {
+	return NewProductsClient(
+		c.transport,
+		path.Join(c.path, "products"),
+		path.Join(c.metric, "products"),
+	)
+}
+
 // Versions returns the target 'versions' resource.
 //
 // Reference to the resource that manage the collection of versions.

@@ -91,6 +91,7 @@ type ClusterBuilder struct {
 	network                           *NetworkBuilder
 	nodes                             *ClusterNodesBuilder
 	openshiftVersion                  *string
+	product                           *ProductBuilder
 	properties                        map[string]string
 	region                            *CloudRegionBuilder
 	state                             *ClusterState
@@ -323,6 +324,14 @@ func (b *ClusterBuilder) OpenshiftVersion(value string) *ClusterBuilder {
 	return b
 }
 
+// Product sets the value of the 'product' attribute to the given value.
+//
+// Representation of an product that can be selected as a cluster type.
+func (b *ClusterBuilder) Product(value *ProductBuilder) *ClusterBuilder {
+	b.product = value
+	return b
+}
+
 // Properties sets the value of the 'properties' attribute to the given value.
 //
 //
@@ -477,6 +486,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.nodes = nil
 	}
 	b.openshiftVersion = object.openshiftVersion
+	if object.product != nil {
+		b.product = NewProduct().Copy(object.product)
+	} else {
+		b.product = nil
+	}
 	if len(object.properties) > 0 {
 		b.properties = make(map[string]string)
 		for k, v := range object.properties {
@@ -610,6 +624,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		}
 	}
 	object.openshiftVersion = b.openshiftVersion
+	if b.product != nil {
+		object.product, err = b.product.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.properties != nil {
 		object.properties = make(map[string]string)
 		for k, v := range b.properties {

@@ -23,13 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Cluster metrics received via telemetry.
 type ClusterMetricsBuilder struct {
-	cpu                *ClusterMetricBuilder
-	computeNodesCPU    *ClusterMetricBuilder
-	computeNodesMemory *ClusterMetricBuilder
-	memory             *ClusterMetricBuilder
-	nodes              *ClusterNodesBuilder
-	sockets            *ClusterMetricBuilder
-	storage            *ClusterMetricBuilder
+	cpu                 *ClusterMetricBuilder
+	alertsFiring        *ClusterAlertsFiringBuilder
+	computeNodesCPU     *ClusterMetricBuilder
+	computeNodesMemory  *ClusterMetricBuilder
+	memory              *ClusterMetricBuilder
+	nodes               *ClusterNodesBuilder
+	operatorsConditions *ClusterOperatorsConditionsBuilder
+	sockets             *ClusterMetricBuilder
+	storage             *ClusterMetricBuilder
 }
 
 // NewClusterMetrics creates a new builder of 'cluster_metrics' objects.
@@ -43,6 +45,14 @@ func NewClusterMetrics() *ClusterMetricsBuilder {
 // a cluster.
 func (b *ClusterMetricsBuilder) CPU(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.cpu = value
+	return b
+}
+
+// AlertsFiring sets the value of the 'alerts_firing' attribute to the given value.
+//
+// Counts of different alerts firing inside a cluster.
+func (b *ClusterMetricsBuilder) AlertsFiring(value *ClusterAlertsFiringBuilder) *ClusterMetricsBuilder {
+	b.alertsFiring = value
 	return b
 }
 
@@ -81,6 +91,14 @@ func (b *ClusterMetricsBuilder) Nodes(value *ClusterNodesBuilder) *ClusterMetric
 	return b
 }
 
+// OperatorsConditions sets the value of the 'operators_conditions' attribute to the given value.
+//
+// Counts of operators conditions inside a cluster.
+func (b *ClusterMetricsBuilder) OperatorsConditions(value *ClusterOperatorsConditionsBuilder) *ClusterMetricsBuilder {
+	b.operatorsConditions = value
+	return b
+}
+
 // Sockets sets the value of the 'sockets' attribute to the given value.
 //
 // Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
@@ -109,6 +127,11 @@ func (b *ClusterMetricsBuilder) Copy(object *ClusterMetrics) *ClusterMetricsBuil
 	} else {
 		b.cpu = nil
 	}
+	if object.alertsFiring != nil {
+		b.alertsFiring = NewClusterAlertsFiring().Copy(object.alertsFiring)
+	} else {
+		b.alertsFiring = nil
+	}
 	if object.computeNodesCPU != nil {
 		b.computeNodesCPU = NewClusterMetric().Copy(object.computeNodesCPU)
 	} else {
@@ -129,6 +152,11 @@ func (b *ClusterMetricsBuilder) Copy(object *ClusterMetrics) *ClusterMetricsBuil
 	} else {
 		b.nodes = nil
 	}
+	if object.operatorsConditions != nil {
+		b.operatorsConditions = NewClusterOperatorsConditions().Copy(object.operatorsConditions)
+	} else {
+		b.operatorsConditions = nil
+	}
 	if object.sockets != nil {
 		b.sockets = NewClusterMetric().Copy(object.sockets)
 	} else {
@@ -147,6 +175,12 @@ func (b *ClusterMetricsBuilder) Build() (object *ClusterMetrics, err error) {
 	object = new(ClusterMetrics)
 	if b.cpu != nil {
 		object.cpu, err = b.cpu.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.alertsFiring != nil {
+		object.alertsFiring, err = b.alertsFiring.Build()
 		if err != nil {
 			return
 		}
@@ -171,6 +205,12 @@ func (b *ClusterMetricsBuilder) Build() (object *ClusterMetrics, err error) {
 	}
 	if b.nodes != nil {
 		object.nodes, err = b.nodes.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.operatorsConditions != nil {
+		object.operatorsConditions, err = b.operatorsConditions.Build()
 		if err != nil {
 			return
 		}

@@ -281,6 +281,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteString(*object.openshiftVersion)
 		count++
 	}
+	if object.product != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("product")
+		writeProduct(object.product, stream)
+		count++
+	}
 	if object.properties != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -551,6 +559,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "openshift_version":
 			value := iterator.ReadString()
 			object.openshiftVersion = &value
+		case "product":
+			value := readProduct(iterator)
+			object.product = value
 		case "properties":
 			value := map[string]string{}
 			for {

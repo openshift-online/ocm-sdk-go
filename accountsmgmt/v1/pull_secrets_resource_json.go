@@ -24,6 +24,18 @@ import (
 	"net/http"
 )
 
+func readPullSecretsDeleteRequest(request *PullSecretsDeleteServerRequest, r *http.Request) error {
+	return nil
+}
+func writePullSecretsDeleteRequest(request *PullSecretsDeleteRequest, writer io.Writer) error {
+	return nil
+}
+func readPullSecretsDeleteResponse(response *PullSecretsDeleteResponse, reader io.Reader) error {
+	return nil
+}
+func writePullSecretsDeleteResponse(response *PullSecretsDeleteServerResponse, w http.ResponseWriter) error {
+	return nil
+}
 func readPullSecretsPostRequest(request *PullSecretsPostServerRequest, r *http.Request) error {
 	var err error
 	request.request, err = UnmarshalPullSecretsRequest(r)

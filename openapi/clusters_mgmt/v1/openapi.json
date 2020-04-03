@@ -2142,6 +2142,42 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/product": {
+      "get": {
+        "description": "Retrieves the details of the product.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/status": {
       "get": {
         "parameters": [
@@ -2569,6 +2605,129 @@
                       "format": "int32"
                     }
                   }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/products": {
+      "get": {
+        "description": "Retrieves the list of products.\n",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the product instead of\nthe names of the columns of a table. For example, in order to sort the products\ndescending by name the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the product instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nproducts with a name starting with `my` the value should be:\n\n\n```\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the products\nthat the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of products.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/products/{product_id}": {
+      "get": {
+        "description": "Retrieves the details of the product.\n",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
                 }
               }
             }
@@ -3366,6 +3525,10 @@
             "description": "Version of _OpenShift_ installed in the cluster, for example `4.0.0-0.2`.\n\nWhen retrieving a cluster this will always be reported.\n\nWhen provisioning a cluster this will be ignored, as the version to\ndeploy will be determined internally.\n",
             "type": "string"
           },
+          "product": {
+            "description": "Link to the product type of this cluster.\n",
+            "$ref": "#/components/schemas/Product"
+          },
           "properties": {
             "description": "User defined properties for tagging and querying.\n",
             "type": "object",
@@ -3405,6 +3568,31 @@
           "listening": {
             "description": "The listening method of the API server.\n",
             "$ref": "#/components/schemas/ListeningMethod"
+          }
+        }
+      },
+      "ClusterAlertsFiring": {
+        "description": "Counts of different alerts firing inside a cluster.\n",
+        "properties": {
+          "critical": {
+            "description": "Number of \"critical\" alerts firing.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "high": {
+            "description": "Number of \"high\" alerts firing.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "none": {
+            "description": "Number of \"none\" alerts firing.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "warning": {
+            "description": "Number of \"warning\" alerts firing.\n",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -3471,6 +3659,10 @@
             "description": "The amount of CPU provisioned and used in the cluster.\n",
             "$ref": "#/components/schemas/ClusterMetric"
           },
+          "alerts_firing": {
+            "description": "AlertsFiring contains information about alerts firing.\n",
+            "$ref": "#/components/schemas/ClusterAlertsFiring"
+          },
           "compute_nodes_cpu": {
             "description": "The amount of CPU provisioned and used in the cluster by compute nodes.\n",
             "$ref": "#/components/schemas/ClusterMetric"
@@ -3486,6 +3678,10 @@
           "nodes": {
             "description": "The number of nodes provisioned for the cluster.\n",
             "$ref": "#/components/schemas/ClusterNodes"
+          },
+          "operators_conditions": {
+            "description": "OperatorsConditions contains information about operator conditions in the cluster.\n",
+            "$ref": "#/components/schemas/ClusterOperatorsConditions"
           },
           "sockets": {
             "description": "The amount of sockets provisioned and used in the cluster.\n",
@@ -3556,6 +3752,26 @@
           "failing",
           "upgrading"
         ]
+      },
+      "ClusterOperatorsConditions": {
+        "description": "Counts of operators conditions inside a cluster.\n",
+        "properties": {
+          "available": {
+            "description": "Number of \"available\" cluster operators.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "degraded": {
+            "description": "Number of \"degraded\" cluster operators.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "failing": {
+            "description": "Number of \"failing\" cluster operators.\n",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       },
       "ClusterOperatorsInfo": {
         "description": "Provides detailed information about the operators installed on the cluster.\n",
@@ -4075,6 +4291,27 @@
           },
           "issuer": {
             "description": "The URL that the OpenID Provider asserts as the Issuer Identifier\n",
+            "type": "string"
+          }
+        }
+      },
+      "Product": {
+        "description": "Representation of an product that can be selected as a cluster type.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Product' if this is a complete object or 'ProductLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the product.\n",
             "type": "string"
           }
         }
