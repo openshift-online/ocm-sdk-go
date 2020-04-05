@@ -46,6 +46,14 @@ func writeClusterMetrics(object *ClusterMetrics, stream *jsoniter.Stream) {
 		writeClusterMetric(object.cpu, stream)
 		count++
 	}
+	if object.alertsFiring != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("alerts_firing")
+		writeClusterAlertsFiring(object.alertsFiring, stream)
+		count++
+	}
 	if object.computeNodesCPU != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -76,6 +84,14 @@ func writeClusterMetrics(object *ClusterMetrics, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("nodes")
 		writeClusterNodes(object.nodes, stream)
+		count++
+	}
+	if object.operatorsConditions != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("operators_conditions")
+		writeClusterOperatorsConditions(object.operatorsConditions, stream)
 		count++
 	}
 	if object.sockets != nil {
@@ -121,6 +137,9 @@ func readClusterMetrics(iterator *jsoniter.Iterator) *ClusterMetrics {
 		case "cpu":
 			value := readClusterMetric(iterator)
 			object.cpu = value
+		case "alerts_firing":
+			value := readClusterAlertsFiring(iterator)
+			object.alertsFiring = value
 		case "compute_nodes_cpu":
 			value := readClusterMetric(iterator)
 			object.computeNodesCPU = value
@@ -133,6 +152,9 @@ func readClusterMetrics(iterator *jsoniter.Iterator) *ClusterMetrics {
 		case "nodes":
 			value := readClusterNodes(iterator)
 			object.nodes = value
+		case "operators_conditions":
+			value := readClusterOperatorsConditions(iterator)
+			object.operatorsConditions = value
 		case "sockets":
 			value := readClusterMetric(iterator)
 			object.sockets = value

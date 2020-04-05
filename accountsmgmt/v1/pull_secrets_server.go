@@ -30,10 +30,31 @@ import (
 // PullSecretsServer represents the interface the manages the 'pull_secrets' resource.
 type PullSecretsServer interface {
 
+	// Delete handles a request for the 'delete' method.
+	//
+	// Deletes the pull secret
+	Delete(ctx context.Context, request *PullSecretsDeleteServerRequest, response *PullSecretsDeleteServerResponse) error
+
 	// Post handles a request for the 'post' method.
 	//
 	// Returns access token generated from registries in docker format.
 	Post(ctx context.Context, request *PullSecretsPostServerRequest, response *PullSecretsPostServerResponse) error
+}
+
+// PullSecretsDeleteServerRequest is the request for the 'delete' method.
+type PullSecretsDeleteServerRequest struct {
+}
+
+// PullSecretsDeleteServerResponse is the response for the 'delete' method.
+type PullSecretsDeleteServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// Status sets the status code.
+func (r *PullSecretsDeleteServerResponse) Status(value int) *PullSecretsDeleteServerResponse {
+	r.status = value
+	return r
 }
 
 // PullSecretsPostServerRequest is the request for the 'post' method.
@@ -90,6 +111,9 @@ func (r *PullSecretsPostServerResponse) Status(value int) *PullSecretsPostServer
 func dispatchPullSecrets(w http.ResponseWriter, r *http.Request, server PullSecretsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
+		case "DELETE":
+			adaptPullSecretsDeleteRequest(w, r, server)
+			return
 		case "POST":
 			adaptPullSecretsPostRequest(w, r, server)
 			return
@@ -101,6 +125,41 @@ func dispatchPullSecrets(w http.ResponseWriter, r *http.Request, server PullSecr
 	switch segments[0] {
 	default:
 		errors.SendNotFound(w, r)
+		return
+	}
+}
+
+// adaptPullSecretsDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptPullSecretsDeleteRequest(w http.ResponseWriter, r *http.Request, server PullSecretsServer) {
+	request := &PullSecretsDeleteServerRequest{}
+	err := readPullSecretsDeleteRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &PullSecretsDeleteServerResponse{}
+	response.status = 204
+	err = server.Delete(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writePullSecretsDeleteResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
 		return
 	}
 }

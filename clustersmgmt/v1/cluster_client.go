@@ -165,6 +165,17 @@ func (c *ClusterClient) MetricQueries() *MetricQueriesClient {
 	)
 }
 
+// Product returns the target 'product' resource.
+//
+// Reference to the resource that manages the product type of the cluster
+func (c *ClusterClient) Product() *ProductClient {
+	return NewProductClient(
+		c.transport,
+		path.Join(c.path, "product"),
+		path.Join(c.metric, "product"),
+	)
+}
+
 // Status returns the target 'cluster_status' resource.
 //
 // Reference to the resource that manages the detailed status of the cluster.

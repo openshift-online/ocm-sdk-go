@@ -103,6 +103,7 @@ type Cluster struct {
 	network                           *Network
 	nodes                             *ClusterNodes
 	openshiftVersion                  *string
+	product                           *Product
 	properties                        map[string]string
 	region                            *CloudRegion
 	state                             *ClusterState
@@ -788,6 +789,29 @@ func (o *Cluster) GetOpenshiftVersion() (value string, ok bool) {
 	ok = o != nil && o.openshiftVersion != nil
 	if ok {
 		value = *o.openshiftVersion
+	}
+	return
+}
+
+// Product returns the value of the 'product' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Link to the product type of this cluster.
+func (o *Cluster) Product() *Product {
+	if o == nil {
+		return nil
+	}
+	return o.product
+}
+
+// GetProduct returns the value of the 'product' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Link to the product type of this cluster.
+func (o *Cluster) GetProduct() (value *Product, ok bool) {
+	ok = o != nil && o.product != nil
+	if ok {
+		value = o.product
 	}
 	return
 }
