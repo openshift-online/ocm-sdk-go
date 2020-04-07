@@ -3,6 +3,19 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.99 Apr 7 2020
+
+- Update to model 0.0.54
+** Add HealthState field to Cluster type
+** Refactor alerts and operator conditions to contain only 'CriticalAlerts' and 'OperatorsConditionFailing'
+** Adding computeNodesSockets to cluster metrics
+** Fix pull secret deletion path
+** Remove unsupported cluster state
+** Add machine type category
+
+- Update to metamodel 0.0.27
+** Update file header year to 2020
+
 == 0.1.98 Apr 6 2020
 
 - Update to model 0.0.53
