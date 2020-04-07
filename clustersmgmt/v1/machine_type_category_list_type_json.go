@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Red Hat, Inc.
+Copyright (c) 2020 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,46 +26,47 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalClusterAlertsFiringList writes a list of values of the 'cluster_alerts_firing' type to
+// MarshalMachineTypeCategoryList writes a list of values of the 'machine_type_category' type to
 // the given writer.
-func MarshalClusterAlertsFiringList(list []*ClusterAlertsFiring, writer io.Writer) error {
+func MarshalMachineTypeCategoryList(list []MachineTypeCategory, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterAlertsFiringList(list, stream)
+	writeMachineTypeCategoryList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeClusterAlertsFiringList writes a list of value of the 'cluster_alerts_firing' type to
+// writeMachineTypeCategoryList writes a list of value of the 'machine_type_category' type to
 // the given stream.
-func writeClusterAlertsFiringList(list []*ClusterAlertsFiring, stream *jsoniter.Stream) {
+func writeMachineTypeCategoryList(list []MachineTypeCategory, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeClusterAlertsFiring(value, stream)
+		stream.WriteString(string(value))
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalClusterAlertsFiringList reads a list of values of the 'cluster_alerts_firing' type
+// UnmarshalMachineTypeCategoryList reads a list of values of the 'machine_type_category' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalClusterAlertsFiringList(source interface{}) (items []*ClusterAlertsFiring, err error) {
+func UnmarshalMachineTypeCategoryList(source interface{}) (items []MachineTypeCategory, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readClusterAlertsFiringList(iterator)
+	items = readMachineTypeCategoryList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterAlertsFiringList reads list of values of the ''cluster_alerts_firing' type from
+// readMachineTypeCategoryList reads list of values of the ''machine_type_category' type from
 // the given iterator.
-func readClusterAlertsFiringList(iterator *jsoniter.Iterator) []*ClusterAlertsFiring {
-	list := []*ClusterAlertsFiring{}
+func readMachineTypeCategoryList(iterator *jsoniter.Iterator) []MachineTypeCategory {
+	list := []MachineTypeCategory{}
 	for iterator.ReadArray() {
-		item := readClusterAlertsFiring(iterator)
+		text := iterator.ReadString()
+		item := MachineTypeCategory(text)
 		list = append(list, item)
 	}
 	return list

@@ -3478,6 +3478,10 @@
               "$ref": "#/components/schemas/Group"
             }
           },
+          "health_state": {
+            "description": "HealthState indicates the overall health state of the cluster.\n",
+            "$ref": "#/components/schemas/ClusterHealthState"
+          },
           "identity_providers": {
             "description": "Link to the collection of identity providers of the cluster.\n",
             "type": "array",
@@ -3571,31 +3575,6 @@
           }
         }
       },
-      "ClusterAlertsFiring": {
-        "description": "Counts of different alerts firing inside a cluster.\n",
-        "properties": {
-          "critical": {
-            "description": "Number of \"critical\" alerts firing.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "high": {
-            "description": "Number of \"high\" alerts firing.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "none": {
-            "description": "Number of \"none\" alerts firing.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "warning": {
-            "description": "Number of \"warning\" alerts firing.\n",
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "ClusterConsole": {
         "description": "Information about the console of a cluster.\n",
         "properties": {
@@ -3634,6 +3613,15 @@
           }
         }
       },
+      "ClusterHealthState": {
+        "description": "ClusterHealthState indicates the health of a cluster.\n",
+        "type": "string",
+        "enum": [
+          "healthy",
+          "unhealthy",
+          "unknown"
+        ]
+      },
       "ClusterMetric": {
         "description": "Metric describing the total and used amount of some resource (like RAM, CPU and storage) in\na cluster.\n",
         "properties": {
@@ -3659,10 +3647,6 @@
             "description": "The amount of CPU provisioned and used in the cluster.\n",
             "$ref": "#/components/schemas/ClusterMetric"
           },
-          "alerts_firing": {
-            "description": "AlertsFiring contains information about alerts firing.\n",
-            "$ref": "#/components/schemas/ClusterAlertsFiring"
-          },
           "compute_nodes_cpu": {
             "description": "The amount of CPU provisioned and used in the cluster by compute nodes.\n",
             "$ref": "#/components/schemas/ClusterMetric"
@@ -3670,6 +3654,15 @@
           "compute_nodes_memory": {
             "description": "The amount of memory provisioned and used in the cluster by compute nodes.\n",
             "$ref": "#/components/schemas/ClusterMetric"
+          },
+          "compute_nodes_sockets": {
+            "description": "The amount of sockets provisioned and used in the cluster by compute nodes.\n",
+            "$ref": "#/components/schemas/ClusterMetric"
+          },
+          "critical_alerts_firing": {
+            "description": "CriticalAlertsFiring contains information about critical alerts firing.\n",
+            "type": "integer",
+            "format": "int32"
           },
           "memory": {
             "description": "The amount of memory provisioned and used in the cluster.\n",
@@ -3679,9 +3672,10 @@
             "description": "The number of nodes provisioned for the cluster.\n",
             "$ref": "#/components/schemas/ClusterNodes"
           },
-          "operators_conditions": {
-            "description": "OperatorsConditions contains information about operator conditions in the cluster.\n",
-            "$ref": "#/components/schemas/ClusterOperatorsConditions"
+          "operators_condition_failing": {
+            "description": "OperatorsConditionFailing contains information about operator in failing condition in the cluster.\n",
+            "type": "integer",
+            "format": "int32"
           },
           "sockets": {
             "description": "The amount of sockets provisioned and used in the cluster.\n",
@@ -3753,26 +3747,6 @@
           "upgrading"
         ]
       },
-      "ClusterOperatorsConditions": {
-        "description": "Counts of operators conditions inside a cluster.\n",
-        "properties": {
-          "available": {
-            "description": "Number of \"available\" cluster operators.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "degraded": {
-            "description": "Number of \"degraded\" cluster operators.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "failing": {
-            "description": "Number of \"failing\" cluster operators.\n",
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "ClusterOperatorsInfo": {
         "description": "Provides detailed information about the operators installed on the cluster.\n",
         "properties": {
@@ -3804,7 +3778,6 @@
           "error",
           "installing",
           "pending",
-          "pending_account",
           "ready",
           "uninstalling",
           "unknown"
@@ -4183,6 +4156,10 @@
             "description": "The amount of cpu's of the machine type.\n",
             "$ref": "#/components/schemas/Value"
           },
+          "category": {
+            "description": "The category which the machine type is suitable for.\n",
+            "$ref": "#/components/schemas/MachineTypeCategory"
+          },
           "cloud_provider": {
             "description": "Link to the cloud provider that the machine type belongs to.\n",
             "$ref": "#/components/schemas/CloudProvider"
@@ -4196,6 +4173,15 @@
             "type": "string"
           }
         }
+      },
+      "MachineTypeCategory": {
+        "description": "Machine type category.\n",
+        "type": "string",
+        "enum": [
+          "compute_optimized",
+          "general_purpose",
+          "memory_optimized"
+        ]
       },
       "Metric": {
         "description": "Metric included in a dashboard.\n",

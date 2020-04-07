@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Red Hat, Inc.
+Copyright (c) 2020 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,18 +24,6 @@ import (
 	"net/http"
 )
 
-func readPullSecretsDeleteRequest(request *PullSecretsDeleteServerRequest, r *http.Request) error {
-	return nil
-}
-func writePullSecretsDeleteRequest(request *PullSecretsDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readPullSecretsDeleteResponse(response *PullSecretsDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writePullSecretsDeleteResponse(response *PullSecretsDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
 func readPullSecretsPostRequest(request *PullSecretsPostServerRequest, r *http.Request) error {
 	var err error
 	request.request, err = UnmarshalPullSecretsRequest(r)

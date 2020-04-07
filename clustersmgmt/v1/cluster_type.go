@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Red Hat, Inc.
+Copyright (c) 2020 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -93,6 +93,7 @@ type Cluster struct {
 	externalID                        *string
 	flavour                           *Flavour
 	groups                            *GroupList
+	healthState                       *ClusterHealthState
 	identityProviders                 *IdentityProviderList
 	ingresses                         *IngressList
 	loadBalancerQuota                 *int
@@ -176,6 +177,7 @@ func (o *Cluster) Empty() bool {
 		o.expirationTimestamp == nil &&
 		o.externalID == nil &&
 		o.groups.Len() == 0 &&
+		o.healthState == nil &&
 		o.identityProviders.Len() == 0 &&
 		o.ingresses.Len() == 0 &&
 		o.loadBalancerQuota == nil &&
@@ -537,6 +539,29 @@ func (o *Cluster) GetGroups() (value *GroupList, ok bool) {
 	ok = o != nil && o.groups != nil
 	if ok {
 		value = o.groups
+	}
+	return
+}
+
+// HealthState returns the value of the 'health_state' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// HealthState indicates the overall health state of the cluster.
+func (o *Cluster) HealthState() ClusterHealthState {
+	if o != nil && o.healthState != nil {
+		return *o.healthState
+	}
+	return ClusterHealthState("")
+}
+
+// GetHealthState returns the value of the 'health_state' attribute and
+// a flag indicating if the attribute has a value.
+//
+// HealthState indicates the overall health state of the cluster.
+func (o *Cluster) GetHealthState() (value ClusterHealthState, ok bool) {
+	ok = o != nil && o.healthState != nil
+	if ok {
+		value = *o.healthState
 	}
 	return
 }
