@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Red Hat, Inc.
+Copyright (c) 2020 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -81,6 +81,7 @@ type ClusterBuilder struct {
 	externalID                        *string
 	flavour                           *FlavourBuilder
 	groups                            *GroupListBuilder
+	healthState                       *ClusterHealthState
 	identityProviders                 *IdentityProviderListBuilder
 	ingresses                         *IngressListBuilder
 	loadBalancerQuota                 *int
@@ -241,6 +242,14 @@ func (b *ClusterBuilder) Flavour(value *FlavourBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) Groups(value *GroupListBuilder) *ClusterBuilder {
 	b.groups = value
+	return b
+}
+
+// HealthState sets the value of the 'health_state' attribute to the given value.
+//
+// ClusterHealthState indicates the health of a cluster.
+func (b *ClusterBuilder) HealthState(value ClusterHealthState) *ClusterBuilder {
+	b.healthState = &value
 	return b
 }
 
@@ -456,6 +465,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.groups = nil
 	}
+	b.healthState = object.healthState
 	if object.identityProviders != nil {
 		b.identityProviders = NewIdentityProviderList().Copy(object.identityProviders)
 	} else {
@@ -589,6 +599,7 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			return
 		}
 	}
+	object.healthState = b.healthState
 	if b.identityProviders != nil {
 		object.identityProviders, err = b.identityProviders.Build()
 		if err != nil {

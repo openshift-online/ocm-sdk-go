@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Red Hat, Inc.
+Copyright (c) 2020 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,20 +23,23 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Cluster metrics received via telemetry.
 type ClusterMetrics struct {
-	cpu                 *ClusterMetric
-	alertsFiring        *ClusterAlertsFiring
-	computeNodesCPU     *ClusterMetric
-	computeNodesMemory  *ClusterMetric
-	memory              *ClusterMetric
-	nodes               *ClusterNodes
-	operatorsConditions *ClusterOperatorsConditions
-	sockets             *ClusterMetric
-	storage             *ClusterMetric
+	cpu                       *ClusterMetric
+	computeNodesCPU           *ClusterMetric
+	computeNodesMemory        *ClusterMetric
+	computeNodesSockets       *ClusterMetric
+	criticalAlertsFiring      *int
+	memory                    *ClusterMetric
+	nodes                     *ClusterNodes
+	operatorsConditionFailing *int
+	sockets                   *ClusterMetric
+	storage                   *ClusterMetric
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterMetrics) Empty() bool {
-	return o == nil || (true)
+	return o == nil || (o.criticalAlertsFiring == nil &&
+		o.operatorsConditionFailing == nil &&
+		true)
 }
 
 // CPU returns the value of the 'CPU' attribute, or
@@ -58,29 +61,6 @@ func (o *ClusterMetrics) GetCPU() (value *ClusterMetric, ok bool) {
 	ok = o != nil && o.cpu != nil
 	if ok {
 		value = o.cpu
-	}
-	return
-}
-
-// AlertsFiring returns the value of the 'alerts_firing' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// AlertsFiring contains information about alerts firing.
-func (o *ClusterMetrics) AlertsFiring() *ClusterAlertsFiring {
-	if o == nil {
-		return nil
-	}
-	return o.alertsFiring
-}
-
-// GetAlertsFiring returns the value of the 'alerts_firing' attribute and
-// a flag indicating if the attribute has a value.
-//
-// AlertsFiring contains information about alerts firing.
-func (o *ClusterMetrics) GetAlertsFiring() (value *ClusterAlertsFiring, ok bool) {
-	ok = o != nil && o.alertsFiring != nil
-	if ok {
-		value = o.alertsFiring
 	}
 	return
 }
@@ -131,6 +111,52 @@ func (o *ClusterMetrics) GetComputeNodesMemory() (value *ClusterMetric, ok bool)
 	return
 }
 
+// ComputeNodesSockets returns the value of the 'compute_nodes_sockets' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The amount of sockets provisioned and used in the cluster by compute nodes.
+func (o *ClusterMetrics) ComputeNodesSockets() *ClusterMetric {
+	if o == nil {
+		return nil
+	}
+	return o.computeNodesSockets
+}
+
+// GetComputeNodesSockets returns the value of the 'compute_nodes_sockets' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The amount of sockets provisioned and used in the cluster by compute nodes.
+func (o *ClusterMetrics) GetComputeNodesSockets() (value *ClusterMetric, ok bool) {
+	ok = o != nil && o.computeNodesSockets != nil
+	if ok {
+		value = o.computeNodesSockets
+	}
+	return
+}
+
+// CriticalAlertsFiring returns the value of the 'critical_alerts_firing' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// CriticalAlertsFiring contains information about critical alerts firing.
+func (o *ClusterMetrics) CriticalAlertsFiring() int {
+	if o != nil && o.criticalAlertsFiring != nil {
+		return *o.criticalAlertsFiring
+	}
+	return 0
+}
+
+// GetCriticalAlertsFiring returns the value of the 'critical_alerts_firing' attribute and
+// a flag indicating if the attribute has a value.
+//
+// CriticalAlertsFiring contains information about critical alerts firing.
+func (o *ClusterMetrics) GetCriticalAlertsFiring() (value int, ok bool) {
+	ok = o != nil && o.criticalAlertsFiring != nil
+	if ok {
+		value = *o.criticalAlertsFiring
+	}
+	return
+}
+
 // Memory returns the value of the 'memory' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -177,25 +203,25 @@ func (o *ClusterMetrics) GetNodes() (value *ClusterNodes, ok bool) {
 	return
 }
 
-// OperatorsConditions returns the value of the 'operators_conditions' attribute, or
+// OperatorsConditionFailing returns the value of the 'operators_condition_failing' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// OperatorsConditions contains information about operator conditions in the cluster.
-func (o *ClusterMetrics) OperatorsConditions() *ClusterOperatorsConditions {
-	if o == nil {
-		return nil
+// OperatorsConditionFailing contains information about operator in failing condition in the cluster.
+func (o *ClusterMetrics) OperatorsConditionFailing() int {
+	if o != nil && o.operatorsConditionFailing != nil {
+		return *o.operatorsConditionFailing
 	}
-	return o.operatorsConditions
+	return 0
 }
 
-// GetOperatorsConditions returns the value of the 'operators_conditions' attribute and
+// GetOperatorsConditionFailing returns the value of the 'operators_condition_failing' attribute and
 // a flag indicating if the attribute has a value.
 //
-// OperatorsConditions contains information about operator conditions in the cluster.
-func (o *ClusterMetrics) GetOperatorsConditions() (value *ClusterOperatorsConditions, ok bool) {
-	ok = o != nil && o.operatorsConditions != nil
+// OperatorsConditionFailing contains information about operator in failing condition in the cluster.
+func (o *ClusterMetrics) GetOperatorsConditionFailing() (value int, ok bool) {
+	ok = o != nil && o.operatorsConditionFailing != nil
 	if ok {
-		value = o.operatorsConditions
+		value = *o.operatorsConditionFailing
 	}
 	return
 }

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Red Hat, Inc.
+Copyright (c) 2020 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,46 +26,47 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalClusterOperatorsConditionsList writes a list of values of the 'cluster_operators_conditions' type to
+// MarshalClusterHealthStateList writes a list of values of the 'cluster_health_state' type to
 // the given writer.
-func MarshalClusterOperatorsConditionsList(list []*ClusterOperatorsConditions, writer io.Writer) error {
+func MarshalClusterHealthStateList(list []ClusterHealthState, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterOperatorsConditionsList(list, stream)
+	writeClusterHealthStateList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeClusterOperatorsConditionsList writes a list of value of the 'cluster_operators_conditions' type to
+// writeClusterHealthStateList writes a list of value of the 'cluster_health_state' type to
 // the given stream.
-func writeClusterOperatorsConditionsList(list []*ClusterOperatorsConditions, stream *jsoniter.Stream) {
+func writeClusterHealthStateList(list []ClusterHealthState, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeClusterOperatorsConditions(value, stream)
+		stream.WriteString(string(value))
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalClusterOperatorsConditionsList reads a list of values of the 'cluster_operators_conditions' type
+// UnmarshalClusterHealthStateList reads a list of values of the 'cluster_health_state' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalClusterOperatorsConditionsList(source interface{}) (items []*ClusterOperatorsConditions, err error) {
+func UnmarshalClusterHealthStateList(source interface{}) (items []ClusterHealthState, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readClusterOperatorsConditionsList(iterator)
+	items = readClusterHealthStateList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterOperatorsConditionsList reads list of values of the ''cluster_operators_conditions' type from
+// readClusterHealthStateList reads list of values of the ''cluster_health_state' type from
 // the given iterator.
-func readClusterOperatorsConditionsList(iterator *jsoniter.Iterator) []*ClusterOperatorsConditions {
-	list := []*ClusterOperatorsConditions{}
+func readClusterHealthStateList(iterator *jsoniter.Iterator) []ClusterHealthState {
+	list := []ClusterHealthState{}
 	for iterator.ReadArray() {
-		item := readClusterOperatorsConditions(iterator)
+		text := iterator.ReadString()
+		item := ClusterHealthState(text)
 		list = append(list, item)
 	}
 	return list

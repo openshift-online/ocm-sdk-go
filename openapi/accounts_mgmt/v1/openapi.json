@@ -1298,24 +1298,6 @@
       }
     },
     "/api/accounts_mgmt/v1/pull_secrets": {
-      "delete": {
-        "description": "Deletes the pull secret\n",
-        "responses": {
-          "204": {
-            "description": "Success.\n"
-          },
-          "default": {
-            "description": "Error.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "description": "Returns access token generated from registries in docker format.\n",
         "requestBody": {
@@ -1337,6 +1319,35 @@
                 }
               }
             }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accounts_mgmt/v1/pull_secrets/{pull_secret_id}": {
+      "delete": {
+        "description": "Deletes the pull secret.\n",
+        "parameters": [
+          {
+            "name": "pull_secret_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success.\n"
           },
           "default": {
             "description": "Error.\n",
