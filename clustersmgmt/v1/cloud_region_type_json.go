@@ -80,6 +80,14 @@ func writeCloudRegion(object *CloudRegion, stream *jsoniter.Stream) {
 		stream.WriteString(*object.displayName)
 		count++
 	}
+	if object.enabled != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("enabled")
+		stream.WriteBool(*object.enabled)
+		count++
+	}
 	if object.name != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -127,6 +135,9 @@ func readCloudRegion(iterator *jsoniter.Iterator) *CloudRegion {
 		case "display_name":
 			value := iterator.ReadString()
 			object.displayName = &value
+		case "enabled":
+			value := iterator.ReadBool()
+			object.enabled = &value
 		case "name":
 			value := iterator.ReadString()
 			object.name = &value

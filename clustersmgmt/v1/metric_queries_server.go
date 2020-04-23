@@ -44,6 +44,11 @@ type MetricQueriesServer interface {
 	// Reference to the resource that retrieves the cluster operator status metrics.
 	ClusterOperators() ClusterOperatorsMetricQueryServer
 
+	// Nodes returns the target 'nodes_metric_query' resource.
+	//
+	// Reference to the resource that retrieves the nodes in the cluster.
+	Nodes() NodesMetricQueryServer
+
 	// SocketTotalByNodeRolesOS returns the target 'socket_total_by_node_roles_OS_metric_query' resource.
 	//
 	// Reference to the resource that retrieves the total socket
@@ -84,6 +89,13 @@ func dispatchMetricQueries(w http.ResponseWriter, r *http.Request, server Metric
 			return
 		}
 		dispatchClusterOperatorsMetricQuery(w, r, target, segments[1:])
+	case "nodes":
+		target := server.Nodes()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchNodesMetricQuery(w, r, target, segments[1:])
 	case "socket_total_by_node_roles_os":
 		target := server.SocketTotalByNodeRolesOS()
 		if target == nil {

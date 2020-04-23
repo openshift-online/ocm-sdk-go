@@ -26,86 +26,65 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalNetwork writes a value of the 'network' type to the given writer.
-func MarshalNetwork(object *Network, writer io.Writer) error {
+// MarshalNodeInfo writes a value of the 'node_info' type to the given writer.
+func MarshalNodeInfo(object *NodeInfo, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeNetwork(object, stream)
+	writeNodeInfo(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeNetwork writes a value of the 'network' type to the given stream.
-func writeNetwork(object *Network, stream *jsoniter.Stream) {
+// writeNodeInfo writes a value of the 'node_info' type to the given stream.
+func writeNodeInfo(object *NodeInfo, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.hostPrefix != nil {
+	if object.amount != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("host_prefix")
-		stream.WriteInt(*object.hostPrefix)
+		stream.WriteObjectField("amount")
+		stream.WriteInt(*object.amount)
 		count++
 	}
-	if object.machineCIDR != nil {
+	if object.type_ != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("machine_cidr")
-		stream.WriteString(*object.machineCIDR)
-		count++
-	}
-	if object.podCIDR != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("pod_cidr")
-		stream.WriteString(*object.podCIDR)
-		count++
-	}
-	if object.serviceCIDR != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("service_cidr")
-		stream.WriteString(*object.serviceCIDR)
+		stream.WriteObjectField("type")
+		stream.WriteString(string(*object.type_))
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalNetwork reads a value of the 'network' type from the given
+// UnmarshalNodeInfo reads a value of the 'node_info' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalNetwork(source interface{}) (object *Network, err error) {
+func UnmarshalNodeInfo(source interface{}) (object *NodeInfo, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readNetwork(iterator)
+	object = readNodeInfo(iterator)
 	err = iterator.Error
 	return
 }
 
-// readNetwork reads a value of the 'network' type from the given iterator.
-func readNetwork(iterator *jsoniter.Iterator) *Network {
-	object := &Network{}
+// readNodeInfo reads a value of the 'node_info' type from the given iterator.
+func readNodeInfo(iterator *jsoniter.Iterator) *NodeInfo {
+	object := &NodeInfo{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "host_prefix":
+		case "amount":
 			value := iterator.ReadInt()
-			object.hostPrefix = &value
-		case "machine_cidr":
-			value := iterator.ReadString()
-			object.machineCIDR = &value
-		case "pod_cidr":
-			value := iterator.ReadString()
-			object.podCIDR = &value
-		case "service_cidr":
-			value := iterator.ReadString()
-			object.serviceCIDR = &value
+			object.amount = &value
+		case "type":
+			text := iterator.ReadString()
+			value := NodeType(text)
+			object.type_ = &value
 		default:
 			iterator.ReadAny()
 		}

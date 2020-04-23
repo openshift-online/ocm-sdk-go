@@ -19,14 +19,14 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// ClusterHealthState represents the values of the 'cluster_health_state' enumerated type.
-type ClusterHealthState string
+// NodeType represents the values of the 'node_type' enumerated type.
+type NodeType string
 
 const (
-	// Cluster is Ready and healthy.
-	ClusterHealthStateHealthy ClusterHealthState = "healthy"
-	// Cluster is Ready and unhealthy.
-	ClusterHealthStateUnhealthy ClusterHealthState = "unhealthy"
-	// Cluster health is unknown.
-	ClusterHealthStateUnknown ClusterHealthState = "unknown"
+	// Compute.
+	NodeTypeCompute NodeType = "compute"
+	// Infra.
+	NodeTypeInfra NodeType = "infra"
+	// Master.
+	NodeTypeMaster NodeType = "master"
 )

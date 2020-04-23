@@ -1879,6 +1879,254 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/ingresses": {
+      "post": {
+        "description": "Adds a new ingress to the cluster.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ingress"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ingress"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of ingresses.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of ingresses.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Ingress"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/ingresses/{ingress_id}": {
+      "delete": {
+        "description": "Deletes the ingress.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ingress_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success.\n"
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the ingress.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ingress_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ingress"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the ingress.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ingress_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ingress"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ingress"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/logs": {
       "get": {
         "description": "Retrieves the list of clusters.\n",
@@ -2089,6 +2337,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CPUTotalsNodeRoleOSMetricNode"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries/nodes": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodesInfo"
                 }
               }
             }
@@ -3386,8 +3669,12 @@
             "description": "Name of the region for display purposes, for example `N. Virginia`.\n",
             "type": "string"
           },
+          "enabled": {
+            "description": "Whether the region is enabled for deploying an OSD cluster.\n",
+            "type": "boolean"
+          },
           "name": {
-            "description": "Human friendly identifier of the region, for example `us-east-1`.\n\nNOTE: Currently for all cloud provideers and all regions `id` and `name` have exactly\nthe same values.\n",
+            "description": "Human friendly identifier of the region, for example `us-east-1`.\n\nNOTE: Currently for all cloud providers and all regions `id` and `name` have exactly\nthe same values.\n",
             "type": "string"
           }
         }
@@ -3694,6 +3981,10 @@
             "description": "Number of compute nodes of the cluster.\n",
             "type": "integer",
             "format": "int32"
+          },
+          "compute_machine_type": {
+            "description": "The compute machine type to use, for example `r5.xlarge`.\n",
+            "$ref": "#/components/schemas/MachineType"
           },
           "infra": {
             "description": "Number of infrastructure nodes of the cluster.\n",
@@ -4202,6 +4493,11 @@
       "Network": {
         "description": "Network configuration of a cluster.\n",
         "properties": {
+          "host_prefix": {
+            "description": "Network host prefix which is defaulted to `23` if not specified.\n",
+            "type": "integer",
+            "format": "int32"
+          },
           "machine_cidr": {
             "description": "IP address block from which to assign machine IP addresses, for example `10.0.0.0/16`.\n",
             "type": "string"
@@ -4213,6 +4509,40 @@
           "service_cidr": {
             "description": "IP address block from which to assign service IP addresses, for example `172.30.0.0/16`.\n",
             "type": "string"
+          }
+        }
+      },
+      "NodeInfo": {
+        "description": "Provides information about a node from specific type in the cluster.\n",
+        "properties": {
+          "amount": {
+            "description": "The amount of the nodes from this type.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "description": "The Node type.\n",
+            "$ref": "#/components/schemas/NodeType"
+          }
+        }
+      },
+      "NodeType": {
+        "description": "Type of node received via telemetry.\n",
+        "type": "string",
+        "enum": [
+          "compute",
+          "infra",
+          "master"
+        ]
+      },
+      "NodesInfo": {
+        "description": "Provides information about the nodes in the cluster.\n",
+        "properties": {
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NodeInfo"
+            }
           }
         }
       },

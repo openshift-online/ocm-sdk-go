@@ -19,14 +19,22 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// ClusterHealthState represents the values of the 'cluster_health_state' enumerated type.
-type ClusterHealthState string
-
-const (
-	// Cluster is Ready and healthy.
-	ClusterHealthStateHealthy ClusterHealthState = "healthy"
-	// Cluster is Ready and unhealthy.
-	ClusterHealthStateUnhealthy ClusterHealthState = "unhealthy"
-	// Cluster health is unknown.
-	ClusterHealthStateUnknown ClusterHealthState = "unknown"
+import (
+	"io"
+	"net/http"
 )
+
+func readNodesMetricQueryGetRequest(request *NodesMetricQueryGetServerRequest, r *http.Request) error {
+	return nil
+}
+func writeNodesMetricQueryGetRequest(request *NodesMetricQueryGetRequest, writer io.Writer) error {
+	return nil
+}
+func readNodesMetricQueryGetResponse(response *NodesMetricQueryGetResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalNodesInfo(reader)
+	return err
+}
+func writeNodesMetricQueryGetResponse(response *NodesMetricQueryGetServerResponse, w http.ResponseWriter) error {
+	return MarshalNodesInfo(response.body, w)
+}
