@@ -46,6 +46,14 @@ func writeClusterNodes(object *ClusterNodes, stream *jsoniter.Stream) {
 		stream.WriteInt(*object.compute)
 		count++
 	}
+	if object.computeMachineType != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("compute_machine_type")
+		writeMachineType(object.computeMachineType, stream)
+		count++
+	}
 	if object.infra != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -97,6 +105,9 @@ func readClusterNodes(iterator *jsoniter.Iterator) *ClusterNodes {
 		case "compute":
 			value := iterator.ReadInt()
 			object.compute = &value
+		case "compute_machine_type":
+			value := readMachineType(iterator)
+			object.computeMachineType = value
 		case "infra":
 			value := iterator.ReadInt()
 			object.infra = &value

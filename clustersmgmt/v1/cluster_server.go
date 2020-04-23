@@ -71,6 +71,11 @@ type ClusterServer interface {
 	// Reference to the resource that manages the collection of identity providers.
 	IdentityProviders() IdentityProvidersServer
 
+	// Ingresses returns the target 'ingresses' resource.
+	//
+	// Reference to the resource that manages the collection of ingress resources.
+	Ingresses() IngressesServer
+
 	// Logs returns the target 'logs' resource.
 	//
 	// Reference to the resource that manages the collection of logs of the cluster.
@@ -237,6 +242,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 			return
 		}
 		dispatchIdentityProviders(w, r, target, segments[1:])
+	case "ingresses":
+		target := server.Ingresses()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchIngresses(w, r, target, segments[1:])
 	case "logs":
 		target := server.Logs()
 		if target == nil {

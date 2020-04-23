@@ -143,6 +143,17 @@ func (c *ClusterClient) IdentityProviders() *IdentityProvidersClient {
 	)
 }
 
+// Ingresses returns the target 'ingresses' resource.
+//
+// Reference to the resource that manages the collection of ingress resources.
+func (c *ClusterClient) Ingresses() *IngressesClient {
+	return NewIngressesClient(
+		c.transport,
+		path.Join(c.path, "ingresses"),
+		path.Join(c.metric, "ingresses"),
+	)
+}
+
 // Logs returns the target 'logs' resource.
 //
 // Reference to the resource that manages the collection of logs of the cluster.

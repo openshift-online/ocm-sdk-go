@@ -78,6 +78,17 @@ func (c *MetricQueriesClient) ClusterOperators() *ClusterOperatorsMetricQueryCli
 	)
 }
 
+// Nodes returns the target 'nodes_metric_query' resource.
+//
+// Reference to the resource that retrieves the nodes in the cluster.
+func (c *MetricQueriesClient) Nodes() *NodesMetricQueryClient {
+	return NewNodesMetricQueryClient(
+		c.transport,
+		path.Join(c.path, "nodes"),
+		path.Join(c.metric, "nodes"),
+	)
+}
+
 // SocketTotalByNodeRolesOS returns the target 'socket_total_by_node_roles_OS_metric_query' resource.
 //
 // Reference to the resource that retrieves the total socket
