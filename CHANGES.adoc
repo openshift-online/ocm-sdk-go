@@ -3,6 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.100 Apr 23 2020
+
+- Update to model 0.0.55
+** Add enabled field to region
+** Adding metrics.nodes to api model
+** Adding cluster ingresses endpoint
+** ClusterNodes: Add ComputeMachineType
+** Network: Added HostPrefix
+
 == 0.1.99 Apr 7 2020
 
 - Update to model 0.0.54
