@@ -3003,6 +3003,12 @@
           "external_id": {
             "type": "string"
           },
+          "labels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Label"
+            }
+          },
           "name": {
             "type": "string"
           },
