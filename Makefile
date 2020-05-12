@@ -69,16 +69,26 @@ generate: model metamodel
 .PHONY: model
 model:
 	rm -rf "$@"
-	git clone "$(model_url)" "$@"
-	cd "$@" && git fetch --tags origin
-	cd "$@" && git checkout -B build "$(model_version)"
+	if [ -d "$(model_url)" ]; then \
+		cp -r "$(model_url)" "$@"; \
+	else \
+		git clone "$(model_url)" "$@"; \
+		cd "$@"; \
+		git fetch --tags origin; \
+		git checkout -B build "$(model_version)"; \
+	fi
 
 .PHONY: metamodel
 metamodel:
 	rm -rf "$@"
-	git clone "$(metamodel_url)" "$@"
-	cd "$@" && git fetch --tags origin
-	cd "$@" && git checkout -B build "$(metamodel_version)"
+	if [ -d "$(metamodel_url)" ]; then \
+		cp -r "$(metamodel_url)" "$@"; \
+	else \
+		git clone "$(metamodel_url)" "$@"; \
+		cd "$@"; \
+		git fetch --tags origin; \
+		git checkout -B build "$(metamodel_version)"; \
+	fi
 	make -C "$@"
 
 .PHONY: clean
