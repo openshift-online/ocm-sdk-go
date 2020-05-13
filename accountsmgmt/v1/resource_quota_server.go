@@ -247,7 +247,7 @@ func adaptResourceQuotaUpdateRequest(w http.ResponseWriter, r *http.Request, ser
 		return
 	}
 	response := &ResourceQuotaUpdateServerResponse{}
-	response.status = 204
+	response.status = 200
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

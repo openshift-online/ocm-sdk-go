@@ -24,18 +24,6 @@ import (
 	"net/http"
 )
 
-func readAddOnInstallationDeleteRequest(request *AddOnInstallationDeleteServerRequest, r *http.Request) error {
-	return nil
-}
-func writeAddOnInstallationDeleteRequest(request *AddOnInstallationDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readAddOnInstallationDeleteResponse(response *AddOnInstallationDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAddOnInstallationDeleteResponse(response *AddOnInstallationDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
 func readAddOnInstallationGetRequest(request *AddOnInstallationGetServerRequest, r *http.Request) error {
 	return nil
 }

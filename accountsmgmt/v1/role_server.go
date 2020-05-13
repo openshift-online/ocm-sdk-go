@@ -247,7 +247,7 @@ func adaptRoleUpdateRequest(w http.ResponseWriter, r *http.Request, server RoleS
 		return
 	}
 	response := &RoleUpdateServerResponse{}
-	response.status = 204
+	response.status = 200
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

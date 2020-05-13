@@ -260,7 +260,7 @@ func adaptSubscriptionUpdateRequest(w http.ResponseWriter, r *http.Request, serv
 		return
 	}
 	response := &SubscriptionUpdateServerResponse{}
-	response.status = 204
+	response.status = 200
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

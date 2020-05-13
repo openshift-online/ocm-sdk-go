@@ -113,6 +113,14 @@ func writeAccount(object *Account, stream *jsoniter.Stream) {
 		stream.WriteString(*object.firstName)
 		count++
 	}
+	if object.labels != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("labels")
+		writeLabelList(object.labels, stream)
+		count++
+	}
 	if object.lastName != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -208,6 +216,9 @@ func readAccount(iterator *jsoniter.Iterator) *Account {
 		case "first_name":
 			value := iterator.ReadString()
 			object.firstName = &value
+		case "labels":
+			value := readLabelList(iterator)
+			object.labels = value
 		case "last_name":
 			value := iterator.ReadString()
 			object.lastName = &value
