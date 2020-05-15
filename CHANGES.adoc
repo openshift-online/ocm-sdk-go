@@ -3,6 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.102 May 15 2020
+
+- Update to model v0.0.57:
+** AddOnInstallations: Remove DELETE operation
+** Added Label to Account
+
+- Update to metamodel v0.0.28:
+** OpenAPI: Fix expected response
+
 == 0.1.101 May 5 2020
 
 - Update to model 0.0.56
