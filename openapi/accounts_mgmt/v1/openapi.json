@@ -254,7 +254,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -545,7 +545,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -764,7 +764,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -1106,7 +1106,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -1822,7 +1822,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -2041,7 +2041,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -2260,7 +2260,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -2592,7 +2592,7 @@
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Success.\n",
             "content": {
               "application/json": {
@@ -2836,6 +2836,12 @@
           },
           "first_name": {
             "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Label"
+            }
           },
           "last_name": {
             "type": "string"

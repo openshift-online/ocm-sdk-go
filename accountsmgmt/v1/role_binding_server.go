@@ -247,7 +247,7 @@ func adaptRoleBindingUpdateRequest(w http.ResponseWriter, r *http.Request, serve
 		return
 	}
 	response := &RoleBindingUpdateServerResponse{}
-	response.status = 204
+	response.status = 200
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

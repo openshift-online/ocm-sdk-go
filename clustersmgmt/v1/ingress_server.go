@@ -247,7 +247,7 @@ func adaptIngressUpdateRequest(w http.ResponseWriter, r *http.Request, server In
 		return
 	}
 	response := &IngressUpdateServerResponse{}
-	response.status = 204
+	response.status = 200
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(

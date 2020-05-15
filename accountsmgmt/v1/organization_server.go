@@ -214,7 +214,7 @@ func adaptOrganizationUpdateRequest(w http.ResponseWriter, r *http.Request, serv
 		return
 	}
 	response := &OrganizationUpdateServerResponse{}
-	response.status = 204
+	response.status = 200
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
