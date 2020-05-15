@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.103 May 15 2020
+
+- Update to model v0.0.58
+** AddOns: Add docs_link attribute
+** Update to metamodel v0.0.28
+
 == 0.1.102 May 15 2020
 
 - Update to model v0.0.57:
