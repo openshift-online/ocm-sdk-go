@@ -72,6 +72,14 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		stream.WriteString(*object.description)
 		count++
 	}
+	if object.docsLink != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("docs_link")
+		stream.WriteString(*object.docsLink)
+		count++
+	}
 	if object.enabled != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -180,6 +188,9 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 		case "description":
 			value := iterator.ReadString()
 			object.description = &value
+		case "docs_link":
+			value := iterator.ReadString()
+			object.docsLink = &value
 		case "enabled":
 			value := iterator.ReadBool()
 			object.enabled = &value
