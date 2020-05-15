@@ -3436,6 +3436,10 @@
             "description": "Description of the add-on.\n",
             "type": "string"
           },
+          "docs_link": {
+            "description": "Link to documentation about the add-on.\n",
+            "type": "string"
+          },
           "enabled": {
             "description": "Indicates if this add-on can be added to clusters.\n",
             "type": "boolean"
