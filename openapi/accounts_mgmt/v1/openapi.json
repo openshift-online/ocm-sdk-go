@@ -2952,6 +2952,25 @@
           }
         }
       },
+      "FeatureToggle": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'FeatureToggle' if this is a complete object or 'FeatureToggleLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
       "Label": {
         "properties": {
           "kind": {
