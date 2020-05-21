@@ -24,7 +24,7 @@ export GOBIN="${PWD}/.gobin"
 export PATH="${GOBIN}:${PATH}"
 
 # Install Go tools:
-go get github.com/onsi/ginkgo/ginkgo
+go get github.com/onsi/ginkgo/ginkgo@v1.8.0
 go get golang.org/x/tools/cmd/goimports
 
 # Check that running `make generate` doesn't introduce any change in the
