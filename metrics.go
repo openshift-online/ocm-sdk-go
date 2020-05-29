@@ -20,6 +20,7 @@ package sdk
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
+	"strings"
 )
 
 // registerMetrics registers the metrics with the Prometheus library.
@@ -117,11 +118,30 @@ func (c *Connection) registerMetrics(subsystem string) error {
 	return nil
 }
 
+func (c *Connection) GetAPIServiceLabelFromPath(path string) string {
+	if strings.HasPrefix(path, "/api/accounts_mgmt") {
+		return "ocm-accounts-service"
+	} else if strings.HasPrefix(path, "/api/clusters_mgmt") {
+		return "ocm-clusters-service"
+	} else if strings.HasPrefix(path, "/api/authorizations") {
+		return "ocm-authorizations-service"
+	} else if strings.HasPrefix(path, "/api/service_logs") {
+		return "ocm-logs-service"
+	} else {
+		pathParts := strings.Split(path, "/")
+		if len(pathParts) > 3 {
+			pathParts = pathParts[:3]
+		}
+		return "ocm-" + strings.Join(pathParts, "/")
+	}
+}
+
 // Names of the labels added to metrics:
 const (
-	metricsCodeLabel   = "code"
-	metricsMethodLabel = "method"
-	metricsPathLabel   = "path"
+	metricsAPIServiceLabel = "apiservice"
+	metricsCodeLabel       = "code"
+	metricsMethodLabel     = "method"
+	metricsPathLabel       = "path"
 )
 
 // Array of labels added to token metrics:
@@ -131,6 +151,7 @@ var tokenMetricsLabels = []string{
 
 // Array of labels added to call metrics:
 var callMetricsLabels = []string{
+	metricsAPIServiceLabel,
 	metricsCodeLabel,
 	metricsMethodLabel,
 	metricsPathLabel,

@@ -67,9 +67,10 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 			code = response.StatusCode
 		}
 		labels := map[string]string{
-			metricsMethodLabel: request.Method,
-			metricsPathLabel:   metric,
-			metricsCodeLabel:   strconv.Itoa(code),
+			metricsAPIServiceLabel: c.GetAPIServiceLabelFromPath(request.URL.Path),
+			metricsMethodLabel:     request.Method,
+			metricsPathLabel:       metric,
+			metricsCodeLabel:       strconv.Itoa(code),
 		}
 		if c.callCountMetric != nil {
 			c.callCountMetric.With(labels).Inc()
