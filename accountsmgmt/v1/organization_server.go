@@ -40,6 +40,11 @@ type OrganizationServer interface {
 	// Updates the organization.
 	Update(ctx context.Context, request *OrganizationUpdateServerRequest, response *OrganizationUpdateServerResponse) error
 
+	// Labels returns the target 'generic_labels' resource.
+	//
+	// Reference to the list of labels of a specific organization.
+	Labels() GenericLabelsServer
+
 	// QuotaSummary returns the target 'quota_summary' resource.
 	//
 	// Reference to the service that returns the summary of the resource quota for this
@@ -144,6 +149,13 @@ func dispatchOrganization(w http.ResponseWriter, r *http.Request, server Organiz
 		}
 	}
 	switch segments[0] {
+	case "labels":
+		target := server.Labels()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchGenericLabels(w, r, target, segments[1:])
 	case "quota_summary":
 		target := server.QuotaSummary()
 		if target == nil {

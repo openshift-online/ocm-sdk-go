@@ -26,7 +26,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
@@ -34,20 +33,20 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// SubscriptionClient is the client of the 'subscription' resource.
+// GenericLabelClient is the client of the 'generic_label' resource.
 //
-// Manages a specific subscription.
-type SubscriptionClient struct {
+// Manages a specific account label.
+type GenericLabelClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewSubscriptionClient creates a new client for the 'subscription'
+// NewGenericLabelClient creates a new client for the 'generic_label'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSubscriptionClient(transport http.RoundTripper, path string, metric string) *SubscriptionClient {
-	return &SubscriptionClient{
+func NewGenericLabelClient(transport http.RoundTripper, path string, metric string) *GenericLabelClient {
+	return &GenericLabelClient{
 		transport: transport,
 		path:      path,
 		metric:    metric,
@@ -56,9 +55,9 @@ func NewSubscriptionClient(transport http.RoundTripper, path string, metric stri
 
 // Delete creates a request for the 'delete' method.
 //
-// Deletes the subscription by ID.
-func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
-	return &SubscriptionDeleteRequest{
+// Deletes the account label.
+func (c *GenericLabelClient) Delete() *GenericLabelDeleteRequest {
+	return &GenericLabelDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
@@ -67,9 +66,9 @@ func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
 
 // Get creates a request for the 'get' method.
 //
-// Retrieves the details of the subscription by ID.
-func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
-	return &SubscriptionGetRequest{
+// Retrieves the details of the label.
+func (c *GenericLabelClient) Get() *GenericLabelGetRequest {
+	return &GenericLabelGetRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
@@ -78,78 +77,44 @@ func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
 
 // Update creates a request for the 'update' method.
 //
-// Update a subscription
-func (c *SubscriptionClient) Update() *SubscriptionUpdateRequest {
-	return &SubscriptionUpdateRequest{
+// Updates the account label.
+func (c *GenericLabelClient) Update() *GenericLabelUpdateRequest {
+	return &GenericLabelUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
 	}
 }
 
-// Labels returns the target 'generic_labels' resource.
-//
-// Reference to the list of labels of a specific subscription.
-func (c *SubscriptionClient) Labels() *GenericLabelsClient {
-	return NewGenericLabelsClient(
-		c.transport,
-		path.Join(c.path, "labels"),
-		path.Join(c.metric, "labels"),
-	)
-}
-
-// Notify returns the target 'subscription_notify' resource.
-//
-// Notify a user related to the subscription via email
-func (c *SubscriptionClient) Notify() *SubscriptionNotifyClient {
-	return NewSubscriptionNotifyClient(
-		c.transport,
-		path.Join(c.path, "notify"),
-		path.Join(c.metric, "notify"),
-	)
-}
-
-// ReservedResources returns the target 'subscription_reserved_resources' resource.
-//
-// Reference to the resource that manages the collection of resources reserved by the
-// subscription.
-func (c *SubscriptionClient) ReservedResources() *SubscriptionReservedResourcesClient {
-	return NewSubscriptionReservedResourcesClient(
-		c.transport,
-		path.Join(c.path, "reserved_resources"),
-		path.Join(c.metric, "reserved_resources"),
-	)
-}
-
-// SubscriptionPollRequest is the request for the Poll method.
-type SubscriptionPollRequest struct {
-	request    *SubscriptionGetRequest
+// GenericLabelPollRequest is the request for the Poll method.
+type GenericLabelPollRequest struct {
+	request    *GenericLabelGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *SubscriptionPollRequest) Parameter(name string, value interface{}) *SubscriptionPollRequest {
+func (r *GenericLabelPollRequest) Parameter(name string, value interface{}) *GenericLabelPollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *SubscriptionPollRequest) Header(name string, value interface{}) *SubscriptionPollRequest {
+func (r *GenericLabelPollRequest) Header(name string, value interface{}) *GenericLabelPollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *SubscriptionPollRequest) Interval(value time.Duration) *SubscriptionPollRequest {
+func (r *GenericLabelPollRequest) Interval(value time.Duration) *GenericLabelPollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *SubscriptionPollRequest) Status(value int) *SubscriptionPollRequest {
+func (r *GenericLabelPollRequest) Status(value int) *GenericLabelPollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -157,9 +122,9 @@ func (r *SubscriptionPollRequest) Status(value int) *SubscriptionPollRequest {
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *SubscriptionPollRequest) Predicate(value func(*SubscriptionGetResponse) bool) *SubscriptionPollRequest {
+func (r *GenericLabelPollRequest) Predicate(value func(*GenericLabelGetResponse) bool) *GenericLabelPollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*SubscriptionGetResponse))
+		return value(response.(*GenericLabelGetResponse))
 	})
 	return r
 }
@@ -169,11 +134,11 @@ func (r *SubscriptionPollRequest) Predicate(value func(*SubscriptionGetResponse)
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *SubscriptionPollRequest) StartContext(ctx context.Context) (response *SubscriptionPollResponse, err error) {
+func (r *GenericLabelPollRequest) StartContext(ctx context.Context) (response *GenericLabelPollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &SubscriptionPollResponse{
-			response: result.(*SubscriptionGetResponse),
+		response = &GenericLabelPollResponse{
+			response: result.(*GenericLabelGetResponse),
 		}
 	}
 	return
@@ -181,7 +146,7 @@ func (r *SubscriptionPollRequest) StartContext(ctx context.Context) (response *S
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *SubscriptionPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *GenericLabelPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -190,13 +155,13 @@ func (r *SubscriptionPollRequest) task(ctx context.Context) (status int, result 
 	return
 }
 
-// SubscriptionPollResponse is the response for the Poll method.
-type SubscriptionPollResponse struct {
-	response *SubscriptionGetResponse
+// GenericLabelPollResponse is the response for the Poll method.
+type GenericLabelPollResponse struct {
+	response *GenericLabelGetResponse
 }
 
 // Status returns the response status code.
-func (r *SubscriptionPollResponse) Status() int {
+func (r *GenericLabelPollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -204,7 +169,7 @@ func (r *SubscriptionPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionPollResponse) Header() http.Header {
+func (r *GenericLabelPollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -212,7 +177,7 @@ func (r *SubscriptionPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionPollResponse) Error() *errors.Error {
+func (r *GenericLabelPollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -222,7 +187,7 @@ func (r *SubscriptionPollResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *SubscriptionPollResponse) Body() *Subscription {
+func (r *GenericLabelPollResponse) Body() *Label {
 	return r.response.Body()
 }
 
@@ -230,20 +195,20 @@ func (r *SubscriptionPollResponse) Body() *Subscription {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *SubscriptionPollResponse) GetBody() (value *Subscription, ok bool) {
+func (r *GenericLabelPollResponse) GetBody() (value *Label, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *SubscriptionClient) Poll() *SubscriptionPollRequest {
-	return &SubscriptionPollRequest{
+func (c *GenericLabelClient) Poll() *GenericLabelPollRequest {
+	return &GenericLabelPollRequest{
 		request: c.Get(),
 	}
 }
 
-// SubscriptionDeleteRequest is the request for the 'delete' method.
-type SubscriptionDeleteRequest struct {
+// GenericLabelDeleteRequest is the request for the 'delete' method.
+type GenericLabelDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -252,13 +217,13 @@ type SubscriptionDeleteRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *SubscriptionDeleteRequest) Parameter(name string, value interface{}) *SubscriptionDeleteRequest {
+func (r *GenericLabelDeleteRequest) Parameter(name string, value interface{}) *GenericLabelDeleteRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *SubscriptionDeleteRequest {
+func (r *GenericLabelDeleteRequest) Header(name string, value interface{}) *GenericLabelDeleteRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -267,12 +232,12 @@ func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *Subs
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *SubscriptionDeleteRequest) Send() (result *SubscriptionDeleteResponse, err error) {
+func (r *GenericLabelDeleteRequest) Send() (result *GenericLabelDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *SubscriptionDeleteResponse, err error) {
+func (r *GenericLabelDeleteRequest) SendContext(ctx context.Context) (result *GenericLabelDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -292,7 +257,7 @@ func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *Su
 		return
 	}
 	defer response.Body.Close()
-	result = &SubscriptionDeleteResponse{}
+	result = &GenericLabelDeleteResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -306,15 +271,15 @@ func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *Su
 	return
 }
 
-// SubscriptionDeleteResponse is the response for the 'delete' method.
-type SubscriptionDeleteResponse struct {
+// GenericLabelDeleteResponse is the response for the 'delete' method.
+type GenericLabelDeleteResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
 }
 
 // Status returns the response status code.
-func (r *SubscriptionDeleteResponse) Status() int {
+func (r *GenericLabelDeleteResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -322,7 +287,7 @@ func (r *SubscriptionDeleteResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionDeleteResponse) Header() http.Header {
+func (r *GenericLabelDeleteResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -330,15 +295,15 @@ func (r *SubscriptionDeleteResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionDeleteResponse) Error() *errors.Error {
+func (r *GenericLabelDeleteResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// SubscriptionGetRequest is the request for the 'get' method.
-type SubscriptionGetRequest struct {
+// GenericLabelGetRequest is the request for the 'get' method.
+type GenericLabelGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -347,13 +312,13 @@ type SubscriptionGetRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *SubscriptionGetRequest) Parameter(name string, value interface{}) *SubscriptionGetRequest {
+func (r *GenericLabelGetRequest) Parameter(name string, value interface{}) *GenericLabelGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *SubscriptionGetRequest) Header(name string, value interface{}) *SubscriptionGetRequest {
+func (r *GenericLabelGetRequest) Header(name string, value interface{}) *GenericLabelGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -362,12 +327,12 @@ func (r *SubscriptionGetRequest) Header(name string, value interface{}) *Subscri
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *SubscriptionGetRequest) Send() (result *SubscriptionGetResponse, err error) {
+func (r *GenericLabelGetRequest) Send() (result *GenericLabelGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *SubscriptionGetResponse, err error) {
+func (r *GenericLabelGetRequest) SendContext(ctx context.Context) (result *GenericLabelGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -387,7 +352,7 @@ func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *Subsc
 		return
 	}
 	defer response.Body.Close()
-	result = &SubscriptionGetResponse{}
+	result = &GenericLabelGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -398,23 +363,23 @@ func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *Subsc
 		err = result.err
 		return
 	}
-	err = readSubscriptionGetResponse(result, response.Body)
+	err = readGenericLabelGetResponse(result, response.Body)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// SubscriptionGetResponse is the response for the 'get' method.
-type SubscriptionGetResponse struct {
+// GenericLabelGetResponse is the response for the 'get' method.
+type GenericLabelGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Subscription
+	body   *Label
 }
 
 // Status returns the response status code.
-func (r *SubscriptionGetResponse) Status() int {
+func (r *GenericLabelGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -422,7 +387,7 @@ func (r *SubscriptionGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionGetResponse) Header() http.Header {
+func (r *GenericLabelGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -430,7 +395,7 @@ func (r *SubscriptionGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionGetResponse) Error() *errors.Error {
+func (r *GenericLabelGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -440,7 +405,7 @@ func (r *SubscriptionGetResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *SubscriptionGetResponse) Body() *Subscription {
+func (r *GenericLabelGetResponse) Body() *Label {
 	if r == nil {
 		return nil
 	}
@@ -451,7 +416,7 @@ func (r *SubscriptionGetResponse) Body() *Subscription {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *SubscriptionGetResponse) GetBody() (value *Subscription, ok bool) {
+func (r *GenericLabelGetResponse) GetBody() (value *Label, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -459,32 +424,32 @@ func (r *SubscriptionGetResponse) GetBody() (value *Subscription, ok bool) {
 	return
 }
 
-// SubscriptionUpdateRequest is the request for the 'update' method.
-type SubscriptionUpdateRequest struct {
+// GenericLabelUpdateRequest is the request for the 'update' method.
+type GenericLabelUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 	query     url.Values
 	header    http.Header
-	body      *Subscription
+	body      *Label
 }
 
 // Parameter adds a query parameter.
-func (r *SubscriptionUpdateRequest) Parameter(name string, value interface{}) *SubscriptionUpdateRequest {
+func (r *GenericLabelUpdateRequest) Parameter(name string, value interface{}) *GenericLabelUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *SubscriptionUpdateRequest) Header(name string, value interface{}) *SubscriptionUpdateRequest {
+func (r *GenericLabelUpdateRequest) Header(name string, value interface{}) *GenericLabelUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Body sets the value of the 'body' parameter.
 //
-// Updated subscription data
-func (r *SubscriptionUpdateRequest) Body(value *Subscription) *SubscriptionUpdateRequest {
+//
+func (r *GenericLabelUpdateRequest) Body(value *Label) *GenericLabelUpdateRequest {
 	r.body = value
 	return r
 }
@@ -493,16 +458,16 @@ func (r *SubscriptionUpdateRequest) Body(value *Subscription) *SubscriptionUpdat
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *SubscriptionUpdateRequest) Send() (result *SubscriptionUpdateResponse, err error) {
+func (r *GenericLabelUpdateRequest) Send() (result *GenericLabelUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *SubscriptionUpdateResponse, err error) {
+func (r *GenericLabelUpdateRequest) SendContext(ctx context.Context) (result *GenericLabelUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	buffer := &bytes.Buffer{}
-	err = writeSubscriptionUpdateRequest(r, buffer)
+	err = writeGenericLabelUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -524,7 +489,7 @@ func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *Su
 		return
 	}
 	defer response.Body.Close()
-	result = &SubscriptionUpdateResponse{}
+	result = &GenericLabelUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -535,7 +500,7 @@ func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *Su
 		err = result.err
 		return
 	}
-	err = readSubscriptionUpdateResponse(result, response.Body)
+	err = readGenericLabelUpdateResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -544,24 +509,24 @@ func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *Su
 
 // marshall is the method used internally to marshal requests for the
 // 'update' method.
-func (r *SubscriptionUpdateRequest) marshal(writer io.Writer) error {
+func (r *GenericLabelUpdateRequest) marshal(writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	r.stream(stream)
 	return stream.Error
 }
-func (r *SubscriptionUpdateRequest) stream(stream *jsoniter.Stream) {
+func (r *GenericLabelUpdateRequest) stream(stream *jsoniter.Stream) {
 }
 
-// SubscriptionUpdateResponse is the response for the 'update' method.
-type SubscriptionUpdateResponse struct {
+// GenericLabelUpdateResponse is the response for the 'update' method.
+type GenericLabelUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Subscription
+	body   *Label
 }
 
 // Status returns the response status code.
-func (r *SubscriptionUpdateResponse) Status() int {
+func (r *GenericLabelUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -569,7 +534,7 @@ func (r *SubscriptionUpdateResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionUpdateResponse) Header() http.Header {
+func (r *GenericLabelUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -577,7 +542,7 @@ func (r *SubscriptionUpdateResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionUpdateResponse) Error() *errors.Error {
+func (r *GenericLabelUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -586,8 +551,8 @@ func (r *SubscriptionUpdateResponse) Error() *errors.Error {
 
 // Body returns the value of the 'body' parameter.
 //
-// Updated subscription data
-func (r *SubscriptionUpdateResponse) Body() *Subscription {
+//
+func (r *GenericLabelUpdateResponse) Body() *Label {
 	if r == nil {
 		return nil
 	}
@@ -597,8 +562,8 @@ func (r *SubscriptionUpdateResponse) Body() *Subscription {
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Updated subscription data
-func (r *SubscriptionUpdateResponse) GetBody() (value *Subscription, ok bool) {
+//
+func (r *GenericLabelUpdateResponse) GetBody() (value *Label, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body

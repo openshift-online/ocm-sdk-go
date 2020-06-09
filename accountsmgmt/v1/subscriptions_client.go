@@ -80,6 +80,7 @@ type SubscriptionsListRequest struct {
 	header                http.Header
 	fetchaccountsAccounts *bool
 	fetchlabelsLabels     *bool
+	fields                *string
 	labels                *string
 	order                 *string
 	page                  *int
@@ -112,6 +113,19 @@ func (r *SubscriptionsListRequest) FetchaccountsAccounts(value bool) *Subscripti
 // If true, includes the labels on a subscription in the output. Could slow request response time.
 func (r *SubscriptionsListRequest) FetchlabelsLabels(value bool) *SubscriptionsListRequest {
 	r.fetchlabelsLabels = &value
+	return r
+}
+
+// Fields sets the value of the 'fields' parameter.
+//
+// Projection
+// This field contains a comma-separated list of fields you'd like to get in
+// a result. No new fields can be added, only existing ones can be filtered.
+// To specify a field 'id' of a structure 'plan' use 'plan.id'.
+// To specify all fields of a structure 'labels' use 'labels.*'.
+//
+func (r *SubscriptionsListRequest) Fields(value string) *SubscriptionsListRequest {
+	r.fields = &value
 	return r
 }
 
@@ -202,6 +216,9 @@ func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *Sub
 	}
 	if r.fetchlabelsLabels != nil {
 		helpers.AddValue(&query, "fetchlabels_labels", *r.fetchlabelsLabels)
+	}
+	if r.fields != nil {
+		helpers.AddValue(&query, "fields", *r.fields)
 	}
 	if r.labels != nil {
 		helpers.AddValue(&query, "labels", *r.labels)

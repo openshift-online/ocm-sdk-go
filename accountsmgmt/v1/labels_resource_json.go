@@ -26,37 +26,9 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func readAccountsAddRequest(request *AccountsAddServerRequest, r *http.Request) error {
-	var err error
-	request.body, err = UnmarshalAccount(r.Body)
-	return err
-}
-func writeAccountsAddRequest(request *AccountsAddRequest, writer io.Writer) error {
-	return MarshalAccount(request.body, writer)
-}
-func readAccountsAddResponse(response *AccountsAddResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalAccount(reader)
-	return err
-}
-func writeAccountsAddResponse(response *AccountsAddServerResponse, w http.ResponseWriter) error {
-	return MarshalAccount(response.body, w)
-}
-func readAccountsListRequest(request *AccountsListServerRequest, r *http.Request) error {
+func readLabelsListRequest(request *LabelsListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()
-	request.fetchlabelsLabels, err = helpers.ParseBoolean(query, "fetchlabels_labels")
-	if err != nil {
-		return err
-	}
-	request.fields, err = helpers.ParseString(query, "fields")
-	if err != nil {
-		return err
-	}
-	request.order, err = helpers.ParseString(query, "order")
-	if err != nil {
-		return err
-	}
 	request.page, err = helpers.ParseInteger(query, "page")
 	if err != nil {
 		return err
@@ -77,10 +49,10 @@ func readAccountsListRequest(request *AccountsListServerRequest, r *http.Request
 	}
 	return nil
 }
-func writeAccountsListRequest(request *AccountsListRequest, writer io.Writer) error {
+func writeLabelsListRequest(request *LabelsListRequest, writer io.Writer) error {
 	return nil
 }
-func readAccountsListResponse(response *AccountsListResponse, reader io.Reader) error {
+func readLabelsListResponse(response *LabelsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {
 		return err
@@ -101,8 +73,8 @@ func readAccountsListResponse(response *AccountsListResponse, reader io.Reader) 
 			value := iterator.ReadInt()
 			response.total = &value
 		case "items":
-			items := readAccountList(iterator)
-			response.items = &AccountList{
+			items := readLabelList(iterator)
+			response.items = &LabelList{
 				items: items,
 			}
 		default:
@@ -111,14 +83,14 @@ func readAccountsListResponse(response *AccountsListResponse, reader io.Reader) 
 	}
 	return iterator.Error
 }
-func writeAccountsListResponse(response *AccountsListServerResponse, w http.ResponseWriter) error {
+func writeLabelsListResponse(response *LabelsListServerResponse, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
 	count := 1
-	stream.WriteString(AccountListKind)
+	stream.WriteString(LabelListKind)
 	if response.items != nil && response.items.href != nil {
 		stream.WriteMore()
 		stream.WriteObjectField("href")
@@ -155,7 +127,7 @@ func writeAccountsListResponse(response *AccountsListServerResponse, w http.Resp
 				stream.WriteMore()
 			}
 			stream.WriteObjectField("items")
-			writeAccountList(response.items.items, stream)
+			writeLabelList(response.items.items, stream)
 			count++
 		}
 	}

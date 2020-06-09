@@ -33,20 +33,20 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// OrganizationsClient is the client of the 'organizations' resource.
+// GenericLabelsClient is the client of the 'generic_labels' resource.
 //
-// Manages the collection of organizations.
-type OrganizationsClient struct {
+// Manages the collection of labels of an account/organization/subscription.
+type GenericLabelsClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewOrganizationsClient creates a new client for the 'organizations'
+// NewGenericLabelsClient creates a new client for the 'generic_labels'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewOrganizationsClient(transport http.RoundTripper, path string, metric string) *OrganizationsClient {
-	return &OrganizationsClient{
+func NewGenericLabelsClient(transport http.RoundTripper, path string, metric string) *GenericLabelsClient {
+	return &GenericLabelsClient{
 		transport: transport,
 		path:      path,
 		metric:    metric,
@@ -55,9 +55,9 @@ func NewOrganizationsClient(transport http.RoundTripper, path string, metric str
 
 // Add creates a request for the 'add' method.
 //
-// Creates a new organization.
-func (c *OrganizationsClient) Add() *OrganizationsAddRequest {
-	return &OrganizationsAddRequest{
+// Create a new account/organization/subscription label.
+func (c *GenericLabelsClient) Add() *GenericLabelsAddRequest {
+	return &GenericLabelsAddRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
@@ -66,52 +66,56 @@ func (c *OrganizationsClient) Add() *OrganizationsAddRequest {
 
 // List creates a request for the 'list' method.
 //
-// Retrieves a list of organizations.
-func (c *OrganizationsClient) List() *OrganizationsListRequest {
-	return &OrganizationsListRequest{
+// Retrieves the list of labels of the account/organization/subscription.
+//
+// IMPORTANT: This collection doesn't currently support paging or searching, so the returned
+// `page` will always be 1 and `size` and `total` will always be the total number of labels
+// of the account/organization/subscription.
+func (c *GenericLabelsClient) List() *GenericLabelsListRequest {
+	return &GenericLabelsListRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
 	}
 }
 
-// Organization returns the target 'organization' resource for the given identifier.
+// Labels returns the target 'generic_label' resource for the given identifier.
 //
-// Reference to the service that manages a specific organization.
-func (c *OrganizationsClient) Organization(id string) *OrganizationClient {
-	return NewOrganizationClient(
+// Reference to the labels of a specific account/organization/subscription.
+func (c *GenericLabelsClient) Labels(id string) *GenericLabelClient {
+	return NewGenericLabelClient(
 		c.transport,
 		path.Join(c.path, id),
 		path.Join(c.metric, "-"),
 	)
 }
 
-// OrganizationsAddRequest is the request for the 'add' method.
-type OrganizationsAddRequest struct {
+// GenericLabelsAddRequest is the request for the 'add' method.
+type GenericLabelsAddRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 	query     url.Values
 	header    http.Header
-	body      *Organization
+	body      *Label
 }
 
 // Parameter adds a query parameter.
-func (r *OrganizationsAddRequest) Parameter(name string, value interface{}) *OrganizationsAddRequest {
+func (r *GenericLabelsAddRequest) Parameter(name string, value interface{}) *GenericLabelsAddRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *OrganizationsAddRequest) Header(name string, value interface{}) *OrganizationsAddRequest {
+func (r *GenericLabelsAddRequest) Header(name string, value interface{}) *GenericLabelsAddRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Body sets the value of the 'body' parameter.
 //
-// Organization data.
-func (r *OrganizationsAddRequest) Body(value *Organization) *OrganizationsAddRequest {
+// Label
+func (r *GenericLabelsAddRequest) Body(value *Label) *GenericLabelsAddRequest {
 	r.body = value
 	return r
 }
@@ -120,16 +124,16 @@ func (r *OrganizationsAddRequest) Body(value *Organization) *OrganizationsAddReq
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *OrganizationsAddRequest) Send() (result *OrganizationsAddResponse, err error) {
+func (r *GenericLabelsAddRequest) Send() (result *GenericLabelsAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *OrganizationsAddRequest) SendContext(ctx context.Context) (result *OrganizationsAddResponse, err error) {
+func (r *GenericLabelsAddRequest) SendContext(ctx context.Context) (result *GenericLabelsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	buffer := &bytes.Buffer{}
-	err = writeOrganizationsAddRequest(r, buffer)
+	err = writeGenericLabelsAddRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -151,7 +155,7 @@ func (r *OrganizationsAddRequest) SendContext(ctx context.Context) (result *Orga
 		return
 	}
 	defer response.Body.Close()
-	result = &OrganizationsAddResponse{}
+	result = &GenericLabelsAddResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -162,7 +166,7 @@ func (r *OrganizationsAddRequest) SendContext(ctx context.Context) (result *Orga
 		err = result.err
 		return
 	}
-	err = readOrganizationsAddResponse(result, response.Body)
+	err = readGenericLabelsAddResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -171,24 +175,24 @@ func (r *OrganizationsAddRequest) SendContext(ctx context.Context) (result *Orga
 
 // marshall is the method used internally to marshal requests for the
 // 'add' method.
-func (r *OrganizationsAddRequest) marshal(writer io.Writer) error {
+func (r *GenericLabelsAddRequest) marshal(writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	r.stream(stream)
 	return stream.Error
 }
-func (r *OrganizationsAddRequest) stream(stream *jsoniter.Stream) {
+func (r *GenericLabelsAddRequest) stream(stream *jsoniter.Stream) {
 }
 
-// OrganizationsAddResponse is the response for the 'add' method.
-type OrganizationsAddResponse struct {
+// GenericLabelsAddResponse is the response for the 'add' method.
+type GenericLabelsAddResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Organization
+	body   *Label
 }
 
 // Status returns the response status code.
-func (r *OrganizationsAddResponse) Status() int {
+func (r *GenericLabelsAddResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -196,7 +200,7 @@ func (r *OrganizationsAddResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *OrganizationsAddResponse) Header() http.Header {
+func (r *GenericLabelsAddResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -204,7 +208,7 @@ func (r *OrganizationsAddResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *OrganizationsAddResponse) Error() *errors.Error {
+func (r *GenericLabelsAddResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -213,8 +217,8 @@ func (r *OrganizationsAddResponse) Error() *errors.Error {
 
 // Body returns the value of the 'body' parameter.
 //
-// Organization data.
-func (r *OrganizationsAddResponse) Body() *Organization {
+// Label
+func (r *GenericLabelsAddResponse) Body() *Label {
 	if r == nil {
 		return nil
 	}
@@ -224,8 +228,8 @@ func (r *OrganizationsAddResponse) Body() *Organization {
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Organization data.
-func (r *OrganizationsAddResponse) GetBody() (value *Organization, ok bool) {
+// Label
+func (r *GenericLabelsAddResponse) GetBody() (value *Label, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -233,86 +237,44 @@ func (r *OrganizationsAddResponse) GetBody() (value *Organization, ok bool) {
 	return
 }
 
-// OrganizationsListRequest is the request for the 'list' method.
-type OrganizationsListRequest struct {
-	transport         http.RoundTripper
-	path              string
-	metric            string
-	query             url.Values
-	header            http.Header
-	fetchlabelsLabels *bool
-	fields            *string
-	page              *int
-	search            *string
-	size              *int
+// GenericLabelsListRequest is the request for the 'list' method.
+type GenericLabelsListRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+	page      *int
+	size      *int
 }
 
 // Parameter adds a query parameter.
-func (r *OrganizationsListRequest) Parameter(name string, value interface{}) *OrganizationsListRequest {
+func (r *GenericLabelsListRequest) Parameter(name string, value interface{}) *GenericLabelsListRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *OrganizationsListRequest) Header(name string, value interface{}) *OrganizationsListRequest {
+func (r *GenericLabelsListRequest) Header(name string, value interface{}) *GenericLabelsListRequest {
 	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// FetchlabelsLabels sets the value of the 'fetchlabels_labels' parameter.
-//
-// If true, includes the labels on an organization in the output. Could slow request response time.
-func (r *OrganizationsListRequest) FetchlabelsLabels(value bool) *OrganizationsListRequest {
-	r.fetchlabelsLabels = &value
-	return r
-}
-
-// Fields sets the value of the 'fields' parameter.
-//
-// Projection
-// This field contains a comma-separated list of fields you'd like to get in
-// a result. No new fields can be added, only existing ones can be filtered.
-// To specify a field 'id' of a structure 'plan' use 'plan.id'.
-// To specify all fields of a structure 'labels' use 'labels.*'.
-//
-func (r *OrganizationsListRequest) Fields(value string) *OrganizationsListRequest {
-	r.fields = &value
 	return r
 }
 
 // Page sets the value of the 'page' parameter.
 //
-// Index of the requested page, where one corresponds to the first page.
-func (r *OrganizationsListRequest) Page(value int) *OrganizationsListRequest {
+// Index of the returned page, where one corresponds to the first page. As this
+// collection doesn't support paging the result will always be `1`.
+func (r *GenericLabelsListRequest) Page(value int) *GenericLabelsListRequest {
 	r.page = &value
-	return r
-}
-
-// Search sets the value of the 'search' parameter.
-//
-// Search criteria.
-//
-// The syntax of this parameter is similar to the syntax of the _where_ clause
-// of an SQL statement, but using the names of the attributes of the organization
-// instead of the names of the columns of a table. For example, in order to
-// retrieve organizations with name starting with my:
-//
-// [source,sql]
-// ----
-// name like 'my%'
-// ----
-//
-// If the parameter isn't provided, or if the value is empty, then all the
-// items that the user has permission to see will be returned.
-func (r *OrganizationsListRequest) Search(value string) *OrganizationsListRequest {
-	r.search = &value
 	return r
 }
 
 // Size sets the value of the 'size' parameter.
 //
-// Maximum number of items that will be contained in the returned page.
-func (r *OrganizationsListRequest) Size(value int) *OrganizationsListRequest {
+// Number of items that will be contained in the returned page. As this collection
+// doesn't support paging or searching the result will always be the total number of
+// labels of the account/organization/subscription.
+func (r *GenericLabelsListRequest) Size(value int) *GenericLabelsListRequest {
 	r.size = &value
 	return r
 }
@@ -321,24 +283,15 @@ func (r *OrganizationsListRequest) Size(value int) *OrganizationsListRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *OrganizationsListRequest) Send() (result *OrganizationsListResponse, err error) {
+func (r *GenericLabelsListRequest) Send() (result *GenericLabelsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *OrganizationsListRequest) SendContext(ctx context.Context) (result *OrganizationsListResponse, err error) {
+func (r *GenericLabelsListRequest) SendContext(ctx context.Context) (result *GenericLabelsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	if r.fetchlabelsLabels != nil {
-		helpers.AddValue(&query, "fetchlabels_labels", *r.fetchlabelsLabels)
-	}
-	if r.fields != nil {
-		helpers.AddValue(&query, "fields", *r.fields)
-	}
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
-	}
-	if r.search != nil {
-		helpers.AddValue(&query, "search", *r.search)
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
@@ -361,7 +314,7 @@ func (r *OrganizationsListRequest) SendContext(ctx context.Context) (result *Org
 		return
 	}
 	defer response.Body.Close()
-	result = &OrganizationsListResponse{}
+	result = &GenericLabelsListResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -372,26 +325,26 @@ func (r *OrganizationsListRequest) SendContext(ctx context.Context) (result *Org
 		err = result.err
 		return
 	}
-	err = readOrganizationsListResponse(result, response.Body)
+	err = readGenericLabelsListResponse(result, response.Body)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// OrganizationsListResponse is the response for the 'list' method.
-type OrganizationsListResponse struct {
+// GenericLabelsListResponse is the response for the 'list' method.
+type GenericLabelsListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	items  *OrganizationList
+	items  *LabelList
 	page   *int
 	size   *int
 	total  *int
 }
 
 // Status returns the response status code.
-func (r *OrganizationsListResponse) Status() int {
+func (r *GenericLabelsListResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -399,7 +352,7 @@ func (r *OrganizationsListResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *OrganizationsListResponse) Header() http.Header {
+func (r *GenericLabelsListResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -407,7 +360,7 @@ func (r *OrganizationsListResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *OrganizationsListResponse) Error() *errors.Error {
+func (r *GenericLabelsListResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -416,8 +369,8 @@ func (r *OrganizationsListResponse) Error() *errors.Error {
 
 // Items returns the value of the 'items' parameter.
 //
-// Retrieved list of organizations.
-func (r *OrganizationsListResponse) Items() *OrganizationList {
+// Retrieved list of cloud providers.
+func (r *GenericLabelsListResponse) Items() *LabelList {
 	if r == nil {
 		return nil
 	}
@@ -427,8 +380,8 @@ func (r *OrganizationsListResponse) Items() *OrganizationList {
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Retrieved list of organizations.
-func (r *OrganizationsListResponse) GetItems() (value *OrganizationList, ok bool) {
+// Retrieved list of cloud providers.
+func (r *GenericLabelsListResponse) GetItems() (value *LabelList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
 		value = r.items
@@ -438,8 +391,9 @@ func (r *OrganizationsListResponse) GetItems() (value *OrganizationList, ok bool
 
 // Page returns the value of the 'page' parameter.
 //
-// Index of the requested page, where one corresponds to the first page.
-func (r *OrganizationsListResponse) Page() int {
+// Index of the returned page, where one corresponds to the first page. As this
+// collection doesn't support paging the result will always be `1`.
+func (r *GenericLabelsListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
 	}
@@ -449,8 +403,9 @@ func (r *OrganizationsListResponse) Page() int {
 // GetPage returns the value of the 'page' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Index of the requested page, where one corresponds to the first page.
-func (r *OrganizationsListResponse) GetPage() (value int, ok bool) {
+// Index of the returned page, where one corresponds to the first page. As this
+// collection doesn't support paging the result will always be `1`.
+func (r *GenericLabelsListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
@@ -460,8 +415,10 @@ func (r *OrganizationsListResponse) GetPage() (value int, ok bool) {
 
 // Size returns the value of the 'size' parameter.
 //
-// Maximum number of items that will be contained in the returned page.
-func (r *OrganizationsListResponse) Size() int {
+// Number of items that will be contained in the returned page. As this collection
+// doesn't support paging or searching the result will always be the total number of
+// labels of the account/organization/subscription.
+func (r *GenericLabelsListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
 	}
@@ -471,8 +428,10 @@ func (r *OrganizationsListResponse) Size() int {
 // GetSize returns the value of the 'size' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Maximum number of items that will be contained in the returned page.
-func (r *OrganizationsListResponse) GetSize() (value int, ok bool) {
+// Number of items that will be contained in the returned page. As this collection
+// doesn't support paging or searching the result will always be the total number of
+// labels of the account/organization/subscription.
+func (r *GenericLabelsListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
 		value = *r.size
@@ -483,8 +442,9 @@ func (r *OrganizationsListResponse) GetSize() (value int, ok bool) {
 // Total returns the value of the 'total' parameter.
 //
 // Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *OrganizationsListResponse) Total() int {
+// regardless of the size of the page. As this collection doesn't support paging or
+// searching the result will always be the total number of labels of the account/organization/subscription.
+func (r *GenericLabelsListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
 	}
@@ -495,8 +455,9 @@ func (r *OrganizationsListResponse) Total() int {
 // a flag indicating if the parameter has a value.
 //
 // Total number of items of the collection that match the search criteria,
-// regardless of the size of the page.
-func (r *OrganizationsListResponse) GetTotal() (value int, ok bool) {
+// regardless of the size of the page. As this collection doesn't support paging or
+// searching the result will always be the total number of labels of the account/organization/subscription.
+func (r *GenericLabelsListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {
 		value = *r.total
