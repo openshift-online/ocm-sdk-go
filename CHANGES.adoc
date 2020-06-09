@@ -3,6 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+
+== 0.1.106 Jun 09 2020
+
+- Update to model 0.0.61:
+** accounts_mgmt: Add 'fields' parameter to all list-requests
+** accounts_mgmt: Support for Labels resources
+- Update to model 0.0.60:
+** Add parameters 'offset' and 'tail' to log resource
+
 == 0.1.105 May 21 2020
 
 - Update to model 0.0.59:
