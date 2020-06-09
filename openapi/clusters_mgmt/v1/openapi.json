@@ -2188,6 +2188,24 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "offset",
+            "description": "Line offset to start logs from. if 0 retreive entire log.\nIf offset > #lines return an empty log.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "tail",
+            "description": "Returns the number of tail lines from the end of the log.\nIf there are no line breaks or the number of lines < tail\nreturn the entire log.\nEither 'tail' or 'offset' can be set. Not both. \n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {

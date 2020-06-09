@@ -45,6 +45,7 @@ type SubscriptionsServer interface {
 type SubscriptionsListServerRequest struct {
 	fetchaccountsAccounts *bool
 	fetchlabelsLabels     *bool
+	fields                *string
 	labels                *string
 	order                 *string
 	page                  *int
@@ -92,6 +93,38 @@ func (r *SubscriptionsListServerRequest) GetFetchlabelsLabels() (value bool, ok 
 	ok = r != nil && r.fetchlabelsLabels != nil
 	if ok {
 		value = *r.fetchlabelsLabels
+	}
+	return
+}
+
+// Fields returns the value of the 'fields' parameter.
+//
+// Projection
+// This field contains a comma-separated list of fields you'd like to get in
+// a result. No new fields can be added, only existing ones can be filtered.
+// To specify a field 'id' of a structure 'plan' use 'plan.id'.
+// To specify all fields of a structure 'labels' use 'labels.*'.
+//
+func (r *SubscriptionsListServerRequest) Fields() string {
+	if r != nil && r.fields != nil {
+		return *r.fields
+	}
+	return ""
+}
+
+// GetFields returns the value of the 'fields' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Projection
+// This field contains a comma-separated list of fields you'd like to get in
+// a result. No new fields can be added, only existing ones can be filtered.
+// To specify a field 'id' of a structure 'plan' use 'plan.id'.
+// To specify all fields of a structure 'labels' use 'labels.*'.
+//
+func (r *SubscriptionsListServerRequest) GetFields() (value string, ok bool) {
+	ok = r != nil && r.fields != nil
+	if ok {
+		value = *r.fields
 	}
 	return
 }

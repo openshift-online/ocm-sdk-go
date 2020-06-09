@@ -66,6 +66,11 @@ type Server interface {
 	// account.
 	CurrentAccount() CurrentAccountServer
 
+	// Labels returns the target 'labels' resource.
+	//
+	// Reference to the resource that manages the collection of labels.
+	Labels() LabelsServer
+
 	// Organizations returns the target 'organizations' resource.
 	//
 	// Reference to the resource that manages the collection of
@@ -178,6 +183,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchCurrentAccount(w, r, target, segments[1:])
+	case "labels":
+		target := server.Labels()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchLabels(w, r, target, segments[1:])
 	case "organizations":
 		target := server.Organizations()
 		if target == nil {

@@ -133,6 +133,17 @@ func (c *Client) CurrentAccount() *CurrentAccountClient {
 	)
 }
 
+// Labels returns the target 'labels' resource.
+//
+// Reference to the resource that manages the collection of labels.
+func (c *Client) Labels() *LabelsClient {
+	return NewLabelsClient(
+		c.transport,
+		path.Join(c.path, "labels"),
+		path.Join(c.metric, "labels"),
+	)
+}
+
 // Organizations returns the target 'organizations' resource.
 //
 // Reference to the resource that manages the collection of

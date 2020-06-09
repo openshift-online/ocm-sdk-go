@@ -19,8 +19,9 @@ limitations under the License.
 package sdk
 
 import (
-	"github.com/prometheus/client_golang/prometheus"
 	"strings"
+
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 // registerMetrics registers the metrics with the Prometheus library.

@@ -37,6 +37,10 @@ func readSubscriptionsListRequest(request *SubscriptionsListServerRequest, r *ht
 	if err != nil {
 		return err
 	}
+	request.fields, err = helpers.ParseString(query, "fields")
+	if err != nil {
+		return err
+	}
 	request.labels, err = helpers.ParseString(query, "labels")
 	if err != nil {
 		return err
