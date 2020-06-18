@@ -25,7 +25,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 // subscription.
 type SubscriptionNotify struct {
 	bccAddress         *string
+	clusterID          *string
+	clusterUUID        *string
 	subject            *string
+	subscriptionID     *string
 	templateName       *string
 	templateParameters []*TemplateParameter
 }
@@ -33,7 +36,10 @@ type SubscriptionNotify struct {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SubscriptionNotify) Empty() bool {
 	return o == nil || (o.bccAddress == nil &&
+		o.clusterID == nil &&
+		o.clusterUUID == nil &&
 		o.subject == nil &&
+		o.subscriptionID == nil &&
 		o.templateName == nil &&
 		len(o.templateParameters) == 0 &&
 		true)
@@ -62,6 +68,52 @@ func (o *SubscriptionNotify) GetBccAddress() (value string, ok bool) {
 	return
 }
 
+// ClusterID returns the value of the 'cluster_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates which Cluster (internal id) the resource type belongs to
+func (o *SubscriptionNotify) ClusterID() string {
+	if o != nil && o.clusterID != nil {
+		return *o.clusterID
+	}
+	return ""
+}
+
+// GetClusterID returns the value of the 'cluster_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates which Cluster (internal id) the resource type belongs to
+func (o *SubscriptionNotify) GetClusterID() (value string, ok bool) {
+	ok = o != nil && o.clusterID != nil
+	if ok {
+		value = *o.clusterID
+	}
+	return
+}
+
+// ClusterUUID returns the value of the 'cluster_UUID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates which Cluster (external id) the resource type belongs to
+func (o *SubscriptionNotify) ClusterUUID() string {
+	if o != nil && o.clusterUUID != nil {
+		return *o.clusterUUID
+	}
+	return ""
+}
+
+// GetClusterUUID returns the value of the 'cluster_UUID' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates which Cluster (external id) the resource type belongs to
+func (o *SubscriptionNotify) GetClusterUUID() (value string, ok bool) {
+	ok = o != nil && o.clusterUUID != nil
+	if ok {
+		value = *o.clusterUUID
+	}
+	return
+}
+
 // Subject returns the value of the 'subject' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
@@ -81,6 +133,29 @@ func (o *SubscriptionNotify) GetSubject() (value string, ok bool) {
 	ok = o != nil && o.subject != nil
 	if ok {
 		value = *o.subject
+	}
+	return
+}
+
+// SubscriptionID returns the value of the 'subscription_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates which Subscription the resource type belongs to
+func (o *SubscriptionNotify) SubscriptionID() string {
+	if o != nil && o.subscriptionID != nil {
+		return *o.subscriptionID
+	}
+	return ""
+}
+
+// GetSubscriptionID returns the value of the 'subscription_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates which Subscription the resource type belongs to
+func (o *SubscriptionNotify) GetSubscriptionID() (value string, ok bool) {
+	ok = o != nil && o.subscriptionID != nil
+	if ok {
+		value = *o.subscriptionID
 	}
 	return
 }

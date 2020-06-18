@@ -3734,7 +3734,7 @@
             "type": "string"
           },
           "expiration_timestamp": {
-            "description": "Date and time when the cluster will be automatically deleted, using the format defined in\nhttps://www.ietf.org/rfc/rfc3339.txt[RFC3339]. If no timestamp is provided, the cluster\nwill never expire.\n",
+            "description": "Date and time when the cluster will be automatically deleted, using the format defined in\nhttps://www.ietf.org/rfc/rfc3339.txt[RFC3339]. If no timestamp is provided, the cluster\nwill never expire.\n\nThis option is unsupported.\n",
             "type": "string",
             "format": "date-time"
           },

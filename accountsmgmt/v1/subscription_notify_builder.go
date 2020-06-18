@@ -25,7 +25,10 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 // subscription.
 type SubscriptionNotifyBuilder struct {
 	bccAddress         *string
+	clusterID          *string
+	clusterUUID        *string
 	subject            *string
+	subscriptionID     *string
 	templateName       *string
 	templateParameters []*TemplateParameterBuilder
 }
@@ -43,11 +46,35 @@ func (b *SubscriptionNotifyBuilder) BccAddress(value string) *SubscriptionNotify
 	return b
 }
 
+// ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
+func (b *SubscriptionNotifyBuilder) ClusterID(value string) *SubscriptionNotifyBuilder {
+	b.clusterID = &value
+	return b
+}
+
+// ClusterUUID sets the value of the 'cluster_UUID' attribute to the given value.
+//
+//
+func (b *SubscriptionNotifyBuilder) ClusterUUID(value string) *SubscriptionNotifyBuilder {
+	b.clusterUUID = &value
+	return b
+}
+
 // Subject sets the value of the 'subject' attribute to the given value.
 //
 //
 func (b *SubscriptionNotifyBuilder) Subject(value string) *SubscriptionNotifyBuilder {
 	b.subject = &value
+	return b
+}
+
+// SubscriptionID sets the value of the 'subscription_ID' attribute to the given value.
+//
+//
+func (b *SubscriptionNotifyBuilder) SubscriptionID(value string) *SubscriptionNotifyBuilder {
+	b.subscriptionID = &value
 	return b
 }
 
@@ -74,7 +101,10 @@ func (b *SubscriptionNotifyBuilder) Copy(object *SubscriptionNotify) *Subscripti
 		return b
 	}
 	b.bccAddress = object.bccAddress
+	b.clusterID = object.clusterID
+	b.clusterUUID = object.clusterUUID
 	b.subject = object.subject
+	b.subscriptionID = object.subscriptionID
 	b.templateName = object.templateName
 	if object.templateParameters != nil {
 		b.templateParameters = make([]*TemplateParameterBuilder, len(object.templateParameters))
@@ -91,7 +121,10 @@ func (b *SubscriptionNotifyBuilder) Copy(object *SubscriptionNotify) *Subscripti
 func (b *SubscriptionNotifyBuilder) Build() (object *SubscriptionNotify, err error) {
 	object = new(SubscriptionNotify)
 	object.bccAddress = b.bccAddress
+	object.clusterID = b.clusterID
+	object.clusterUUID = b.clusterUUID
 	object.subject = b.subject
+	object.subscriptionID = b.subscriptionID
 	object.templateName = b.templateName
 	if b.templateParameters != nil {
 		object.templateParameters = make([]*TemplateParameter, len(b.templateParameters))
