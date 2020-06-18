@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.107 Jun 18 2020
+
+- Update to model v0.0.63
+** cluster: Remove support for expiration_timestamp
+** Added top-level Notify endpoint to AMS
+
 == 0.1.106 Jun 9 2020
 
 - Update to metamodel v0.0.29:
