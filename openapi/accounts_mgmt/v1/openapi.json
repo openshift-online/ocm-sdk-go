@@ -4416,8 +4416,20 @@
             "description": "The BCC address to be included on the email that is sent\n",
             "type": "string"
           },
+          "cluster_id": {
+            "description": "Indicates which Cluster (internal id) the resource type belongs to\n",
+            "type": "string"
+          },
+          "cluster_uuid": {
+            "description": "Indicates which Cluster (external id) the resource type belongs to\n",
+            "type": "string"
+          },
           "subject": {
             "description": "The email subject\n",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "Indicates which Subscription the resource type belongs to\n",
             "type": "string"
           },
           "template_name": {

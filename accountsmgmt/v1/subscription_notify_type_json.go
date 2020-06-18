@@ -46,12 +46,36 @@ func writeSubscriptionNotify(object *SubscriptionNotify, stream *jsoniter.Stream
 		stream.WriteString(*object.bccAddress)
 		count++
 	}
+	if object.clusterID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cluster_id")
+		stream.WriteString(*object.clusterID)
+		count++
+	}
+	if object.clusterUUID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cluster_uuid")
+		stream.WriteString(*object.clusterUUID)
+		count++
+	}
 	if object.subject != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subject")
 		stream.WriteString(*object.subject)
+		count++
+	}
+	if object.subscriptionID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("subscription_id")
+		stream.WriteString(*object.subscriptionID)
 		count++
 	}
 	if object.templateName != nil {
@@ -97,9 +121,18 @@ func readSubscriptionNotify(iterator *jsoniter.Iterator) *SubscriptionNotify {
 		case "bcc_address":
 			value := iterator.ReadString()
 			object.bccAddress = &value
+		case "cluster_id":
+			value := iterator.ReadString()
+			object.clusterID = &value
+		case "cluster_uuid":
+			value := iterator.ReadString()
+			object.clusterUUID = &value
 		case "subject":
 			value := iterator.ReadString()
 			object.subject = &value
+		case "subscription_id":
+			value := iterator.ReadString()
+			object.subscriptionID = &value
 		case "template_name":
 			value := iterator.ReadString()
 			object.templateName = &value

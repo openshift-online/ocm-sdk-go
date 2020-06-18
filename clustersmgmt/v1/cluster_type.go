@@ -453,6 +453,8 @@ func (o *Cluster) GetDisplayName() (value string, ok bool) {
 // Date and time when the cluster will be automatically deleted, using the format defined in
 // https://www.ietf.org/rfc/rfc3339.txt[RFC3339]. If no timestamp is provided, the cluster
 // will never expire.
+//
+// This option is unsupported.
 func (o *Cluster) ExpirationTimestamp() time.Time {
 	if o != nil && o.expirationTimestamp != nil {
 		return *o.expirationTimestamp
@@ -466,6 +468,8 @@ func (o *Cluster) ExpirationTimestamp() time.Time {
 // Date and time when the cluster will be automatically deleted, using the format defined in
 // https://www.ietf.org/rfc/rfc3339.txt[RFC3339]. If no timestamp is provided, the cluster
 // will never expire.
+//
+// This option is unsupported.
 func (o *Cluster) GetExpirationTimestamp() (value time.Time, ok bool) {
 	ok = o != nil && o.expirationTimestamp != nil
 	if ok {
