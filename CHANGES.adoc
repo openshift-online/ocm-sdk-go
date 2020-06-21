@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.108 Jun 21 2020
+
+- Update to model v0.0.64
+** Added Notify to root_resource in AMS
+
 == 0.1.107 Jun 18 2020
 
 - Update to model v0.0.63

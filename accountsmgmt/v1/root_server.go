@@ -71,6 +71,11 @@ type Server interface {
 	// Reference to the resource that manages the collection of labels.
 	Labels() LabelsServer
 
+	// Notify returns the target 'notify' resource.
+	//
+	// Reference to the resource that manages the notifications.
+	Notify() NotifyServer
+
 	// Organizations returns the target 'organizations' resource.
 	//
 	// Reference to the resource that manages the collection of
@@ -190,6 +195,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchLabels(w, r, target, segments[1:])
+	case "notify":
+		target := server.Notify()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchNotify(w, r, target, segments[1:])
 	case "organizations":
 		target := server.Organizations()
 		if target == nil {
