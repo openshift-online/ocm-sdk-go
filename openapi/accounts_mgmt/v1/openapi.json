@@ -938,6 +938,42 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/notify": {
+      "post": {
+        "description": "Notify user related to subscription/cluster via email\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionNotify"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionNotify"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/organizations": {
       "post": {
         "description": "Creates a new organization.\n",
