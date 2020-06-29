@@ -176,6 +176,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteString(*object.externalID)
 		count++
 	}
+	if object.externalConfiguration != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("external_configuration")
+		writeExternalConfiguration(object.externalConfiguration, stream)
+		count++
+	}
 	if object.flavour != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -477,6 +485,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "external_id":
 			value := iterator.ReadString()
 			object.externalID = &value
+		case "external_configuration":
+			value := readExternalConfiguration(iterator)
+			object.externalConfiguration = value
 		case "flavour":
 			value := readFlavour(iterator)
 			object.flavour = value

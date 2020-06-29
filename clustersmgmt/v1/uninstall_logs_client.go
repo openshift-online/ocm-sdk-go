@@ -29,20 +29,20 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// LogsClient is the client of the 'logs' resource.
+// UninstallLogsClient is the client of the 'uninstall_logs' resource.
 //
-// Manages a collection of logs.
-type LogsClient struct {
+// Manages a collection of install logs.
+type UninstallLogsClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewLogsClient creates a new client for the 'logs'
+// NewUninstallLogsClient creates a new client for the 'uninstall_logs'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewLogsClient(transport http.RoundTripper, path string, metric string) *LogsClient {
-	return &LogsClient{
+func NewUninstallLogsClient(transport http.RoundTripper, path string, metric string) *UninstallLogsClient {
+	return &UninstallLogsClient{
 		transport: transport,
 		path:      path,
 		metric:    metric,
@@ -51,30 +51,19 @@ func NewLogsClient(transport http.RoundTripper, path string, metric string) *Log
 
 // List creates a request for the 'list' method.
 //
-// Retrieves the list of clusters.
-func (c *LogsClient) List() *LogsListRequest {
-	return &LogsListRequest{
+// Retrieves the list of install logs.
+func (c *UninstallLogsClient) List() *UninstallLogsListRequest {
+	return &UninstallLogsListRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
 	}
 }
 
-// Install returns the target 'install_logs' resource.
-//
-//
-func (c *LogsClient) Install() *InstallLogsClient {
-	return NewInstallLogsClient(
-		c.transport,
-		path.Join(c.path, "install"),
-		path.Join(c.metric, "install"),
-	)
-}
-
 // Log returns the target 'log' resource for the given identifier.
 //
 // Returns a reference to the service that manages an specific log.
-func (c *LogsClient) Log(id string) *LogClient {
+func (c *UninstallLogsClient) Log(id string) *LogClient {
 	return NewLogClient(
 		c.transport,
 		path.Join(c.path, id),
@@ -82,19 +71,8 @@ func (c *LogsClient) Log(id string) *LogClient {
 	)
 }
 
-// Uninstall returns the target 'uninstall_logs' resource.
-//
-//
-func (c *LogsClient) Uninstall() *UninstallLogsClient {
-	return NewUninstallLogsClient(
-		c.transport,
-		path.Join(c.path, "uninstall"),
-		path.Join(c.metric, "uninstall"),
-	)
-}
-
-// LogsListRequest is the request for the 'list' method.
-type LogsListRequest struct {
+// UninstallLogsListRequest is the request for the 'list' method.
+type UninstallLogsListRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -105,13 +83,13 @@ type LogsListRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *LogsListRequest) Parameter(name string, value interface{}) *LogsListRequest {
+func (r *UninstallLogsListRequest) Parameter(name string, value interface{}) *UninstallLogsListRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *LogsListRequest) Header(name string, value interface{}) *LogsListRequest {
+func (r *UninstallLogsListRequest) Header(name string, value interface{}) *UninstallLogsListRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -119,7 +97,7 @@ func (r *LogsListRequest) Header(name string, value interface{}) *LogsListReques
 // Page sets the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *LogsListRequest) Page(value int) *LogsListRequest {
+func (r *UninstallLogsListRequest) Page(value int) *UninstallLogsListRequest {
 	r.page = &value
 	return r
 }
@@ -127,7 +105,7 @@ func (r *LogsListRequest) Page(value int) *LogsListRequest {
 // Size sets the value of the 'size' parameter.
 //
 // Number of items contained in the returned page.
-func (r *LogsListRequest) Size(value int) *LogsListRequest {
+func (r *UninstallLogsListRequest) Size(value int) *UninstallLogsListRequest {
 	r.size = &value
 	return r
 }
@@ -136,12 +114,12 @@ func (r *LogsListRequest) Size(value int) *LogsListRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *LogsListRequest) Send() (result *LogsListResponse, err error) {
+func (r *UninstallLogsListRequest) Send() (result *UninstallLogsListResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *LogsListRequest) SendContext(ctx context.Context) (result *LogsListResponse, err error) {
+func (r *UninstallLogsListRequest) SendContext(ctx context.Context) (result *UninstallLogsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -167,7 +145,7 @@ func (r *LogsListRequest) SendContext(ctx context.Context) (result *LogsListResp
 		return
 	}
 	defer response.Body.Close()
-	result = &LogsListResponse{}
+	result = &UninstallLogsListResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -178,15 +156,15 @@ func (r *LogsListRequest) SendContext(ctx context.Context) (result *LogsListResp
 		err = result.err
 		return
 	}
-	err = readLogsListResponse(result, response.Body)
+	err = readUninstallLogsListResponse(result, response.Body)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// LogsListResponse is the response for the 'list' method.
-type LogsListResponse struct {
+// UninstallLogsListResponse is the response for the 'list' method.
+type UninstallLogsListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
@@ -197,7 +175,7 @@ type LogsListResponse struct {
 }
 
 // Status returns the response status code.
-func (r *LogsListResponse) Status() int {
+func (r *UninstallLogsListResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -205,7 +183,7 @@ func (r *LogsListResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *LogsListResponse) Header() http.Header {
+func (r *UninstallLogsListResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -213,7 +191,7 @@ func (r *LogsListResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *LogsListResponse) Error() *errors.Error {
+func (r *UninstallLogsListResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -222,8 +200,8 @@ func (r *LogsListResponse) Error() *errors.Error {
 
 // Items returns the value of the 'items' parameter.
 //
-// Retrieved list of logs.
-func (r *LogsListResponse) Items() *LogList {
+// Retrieved list of install logs.
+func (r *UninstallLogsListResponse) Items() *LogList {
 	if r == nil {
 		return nil
 	}
@@ -233,8 +211,8 @@ func (r *LogsListResponse) Items() *LogList {
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Retrieved list of logs.
-func (r *LogsListResponse) GetItems() (value *LogList, ok bool) {
+// Retrieved list of install logs.
+func (r *UninstallLogsListResponse) GetItems() (value *LogList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
 		value = r.items
@@ -245,7 +223,7 @@ func (r *LogsListResponse) GetItems() (value *LogList, ok bool) {
 // Page returns the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *LogsListResponse) Page() int {
+func (r *UninstallLogsListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
 	}
@@ -256,7 +234,7 @@ func (r *LogsListResponse) Page() int {
 // a flag indicating if the parameter has a value.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *LogsListResponse) GetPage() (value int, ok bool) {
+func (r *UninstallLogsListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
@@ -267,7 +245,7 @@ func (r *LogsListResponse) GetPage() (value int, ok bool) {
 // Size returns the value of the 'size' parameter.
 //
 // Number of items contained in the returned page.
-func (r *LogsListResponse) Size() int {
+func (r *UninstallLogsListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
 	}
@@ -278,7 +256,7 @@ func (r *LogsListResponse) Size() int {
 // a flag indicating if the parameter has a value.
 //
 // Number of items contained in the returned page.
-func (r *LogsListResponse) GetSize() (value int, ok bool) {
+func (r *UninstallLogsListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
 		value = *r.size
@@ -289,7 +267,7 @@ func (r *LogsListResponse) GetSize() (value int, ok bool) {
 // Total returns the value of the 'total' parameter.
 //
 // Total number of items of the collection.
-func (r *LogsListResponse) Total() int {
+func (r *UninstallLogsListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
 	}
@@ -300,7 +278,7 @@ func (r *LogsListResponse) Total() int {
 // a flag indicating if the parameter has a value.
 //
 // Total number of items of the collection.
-func (r *LogsListResponse) GetTotal() (value int, ok bool) {
+func (r *UninstallLogsListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {
 		value = *r.total

@@ -61,6 +61,11 @@ type ClusterServer interface {
 	// Reference to the resource that manages the credentials of the cluster.
 	Credentials() CredentialsServer
 
+	// ExternalConfiguration returns the target 'external_configuration' resource.
+	//
+	// Reference to the resource that manages the external configuration.
+	ExternalConfiguration() ExternalConfigurationServer
+
 	// Groups returns the target 'groups' resource.
 	//
 	// Reference to the resource that manages the collection of groups.
@@ -228,6 +233,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 			return
 		}
 		dispatchCredentials(w, r, target, segments[1:])
+	case "external_configuration":
+		target := server.ExternalConfiguration()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchExternalConfiguration(w, r, target, segments[1:])
 	case "groups":
 		target := server.Groups()
 		if target == nil {
