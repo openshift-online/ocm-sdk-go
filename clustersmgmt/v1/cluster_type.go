@@ -91,6 +91,7 @@ type Cluster struct {
 	displayName                       *string
 	expirationTimestamp               *time.Time
 	externalID                        *string
+	externalConfiguration             *ExternalConfiguration
 	flavour                           *Flavour
 	groups                            *GroupList
 	healthState                       *ClusterHealthState
@@ -497,6 +498,29 @@ func (o *Cluster) GetExternalID() (value string, ok bool) {
 	ok = o != nil && o.externalID != nil
 	if ok {
 		value = *o.externalID
+	}
+	return
+}
+
+// ExternalConfiguration returns the value of the 'external_configuration' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// ExternalConfiguration shows external configuration on the cluster.
+func (o *Cluster) ExternalConfiguration() *ExternalConfiguration {
+	if o == nil {
+		return nil
+	}
+	return o.externalConfiguration
+}
+
+// GetExternalConfiguration returns the value of the 'external_configuration' attribute and
+// a flag indicating if the attribute has a value.
+//
+// ExternalConfiguration shows external configuration on the cluster.
+func (o *Cluster) GetExternalConfiguration() (value *ExternalConfiguration, ok bool) {
+	ok = o != nil && o.externalConfiguration != nil
+	if ok {
+		value = o.externalConfiguration
 	}
 	return
 }

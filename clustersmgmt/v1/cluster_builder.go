@@ -79,6 +79,7 @@ type ClusterBuilder struct {
 	displayName                       *string
 	expirationTimestamp               *time.Time
 	externalID                        *string
+	externalConfiguration             *ExternalConfigurationBuilder
 	flavour                           *FlavourBuilder
 	groups                            *GroupListBuilder
 	healthState                       *ClusterHealthState
@@ -225,6 +226,14 @@ func (b *ClusterBuilder) ExpirationTimestamp(value time.Time) *ClusterBuilder {
 //
 func (b *ClusterBuilder) ExternalID(value string) *ClusterBuilder {
 	b.externalID = &value
+	return b
+}
+
+// ExternalConfiguration sets the value of the 'external_configuration' attribute to the given value.
+//
+// Representation of cluster external configuration.
+func (b *ClusterBuilder) ExternalConfiguration(value *ExternalConfigurationBuilder) *ClusterBuilder {
+	b.externalConfiguration = value
 	return b
 }
 
@@ -455,6 +464,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	b.displayName = object.displayName
 	b.expirationTimestamp = object.expirationTimestamp
 	b.externalID = object.externalID
+	if object.externalConfiguration != nil {
+		b.externalConfiguration = NewExternalConfiguration().Copy(object.externalConfiguration)
+	} else {
+		b.externalConfiguration = nil
+	}
 	if object.flavour != nil {
 		b.flavour = NewFlavour().Copy(object.flavour)
 	} else {
@@ -587,6 +601,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	object.displayName = b.displayName
 	object.expirationTimestamp = b.expirationTimestamp
 	object.externalID = b.externalID
+	if b.externalConfiguration != nil {
+		object.externalConfiguration, err = b.externalConfiguration.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.flavour != nil {
 		object.flavour, err = b.flavour.Build()
 		if err != nil {

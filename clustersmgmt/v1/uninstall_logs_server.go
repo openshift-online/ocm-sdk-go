@@ -27,32 +27,22 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
-// LogsServer represents the interface the manages the 'logs' resource.
-type LogsServer interface {
+// UninstallLogsServer represents the interface the manages the 'uninstall_logs' resource.
+type UninstallLogsServer interface {
 
 	// List handles a request for the 'list' method.
 	//
-	// Retrieves the list of clusters.
-	List(ctx context.Context, request *LogsListServerRequest, response *LogsListServerResponse) error
-
-	// Install returns the target 'install_logs' resource.
-	//
-	//
-	Install() InstallLogsServer
+	// Retrieves the list of install logs.
+	List(ctx context.Context, request *UninstallLogsListServerRequest, response *UninstallLogsListServerResponse) error
 
 	// Log returns the target 'log' server for the given identifier.
 	//
 	// Returns a reference to the service that manages an specific log.
 	Log(id string) LogServer
-
-	// Uninstall returns the target 'uninstall_logs' resource.
-	//
-	//
-	Uninstall() UninstallLogsServer
 }
 
-// LogsListServerRequest is the request for the 'list' method.
-type LogsListServerRequest struct {
+// UninstallLogsListServerRequest is the request for the 'list' method.
+type UninstallLogsListServerRequest struct {
 	page *int
 	size *int
 }
@@ -60,7 +50,7 @@ type LogsListServerRequest struct {
 // Page returns the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *LogsListServerRequest) Page() int {
+func (r *UninstallLogsListServerRequest) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
 	}
@@ -71,7 +61,7 @@ func (r *LogsListServerRequest) Page() int {
 // a flag indicating if the parameter has a value.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *LogsListServerRequest) GetPage() (value int, ok bool) {
+func (r *UninstallLogsListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
@@ -82,7 +72,7 @@ func (r *LogsListServerRequest) GetPage() (value int, ok bool) {
 // Size returns the value of the 'size' parameter.
 //
 // Number of items contained in the returned page.
-func (r *LogsListServerRequest) Size() int {
+func (r *UninstallLogsListServerRequest) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
 	}
@@ -93,7 +83,7 @@ func (r *LogsListServerRequest) Size() int {
 // a flag indicating if the parameter has a value.
 //
 // Number of items contained in the returned page.
-func (r *LogsListServerRequest) GetSize() (value int, ok bool) {
+func (r *UninstallLogsListServerRequest) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
 		value = *r.size
@@ -101,8 +91,8 @@ func (r *LogsListServerRequest) GetSize() (value int, ok bool) {
 	return
 }
 
-// LogsListServerResponse is the response for the 'list' method.
-type LogsListServerResponse struct {
+// UninstallLogsListServerResponse is the response for the 'list' method.
+type UninstallLogsListServerResponse struct {
 	status int
 	err    *errors.Error
 	items  *LogList
@@ -113,8 +103,8 @@ type LogsListServerResponse struct {
 
 // Items sets the value of the 'items' parameter.
 //
-// Retrieved list of logs.
-func (r *LogsListServerResponse) Items(value *LogList) *LogsListServerResponse {
+// Retrieved list of install logs.
+func (r *UninstallLogsListServerResponse) Items(value *LogList) *UninstallLogsListServerResponse {
 	r.items = value
 	return r
 }
@@ -122,7 +112,7 @@ func (r *LogsListServerResponse) Items(value *LogList) *LogsListServerResponse {
 // Page sets the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.
-func (r *LogsListServerResponse) Page(value int) *LogsListServerResponse {
+func (r *UninstallLogsListServerResponse) Page(value int) *UninstallLogsListServerResponse {
 	r.page = &value
 	return r
 }
@@ -130,7 +120,7 @@ func (r *LogsListServerResponse) Page(value int) *LogsListServerResponse {
 // Size sets the value of the 'size' parameter.
 //
 // Number of items contained in the returned page.
-func (r *LogsListServerResponse) Size(value int) *LogsListServerResponse {
+func (r *UninstallLogsListServerResponse) Size(value int) *UninstallLogsListServerResponse {
 	r.size = &value
 	return r
 }
@@ -138,25 +128,25 @@ func (r *LogsListServerResponse) Size(value int) *LogsListServerResponse {
 // Total sets the value of the 'total' parameter.
 //
 // Total number of items of the collection.
-func (r *LogsListServerResponse) Total(value int) *LogsListServerResponse {
+func (r *UninstallLogsListServerResponse) Total(value int) *UninstallLogsListServerResponse {
 	r.total = &value
 	return r
 }
 
 // Status sets the status code.
-func (r *LogsListServerResponse) Status(value int) *LogsListServerResponse {
+func (r *UninstallLogsListServerResponse) Status(value int) *UninstallLogsListServerResponse {
 	r.status = value
 	return r
 }
 
-// dispatchLogs navigates the servers tree rooted at the given server
+// dispatchUninstallLogs navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchLogs(w http.ResponseWriter, r *http.Request, server LogsServer, segments []string) {
+func dispatchUninstallLogs(w http.ResponseWriter, r *http.Request, server UninstallLogsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case "GET":
-			adaptLogsListRequest(w, r, server)
+			adaptUninstallLogsListRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -164,20 +154,6 @@ func dispatchLogs(w http.ResponseWriter, r *http.Request, server LogsServer, seg
 		}
 	}
 	switch segments[0] {
-	case "install":
-		target := server.Install()
-		if target == nil {
-			errors.SendNotFound(w, r)
-			return
-		}
-		dispatchInstallLogs(w, r, target, segments[1:])
-	case "uninstall":
-		target := server.Uninstall()
-		if target == nil {
-			errors.SendNotFound(w, r)
-			return
-		}
-		dispatchUninstallLogs(w, r, target, segments[1:])
 	default:
 		target := server.Log(segments[0])
 		if target == nil {
@@ -188,12 +164,12 @@ func dispatchLogs(w http.ResponseWriter, r *http.Request, server LogsServer, seg
 	}
 }
 
-// adaptLogsListRequest translates the given HTTP request into a call to
+// adaptUninstallLogsListRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptLogsListRequest(w http.ResponseWriter, r *http.Request, server LogsServer) {
-	request := &LogsListServerRequest{}
-	err := readLogsListRequest(request, r)
+func adaptUninstallLogsListRequest(w http.ResponseWriter, r *http.Request, server UninstallLogsServer) {
+	request := &UninstallLogsListServerRequest{}
+	err := readUninstallLogsListRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -202,7 +178,7 @@ func adaptLogsListRequest(w http.ResponseWriter, r *http.Request, server LogsSer
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &LogsListServerResponse{}
+	response := &UninstallLogsListServerResponse{}
 	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
@@ -213,7 +189,7 @@ func adaptLogsListRequest(w http.ResponseWriter, r *http.Request, server LogsSer
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeLogsListResponse(response, w)
+	err = writeUninstallLogsListResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
