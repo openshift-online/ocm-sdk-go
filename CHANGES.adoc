@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.109 Jun 29 2020
+
+- Update to model v0.0.65
+** Added Uninstall Log
+** Added syncset API
+** Update to metamodel v0.0.30
+
 == 0.1.108 Jun 21 2020
 
 - Update to model v0.0.64
