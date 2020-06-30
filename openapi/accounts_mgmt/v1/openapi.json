@@ -3915,6 +3915,25 @@
           }
         }
       },
+      "FeatureToggleQueryRequest": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'FeatureToggleQueryRequest' if this is a complete object or 'FeatureToggleQueryRequestLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          }
+        }
+      },
       "Label": {
         "properties": {
           "kind": {
