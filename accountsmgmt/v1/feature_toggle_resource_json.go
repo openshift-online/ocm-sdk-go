@@ -24,17 +24,19 @@ import (
 	"net/http"
 )
 
-func readFeatureToggleGetRequest(request *FeatureToggleGetServerRequest, r *http.Request) error {
-	return nil
-}
-func writeFeatureToggleGetRequest(request *FeatureToggleGetRequest, writer io.Writer) error {
-	return nil
-}
-func readFeatureToggleGetResponse(response *FeatureToggleGetResponse, reader io.Reader) error {
+func readFeatureTogglePostRequest(request *FeatureTogglePostServerRequest, r *http.Request) error {
 	var err error
-	response.body, err = UnmarshalFeatureToggle(reader)
+	request.request, err = UnmarshalFeatureToggleQueryRequest(r)
 	return err
 }
-func writeFeatureToggleGetResponse(response *FeatureToggleGetServerResponse, w http.ResponseWriter) error {
-	return MarshalFeatureToggle(response.body, w)
+func writeFeatureTogglePostRequest(request *FeatureTogglePostRequest, writer io.Writer) error {
+	return MarshalFeatureToggleQueryRequest(request.request, writer)
+}
+func readFeatureTogglePostResponse(response *FeatureTogglePostResponse, reader io.Reader) error {
+	var err error
+	response.response, err = UnmarshalFeatureToggle(reader)
+	return err
+}
+func writeFeatureTogglePostResponse(response *FeatureTogglePostServerResponse, w http.ResponseWriter) error {
+	return MarshalFeatureToggle(response.response, w)
 }

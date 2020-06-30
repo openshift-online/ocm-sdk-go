@@ -30,33 +30,56 @@ import (
 // FeatureToggleServer represents the interface the manages the 'feature_toggle' resource.
 type FeatureToggleServer interface {
 
-	// Get handles a request for the 'get' method.
+	// Post handles a request for the 'post' method.
 	//
-	// Retrieves the details of the feature toggle.
-	Get(ctx context.Context, request *FeatureToggleGetServerRequest, response *FeatureToggleGetServerResponse) error
+	// Retrieves the details of the feature toggle by providing query context
+	Post(ctx context.Context, request *FeatureTogglePostServerRequest, response *FeatureTogglePostServerResponse) error
 }
 
-// FeatureToggleGetServerRequest is the request for the 'get' method.
-type FeatureToggleGetServerRequest struct {
+// FeatureTogglePostServerRequest is the request for the 'post' method.
+type FeatureTogglePostServerRequest struct {
+	request *FeatureToggleQueryRequest
 }
 
-// FeatureToggleGetServerResponse is the response for the 'get' method.
-type FeatureToggleGetServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *FeatureToggle
-}
-
-// Body sets the value of the 'body' parameter.
+// Request returns the value of the 'request' parameter.
 //
 //
-func (r *FeatureToggleGetServerResponse) Body(value *FeatureToggle) *FeatureToggleGetServerResponse {
-	r.body = value
+func (r *FeatureTogglePostServerRequest) Request() *FeatureToggleQueryRequest {
+	if r == nil {
+		return nil
+	}
+	return r.request
+}
+
+// GetRequest returns the value of the 'request' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *FeatureTogglePostServerRequest) GetRequest() (value *FeatureToggleQueryRequest, ok bool) {
+	ok = r != nil && r.request != nil
+	if ok {
+		value = r.request
+	}
+	return
+}
+
+// FeatureTogglePostServerResponse is the response for the 'post' method.
+type FeatureTogglePostServerResponse struct {
+	status   int
+	err      *errors.Error
+	response *FeatureToggle
+}
+
+// Response sets the value of the 'response' parameter.
+//
+//
+func (r *FeatureTogglePostServerResponse) Response(value *FeatureToggle) *FeatureTogglePostServerResponse {
+	r.response = value
 	return r
 }
 
 // Status sets the status code.
-func (r *FeatureToggleGetServerResponse) Status(value int) *FeatureToggleGetServerResponse {
+func (r *FeatureTogglePostServerResponse) Status(value int) *FeatureTogglePostServerResponse {
 	r.status = value
 	return r
 }
@@ -67,8 +90,8 @@ func (r *FeatureToggleGetServerResponse) Status(value int) *FeatureToggleGetServ
 func dispatchFeatureToggle(w http.ResponseWriter, r *http.Request, server FeatureToggleServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case "GET":
-			adaptFeatureToggleGetRequest(w, r, server)
+		case "POST":
+			adaptFeatureTogglePostRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -82,12 +105,12 @@ func dispatchFeatureToggle(w http.ResponseWriter, r *http.Request, server Featur
 	}
 }
 
-// adaptFeatureToggleGetRequest translates the given HTTP request into a call to
+// adaptFeatureTogglePostRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptFeatureToggleGetRequest(w http.ResponseWriter, r *http.Request, server FeatureToggleServer) {
-	request := &FeatureToggleGetServerRequest{}
-	err := readFeatureToggleGetRequest(request, r)
+func adaptFeatureTogglePostRequest(w http.ResponseWriter, r *http.Request, server FeatureToggleServer) {
+	request := &FeatureTogglePostServerRequest{}
+	err := readFeatureTogglePostRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -96,9 +119,9 @@ func adaptFeatureToggleGetRequest(w http.ResponseWriter, r *http.Request, server
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &FeatureToggleGetServerResponse{}
-	response.status = 200
-	err = server.Get(r.Context(), request, response)
+	response := &FeatureTogglePostServerResponse{}
+	response.status = 201
+	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
 			"Can't process request for method '%s' and path '%s': %v",
@@ -107,7 +130,7 @@ func adaptFeatureToggleGetRequest(w http.ResponseWriter, r *http.Request, server
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeFeatureToggleGetResponse(response, w)
+	err = writeFeatureTogglePostResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
