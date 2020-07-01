@@ -4278,6 +4278,10 @@
           "resource_type": {
             "type": "string"
           },
+          "sku_count": {
+            "type": "integer",
+            "format": "int32"
+          },
           "type": {
             "type": "string"
           },
