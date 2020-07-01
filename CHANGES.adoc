@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.111 Jul 1 2020
+
+- Update to model v0.0.67
+** [AMS] Added SkuCount to ResourceQuota type
+
 == 0.1.110 Jun 30 2020
 
 - Update to model v0.0.66
