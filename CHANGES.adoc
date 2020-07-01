@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.110 Jun 30 2020
+
+- Update to model v0.0.66
+** Change feature toggle query to be POST with payload containing organization ID
+
 == 0.1.109 Jun 29 2020
 
 - Update to model v0.0.65
