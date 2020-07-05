@@ -23,33 +23,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type FeatureToggleQueryRequestBuilder struct {
-	id             *string
-	href           *string
-	link           bool
 	organizationID *string
 }
 
 // NewFeatureToggleQueryRequest creates a new builder of 'feature_toggle_query_request' objects.
 func NewFeatureToggleQueryRequest() *FeatureToggleQueryRequestBuilder {
 	return new(FeatureToggleQueryRequestBuilder)
-}
-
-// ID sets the identifier of the object.
-func (b *FeatureToggleQueryRequestBuilder) ID(value string) *FeatureToggleQueryRequestBuilder {
-	b.id = &value
-	return b
-}
-
-// HREF sets the link to the object.
-func (b *FeatureToggleQueryRequestBuilder) HREF(value string) *FeatureToggleQueryRequestBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *FeatureToggleQueryRequestBuilder) Link(value bool) *FeatureToggleQueryRequestBuilder {
-	b.link = value
-	return b
 }
 
 // OrganizationID sets the value of the 'organization_ID' attribute to the given value.
@@ -65,9 +44,6 @@ func (b *FeatureToggleQueryRequestBuilder) Copy(object *FeatureToggleQueryReques
 	if object == nil {
 		return b
 	}
-	b.id = object.id
-	b.href = object.href
-	b.link = object.link
 	b.organizationID = object.organizationID
 	return b
 }
@@ -75,9 +51,6 @@ func (b *FeatureToggleQueryRequestBuilder) Copy(object *FeatureToggleQueryReques
 // Build creates a 'feature_toggle_query_request' object using the configuration stored in the builder.
 func (b *FeatureToggleQueryRequestBuilder) Build() (object *FeatureToggleQueryRequest, err error) {
 	object = new(FeatureToggleQueryRequest)
-	object.id = b.id
-	object.href = b.href
-	object.link = b.link
 	object.organizationID = b.organizationID
 	return
 }

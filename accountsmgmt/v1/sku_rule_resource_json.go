@@ -18,3 +18,23 @@ limitations under the License.
 // your changes will be lost when the file is generated again.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+
+import (
+	"io"
+	"net/http"
+)
+
+func readSkuRuleGetRequest(request *SkuRuleGetServerRequest, r *http.Request) error {
+	return nil
+}
+func writeSkuRuleGetRequest(request *SkuRuleGetRequest, writer io.Writer) error {
+	return nil
+}
+func readSkuRuleGetResponse(response *SkuRuleGetResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalSkuRule(reader)
+	return err
+}
+func writeSkuRuleGetResponse(response *SkuRuleGetServerResponse, w http.ResponseWriter) error {
+	return MarshalSkuRule(response.body, w)
+}

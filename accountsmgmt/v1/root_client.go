@@ -133,6 +133,17 @@ func (c *Client) CurrentAccount() *CurrentAccountClient {
 	)
 }
 
+// FeatureToggles returns the target 'feature_toggles' resource.
+//
+// Reference to the resource that manages feature toggles.
+func (c *Client) FeatureToggles() *FeatureTogglesClient {
+	return NewFeatureTogglesClient(
+		c.transport,
+		path.Join(c.path, "feature_toggles"),
+		path.Join(c.metric, "feature_toggles"),
+	)
+}
+
 // Labels returns the target 'labels' resource.
 //
 // Reference to the resource that manages the collection of labels.
@@ -244,6 +255,18 @@ func (c *Client) Roles() *RolesClient {
 		c.transport,
 		path.Join(c.path, "roles"),
 		path.Join(c.metric, "roles"),
+	)
+}
+
+// SkuRules returns the target 'sku_rules' resource.
+//
+// Reference to the resource that manages the collection of
+// Sku Rules
+func (c *Client) SkuRules() *SkuRulesClient {
+	return NewSkuRulesClient(
+		c.transport,
+		path.Join(c.path, "sku_rules"),
+		path.Join(c.metric, "sku_rules"),
 	)
 }
 

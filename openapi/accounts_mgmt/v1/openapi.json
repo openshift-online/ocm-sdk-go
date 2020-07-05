@@ -859,6 +859,51 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/feature_toggles/{feature_toggle_id}/query": {
+      "post": {
+        "description": "Retrieves the details of the feature toggle by providing query context\n",
+        "parameters": [
+          {
+            "name": "feature_toggle_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureToggleQueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureToggle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/labels": {
       "get": {
         "description": "Retrieves a list of labels.\n",
@@ -2926,6 +2971,121 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/sku_rules": {
+      "get": {
+        "description": "Retrieves a list of Sku Rules.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the SKU\ninstead of the names of the columns of a table. For example, in order to\nretrieve SKUS large sized resources:\n\n\n```\nresource_name like '%large'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of Sku Rules.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SkuRule"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accounts_mgmt/v1/sku_rules/{sku_rule_id}": {
+      "get": {
+        "description": "Retrieves the details of the Sku Rule.\n",
+        "parameters": [
+          {
+            "name": "sku_rule_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkuRule"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/skus": {
       "get": {
         "description": "Retrieves a list of SKUS.\n",
@@ -3917,18 +4077,6 @@
       },
       "FeatureToggleQueryRequest": {
         "properties": {
-          "kind": {
-            "description": "Indicates the type of this object. Will be 'FeatureToggleQueryRequest' if this is a complete object or 'FeatureToggleQueryRequestLink' if it is just a link.\n",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique identifier of the object.\n",
-            "type": "string"
-          },
-          "href": {
-            "description": "Self link.\n",
-            "type": "string"
-          },
           "organization_id": {
             "type": "string"
           }
@@ -4376,6 +4524,36 @@
         "enum": [
           
         ]
+      },
+      "SkuRule": {
+        "description": "Identifies sku rule\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'SkuRule' if this is a complete object or 'SkuRuleLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "allowed": {
+            "description": "Specifies the allowed parameter for calculation\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "quota_id": {
+            "description": "Specifies the quota id\n",
+            "type": "string"
+          },
+          "sku": {
+            "description": "Specifies the sku, such as \"\"MW00504\"\"\n",
+            "type": "string"
+          }
+        }
       },
       "Subscription": {
         "properties": {

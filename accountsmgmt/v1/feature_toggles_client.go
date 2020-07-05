@@ -24,33 +24,33 @@ import (
 	"path"
 )
 
-// FeatureToggleClient is the client of the 'feature_toggle' resource.
+// FeatureTogglesClient is the client of the 'feature_toggles' resource.
 //
-// Manages feature toggle.
-type FeatureToggleClient struct {
+// Manages feature toggles.
+type FeatureTogglesClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewFeatureToggleClient creates a new client for the 'feature_toggle'
+// NewFeatureTogglesClient creates a new client for the 'feature_toggles'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewFeatureToggleClient(transport http.RoundTripper, path string, metric string) *FeatureToggleClient {
-	return &FeatureToggleClient{
+func NewFeatureTogglesClient(transport http.RoundTripper, path string, metric string) *FeatureTogglesClient {
+	return &FeatureTogglesClient{
 		transport: transport,
 		path:      path,
 		metric:    metric,
 	}
 }
 
-// Query returns the target 'feature_toggle_query' resource.
+// FeatureToggle returns the target 'feature_toggle' resource for the given identifier.
 //
 //
-func (c *FeatureToggleClient) Query() *FeatureToggleQueryClient {
-	return NewFeatureToggleQueryClient(
+func (c *FeatureTogglesClient) FeatureToggle(id string) *FeatureToggleClient {
+	return NewFeatureToggleClient(
 		c.transport,
-		path.Join(c.path, "query"),
-		path.Join(c.metric, "query"),
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
 	)
 }

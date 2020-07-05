@@ -19,84 +19,16 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-// FeatureToggleQueryRequestKind is the name of the type used to represent objects
-// of type 'feature_toggle_query_request'.
-const FeatureToggleQueryRequestKind = "FeatureToggleQueryRequest"
-
-// FeatureToggleQueryRequestLinkKind is the name of the type used to represent links
-// to objects of type 'feature_toggle_query_request'.
-const FeatureToggleQueryRequestLinkKind = "FeatureToggleQueryRequestLink"
-
-// FeatureToggleQueryRequestNilKind is the name of the type used to nil references
-// to objects of type 'feature_toggle_query_request'.
-const FeatureToggleQueryRequestNilKind = "FeatureToggleQueryRequestNil"
-
 // FeatureToggleQueryRequest represents the values of the 'feature_toggle_query_request' type.
 //
 //
 type FeatureToggleQueryRequest struct {
-	id             *string
-	href           *string
-	link           bool
 	organizationID *string
-}
-
-// Kind returns the name of the type of the object.
-func (o *FeatureToggleQueryRequest) Kind() string {
-	if o == nil {
-		return FeatureToggleQueryRequestNilKind
-	}
-	if o.link {
-		return FeatureToggleQueryRequestLinkKind
-	}
-	return FeatureToggleQueryRequestKind
-}
-
-// ID returns the identifier of the object.
-func (o *FeatureToggleQueryRequest) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
-	}
-	return ""
-}
-
-// GetID returns the identifier of the object and a flag indicating if the
-// identifier has a value.
-func (o *FeatureToggleQueryRequest) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
-	if ok {
-		value = *o.id
-	}
-	return
-}
-
-// Link returns true iif this is a link.
-func (o *FeatureToggleQueryRequest) Link() bool {
-	return o != nil && o.link
-}
-
-// HREF returns the link to the object.
-func (o *FeatureToggleQueryRequest) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
-	}
-	return ""
-}
-
-// GetHREF returns the link of the object and a flag indicating if the
-// link has a value.
-func (o *FeatureToggleQueryRequest) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
-	if ok {
-		value = *o.href
-	}
-	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *FeatureToggleQueryRequest) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.organizationID == nil &&
+	return o == nil || (o.organizationID == nil &&
 		true)
 }
 
@@ -140,40 +72,6 @@ type FeatureToggleQueryRequestList struct {
 	href  *string
 	link  bool
 	items []*FeatureToggleQueryRequest
-}
-
-// Kind returns the name of the type of the object.
-func (l *FeatureToggleQueryRequestList) Kind() string {
-	if l == nil {
-		return FeatureToggleQueryRequestListNilKind
-	}
-	if l.link {
-		return FeatureToggleQueryRequestListLinkKind
-	}
-	return FeatureToggleQueryRequestListKind
-}
-
-// Link returns true iif this is a link.
-func (l *FeatureToggleQueryRequestList) Link() bool {
-	return l != nil && l.link
-}
-
-// HREF returns the link to the list.
-func (l *FeatureToggleQueryRequestList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
-	}
-	return ""
-}
-
-// GetHREF returns the link of the list and a flag indicating if the
-// link has a value.
-func (l *FeatureToggleQueryRequestList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
-	if ok {
-		value = *l.href
-	}
-	return
 }
 
 // Len returns the length of the list.
