@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.112 Jul 5 2020
+
+- Update to model v0.0.69
+** Added top level sku_rules endpoint to AMS
+** Change the feature toggle API to be /feature_toggles/id/query using POST with org id as context
+
 == 0.1.111 Jul 1 2020
 
 - Update to model v0.0.67

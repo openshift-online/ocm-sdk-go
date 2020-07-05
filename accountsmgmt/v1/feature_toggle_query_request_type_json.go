@@ -38,32 +38,6 @@ func MarshalFeatureToggleQueryRequest(object *FeatureToggleQueryRequest, writer 
 func writeFeatureToggleQueryRequest(object *FeatureToggleQueryRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
-	stream.WriteObjectField("kind")
-	if object.link {
-		stream.WriteString(FeatureToggleQueryRequestLinkKind)
-	} else {
-		stream.WriteString(FeatureToggleQueryRequestKind)
-	}
-	count++
-	if object.id != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
-		count++
-	}
-	if object.href != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
-		count++
-	}
 	if object.organizationID != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -96,15 +70,6 @@ func readFeatureToggleQueryRequest(iterator *jsoniter.Iterator) *FeatureToggleQu
 			break
 		}
 		switch field {
-		case "kind":
-			value := iterator.ReadString()
-			object.link = value == FeatureToggleQueryRequestLinkKind
-		case "id":
-			value := iterator.ReadString()
-			object.id = &value
-		case "href":
-			value := iterator.ReadString()
-			object.href = &value
 		case "organization_id":
 			value := iterator.ReadString()
 			object.organizationID = &value

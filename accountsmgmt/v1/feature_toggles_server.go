@@ -25,19 +25,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
-// FeatureToggleServer represents the interface the manages the 'feature_toggle' resource.
-type FeatureToggleServer interface {
+// FeatureTogglesServer represents the interface the manages the 'feature_toggles' resource.
+type FeatureTogglesServer interface {
 
-	// Query returns the target 'feature_toggle_query' resource.
+	// FeatureToggle returns the target 'feature_toggle' server for the given identifier.
 	//
 	//
-	Query() FeatureToggleQueryServer
+	FeatureToggle(id string) FeatureToggleServer
 }
 
-// dispatchFeatureToggle navigates the servers tree rooted at the given server
+// dispatchFeatureToggles navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchFeatureToggle(w http.ResponseWriter, r *http.Request, server FeatureToggleServer, segments []string) {
+func dispatchFeatureToggles(w http.ResponseWriter, r *http.Request, server FeatureTogglesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		default:
@@ -46,15 +46,12 @@ func dispatchFeatureToggle(w http.ResponseWriter, r *http.Request, server Featur
 		}
 	}
 	switch segments[0] {
-	case "query":
-		target := server.Query()
+	default:
+		target := server.FeatureToggle(segments[0])
 		if target == nil {
 			errors.SendNotFound(w, r)
 			return
 		}
-		dispatchFeatureToggleQuery(w, r, target, segments[1:])
-	default:
-		errors.SendNotFound(w, r)
-		return
+		dispatchFeatureToggle(w, r, target, segments[1:])
 	}
 }

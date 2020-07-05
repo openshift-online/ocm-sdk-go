@@ -66,6 +66,11 @@ type Server interface {
 	// account.
 	CurrentAccount() CurrentAccountServer
 
+	// FeatureToggles returns the target 'feature_toggles' resource.
+	//
+	// Reference to the resource that manages feature toggles.
+	FeatureToggles() FeatureTogglesServer
+
 	// Labels returns the target 'labels' resource.
 	//
 	// Reference to the resource that manages the collection of labels.
@@ -119,6 +124,12 @@ type Server interface {
 	//
 	// Reference to the resource that manages the collection of roles.
 	Roles() RolesServer
+
+	// SkuRules returns the target 'sku_rules' resource.
+	//
+	// Reference to the resource that manages the collection of
+	// Sku Rules
+	SkuRules() SkuRulesServer
 
 	// Subscriptions returns the target 'subscriptions' resource.
 	//
@@ -188,6 +199,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchCurrentAccount(w, r, target, segments[1:])
+	case "feature_toggles":
+		target := server.FeatureToggles()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchFeatureToggles(w, r, target, segments[1:])
 	case "labels":
 		target := server.Labels()
 		if target == nil {
@@ -258,6 +276,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchRoles(w, r, target, segments[1:])
+	case "sku_rules":
+		target := server.SkuRules()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchSkuRules(w, r, target, segments[1:])
 	case "subscriptions":
 		target := server.Subscriptions()
 		if target == nil {
