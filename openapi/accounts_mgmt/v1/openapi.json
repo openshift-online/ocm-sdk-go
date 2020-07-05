@@ -859,6 +859,51 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/feature_toggles/{feature_toggle_id}/query": {
+      "post": {
+        "description": "Retrieves the details of the feature toggle by providing query context\n",
+        "parameters": [
+          {
+            "name": "feature_toggle_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureToggleQueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureToggle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/labels": {
       "get": {
         "description": "Retrieves a list of labels.\n",
@@ -3917,18 +3962,6 @@
       },
       "FeatureToggleQueryRequest": {
         "properties": {
-          "kind": {
-            "description": "Indicates the type of this object. Will be 'FeatureToggleQueryRequest' if this is a complete object or 'FeatureToggleQueryRequestLink' if it is just a link.\n",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique identifier of the object.\n",
-            "type": "string"
-          },
-          "href": {
-            "description": "Self link.\n",
-            "type": "string"
-          },
           "organization_id": {
             "type": "string"
           }

@@ -66,6 +66,11 @@ type Server interface {
 	// account.
 	CurrentAccount() CurrentAccountServer
 
+	// FeatureToggles returns the target 'feature_toggles' resource.
+	//
+	// Reference to the resource that manages feature toggles.
+	FeatureToggles() FeatureTogglesServer
+
 	// Labels returns the target 'labels' resource.
 	//
 	// Reference to the resource that manages the collection of labels.
@@ -188,6 +193,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchCurrentAccount(w, r, target, segments[1:])
+	case "feature_toggles":
+		target := server.FeatureToggles()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchFeatureToggles(w, r, target, segments[1:])
 	case "labels":
 		target := server.Labels()
 		if target == nil {

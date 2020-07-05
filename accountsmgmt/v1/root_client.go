@@ -133,6 +133,17 @@ func (c *Client) CurrentAccount() *CurrentAccountClient {
 	)
 }
 
+// FeatureToggles returns the target 'feature_toggles' resource.
+//
+// Reference to the resource that manages feature toggles.
+func (c *Client) FeatureToggles() *FeatureTogglesClient {
+	return NewFeatureTogglesClient(
+		c.transport,
+		path.Join(c.path, "feature_toggles"),
+		path.Join(c.metric, "feature_toggles"),
+	)
+}
+
 // Labels returns the target 'labels' resource.
 //
 // Reference to the resource that manages the collection of labels.
