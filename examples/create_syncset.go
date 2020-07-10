@@ -28,7 +28,6 @@ import (
 	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 )
 
 func main() {
@@ -59,27 +58,25 @@ func main() {
 	clustersResource := connection.ClustersMgmt().V1().Clusters()
 
 	// create an array of resources to add to the syncset (this example only has 1 item)
-	resources := []runtime.RawExtension{
-		{
-			Object: &corev1.ConfigMap{
-				TypeMeta: metav1.TypeMeta{
-					APIVersion: "v1",
-					Kind:       "ConfigMap",
-				},
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "foo",
-					Namespace: "default",
-				},
-				Data: map[string]string{
-					"foo": "bar",
-				},
+	resources := []interface{}{
+		&corev1.ConfigMap{
+			TypeMeta: metav1.TypeMeta{
+				APIVersion: "v1",
+				Kind:       "ConfigMap",
+			},
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      "foo",
+				Namespace: "default",
+			},
+			Data: map[string]string{
+				"foo": "bar",
 			},
 		},
 	}
 
 	// Build the syncset - "ext-" prefix is required
 	syncsetBuilder := cmv1.NewSyncset()
-	syncsetBuilder = syncsetBuilder.ID("ext-foo2").Resources(resources)
+	syncsetBuilder = syncsetBuilder.ID("ext-foo2").Resources(resources...)
 	syncset, err := syncsetBuilder.Build()
 	if err != nil {
 		fmt.Printf("%v\n", err)
