@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.113 Jul 14 2020
+
+- Update to model v0.0.70
+** Add API for custerdeployment labels
+** add organization_id to cluster_registration
+** label: Fix erroneous file extensions
+** MachineType: Expose instance size enum
+
 == 0.1.112 Jul 5 2020
 
 - Update to model v0.0.69
