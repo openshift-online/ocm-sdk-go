@@ -61,6 +61,17 @@ func (c *ExternalConfigurationClient) Get() *ExternalConfigurationGetRequest {
 	}
 }
 
+// Labels returns the target 'labels' resource.
+//
+// Reference to the resource that manages the collection of labels.
+func (c *ExternalConfigurationClient) Labels() *LabelsClient {
+	return NewLabelsClient(
+		c.transport,
+		path.Join(c.path, "labels"),
+		path.Join(c.metric, "labels"),
+	)
+}
+
 // Syncsets returns the target 'syncsets' resource.
 //
 // Reference to the resource that manages the collection of syncsets.

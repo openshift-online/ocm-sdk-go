@@ -35,6 +35,11 @@ type ExternalConfigurationServer interface {
 	// Retrieves the details of the external configuration.
 	Get(ctx context.Context, request *ExternalConfigurationGetServerRequest, response *ExternalConfigurationGetServerResponse) error
 
+	// Labels returns the target 'labels' resource.
+	//
+	// Reference to the resource that manages the collection of labels.
+	Labels() LabelsServer
+
 	// Syncsets returns the target 'syncsets' resource.
 	//
 	// Reference to the resource that manages the collection of syncsets.
@@ -81,6 +86,13 @@ func dispatchExternalConfiguration(w http.ResponseWriter, r *http.Request, serve
 		}
 	}
 	switch segments[0] {
+	case "labels":
+		target := server.Labels()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchLabels(w, r, target, segments[1:])
 	case "syncsets":
 		target := server.Syncsets()
 		if target == nil {
