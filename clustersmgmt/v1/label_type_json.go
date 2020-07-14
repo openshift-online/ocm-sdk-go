@@ -26,75 +26,88 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalClusterRegistration writes a value of the 'cluster_registration' type to the given writer.
-func MarshalClusterRegistration(object *ClusterRegistration, writer io.Writer) error {
+// MarshalLabel writes a value of the 'label' type to the given writer.
+func MarshalLabel(object *Label, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterRegistration(object, stream)
+	writeLabel(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeClusterRegistration writes a value of the 'cluster_registration' type to the given stream.
-func writeClusterRegistration(object *ClusterRegistration, stream *jsoniter.Stream) {
+// writeLabel writes a value of the 'label' type to the given stream.
+func writeLabel(object *Label, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.externalID != nil {
+	if count > 0 {
+		stream.WriteMore()
+	}
+	stream.WriteObjectField("kind")
+	if object.link {
+		stream.WriteString(LabelLinkKind)
+	} else {
+		stream.WriteString(LabelKind)
+	}
+	count++
+	if object.id != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("external_id")
-		stream.WriteString(*object.externalID)
+		stream.WriteObjectField("id")
+		stream.WriteString(*object.id)
 		count++
 	}
-	if object.organizationID != nil {
+	if object.href != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteObjectField("href")
+		stream.WriteString(*object.href)
 		count++
 	}
-	if object.subscriptionID != nil {
+	if object.value != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("subscription_id")
-		stream.WriteString(*object.subscriptionID)
+		stream.WriteObjectField("value")
+		stream.WriteString(*object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalClusterRegistration reads a value of the 'cluster_registration' type from the given
+// UnmarshalLabel reads a value of the 'label' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalClusterRegistration(source interface{}) (object *ClusterRegistration, err error) {
+func UnmarshalLabel(source interface{}) (object *Label, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readClusterRegistration(iterator)
+	object = readLabel(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterRegistration reads a value of the 'cluster_registration' type from the given iterator.
-func readClusterRegistration(iterator *jsoniter.Iterator) *ClusterRegistration {
-	object := &ClusterRegistration{}
+// readLabel reads a value of the 'label' type from the given iterator.
+func readLabel(iterator *jsoniter.Iterator) *Label {
+	object := &Label{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "external_id":
+		case "kind":
 			value := iterator.ReadString()
-			object.externalID = &value
-		case "organization_id":
+			object.link = value == LabelLinkKind
+		case "id":
 			value := iterator.ReadString()
-			object.organizationID = &value
-		case "subscription_id":
+			object.id = &value
+		case "href":
 			value := iterator.ReadString()
-			object.subscriptionID = &value
+			object.href = &value
+		case "value":
+			value := iterator.ReadString()
+			object.value = &value
 		default:
 			iterator.ReadAny()
 		}

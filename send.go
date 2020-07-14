@@ -22,7 +22,6 @@ package sdk
 import (
 	"context"
 	"fmt"
-	strip "github.com/grokify/html-strip-tags-go"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -31,6 +30,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	strip "github.com/grokify/html-strip-tags-go"
 )
 
 var wsRegex = regexp.MustCompile(`\s+`)
