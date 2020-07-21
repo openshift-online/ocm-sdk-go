@@ -5,6 +5,12 @@ SDK.
 
 == 0.1.113 Jul 14 2020
 
+- Update to model v0.0.71
+** Add API for getting cluster's provision shard
+** Add API for getting provision shards
+
+== 0.1.113 Jul 14 2020
+
 - Update to model v0.0.70
 ** Add API for custerdeployment labels
 ** add organization_id to cluster_registration

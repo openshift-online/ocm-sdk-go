@@ -96,6 +96,11 @@ type ClusterServer interface {
 	// Reference to the resource that manages the product type of the cluster
 	Product() ProductServer
 
+	// ProvisionShard returns the target 'provision_shard' resource.
+	//
+	// Reference to the resource that manages the cluster's provision shard.
+	ProvisionShard() ProvisionShardServer
+
 	// Status returns the target 'cluster_status' resource.
 	//
 	// Reference to the resource that manages the detailed status of the cluster.
@@ -282,6 +287,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 			return
 		}
 		dispatchProduct(w, r, target, segments[1:])
+	case "provision_shard":
+		target := server.ProvisionShard()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchProvisionShard(w, r, target, segments[1:])
 	case "status":
 		target := server.Status()
 		if target == nil {
