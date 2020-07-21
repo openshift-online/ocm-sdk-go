@@ -3,7 +3,7 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.113 Jul 14 2020
+== 0.1.114 Jul 21 2020
 
 - Update to model v0.0.71
 ** Add API for getting cluster's provision shard
