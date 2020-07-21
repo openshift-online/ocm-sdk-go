@@ -198,6 +198,17 @@ func (c *ClusterClient) Product() *ProductClient {
 	)
 }
 
+// ProvisionShard returns the target 'provision_shard' resource.
+//
+// Reference to the resource that manages the cluster's provision shard.
+func (c *ClusterClient) ProvisionShard() *ProvisionShardClient {
+	return NewProvisionShardClient(
+		c.transport,
+		path.Join(c.path, "provision_shard"),
+		path.Join(c.metric, "provision_shard"),
+	)
+}
+
 // Status returns the target 'cluster_status' resource.
 //
 // Reference to the resource that manages the detailed status of the cluster.
