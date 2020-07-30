@@ -82,11 +82,11 @@ func (c *LogsClient) Log(id string) *LogClient {
 	)
 }
 
-// Uninstall returns the target 'uninstall_logs' resource.
+// Uninstall returns the target 'uninstall_log' resource.
 //
 //
-func (c *LogsClient) Uninstall() *UninstallLogsClient {
-	return NewUninstallLogsClient(
+func (c *LogsClient) Uninstall() *UninstallLogClient {
+	return NewUninstallLogClient(
 		c.transport,
 		path.Join(c.path, "uninstall"),
 		path.Join(c.metric, "uninstall"),

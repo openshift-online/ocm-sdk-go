@@ -45,10 +45,10 @@ type LogsServer interface {
 	// Returns a reference to the service that manages an specific log.
 	Log(id string) LogServer
 
-	// Uninstall returns the target 'uninstall_logs' resource.
+	// Uninstall returns the target 'uninstall_log' resource.
 	//
 	//
-	Uninstall() UninstallLogsServer
+	Uninstall() UninstallLogServer
 }
 
 // LogsListServerRequest is the request for the 'list' method.
@@ -177,7 +177,7 @@ func dispatchLogs(w http.ResponseWriter, r *http.Request, server LogsServer, seg
 			errors.SendNotFound(w, r)
 			return
 		}
-		dispatchUninstallLogs(w, r, target, segments[1:])
+		dispatchUninstallLog(w, r, target, segments[1:])
 	default:
 		target := server.Log(segments[0])
 		if target == nil {

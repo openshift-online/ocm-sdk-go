@@ -35,6 +35,11 @@ type SubscriptionsServer interface {
 	// Retrieves a list of subscriptions.
 	List(ctx context.Context, request *SubscriptionsListServerRequest, response *SubscriptionsListServerResponse) error
 
+	// Post handles a request for the 'post' method.
+	//
+	// Create a new subscription and register a cluster for it.
+	Post(ctx context.Context, request *SubscriptionsPostServerRequest, response *SubscriptionsPostServerResponse) error
+
 	// Subscription returns the target 'subscription' server for the given identifier.
 	//
 	// Reference to the service that manages a specific subscription.
@@ -350,6 +355,54 @@ func (r *SubscriptionsListServerResponse) Status(value int) *SubscriptionsListSe
 	return r
 }
 
+// SubscriptionsPostServerRequest is the request for the 'post' method.
+type SubscriptionsPostServerRequest struct {
+	request *SubscriptionRegistration
+}
+
+// Request returns the value of the 'request' parameter.
+//
+//
+func (r *SubscriptionsPostServerRequest) Request() *SubscriptionRegistration {
+	if r == nil {
+		return nil
+	}
+	return r.request
+}
+
+// GetRequest returns the value of the 'request' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *SubscriptionsPostServerRequest) GetRequest() (value *SubscriptionRegistration, ok bool) {
+	ok = r != nil && r.request != nil
+	if ok {
+		value = r.request
+	}
+	return
+}
+
+// SubscriptionsPostServerResponse is the response for the 'post' method.
+type SubscriptionsPostServerResponse struct {
+	status   int
+	err      *errors.Error
+	response *Subscription
+}
+
+// Response sets the value of the 'response' parameter.
+//
+//
+func (r *SubscriptionsPostServerResponse) Response(value *Subscription) *SubscriptionsPostServerResponse {
+	r.response = value
+	return r
+}
+
+// Status sets the status code.
+func (r *SubscriptionsPostServerResponse) Status(value int) *SubscriptionsPostServerResponse {
+	r.status = value
+	return r
+}
+
 // dispatchSubscriptions navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
@@ -358,6 +411,9 @@ func dispatchSubscriptions(w http.ResponseWriter, r *http.Request, server Subscr
 		switch r.Method {
 		case "GET":
 			adaptSubscriptionsListRequest(w, r, server)
+			return
+		case "POST":
+			adaptSubscriptionsPostRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -401,6 +457,41 @@ func adaptSubscriptionsListRequest(w http.ResponseWriter, r *http.Request, serve
 		return
 	}
 	err = writeSubscriptionsListResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		return
+	}
+}
+
+// adaptSubscriptionsPostRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptSubscriptionsPostRequest(w http.ResponseWriter, r *http.Request, server SubscriptionsServer) {
+	request := &SubscriptionsPostServerRequest{}
+	err := readSubscriptionsPostRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &SubscriptionsPostServerResponse{}
+	response.status = 201
+	err = server.Post(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeSubscriptionsPostResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

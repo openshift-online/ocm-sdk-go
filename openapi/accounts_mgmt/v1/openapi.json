@@ -3318,6 +3318,40 @@
             }
           }
         }
+      },
+      "post": {
+        "description": "Create a new subscription and register a cluster for it.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionRegistration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subscription"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}": {
@@ -4198,6 +4232,13 @@
           }
         }
       },
+      "PlanID": {
+        "description": "Plan ID of subscription.\n",
+        "type": "string",
+        "enum": [
+          "ocp"
+        ]
+      },
       "ProductBundleEnum": {
         "description": "Usage of Subscription.\n",
         "type": "string",
@@ -4679,6 +4720,31 @@
             "items": {
               "$ref": "#/components/schemas/TemplateParameter"
             }
+          }
+        }
+      },
+      "SubscriptionRegistration": {
+        "description": "Registration of a new subscription.\n",
+        "properties": {
+          "cluster_uuid": {
+            "description": "External cluster ID.\n",
+            "type": "string"
+          },
+          "console_url": {
+            "description": "Console URL of subscription (optional).\n",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "Display name of subscription (optional).\n",
+            "type": "string"
+          },
+          "plan_id": {
+            "description": "Plan ID of subscription.\n",
+            "$ref": "#/components/schemas/PlanID"
+          },
+          "status": {
+            "description": "Status of subscription.\n",
+            "type": "string"
           }
         }
       },
