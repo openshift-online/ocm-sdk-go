@@ -3,6 +3,20 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.115 Jul 30 2020
+
+- Update to metamodel v0.0.31
+** Adding List type to checkUpdate validator
+
+- Update to model v0.0.72
+** Fix comment
+** Expose if a region supports multi AZ
+** Add Update Identity Provider
+** removing 'deprovision' suffix from logs endpoint
+** add post method to subscription resource
+** Add labels field to external configuration type
+** Implement Batch Patch Ingresses API endpoint
+
 == 0.1.114 Jul 21 2020
 
 - Update to model v0.0.71
