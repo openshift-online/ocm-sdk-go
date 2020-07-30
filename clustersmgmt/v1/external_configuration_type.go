@@ -23,13 +23,38 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of cluster external configuration.
 type ExternalConfiguration struct {
+	labels   *LabelList
 	syncsets *SyncsetList
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ExternalConfiguration) Empty() bool {
-	return o == nil || (o.syncsets.Len() == 0 &&
+	return o == nil || (o.labels.Len() == 0 &&
+		o.syncsets.Len() == 0 &&
 		true)
+}
+
+// Labels returns the value of the 'labels' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// list of labels externally configured on the clusterdeployment.
+func (o *ExternalConfiguration) Labels() *LabelList {
+	if o == nil {
+		return nil
+	}
+	return o.labels
+}
+
+// GetLabels returns the value of the 'labels' attribute and
+// a flag indicating if the attribute has a value.
+//
+// list of labels externally configured on the clusterdeployment.
+func (o *ExternalConfiguration) GetLabels() (value *LabelList, ok bool) {
+	ok = o != nil && o.labels != nil
+	if ok {
+		value = o.labels
+	}
+	return
 }
 
 // Syncsets returns the value of the 'syncsets' attribute, or

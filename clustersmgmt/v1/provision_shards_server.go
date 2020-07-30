@@ -103,7 +103,7 @@ type ProvisionShardsListServerResponse struct {
 
 // Items sets the value of the 'items' parameter.
 //
-// Retrieved list provision shards.
+// Retrieved a list of provision shards.
 func (r *ProvisionShardsListServerResponse) Items(value *ProvisionShardList) *ProvisionShardsListServerResponse {
 	r.items = value
 	return r

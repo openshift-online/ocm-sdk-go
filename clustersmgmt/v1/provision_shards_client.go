@@ -200,7 +200,7 @@ func (r *ProvisionShardsListResponse) Error() *errors.Error {
 
 // Items returns the value of the 'items' parameter.
 //
-// Retrieved list provision shards.
+// Retrieved a list of provision shards.
 func (r *ProvisionShardsListResponse) Items() *ProvisionShardList {
 	if r == nil {
 		return nil
@@ -211,7 +211,7 @@ func (r *ProvisionShardsListResponse) Items() *ProvisionShardList {
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Retrieved list provision shards.
+// Retrieved a list of provision shards.
 func (r *ProvisionShardsListResponse) GetItems() (value *ProvisionShardList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {

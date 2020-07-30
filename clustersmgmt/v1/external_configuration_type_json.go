@@ -38,6 +38,17 @@ func MarshalExternalConfiguration(object *ExternalConfiguration, writer io.Write
 func writeExternalConfiguration(object *ExternalConfiguration, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
+	if object.labels != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("labels")
+		stream.WriteObjectStart()
+		stream.WriteObjectField("items")
+		writeLabelList(object.labels.items, stream)
+		stream.WriteObjectEnd()
+		count++
+	}
 	if object.syncsets != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -73,6 +84,27 @@ func readExternalConfiguration(iterator *jsoniter.Iterator) *ExternalConfigurati
 			break
 		}
 		switch field {
+		case "labels":
+			value := &LabelList{}
+			for {
+				field := iterator.ReadObject()
+				if field == "" {
+					break
+				}
+				switch field {
+				case "kind":
+					text := iterator.ReadString()
+					value.link = text == LabelListLinkKind
+				case "href":
+					text := iterator.ReadString()
+					value.href = &text
+				case "items":
+					value.items = readLabelList(iterator)
+				default:
+					iterator.ReadAny()
+				}
+			}
+			object.labels = value
 		case "syncsets":
 			value := &SyncsetList{}
 			for {
