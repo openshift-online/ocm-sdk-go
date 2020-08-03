@@ -324,6 +324,23 @@ var _ = Describe("Methods", func() {
 		})
 	})
 
+	Describe("Put", func() {
+		It("Accepts empty body", func() {
+			// Configure the server:
+			apiServer.AppendHandlers(
+				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+			)
+
+			// Send the request:
+			response, err := connection.Put().
+				Path("/mypath").
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.Status()).To(Equal(http.StatusOK))
+		})
+	})
+
 	When("Server doesn't return JSON content type", func() {
 		It("It should ignore letter case", func() {
 			// Configure the server:

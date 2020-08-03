@@ -113,8 +113,8 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 			)
 			return
 		}
-	case http.MethodPost, http.MethodPatch:
-		// POST and PATCH don't need to have a body. It is up to the server to decide if
+	case http.MethodPost, http.MethodPatch, http.MethodPut:
+		// POST and PATCH and PUT don't need to have a body. It is up to the server to decide if
 		// this is acceptable.
 	default:
 		err = fmt.Errorf("method '%s' is not allowed", request.Method)
@@ -139,7 +139,7 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 		request.Header.Set("Authorization", "Bearer "+token)
 	}
 	switch request.Method {
-	case http.MethodPost, http.MethodPatch:
+	case http.MethodPost, http.MethodPatch, http.MethodPut:
 		request.Header.Set("Content-Type", "application/json")
 	}
 	request.Header.Set("Accept", "application/json")
