@@ -281,3 +281,14 @@ func (c *Client) Subscriptions() *SubscriptionsClient {
 		path.Join(c.metric, "subscriptions"),
 	)
 }
+
+// SupportCases returns the target 'support_cases' resource.
+//
+// Reference to the resource that manages the support cases.
+func (c *Client) SupportCases() *SupportCasesClient {
+	return NewSupportCasesClient(
+		c.transport,
+		path.Join(c.path, "support_cases"),
+		path.Join(c.metric, "support_cases"),
+	)
+}
