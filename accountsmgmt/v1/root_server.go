@@ -136,6 +136,11 @@ type Server interface {
 	// Reference to the resource that manages the collection of
 	// subscriptions.
 	Subscriptions() SubscriptionsServer
+
+	// SupportCases returns the target 'support_cases' resource.
+	//
+	// Reference to the resource that manages the support cases.
+	SupportCases() SupportCasesServer
 }
 
 // Dispatch navigates the servers tree rooted at the given server
@@ -290,6 +295,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchSubscriptions(w, r, target, segments[1:])
+	case "support_cases":
+		target := server.SupportCases()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchSupportCases(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return

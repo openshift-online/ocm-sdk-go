@@ -86,6 +86,42 @@
         }
       }
     },
+    "/api/authorizations/v1/capability_review": {
+      "post": {
+        "description": "Reviews a user's capability to a resource.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CapabilityReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapabilityReviewResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/authorizations/v1/export_control_review": {
       "post": {
         "description": "Screens a user by account user name.\n",
@@ -193,6 +229,42 @@
           }
         }
       }
+    },
+    "/api/authorizations/v1/self_capability_review": {
+      "post": {
+        "description": "Reviews a user's capability to a resource.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelfCapabilityReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelfCapabilityReviewResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -272,6 +344,47 @@
           },
           "subscription_id": {
             "description": "Indicates which Subscription the resource type belongs to\n",
+            "type": "string"
+          }
+        }
+      },
+      "CapabilityReviewRequest": {
+        "description": "Representation of a capability review.\n",
+        "properties": {
+          "account_username": {
+            "description": "Defines the username of the account of which capability is being reviewed.\n",
+            "type": "string"
+          },
+          "capability": {
+            "description": "Capability to review [manage_cluster_admin].\n",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Indicates which Cluster (internal id) the resource type belongs to.\n",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "Indicates which Organization the resource type belongs to.\n",
+            "type": "string"
+          },
+          "resource_type": {
+            "description": "Indicates the type of the resource.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values.\n",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "Indicates which Subscription the resource type belongs to.\n",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of capability [Cluster].\n",
+            "type": "string"
+          }
+        }
+      },
+      "CapabilityReviewResponse": {
+        "description": "Representation of a capability review response.\n",
+        "properties": {
+          "result": {
             "type": "string"
           }
         }
@@ -410,6 +523,47 @@
           },
           "subscription_id": {
             "description": "Indicates which Subscription the resource type belongs to\n",
+            "type": "string"
+          }
+        }
+      },
+      "SelfCapabilityReviewRequest": {
+        "description": "Representation of a capability review.\n",
+        "properties": {
+          "account_username": {
+            "description": "Defines the username of the account of which capability is being reviewed.\n",
+            "type": "string"
+          },
+          "capability": {
+            "description": "Capability to review [manage_cluster_admin].\n",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Indicates which Cluster (internal id) the resource type belongs to.\n",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "Indicates which Organization the resource type belongs to.\n",
+            "type": "string"
+          },
+          "resource_type": {
+            "description": "Indicates the type of the resource.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values.\n",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "Indicates which Subscription the resource type belongs to.\n",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of capability [Cluster].\n",
+            "type": "string"
+          }
+        }
+      },
+      "SelfCapabilityReviewResponse": {
+        "description": "Representation of a capability review response.\n",
+        "properties": {
+          "result": {
             "type": "string"
           }
         }

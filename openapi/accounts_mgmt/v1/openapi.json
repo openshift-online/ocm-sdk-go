@@ -3873,6 +3873,60 @@
           }
         }
       }
+    },
+    "/api/accounts_mgmt/v1/support_cases": {
+      "post": {
+        "description": "Create a support case related to Hydra\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupportCase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupportCase"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Close a support case in Hydra. \n",
+        "responses": {
+          "204": {
+            "description": "Success.\n"
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -4744,6 +4798,42 @@
           },
           "status": {
             "description": "Status of subscription.\n",
+            "type": "string"
+          }
+        }
+      },
+      "SupportCase": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'SupportCase' if this is a complete object or 'SupportCaseLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "cluster_uuid": {
+            "description": "(optional) cluster uuid in case we want to create an osl log.\n",
+            "type": "string"
+          },
+          "description": {
+            "description": "Support case desciption.\n",
+            "type": "string"
+          },
+          "event_stream_id": {
+            "description": "(optional) event stream id for the support case so we could track it.\n",
+            "type": "string"
+          },
+          "severity": {
+            "description": "Support case severity.\n",
+            "type": "string"
+          },
+          "summary": {
+            "description": "Support case title.\n",
             "type": "string"
           }
         }
