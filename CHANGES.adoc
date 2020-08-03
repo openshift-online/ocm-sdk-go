@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.116 Aug 3 2020
+
+- Added support for http PUT method
+- Update to model v0.0.73
+** Add capability_review endpoint
+** Add support_cases endpoint
+
 == 0.1.115 Jul 30 2020
 
 - Update to metamodel v0.0.31
