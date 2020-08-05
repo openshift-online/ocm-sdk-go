@@ -30,6 +30,7 @@ type ProvisionShardBuilder struct {
 	awsBaseDomain            *string
 	gcpBaseDomain            *string
 	gcpProjectOperator       *ServerConfigBuilder
+	hiveConfig               *ServerConfigBuilder
 }
 
 // NewProvisionShard creates a new builder of 'provision_shard' objects.
@@ -87,6 +88,14 @@ func (b *ProvisionShardBuilder) GCPProjectOperator(value *ServerConfigBuilder) *
 	return b
 }
 
+// HiveConfig sets the value of the 'hive_config' attribute to the given value.
+//
+// Representation of a server config
+func (b *ProvisionShardBuilder) HiveConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
+	b.hiveConfig = value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuilder {
 	if object == nil {
@@ -107,6 +116,11 @@ func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuil
 	} else {
 		b.gcpProjectOperator = nil
 	}
+	if object.hiveConfig != nil {
+		b.hiveConfig = NewServerConfig().Copy(object.hiveConfig)
+	} else {
+		b.hiveConfig = nil
+	}
 	return b
 }
 
@@ -126,6 +140,12 @@ func (b *ProvisionShardBuilder) Build() (object *ProvisionShard, err error) {
 	object.gcpBaseDomain = b.gcpBaseDomain
 	if b.gcpProjectOperator != nil {
 		object.gcpProjectOperator, err = b.gcpProjectOperator.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.hiveConfig != nil {
+		object.hiveConfig, err = b.hiveConfig.Build()
 		if err != nil {
 			return
 		}

@@ -96,6 +96,14 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		writeServerConfig(object.gcpProjectOperator, stream)
 		count++
 	}
+	if object.hiveConfig != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("hive_config")
+		writeServerConfig(object.hiveConfig, stream)
+		count++
+	}
 	stream.WriteObjectEnd()
 }
 
@@ -141,6 +149,9 @@ func readProvisionShard(iterator *jsoniter.Iterator) *ProvisionShard {
 		case "gcp_project_operator":
 			value := readServerConfig(iterator)
 			object.gcpProjectOperator = value
+		case "hive_config":
+			value := readServerConfig(iterator)
+			object.hiveConfig = value
 		default:
 			iterator.ReadAny()
 		}
