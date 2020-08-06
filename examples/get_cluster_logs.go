@@ -72,7 +72,7 @@ func main() {
 	// that specific log.
 	listResponse.Items().Each(func(log *cmv1.Log) bool {
 		logID := log.ID()
-		logResource := logsCollection.Log(logID)
+		logResource := logsCollection.Install()
 		getResponse, err := logResource.Get().SendContext(ctx)
 		if err != nil {
 			fmt.Fprintf(
