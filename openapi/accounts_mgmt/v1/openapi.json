@@ -3881,7 +3881,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SupportCase"
+                "$ref": "#/components/schemas/SupportCaseRequest"
               }
             }
           }
@@ -3892,7 +3892,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SupportCase"
+                  "$ref": "#/components/schemas/SupportCaseResponse"
                 }
               }
             }
@@ -3908,12 +3908,59 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/accounts_mgmt/v1/support_cases/{support_case_id}": {
       "delete": {
-        "description": "Close a support case in Hydra. \n",
+        "description": "Deletes the support case by Case ID.\n",
+        "parameters": [
+          {
+            "name": "support_case_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": "Success.\n"
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accounts_mgmt/v1/token_authorization": {
+      "post": {
+        "description": "Returns a specific account based on the given pull secret\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenAuthorizationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenAuthorizationResponse"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error.\n",
@@ -4802,10 +4849,10 @@
           }
         }
       },
-      "SupportCase": {
+      "SupportCaseRequest": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'SupportCase' if this is a complete object or 'SupportCaseLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'SupportCaseRequest' if this is a complete object or 'SupportCaseRequestLink' if it is just a link.\n",
             "type": "string"
           },
           "id": {
@@ -4816,8 +4863,12 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "cluster_id": {
+            "description": "(optional) cluster id of the cluster on which we create the support case for.\n",
+            "type": "string"
+          },
           "cluster_uuid": {
-            "description": "(optional) cluster uuid in case we want to create an osl log.\n",
+            "description": "(optional) cluster uuid of the cluster on which we create the support case for.\n",
             "type": "string"
           },
           "description": {
@@ -4830,6 +4881,62 @@
           },
           "severity": {
             "description": "Support case severity.\n",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "(optional) subscription id of the subscription on which we create the support case for.\n",
+            "type": "string"
+          },
+          "summary": {
+            "description": "Support case title.\n",
+            "type": "string"
+          }
+        }
+      },
+      "SupportCaseResponse": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'SupportCaseResponse' if this is a complete object or 'SupportCaseResponseLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "uri": {
+            "description": "Support case uri.\n",
+            "type": "string"
+          },
+          "case_number": {
+            "description": "Support case number.\n",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "(optional) cluster id of the cluster on which we created the support case for.\n",
+            "type": "string"
+          },
+          "cluster_uuid": {
+            "description": "(optional) cluster uuid of the cluster on which we created the support case for.\n",
+            "type": "string"
+          },
+          "description": {
+            "description": "Support case desciption.\n",
+            "type": "string"
+          },
+          "severity": {
+            "description": "Support case severity.\n",
+            "type": "string"
+          },
+          "status": {
+            "description": "Support case status.\n",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "(optional) subscription id of the subscription on which we created the support case for.\n",
             "type": "string"
           },
           "summary": {

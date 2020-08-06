@@ -19,45 +19,47 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-// SupportCaseKind is the name of the type used to represent objects
-// of type 'support_case'.
-const SupportCaseKind = "SupportCase"
+// SupportCaseRequestKind is the name of the type used to represent objects
+// of type 'support_case_request'.
+const SupportCaseRequestKind = "SupportCaseRequest"
 
-// SupportCaseLinkKind is the name of the type used to represent links
-// to objects of type 'support_case'.
-const SupportCaseLinkKind = "SupportCaseLink"
+// SupportCaseRequestLinkKind is the name of the type used to represent links
+// to objects of type 'support_case_request'.
+const SupportCaseRequestLinkKind = "SupportCaseRequestLink"
 
-// SupportCaseNilKind is the name of the type used to nil references
-// to objects of type 'support_case'.
-const SupportCaseNilKind = "SupportCaseNil"
+// SupportCaseRequestNilKind is the name of the type used to nil references
+// to objects of type 'support_case_request'.
+const SupportCaseRequestNilKind = "SupportCaseRequestNil"
 
-// SupportCase represents the values of the 'support_case' type.
+// SupportCaseRequest represents the values of the 'support_case_request' type.
 //
 //
-type SupportCase struct {
-	id            *string
-	href          *string
-	link          bool
-	clusterUuid   *string
-	description   *string
-	eventStreamId *string
-	severity      *string
-	summary       *string
+type SupportCaseRequest struct {
+	id             *string
+	href           *string
+	link           bool
+	clusterId      *string
+	clusterUuid    *string
+	description    *string
+	eventStreamId  *string
+	severity       *string
+	subscriptionId *string
+	summary        *string
 }
 
 // Kind returns the name of the type of the object.
-func (o *SupportCase) Kind() string {
+func (o *SupportCaseRequest) Kind() string {
 	if o == nil {
-		return SupportCaseNilKind
+		return SupportCaseRequestNilKind
 	}
 	if o.link {
-		return SupportCaseLinkKind
+		return SupportCaseRequestLinkKind
 	}
-	return SupportCaseKind
+	return SupportCaseRequestKind
 }
 
 // ID returns the identifier of the object.
-func (o *SupportCase) ID() string {
+func (o *SupportCaseRequest) ID() string {
 	if o != nil && o.id != nil {
 		return *o.id
 	}
@@ -66,7 +68,7 @@ func (o *SupportCase) ID() string {
 
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
-func (o *SupportCase) GetID() (value string, ok bool) {
+func (o *SupportCaseRequest) GetID() (value string, ok bool) {
 	ok = o != nil && o.id != nil
 	if ok {
 		value = *o.id
@@ -75,12 +77,12 @@ func (o *SupportCase) GetID() (value string, ok bool) {
 }
 
 // Link returns true iif this is a link.
-func (o *SupportCase) Link() bool {
+func (o *SupportCaseRequest) Link() bool {
 	return o != nil && o.link
 }
 
 // HREF returns the link to the object.
-func (o *SupportCase) HREF() string {
+func (o *SupportCaseRequest) HREF() string {
 	if o != nil && o.href != nil {
 		return *o.href
 	}
@@ -89,7 +91,7 @@ func (o *SupportCase) HREF() string {
 
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
-func (o *SupportCase) GetHREF() (value string, ok bool) {
+func (o *SupportCaseRequest) GetHREF() (value string, ok bool) {
 	ok = o != nil && o.href != nil
 	if ok {
 		value = *o.href
@@ -98,21 +100,46 @@ func (o *SupportCase) GetHREF() (value string, ok bool) {
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *SupportCase) Empty() bool {
+func (o *SupportCaseRequest) Empty() bool {
 	return o == nil || (o.id == nil &&
+		o.clusterId == nil &&
 		o.clusterUuid == nil &&
 		o.description == nil &&
 		o.eventStreamId == nil &&
 		o.severity == nil &&
+		o.subscriptionId == nil &&
 		o.summary == nil &&
 		true)
+}
+
+// ClusterId returns the value of the 'cluster_id' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// (optional) cluster id of the cluster on which we create the support case for.
+func (o *SupportCaseRequest) ClusterId() string {
+	if o != nil && o.clusterId != nil {
+		return *o.clusterId
+	}
+	return ""
+}
+
+// GetClusterId returns the value of the 'cluster_id' attribute and
+// a flag indicating if the attribute has a value.
+//
+// (optional) cluster id of the cluster on which we create the support case for.
+func (o *SupportCaseRequest) GetClusterId() (value string, ok bool) {
+	ok = o != nil && o.clusterId != nil
+	if ok {
+		value = *o.clusterId
+	}
+	return
 }
 
 // ClusterUuid returns the value of the 'cluster_uuid' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// (optional) cluster uuid in case we want to create an osl log.
-func (o *SupportCase) ClusterUuid() string {
+// (optional) cluster uuid of the cluster on which we create the support case for.
+func (o *SupportCaseRequest) ClusterUuid() string {
 	if o != nil && o.clusterUuid != nil {
 		return *o.clusterUuid
 	}
@@ -122,8 +149,8 @@ func (o *SupportCase) ClusterUuid() string {
 // GetClusterUuid returns the value of the 'cluster_uuid' attribute and
 // a flag indicating if the attribute has a value.
 //
-// (optional) cluster uuid in case we want to create an osl log.
-func (o *SupportCase) GetClusterUuid() (value string, ok bool) {
+// (optional) cluster uuid of the cluster on which we create the support case for.
+func (o *SupportCaseRequest) GetClusterUuid() (value string, ok bool) {
 	ok = o != nil && o.clusterUuid != nil
 	if ok {
 		value = *o.clusterUuid
@@ -135,7 +162,7 @@ func (o *SupportCase) GetClusterUuid() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Support case desciption.
-func (o *SupportCase) Description() string {
+func (o *SupportCaseRequest) Description() string {
 	if o != nil && o.description != nil {
 		return *o.description
 	}
@@ -146,7 +173,7 @@ func (o *SupportCase) Description() string {
 // a flag indicating if the attribute has a value.
 //
 // Support case desciption.
-func (o *SupportCase) GetDescription() (value string, ok bool) {
+func (o *SupportCaseRequest) GetDescription() (value string, ok bool) {
 	ok = o != nil && o.description != nil
 	if ok {
 		value = *o.description
@@ -158,7 +185,7 @@ func (o *SupportCase) GetDescription() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // (optional) event stream id for the support case so we could track it.
-func (o *SupportCase) EventStreamId() string {
+func (o *SupportCaseRequest) EventStreamId() string {
 	if o != nil && o.eventStreamId != nil {
 		return *o.eventStreamId
 	}
@@ -169,7 +196,7 @@ func (o *SupportCase) EventStreamId() string {
 // a flag indicating if the attribute has a value.
 //
 // (optional) event stream id for the support case so we could track it.
-func (o *SupportCase) GetEventStreamId() (value string, ok bool) {
+func (o *SupportCaseRequest) GetEventStreamId() (value string, ok bool) {
 	ok = o != nil && o.eventStreamId != nil
 	if ok {
 		value = *o.eventStreamId
@@ -181,7 +208,7 @@ func (o *SupportCase) GetEventStreamId() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Support case severity.
-func (o *SupportCase) Severity() string {
+func (o *SupportCaseRequest) Severity() string {
 	if o != nil && o.severity != nil {
 		return *o.severity
 	}
@@ -192,10 +219,33 @@ func (o *SupportCase) Severity() string {
 // a flag indicating if the attribute has a value.
 //
 // Support case severity.
-func (o *SupportCase) GetSeverity() (value string, ok bool) {
+func (o *SupportCaseRequest) GetSeverity() (value string, ok bool) {
 	ok = o != nil && o.severity != nil
 	if ok {
 		value = *o.severity
+	}
+	return
+}
+
+// SubscriptionId returns the value of the 'subscription_id' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// (optional) subscription id of the subscription on which we create the support case for.
+func (o *SupportCaseRequest) SubscriptionId() string {
+	if o != nil && o.subscriptionId != nil {
+		return *o.subscriptionId
+	}
+	return ""
+}
+
+// GetSubscriptionId returns the value of the 'subscription_id' attribute and
+// a flag indicating if the attribute has a value.
+//
+// (optional) subscription id of the subscription on which we create the support case for.
+func (o *SupportCaseRequest) GetSubscriptionId() (value string, ok bool) {
+	ok = o != nil && o.subscriptionId != nil
+	if ok {
+		value = *o.subscriptionId
 	}
 	return
 }
@@ -204,7 +254,7 @@ func (o *SupportCase) GetSeverity() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Support case title.
-func (o *SupportCase) Summary() string {
+func (o *SupportCaseRequest) Summary() string {
 	if o != nil && o.summary != nil {
 		return *o.summary
 	}
@@ -215,7 +265,7 @@ func (o *SupportCase) Summary() string {
 // a flag indicating if the attribute has a value.
 //
 // Support case title.
-func (o *SupportCase) GetSummary() (value string, ok bool) {
+func (o *SupportCaseRequest) GetSummary() (value string, ok bool) {
 	ok = o != nil && o.summary != nil
 	if ok {
 		value = *o.summary
@@ -223,43 +273,43 @@ func (o *SupportCase) GetSummary() (value string, ok bool) {
 	return
 }
 
-// SupportCaseListKind is the name of the type used to represent list of objects of
-// type 'support_case'.
-const SupportCaseListKind = "SupportCaseList"
+// SupportCaseRequestListKind is the name of the type used to represent list of objects of
+// type 'support_case_request'.
+const SupportCaseRequestListKind = "SupportCaseRequestList"
 
-// SupportCaseListLinkKind is the name of the type used to represent links to list
-// of objects of type 'support_case'.
-const SupportCaseListLinkKind = "SupportCaseListLink"
+// SupportCaseRequestListLinkKind is the name of the type used to represent links to list
+// of objects of type 'support_case_request'.
+const SupportCaseRequestListLinkKind = "SupportCaseRequestListLink"
 
-// SupportCaseNilKind is the name of the type used to nil lists of objects of
-// type 'support_case'.
-const SupportCaseListNilKind = "SupportCaseListNil"
+// SupportCaseRequestNilKind is the name of the type used to nil lists of objects of
+// type 'support_case_request'.
+const SupportCaseRequestListNilKind = "SupportCaseRequestListNil"
 
-// SupportCaseList is a list of values of the 'support_case' type.
-type SupportCaseList struct {
+// SupportCaseRequestList is a list of values of the 'support_case_request' type.
+type SupportCaseRequestList struct {
 	href  *string
 	link  bool
-	items []*SupportCase
+	items []*SupportCaseRequest
 }
 
 // Kind returns the name of the type of the object.
-func (l *SupportCaseList) Kind() string {
+func (l *SupportCaseRequestList) Kind() string {
 	if l == nil {
-		return SupportCaseListNilKind
+		return SupportCaseRequestListNilKind
 	}
 	if l.link {
-		return SupportCaseListLinkKind
+		return SupportCaseRequestListLinkKind
 	}
-	return SupportCaseListKind
+	return SupportCaseRequestListKind
 }
 
 // Link returns true iif this is a link.
-func (l *SupportCaseList) Link() bool {
+func (l *SupportCaseRequestList) Link() bool {
 	return l != nil && l.link
 }
 
 // HREF returns the link to the list.
-func (l *SupportCaseList) HREF() string {
+func (l *SupportCaseRequestList) HREF() string {
 	if l != nil && l.href != nil {
 		return *l.href
 	}
@@ -268,7 +318,7 @@ func (l *SupportCaseList) HREF() string {
 
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
-func (l *SupportCaseList) GetHREF() (value string, ok bool) {
+func (l *SupportCaseRequestList) GetHREF() (value string, ok bool) {
 	ok = l != nil && l.href != nil
 	if ok {
 		value = *l.href
@@ -277,7 +327,7 @@ func (l *SupportCaseList) GetHREF() (value string, ok bool) {
 }
 
 // Len returns the length of the list.
-func (l *SupportCaseList) Len() int {
+func (l *SupportCaseRequestList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -285,13 +335,13 @@ func (l *SupportCaseList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *SupportCaseList) Empty() bool {
+func (l *SupportCaseRequestList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *SupportCaseList) Get(i int) *SupportCase {
+func (l *SupportCaseRequestList) Get(i int) *SupportCaseRequest {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -304,12 +354,12 @@ func (l *SupportCaseList) Get(i int) *SupportCase {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *SupportCaseList) Slice() []*SupportCase {
-	var slice []*SupportCase
+func (l *SupportCaseRequestList) Slice() []*SupportCaseRequest {
+	var slice []*SupportCaseRequest
 	if l == nil {
-		slice = make([]*SupportCase, 0)
+		slice = make([]*SupportCaseRequest, 0)
 	} else {
-		slice = make([]*SupportCase, len(l.items))
+		slice = make([]*SupportCaseRequest, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -318,7 +368,7 @@ func (l *SupportCaseList) Slice() []*SupportCase {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *SupportCaseList) Each(f func(item *SupportCase) bool) {
+func (l *SupportCaseRequestList) Each(f func(item *SupportCaseRequest) bool) {
 	if l == nil {
 		return
 	}
@@ -332,7 +382,7 @@ func (l *SupportCaseList) Each(f func(item *SupportCase) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *SupportCaseList) Range(f func(index int, item *SupportCase) bool) {
+func (l *SupportCaseRequestList) Range(f func(index int, item *SupportCaseRequest) bool) {
 	if l == nil {
 		return
 	}

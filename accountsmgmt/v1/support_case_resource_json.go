@@ -24,19 +24,15 @@ import (
 	"net/http"
 )
 
-func readSupportCasesPostRequest(request *SupportCasesPostServerRequest, r *http.Request) error {
-	var err error
-	request.request, err = UnmarshalSupportCaseRequest(r)
-	return err
+func readSupportCaseDeleteRequest(request *SupportCaseDeleteServerRequest, r *http.Request) error {
+	return nil
 }
-func writeSupportCasesPostRequest(request *SupportCasesPostRequest, writer io.Writer) error {
-	return MarshalSupportCaseRequest(request.request, writer)
+func writeSupportCaseDeleteRequest(request *SupportCaseDeleteRequest, writer io.Writer) error {
+	return nil
 }
-func readSupportCasesPostResponse(response *SupportCasesPostResponse, reader io.Reader) error {
-	var err error
-	response.response, err = UnmarshalSupportCaseResponse(reader)
-	return err
+func readSupportCaseDeleteResponse(response *SupportCaseDeleteResponse, reader io.Reader) error {
+	return nil
 }
-func writeSupportCasesPostResponse(response *SupportCasesPostServerResponse, w http.ResponseWriter) error {
-	return MarshalSupportCaseResponse(response.response, w)
+func writeSupportCaseDeleteResponse(response *SupportCaseDeleteServerResponse, w http.ResponseWriter) error {
+	return nil
 }

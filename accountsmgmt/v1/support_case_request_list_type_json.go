@@ -26,46 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalSupportCaseList writes a list of values of the 'support_case' type to
+// MarshalSupportCaseRequestList writes a list of values of the 'support_case_request' type to
 // the given writer.
-func MarshalSupportCaseList(list []*SupportCase, writer io.Writer) error {
+func MarshalSupportCaseRequestList(list []*SupportCaseRequest, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeSupportCaseList(list, stream)
+	writeSupportCaseRequestList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeSupportCaseList writes a list of value of the 'support_case' type to
+// writeSupportCaseRequestList writes a list of value of the 'support_case_request' type to
 // the given stream.
-func writeSupportCaseList(list []*SupportCase, stream *jsoniter.Stream) {
+func writeSupportCaseRequestList(list []*SupportCaseRequest, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeSupportCase(value, stream)
+		writeSupportCaseRequest(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalSupportCaseList reads a list of values of the 'support_case' type
+// UnmarshalSupportCaseRequestList reads a list of values of the 'support_case_request' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalSupportCaseList(source interface{}) (items []*SupportCase, err error) {
+func UnmarshalSupportCaseRequestList(source interface{}) (items []*SupportCaseRequest, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readSupportCaseList(iterator)
+	items = readSupportCaseRequestList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readSupportCaseList reads list of values of the ''support_case' type from
+// readSupportCaseRequestList reads list of values of the ''support_case_request' type from
 // the given iterator.
-func readSupportCaseList(iterator *jsoniter.Iterator) []*SupportCase {
-	list := []*SupportCase{}
+func readSupportCaseRequestList(iterator *jsoniter.Iterator) []*SupportCaseRequest {
+	list := []*SupportCaseRequest{}
 	for iterator.ReadArray() {
-		item := readSupportCase(iterator)
+		item := readSupportCaseRequest(iterator)
 		list = append(list, item)
 	}
 	return list

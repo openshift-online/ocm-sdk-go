@@ -19,48 +19,48 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-// SupportCaseListBuilder contains the data and logic needed to build
-// 'support_case' objects.
-type SupportCaseListBuilder struct {
-	items []*SupportCaseBuilder
+// SupportCaseResponseListBuilder contains the data and logic needed to build
+// 'support_case_response' objects.
+type SupportCaseResponseListBuilder struct {
+	items []*SupportCaseResponseBuilder
 }
 
-// NewSupportCaseList creates a new builder of 'support_case' objects.
-func NewSupportCaseList() *SupportCaseListBuilder {
-	return new(SupportCaseListBuilder)
+// NewSupportCaseResponseList creates a new builder of 'support_case_response' objects.
+func NewSupportCaseResponseList() *SupportCaseResponseListBuilder {
+	return new(SupportCaseResponseListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *SupportCaseListBuilder) Items(values ...*SupportCaseBuilder) *SupportCaseListBuilder {
-	b.items = make([]*SupportCaseBuilder, len(values))
+func (b *SupportCaseResponseListBuilder) Items(values ...*SupportCaseResponseBuilder) *SupportCaseResponseListBuilder {
+	b.items = make([]*SupportCaseResponseBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
 // Copy copies the items of the given list into this builder, discarding any previous items.
-func (b *SupportCaseListBuilder) Copy(list *SupportCaseList) *SupportCaseListBuilder {
+func (b *SupportCaseResponseListBuilder) Copy(list *SupportCaseResponseList) *SupportCaseResponseListBuilder {
 	if list == nil || list.items == nil {
 		b.items = nil
 	} else {
-		b.items = make([]*SupportCaseBuilder, len(list.items))
+		b.items = make([]*SupportCaseResponseBuilder, len(list.items))
 		for i, v := range list.items {
-			b.items[i] = NewSupportCase().Copy(v)
+			b.items[i] = NewSupportCaseResponse().Copy(v)
 		}
 	}
 	return b
 }
 
-// Build creates a list of 'support_case' objects using the
+// Build creates a list of 'support_case_response' objects using the
 // configuration stored in the builder.
-func (b *SupportCaseListBuilder) Build() (list *SupportCaseList, err error) {
-	items := make([]*SupportCase, len(b.items))
+func (b *SupportCaseResponseListBuilder) Build() (list *SupportCaseResponseList, err error) {
+	items := make([]*SupportCaseResponse, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(SupportCaseList)
+	list = new(SupportCaseResponseList)
 	list.items = items
 	return
 }
