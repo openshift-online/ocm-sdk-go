@@ -31,7 +31,7 @@ import (
 
 // LogsClient is the client of the 'logs' resource.
 //
-// Manages a collection of logs.
+// Manages a collection of log links.
 type LogsClient struct {
 	transport http.RoundTripper
 	path      string
@@ -51,7 +51,7 @@ func NewLogsClient(transport http.RoundTripper, path string, metric string) *Log
 
 // List creates a request for the 'list' method.
 //
-// Retrieves the list of clusters.
+// Retrieves the list of log links.
 func (c *LogsClient) List() *LogsListRequest {
 	return &LogsListRequest{
 		transport: c.transport,
@@ -60,33 +60,22 @@ func (c *LogsClient) List() *LogsListRequest {
 	}
 }
 
-// Install returns the target 'install_logs' resource.
+// Install returns the target 'log' resource.
 //
 //
-func (c *LogsClient) Install() *InstallLogsClient {
-	return NewInstallLogsClient(
+func (c *LogsClient) Install() *LogClient {
+	return NewLogClient(
 		c.transport,
 		path.Join(c.path, "install"),
 		path.Join(c.metric, "install"),
 	)
 }
 
-// Log returns the target 'log' resource for the given identifier.
+// Uninstall returns the target 'log' resource.
 //
-// Returns a reference to the service that manages an specific log.
-func (c *LogsClient) Log(id string) *LogClient {
+//
+func (c *LogsClient) Uninstall() *LogClient {
 	return NewLogClient(
-		c.transport,
-		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
-	)
-}
-
-// Uninstall returns the target 'uninstall_log' resource.
-//
-//
-func (c *LogsClient) Uninstall() *UninstallLogClient {
-	return NewUninstallLogClient(
 		c.transport,
 		path.Join(c.path, "uninstall"),
 		path.Join(c.metric, "uninstall"),
@@ -222,7 +211,7 @@ func (r *LogsListResponse) Error() *errors.Error {
 
 // Items returns the value of the 'items' parameter.
 //
-// Retrieved list of logs.
+// Retrieved list of log links.
 func (r *LogsListResponse) Items() *LogList {
 	if r == nil {
 		return nil
@@ -233,7 +222,7 @@ func (r *LogsListResponse) Items() *LogList {
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Retrieved list of logs.
+// Retrieved list of log links.
 func (r *LogsListResponse) GetItems() (value *LogList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {

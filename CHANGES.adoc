@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.117 Aug 5 2020
+
+- Update to model v0.0.73
+** [CS] Add hive_config to the provision shard
+** [CS] Improving cluster logs endpoint
+** [AMS] Added token authorization endpoint
+
 == 0.1.116 Aug 3 2020
 
 - Added support for http PUT method

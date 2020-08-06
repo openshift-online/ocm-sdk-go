@@ -42,6 +42,7 @@ type ProvisionShard struct {
 	awsBaseDomain            *string
 	gcpBaseDomain            *string
 	gcpProjectOperator       *ServerConfig
+	hiveConfig               *ServerConfig
 }
 
 // Kind returns the name of the type of the object.
@@ -192,6 +193,29 @@ func (o *ProvisionShard) GetGCPProjectOperator() (value *ServerConfig, ok bool) 
 	ok = o != nil && o.gcpProjectOperator != nil
 	if ok {
 		value = o.gcpProjectOperator
+	}
+	return
+}
+
+// HiveConfig returns the value of the 'hive_config' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Contains the configuration for Hive
+func (o *ProvisionShard) HiveConfig() *ServerConfig {
+	if o == nil {
+		return nil
+	}
+	return o.hiveConfig
+}
+
+// GetHiveConfig returns the value of the 'hive_config' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Contains the configuration for Hive
+func (o *ProvisionShard) GetHiveConfig() (value *ServerConfig, ok bool) {
+	ok = o != nil && o.hiveConfig != nil
+	if ok {
+		value = o.hiveConfig
 	}
 	return
 }

@@ -4865,6 +4865,21 @@
           }
         }
       },
+      "TokenAuthorizationRequest": {
+        "properties": {
+          "authorization_token": {
+            "description": "The pull secret of a given account\n",
+            "type": "string"
+          }
+        }
+      },
+      "TokenAuthorizationResponse": {
+        "properties": {
+          "account": {
+            "$ref": "#/components/schemas/Account"
+          }
+        }
+      },
       "UsageEnum": {
         "description": "Usage of Subscription.\n",
         "type": "string",
