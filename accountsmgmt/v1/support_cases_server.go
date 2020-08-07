@@ -30,77 +30,61 @@ import (
 // SupportCasesServer represents the interface the manages the 'support_cases' resource.
 type SupportCasesServer interface {
 
-	// Add handles a request for the 'add' method.
+	// Post handles a request for the 'post' method.
 	//
 	// Create a support case related to Hydra
-	Add(ctx context.Context, request *SupportCasesAddServerRequest, response *SupportCasesAddServerResponse) error
+	Post(ctx context.Context, request *SupportCasesPostServerRequest, response *SupportCasesPostServerResponse) error
 
-	// Delete handles a request for the 'delete' method.
+	// SupportCase returns the target 'support_case' server for the given identifier.
 	//
-	// Close a support case in Hydra.
-	Delete(ctx context.Context, request *SupportCasesDeleteServerRequest, response *SupportCasesDeleteServerResponse) error
+	// Reference to the service that manages a specific support case.
+	SupportCase(id string) SupportCaseServer
 }
 
-// SupportCasesAddServerRequest is the request for the 'add' method.
-type SupportCasesAddServerRequest struct {
-	body *SupportCase
+// SupportCasesPostServerRequest is the request for the 'post' method.
+type SupportCasesPostServerRequest struct {
+	request *SupportCaseRequest
 }
 
-// Body returns the value of the 'body' parameter.
+// Request returns the value of the 'request' parameter.
 //
 //
-func (r *SupportCasesAddServerRequest) Body() *SupportCase {
+func (r *SupportCasesPostServerRequest) Request() *SupportCaseRequest {
 	if r == nil {
 		return nil
 	}
-	return r.body
+	return r.request
 }
 
-// GetBody returns the value of the 'body' parameter and
+// GetRequest returns the value of the 'request' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *SupportCasesAddServerRequest) GetBody() (value *SupportCase, ok bool) {
-	ok = r != nil && r.body != nil
+func (r *SupportCasesPostServerRequest) GetRequest() (value *SupportCaseRequest, ok bool) {
+	ok = r != nil && r.request != nil
 	if ok {
-		value = r.body
+		value = r.request
 	}
 	return
 }
 
-// SupportCasesAddServerResponse is the response for the 'add' method.
-type SupportCasesAddServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *SupportCase
+// SupportCasesPostServerResponse is the response for the 'post' method.
+type SupportCasesPostServerResponse struct {
+	status   int
+	err      *errors.Error
+	response *SupportCaseResponse
 }
 
-// Body sets the value of the 'body' parameter.
+// Response sets the value of the 'response' parameter.
 //
 //
-func (r *SupportCasesAddServerResponse) Body(value *SupportCase) *SupportCasesAddServerResponse {
-	r.body = value
+func (r *SupportCasesPostServerResponse) Response(value *SupportCaseResponse) *SupportCasesPostServerResponse {
+	r.response = value
 	return r
 }
 
 // Status sets the status code.
-func (r *SupportCasesAddServerResponse) Status(value int) *SupportCasesAddServerResponse {
-	r.status = value
-	return r
-}
-
-// SupportCasesDeleteServerRequest is the request for the 'delete' method.
-type SupportCasesDeleteServerRequest struct {
-}
-
-// SupportCasesDeleteServerResponse is the response for the 'delete' method.
-type SupportCasesDeleteServerResponse struct {
-	status int
-	err    *errors.Error
-}
-
-// Status sets the status code.
-func (r *SupportCasesDeleteServerResponse) Status(value int) *SupportCasesDeleteServerResponse {
+func (r *SupportCasesPostServerResponse) Status(value int) *SupportCasesPostServerResponse {
 	r.status = value
 	return r
 }
@@ -112,10 +96,7 @@ func dispatchSupportCases(w http.ResponseWriter, r *http.Request, server Support
 	if len(segments) == 0 {
 		switch r.Method {
 		case "POST":
-			adaptSupportCasesAddRequest(w, r, server)
-			return
-		case "DELETE":
-			adaptSupportCasesDeleteRequest(w, r, server)
+			adaptSupportCasesPostRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -124,17 +105,21 @@ func dispatchSupportCases(w http.ResponseWriter, r *http.Request, server Support
 	}
 	switch segments[0] {
 	default:
-		errors.SendNotFound(w, r)
-		return
+		target := server.SupportCase(segments[0])
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchSupportCase(w, r, target, segments[1:])
 	}
 }
 
-// adaptSupportCasesAddRequest translates the given HTTP request into a call to
+// adaptSupportCasesPostRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptSupportCasesAddRequest(w http.ResponseWriter, r *http.Request, server SupportCasesServer) {
-	request := &SupportCasesAddServerRequest{}
-	err := readSupportCasesAddRequest(request, r)
+func adaptSupportCasesPostRequest(w http.ResponseWriter, r *http.Request, server SupportCasesServer) {
+	request := &SupportCasesPostServerRequest{}
+	err := readSupportCasesPostRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -143,9 +128,9 @@ func adaptSupportCasesAddRequest(w http.ResponseWriter, r *http.Request, server 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &SupportCasesAddServerResponse{}
+	response := &SupportCasesPostServerResponse{}
 	response.status = 201
-	err = server.Add(r.Context(), request, response)
+	err = server.Post(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
 			"Can't process request for method '%s' and path '%s': %v",
@@ -154,42 +139,7 @@ func adaptSupportCasesAddRequest(w http.ResponseWriter, r *http.Request, server 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeSupportCasesAddResponse(response, w)
-	if err != nil {
-		glog.Errorf(
-			"Can't write response for method '%s' and path '%s': %v",
-			r.Method, r.URL.Path, err,
-		)
-		return
-	}
-}
-
-// adaptSupportCasesDeleteRequest translates the given HTTP request into a call to
-// the corresponding method of the given server. Then it translates the
-// results returned by that method into an HTTP response.
-func adaptSupportCasesDeleteRequest(w http.ResponseWriter, r *http.Request, server SupportCasesServer) {
-	request := &SupportCasesDeleteServerRequest{}
-	err := readSupportCasesDeleteRequest(request, r)
-	if err != nil {
-		glog.Errorf(
-			"Can't read request for method '%s' and path '%s': %v",
-			r.Method, r.URL.Path, err,
-		)
-		errors.SendInternalServerError(w, r)
-		return
-	}
-	response := &SupportCasesDeleteServerResponse{}
-	response.status = 204
-	err = server.Delete(r.Context(), request, response)
-	if err != nil {
-		glog.Errorf(
-			"Can't process request for method '%s' and path '%s': %v",
-			r.Method, r.URL.Path, err,
-		)
-		errors.SendInternalServerError(w, r)
-		return
-	}
-	err = writeSupportCasesDeleteResponse(response, w)
+	err = writeSupportCasesPostResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

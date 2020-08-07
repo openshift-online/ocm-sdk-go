@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"path"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -52,55 +53,55 @@ func NewSupportCasesClient(transport http.RoundTripper, path string, metric stri
 	}
 }
 
-// Add creates a request for the 'add' method.
+// Post creates a request for the 'post' method.
 //
 // Create a support case related to Hydra
-func (c *SupportCasesClient) Add() *SupportCasesAddRequest {
-	return &SupportCasesAddRequest{
+func (c *SupportCasesClient) Post() *SupportCasesPostRequest {
+	return &SupportCasesPostRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
 	}
 }
 
-// Delete creates a request for the 'delete' method.
+// SupportCase returns the target 'support_case' resource for the given identifier.
 //
-// Close a support case in Hydra.
-func (c *SupportCasesClient) Delete() *SupportCasesDeleteRequest {
-	return &SupportCasesDeleteRequest{
-		transport: c.transport,
-		path:      c.path,
-		metric:    c.metric,
-	}
+// Reference to the service that manages a specific support case.
+func (c *SupportCasesClient) SupportCase(id string) *SupportCaseClient {
+	return NewSupportCaseClient(
+		c.transport,
+		path.Join(c.path, id),
+		path.Join(c.metric, "-"),
+	)
 }
 
-// SupportCasesAddRequest is the request for the 'add' method.
-type SupportCasesAddRequest struct {
+// SupportCasesPostRequest is the request for the 'post' method.
+type SupportCasesPostRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 	query     url.Values
 	header    http.Header
-	body      *SupportCase
+	request   *SupportCaseRequest
 }
 
 // Parameter adds a query parameter.
-func (r *SupportCasesAddRequest) Parameter(name string, value interface{}) *SupportCasesAddRequest {
+func (r *SupportCasesPostRequest) Parameter(name string, value interface{}) *SupportCasesPostRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *SupportCasesAddRequest) Header(name string, value interface{}) *SupportCasesAddRequest {
+func (r *SupportCasesPostRequest) Header(name string, value interface{}) *SupportCasesPostRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
-// Body sets the value of the 'body' parameter.
+// Request sets the value of the 'request' parameter.
 //
 //
-func (r *SupportCasesAddRequest) Body(value *SupportCase) *SupportCasesAddRequest {
-	r.body = value
+func (r *SupportCasesPostRequest) Request(value *SupportCaseRequest) *SupportCasesPostRequest {
+	r.request = value
 	return r
 }
 
@@ -108,16 +109,16 @@ func (r *SupportCasesAddRequest) Body(value *SupportCase) *SupportCasesAddReques
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *SupportCasesAddRequest) Send() (result *SupportCasesAddResponse, err error) {
+func (r *SupportCasesPostRequest) Send() (result *SupportCasesPostResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *SupportCasesAddRequest) SendContext(ctx context.Context) (result *SupportCasesAddResponse, err error) {
+func (r *SupportCasesPostRequest) SendContext(ctx context.Context) (result *SupportCasesPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	buffer := &bytes.Buffer{}
-	err = writeSupportCasesAddRequest(r, buffer)
+	err = writeSupportCasesPostRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -139,7 +140,7 @@ func (r *SupportCasesAddRequest) SendContext(ctx context.Context) (result *Suppo
 		return
 	}
 	defer response.Body.Close()
-	result = &SupportCasesAddResponse{}
+	result = &SupportCasesPostResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -150,7 +151,7 @@ func (r *SupportCasesAddRequest) SendContext(ctx context.Context) (result *Suppo
 		err = result.err
 		return
 	}
-	err = readSupportCasesAddResponse(result, response.Body)
+	err = readSupportCasesPostResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -158,25 +159,25 @@ func (r *SupportCasesAddRequest) SendContext(ctx context.Context) (result *Suppo
 }
 
 // marshall is the method used internally to marshal requests for the
-// 'add' method.
-func (r *SupportCasesAddRequest) marshal(writer io.Writer) error {
+// 'post' method.
+func (r *SupportCasesPostRequest) marshal(writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	r.stream(stream)
 	return stream.Error
 }
-func (r *SupportCasesAddRequest) stream(stream *jsoniter.Stream) {
+func (r *SupportCasesPostRequest) stream(stream *jsoniter.Stream) {
 }
 
-// SupportCasesAddResponse is the response for the 'add' method.
-type SupportCasesAddResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-	body   *SupportCase
+// SupportCasesPostResponse is the response for the 'post' method.
+type SupportCasesPostResponse struct {
+	status   int
+	header   http.Header
+	err      *errors.Error
+	response *SupportCaseResponse
 }
 
 // Status returns the response status code.
-func (r *SupportCasesAddResponse) Status() int {
+func (r *SupportCasesPostResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -184,7 +185,7 @@ func (r *SupportCasesAddResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SupportCasesAddResponse) Header() http.Header {
+func (r *SupportCasesPostResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -192,126 +193,31 @@ func (r *SupportCasesAddResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SupportCasesAddResponse) Error() *errors.Error {
+func (r *SupportCasesPostResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// Body returns the value of the 'body' parameter.
+// Response returns the value of the 'response' parameter.
 //
 //
-func (r *SupportCasesAddResponse) Body() *SupportCase {
+func (r *SupportCasesPostResponse) Response() *SupportCaseResponse {
 	if r == nil {
 		return nil
 	}
-	return r.body
+	return r.response
 }
 
-// GetBody returns the value of the 'body' parameter and
+// GetResponse returns the value of the 'response' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *SupportCasesAddResponse) GetBody() (value *SupportCase, ok bool) {
-	ok = r != nil && r.body != nil
+func (r *SupportCasesPostResponse) GetResponse() (value *SupportCaseResponse, ok bool) {
+	ok = r != nil && r.response != nil
 	if ok {
-		value = r.body
+		value = r.response
 	}
 	return
-}
-
-// SupportCasesDeleteRequest is the request for the 'delete' method.
-type SupportCasesDeleteRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *SupportCasesDeleteRequest) Parameter(name string, value interface{}) *SupportCasesDeleteRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *SupportCasesDeleteRequest) Header(name string, value interface{}) *SupportCasesDeleteRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SupportCasesDeleteRequest) Send() (result *SupportCasesDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SupportCasesDeleteRequest) SendContext(ctx context.Context) (result *SupportCasesDeleteResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: "DELETE",
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = &SupportCasesDeleteResponse{}
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	return
-}
-
-// SupportCasesDeleteResponse is the response for the 'delete' method.
-type SupportCasesDeleteResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-}
-
-// Status returns the response status code.
-func (r *SupportCasesDeleteResponse) Status() int {
-	if r == nil {
-		return 0
-	}
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *SupportCasesDeleteResponse) Header() http.Header {
-	if r == nil {
-		return nil
-	}
-	return r.header
-}
-
-// Error returns the response error.
-func (r *SupportCasesDeleteResponse) Error() *errors.Error {
-	if r == nil {
-		return nil
-	}
-	return r.err
 }

@@ -141,6 +141,11 @@ type Server interface {
 	//
 	// Reference to the resource that manages the support cases.
 	SupportCases() SupportCasesServer
+
+	// TokenAuthorization returns the target 'token_authorization' resource.
+	//
+	// Reference to the resource that manages token authorization.
+	TokenAuthorization() TokenAuthorizationServer
 }
 
 // Dispatch navigates the servers tree rooted at the given server
@@ -302,6 +307,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchSupportCases(w, r, target, segments[1:])
+	case "token_authorization":
+		target := server.TokenAuthorization()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchTokenAuthorization(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return

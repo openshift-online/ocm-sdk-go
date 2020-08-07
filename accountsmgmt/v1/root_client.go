@@ -292,3 +292,14 @@ func (c *Client) SupportCases() *SupportCasesClient {
 		path.Join(c.metric, "support_cases"),
 	)
 }
+
+// TokenAuthorization returns the target 'token_authorization' resource.
+//
+// Reference to the resource that manages token authorization.
+func (c *Client) TokenAuthorization() *TokenAuthorizationClient {
+	return NewTokenAuthorizationClient(
+		c.transport,
+		path.Join(c.path, "token_authorization"),
+		path.Join(c.metric, "token_authorization"),
+	)
+}

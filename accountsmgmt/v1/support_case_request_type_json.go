@@ -26,16 +26,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalSupportCase writes a value of the 'support_case' type to the given writer.
-func MarshalSupportCase(object *SupportCase, writer io.Writer) error {
+// MarshalSupportCaseRequest writes a value of the 'support_case_request' type to the given writer.
+func MarshalSupportCaseRequest(object *SupportCaseRequest, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeSupportCase(object, stream)
+	writeSupportCaseRequest(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeSupportCase writes a value of the 'support_case' type to the given stream.
-func writeSupportCase(object *SupportCase, stream *jsoniter.Stream) {
+// writeSupportCaseRequest writes a value of the 'support_case_request' type to the given stream.
+func writeSupportCaseRequest(object *SupportCaseRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	if count > 0 {
@@ -43,9 +43,9 @@ func writeSupportCase(object *SupportCase, stream *jsoniter.Stream) {
 	}
 	stream.WriteObjectField("kind")
 	if object.link {
-		stream.WriteString(SupportCaseLinkKind)
+		stream.WriteString(SupportCaseRequestLinkKind)
 	} else {
-		stream.WriteString(SupportCaseKind)
+		stream.WriteString(SupportCaseRequestKind)
 	}
 	count++
 	if object.id != nil {
@@ -62,6 +62,14 @@ func writeSupportCase(object *SupportCase, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("href")
 		stream.WriteString(*object.href)
+		count++
+	}
+	if object.clusterId != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cluster_id")
+		stream.WriteString(*object.clusterId)
 		count++
 	}
 	if object.clusterUuid != nil {
@@ -96,6 +104,14 @@ func writeSupportCase(object *SupportCase, stream *jsoniter.Stream) {
 		stream.WriteString(*object.severity)
 		count++
 	}
+	if object.subscriptionId != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("subscription_id")
+		stream.WriteString(*object.subscriptionId)
+		count++
+	}
 	if object.summary != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -107,21 +123,21 @@ func writeSupportCase(object *SupportCase, stream *jsoniter.Stream) {
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalSupportCase reads a value of the 'support_case' type from the given
+// UnmarshalSupportCaseRequest reads a value of the 'support_case_request' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalSupportCase(source interface{}) (object *SupportCase, err error) {
+func UnmarshalSupportCaseRequest(source interface{}) (object *SupportCaseRequest, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readSupportCase(iterator)
+	object = readSupportCaseRequest(iterator)
 	err = iterator.Error
 	return
 }
 
-// readSupportCase reads a value of the 'support_case' type from the given iterator.
-func readSupportCase(iterator *jsoniter.Iterator) *SupportCase {
-	object := &SupportCase{}
+// readSupportCaseRequest reads a value of the 'support_case_request' type from the given iterator.
+func readSupportCaseRequest(iterator *jsoniter.Iterator) *SupportCaseRequest {
+	object := &SupportCaseRequest{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
@@ -130,13 +146,16 @@ func readSupportCase(iterator *jsoniter.Iterator) *SupportCase {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == SupportCaseLinkKind
+			object.link = value == SupportCaseRequestLinkKind
 		case "id":
 			value := iterator.ReadString()
 			object.id = &value
 		case "href":
 			value := iterator.ReadString()
 			object.href = &value
+		case "cluster_id":
+			value := iterator.ReadString()
+			object.clusterId = &value
 		case "cluster_uuid":
 			value := iterator.ReadString()
 			object.clusterUuid = &value
@@ -149,6 +168,9 @@ func readSupportCase(iterator *jsoniter.Iterator) *SupportCase {
 		case "severity":
 			value := iterator.ReadString()
 			object.severity = &value
+		case "subscription_id":
+			value := iterator.ReadString()
+			object.subscriptionId = &value
 		case "summary":
 			value := iterator.ReadString()
 			object.summary = &value
