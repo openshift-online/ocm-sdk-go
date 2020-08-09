@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.118 Aug 7 2020
+
+- Update to model v0.0.75
+** Added support_case resource
+** Added token_authorization to root_resource
+
 == 0.1.117 Aug 5 2020
 
 - Update to model v0.0.73
