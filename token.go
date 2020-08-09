@@ -298,6 +298,8 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	}
 	defer response.Body.Close()
 
+	code = response.StatusCode
+
 	// Check that the response content type is JSON:
 	err = c.checkContentType(response)
 	if err != nil {
