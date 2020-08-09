@@ -181,7 +181,7 @@ func (t *TestTransport) RoundTrip(request *http.Request) (response *http.Respons
 	header := http.Header{}
 	header.Add("Content-type", "application/json")
 	response = &http.Response{
-		StatusCode: 401,
+		StatusCode: http.StatusInternalServerError,
 		Header:     header,
 		Body:       gbytes.BufferWithBytes([]byte("{}")),
 	}

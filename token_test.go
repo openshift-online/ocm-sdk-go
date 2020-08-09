@@ -247,17 +247,19 @@ var _ = Describe("Tokens", func() {
 				refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 				// Configure the server:
-				oidServer.AppendHandlers(
-					ghttp.RespondWith(
-						http.StatusServiceUnavailable,
-						`Service unavailable`,
-						http.Header{
-							"Content-Type": []string{
-								"text/plain",
+				for i := 0; i < 100; i++ { // there are going to be several retries
+					oidServer.AppendHandlers(
+						ghttp.RespondWith(
+							http.StatusServiceUnavailable,
+							`Service unavailable`,
+							http.Header{
+								"Content-Type": []string{
+									"text/plain",
+								},
 							},
-						},
-					),
-				)
+						),
+					)
+				}
 
 				// Create the connection:
 				connection, err := NewConnectionBuilder().
@@ -287,7 +289,7 @@ var _ = Describe("Tokens", func() {
 				// Configure the server:
 				oidServer.AppendHandlers(
 					ghttp.RespondWith(
-						http.StatusServiceUnavailable,
+						http.StatusBadRequest,
 						content,
 						http.Header{
 							"Content-Type": []string{

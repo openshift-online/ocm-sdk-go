@@ -53,19 +53,26 @@ func (c *Connection) Tokens() (access, refresh string, err error) {
 func (c *Connection) TokensContext(ctx context.Context) (access, refresh string, err error) {
 	operation := func() error {
 		c.logger.Debug(ctx, "trying to get tokens")
-		access, refresh, err = c.tokensContext(ctx)
+		var code int
+		code, access, refresh, err = c.tokensContext(ctx)
 		if err != nil {
-			c.logger.Debug(ctx, "failed to get tokens, will attempt to retry")
+			if code >= http.StatusInternalServerError {
+				c.logger.Error(ctx, "failed to get tokens, got http code %d, will attempt to retry. err: %v", code, err)
+				return err
+			} else {
+				c.logger.Debug(ctx, "failed to get tokens, got http code %d, will not attempt to retry. err: %v", code, err)
+				return nil
+			}
 		}
-		return err
+		return nil
 	}
 	backoffMethod := backoff.NewExponentialBackOff()
 	backoffMethod.MaxElapsedTime = time.Second * 15
-	err = backoff.Retry(operation, backoffMethod)
+	backoff.Retry(operation, backoffMethod)
 	return access, refresh, err
 }
 
-func (c *Connection) tokensContext(ctx context.Context) (access, refresh string, err error) {
+func (c *Connection) tokensContext(ctx context.Context) (code int, access, refresh string, err error) {
 	// We need to make sure that this method isn't execute concurrently, as we will be updating
 	// multiple attributes of the connection:
 	c.tokenMutex.Lock()
@@ -104,7 +111,7 @@ func (c *Connection) tokensContext(ctx context.Context) (access, refresh string,
 	// At this point we know that the access token is unavailable, expired or about to expire.
 	// So we need to check if we can use the refresh token to request a new one.
 	if c.refreshToken != nil && (!refreshExpires || refreshLeft >= 1*time.Minute) {
-		_, _, err = c.sendRefreshTokenForm(ctx)
+		code, _, err = c.sendRefreshTokenForm(ctx)
 		if err != nil {
 			return
 		}
@@ -116,7 +123,7 @@ func (c *Connection) tokensContext(ctx context.Context) (access, refresh string,
 	// expire. So we need to check if we have other credentials that can be used to request a
 	// new token, and use them.
 	if c.haveCredentials() {
-		_, _, err = c.sendRequestTokenForm(ctx)
+		code, _, err = c.sendRequestTokenForm(ctx)
 		if err != nil {
 			return
 		}
@@ -134,7 +141,7 @@ func (c *Connection) tokensContext(ctx context.Context) (access, refresh string,
 				"obtain a new token, so will try to use it anyhow",
 			refreshLeft,
 		)
-		_, _, err = c.sendRefreshTokenForm(ctx)
+		code, _, err = c.sendRefreshTokenForm(ctx)
 		if err != nil {
 			return
 		}
