@@ -59,15 +59,15 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 			if code >= http.StatusInternalServerError {
 				c.logger.Error(ctx, "failed to get tokens, got http code %d, will attempt to retry. err: %v", code, err)
 				return err
-			} else {
-				c.logger.Debug(ctx, "failed to get tokens, got http code %d, will not attempt to retry. err: %v", code, err)
-				return nil
 			}
+			c.logger.Debug(ctx, "failed to get tokens, got http code %d, will not attempt to retry. err: %v", code, err)
+			return nil
 		}
 		return nil
 	}
 	backoffMethod := backoff.NewExponentialBackOff()
 	backoffMethod.MaxElapsedTime = time.Second * 15
+	// nolint
 	backoff.Retry(operation, backoffMethod)
 	return access, refresh, err
 }
