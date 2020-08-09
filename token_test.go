@@ -511,14 +511,12 @@ var _ = Describe("Tokens", func() {
 
 		It("Fails with wrong user name", func() {
 			// Configure the server:
-			for i := 0; i < 100; i++ { // there are going to be several retries
-				oidServer.AppendHandlers(
-					ghttp.CombineHandlers(
-						VerifyPasswordGrant("baduser", "mypassword"),
-						RespondWithError("bad_user", "Bad user"),
-					),
-				)
-			}
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					VerifyPasswordGrant("baduser", "mypassword"),
+					RespondWithError("bad_user", "Bad user"),
+				),
+			)
 
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
@@ -537,14 +535,12 @@ var _ = Describe("Tokens", func() {
 
 		It("Fails with wrong password", func() {
 			// Configure the server:
-			for i := 0; i < 100; i++ { // there are going to be several retries
-				oidServer.AppendHandlers(
-					ghttp.CombineHandlers(
-						VerifyPasswordGrant("myuser", "badpassword"),
-						RespondWithError("bad_password", "Bad password"),
-					),
-				)
-			}
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					VerifyPasswordGrant("myuser", "badpassword"),
+					RespondWithError("bad_password", "Bad password"),
+				),
+			)
 
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
