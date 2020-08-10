@@ -915,6 +915,99 @@ var _ = Describe("Tokens", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})
+
+	Describe("Test retry for getting access token", func() {
+		It("Return access token after a few retries", func() {
+			// Generate tokens:
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+			accessToken := DefaultToken("Bearer", 5*time.Minute)
+
+			oidServer.AppendHandlers(
+				ghttp.RespondWith(
+					http.StatusInternalServerError,
+					`Internal Server Error`,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
+				ghttp.RespondWith(
+					http.StatusBadGateway,
+					`Bad Gateway`,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
+				ghttp.CombineHandlers(
+					VerifyRefreshGrant(refreshToken),
+				  RespondWithTokens(accessToken, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(refreshToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Get the tokens:
+			returnedAccess, returnedRefresh, err := connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).ToNot(BeEmpty())
+			Expect(returnedRefresh).ToNot(BeEmpty())
+		})
+		It("Test no retry when status is not http 5xx", func() {
+			// Generate tokens:
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+			accessToken := DefaultToken("Bearer", 5*time.Minute)
+
+			oidServer.AppendHandlers(
+				ghttp.RespondWith(
+					http.StatusInternalServerError,
+					`Internal Server Error`,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
+				ghttp.RespondWith(
+					http.StatusForbidden,
+					`{}`,
+					http.Header{
+						"Content-Type": []string{
+							"application/json",
+						},
+					},
+				),
+				ghttp.CombineHandlers(
+					VerifyRefreshGrant(refreshToken),
+					RespondWithTokens(accessToken, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(refreshToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Get the tokens:
+			_, _, err = connection.Tokens()
+			Expect(err).To(HaveOccurred())
+		})
+	})
 })
 
 func VerifyPasswordGrant(user, password string) http.HandlerFunc {
