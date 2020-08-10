@@ -167,27 +167,27 @@ var _ = Describe("Connection", func() {
 		Expect(err).ToNot(HaveOccurred())
 		defer connection.Close()
 		_, _, err = connection.Tokens()
-		Expect(transport.called).To(BeTrue())
+		Expect(transport.called > 2).To(BeTrue()) // it means the retry was called
 		Expect(err).To(HaveOccurred())
 	})
 })
 
 type TestTransport struct {
-	called bool
+	called int
 }
 
 func (t *TestTransport) RoundTrip(request *http.Request) (response *http.Response, err error) {
-	t.called = true
+	t.called++
 	header := http.Header{}
 	header.Add("Content-type", "application/json")
 	response = &http.Response{
-		StatusCode: 401,
+		StatusCode: http.StatusInternalServerError,
 		Header:     header,
-		Body:       gbytes.NewBuffer(),
+		Body:       gbytes.BufferWithBytes([]byte("{}")),
 	}
 	return response, nil
 }
 
 func NewTestTransport() *TestTransport {
-	return &TestTransport{called: false}
+	return &TestTransport{called: 0}
 }

@@ -247,17 +247,19 @@ var _ = Describe("Tokens", func() {
 				refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 				// Configure the server:
-				oidServer.AppendHandlers(
-					ghttp.RespondWith(
-						http.StatusServiceUnavailable,
-						`Service unavailable`,
-						http.Header{
-							"Content-Type": []string{
-								"text/plain",
+				for i := 0; i < 100; i++ { // there are going to be several retries
+					oidServer.AppendHandlers(
+						ghttp.RespondWith(
+							http.StatusServiceUnavailable,
+							`Service unavailable`,
+							http.Header{
+								"Content-Type": []string{
+									"text/plain",
+								},
 							},
-						},
-					),
-				)
+						),
+					)
+				}
 
 				// Create the connection:
 				connection, err := NewConnectionBuilder().
@@ -287,7 +289,7 @@ var _ = Describe("Tokens", func() {
 				// Configure the server:
 				oidServer.AppendHandlers(
 					ghttp.RespondWith(
-						http.StatusServiceUnavailable,
+						http.StatusBadRequest,
 						content,
 						http.Header{
 							"Content-Type": []string{
@@ -911,6 +913,99 @@ var _ = Describe("Tokens", func() {
 			// should honor the cookies returned in the first attempt:
 			_, _, err = connection.Tokens()
 			Expect(err).ToNot(HaveOccurred())
+		})
+	})
+
+	Describe("Test retry for getting access token", func() {
+		It("Return access token after a few retries", func() {
+			// Generate tokens:
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+			accessToken := DefaultToken("Bearer", 5*time.Minute)
+
+			oidServer.AppendHandlers(
+				ghttp.RespondWith(
+					http.StatusInternalServerError,
+					`Internal Server Error`,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
+				ghttp.RespondWith(
+					http.StatusBadGateway,
+					`Bad Gateway`,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
+				ghttp.CombineHandlers(
+					VerifyRefreshGrant(refreshToken),
+				  RespondWithTokens(accessToken, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(refreshToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Get the tokens:
+			returnedAccess, returnedRefresh, err := connection.Tokens()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).ToNot(BeEmpty())
+			Expect(returnedRefresh).ToNot(BeEmpty())
+		})
+		It("Test no retry when status is not http 5xx", func() {
+			// Generate tokens:
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+			accessToken := DefaultToken("Bearer", 5*time.Minute)
+
+			oidServer.AppendHandlers(
+				ghttp.RespondWith(
+					http.StatusInternalServerError,
+					`Internal Server Error`,
+					http.Header{
+						"Content-Type": []string{
+							"text/plain",
+						},
+					},
+				),
+				ghttp.RespondWith(
+					http.StatusForbidden,
+					`{}`,
+					http.Header{
+						"Content-Type": []string{
+							"application/json",
+						},
+					},
+				),
+				ghttp.CombineHandlers(
+					VerifyRefreshGrant(refreshToken),
+					RespondWithTokens(accessToken, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(refreshToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Get the tokens:
+			_, _, err = connection.Tokens()
+			Expect(err).To(HaveOccurred())
 		})
 	})
 })
