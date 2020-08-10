@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.119 Aug 10 2020
+
+- Add support for retry getting access token in case of http 5xx
+
 == 0.1.118 Aug 7 2020
 
 - Update to model v0.0.75
