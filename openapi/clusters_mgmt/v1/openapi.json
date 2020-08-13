@@ -4643,6 +4643,10 @@
               "type": "string"
             }
           },
+          "provision_shard": {
+            "description": "ProvisionShard contains the properties of the provision shard, including AWS and GCP related configurations\n",
+            "$ref": "#/components/schemas/ProvisionShard"
+          },
           "region": {
             "description": "Link to the cloud provider region where the cluster is installed.\n",
             "$ref": "#/components/schemas/CloudRegion"

@@ -107,6 +107,7 @@ type Cluster struct {
 	openshiftVersion                  *string
 	product                           *Product
 	properties                        map[string]string
+	provisionShard                    *ProvisionShard
 	region                            *CloudRegion
 	state                             *ClusterState
 	storageQuota                      *Value
@@ -888,6 +889,29 @@ func (o *Cluster) GetProperties() (value map[string]string, ok bool) {
 	ok = o != nil && o.properties != nil
 	if ok {
 		value = o.properties
+	}
+	return
+}
+
+// ProvisionShard returns the value of the 'provision_shard' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// ProvisionShard contains the properties of the provision shard, including AWS and GCP related configurations
+func (o *Cluster) ProvisionShard() *ProvisionShard {
+	if o == nil {
+		return nil
+	}
+	return o.provisionShard
+}
+
+// GetProvisionShard returns the value of the 'provision_shard' attribute and
+// a flag indicating if the attribute has a value.
+//
+// ProvisionShard contains the properties of the provision shard, including AWS and GCP related configurations
+func (o *Cluster) GetProvisionShard() (value *ProvisionShard, ok bool) {
+	ok = o != nil && o.provisionShard != nil
+	if ok {
+		value = o.provisionShard
 	}
 	return
 }

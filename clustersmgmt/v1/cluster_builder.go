@@ -95,6 +95,7 @@ type ClusterBuilder struct {
 	openshiftVersion                  *string
 	product                           *ProductBuilder
 	properties                        map[string]string
+	provisionShard                    *ProvisionShardBuilder
 	region                            *CloudRegionBuilder
 	state                             *ClusterState
 	storageQuota                      *ValueBuilder
@@ -358,6 +359,14 @@ func (b *ClusterBuilder) Properties(value map[string]string) *ClusterBuilder {
 	return b
 }
 
+// ProvisionShard sets the value of the 'provision_shard' attribute to the given value.
+//
+// Contains the properties of the provision shard, including AWS and GCP related configurations
+func (b *ClusterBuilder) ProvisionShard(value *ProvisionShardBuilder) *ClusterBuilder {
+	b.provisionShard = value
+	return b
+}
+
 // Region sets the value of the 'region' attribute to the given value.
 //
 // Description of a region of a cloud provider.
@@ -523,6 +532,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.properties = nil
 	}
+	if object.provisionShard != nil {
+		b.provisionShard = NewProvisionShard().Copy(object.provisionShard)
+	} else {
+		b.provisionShard = nil
+	}
 	if object.region != nil {
 		b.region = NewCloudRegion().Copy(object.region)
 	} else {
@@ -665,6 +679,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		object.properties = make(map[string]string)
 		for k, v := range b.properties {
 			object.properties[k] = v
+		}
+	}
+	if b.provisionShard != nil {
+		object.provisionShard, err = b.provisionShard.Build()
+		if err != nil {
+			return
 		}
 	}
 	if b.region != nil {

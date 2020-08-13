@@ -943,7 +943,7 @@ var _ = Describe("Tokens", func() {
 				),
 				ghttp.CombineHandlers(
 					VerifyRefreshGrant(refreshToken),
-				  RespondWithTokens(accessToken, refreshToken),
+					RespondWithTokens(accessToken, refreshToken),
 				),
 			)
 
