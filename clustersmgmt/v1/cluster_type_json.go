@@ -329,6 +329,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteObjectEnd()
 		count++
 	}
+	if object.provisionShard != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("provision_shard")
+		writeProvisionShard(object.provisionShard, stream)
+		count++
+	}
 	if object.region != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -596,6 +604,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 				value[key] = item
 			}
 			object.properties = value
+		case "provision_shard":
+			value := readProvisionShard(iterator)
+			object.provisionShard = value
 		case "region":
 			value := readCloudRegion(iterator)
 			object.region = value
