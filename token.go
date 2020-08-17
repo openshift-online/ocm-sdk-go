@@ -61,7 +61,7 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 				return err
 			}
 			c.logger.Debug(ctx, "failed to get tokens, got http code %d, will not attempt to retry. err: %v", code, err)
-			return nil
+			return backoff.Permanent(err)
 		}
 		return nil
 	}
