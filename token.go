@@ -51,17 +51,24 @@ func (c *Connection) Tokens() (access, refresh string, err error) {
 // expired, this method will do it and will return an error if it fails.
 // The function will retry the operation in an exponential-backoff method.
 func (c *Connection) TokensContext(ctx context.Context) (access, refresh string, err error) {
+	attempt := 0
 	operation := func() error {
-		c.logger.Debug(ctx, "trying to get tokens")
+		attempt++
 		var code int
-		code, access, refresh, err = c.tokensContext(ctx)
+		code, access, refresh, err = c.tokensContext(ctx, attempt)
 		if err != nil {
 			if code >= http.StatusInternalServerError {
-				c.logger.Error(ctx, "failed to get tokens, got http code %d, will attempt to retry. err: %v", code, err)
+				c.logger.Error(ctx, "OCM auth: failed to get tokens, got http code %d, will attempt to retry. err: %v", code, err)
 				return err
 			}
-			c.logger.Debug(ctx, "failed to get tokens, got http code %d, will not attempt to retry. err: %v", code, err)
+			c.logger.Error(ctx, "OCM auth: failed to get tokens, got http code %d, will not attempt to retry. err: %v", code, err)
 			return backoff.Permanent(err)
+		}
+
+		if attempt > 0 {
+			c.logger.Info(ctx, "OCM auth: got tokens on attempt %d.", attempt)
+		} else {
+			c.logger.Debug(ctx, "OCM auth: got tokens on attempt %d.", attempt)
 		}
 		return nil
 	}
@@ -72,7 +79,10 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 	return access, refresh, err
 }
 
-func (c *Connection) tokensContext(ctx context.Context) (code int, access, refresh string, err error) {
+func (c *Connection) tokensContext(
+	ctx context.Context,
+	attempt int,
+) (code int, access, refresh string, err error) {
 	// We need to make sure that this method isn't execute concurrently, as we will be updating
 	// multiple attributes of the connection:
 	c.tokenMutex.Lock()
@@ -109,9 +119,11 @@ func (c *Connection) tokensContext(ctx context.Context) (code int, access, refre
 	}
 
 	// At this point we know that the access token is unavailable, expired or about to expire.
+	c.logger.Debug(ctx, "OCM auth: trying to get new tokens (attempt %d)", attempt)
+
 	// So we need to check if we can use the refresh token to request a new one.
 	if c.refreshToken != nil && (!refreshExpires || refreshLeft >= 1*time.Minute) {
-		code, _, err = c.sendRefreshTokenForm(ctx)
+		code, _, err = c.sendRefreshTokenForm(ctx, attempt)
 		if err != nil {
 			return
 		}
@@ -123,7 +135,7 @@ func (c *Connection) tokensContext(ctx context.Context) (code int, access, refre
 	// expire. So we need to check if we have other credentials that can be used to request a
 	// new token, and use them.
 	if c.haveCredentials() {
-		code, _, err = c.sendRequestTokenForm(ctx)
+		code, _, err = c.sendRequestTokenForm(ctx, attempt)
 		if err != nil {
 			return
 		}
@@ -137,11 +149,11 @@ func (c *Connection) tokensContext(ctx context.Context) (code int, access, refre
 	if c.refreshToken != nil && refreshLeft > 0 {
 		c.logger.Warn(
 			ctx,
-			"Refresh token expires in only %s, but there is no other mechanism to "+
+			"OCM auth: refresh token expires in only %s, but there is no other mechanism to "+
 				"obtain a new token, so will try to use it anyhow",
 			refreshLeft,
 		)
-		code, _, err = c.sendRefreshTokenForm(ctx)
+		code, _, err = c.sendRefreshTokenForm(ctx, attempt)
 		if err != nil {
 			return
 		}
@@ -156,7 +168,7 @@ func (c *Connection) tokensContext(ctx context.Context) (code int, access, refre
 	if c.accessToken != nil && accessLeft > 0 {
 		c.logger.Warn(
 			ctx,
-			"Access token expires in only %s, but there is no other mechanism to "+
+			"OCM auth: access token expires in only %s, but there is no other mechanism to "+
 				"obtain a new token, so will try to use it anyhow",
 			accessLeft,
 		)
@@ -166,7 +178,7 @@ func (c *Connection) tokensContext(ctx context.Context) (code int, access, refre
 
 	// There is no way to get a valid access token, so all we can do is report the failure:
 	err = fmt.Errorf(
-		"access and refresh tokens are unavailable or expired, and there are no " +
+		"OCM auth: access and refresh tokens are unavailable or expired, and there are no " +
 			"password or client secret to request new ones",
 	)
 
@@ -186,17 +198,17 @@ func (c *Connection) currentTokens() (access, refresh string) {
 	return
 }
 
-func (c *Connection) sendRequestTokenForm(ctx context.Context) (code int,
+func (c *Connection) sendRequestTokenForm(ctx context.Context, attempt int) (code int,
 	result *internal.TokenResponse, err error) {
 	form := url.Values{}
 	if c.havePassword() {
-		c.logger.Debug(ctx, "Requesting new token using the password grant")
+		c.logger.Debug(ctx, "OCM auth: requesting new token using the password grant")
 		form.Set("grant_type", "password")
 		form.Set("client_id", c.clientID)
 		form.Set("username", c.user)
 		form.Set("password", c.password)
 	} else if c.haveSecret() {
-		c.logger.Debug(ctx, "Requesting new token using the client credentials grant")
+		c.logger.Debug(ctx, "OCM auth: requesting new token using the client credentials grant")
 		form.Set("grant_type", "client_credentials")
 		form.Set("client_id", c.clientID)
 		form.Set("client_secret", c.clientSecret)
@@ -207,19 +219,19 @@ func (c *Connection) sendRequestTokenForm(ctx context.Context) (code int,
 		return
 	}
 	form.Set("scope", strings.Join(c.scopes, " "))
-	return c.sendTokenForm(ctx, form)
+	return c.sendTokenForm(ctx, form, attempt)
 }
 
-func (c *Connection) sendRefreshTokenForm(ctx context.Context) (code int,
+func (c *Connection) sendRefreshTokenForm(ctx context.Context, attempt int) (code int,
 	result *internal.TokenResponse, err error) {
 	// Send the refresh token grant form:
-	c.logger.Debug(ctx, "Requesting new token using the refresh token grant")
+	c.logger.Debug(ctx, "OCM auth: requesting new token using the refresh token grant")
 	form := url.Values{}
 	form.Set("grant_type", "refresh_token")
 	form.Set("client_id", c.clientID)
 	form.Set("client_secret", c.clientSecret)
 	form.Set("refresh_token", c.refreshToken.Raw)
-	code, result, err = c.sendTokenForm(ctx, form)
+	code, result, err = c.sendTokenForm(ctx, form, attempt)
 
 	// If the server returns an 'invalid_grant' error response then it may be that the
 	// session has expired even if the tokens have not expired. This may happen when the SSO
@@ -239,19 +251,22 @@ func (c *Connection) sendRefreshTokenForm(ctx context.Context) (code int,
 		if errorCode == "invalid_grant" && c.haveCredentials() {
 			c.logger.Info(
 				ctx,
-				"Server returned error code '%s' and error description '%s' "+
+				"OCM auth: server returned error code '%s' and error description '%s' "+
 					"when the refresh token isn't expired",
 				errorCode, errorDescription,
 			)
-			return c.sendRequestTokenForm(ctx)
+			return c.sendRequestTokenForm(ctx, attempt)
 		}
 	}
 
 	return
 }
 
-func (c *Connection) sendTokenForm(ctx context.Context,
-	form url.Values) (code int, result *internal.TokenResponse, err error) {
+func (c *Connection) sendTokenForm(
+	ctx context.Context,
+	form url.Values,
+	attempt int,
+) (code int, result *internal.TokenResponse, err error) {
 	// Measure the time that it takes to send the request and receive the response:
 	before := time.Now()
 	code, result, err = c.sendTokenFormTimed(ctx, form)
@@ -261,7 +276,8 @@ func (c *Connection) sendTokenForm(ctx context.Context,
 	// Update the metrics:
 	if c.tokenCountMetric != nil || c.tokenDurationMetric != nil {
 		labels := map[string]string{
-			metricsCodeLabel: strconv.Itoa(code),
+			metricsAttemptLabel: strconv.Itoa(attempt),
+			metricsCodeLabel:    strconv.Itoa(code),
 		}
 		if c.tokenCountMetric != nil {
 			c.tokenCountMetric.With(labels).Inc()
@@ -387,15 +403,15 @@ func (c *Connection) debugExpiry(ctx context.Context, typ string, token *jwt.Tok
 	if token != nil {
 		if expires {
 			if left < 0 {
-				c.logger.Debug(ctx, "%s token expired %s ago", typ, -left)
+				c.logger.Debug(ctx, "OCM auth: %s token expired %s ago", typ, -left)
 			} else if left > 0 {
-				c.logger.Debug(ctx, "%s token expires in %s", typ, left)
+				c.logger.Debug(ctx, "OCM auth: %s token expires in %s", typ, left)
 			} else {
-				c.logger.Debug(ctx, "%s token expired just now", typ)
+				c.logger.Debug(ctx, "OCM auth: %s token expired just now", typ)
 			}
 		}
 	} else {
-		c.logger.Debug(ctx, "%s token isn't available", typ)
+		c.logger.Debug(ctx, "OCM auth: %s token isn't available", typ)
 	}
 }
 
