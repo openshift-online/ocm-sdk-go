@@ -148,6 +148,7 @@ const (
 
 // Array of labels added to token metrics:
 var tokenMetricsLabels = []string{
+	metricsAttemptLabel,
 	metricsCodeLabel,
 }
 
