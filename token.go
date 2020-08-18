@@ -429,15 +429,14 @@ func tokenExpiry(token *jwt.Token, now time.Time) (expires bool,
 		err = fmt.Errorf("expected map claims bug got %T", claims)
 		return
 	}
+	var exp float64
 	claim, ok := claims["exp"]
-	if !ok {
-		err = fmt.Errorf("token doesn't contain the 'exp' claim")
-		return
-	}
-	exp, ok := claim.(float64)
-	if !ok {
-		err = fmt.Errorf("expected floating point 'exp' but got %T", claim)
-		return
+	if ok {
+		exp, ok = claim.(float64)
+		if !ok {
+			err = fmt.Errorf("expected floating point 'exp' but got %T", claim)
+			return
+		}
 	}
 	if exp == 0 {
 		expires = false
