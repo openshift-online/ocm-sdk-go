@@ -28,6 +28,8 @@ import (
 	. "github.com/onsi/gomega" // nolint
 
 	"github.com/onsi/gomega/ghttp"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/testutil"
 )
 
 var _ = Describe("Tokens", func() {
@@ -37,6 +39,11 @@ var _ = Describe("Tokens", func() {
 
 	// Logger used during the tests:
 	var logger Logger
+
+	// Metrics subsystem - value doesn't matter but configuring it enables
+	// prometheus exporting, exercising the counter increment functionality
+	// (e.g. will catch inconsistent labels).
+	metrics := "test_subsystem"
 
 	BeforeEach(func() {
 		var err error
@@ -76,6 +83,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(refreshToken).
@@ -106,6 +114,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(refreshToken).
@@ -141,6 +150,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(expiredAccess, refreshToken).
@@ -171,6 +181,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(firstAccess, refreshToken).
@@ -191,6 +202,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(accessToken).
@@ -210,6 +222,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(accessToken).
@@ -229,6 +242,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(refreshToken).
@@ -264,6 +278,7 @@ var _ = Describe("Tokens", func() {
 				// Create the connection:
 				connection, err := NewConnectionBuilder().
 					Logger(logger).
+					Metrics(metrics).
 					TokenURL(oidServer.URL()).
 					URL(apiServer.URL()).
 					Tokens(refreshToken).
@@ -302,6 +317,7 @@ var _ = Describe("Tokens", func() {
 				// Create the connection:
 				connection, err := NewConnectionBuilder().
 					Logger(logger).
+					Metrics(metrics).
 					TokenURL(oidServer.URL()).
 					URL(apiServer.URL()).
 					Tokens(refreshToken).
@@ -340,6 +356,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(expiredAccess, refreshToken).
@@ -376,6 +393,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				User("myuser", "mypassword").
@@ -411,6 +429,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				User("myuser", "mypassword").
@@ -451,6 +470,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				User("myuser", "mypassword").
@@ -491,6 +511,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				User("myuser", "mypassword").
@@ -521,6 +542,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				User("baduser", "mypassword").
@@ -545,6 +567,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				User("myuser", "badpassword").
@@ -578,6 +601,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				User("myuser", "mypassword").
@@ -605,6 +629,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(accessToken).
@@ -626,6 +651,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(accessToken).
@@ -658,6 +684,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
@@ -693,6 +720,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
@@ -733,6 +761,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
@@ -773,6 +802,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
@@ -803,6 +833,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("badclient", "mysecret").
@@ -827,6 +858,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("myclient", "badsecret").
@@ -861,6 +893,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
@@ -897,6 +930,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
@@ -950,6 +984,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(refreshToken).
@@ -962,6 +997,13 @@ var _ = Describe("Tokens", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(returnedAccess).ToNot(BeEmpty())
 			Expect(returnedRefresh).ToNot(BeEmpty())
+
+			expectedLabels := prometheus.Labels{
+				"attempt": "2",
+				"code":    "502",
+			}
+			counter := connection.tokenCountMetric.With(expectedLabels)
+			Expect(testutil.ToFloat64(counter)).To(Equal(1.0))
 		})
 		It("Test no retry when status is not http 5xx", func() {
 			// Generate tokens:
@@ -996,6 +1038,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
+				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				Tokens(refreshToken).
