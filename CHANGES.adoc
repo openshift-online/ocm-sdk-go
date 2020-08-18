@@ -3,10 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.121 Aug 18 2020 BROKEN
+== 0.1.121 Aug 18 2020
 
-- Better logging and metrics when retrying SSO 
-  BROKEN, DO NOT USE THIS VERSION: causes panic "inconsistent label cardinality".
+- Better logging and metrics when retrying SSO
+- Assume expiration is 0 when missing in the token
 
 == 0.1.120 Aug 13 2020
 
