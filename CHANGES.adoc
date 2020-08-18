@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.122 Aug 18 2020 BROKEN
+
+- Fix panic from unexpected prometheus label
+
 == 0.1.121 Aug 18 2020 BROKEN
 
 - Better logging and metrics when retrying SSO 
