@@ -140,6 +140,7 @@ func (c *Connection) GetAPIServiceLabelFromPath(path string) string {
 // Names of the labels added to metrics:
 const (
 	metricsAPIServiceLabel = "apiservice"
+	metricsAttemptLabel    = "attempt"
 	metricsCodeLabel       = "code"
 	metricsMethodLabel     = "method"
 	metricsPathLabel       = "path"
