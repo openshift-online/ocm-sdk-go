@@ -71,7 +71,7 @@ func (c *Connection) TokensContext(ctx context.Context) (access, refresh string,
 			return backoff.Permanent(err)
 		}
 
-		if attempt > 0 {
+		if attempt > 1 {
 			c.logger.Info(ctx, "OCM auth: got tokens on attempt %d.", attempt)
 		} else {
 			c.logger.Debug(ctx, "OCM auth: got tokens on attempt %d.", attempt)
