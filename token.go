@@ -23,6 +23,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -32,7 +33,7 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/openshift-online/ocm-sdk-go/internal"
 )
 
@@ -99,7 +100,7 @@ func (c *Connection) tokensContext(
 	var accessExpires bool
 	var accessLeft time.Duration
 	if c.accessToken != nil {
-		accessExpires, accessLeft, err = tokenExpiry(c.accessToken, now)
+		accessExpires, accessLeft, err = GetTokenExpiry(c.accessToken, now)
 		if err != nil {
 			return
 		}
@@ -107,7 +108,7 @@ func (c *Connection) tokensContext(
 	var refreshExpires bool
 	var refreshLeft time.Duration
 	if c.refreshToken != nil {
-		refreshExpires, refreshLeft, err = tokenExpiry(c.refreshToken, now)
+		refreshExpires, refreshLeft, err = GetTokenExpiry(c.refreshToken, now)
 		if err != nil {
 			return
 		}
@@ -421,8 +422,8 @@ func (c *Connection) debugExpiry(ctx context.Context, typ string, token *jwt.Tok
 	}
 }
 
-// tokenExpiry determines if the given token expires, and the time that remains till it expires.
-func tokenExpiry(token *jwt.Token, now time.Time) (expires bool,
+// GetTokenExpiry determines if the given token expires, and the time that remains till it expires.
+func GetTokenExpiry(token *jwt.Token, now time.Time) (expires bool,
 	left time.Duration, err error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
