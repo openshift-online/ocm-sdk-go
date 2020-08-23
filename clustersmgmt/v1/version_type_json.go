@@ -64,6 +64,14 @@ func writeVersion(object *Version, stream *jsoniter.Stream) {
 		stream.WriteString(*object.href)
 		count++
 	}
+	if object.channelGroup != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("channel_group")
+		stream.WriteString(*object.channelGroup)
+		count++
+	}
 	if object.default_ != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -113,6 +121,9 @@ func readVersion(iterator *jsoniter.Iterator) *Version {
 		case "href":
 			value := iterator.ReadString()
 			object.href = &value
+		case "channel_group":
+			value := iterator.ReadString()
+			object.channelGroup = &value
 		case "default":
 			value := iterator.ReadBool()
 			object.default_ = &value
