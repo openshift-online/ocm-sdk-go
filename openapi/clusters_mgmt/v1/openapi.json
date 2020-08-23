@@ -522,6 +522,93 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/cloud_providers/{cloud_provider_id}/available_regions": {
+      "post": {
+        "description": "Retrieves the list of available regions of the cloud provider.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.\n",
+        "parameters": [
+          {
+            "name": "cloud_provider_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AWS"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of cloud regions.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CloudRegion"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/cloud_providers/{cloud_provider_id}/regions": {
       "get": {
         "description": "Retrieves the list of regions of the cloud provider.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of regions\nof the provider.\n",
@@ -5703,6 +5790,10 @@
           },
           "href": {
             "description": "Self link.\n",
+            "type": "string"
+          },
+          "channel_group": {
+            "description": "ChannelGroup is the name of the group where this image belongs.\nChannelGroup is a mechanism to partition the images to different groups,\neach image belongs to only a single group.\n",
             "type": "string"
           },
           "default": {

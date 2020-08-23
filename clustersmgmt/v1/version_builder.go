@@ -23,11 +23,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an _OpenShift_ version.
 type VersionBuilder struct {
-	id       *string
-	href     *string
-	link     bool
-	default_ *bool
-	enabled  *bool
+	id           *string
+	href         *string
+	link         bool
+	channelGroup *string
+	default_     *bool
+	enabled      *bool
 }
 
 // NewVersion creates a new builder of 'version' objects.
@@ -50,6 +51,14 @@ func (b *VersionBuilder) HREF(value string) *VersionBuilder {
 // Link sets the flag that indicates if this is a link.
 func (b *VersionBuilder) Link(value bool) *VersionBuilder {
 	b.link = value
+	return b
+}
+
+// ChannelGroup sets the value of the 'channel_group' attribute to the given value.
+//
+//
+func (b *VersionBuilder) ChannelGroup(value string) *VersionBuilder {
+	b.channelGroup = &value
 	return b
 }
 
@@ -77,6 +86,7 @@ func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
 	b.id = object.id
 	b.href = object.href
 	b.link = object.link
+	b.channelGroup = object.channelGroup
 	b.default_ = object.default_
 	b.enabled = object.enabled
 	return b
@@ -88,6 +98,7 @@ func (b *VersionBuilder) Build() (object *Version, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	object.channelGroup = b.channelGroup
 	object.default_ = b.default_
 	object.enabled = b.enabled
 	return

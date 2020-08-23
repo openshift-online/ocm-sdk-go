@@ -35,11 +35,12 @@ const VersionNilKind = "VersionNil"
 //
 // Representation of an _OpenShift_ version.
 type Version struct {
-	id       *string
-	href     *string
-	link     bool
-	default_ *bool
-	enabled  *bool
+	id           *string
+	href         *string
+	link         bool
+	channelGroup *string
+	default_     *bool
+	enabled      *bool
 }
 
 // Kind returns the name of the type of the object.
@@ -97,9 +98,37 @@ func (o *Version) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Version) Empty() bool {
 	return o == nil || (o.id == nil &&
+		o.channelGroup == nil &&
 		o.default_ == nil &&
 		o.enabled == nil &&
 		true)
+}
+
+// ChannelGroup returns the value of the 'channel_group' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// ChannelGroup is the name of the group where this image belongs.
+// ChannelGroup is a mechanism to partition the images to different groups,
+// each image belongs to only a single group.
+func (o *Version) ChannelGroup() string {
+	if o != nil && o.channelGroup != nil {
+		return *o.channelGroup
+	}
+	return ""
+}
+
+// GetChannelGroup returns the value of the 'channel_group' attribute and
+// a flag indicating if the attribute has a value.
+//
+// ChannelGroup is the name of the group where this image belongs.
+// ChannelGroup is a mechanism to partition the images to different groups,
+// each image belongs to only a single group.
+func (o *Version) GetChannelGroup() (value string, ok bool) {
+	ok = o != nil && o.channelGroup != nil
+	if ok {
+		value = *o.channelGroup
+	}
+	return
 }
 
 // Default returns the value of the 'default' attribute, or
