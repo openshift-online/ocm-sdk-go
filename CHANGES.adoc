@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.124 Aug 28 2020
+
+- Set token expiry function public
+- Allow auth header of type AccessToken
+
 == 0.1.123 Aug 23 2020
 
 - Remove get tokens on first attempt log entry
