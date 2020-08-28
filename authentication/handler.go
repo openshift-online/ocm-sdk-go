@@ -330,37 +330,44 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	typ := matches[1]
 	bearer := matches[2]
-	if !strings.EqualFold(typ, "Bearer") {
-		h.sendError(
-			w, r,
-			"Authentication type '%s' isn't supported",
-			typ,
-		)
-		return
+
+	if strings.EqualFold(typ, "AccessToken") {
+		// Set JWT to nil since there is an AccessToken authorization header
+		ctx = ContextWithToken(ctx, nil)
+	} else {
+		if !strings.EqualFold(typ, "Bearer") {
+			h.sendError(
+				w, r,
+				"Authentication type '%s' isn't supported",
+				typ,
+			)
+			return
+		}
+
+		// Use the JWT library to verify that the token is correctly signed and that the basic
+		// claims are correct:
+		token, claims, ok := h.checkToken(w, r, bearer)
+		if !ok {
+			return
+		}
+
+		// The library that we use considers tokens valid if the claims that it checks don't exist,
+		// but we want to reject those tokens, so we need to do some additional validations:
+		ok = h.checkClaims(w, r, claims)
+		if !ok {
+			return
+		}
+
+		// Check if the claims match at least one of the ACL items:
+		ok = h.checkACL(w, r, claims)
+		if !ok {
+			return
+		}
+
+		// Add the token to the context:
+		ctx = ContextWithToken(ctx, token)
 	}
 
-	// Use the JWT library to verify that the token is correctly signed and that the basic
-	// claims are correct:
-	token, claims, ok := h.checkToken(w, r, bearer)
-	if !ok {
-		return
-	}
-
-	// The library that we use considers tokens valid if the claims that it checks don't exist,
-	// but we want to reject those tokens, so we need to do some additional validations:
-	ok = h.checkClaims(w, r, claims)
-	if !ok {
-		return
-	}
-
-	// Check if the claims match at least one of the ACL items:
-	ok = h.checkACL(w, r, claims)
-	if !ok {
-		return
-	}
-
-	// Add the token to the context:
-	ctx = ContextWithToken(ctx, token)
 	r = r.WithContext(ctx)
 
 	// Call the next handler:
