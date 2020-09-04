@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.125 Sep 4 2020
+
+Update to model v0.0.78
+** Added New DNS_READY
+** version: Add moa_enabled flag
+
 == 0.1.124 Aug 28 2020
 
 - Set token expiry function public

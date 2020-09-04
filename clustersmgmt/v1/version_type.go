@@ -38,6 +38,7 @@ type Version struct {
 	id           *string
 	href         *string
 	link         bool
+	moaEnabled   *bool
 	channelGroup *string
 	default_     *bool
 	enabled      *bool
@@ -98,10 +99,34 @@ func (o *Version) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Version) Empty() bool {
 	return o == nil || (o.id == nil &&
+		o.moaEnabled == nil &&
 		o.channelGroup == nil &&
 		o.default_ == nil &&
 		o.enabled == nil &&
 		true)
+}
+
+// MOAEnabled returns the value of the 'MOA_enabled' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// MOAEnabled indicates whether this version can be used to create MOA clusters.
+func (o *Version) MOAEnabled() bool {
+	if o != nil && o.moaEnabled != nil {
+		return *o.moaEnabled
+	}
+	return false
+}
+
+// GetMOAEnabled returns the value of the 'MOA_enabled' attribute and
+// a flag indicating if the attribute has a value.
+//
+// MOAEnabled indicates whether this version can be used to create MOA clusters.
+func (o *Version) GetMOAEnabled() (value bool, ok bool) {
+	ok = o != nil && o.moaEnabled != nil
+	if ok {
+		value = *o.moaEnabled
+	}
+	return
 }
 
 // ChannelGroup returns the value of the 'channel_group' attribute, or

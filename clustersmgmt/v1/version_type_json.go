@@ -64,6 +64,14 @@ func writeVersion(object *Version, stream *jsoniter.Stream) {
 		stream.WriteString(*object.href)
 		count++
 	}
+	if object.moaEnabled != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("moa_enabled")
+		stream.WriteBool(*object.moaEnabled)
+		count++
+	}
 	if object.channelGroup != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -121,6 +129,9 @@ func readVersion(iterator *jsoniter.Iterator) *Version {
 		case "href":
 			value := iterator.ReadString()
 			object.href = &value
+		case "moa_enabled":
+			value := iterator.ReadBool()
+			object.moaEnabled = &value
 		case "channel_group":
 			value := iterator.ReadString()
 			object.channelGroup = &value

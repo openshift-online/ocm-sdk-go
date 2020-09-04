@@ -71,6 +71,7 @@ type ClusterBuilder struct {
 	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantListBuilder
 	byoc                              *bool
 	dns                               *DNSBuilder
+	dnsReady                          *bool
 	addons                            *AddOnInstallationListBuilder
 	cloudProvider                     *CloudProviderBuilder
 	clusterAdminEnabled               *bool
@@ -163,6 +164,14 @@ func (b *ClusterBuilder) BYOC(value bool) *ClusterBuilder {
 // DNS settings of the cluster.
 func (b *ClusterBuilder) DNS(value *DNSBuilder) *ClusterBuilder {
 	b.dns = value
+	return b
+}
+
+// DNSReady sets the value of the 'DNS_ready' attribute to the given value.
+//
+//
+func (b *ClusterBuilder) DNSReady(value bool) *ClusterBuilder {
+	b.dnsReady = &value
 	return b
 }
 
@@ -453,6 +462,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.dns = nil
 	}
+	b.dnsReady = object.dnsReady
 	if object.addons != nil {
 		b.addons = NewAddOnInstallationList().Copy(object.addons)
 	} else {
@@ -592,6 +602,7 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			return
 		}
 	}
+	object.dnsReady = b.dnsReady
 	if b.addons != nil {
 		object.addons, err = b.addons.Build()
 		if err != nil {
