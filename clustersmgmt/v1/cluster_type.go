@@ -83,6 +83,7 @@ type Cluster struct {
 	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantList
 	byoc                              *bool
 	dns                               *DNS
+	dnsReady                          *bool
 	addons                            *AddOnInstallationList
 	cloudProvider                     *CloudProvider
 	clusterAdminEnabled               *bool
@@ -172,6 +173,7 @@ func (o *Cluster) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.awsInfrastructureAccessRoleGrants.Len() == 0 &&
 		o.byoc == nil &&
+		o.dnsReady == nil &&
 		o.addons.Len() == 0 &&
 		o.clusterAdminEnabled == nil &&
 		o.creationTimestamp == nil &&
@@ -303,6 +305,29 @@ func (o *Cluster) GetDNS() (value *DNS, ok bool) {
 	ok = o != nil && o.dns != nil
 	if ok {
 		value = o.dns
+	}
+	return
+}
+
+// DNSReady returns the value of the 'DNS_ready' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Provisioner DNS Ready Status
+func (o *Cluster) DNSReady() bool {
+	if o != nil && o.dnsReady != nil {
+		return *o.dnsReady
+	}
+	return false
+}
+
+// GetDNSReady returns the value of the 'DNS_ready' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Provisioner DNS Ready Status
+func (o *Cluster) GetDNSReady() (value bool, ok bool) {
+	ok = o != nil && o.dnsReady != nil
+	if ok {
+		value = *o.dnsReady
 	}
 	return
 }

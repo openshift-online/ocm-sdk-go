@@ -26,6 +26,7 @@ type VersionBuilder struct {
 	id           *string
 	href         *string
 	link         bool
+	moaEnabled   *bool
 	channelGroup *string
 	default_     *bool
 	enabled      *bool
@@ -51,6 +52,14 @@ func (b *VersionBuilder) HREF(value string) *VersionBuilder {
 // Link sets the flag that indicates if this is a link.
 func (b *VersionBuilder) Link(value bool) *VersionBuilder {
 	b.link = value
+	return b
+}
+
+// MOAEnabled sets the value of the 'MOA_enabled' attribute to the given value.
+//
+//
+func (b *VersionBuilder) MOAEnabled(value bool) *VersionBuilder {
+	b.moaEnabled = &value
 	return b
 }
 
@@ -86,6 +95,7 @@ func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
 	b.id = object.id
 	b.href = object.href
 	b.link = object.link
+	b.moaEnabled = object.moaEnabled
 	b.channelGroup = object.channelGroup
 	b.default_ = object.default_
 	b.enabled = object.enabled
@@ -98,6 +108,7 @@ func (b *VersionBuilder) Build() (object *Version, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	object.moaEnabled = b.moaEnabled
 	object.channelGroup = b.channelGroup
 	object.default_ = b.default_
 	object.enabled = b.enabled
