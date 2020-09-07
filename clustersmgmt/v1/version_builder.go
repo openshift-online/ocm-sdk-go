@@ -23,13 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an _OpenShift_ version.
 type VersionBuilder struct {
-	id           *string
-	href         *string
-	link         bool
-	moaEnabled   *bool
-	channelGroup *string
-	default_     *bool
-	enabled      *bool
+	id                *string
+	href              *string
+	link              bool
+	moaEnabled        *bool
+	availableUpgrades []string
+	channelGroup      *string
+	default_          *bool
+	enabled           *bool
 }
 
 // NewVersion creates a new builder of 'version' objects.
@@ -60,6 +61,15 @@ func (b *VersionBuilder) Link(value bool) *VersionBuilder {
 //
 func (b *VersionBuilder) MOAEnabled(value bool) *VersionBuilder {
 	b.moaEnabled = &value
+	return b
+}
+
+// AvailableUpgrades sets the value of the 'available_upgrades' attribute to the given values.
+//
+//
+func (b *VersionBuilder) AvailableUpgrades(values ...string) *VersionBuilder {
+	b.availableUpgrades = make([]string, len(values))
+	copy(b.availableUpgrades, values)
 	return b
 }
 
@@ -96,6 +106,12 @@ func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
 	b.href = object.href
 	b.link = object.link
 	b.moaEnabled = object.moaEnabled
+	if object.availableUpgrades != nil {
+		b.availableUpgrades = make([]string, len(object.availableUpgrades))
+		copy(b.availableUpgrades, object.availableUpgrades)
+	} else {
+		b.availableUpgrades = nil
+	}
 	b.channelGroup = object.channelGroup
 	b.default_ = object.default_
 	b.enabled = object.enabled
@@ -109,6 +125,10 @@ func (b *VersionBuilder) Build() (object *Version, err error) {
 	object.href = b.href
 	object.link = b.link
 	object.moaEnabled = b.moaEnabled
+	if b.availableUpgrades != nil {
+		object.availableUpgrades = make([]string, len(b.availableUpgrades))
+		copy(object.availableUpgrades, b.availableUpgrades)
+	}
 	object.channelGroup = b.channelGroup
 	object.default_ = b.default_
 	object.enabled = b.enabled

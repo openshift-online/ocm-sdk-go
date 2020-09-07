@@ -4205,6 +4205,30 @@
           }
         }
       },
+      "CCS": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'CCS' if this is a complete object or 'CCSLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "disable_scp_checks": {
+            "description": "Indicates if cloud permissions checks are disabled,\nwhen attempting installation of the cluster.\n",
+            "type": "boolean"
+          },
+          "enabled": {
+            "description": "Indicates if Customer Cloud Subscription is enabled on the cluster.\n",
+            "type": "boolean"
+          }
+        }
+      },
       "CPUTotalNodeRoleOSMetricNode": {
         "description": "Representation of information from telemetry about a the CPU capacity by node role and OS.\n",
         "properties": {
@@ -4611,6 +4635,10 @@
           "byoc": {
             "description": "Flag indicating if the cluster is BYOC (customer cloud subscription).\n",
             "type": "boolean"
+          },
+          "ccs": {
+            "description": "Contains configuration of a Customer Cloud Subscription cluster.\n",
+            "$ref": "#/components/schemas/CCS"
           },
           "dns": {
             "description": "DNS settings of the cluster.\n",
@@ -5799,6 +5827,13 @@
           "moa_enabled": {
             "description": "MOAEnabled indicates whether this version can be used to create MOA clusters.\n",
             "type": "boolean"
+          },
+          "available_upgrades": {
+            "description": "AvailableUpgrades is the list of versions this version can be upgraded to.\n",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "channel_group": {
             "description": "ChannelGroup is the name of the group where this image belongs.\nChannelGroup is a mechanism to partition the images to different groups,\neach image belongs to only a single group.\n",

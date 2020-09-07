@@ -82,6 +82,7 @@ type Cluster struct {
 	aws                               *AWS
 	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantList
 	byoc                              *bool
+	ccs                               *CCS
 	dns                               *DNS
 	dnsReady                          *bool
 	addons                            *AddOnInstallationList
@@ -282,6 +283,29 @@ func (o *Cluster) GetBYOC() (value bool, ok bool) {
 	ok = o != nil && o.byoc != nil
 	if ok {
 		value = *o.byoc
+	}
+	return
+}
+
+// CCS returns the value of the 'CCS' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Contains configuration of a Customer Cloud Subscription cluster.
+func (o *Cluster) CCS() *CCS {
+	if o == nil {
+		return nil
+	}
+	return o.ccs
+}
+
+// GetCCS returns the value of the 'CCS' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Contains configuration of a Customer Cloud Subscription cluster.
+func (o *Cluster) GetCCS() (value *CCS, ok bool) {
+	ok = o != nil && o.ccs != nil
+	if ok {
+		value = o.ccs
 	}
 	return
 }

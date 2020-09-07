@@ -101,6 +101,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteBool(*object.byoc)
 		count++
 	}
+	if object.ccs != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("ccs")
+		writeCCS(object.ccs, stream)
+		count++
+	}
 	if object.dns != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -448,6 +456,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "byoc":
 			value := iterator.ReadBool()
 			object.byoc = &value
+		case "ccs":
+			value := readCCS(iterator)
+			object.ccs = value
 		case "dns":
 			value := readDNS(iterator)
 			object.dns = value
