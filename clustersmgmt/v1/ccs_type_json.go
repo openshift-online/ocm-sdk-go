@@ -26,16 +26,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalVersion writes a value of the 'version' type to the given writer.
-func MarshalVersion(object *Version, writer io.Writer) error {
+// MarshalCCS writes a value of the 'CCS' type to the given writer.
+func MarshalCCS(object *CCS, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeVersion(object, stream)
+	writeCCS(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeVersion writes a value of the 'version' type to the given stream.
-func writeVersion(object *Version, stream *jsoniter.Stream) {
+// writeCCS writes a value of the 'CCS' type to the given stream.
+func writeCCS(object *CCS, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	if count > 0 {
@@ -43,9 +43,9 @@ func writeVersion(object *Version, stream *jsoniter.Stream) {
 	}
 	stream.WriteObjectField("kind")
 	if object.link {
-		stream.WriteString(VersionLinkKind)
+		stream.WriteString(CCSLinkKind)
 	} else {
-		stream.WriteString(VersionKind)
+		stream.WriteString(CCSKind)
 	}
 	count++
 	if object.id != nil {
@@ -64,36 +64,12 @@ func writeVersion(object *Version, stream *jsoniter.Stream) {
 		stream.WriteString(*object.href)
 		count++
 	}
-	if object.moaEnabled != nil {
+	if object.disableSCPChecks != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("moa_enabled")
-		stream.WriteBool(*object.moaEnabled)
-		count++
-	}
-	if object.availableUpgrades != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("available_upgrades")
-		writeStringList(object.availableUpgrades, stream)
-		count++
-	}
-	if object.channelGroup != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("channel_group")
-		stream.WriteString(*object.channelGroup)
-		count++
-	}
-	if object.default_ != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("default")
-		stream.WriteBool(*object.default_)
+		stream.WriteObjectField("disable_scp_checks")
+		stream.WriteBool(*object.disableSCPChecks)
 		count++
 	}
 	if object.enabled != nil {
@@ -107,21 +83,21 @@ func writeVersion(object *Version, stream *jsoniter.Stream) {
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalVersion reads a value of the 'version' type from the given
+// UnmarshalCCS reads a value of the 'CCS' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalVersion(source interface{}) (object *Version, err error) {
+func UnmarshalCCS(source interface{}) (object *CCS, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readVersion(iterator)
+	object = readCCS(iterator)
 	err = iterator.Error
 	return
 }
 
-// readVersion reads a value of the 'version' type from the given iterator.
-func readVersion(iterator *jsoniter.Iterator) *Version {
-	object := &Version{}
+// readCCS reads a value of the 'CCS' type from the given iterator.
+func readCCS(iterator *jsoniter.Iterator) *CCS {
+	object := &CCS{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
@@ -130,25 +106,16 @@ func readVersion(iterator *jsoniter.Iterator) *Version {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == VersionLinkKind
+			object.link = value == CCSLinkKind
 		case "id":
 			value := iterator.ReadString()
 			object.id = &value
 		case "href":
 			value := iterator.ReadString()
 			object.href = &value
-		case "moa_enabled":
+		case "disable_scp_checks":
 			value := iterator.ReadBool()
-			object.moaEnabled = &value
-		case "available_upgrades":
-			value := readStringList(iterator)
-			object.availableUpgrades = value
-		case "channel_group":
-			value := iterator.ReadString()
-			object.channelGroup = &value
-		case "default":
-			value := iterator.ReadBool()
-			object.default_ = &value
+			object.disableSCPChecks = &value
 		case "enabled":
 			value := iterator.ReadBool()
 			object.enabled = &value

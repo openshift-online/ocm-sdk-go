@@ -70,6 +70,7 @@ type ClusterBuilder struct {
 	aws                               *AWSBuilder
 	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantListBuilder
 	byoc                              *bool
+	ccs                               *CCSBuilder
 	dns                               *DNSBuilder
 	dnsReady                          *bool
 	addons                            *AddOnInstallationListBuilder
@@ -156,6 +157,14 @@ func (b *ClusterBuilder) AWSInfrastructureAccessRoleGrants(value *AWSInfrastruct
 //
 func (b *ClusterBuilder) BYOC(value bool) *ClusterBuilder {
 	b.byoc = &value
+	return b
+}
+
+// CCS sets the value of the 'CCS' attribute to the given value.
+//
+//
+func (b *ClusterBuilder) CCS(value *CCSBuilder) *ClusterBuilder {
+	b.ccs = value
 	return b
 }
 
@@ -457,6 +466,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.awsInfrastructureAccessRoleGrants = nil
 	}
 	b.byoc = object.byoc
+	if object.ccs != nil {
+		b.ccs = NewCCS().Copy(object.ccs)
+	} else {
+		b.ccs = nil
+	}
 	if object.dns != nil {
 		b.dns = NewDNS().Copy(object.dns)
 	} else {
@@ -596,6 +610,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		}
 	}
 	object.byoc = b.byoc
+	if b.ccs != nil {
+		object.ccs, err = b.ccs.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.dns != nil {
 		object.dns, err = b.dns.Build()
 		if err != nil {

@@ -35,13 +35,14 @@ const VersionNilKind = "VersionNil"
 //
 // Representation of an _OpenShift_ version.
 type Version struct {
-	id           *string
-	href         *string
-	link         bool
-	moaEnabled   *bool
-	channelGroup *string
-	default_     *bool
-	enabled      *bool
+	id                *string
+	href              *string
+	link              bool
+	moaEnabled        *bool
+	availableUpgrades []string
+	channelGroup      *string
+	default_          *bool
+	enabled           *bool
 }
 
 // Kind returns the name of the type of the object.
@@ -100,6 +101,7 @@ func (o *Version) GetHREF() (value string, ok bool) {
 func (o *Version) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.moaEnabled == nil &&
+		len(o.availableUpgrades) == 0 &&
 		o.channelGroup == nil &&
 		o.default_ == nil &&
 		o.enabled == nil &&
@@ -125,6 +127,29 @@ func (o *Version) GetMOAEnabled() (value bool, ok bool) {
 	ok = o != nil && o.moaEnabled != nil
 	if ok {
 		value = *o.moaEnabled
+	}
+	return
+}
+
+// AvailableUpgrades returns the value of the 'available_upgrades' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// AvailableUpgrades is the list of versions this version can be upgraded to.
+func (o *Version) AvailableUpgrades() []string {
+	if o == nil {
+		return nil
+	}
+	return o.availableUpgrades
+}
+
+// GetAvailableUpgrades returns the value of the 'available_upgrades' attribute and
+// a flag indicating if the attribute has a value.
+//
+// AvailableUpgrades is the list of versions this version can be upgraded to.
+func (o *Version) GetAvailableUpgrades() (value []string, ok bool) {
+	ok = o != nil && o.availableUpgrades != nil
+	if ok {
+		value = o.availableUpgrades
 	}
 	return
 }
