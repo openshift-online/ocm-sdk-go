@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.126 Sep 7 2020
+
+Update to model v0.0.79
+** Add 'available_upgrades' list to version type
+** Add CCS type and Attribute to Cluster type
+
 == 0.1.125 Sep 4 2020
 
 Update to model v0.0.78
