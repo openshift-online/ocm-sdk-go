@@ -265,6 +265,69 @@
           }
         }
       }
+    },
+    "/api/authorizations/v1/self_terms_review": {
+      "post": {
+        "description": "Reviews a user's status of Terms.\n",
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TermsReviewResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/authorizations/v1/terms_review": {
+      "post": {
+        "description": "Reviews a user's status of Terms.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TermsReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TermsReviewResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -565,6 +628,40 @@
         "properties": {
           "result": {
             "type": "string"
+          }
+        }
+      },
+      "TermsReviewRequest": {
+        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.\n",
+        "properties": {
+          "account_username": {
+            "description": "Defines the username of the account of which Terms is being reviewed.\n",
+            "type": "string"
+          }
+        }
+      },
+      "TermsReviewResponse": {
+        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview response.\n",
+        "properties": {
+          "account_id": {
+            "description": "Account ID of requesting user.\n",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "Indicates which Organization the user belongs to.\n",
+            "type": "string"
+          },
+          "redirect_url": {
+            "description": "Optional URL to Red Hat's Terms and Conditions Application if the user has either required or available Terms\nneeds to acknowledge.\n",
+            "type": "string"
+          },
+          "terms_available": {
+            "description": "Defines whether Terms are available.\n",
+            "type": "boolean"
+          },
+          "terms_required": {
+            "description": "Defines whether user is required to accept Terms before using OpenShift Dedicated and Amazon Red Hat OpenShift.\n",
+            "type": "boolean"
           }
         }
       },

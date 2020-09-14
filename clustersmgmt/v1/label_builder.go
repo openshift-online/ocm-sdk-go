@@ -26,6 +26,7 @@ type LabelBuilder struct {
 	id    *string
 	href  *string
 	link  bool
+	key   *string
 	value *string
 }
 
@@ -52,6 +53,14 @@ func (b *LabelBuilder) Link(value bool) *LabelBuilder {
 	return b
 }
 
+// Key sets the value of the 'key' attribute to the given value.
+//
+//
+func (b *LabelBuilder) Key(value string) *LabelBuilder {
+	b.key = &value
+	return b
+}
+
 // Value sets the value of the 'value' attribute to the given value.
 //
 //
@@ -68,6 +77,7 @@ func (b *LabelBuilder) Copy(object *Label) *LabelBuilder {
 	b.id = object.id
 	b.href = object.href
 	b.link = object.link
+	b.key = object.key
 	b.value = object.value
 	return b
 }
@@ -78,6 +88,7 @@ func (b *LabelBuilder) Build() (object *Label, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	object.key = b.key
 	object.value = b.value
 	return
 }

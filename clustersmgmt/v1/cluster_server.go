@@ -47,13 +47,13 @@ type ClusterServer interface {
 
 	// AWSInfrastructureAccessRoleGrants returns the target 'AWS_infrastructure_access_role_grants' resource.
 	//
-	// Refrence to the resource that manages the collection of AWS infrastructure
+	// Reference to the resource that manages the collection of AWS infrastructure
 	// access role grants on this cluster.
 	AWSInfrastructureAccessRoleGrants() AWSInfrastructureAccessRoleGrantsServer
 
 	// Addons returns the target 'add_on_installations' resource.
 	//
-	// Refrence to the resource that manages the collection of add-ons installed on this cluster.
+	// Reference to the resource that manages the collection of add-ons installed on this cluster.
 	Addons() AddOnInstallationsServer
 
 	// Credentials returns the target 'credentials' resource.
@@ -105,6 +105,11 @@ type ClusterServer interface {
 	//
 	// Reference to the resource that manages the detailed status of the cluster.
 	Status() ClusterStatusServer
+
+	// UpgradePolicies returns the target 'upgrade_policies' resource.
+	//
+	// Reference to the resource that manages the collection of upgrade policies defined for this cluster.
+	UpgradePolicies() UpgradePoliciesServer
 }
 
 // ClusterDeleteServerRequest is the request for the 'delete' method.
@@ -301,6 +306,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 			return
 		}
 		dispatchClusterStatus(w, r, target, segments[1:])
+	case "upgrade_policies":
+		target := server.UpgradePolicies()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchUpgradePolicies(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return

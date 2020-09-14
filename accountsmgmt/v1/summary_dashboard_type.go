@@ -17,44 +17,43 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-// LabelKind is the name of the type used to represent objects
-// of type 'label'.
-const LabelKind = "Label"
+// SummaryDashboardKind is the name of the type used to represent objects
+// of type 'summary_dashboard'.
+const SummaryDashboardKind = "SummaryDashboard"
 
-// LabelLinkKind is the name of the type used to represent links
-// to objects of type 'label'.
-const LabelLinkKind = "LabelLink"
+// SummaryDashboardLinkKind is the name of the type used to represent links
+// to objects of type 'summary_dashboard'.
+const SummaryDashboardLinkKind = "SummaryDashboardLink"
 
-// LabelNilKind is the name of the type used to nil references
-// to objects of type 'label'.
-const LabelNilKind = "LabelNil"
+// SummaryDashboardNilKind is the name of the type used to nil references
+// to objects of type 'summary_dashboard'.
+const SummaryDashboardNilKind = "SummaryDashboardNil"
 
-// Label represents the values of the 'label' type.
+// SummaryDashboard represents the values of the 'summary_dashboard' type.
 //
-// Representation of a label in clusterdeployment.
-type Label struct {
-	id    *string
-	href  *string
-	link  bool
-	key   *string
-	value *string
+//
+type SummaryDashboard struct {
+	id      *string
+	href    *string
+	link    bool
+	metrics []*SummaryMetrics
 }
 
 // Kind returns the name of the type of the object.
-func (o *Label) Kind() string {
+func (o *SummaryDashboard) Kind() string {
 	if o == nil {
-		return LabelNilKind
+		return SummaryDashboardNilKind
 	}
 	if o.link {
-		return LabelLinkKind
+		return SummaryDashboardLinkKind
 	}
-	return LabelKind
+	return SummaryDashboardKind
 }
 
 // ID returns the identifier of the object.
-func (o *Label) ID() string {
+func (o *SummaryDashboard) ID() string {
 	if o != nil && o.id != nil {
 		return *o.id
 	}
@@ -63,7 +62,7 @@ func (o *Label) ID() string {
 
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
-func (o *Label) GetID() (value string, ok bool) {
+func (o *SummaryDashboard) GetID() (value string, ok bool) {
 	ok = o != nil && o.id != nil
 	if ok {
 		value = *o.id
@@ -72,12 +71,12 @@ func (o *Label) GetID() (value string, ok bool) {
 }
 
 // Link returns true iif this is a link.
-func (o *Label) Link() bool {
+func (o *SummaryDashboard) Link() bool {
 	return o != nil && o.link
 }
 
 // HREF returns the link to the object.
-func (o *Label) HREF() string {
+func (o *SummaryDashboard) HREF() string {
 	if o != nil && o.href != nil {
 		return *o.href
 	}
@@ -86,7 +85,7 @@ func (o *Label) HREF() string {
 
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
-func (o *Label) GetHREF() (value string, ok bool) {
+func (o *SummaryDashboard) GetHREF() (value string, ok bool) {
 	ok = o != nil && o.href != nil
 	if ok {
 		value = *o.href
@@ -95,96 +94,72 @@ func (o *Label) GetHREF() (value string, ok bool) {
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *Label) Empty() bool {
+func (o *SummaryDashboard) Empty() bool {
 	return o == nil || (o.id == nil &&
-		o.key == nil &&
-		o.value == nil &&
+		len(o.metrics) == 0 &&
 		true)
 }
 
-// Key returns the value of the 'key' attribute, or
+// Metrics returns the value of the 'metrics' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// the key of the label
-func (o *Label) Key() string {
-	if o != nil && o.key != nil {
-		return *o.key
+//
+func (o *SummaryDashboard) Metrics() []*SummaryMetrics {
+	if o == nil {
+		return nil
 	}
-	return ""
+	return o.metrics
 }
 
-// GetKey returns the value of the 'key' attribute and
+// GetMetrics returns the value of the 'metrics' attribute and
 // a flag indicating if the attribute has a value.
 //
-// the key of the label
-func (o *Label) GetKey() (value string, ok bool) {
-	ok = o != nil && o.key != nil
+//
+func (o *SummaryDashboard) GetMetrics() (value []*SummaryMetrics, ok bool) {
+	ok = o != nil && o.metrics != nil
 	if ok {
-		value = *o.key
+		value = o.metrics
 	}
 	return
 }
 
-// Value returns the value of the 'value' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// the value to set in the label
-func (o *Label) Value() string {
-	if o != nil && o.value != nil {
-		return *o.value
-	}
-	return ""
-}
+// SummaryDashboardListKind is the name of the type used to represent list of objects of
+// type 'summary_dashboard'.
+const SummaryDashboardListKind = "SummaryDashboardList"
 
-// GetValue returns the value of the 'value' attribute and
-// a flag indicating if the attribute has a value.
-//
-// the value to set in the label
-func (o *Label) GetValue() (value string, ok bool) {
-	ok = o != nil && o.value != nil
-	if ok {
-		value = *o.value
-	}
-	return
-}
+// SummaryDashboardListLinkKind is the name of the type used to represent links to list
+// of objects of type 'summary_dashboard'.
+const SummaryDashboardListLinkKind = "SummaryDashboardListLink"
 
-// LabelListKind is the name of the type used to represent list of objects of
-// type 'label'.
-const LabelListKind = "LabelList"
+// SummaryDashboardNilKind is the name of the type used to nil lists of objects of
+// type 'summary_dashboard'.
+const SummaryDashboardListNilKind = "SummaryDashboardListNil"
 
-// LabelListLinkKind is the name of the type used to represent links to list
-// of objects of type 'label'.
-const LabelListLinkKind = "LabelListLink"
-
-// LabelNilKind is the name of the type used to nil lists of objects of
-// type 'label'.
-const LabelListNilKind = "LabelListNil"
-
-// LabelList is a list of values of the 'label' type.
-type LabelList struct {
+// SummaryDashboardList is a list of values of the 'summary_dashboard' type.
+type SummaryDashboardList struct {
 	href  *string
 	link  bool
-	items []*Label
+	items []*SummaryDashboard
 }
 
 // Kind returns the name of the type of the object.
-func (l *LabelList) Kind() string {
+func (l *SummaryDashboardList) Kind() string {
 	if l == nil {
-		return LabelListNilKind
+		return SummaryDashboardListNilKind
 	}
 	if l.link {
-		return LabelListLinkKind
+		return SummaryDashboardListLinkKind
 	}
-	return LabelListKind
+	return SummaryDashboardListKind
 }
 
 // Link returns true iif this is a link.
-func (l *LabelList) Link() bool {
+func (l *SummaryDashboardList) Link() bool {
 	return l != nil && l.link
 }
 
 // HREF returns the link to the list.
-func (l *LabelList) HREF() string {
+func (l *SummaryDashboardList) HREF() string {
 	if l != nil && l.href != nil {
 		return *l.href
 	}
@@ -193,7 +168,7 @@ func (l *LabelList) HREF() string {
 
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
-func (l *LabelList) GetHREF() (value string, ok bool) {
+func (l *SummaryDashboardList) GetHREF() (value string, ok bool) {
 	ok = l != nil && l.href != nil
 	if ok {
 		value = *l.href
@@ -202,7 +177,7 @@ func (l *LabelList) GetHREF() (value string, ok bool) {
 }
 
 // Len returns the length of the list.
-func (l *LabelList) Len() int {
+func (l *SummaryDashboardList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -210,13 +185,13 @@ func (l *LabelList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *LabelList) Empty() bool {
+func (l *SummaryDashboardList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *LabelList) Get(i int) *Label {
+func (l *SummaryDashboardList) Get(i int) *SummaryDashboard {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -229,12 +204,12 @@ func (l *LabelList) Get(i int) *Label {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *LabelList) Slice() []*Label {
-	var slice []*Label
+func (l *SummaryDashboardList) Slice() []*SummaryDashboard {
+	var slice []*SummaryDashboard
 	if l == nil {
-		slice = make([]*Label, 0)
+		slice = make([]*SummaryDashboard, 0)
 	} else {
-		slice = make([]*Label, len(l.items))
+		slice = make([]*SummaryDashboard, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -243,7 +218,7 @@ func (l *LabelList) Slice() []*Label {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *LabelList) Each(f func(item *Label) bool) {
+func (l *SummaryDashboardList) Each(f func(item *SummaryDashboard) bool) {
 	if l == nil {
 		return
 	}
@@ -257,7 +232,7 @@ func (l *LabelList) Each(f func(item *Label) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *LabelList) Range(f func(index int, item *Label) bool) {
+func (l *SummaryDashboardList) Range(f func(index int, item *SummaryDashboard) bool) {
 	if l == nil {
 		return
 	}

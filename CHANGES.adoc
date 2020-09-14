@@ -3,6 +3,17 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.127 Sep 14 2020
+
+Update to model v0.0.81
+** Add key to label_type
+** Remove ID from upgrade label
+
+Also included as part of model v0.0.80
+** Add upgrade policy type and resource
+** Add terms review and self terms review
+** Add dashboards summary
+
 == 0.1.126 Sep 7 2020
 
 Update to model v0.0.79
