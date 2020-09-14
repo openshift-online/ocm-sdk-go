@@ -9,7 +9,6 @@ require (
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/grokify/html-strip-tags-go v0.0.0-20200322061010-ea0c1cf2f119
 	github.com/json-iterator/go v1.1.9
-	github.com/kubermatic/glog-logrus v0.0.0-20180829085450-3fa5b9870d1d
 	github.com/onsi/ginkgo v1.11.0
 	github.com/onsi/gomega v1.7.0
 	github.com/prometheus/client_golang v0.9.3
