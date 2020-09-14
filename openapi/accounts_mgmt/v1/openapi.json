@@ -1817,6 +1817,42 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/organizations/{organization_id}/summary_dashboard": {
+      "get": {
+        "description": "Retrieves the details of the organization's summary dashboard.\n",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryDashboard"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/permissions": {
       "post": {
         "description": "Creates a new permission.\n",
@@ -4846,6 +4882,52 @@
           "status": {
             "description": "Status of subscription.\n",
             "type": "string"
+          }
+        }
+      },
+      "SummaryDashboard": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'SummaryDashboard' if this is a complete object or 'SummaryDashboardLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SummaryMetrics"
+            }
+          }
+        }
+      },
+      "SummaryMetrics": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "vector": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SummarySample"
+            }
+          }
+        }
+      },
+      "SummarySample": {
+        "properties": {
+          "time": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "format": "float"
           }
         }
       },

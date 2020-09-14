@@ -111,6 +111,18 @@ func (c *OrganizationClient) ResourceQuota() *ResourceQuotasClient {
 	)
 }
 
+// SummaryDashboard returns the target 'summary_dashboard' resource.
+//
+// Reference to the service that manages the resource quotas for this
+// organization.
+func (c *OrganizationClient) SummaryDashboard() *SummaryDashboardClient {
+	return NewSummaryDashboardClient(
+		c.transport,
+		path.Join(c.path, "summary_dashboard"),
+		path.Join(c.metric, "summary_dashboard"),
+	)
+}
+
 // OrganizationPollRequest is the request for the Poll method.
 type OrganizationPollRequest struct {
 	request    *OrganizationGetRequest

@@ -56,6 +56,12 @@ type OrganizationServer interface {
 	// Reference to the service that manages the resource quotas for this
 	// organization.
 	ResourceQuota() ResourceQuotasServer
+
+	// SummaryDashboard returns the target 'summary_dashboard' resource.
+	//
+	// Reference to the service that manages the resource quotas for this
+	// organization.
+	SummaryDashboard() SummaryDashboardServer
 }
 
 // OrganizationGetServerRequest is the request for the 'get' method.
@@ -170,6 +176,13 @@ func dispatchOrganization(w http.ResponseWriter, r *http.Request, server Organiz
 			return
 		}
 		dispatchResourceQuotas(w, r, target, segments[1:])
+	case "summary_dashboard":
+		target := server.SummaryDashboard()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchSummaryDashboard(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return

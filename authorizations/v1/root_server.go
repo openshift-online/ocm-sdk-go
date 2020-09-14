@@ -57,6 +57,18 @@ type Server interface {
 	//
 	// Reference to the resource that is used to submit self capability review requests.
 	SelfCapabilityReview() SelfCapabilityReviewServer
+
+	// SelfTermsReview returns the target 'self_terms_review' resource.
+	//
+	// Reference to the resource that is used to submit Red Hat's Terms and Conditions
+	// for using OpenShift Dedicated and Amazon Red Hat OpenShift self-review requests.
+	SelfTermsReview() SelfTermsReviewServer
+
+	// TermsReview returns the target 'terms_review' resource.
+	//
+	// Reference to the resource that is used to submit Red Hat's Terms and Conditions
+	// for using OpenShift Dedicated and Amazon Red Hat OpenShift review requests.
+	TermsReview() TermsReviewServer
 }
 
 // Dispatch navigates the servers tree rooted at the given server
@@ -113,6 +125,20 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchSelfCapabilityReview(w, r, target, segments[1:])
+	case "self_terms_review":
+		target := server.SelfTermsReview()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchSelfTermsReview(w, r, target, segments[1:])
+	case "terms_review":
+		target := server.TermsReview()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchTermsReview(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return

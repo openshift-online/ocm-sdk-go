@@ -26,7 +26,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
@@ -34,20 +33,20 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// ClusterClient is the client of the 'cluster' resource.
+// UpgradePolicyClient is the client of the 'upgrade_policy' resource.
 //
-// Manages a specific cluster.
-type ClusterClient struct {
+// Manages a specific upgrade policy.
+type UpgradePolicyClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewClusterClient creates a new client for the 'cluster'
+// NewUpgradePolicyClient creates a new client for the 'upgrade_policy'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClusterClient(transport http.RoundTripper, path string, metric string) *ClusterClient {
-	return &ClusterClient{
+func NewUpgradePolicyClient(transport http.RoundTripper, path string, metric string) *UpgradePolicyClient {
+	return &UpgradePolicyClient{
 		transport: transport,
 		path:      path,
 		metric:    metric,
@@ -56,9 +55,9 @@ func NewClusterClient(transport http.RoundTripper, path string, metric string) *
 
 // Delete creates a request for the 'delete' method.
 //
-// Deletes the cluster.
-func (c *ClusterClient) Delete() *ClusterDeleteRequest {
-	return &ClusterDeleteRequest{
+// Deletes the upgrade policy.
+func (c *UpgradePolicyClient) Delete() *UpgradePolicyDeleteRequest {
+	return &UpgradePolicyDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
@@ -67,9 +66,9 @@ func (c *ClusterClient) Delete() *ClusterDeleteRequest {
 
 // Get creates a request for the 'get' method.
 //
-// Retrieves the details of the cluster.
-func (c *ClusterClient) Get() *ClusterGetRequest {
-	return &ClusterGetRequest{
+// Retrieves the details of the upgrade policy.
+func (c *UpgradePolicyClient) Get() *UpgradePolicyGetRequest {
+	return &UpgradePolicyGetRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
@@ -78,188 +77,44 @@ func (c *ClusterClient) Get() *ClusterGetRequest {
 
 // Update creates a request for the 'update' method.
 //
-// Updates the cluster.
-func (c *ClusterClient) Update() *ClusterUpdateRequest {
-	return &ClusterUpdateRequest{
+// Update the upgrade policy.
+func (c *UpgradePolicyClient) Update() *UpgradePolicyUpdateRequest {
+	return &UpgradePolicyUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
 	}
 }
 
-// AWSInfrastructureAccessRoleGrants returns the target 'AWS_infrastructure_access_role_grants' resource.
-//
-// Reference to the resource that manages the collection of AWS infrastructure
-// access role grants on this cluster.
-func (c *ClusterClient) AWSInfrastructureAccessRoleGrants() *AWSInfrastructureAccessRoleGrantsClient {
-	return NewAWSInfrastructureAccessRoleGrantsClient(
-		c.transport,
-		path.Join(c.path, "aws_infrastructure_access_role_grants"),
-		path.Join(c.metric, "aws_infrastructure_access_role_grants"),
-	)
-}
-
-// Addons returns the target 'add_on_installations' resource.
-//
-// Reference to the resource that manages the collection of add-ons installed on this cluster.
-func (c *ClusterClient) Addons() *AddOnInstallationsClient {
-	return NewAddOnInstallationsClient(
-		c.transport,
-		path.Join(c.path, "addons"),
-		path.Join(c.metric, "addons"),
-	)
-}
-
-// Credentials returns the target 'credentials' resource.
-//
-// Reference to the resource that manages the credentials of the cluster.
-func (c *ClusterClient) Credentials() *CredentialsClient {
-	return NewCredentialsClient(
-		c.transport,
-		path.Join(c.path, "credentials"),
-		path.Join(c.metric, "credentials"),
-	)
-}
-
-// ExternalConfiguration returns the target 'external_configuration' resource.
-//
-// Reference to the resource that manages the external configuration.
-func (c *ClusterClient) ExternalConfiguration() *ExternalConfigurationClient {
-	return NewExternalConfigurationClient(
-		c.transport,
-		path.Join(c.path, "external_configuration"),
-		path.Join(c.metric, "external_configuration"),
-	)
-}
-
-// Groups returns the target 'groups' resource.
-//
-// Reference to the resource that manages the collection of groups.
-func (c *ClusterClient) Groups() *GroupsClient {
-	return NewGroupsClient(
-		c.transport,
-		path.Join(c.path, "groups"),
-		path.Join(c.metric, "groups"),
-	)
-}
-
-// IdentityProviders returns the target 'identity_providers' resource.
-//
-// Reference to the resource that manages the collection of identity providers.
-func (c *ClusterClient) IdentityProviders() *IdentityProvidersClient {
-	return NewIdentityProvidersClient(
-		c.transport,
-		path.Join(c.path, "identity_providers"),
-		path.Join(c.metric, "identity_providers"),
-	)
-}
-
-// Ingresses returns the target 'ingresses' resource.
-//
-// Reference to the resource that manages the collection of ingress resources.
-func (c *ClusterClient) Ingresses() *IngressesClient {
-	return NewIngressesClient(
-		c.transport,
-		path.Join(c.path, "ingresses"),
-		path.Join(c.metric, "ingresses"),
-	)
-}
-
-// Logs returns the target 'logs' resource.
-//
-// Reference to the resource that manages the collection of logs of the cluster.
-func (c *ClusterClient) Logs() *LogsClient {
-	return NewLogsClient(
-		c.transport,
-		path.Join(c.path, "logs"),
-		path.Join(c.metric, "logs"),
-	)
-}
-
-// MetricQueries returns the target 'metric_queries' resource.
-//
-// Reference to the resource that manages metrics queries for the cluster.
-func (c *ClusterClient) MetricQueries() *MetricQueriesClient {
-	return NewMetricQueriesClient(
-		c.transport,
-		path.Join(c.path, "metric_queries"),
-		path.Join(c.metric, "metric_queries"),
-	)
-}
-
-// Product returns the target 'product' resource.
-//
-// Reference to the resource that manages the product type of the cluster
-func (c *ClusterClient) Product() *ProductClient {
-	return NewProductClient(
-		c.transport,
-		path.Join(c.path, "product"),
-		path.Join(c.metric, "product"),
-	)
-}
-
-// ProvisionShard returns the target 'provision_shard' resource.
-//
-// Reference to the resource that manages the cluster's provision shard.
-func (c *ClusterClient) ProvisionShard() *ProvisionShardClient {
-	return NewProvisionShardClient(
-		c.transport,
-		path.Join(c.path, "provision_shard"),
-		path.Join(c.metric, "provision_shard"),
-	)
-}
-
-// Status returns the target 'cluster_status' resource.
-//
-// Reference to the resource that manages the detailed status of the cluster.
-func (c *ClusterClient) Status() *ClusterStatusClient {
-	return NewClusterStatusClient(
-		c.transport,
-		path.Join(c.path, "status"),
-		path.Join(c.metric, "status"),
-	)
-}
-
-// UpgradePolicies returns the target 'upgrade_policies' resource.
-//
-// Reference to the resource that manages the collection of upgrade policies defined for this cluster.
-func (c *ClusterClient) UpgradePolicies() *UpgradePoliciesClient {
-	return NewUpgradePoliciesClient(
-		c.transport,
-		path.Join(c.path, "upgrade_policies"),
-		path.Join(c.metric, "upgrade_policies"),
-	)
-}
-
-// ClusterPollRequest is the request for the Poll method.
-type ClusterPollRequest struct {
-	request    *ClusterGetRequest
+// UpgradePolicyPollRequest is the request for the Poll method.
+type UpgradePolicyPollRequest struct {
+	request    *UpgradePolicyGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *ClusterPollRequest) Parameter(name string, value interface{}) *ClusterPollRequest {
+func (r *UpgradePolicyPollRequest) Parameter(name string, value interface{}) *UpgradePolicyPollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *ClusterPollRequest) Header(name string, value interface{}) *ClusterPollRequest {
+func (r *UpgradePolicyPollRequest) Header(name string, value interface{}) *UpgradePolicyPollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *ClusterPollRequest) Interval(value time.Duration) *ClusterPollRequest {
+func (r *UpgradePolicyPollRequest) Interval(value time.Duration) *UpgradePolicyPollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *ClusterPollRequest) Status(value int) *ClusterPollRequest {
+func (r *UpgradePolicyPollRequest) Status(value int) *UpgradePolicyPollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -267,9 +122,9 @@ func (r *ClusterPollRequest) Status(value int) *ClusterPollRequest {
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *ClusterPollRequest) Predicate(value func(*ClusterGetResponse) bool) *ClusterPollRequest {
+func (r *UpgradePolicyPollRequest) Predicate(value func(*UpgradePolicyGetResponse) bool) *UpgradePolicyPollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*ClusterGetResponse))
+		return value(response.(*UpgradePolicyGetResponse))
 	})
 	return r
 }
@@ -279,11 +134,11 @@ func (r *ClusterPollRequest) Predicate(value func(*ClusterGetResponse) bool) *Cl
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ClusterPollRequest) StartContext(ctx context.Context) (response *ClusterPollResponse, err error) {
+func (r *UpgradePolicyPollRequest) StartContext(ctx context.Context) (response *UpgradePolicyPollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &ClusterPollResponse{
-			response: result.(*ClusterGetResponse),
+		response = &UpgradePolicyPollResponse{
+			response: result.(*UpgradePolicyGetResponse),
 		}
 	}
 	return
@@ -291,7 +146,7 @@ func (r *ClusterPollRequest) StartContext(ctx context.Context) (response *Cluste
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *ClusterPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *UpgradePolicyPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -300,13 +155,13 @@ func (r *ClusterPollRequest) task(ctx context.Context) (status int, result inter
 	return
 }
 
-// ClusterPollResponse is the response for the Poll method.
-type ClusterPollResponse struct {
-	response *ClusterGetResponse
+// UpgradePolicyPollResponse is the response for the Poll method.
+type UpgradePolicyPollResponse struct {
+	response *UpgradePolicyGetResponse
 }
 
 // Status returns the response status code.
-func (r *ClusterPollResponse) Status() int {
+func (r *UpgradePolicyPollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -314,7 +169,7 @@ func (r *ClusterPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterPollResponse) Header() http.Header {
+func (r *UpgradePolicyPollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -322,7 +177,7 @@ func (r *ClusterPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterPollResponse) Error() *errors.Error {
+func (r *UpgradePolicyPollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -332,7 +187,7 @@ func (r *ClusterPollResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *ClusterPollResponse) Body() *Cluster {
+func (r *UpgradePolicyPollResponse) Body() *UpgradePolicy {
 	return r.response.Body()
 }
 
@@ -340,20 +195,20 @@ func (r *ClusterPollResponse) Body() *Cluster {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ClusterPollResponse) GetBody() (value *Cluster, ok bool) {
+func (r *UpgradePolicyPollResponse) GetBody() (value *UpgradePolicy, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *ClusterClient) Poll() *ClusterPollRequest {
-	return &ClusterPollRequest{
+func (c *UpgradePolicyClient) Poll() *UpgradePolicyPollRequest {
+	return &UpgradePolicyPollRequest{
 		request: c.Get(),
 	}
 }
 
-// ClusterDeleteRequest is the request for the 'delete' method.
-type ClusterDeleteRequest struct {
+// UpgradePolicyDeleteRequest is the request for the 'delete' method.
+type UpgradePolicyDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -362,13 +217,13 @@ type ClusterDeleteRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *ClusterDeleteRequest) Parameter(name string, value interface{}) *ClusterDeleteRequest {
+func (r *UpgradePolicyDeleteRequest) Parameter(name string, value interface{}) *UpgradePolicyDeleteRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDeleteRequest {
+func (r *UpgradePolicyDeleteRequest) Header(name string, value interface{}) *UpgradePolicyDeleteRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -377,12 +232,12 @@ func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDe
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error) {
+func (r *UpgradePolicyDeleteRequest) Send() (result *UpgradePolicyDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
+func (r *UpgradePolicyDeleteRequest) SendContext(ctx context.Context) (result *UpgradePolicyDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -402,7 +257,7 @@ func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *Cluster
 		return
 	}
 	defer response.Body.Close()
-	result = &ClusterDeleteResponse{}
+	result = &UpgradePolicyDeleteResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -416,15 +271,15 @@ func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *Cluster
 	return
 }
 
-// ClusterDeleteResponse is the response for the 'delete' method.
-type ClusterDeleteResponse struct {
+// UpgradePolicyDeleteResponse is the response for the 'delete' method.
+type UpgradePolicyDeleteResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
 }
 
 // Status returns the response status code.
-func (r *ClusterDeleteResponse) Status() int {
+func (r *UpgradePolicyDeleteResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -432,7 +287,7 @@ func (r *ClusterDeleteResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterDeleteResponse) Header() http.Header {
+func (r *UpgradePolicyDeleteResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -440,15 +295,15 @@ func (r *ClusterDeleteResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterDeleteResponse) Error() *errors.Error {
+func (r *UpgradePolicyDeleteResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// ClusterGetRequest is the request for the 'get' method.
-type ClusterGetRequest struct {
+// UpgradePolicyGetRequest is the request for the 'get' method.
+type UpgradePolicyGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -457,13 +312,13 @@ type ClusterGetRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *ClusterGetRequest) Parameter(name string, value interface{}) *ClusterGetRequest {
+func (r *UpgradePolicyGetRequest) Parameter(name string, value interface{}) *UpgradePolicyGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ClusterGetRequest) Header(name string, value interface{}) *ClusterGetRequest {
+func (r *UpgradePolicyGetRequest) Header(name string, value interface{}) *UpgradePolicyGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -472,12 +327,12 @@ func (r *ClusterGetRequest) Header(name string, value interface{}) *ClusterGetRe
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ClusterGetRequest) Send() (result *ClusterGetResponse, err error) {
+func (r *UpgradePolicyGetRequest) Send() (result *UpgradePolicyGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGetResponse, err error) {
+func (r *UpgradePolicyGetRequest) SendContext(ctx context.Context) (result *UpgradePolicyGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -497,7 +352,7 @@ func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGet
 		return
 	}
 	defer response.Body.Close()
-	result = &ClusterGetResponse{}
+	result = &UpgradePolicyGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -508,23 +363,23 @@ func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGet
 		err = result.err
 		return
 	}
-	err = readClusterGetResponse(result, response.Body)
+	err = readUpgradePolicyGetResponse(result, response.Body)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// ClusterGetResponse is the response for the 'get' method.
-type ClusterGetResponse struct {
+// UpgradePolicyGetResponse is the response for the 'get' method.
+type UpgradePolicyGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Cluster
+	body   *UpgradePolicy
 }
 
 // Status returns the response status code.
-func (r *ClusterGetResponse) Status() int {
+func (r *UpgradePolicyGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -532,7 +387,7 @@ func (r *ClusterGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterGetResponse) Header() http.Header {
+func (r *UpgradePolicyGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -540,7 +395,7 @@ func (r *ClusterGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterGetResponse) Error() *errors.Error {
+func (r *UpgradePolicyGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -550,7 +405,7 @@ func (r *ClusterGetResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *ClusterGetResponse) Body() *Cluster {
+func (r *UpgradePolicyGetResponse) Body() *UpgradePolicy {
 	if r == nil {
 		return nil
 	}
@@ -561,7 +416,7 @@ func (r *ClusterGetResponse) Body() *Cluster {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ClusterGetResponse) GetBody() (value *Cluster, ok bool) {
+func (r *UpgradePolicyGetResponse) GetBody() (value *UpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -569,24 +424,24 @@ func (r *ClusterGetResponse) GetBody() (value *Cluster, ok bool) {
 	return
 }
 
-// ClusterUpdateRequest is the request for the 'update' method.
-type ClusterUpdateRequest struct {
+// UpgradePolicyUpdateRequest is the request for the 'update' method.
+type UpgradePolicyUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 	query     url.Values
 	header    http.Header
-	body      *Cluster
+	body      *UpgradePolicy
 }
 
 // Parameter adds a query parameter.
-func (r *ClusterUpdateRequest) Parameter(name string, value interface{}) *ClusterUpdateRequest {
+func (r *UpgradePolicyUpdateRequest) Parameter(name string, value interface{}) *UpgradePolicyUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ClusterUpdateRequest) Header(name string, value interface{}) *ClusterUpdateRequest {
+func (r *UpgradePolicyUpdateRequest) Header(name string, value interface{}) *UpgradePolicyUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -594,7 +449,7 @@ func (r *ClusterUpdateRequest) Header(name string, value interface{}) *ClusterUp
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *ClusterUpdateRequest) Body(value *Cluster) *ClusterUpdateRequest {
+func (r *UpgradePolicyUpdateRequest) Body(value *UpgradePolicy) *UpgradePolicyUpdateRequest {
 	r.body = value
 	return r
 }
@@ -603,16 +458,16 @@ func (r *ClusterUpdateRequest) Body(value *Cluster) *ClusterUpdateRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ClusterUpdateRequest) Send() (result *ClusterUpdateResponse, err error) {
+func (r *UpgradePolicyUpdateRequest) Send() (result *UpgradePolicyUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *ClusterUpdateResponse, err error) {
+func (r *UpgradePolicyUpdateRequest) SendContext(ctx context.Context) (result *UpgradePolicyUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	buffer := &bytes.Buffer{}
-	err = writeClusterUpdateRequest(r, buffer)
+	err = writeUpgradePolicyUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -634,7 +489,7 @@ func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *Cluster
 		return
 	}
 	defer response.Body.Close()
-	result = &ClusterUpdateResponse{}
+	result = &UpgradePolicyUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -645,7 +500,7 @@ func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *Cluster
 		err = result.err
 		return
 	}
-	err = readClusterUpdateResponse(result, response.Body)
+	err = readUpgradePolicyUpdateResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -654,24 +509,24 @@ func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *Cluster
 
 // marshall is the method used internally to marshal requests for the
 // 'update' method.
-func (r *ClusterUpdateRequest) marshal(writer io.Writer) error {
+func (r *UpgradePolicyUpdateRequest) marshal(writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	r.stream(stream)
 	return stream.Error
 }
-func (r *ClusterUpdateRequest) stream(stream *jsoniter.Stream) {
+func (r *UpgradePolicyUpdateRequest) stream(stream *jsoniter.Stream) {
 }
 
-// ClusterUpdateResponse is the response for the 'update' method.
-type ClusterUpdateResponse struct {
+// UpgradePolicyUpdateResponse is the response for the 'update' method.
+type UpgradePolicyUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Cluster
+	body   *UpgradePolicy
 }
 
 // Status returns the response status code.
-func (r *ClusterUpdateResponse) Status() int {
+func (r *UpgradePolicyUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -679,7 +534,7 @@ func (r *ClusterUpdateResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterUpdateResponse) Header() http.Header {
+func (r *UpgradePolicyUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -687,7 +542,7 @@ func (r *ClusterUpdateResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterUpdateResponse) Error() *errors.Error {
+func (r *UpgradePolicyUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -697,7 +552,7 @@ func (r *ClusterUpdateResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *ClusterUpdateResponse) Body() *Cluster {
+func (r *UpgradePolicyUpdateResponse) Body() *UpgradePolicy {
 	if r == nil {
 		return nil
 	}
@@ -708,7 +563,7 @@ func (r *ClusterUpdateResponse) Body() *Cluster {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ClusterUpdateResponse) GetBody() (value *Cluster, ok bool) {
+func (r *UpgradePolicyUpdateResponse) GetBody() (value *UpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body

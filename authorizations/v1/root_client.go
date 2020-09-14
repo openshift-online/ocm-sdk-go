@@ -118,3 +118,27 @@ func (c *Client) SelfCapabilityReview() *SelfCapabilityReviewClient {
 		path.Join(c.metric, "self_capability_review"),
 	)
 }
+
+// SelfTermsReview returns the target 'self_terms_review' resource.
+//
+// Reference to the resource that is used to submit Red Hat's Terms and Conditions
+// for using OpenShift Dedicated and Amazon Red Hat OpenShift self-review requests.
+func (c *Client) SelfTermsReview() *SelfTermsReviewClient {
+	return NewSelfTermsReviewClient(
+		c.transport,
+		path.Join(c.path, "self_terms_review"),
+		path.Join(c.metric, "self_terms_review"),
+	)
+}
+
+// TermsReview returns the target 'terms_review' resource.
+//
+// Reference to the resource that is used to submit Red Hat's Terms and Conditions
+// for using OpenShift Dedicated and Amazon Red Hat OpenShift review requests.
+func (c *Client) TermsReview() *TermsReviewClient {
+	return NewTermsReviewClient(
+		c.transport,
+		path.Join(c.path, "terms_review"),
+		path.Join(c.metric, "terms_review"),
+	)
+}
