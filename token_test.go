@@ -195,6 +195,40 @@ var _ = Describe("Tokens", func() {
 			Expect(returnedAccess).To(Equal(secondAccess))
 		})
 
+		It("Refreshes the access token if it expires in less than specified expiry period", func() {
+			// Ask for a token valid for at least 10 minutes
+			expiresIn := 10 * time.Minute
+
+			// Generate the tokens:
+			firstAccess := DefaultToken("Bearer", 9*time.Minute)
+			secondAccess := DefaultToken("Bearer", 20*time.Minute)
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+
+			// Configure the server:
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					VerifyRefreshGrant(refreshToken),
+					RespondWithTokens(secondAccess, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				Metrics(metrics).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(firstAccess, refreshToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Get the tokens:
+			returnedAccess, _, err := connection.Tokens(expiresIn)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(secondAccess))
+		})
+
 		It("Fails if the access token is expired and there is no refresh token", func() {
 			// Generate the tokens:
 			accessToken := DefaultToken("Bearer", -5*time.Second)
