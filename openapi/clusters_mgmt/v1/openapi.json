@@ -5022,6 +5022,10 @@
             "description": "Overall state of the cluster.\n",
             "$ref": "#/components/schemas/ClusterState"
           },
+          "status": {
+            "description": "Status of cluster\n",
+            "$ref": "#/components/schemas/ClusterStatus"
+          },
           "storage_quota": {
             "description": "Storage quota to be assigned to the cluster.\n",
             "$ref": "#/components/schemas/Value"
@@ -5280,8 +5284,20 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "dns_ready": {
+            "description": "DNSReady from Provisioner\n",
+            "type": "boolean"
+          },
           "description": {
             "description": "Detailed description of the cluster status.\n",
+            "type": "string"
+          },
+          "provision_error_reason": {
+            "description": "Provisioning Error Reason\n",
+            "type": "string"
+          },
+          "provision_error_type": {
+            "description": "Provisioning Error Type\n",
             "type": "string"
           },
           "state": {
