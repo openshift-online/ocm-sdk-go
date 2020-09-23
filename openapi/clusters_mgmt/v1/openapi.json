@@ -4641,6 +4641,10 @@
             "description": "Indicates if this add-on can be added to clusters.\n",
             "type": "boolean"
           },
+          "external_resources": {
+            "description": "Indicates if this add-on has external resources associated with it \n",
+            "type": "boolean"
+          },
           "icon": {
             "description": "Base64-encoded icon representing an add-on. The icon should be in PNG format.\n",
             "type": "string"

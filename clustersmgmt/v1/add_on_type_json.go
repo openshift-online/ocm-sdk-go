@@ -88,6 +88,14 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		stream.WriteBool(*object.enabled)
 		count++
 	}
+	if object.externalResources != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("external_resources")
+		stream.WriteBool(*object.externalResources)
+		count++
+	}
 	if object.icon != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -194,6 +202,9 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 		case "enabled":
 			value := iterator.ReadBool()
 			object.enabled = &value
+		case "external_resources":
+			value := iterator.ReadBool()
+			object.externalResources = &value
 		case "icon":
 			value := iterator.ReadString()
 			object.icon = &value

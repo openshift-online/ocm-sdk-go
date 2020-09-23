@@ -23,20 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on that can be installed in a cluster.
 type AddOnBuilder struct {
-	id              *string
-	href            *string
-	link            bool
-	description     *string
-	docsLink        *string
-	enabled         *bool
-	icon            *string
-	installMode     *AddOnInstallMode
-	label           *string
-	name            *string
-	operatorName    *string
-	resourceCost    *float64
-	resourceName    *string
-	targetNamespace *string
+	id                *string
+	href              *string
+	link              bool
+	description       *string
+	docsLink          *string
+	enabled           *bool
+	externalResources *bool
+	icon              *string
+	installMode       *AddOnInstallMode
+	label             *string
+	name              *string
+	operatorName      *string
+	resourceCost      *float64
+	resourceName      *string
+	targetNamespace   *string
 }
 
 // NewAddOn creates a new builder of 'add_on' objects.
@@ -83,6 +84,14 @@ func (b *AddOnBuilder) DocsLink(value string) *AddOnBuilder {
 //
 func (b *AddOnBuilder) Enabled(value bool) *AddOnBuilder {
 	b.enabled = &value
+	return b
+}
+
+// ExternalResources sets the value of the 'external_resources' attribute to the given value.
+//
+//
+func (b *AddOnBuilder) ExternalResources(value bool) *AddOnBuilder {
+	b.externalResources = &value
 	return b
 }
 
@@ -161,6 +170,7 @@ func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	b.description = object.description
 	b.docsLink = object.docsLink
 	b.enabled = object.enabled
+	b.externalResources = object.externalResources
 	b.icon = object.icon
 	b.installMode = object.installMode
 	b.label = object.label
@@ -181,6 +191,7 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 	object.description = b.description
 	object.docsLink = b.docsLink
 	object.enabled = b.enabled
+	object.externalResources = b.externalResources
 	object.icon = b.icon
 	object.installMode = b.installMode
 	object.label = b.label

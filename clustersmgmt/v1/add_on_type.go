@@ -35,20 +35,21 @@ const AddOnNilKind = "AddOnNil"
 //
 // Representation of an add-on that can be installed in a cluster.
 type AddOn struct {
-	id              *string
-	href            *string
-	link            bool
-	description     *string
-	docsLink        *string
-	enabled         *bool
-	icon            *string
-	installMode     *AddOnInstallMode
-	label           *string
-	name            *string
-	operatorName    *string
-	resourceCost    *float64
-	resourceName    *string
-	targetNamespace *string
+	id                *string
+	href              *string
+	link              bool
+	description       *string
+	docsLink          *string
+	enabled           *bool
+	externalResources *bool
+	icon              *string
+	installMode       *AddOnInstallMode
+	label             *string
+	name              *string
+	operatorName      *string
+	resourceCost      *float64
+	resourceName      *string
+	targetNamespace   *string
 }
 
 // Kind returns the name of the type of the object.
@@ -109,6 +110,7 @@ func (o *AddOn) Empty() bool {
 		o.description == nil &&
 		o.docsLink == nil &&
 		o.enabled == nil &&
+		o.externalResources == nil &&
 		o.icon == nil &&
 		o.installMode == nil &&
 		o.label == nil &&
@@ -185,6 +187,29 @@ func (o *AddOn) GetEnabled() (value bool, ok bool) {
 	ok = o != nil && o.enabled != nil
 	if ok {
 		value = *o.enabled
+	}
+	return
+}
+
+// ExternalResources returns the value of the 'external_resources' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates if this add-on has external resources associated with it
+func (o *AddOn) ExternalResources() bool {
+	if o != nil && o.externalResources != nil {
+		return *o.externalResources
+	}
+	return false
+}
+
+// GetExternalResources returns the value of the 'external_resources' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates if this add-on has external resources associated with it
+func (o *AddOn) GetExternalResources() (value bool, ok bool) {
+	ok = o != nil && o.externalResources != nil
+	if ok {
+		value = *o.externalResources
 	}
 	return
 }
