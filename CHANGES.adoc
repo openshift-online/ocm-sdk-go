@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.132 Sep 24 2029
+
+- Update model to v0.0.83
+** add external resources to add on type model
+** SDA-2952 - Add "hidden" option to AddOn
+
 == 0.1.131 Sep 23 2020
 
 ** Support http proxy
