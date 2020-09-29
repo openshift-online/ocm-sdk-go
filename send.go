@@ -203,7 +203,7 @@ func (c *Connection) contentSummary(mediaType string, response *http.Response) (
 	if err != nil {
 		return
 	}
-	limit := 200
+	limit := 250
 	runes := []rune(string(body))
 	if strings.EqualFold(mediaType, "text/html") && len(runes) > limit {
 		content := strip.StripTags(string(body))
