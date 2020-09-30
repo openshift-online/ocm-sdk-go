@@ -3,7 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.132 Sep 24 2029
+== 0.1.133 Sep 30 2020
+
+- increase the limit/size of content summary
+- Update metamodel to v0.0.33
+** json: Support NoContent on POST responses
+
+== 0.1.132 Sep 24 2020
 
 - Update model to v0.0.83
 ** add external resources to add on type model
