@@ -100,6 +100,7 @@ type Cluster struct {
 	identityProviders                 *IdentityProviderList
 	ingresses                         *IngressList
 	loadBalancerQuota                 *int
+	machinePools                      *MachinePoolList
 	managed                           *bool
 	metrics                           *ClusterMetrics
 	multiAZ                           *bool
@@ -187,6 +188,7 @@ func (o *Cluster) Empty() bool {
 		o.identityProviders.Len() == 0 &&
 		o.ingresses.Len() == 0 &&
 		o.loadBalancerQuota == nil &&
+		o.machinePools.Len() == 0 &&
 		o.managed == nil &&
 		o.multiAZ == nil &&
 		o.name == nil &&
@@ -710,6 +712,29 @@ func (o *Cluster) GetLoadBalancerQuota() (value int, ok bool) {
 	ok = o != nil && o.loadBalancerQuota != nil
 	if ok {
 		value = *o.loadBalancerQuota
+	}
+	return
+}
+
+// MachinePools returns the value of the 'machine_pools' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// List of machine pools on this cluster.
+func (o *Cluster) MachinePools() *MachinePoolList {
+	if o == nil {
+		return nil
+	}
+	return o.machinePools
+}
+
+// GetMachinePools returns the value of the 'machine_pools' attribute and
+// a flag indicating if the attribute has a value.
+//
+// List of machine pools on this cluster.
+func (o *Cluster) GetMachinePools() (value *MachinePoolList, ok bool) {
+	ok = o != nil && o.machinePools != nil
+	if ok {
+		value = o.machinePools
 	}
 	return
 }

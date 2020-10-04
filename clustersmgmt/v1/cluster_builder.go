@@ -88,6 +88,7 @@ type ClusterBuilder struct {
 	identityProviders                 *IdentityProviderListBuilder
 	ingresses                         *IngressListBuilder
 	loadBalancerQuota                 *int
+	machinePools                      *MachinePoolListBuilder
 	managed                           *bool
 	metrics                           *ClusterMetricsBuilder
 	multiAZ                           *bool
@@ -303,6 +304,14 @@ func (b *ClusterBuilder) Ingresses(value *IngressListBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) LoadBalancerQuota(value int) *ClusterBuilder {
 	b.loadBalancerQuota = &value
+	return b
+}
+
+// MachinePools sets the value of the 'machine_pools' attribute to the given values.
+//
+//
+func (b *ClusterBuilder) MachinePools(value *MachinePoolListBuilder) *ClusterBuilder {
+	b.machinePools = value
 	return b
 }
 
@@ -533,6 +542,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.ingresses = nil
 	}
 	b.loadBalancerQuota = object.loadBalancerQuota
+	if object.machinePools != nil {
+		b.machinePools = NewMachinePoolList().Copy(object.machinePools)
+	} else {
+		b.machinePools = nil
+	}
 	b.managed = object.managed
 	if object.metrics != nil {
 		b.metrics = NewClusterMetrics().Copy(object.metrics)
@@ -692,6 +706,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		}
 	}
 	object.loadBalancerQuota = b.loadBalancerQuota
+	if b.machinePools != nil {
+		object.machinePools, err = b.machinePools.Build()
+		if err != nil {
+			return
+		}
+	}
 	object.managed = b.managed
 	if b.metrics != nil {
 		object.metrics, err = b.metrics.Build()

@@ -258,6 +258,17 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteInt(*object.loadBalancerQuota)
 		count++
 	}
+	if object.machinePools != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("machine_pools")
+		stream.WriteObjectStart()
+		stream.WriteObjectField("items")
+		writeMachinePoolList(object.machinePools.items, stream)
+		stream.WriteObjectEnd()
+		count++
+	}
 	if object.managed != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -603,6 +614,27 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "load_balancer_quota":
 			value := iterator.ReadInt()
 			object.loadBalancerQuota = &value
+		case "machine_pools":
+			value := &MachinePoolList{}
+			for {
+				field := iterator.ReadObject()
+				if field == "" {
+					break
+				}
+				switch field {
+				case "kind":
+					text := iterator.ReadString()
+					value.link = text == MachinePoolListLinkKind
+				case "href":
+					text := iterator.ReadString()
+					value.href = &text
+				case "items":
+					value.items = readMachinePoolList(iterator)
+				default:
+					iterator.ReadAny()
+				}
+			}
+			object.machinePools = value
 		case "managed":
 			value := iterator.ReadBool()
 			object.managed = &value
