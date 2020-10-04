@@ -4979,6 +4979,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "machine_pools": {
+            "description": "List of machine pools on this cluster.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MachinePool"
+            }
+          },
           "managed": {
             "description": "Flag indicating if the cluster is managed (by Red Hat) or\nself-managed by the user.\n",
             "type": "boolean"
@@ -5176,6 +5183,13 @@
       "ClusterNodes": {
         "description": "Counts of different classes of nodes inside a cluster.\n",
         "properties": {
+          "availability_zones": {
+            "description": "The availability zones upon which the nodes are created.\n",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "compute": {
             "description": "Number of compute nodes of the cluster.\n",
             "type": "integer",
@@ -5684,6 +5698,50 @@
           "content": {
             "description": "Content of the log.\n",
             "type": "string"
+          }
+        }
+      },
+      "MachinePool": {
+        "description": "Representation of a machine pool in a cluster.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'MachinePool' if this is a complete object or 'MachinePoolLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "availability_zones": {
+            "description": "The availability zones upon which the nodes are created.\n",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cluster": {
+            "description": "ID used to identify the cluster that this machinepool is attached to.\n",
+            "$ref": "#/components/schemas/Cluster"
+          },
+          "instance_type": {
+            "description": "The instance type of Nodes to create.\n",
+            "type": "string"
+          },
+          "labels": {
+            "description": "The labels set on the Nodes created.\n",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "replicas": {
+            "description": "The number of Machines (and Nodes) to create.\n",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

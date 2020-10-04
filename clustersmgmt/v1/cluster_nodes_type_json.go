@@ -39,6 +39,14 @@ func MarshalClusterNodes(object *ClusterNodes, writer io.Writer) error {
 func writeClusterNodes(object *ClusterNodes, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
+	if object.availabilityZones != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("availability_zones")
+		writeStringList(object.availabilityZones, stream)
+		count++
+	}
 	if object.compute != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -106,6 +114,9 @@ func readClusterNodes(iterator *jsoniter.Iterator) *ClusterNodes {
 			break
 		}
 		switch field {
+		case "availability_zones":
+			value := readStringList(iterator)
+			object.availabilityZones = value
 		case "compute":
 			value := iterator.ReadInt()
 			object.compute = &value

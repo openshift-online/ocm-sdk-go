@@ -23,6 +23,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Counts of different classes of nodes inside a cluster.
 type ClusterNodes struct {
+	availabilityZones  []string
 	compute            *int
 	computeMachineType *MachineType
 	infra              *int
@@ -32,11 +33,35 @@ type ClusterNodes struct {
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterNodes) Empty() bool {
-	return o == nil || (o.compute == nil &&
+	return o == nil || (len(o.availabilityZones) == 0 &&
+		o.compute == nil &&
 		o.infra == nil &&
 		o.master == nil &&
 		o.total == nil &&
 		true)
+}
+
+// AvailabilityZones returns the value of the 'availability_zones' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The availability zones upon which the nodes are created.
+func (o *ClusterNodes) AvailabilityZones() []string {
+	if o == nil {
+		return nil
+	}
+	return o.availabilityZones
+}
+
+// GetAvailabilityZones returns the value of the 'availability_zones' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The availability zones upon which the nodes are created.
+func (o *ClusterNodes) GetAvailabilityZones() (value []string, ok bool) {
+	ok = o != nil && o.availabilityZones != nil
+	if ok {
+		value = o.availabilityZones
+	}
+	return
 }
 
 // Compute returns the value of the 'compute' attribute, or

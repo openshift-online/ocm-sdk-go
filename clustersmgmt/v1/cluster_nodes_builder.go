@@ -23,6 +23,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Counts of different classes of nodes inside a cluster.
 type ClusterNodesBuilder struct {
+	availabilityZones  []string
 	compute            *int
 	computeMachineType *MachineTypeBuilder
 	infra              *int
@@ -33,6 +34,15 @@ type ClusterNodesBuilder struct {
 // NewClusterNodes creates a new builder of 'cluster_nodes' objects.
 func NewClusterNodes() *ClusterNodesBuilder {
 	return new(ClusterNodesBuilder)
+}
+
+// AvailabilityZones sets the value of the 'availability_zones' attribute to the given values.
+//
+//
+func (b *ClusterNodesBuilder) AvailabilityZones(values ...string) *ClusterNodesBuilder {
+	b.availabilityZones = make([]string, len(values))
+	copy(b.availabilityZones, values)
+	return b
 }
 
 // Compute sets the value of the 'compute' attribute to the given value.
@@ -80,6 +90,12 @@ func (b *ClusterNodesBuilder) Copy(object *ClusterNodes) *ClusterNodesBuilder {
 	if object == nil {
 		return b
 	}
+	if object.availabilityZones != nil {
+		b.availabilityZones = make([]string, len(object.availabilityZones))
+		copy(b.availabilityZones, object.availabilityZones)
+	} else {
+		b.availabilityZones = nil
+	}
 	b.compute = object.compute
 	if object.computeMachineType != nil {
 		b.computeMachineType = NewMachineType().Copy(object.computeMachineType)
@@ -95,6 +111,10 @@ func (b *ClusterNodesBuilder) Copy(object *ClusterNodes) *ClusterNodesBuilder {
 // Build creates a 'cluster_nodes' object using the configuration stored in the builder.
 func (b *ClusterNodesBuilder) Build() (object *ClusterNodes, err error) {
 	object = new(ClusterNodes)
+	if b.availabilityZones != nil {
+		object.availabilityZones = make([]string, len(b.availabilityZones))
+		copy(object.availabilityZones, b.availabilityZones)
+	}
 	object.compute = b.compute
 	if b.computeMachineType != nil {
 		object.computeMachineType, err = b.computeMachineType.Build()
