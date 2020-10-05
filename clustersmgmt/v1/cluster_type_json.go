@@ -126,6 +126,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteBool(*object.dnsReady)
 		count++
 	}
+	if object.gcp != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("gcp")
+		writeGCP(object.gcp, stream)
+		count++
+	}
 	if object.addons != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -488,6 +496,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "dns_ready":
 			value := iterator.ReadBool()
 			object.dnsReady = &value
+		case "gcp":
+			value := readGCP(iterator)
+			object.gcp = value
 		case "addons":
 			value := &AddOnInstallationList{}
 			for {

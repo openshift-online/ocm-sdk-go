@@ -81,20 +81,20 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		stream.WriteString(*object.description)
 		count++
 	}
-	if object.provisionErrorReason != nil {
+	if object.provisionErrorCode != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("provision_error_reason")
-		stream.WriteString(*object.provisionErrorReason)
+		stream.WriteObjectField("provision_error_code")
+		stream.WriteString(*object.provisionErrorCode)
 		count++
 	}
-	if object.provisionErrorType != nil {
+	if object.provisionErrorMessage != nil {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("provision_error_type")
-		stream.WriteString(*object.provisionErrorType)
+		stream.WriteObjectField("provision_error_message")
+		stream.WriteString(*object.provisionErrorMessage)
 		count++
 	}
 	if object.state != nil {
@@ -147,12 +147,12 @@ func readClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
 		case "description":
 			value := iterator.ReadString()
 			object.description = &value
-		case "provision_error_reason":
+		case "provision_error_code":
 			value := iterator.ReadString()
-			object.provisionErrorReason = &value
-		case "provision_error_type":
+			object.provisionErrorCode = &value
+		case "provision_error_message":
 			value := iterator.ReadString()
-			object.provisionErrorType = &value
+			object.provisionErrorMessage = &value
 		case "state":
 			text := iterator.ReadString()
 			value := ClusterState(text)

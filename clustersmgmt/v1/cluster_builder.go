@@ -73,6 +73,7 @@ type ClusterBuilder struct {
 	ccs                               *CCSBuilder
 	dns                               *DNSBuilder
 	dnsReady                          *bool
+	gcp                               *GCPBuilder
 	addons                            *AddOnInstallationListBuilder
 	cloudProvider                     *CloudProviderBuilder
 	clusterAdminEnabled               *bool
@@ -183,6 +184,14 @@ func (b *ClusterBuilder) DNS(value *DNSBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) DNSReady(value bool) *ClusterBuilder {
 	b.dnsReady = &value
+	return b
+}
+
+// GCP sets the value of the 'GCP' attribute to the given value.
+//
+// Google cloud platform settings of a cluster.
+func (b *ClusterBuilder) GCP(value *GCPBuilder) *ClusterBuilder {
+	b.gcp = value
 	return b
 }
 
@@ -495,6 +504,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.dns = nil
 	}
 	b.dnsReady = object.dnsReady
+	if object.gcp != nil {
+		b.gcp = NewGCP().Copy(object.gcp)
+	} else {
+		b.gcp = nil
+	}
 	if object.addons != nil {
 		b.addons = NewAddOnInstallationList().Copy(object.addons)
 	} else {
@@ -651,6 +665,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		}
 	}
 	object.dnsReady = b.dnsReady
+	if b.gcp != nil {
+		object.gcp, err = b.gcp.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.addons != nil {
 		object.addons, err = b.addons.Build()
 		if err != nil {

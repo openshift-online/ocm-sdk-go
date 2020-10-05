@@ -4615,6 +4615,51 @@
           }
         }
       },
+      "GCP": {
+        "description": "Google cloud platform settings of a cluster.\n",
+        "properties": {
+          "auth_uri": {
+            "description": "GCP authentication uri\n",
+            "type": "string"
+          },
+          "auth_provider_x509_cert_url": {
+            "description": "GCP Authentication provider x509 certificate url\n",
+            "type": "string"
+          },
+          "client_id": {
+            "description": "GCP client identifier\n",
+            "type": "string"
+          },
+          "client_x509_cert_url": {
+            "description": "GCP client x509 certificate url\n",
+            "type": "string"
+          },
+          "client_email": {
+            "description": "GCP client email\n",
+            "type": "string"
+          },
+          "private_key": {
+            "description": "GCP private key\n",
+            "type": "string"
+          },
+          "private_key_id": {
+            "description": "GCP private key identifier\n",
+            "type": "string"
+          },
+          "project_id": {
+            "description": "GCP project identifier.\n",
+            "type": "string"
+          },
+          "token_uri": {
+            "description": "GCP token uri\n",
+            "type": "string"
+          },
+          "type": {
+            "description": "GCP the type of the service the key belongs to\n",
+            "type": "string"
+          }
+        }
+      },
       "GCPFlavour": {
         "description": "Specification for different classes of nodes inside a flavour.\n",
         "properties": {
@@ -4628,6 +4673,19 @@
           },
           "master_instance_type": {
             "description": "GCP default instance type for the master volume.\n",
+            "type": "string"
+          }
+        }
+      },
+      "HTPasswdIdentityProvider": {
+        "description": "Details for `htpasswd` identity providers.\n",
+        "properties": {
+          "password": {
+            "description": "Password to be used in the _HTPasswd_ data file.\n",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username to be used in the _HTPasswd_ data file.\n",
             "type": "string"
           }
         }
@@ -4996,6 +5054,10 @@
           "dns_ready": {
             "description": "Provisioner DNS Ready Status\n",
             "type": "boolean"
+          },
+          "gcp": {
+            "description": "Google cloud platform settings of the cluster.\n",
+            "$ref": "#/components/schemas/GCP"
           },
           "addons": {
             "description": "List of add-ons on this cluster.\n",
@@ -5407,12 +5469,12 @@
             "description": "Detailed description of the cluster status.\n",
             "type": "string"
           },
-          "provision_error_reason": {
-            "description": "Provisioning Error Reason\n",
+          "provision_error_code": {
+            "description": "Provisioning Error Code\n",
             "type": "string"
           },
-          "provision_error_type": {
-            "description": "Provisioning Error Type\n",
+          "provision_error_message": {
+            "description": "Provisioning Error Message\n",
             "type": "string"
           },
           "state": {
@@ -5589,7 +5651,7 @@
             "type": "string"
           },
           "client_secret": {
-            "description": "Client secret issued by _Google.\n",
+            "description": "Client secret issued by _Google_.\n",
             "type": "string"
           },
           "hosted_domain": {
@@ -5657,6 +5719,10 @@
             "description": "Details for `google` identity providers.\n",
             "$ref": "#/components/schemas/GoogleIdentityProvider"
           },
+          "htpasswd": {
+            "description": "Details for `htpasswd` identity providers.\n",
+            "$ref": "#/components/schemas/HTPasswdIdentityProvider"
+          },
           "login": {
             "description": "When `true` unauthenticated token requests from web clients (like the web console) are\nredirected to the authorize URL to log in.\n",
             "type": "boolean"
@@ -5697,6 +5763,7 @@
           "github",
           "gitlab",
           "google",
+          "htpasswd",
           "open_id"
         ]
       },

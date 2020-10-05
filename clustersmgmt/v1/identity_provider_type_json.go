@@ -105,6 +105,14 @@ func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 		writeGoogleIdentityProvider(object.google, stream)
 		count++
 	}
+	if object.htpasswd != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("htpasswd")
+		writeHTPasswdIdentityProvider(object.htpasswd, stream)
+		count++
+	}
 	if object.login != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -196,6 +204,9 @@ func readIdentityProvider(iterator *jsoniter.Iterator) *IdentityProvider {
 		case "google":
 			value := readGoogleIdentityProvider(iterator)
 			object.google = value
+		case "htpasswd":
+			value := readHTPasswdIdentityProvider(iterator)
+			object.htpasswd = value
 		case "login":
 			value := iterator.ReadBool()
 			object.login = &value
