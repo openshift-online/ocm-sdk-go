@@ -26,7 +26,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
@@ -34,42 +33,31 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// UpgradePolicyClient is the client of the 'upgrade_policy' resource.
+// UpgradePolicyStateClient is the client of the 'upgrade_policy_state' resource.
 //
-// Manages a specific upgrade policy.
-type UpgradePolicyClient struct {
+// Manages a specific upgrade policy state.
+type UpgradePolicyStateClient struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 }
 
-// NewUpgradePolicyClient creates a new client for the 'upgrade_policy'
+// NewUpgradePolicyStateClient creates a new client for the 'upgrade_policy_state'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewUpgradePolicyClient(transport http.RoundTripper, path string, metric string) *UpgradePolicyClient {
-	return &UpgradePolicyClient{
+func NewUpgradePolicyStateClient(transport http.RoundTripper, path string, metric string) *UpgradePolicyStateClient {
+	return &UpgradePolicyStateClient{
 		transport: transport,
 		path:      path,
 		metric:    metric,
 	}
 }
 
-// Delete creates a request for the 'delete' method.
-//
-// Deletes the upgrade policy.
-func (c *UpgradePolicyClient) Delete() *UpgradePolicyDeleteRequest {
-	return &UpgradePolicyDeleteRequest{
-		transport: c.transport,
-		path:      c.path,
-		metric:    c.metric,
-	}
-}
-
 // Get creates a request for the 'get' method.
 //
-// Retrieves the details of the upgrade policy.
-func (c *UpgradePolicyClient) Get() *UpgradePolicyGetRequest {
-	return &UpgradePolicyGetRequest{
+// Retrieves the details of the upgrade policy state.
+func (c *UpgradePolicyStateClient) Get() *UpgradePolicyStateGetRequest {
+	return &UpgradePolicyStateGetRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
@@ -78,55 +66,44 @@ func (c *UpgradePolicyClient) Get() *UpgradePolicyGetRequest {
 
 // Update creates a request for the 'update' method.
 //
-// Update the upgrade policy.
-func (c *UpgradePolicyClient) Update() *UpgradePolicyUpdateRequest {
-	return &UpgradePolicyUpdateRequest{
+// Update the upgrade policy state.
+func (c *UpgradePolicyStateClient) Update() *UpgradePolicyStateUpdateRequest {
+	return &UpgradePolicyStateUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
 		metric:    c.metric,
 	}
 }
 
-// State returns the target 'upgrade_policy_state' resource.
-//
-// Reference to the state of the upgrade policy.
-func (c *UpgradePolicyClient) State() *UpgradePolicyStateClient {
-	return NewUpgradePolicyStateClient(
-		c.transport,
-		path.Join(c.path, "state"),
-		path.Join(c.metric, "state"),
-	)
-}
-
-// UpgradePolicyPollRequest is the request for the Poll method.
-type UpgradePolicyPollRequest struct {
-	request    *UpgradePolicyGetRequest
+// UpgradePolicyStatePollRequest is the request for the Poll method.
+type UpgradePolicyStatePollRequest struct {
+	request    *UpgradePolicyStateGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *UpgradePolicyPollRequest) Parameter(name string, value interface{}) *UpgradePolicyPollRequest {
+func (r *UpgradePolicyStatePollRequest) Parameter(name string, value interface{}) *UpgradePolicyStatePollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *UpgradePolicyPollRequest) Header(name string, value interface{}) *UpgradePolicyPollRequest {
+func (r *UpgradePolicyStatePollRequest) Header(name string, value interface{}) *UpgradePolicyStatePollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *UpgradePolicyPollRequest) Interval(value time.Duration) *UpgradePolicyPollRequest {
+func (r *UpgradePolicyStatePollRequest) Interval(value time.Duration) *UpgradePolicyStatePollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *UpgradePolicyPollRequest) Status(value int) *UpgradePolicyPollRequest {
+func (r *UpgradePolicyStatePollRequest) Status(value int) *UpgradePolicyStatePollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -134,9 +111,9 @@ func (r *UpgradePolicyPollRequest) Status(value int) *UpgradePolicyPollRequest {
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *UpgradePolicyPollRequest) Predicate(value func(*UpgradePolicyGetResponse) bool) *UpgradePolicyPollRequest {
+func (r *UpgradePolicyStatePollRequest) Predicate(value func(*UpgradePolicyStateGetResponse) bool) *UpgradePolicyStatePollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*UpgradePolicyGetResponse))
+		return value(response.(*UpgradePolicyStateGetResponse))
 	})
 	return r
 }
@@ -146,11 +123,11 @@ func (r *UpgradePolicyPollRequest) Predicate(value func(*UpgradePolicyGetRespons
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *UpgradePolicyPollRequest) StartContext(ctx context.Context) (response *UpgradePolicyPollResponse, err error) {
+func (r *UpgradePolicyStatePollRequest) StartContext(ctx context.Context) (response *UpgradePolicyStatePollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &UpgradePolicyPollResponse{
-			response: result.(*UpgradePolicyGetResponse),
+		response = &UpgradePolicyStatePollResponse{
+			response: result.(*UpgradePolicyStateGetResponse),
 		}
 	}
 	return
@@ -158,7 +135,7 @@ func (r *UpgradePolicyPollRequest) StartContext(ctx context.Context) (response *
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *UpgradePolicyPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *UpgradePolicyStatePollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -167,13 +144,13 @@ func (r *UpgradePolicyPollRequest) task(ctx context.Context) (status int, result
 	return
 }
 
-// UpgradePolicyPollResponse is the response for the Poll method.
-type UpgradePolicyPollResponse struct {
-	response *UpgradePolicyGetResponse
+// UpgradePolicyStatePollResponse is the response for the Poll method.
+type UpgradePolicyStatePollResponse struct {
+	response *UpgradePolicyStateGetResponse
 }
 
 // Status returns the response status code.
-func (r *UpgradePolicyPollResponse) Status() int {
+func (r *UpgradePolicyStatePollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -181,7 +158,7 @@ func (r *UpgradePolicyPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *UpgradePolicyPollResponse) Header() http.Header {
+func (r *UpgradePolicyStatePollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -189,7 +166,7 @@ func (r *UpgradePolicyPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *UpgradePolicyPollResponse) Error() *errors.Error {
+func (r *UpgradePolicyStatePollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -199,7 +176,7 @@ func (r *UpgradePolicyPollResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *UpgradePolicyPollResponse) Body() *UpgradePolicy {
+func (r *UpgradePolicyStatePollResponse) Body() *UpgradePolicyState {
 	return r.response.Body()
 }
 
@@ -207,20 +184,20 @@ func (r *UpgradePolicyPollResponse) Body() *UpgradePolicy {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *UpgradePolicyPollResponse) GetBody() (value *UpgradePolicy, ok bool) {
+func (r *UpgradePolicyStatePollResponse) GetBody() (value *UpgradePolicyState, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *UpgradePolicyClient) Poll() *UpgradePolicyPollRequest {
-	return &UpgradePolicyPollRequest{
+func (c *UpgradePolicyStateClient) Poll() *UpgradePolicyStatePollRequest {
+	return &UpgradePolicyStatePollRequest{
 		request: c.Get(),
 	}
 }
 
-// UpgradePolicyDeleteRequest is the request for the 'delete' method.
-type UpgradePolicyDeleteRequest struct {
+// UpgradePolicyStateGetRequest is the request for the 'get' method.
+type UpgradePolicyStateGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
@@ -229,13 +206,13 @@ type UpgradePolicyDeleteRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *UpgradePolicyDeleteRequest) Parameter(name string, value interface{}) *UpgradePolicyDeleteRequest {
+func (r *UpgradePolicyStateGetRequest) Parameter(name string, value interface{}) *UpgradePolicyStateGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *UpgradePolicyDeleteRequest) Header(name string, value interface{}) *UpgradePolicyDeleteRequest {
+func (r *UpgradePolicyStateGetRequest) Header(name string, value interface{}) *UpgradePolicyStateGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -244,107 +221,12 @@ func (r *UpgradePolicyDeleteRequest) Header(name string, value interface{}) *Upg
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *UpgradePolicyDeleteRequest) Send() (result *UpgradePolicyDeleteResponse, err error) {
+func (r *UpgradePolicyStateGetRequest) Send() (result *UpgradePolicyStateGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *UpgradePolicyDeleteRequest) SendContext(ctx context.Context) (result *UpgradePolicyDeleteResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: "DELETE",
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = &UpgradePolicyDeleteResponse{}
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	return
-}
-
-// UpgradePolicyDeleteResponse is the response for the 'delete' method.
-type UpgradePolicyDeleteResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-}
-
-// Status returns the response status code.
-func (r *UpgradePolicyDeleteResponse) Status() int {
-	if r == nil {
-		return 0
-	}
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *UpgradePolicyDeleteResponse) Header() http.Header {
-	if r == nil {
-		return nil
-	}
-	return r.header
-}
-
-// Error returns the response error.
-func (r *UpgradePolicyDeleteResponse) Error() *errors.Error {
-	if r == nil {
-		return nil
-	}
-	return r.err
-}
-
-// UpgradePolicyGetRequest is the request for the 'get' method.
-type UpgradePolicyGetRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *UpgradePolicyGetRequest) Parameter(name string, value interface{}) *UpgradePolicyGetRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *UpgradePolicyGetRequest) Header(name string, value interface{}) *UpgradePolicyGetRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UpgradePolicyGetRequest) Send() (result *UpgradePolicyGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UpgradePolicyGetRequest) SendContext(ctx context.Context) (result *UpgradePolicyGetResponse, err error) {
+func (r *UpgradePolicyStateGetRequest) SendContext(ctx context.Context) (result *UpgradePolicyStateGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	uri := &url.URL{
@@ -364,7 +246,7 @@ func (r *UpgradePolicyGetRequest) SendContext(ctx context.Context) (result *Upgr
 		return
 	}
 	defer response.Body.Close()
-	result = &UpgradePolicyGetResponse{}
+	result = &UpgradePolicyStateGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -375,23 +257,23 @@ func (r *UpgradePolicyGetRequest) SendContext(ctx context.Context) (result *Upgr
 		err = result.err
 		return
 	}
-	err = readUpgradePolicyGetResponse(result, response.Body)
+	err = readUpgradePolicyStateGetResponse(result, response.Body)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// UpgradePolicyGetResponse is the response for the 'get' method.
-type UpgradePolicyGetResponse struct {
+// UpgradePolicyStateGetResponse is the response for the 'get' method.
+type UpgradePolicyStateGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *UpgradePolicy
+	body   *UpgradePolicyState
 }
 
 // Status returns the response status code.
-func (r *UpgradePolicyGetResponse) Status() int {
+func (r *UpgradePolicyStateGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -399,7 +281,7 @@ func (r *UpgradePolicyGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *UpgradePolicyGetResponse) Header() http.Header {
+func (r *UpgradePolicyStateGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -407,7 +289,7 @@ func (r *UpgradePolicyGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *UpgradePolicyGetResponse) Error() *errors.Error {
+func (r *UpgradePolicyStateGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -417,7 +299,7 @@ func (r *UpgradePolicyGetResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *UpgradePolicyGetResponse) Body() *UpgradePolicy {
+func (r *UpgradePolicyStateGetResponse) Body() *UpgradePolicyState {
 	if r == nil {
 		return nil
 	}
@@ -428,7 +310,7 @@ func (r *UpgradePolicyGetResponse) Body() *UpgradePolicy {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *UpgradePolicyGetResponse) GetBody() (value *UpgradePolicy, ok bool) {
+func (r *UpgradePolicyStateGetResponse) GetBody() (value *UpgradePolicyState, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -436,24 +318,24 @@ func (r *UpgradePolicyGetResponse) GetBody() (value *UpgradePolicy, ok bool) {
 	return
 }
 
-// UpgradePolicyUpdateRequest is the request for the 'update' method.
-type UpgradePolicyUpdateRequest struct {
+// UpgradePolicyStateUpdateRequest is the request for the 'update' method.
+type UpgradePolicyStateUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	metric    string
 	query     url.Values
 	header    http.Header
-	body      *UpgradePolicy
+	body      *UpgradePolicyState
 }
 
 // Parameter adds a query parameter.
-func (r *UpgradePolicyUpdateRequest) Parameter(name string, value interface{}) *UpgradePolicyUpdateRequest {
+func (r *UpgradePolicyStateUpdateRequest) Parameter(name string, value interface{}) *UpgradePolicyStateUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *UpgradePolicyUpdateRequest) Header(name string, value interface{}) *UpgradePolicyUpdateRequest {
+func (r *UpgradePolicyStateUpdateRequest) Header(name string, value interface{}) *UpgradePolicyStateUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -461,7 +343,7 @@ func (r *UpgradePolicyUpdateRequest) Header(name string, value interface{}) *Upg
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *UpgradePolicyUpdateRequest) Body(value *UpgradePolicy) *UpgradePolicyUpdateRequest {
+func (r *UpgradePolicyStateUpdateRequest) Body(value *UpgradePolicyState) *UpgradePolicyStateUpdateRequest {
 	r.body = value
 	return r
 }
@@ -470,16 +352,16 @@ func (r *UpgradePolicyUpdateRequest) Body(value *UpgradePolicy) *UpgradePolicyUp
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *UpgradePolicyUpdateRequest) Send() (result *UpgradePolicyUpdateResponse, err error) {
+func (r *UpgradePolicyStateUpdateRequest) Send() (result *UpgradePolicyStateUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *UpgradePolicyUpdateRequest) SendContext(ctx context.Context) (result *UpgradePolicyUpdateResponse, err error) {
+func (r *UpgradePolicyStateUpdateRequest) SendContext(ctx context.Context) (result *UpgradePolicyStateUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.SetHeader(r.header, r.metric)
 	buffer := &bytes.Buffer{}
-	err = writeUpgradePolicyUpdateRequest(r, buffer)
+	err = writeUpgradePolicyStateUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -501,7 +383,7 @@ func (r *UpgradePolicyUpdateRequest) SendContext(ctx context.Context) (result *U
 		return
 	}
 	defer response.Body.Close()
-	result = &UpgradePolicyUpdateResponse{}
+	result = &UpgradePolicyStateUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	if result.status >= 400 {
@@ -512,7 +394,7 @@ func (r *UpgradePolicyUpdateRequest) SendContext(ctx context.Context) (result *U
 		err = result.err
 		return
 	}
-	err = readUpgradePolicyUpdateResponse(result, response.Body)
+	err = readUpgradePolicyStateUpdateResponse(result, response.Body)
 	if err != nil {
 		return
 	}
@@ -521,24 +403,24 @@ func (r *UpgradePolicyUpdateRequest) SendContext(ctx context.Context) (result *U
 
 // marshall is the method used internally to marshal requests for the
 // 'update' method.
-func (r *UpgradePolicyUpdateRequest) marshal(writer io.Writer) error {
+func (r *UpgradePolicyStateUpdateRequest) marshal(writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	r.stream(stream)
 	return stream.Error
 }
-func (r *UpgradePolicyUpdateRequest) stream(stream *jsoniter.Stream) {
+func (r *UpgradePolicyStateUpdateRequest) stream(stream *jsoniter.Stream) {
 }
 
-// UpgradePolicyUpdateResponse is the response for the 'update' method.
-type UpgradePolicyUpdateResponse struct {
+// UpgradePolicyStateUpdateResponse is the response for the 'update' method.
+type UpgradePolicyStateUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *UpgradePolicy
+	body   *UpgradePolicyState
 }
 
 // Status returns the response status code.
-func (r *UpgradePolicyUpdateResponse) Status() int {
+func (r *UpgradePolicyStateUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -546,7 +428,7 @@ func (r *UpgradePolicyUpdateResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *UpgradePolicyUpdateResponse) Header() http.Header {
+func (r *UpgradePolicyStateUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -554,7 +436,7 @@ func (r *UpgradePolicyUpdateResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *UpgradePolicyUpdateResponse) Error() *errors.Error {
+func (r *UpgradePolicyStateUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -564,7 +446,7 @@ func (r *UpgradePolicyUpdateResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *UpgradePolicyUpdateResponse) Body() *UpgradePolicy {
+func (r *UpgradePolicyStateUpdateResponse) Body() *UpgradePolicyState {
 	if r == nil {
 		return nil
 	}
@@ -575,7 +457,7 @@ func (r *UpgradePolicyUpdateResponse) Body() *UpgradePolicy {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *UpgradePolicyUpdateResponse) GetBody() (value *UpgradePolicy, ok bool) {
+func (r *UpgradePolicyStateUpdateResponse) GetBody() (value *UpgradePolicyState, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
