@@ -85,6 +85,7 @@ type Cluster struct {
 	ccs                               *CCS
 	dns                               *DNS
 	dnsReady                          *bool
+	gcp                               *GCP
 	addons                            *AddOnInstallationList
 	cloudProvider                     *CloudProvider
 	clusterAdminEnabled               *bool
@@ -355,6 +356,29 @@ func (o *Cluster) GetDNSReady() (value bool, ok bool) {
 	ok = o != nil && o.dnsReady != nil
 	if ok {
 		value = *o.dnsReady
+	}
+	return
+}
+
+// GCP returns the value of the 'GCP' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Google cloud platform settings of the cluster.
+func (o *Cluster) GCP() *GCP {
+	if o == nil {
+		return nil
+	}
+	return o.gcp
+}
+
+// GetGCP returns the value of the 'GCP' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Google cloud platform settings of the cluster.
+func (o *Cluster) GetGCP() (value *GCP, ok bool) {
+	ok = o != nil && o.gcp != nil
+	if ok {
+		value = o.gcp
 	}
 	return
 }

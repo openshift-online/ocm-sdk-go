@@ -3,6 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.136 Oct 5 2020
+
+- Update metamodel to v0.0.34
+** Support numeric initialisms
+- Update api-model to v0.0.86
+** Added New Error Message implementation
+** idp: Add HTPasswd provider
+** Uptdating SDK with GCP credentials
+
 == 0.1.135 Oct 5 2020
 
 - Update API model to v0.0.85
