@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.134 Oct 5 2020
+
+- Update API model to v0.0.85
+** Add upgrade policy state
+
 == 0.1.133 Sep 30 2020
 
 - increase the limit/size of content summary
