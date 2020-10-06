@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.137 Oct 5 2020
+
+- Update api-model to v0.0.87
+** Add missing machine pool resource
+
 == 0.1.136 Oct 5 2020
 
 - Update metamodel to v0.0.34
