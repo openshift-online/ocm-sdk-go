@@ -22,6 +22,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"io"
 	"net/http"
+	"sort"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
@@ -53,6 +54,30 @@ func writeClusterNodes(object *ClusterNodes, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("compute")
 		stream.WriteInt(*object.compute)
+		count++
+	}
+	if object.computeLabels != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("compute_labels")
+		stream.WriteObjectStart()
+		keys := make([]string, len(object.computeLabels))
+		i := 0
+		for key := range object.computeLabels {
+			keys[i] = key
+			i++
+		}
+		sort.Strings(keys)
+		for i, key := range keys {
+			if i > 0 {
+				stream.WriteMore()
+			}
+			item := object.computeLabels[key]
+			stream.WriteObjectField(key)
+			stream.WriteString(item)
+		}
+		stream.WriteObjectEnd()
 		count++
 	}
 	if object.computeMachineType != nil {
@@ -120,6 +145,17 @@ func readClusterNodes(iterator *jsoniter.Iterator) *ClusterNodes {
 		case "compute":
 			value := iterator.ReadInt()
 			object.compute = &value
+		case "compute_labels":
+			value := map[string]string{}
+			for {
+				key := iterator.ReadObject()
+				if key == "" {
+					break
+				}
+				item := iterator.ReadString()
+				value[key] = item
+			}
+			object.computeLabels = value
 		case "compute_machine_type":
 			value := readMachineType(iterator)
 			object.computeMachineType = value

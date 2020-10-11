@@ -25,6 +25,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 type ClusterNodes struct {
 	availabilityZones  []string
 	compute            *int
+	computeLabels      map[string]string
 	computeMachineType *MachineType
 	infra              *int
 	master             *int
@@ -35,6 +36,7 @@ type ClusterNodes struct {
 func (o *ClusterNodes) Empty() bool {
 	return o == nil || (len(o.availabilityZones) == 0 &&
 		o.compute == nil &&
+		len(o.computeLabels) == 0 &&
 		o.infra == nil &&
 		o.master == nil &&
 		o.total == nil &&
@@ -83,6 +85,29 @@ func (o *ClusterNodes) GetCompute() (value int, ok bool) {
 	ok = o != nil && o.compute != nil
 	if ok {
 		value = *o.compute
+	}
+	return
+}
+
+// ComputeLabels returns the value of the 'compute_labels' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The labels set on the "default" compute machine pool.
+func (o *ClusterNodes) ComputeLabels() map[string]string {
+	if o == nil {
+		return nil
+	}
+	return o.computeLabels
+}
+
+// GetComputeLabels returns the value of the 'compute_labels' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The labels set on the "default" compute machine pool.
+func (o *ClusterNodes) GetComputeLabels() (value map[string]string, ok bool) {
+	ok = o != nil && o.computeLabels != nil
+	if ok {
+		value = o.computeLabels
 	}
 	return
 }
