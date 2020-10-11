@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.139 Oct 11 2020
+
+- Update api-model to v0.0.90
+** Add machine pools locator
+** Add compute node labels
+- Interpret HTML entities in logged summary of error response
+- Use new limits for content summary
+
 == 0.1.138 Oct 5 2020
 
 - Update api-model to v0.0.88
