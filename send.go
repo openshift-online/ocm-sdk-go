@@ -212,7 +212,7 @@ func (c *Connection) contentSummary(mediaType string, response *http.Response) (
 		runes = []rune(content)
 	}
 	if len(runes) > limit {
-		summary = fmt.Sprintf("%s...", string(runes[:200]))
+		summary = fmt.Sprintf("%s...", string(runes[:limit]))
 	} else {
 		summary = string(runes)
 	}
