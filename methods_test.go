@@ -446,6 +446,38 @@ var _ = Describe("Methods", func() {
 			Expect(message).To(ContainSubstring("Application is not available"))
 			Expect(message).To(ContainSubstring("..."))
 		})
+
+		It("Summary shows html entities in a readable form", func() {
+			content := errorWithHTMLEntities
+
+			// Configure the server:
+			apiServer.AppendHandlers(
+				ghttp.RespondWith(
+					http.StatusBadGateway,
+					content,
+					http.Header{
+						"Content-Type": []string{
+							"text/html",
+						},
+					},
+				),
+			)
+
+			// Try to get the access token:
+			_, err := connection.Get().
+				Path("/api/clusters_mgmt/v1/clusters").
+				Send()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("text/html"))
+			Expect(message).NotTo(ContainSubstring("tag was not removed"))
+			Expect(message).To(ContainSubstring(
+				`You don't have permission to access "http://sso.redhat.com/AK_PM_VPATH0/" ` +
+					`on this server. Reference #18.3500e8ac.1601993172.3a9c59e`))
+			Expect(message).To(ContainSubstring(`< > " & € ∭`))
+			// Sufficiently short to log Akamai reference number without shortening.
+			Expect(message).NotTo(ContainSubstring("..."))
+		})
 	})
 })
 
@@ -584,6 +616,26 @@ const gatewayError = `
         </ul>
       </div>
     </div>
+  </body>
+</html>
+`
+
+// The text in body is a real response from Akamai blocking/rate-limiting our access to SSO.
+// I don't have the original HTML so the head & tags are made up.
+const errorWithHTMLEntities = `
+<html>
+  <head>
+  <title>Access Denied</title>
+  <script>
+   if(2 < 3) alert("2 &lt; 3 but more imporantly &lt;script&gt; tag was not removed!");
+  </script>
+  </head>
+  <body>
+   <h1>Access Denied</h1>
+   <p>You don't have permission to access
+   "http&#58;&#47;&#47;sso&#46;redhat&#46;com&#47;AK&#95;PM&#95;VPATH0&#47;" on this server.
+   Reference&#32;&#35;18&#46;3500e8ac&#46;1601993172&#46;3a9c59e</p>
+   &lt; &gt; &quot; &amp; &euro; &tint;
   </body>
 </html>
 `
