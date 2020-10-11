@@ -5598,6 +5598,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "compute_labels": {
+            "description": "The labels set on the \"default\" compute machine pool.\n",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "compute_machine_type": {
             "description": "The compute machine type to use, for example `r5.xlarge`.\n",
             "$ref": "#/components/schemas/MachineType"
