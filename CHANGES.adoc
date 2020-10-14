@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.140 Oct 14 2020
+
+- Update api-model to v0.0.91
+** Remove redudant fields
+** flavours: Remove infra and compute nodes
+** Add AddOnParameter modal type Update AddOn to include list of AddOnParameters
+** Add AddOnInstallationParameter modal type Update AddOnInstallation to include list of AddOnInstallationParameters
+
 == 0.1.139 Oct 11 2020
 
 - Update api-model to v0.0.90

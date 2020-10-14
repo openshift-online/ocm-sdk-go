@@ -36,6 +36,7 @@ type AddOnBuilder struct {
 	label                *string
 	name                 *string
 	operatorName         *string
+	parameters           *AddOnParameterListBuilder
 	resourceCost         *float64
 	resourceName         *string
 	targetNamespace      *string
@@ -144,6 +145,14 @@ func (b *AddOnBuilder) OperatorName(value string) *AddOnBuilder {
 	return b
 }
 
+// Parameters sets the value of the 'parameters' attribute to the given values.
+//
+//
+func (b *AddOnBuilder) Parameters(value *AddOnParameterListBuilder) *AddOnBuilder {
+	b.parameters = value
+	return b
+}
+
 // ResourceCost sets the value of the 'resource_cost' attribute to the given value.
 //
 //
@@ -186,6 +195,11 @@ func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	b.label = object.label
 	b.name = object.name
 	b.operatorName = object.operatorName
+	if object.parameters != nil {
+		b.parameters = NewAddOnParameterList().Copy(object.parameters)
+	} else {
+		b.parameters = nil
+	}
 	b.resourceCost = object.resourceCost
 	b.resourceName = object.resourceName
 	b.targetNamespace = object.targetNamespace
@@ -208,6 +222,12 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 	object.label = b.label
 	object.name = b.name
 	object.operatorName = b.operatorName
+	if b.parameters != nil {
+		object.parameters, err = b.parameters.Build()
+		if err != nil {
+			return
+		}
+	}
 	object.resourceCost = b.resourceCost
 	object.resourceName = b.resourceName
 	object.targetNamespace = b.targetNamespace

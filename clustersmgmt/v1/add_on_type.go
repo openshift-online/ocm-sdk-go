@@ -48,6 +48,7 @@ type AddOn struct {
 	label                *string
 	name                 *string
 	operatorName         *string
+	parameters           *AddOnParameterList
 	resourceCost         *float64
 	resourceName         *string
 	targetNamespace      *string
@@ -118,6 +119,7 @@ func (o *AddOn) Empty() bool {
 		o.label == nil &&
 		o.name == nil &&
 		o.operatorName == nil &&
+		o.parameters.Len() == 0 &&
 		o.resourceCost == nil &&
 		o.resourceName == nil &&
 		o.targetNamespace == nil &&
@@ -350,6 +352,29 @@ func (o *AddOn) GetOperatorName() (value string, ok bool) {
 	ok = o != nil && o.operatorName != nil
 	if ok {
 		value = *o.operatorName
+	}
+	return
+}
+
+// Parameters returns the value of the 'parameters' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// List of parameters for this add-on.
+func (o *AddOn) Parameters() *AddOnParameterList {
+	if o == nil {
+		return nil
+	}
+	return o.parameters
+}
+
+// GetParameters returns the value of the 'parameters' attribute and
+// a flag indicating if the attribute has a value.
+//
+// List of parameters for this add-on.
+func (o *AddOn) GetParameters() (value *AddOnParameterList, ok bool) {
+	ok = o != nil && o.parameters != nil
+	if ok {
+		value = o.parameters
 	}
 	return
 }

@@ -39,22 +39,6 @@ func MarshalFlavourNodes(object *FlavourNodes, writer io.Writer) error {
 func writeFlavourNodes(object *FlavourNodes, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.compute != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("compute")
-		stream.WriteInt(*object.compute)
-		count++
-	}
-	if object.infra != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("infra")
-		stream.WriteInt(*object.infra)
-		count++
-	}
 	if object.master != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -90,12 +74,6 @@ func readFlavourNodes(iterator *jsoniter.Iterator) *FlavourNodes {
 			break
 		}
 		switch field {
-		case "compute":
-			value := iterator.ReadInt()
-			object.compute = &value
-		case "infra":
-			value := iterator.ReadInt()
-			object.infra = &value
 		case "master":
 			value := iterator.ReadInt()
 			object.master = &value
