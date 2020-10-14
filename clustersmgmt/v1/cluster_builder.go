@@ -72,7 +72,6 @@ type ClusterBuilder struct {
 	byoc                              *bool
 	ccs                               *CCSBuilder
 	dns                               *DNSBuilder
-	dnsReady                          *bool
 	gcp                               *GCPBuilder
 	addons                            *AddOnInstallationListBuilder
 	cloudProvider                     *CloudProviderBuilder
@@ -176,14 +175,6 @@ func (b *ClusterBuilder) CCS(value *CCSBuilder) *ClusterBuilder {
 // DNS settings of the cluster.
 func (b *ClusterBuilder) DNS(value *DNSBuilder) *ClusterBuilder {
 	b.dns = value
-	return b
-}
-
-// DNSReady sets the value of the 'DNS_ready' attribute to the given value.
-//
-//
-func (b *ClusterBuilder) DNSReady(value bool) *ClusterBuilder {
-	b.dnsReady = &value
 	return b
 }
 
@@ -503,7 +494,6 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.dns = nil
 	}
-	b.dnsReady = object.dnsReady
 	if object.gcp != nil {
 		b.gcp = NewGCP().Copy(object.gcp)
 	} else {
@@ -664,7 +654,6 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			return
 		}
 	}
-	object.dnsReady = b.dnsReady
 	if b.gcp != nil {
 		object.gcp, err = b.gcp.Build()
 		if err != nil {

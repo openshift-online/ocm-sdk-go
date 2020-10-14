@@ -4149,7 +4149,7 @@
         }
       },
       "patch": {
-        "description": "Updates the flavour.\n\nAttributes that can be updated are:\n\n- `nodes.infra`\n- `aws.infra_volume`\n- `aws.infra_instance_type`\n- `gcp.infra_instance_type`\n",
+        "description": "Updates the flavour.\n\nAttributes that can be updated are:\n\n- `aws.infra_volume`\n- `aws.infra_instance_type`\n- `gcp.infra_instance_type`\n",
         "parameters": [
           {
             "name": "flavour_id",
@@ -5068,6 +5068,13 @@
             "description": "The name of the operator installed by this add-on.\n",
             "type": "string"
           },
+          "parameters": {
+            "description": "List of parameters for this add-on.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnParameter"
+            }
+          },
           "resource_cost": {
             "description": "Used to determine how many units of quota an add-on consumes per resource name.\n",
             "type": "number",
@@ -5123,6 +5130,13 @@
             "description": "Version of the operator installed by the add-on.\n",
             "type": "string"
           },
+          "parameters": {
+            "description": "List of add-on parameters for this add-on installation.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnInstallationParameter"
+            }
+          },
           "state": {
             "description": "Overall state of the add-on installation.\n",
             "$ref": "#/components/schemas/AddOnInstallationState"
@@ -5138,6 +5152,27 @@
           }
         }
       },
+      "AddOnInstallationParameter": {
+        "description": "Representation of an add-on installation parameter.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnInstallationParameter' if this is a complete object or 'AddOnInstallationParameterLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the parameter.\n",
+            "type": "string"
+          }
+        }
+      },
       "AddOnInstallationState": {
         "description": "Representation of an add-on installation State field.\n",
         "type": "string",
@@ -5148,6 +5183,51 @@
           "pending",
           "ready"
         ]
+      },
+      "AddOnParameter": {
+        "description": "Representation of an add-on parameter.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnParameter' if this is a complete object or 'AddOnParameterLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "addon": {
+            "description": "Link to add-on.\n",
+            "$ref": "#/components/schemas/AddOn"
+          },
+          "description": {
+            "description": "Description of the add-on parameter.\n",
+            "type": "string"
+          },
+          "editable": {
+            "description": "Indicates if this parameter can be edited after creation.\n",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the add-on parameter.\n",
+            "type": "string"
+          },
+          "required": {
+            "description": "Indicates if this parameter is required by the add-on.\n",
+            "type": "boolean"
+          },
+          "validation": {
+            "description": "Validation rule for the add-on parameter.\n",
+            "type": "string"
+          },
+          "value_type": {
+            "description": "Type of value of the add-on parameter.\n",
+            "type": "string"
+          }
+        }
       },
       "AdminCredentials": {
         "description": "Temporary administrator credentials generated during the installation of the\ncluster.\n",
@@ -5298,10 +5378,6 @@
           "dns": {
             "description": "DNS settings of the cluster.\n",
             "$ref": "#/components/schemas/DNS"
-          },
-          "dns_ready": {
-            "description": "Provisioner DNS Ready Status\n",
-            "type": "boolean"
           },
           "gcp": {
             "description": "Google cloud platform settings of the cluster.\n",
@@ -5825,16 +5901,6 @@
       "FlavourNodes": {
         "description": "Counts of different classes of nodes inside a flavour.\n",
         "properties": {
-          "compute": {
-            "description": "Number of compute nodes of the cluster.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "infra": {
-            "description": "Number of infra nodes of the cluster.\n",
-            "type": "integer",
-            "format": "int32"
-          },
           "master": {
             "description": "Number of master nodes of the cluster.\n",
             "type": "integer",
