@@ -31,6 +31,7 @@ type VersionBuilder struct {
 	channelGroup      *string
 	default_          *bool
 	enabled           *bool
+	rawID             *string
 }
 
 // NewVersion creates a new builder of 'version' objects.
@@ -97,6 +98,14 @@ func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
 	return b
 }
 
+// RawID sets the value of the 'raw_ID' attribute to the given value.
+//
+//
+func (b *VersionBuilder) RawID(value string) *VersionBuilder {
+	b.rawID = &value
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
 	if object == nil {
@@ -115,6 +124,7 @@ func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
 	b.channelGroup = object.channelGroup
 	b.default_ = object.default_
 	b.enabled = object.enabled
+	b.rawID = object.rawID
 	return b
 }
 
@@ -132,5 +142,6 @@ func (b *VersionBuilder) Build() (object *Version, err error) {
 	object.channelGroup = b.channelGroup
 	object.default_ = b.default_
 	object.enabled = b.enabled
+	object.rawID = b.rawID
 	return
 }
