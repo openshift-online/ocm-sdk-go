@@ -43,6 +43,7 @@ type Version struct {
 	channelGroup      *string
 	default_          *bool
 	enabled           *bool
+	rawID             *string
 }
 
 // Kind returns the name of the type of the object.
@@ -105,6 +106,7 @@ func (o *Version) Empty() bool {
 		o.channelGroup == nil &&
 		o.default_ == nil &&
 		o.enabled == nil &&
+		o.rawID == nil &&
 		true)
 }
 
@@ -225,6 +227,29 @@ func (o *Version) GetEnabled() (value bool, ok bool) {
 	ok = o != nil && o.enabled != nil
 	if ok {
 		value = *o.enabled
+	}
+	return
+}
+
+// RawID returns the value of the 'raw_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// RawID is the id of the version - without channel group and prefix.
+func (o *Version) RawID() string {
+	if o != nil && o.rawID != nil {
+		return *o.rawID
+	}
+	return ""
+}
+
+// GetRawID returns the value of the 'raw_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+// RawID is the id of the version - without channel group and prefix.
+func (o *Version) GetRawID() (value string, ok bool) {
+	ok = o != nil && o.rawID != nil
+	if ok {
+		value = *o.rawID
 	}
 	return
 }

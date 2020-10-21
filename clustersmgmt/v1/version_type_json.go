@@ -105,6 +105,14 @@ func writeVersion(object *Version, stream *jsoniter.Stream) {
 		stream.WriteBool(*object.enabled)
 		count++
 	}
+	if object.rawID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("raw_id")
+		stream.WriteString(*object.rawID)
+		count++
+	}
 	stream.WriteObjectEnd()
 }
 
@@ -156,6 +164,9 @@ func readVersion(iterator *jsoniter.Iterator) *Version {
 		case "enabled":
 			value := iterator.ReadBool()
 			object.enabled = &value
+		case "raw_id":
+			value := iterator.ReadString()
+			object.rawID = &value
 		default:
 			iterator.ReadAny()
 		}
