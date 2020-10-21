@@ -58,19 +58,20 @@ var DefaultScopes = []string{
 // function instead.
 type ConnectionBuilder struct {
 	// Basic attributes:
-	logger           Logger
-	trustedCAs       *x509.CertPool
-	insecure         bool
-	tokenURL         string
-	clientID         string
-	clientSecret     string
-	apiURL           string
-	agent            string
-	user             string
-	password         string
-	tokens           []string
-	scopes           []string
-	transportWrapper TransportWrapper
+	logger            Logger
+	trustedCAs        *x509.CertPool
+	insecure          bool
+	disableKeepAlives bool
+	tokenURL          string
+	clientID          string
+	clientSecret      string
+	apiURL            string
+	agent             string
+	user              string
+	password          string
+	tokens            []string
+	scopes            []string
+	transportWrapper  TransportWrapper
 
 	// Metrics:
 	subsystem string
@@ -85,23 +86,24 @@ type TransportWrapper func(http.RoundTripper) http.RoundTripper
 // of this type directly, use the builder instead.
 type Connection struct {
 	// Basic attributes:
-	closed       bool
-	logger       Logger
-	trustedCAs   *x509.CertPool
-	insecure     bool
-	client       *http.Client
-	tokenURL     *url.URL
-	clientID     string
-	clientSecret string
-	apiURL       *url.URL
-	agent        string
-	user         string
-	password     string
-	tokenMutex   *sync.Mutex
-	tokenParser  *jwt.Parser
-	accessToken  *jwt.Token
-	refreshToken *jwt.Token
-	scopes       []string
+	closed            bool
+	logger            Logger
+	trustedCAs        *x509.CertPool
+	insecure          bool
+	disableKeepAlives bool
+	client            *http.Client
+	tokenURL          *url.URL
+	clientID          string
+	clientSecret      string
+	apiURL            *url.URL
+	agent             string
+	user              string
+	password          string
+	tokenMutex        *sync.Mutex
+	tokenParser       *jwt.Parser
+	accessToken       *jwt.Token
+	refreshToken      *jwt.Token
+	scopes            []string
 
 	// Metrics:
 	tokenCountMetric    *prometheus.CounterVec
@@ -259,6 +261,13 @@ func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder 
 // certificates and host names and it isn't recommended for a production environment.
 func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 	b.insecure = flag
+	return b
+}
+
+// DisableKeepAlives disables HTTP keep-alives with the server. This is unrelated to similarly
+// named TCP keep-alives.
+func (b *ConnectionBuilder) DisableKeepAlives(flag bool) *ConnectionBuilder {
+	b.disableKeepAlives = flag
 	return b
 }
 
@@ -486,21 +495,22 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 
 	// Allocate and populate the connection object:
 	connection = &Connection{
-		logger:       b.logger,
-		trustedCAs:   b.trustedCAs,
-		insecure:     b.insecure,
-		client:       client,
-		tokenURL:     tokenURL,
-		clientID:     clientID,
-		clientSecret: clientSecret,
-		apiURL:       apiURL,
-		agent:        agent,
-		user:         b.user,
-		password:     b.password,
-		tokenParser:  tokenParser,
-		accessToken:  accessToken,
-		refreshToken: refreshToken,
-		scopes:       scopes,
+		logger:            b.logger,
+		trustedCAs:        b.trustedCAs,
+		insecure:          b.insecure,
+		disableKeepAlives: b.disableKeepAlives,
+		client:            client,
+		tokenURL:          tokenURL,
+		clientID:          clientID,
+		clientSecret:      clientSecret,
+		apiURL:            apiURL,
+		agent:             agent,
+		user:              b.user,
+		password:          b.password,
+		tokenParser:       tokenParser,
+		accessToken:       accessToken,
+		refreshToken:      refreshToken,
+		scopes:            scopes,
 	}
 
 	// Create the mutex that protects token manipulations:
@@ -531,7 +541,8 @@ func (b *ConnectionBuilder) createTransport() (transport http.RoundTripper, err 
 			InsecureSkipVerify: b.insecure,
 			RootCAs:            b.trustedCAs,
 		},
-		Proxy: http.ProxyFromEnvironment,
+		Proxy:             http.ProxyFromEnvironment,
+		DisableKeepAlives: b.disableKeepAlives,
 	}
 
 	// If debug is enabled then wrap the raw transport with the round tripper that sends the
@@ -598,6 +609,10 @@ func (c *Connection) TrustedCAs() *x509.CertPool {
 // Insecure returns the flag that indicates if insecure communication with the server is enabled.
 func (c *Connection) Insecure() bool {
 	return c.insecure
+}
+
+func (c *Connection) DisableKeepAlives() bool {
+	return c.disableKeepAlives
 }
 
 // AccountsMgmt returns the client for the accounts management service.
