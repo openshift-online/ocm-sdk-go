@@ -6710,8 +6710,8 @@
             "description": "Self link.\n",
             "type": "string"
           },
-          "moa_enabled": {
-            "description": "MOAEnabled indicates whether this version can be used to create MOA clusters.\n",
+          "rosa_enabled": {
+            "description": "ROSAEnabled indicates whether this version can be used to create ROSA clusters.\n",
             "type": "boolean"
           },
           "available_upgrades": {

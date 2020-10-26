@@ -4839,6 +4839,10 @@
             "description": "Indicates which Cluster (external id) the resource type belongs to\n",
             "type": "string"
           },
+          "include_red_hat_associates": {
+            "description": "Indicates whether to include red hat associates in the email notification\n",
+            "type": "boolean"
+          },
           "subject": {
             "description": "The email subject\n",
             "type": "string"
