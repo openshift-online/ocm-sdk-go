@@ -26,7 +26,7 @@ type VersionBuilder struct {
 	id                *string
 	href              *string
 	link              bool
-	moaEnabled        *bool
+	rosaEnabled       *bool
 	availableUpgrades []string
 	channelGroup      *string
 	default_          *bool
@@ -57,11 +57,11 @@ func (b *VersionBuilder) Link(value bool) *VersionBuilder {
 	return b
 }
 
-// MOAEnabled sets the value of the 'MOA_enabled' attribute to the given value.
+// ROSAEnabled sets the value of the 'ROSA_enabled' attribute to the given value.
 //
 //
-func (b *VersionBuilder) MOAEnabled(value bool) *VersionBuilder {
-	b.moaEnabled = &value
+func (b *VersionBuilder) ROSAEnabled(value bool) *VersionBuilder {
+	b.rosaEnabled = &value
 	return b
 }
 
@@ -114,7 +114,7 @@ func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
 	b.id = object.id
 	b.href = object.href
 	b.link = object.link
-	b.moaEnabled = object.moaEnabled
+	b.rosaEnabled = object.rosaEnabled
 	if object.availableUpgrades != nil {
 		b.availableUpgrades = make([]string, len(object.availableUpgrades))
 		copy(b.availableUpgrades, object.availableUpgrades)
@@ -134,7 +134,7 @@ func (b *VersionBuilder) Build() (object *Version, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
-	object.moaEnabled = b.moaEnabled
+	object.rosaEnabled = b.rosaEnabled
 	if b.availableUpgrades != nil {
 		object.availableUpgrades = make([]string, len(b.availableUpgrades))
 		copy(object.availableUpgrades, b.availableUpgrades)
