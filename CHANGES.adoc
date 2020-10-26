@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.142 Oct 26 2020
+
+- Allow disabling keep alive connections in the SDK connection transport
+- Update api-model to v0.0.94
+** version: Rename field from MOA to ROSA
+** [AMS] Add IncludeRedHatAssociates to SubscriptionNotify
+
 == 0.1.141 Oct 21 2020
 
 - Update api-model to v0.0.92
