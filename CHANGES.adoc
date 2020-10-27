@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.143 Oct 27 2020
+
+- Update api-model to v0.0.95
+** Add SubnetIDs field to AWS type.
+
 == 0.1.142 Oct 26 2020
 
 - Allow disabling keep alive connections in the SDK connection transport
