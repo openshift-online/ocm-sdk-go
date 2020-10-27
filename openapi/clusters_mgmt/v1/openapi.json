@@ -4657,6 +4657,13 @@
           "secret_access_key": {
             "description": "AWS secret access key.\n",
             "type": "string"
+          },
+          "subnet_ids": {
+            "description": "SubnetIDs are the subnet ids to be used when installing the cluster.\n",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
