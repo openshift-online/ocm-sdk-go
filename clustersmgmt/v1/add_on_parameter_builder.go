@@ -29,6 +29,7 @@ type AddOnParameterBuilder struct {
 	addon       *AddOnBuilder
 	description *string
 	editable    *bool
+	enabled     *bool
 	name        *string
 	required    *bool
 	validation  *string
@@ -82,6 +83,14 @@ func (b *AddOnParameterBuilder) Editable(value bool) *AddOnParameterBuilder {
 	return b
 }
 
+// Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
+func (b *AddOnParameterBuilder) Enabled(value bool) *AddOnParameterBuilder {
+	b.enabled = &value
+	return b
+}
+
 // Name sets the value of the 'name' attribute to the given value.
 //
 //
@@ -129,6 +138,7 @@ func (b *AddOnParameterBuilder) Copy(object *AddOnParameter) *AddOnParameterBuil
 	}
 	b.description = object.description
 	b.editable = object.editable
+	b.enabled = object.enabled
 	b.name = object.name
 	b.required = object.required
 	b.validation = object.validation
@@ -150,6 +160,7 @@ func (b *AddOnParameterBuilder) Build() (object *AddOnParameter, err error) {
 	}
 	object.description = b.description
 	object.editable = b.editable
+	object.enabled = b.enabled
 	object.name = b.name
 	object.required = b.required
 	object.validation = b.validation
