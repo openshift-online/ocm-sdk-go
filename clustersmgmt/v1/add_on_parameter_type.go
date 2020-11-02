@@ -41,6 +41,7 @@ type AddOnParameter struct {
 	addon       *AddOn
 	description *string
 	editable    *bool
+	enabled     *bool
 	name        *string
 	required    *bool
 	validation  *string
@@ -104,6 +105,7 @@ func (o *AddOnParameter) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.description == nil &&
 		o.editable == nil &&
+		o.enabled == nil &&
 		o.name == nil &&
 		o.required == nil &&
 		o.validation == nil &&
@@ -176,6 +178,29 @@ func (o *AddOnParameter) GetEditable() (value bool, ok bool) {
 	ok = o != nil && o.editable != nil
 	if ok {
 		value = *o.editable
+	}
+	return
+}
+
+// Enabled returns the value of the 'enabled' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates if this parameter is enabled for the add-on.
+func (o *AddOnParameter) Enabled() bool {
+	if o != nil && o.enabled != nil {
+		return *o.enabled
+	}
+	return false
+}
+
+// GetEnabled returns the value of the 'enabled' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates if this parameter is enabled for the add-on.
+func (o *AddOnParameter) GetEnabled() (value bool, ok bool) {
+	ok = o != nil && o.enabled != nil
+	if ok {
+		value = *o.enabled
 	}
 	return
 }

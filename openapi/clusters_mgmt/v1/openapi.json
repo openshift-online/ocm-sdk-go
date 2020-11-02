@@ -5218,6 +5218,10 @@
             "description": "Indicates if this parameter can be edited after creation.\n",
             "type": "boolean"
           },
+          "enabled": {
+            "description": "Indicates if this parameter is enabled for the add-on.\n",
+            "type": "boolean"
+          },
           "name": {
             "description": "Name of the add-on parameter.\n",
             "type": "string"

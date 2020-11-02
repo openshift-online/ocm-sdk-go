@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.144 Nov 2 2020
+
+- Update model to v0.0.96
+** Add Enabled to AddOnParameter type.
+
 == 0.1.143 Oct 27 2020
 
 - Update api-model to v0.0.95
