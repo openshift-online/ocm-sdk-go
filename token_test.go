@@ -984,30 +984,22 @@ var _ = Describe("Tokens", func() {
 		})
 	})
 
-	Describe("Test retry for getting access token", func() {
+	Describe("Retry for getting access token", func() {
 		It("Return access token after a few retries", func() {
 			// Generate tokens:
 			refreshToken := DefaultToken("Refresh", 10*time.Hour)
 			accessToken := DefaultToken("Bearer", 5*time.Minute)
 
 			oidServer.AppendHandlers(
-				ghttp.RespondWith(
+				RespondWithContent(
 					http.StatusInternalServerError,
-					`Internal Server Error`,
-					http.Header{
-						"Content-Type": []string{
-							"text/plain",
-						},
-					},
+					"text/plain",
+					"Internal Server Error",
 				),
-				ghttp.RespondWith(
+				RespondWithContent(
 					http.StatusBadGateway,
-					`Bad Gateway`,
-					http.Header{
-						"Content-Type": []string{
-							"text/plain",
-						},
-					},
+					"text/plain",
+					"Bad Gateway",
 				),
 				ghttp.CombineHandlers(
 					VerifyRefreshGrant(refreshToken),
@@ -1039,29 +1031,21 @@ var _ = Describe("Tokens", func() {
 			counter := connection.tokenCountMetric.With(expectedLabels)
 			Expect(testutil.ToFloat64(counter)).To(Equal(1.0))
 		})
+
 		It("Test no retry when status is not http 5xx", func() {
 			// Generate tokens:
 			refreshToken := DefaultToken("Refresh", 10*time.Hour)
 			accessToken := DefaultToken("Bearer", 5*time.Minute)
 
 			oidServer.AppendHandlers(
-				ghttp.RespondWith(
+				RespondWithContent(
 					http.StatusInternalServerError,
-					`Internal Server Error`,
-					http.Header{
-						"Content-Type": []string{
-							"text/plain",
-						},
-					},
+					"text/plain",
+					"Internal Server Error",
 				),
-				ghttp.RespondWith(
+				RespondWithJSON(
 					http.StatusForbidden,
-					`{}`,
-					http.Header{
-						"Content-Type": []string{
-							"application/json",
-						},
-					},
+					"{}",
 				),
 				ghttp.CombineHandlers(
 					VerifyRefreshGrant(refreshToken),

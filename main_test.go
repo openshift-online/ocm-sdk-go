@@ -39,16 +39,34 @@ func TestClient(t *testing.T) {
 var _ = BeforeSuite(func() {
 	var err error
 
-	// Load the keys used to sign and verify tokens:j
+	// Load the keys used to sign and verify tokens:
 	jwtPublicKey, err = jwt.ParseRSAPublicKeyFromPEM([]byte(jwtPublicKeyPEM))
 	Expect(err).ToNot(HaveOccurred())
 	jwtPrivateKey, err = jwt.ParseRSAPrivateKeyFromPEM([]byte(jwtPrivateKeyPEM))
 	Expect(err).ToNot(HaveOccurred())
 })
 
-// RespondWithTemplate responds with the given status code and with a JSON body that is generated
-// from the given template and the name value pairs given as arguments. For example, the following
-// code:
+// RespondeWithContent responds with the given status code, content type and body.
+func RespondWithContent(status int, contentType, body string) http.HandlerFunc {
+	return ghttp.RespondWith(
+		status,
+		body,
+		http.Header{
+			"Content-Type": []string{
+				contentType,
+			},
+		},
+	)
+}
+
+// RespondWithJSON responds with the given status code and JSON body.
+func RespondWithJSON(status int, body string) http.HandlerFunc {
+	return RespondWithContent(status, "application/json", body)
+}
+
+// RespondWithJSONTemplate responds with the given status code and with a JSON body that is
+// generated from the given template and the name value pairs given as arguments. For example, the
+// following code:
 //
 //	RespondWithJSONTemplate(
 //		http.StatusOK,
@@ -66,7 +84,7 @@ var _ = BeforeSuite(func() {
 //		"access_token": "myaccesstoken"
 //		"access_token": "myrefreshtoken"
 //	}
-func RespondWithJSONTemplate(statusCode int, source string, args ...interface{}) http.HandlerFunc {
+func RespondWithJSONTemplate(status int, source string, args ...interface{}) http.HandlerFunc {
 	// Check that there is an even number of args, and that the first of each pair is a string:
 	count := len(args)
 	Expect(count%2).To(
@@ -111,13 +129,7 @@ func RespondWithJSONTemplate(statusCode int, source string, args ...interface{})
 		source, err,
 	)
 
-	return ghttp.RespondWith(
-		statusCode,
-		buffer.Bytes(),
-		http.Header{
-			"Content-Type": []string{"application/json"},
-		},
-	)
+	return RespondWithJSON(status, buffer.String())
 }
 
 // RespondWithCookie responds to the request adding a cookie with the given name and value.

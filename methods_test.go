@@ -41,8 +41,6 @@ var _ = Describe("Methods", func() {
 	// Connection used during the tests:
 	var connection *Connection
 
-	jsonHeader := http.Header{"Content-Type": []string{"application/json"}}
-
 	BeforeEach(func() {
 		var err error
 
@@ -100,7 +98,7 @@ var _ = Describe("Methods", func() {
 			apiServer.AppendHandlers(
 				ghttp.CombineHandlers(
 					ghttp.VerifyRequest(http.MethodGet, "/mypath"),
-					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+					RespondWithJSON(http.StatusOK, ""),
 				),
 			)
 
@@ -116,7 +114,7 @@ var _ = Describe("Methods", func() {
 			apiServer.AppendHandlers(
 				ghttp.CombineHandlers(
 					ghttp.VerifyHeaderKV("Accept", "application/json"),
-					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+					RespondWithJSON(http.StatusOK, ""),
 				),
 			)
 
@@ -132,7 +130,7 @@ var _ = Describe("Methods", func() {
 			apiServer.AppendHandlers(
 				ghttp.CombineHandlers(
 					ghttp.VerifyFormKV("myparameter", "myvalue"),
-					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+					RespondWithJSON(http.StatusOK, ""),
 				),
 			)
 
@@ -150,7 +148,7 @@ var _ = Describe("Methods", func() {
 				ghttp.CombineHandlers(
 					ghttp.VerifyFormKV("myparameter", "myvalue"),
 					ghttp.VerifyFormKV("yourparameter", "yourvalue"),
-					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+					RespondWithJSON(http.StatusOK, ""),
 				),
 			)
 
@@ -168,7 +166,7 @@ var _ = Describe("Methods", func() {
 			apiServer.AppendHandlers(
 				ghttp.CombineHandlers(
 					ghttp.VerifyHeaderKV("myheader", "myvalue"),
-					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+					RespondWithJSON(http.StatusOK, ""),
 				),
 			)
 
@@ -186,7 +184,7 @@ var _ = Describe("Methods", func() {
 				ghttp.CombineHandlers(
 					ghttp.VerifyHeaderKV("myheader", "myvalue"),
 					ghttp.VerifyHeaderKV("yourheader", "yourvalue"),
-					ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+					RespondWithJSON(http.StatusOK, ""),
 				),
 			)
 
@@ -202,7 +200,7 @@ var _ = Describe("Methods", func() {
 		It("Receives body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, `{"test":"mybody"}`, jsonHeader),
+				RespondWithJSON(http.StatusOK, `{"test":"mybody"}`),
 			)
 
 			// Send the request:
@@ -219,7 +217,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 200", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				RespondWithJSON(http.StatusOK, ""),
 			)
 
 			// Send the request:
@@ -234,7 +232,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 400", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusBadRequest, nil, jsonHeader),
+				RespondWithJSON(http.StatusBadRequest, ""),
 			)
 
 			// Send the request:
@@ -249,7 +247,7 @@ var _ = Describe("Methods", func() {
 		It("Receives status code 500", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusInternalServerError, nil, jsonHeader),
+				RespondWithJSON(http.StatusInternalServerError, ""),
 			)
 
 			// Send the request:
@@ -302,7 +300,7 @@ var _ = Describe("Methods", func() {
 		It("Accepts empty body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				RespondWithJSON(http.StatusOK, ""),
 			)
 
 			// Send the request:
@@ -317,7 +315,7 @@ var _ = Describe("Methods", func() {
 		It("Increments outbound prometheus counter", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusTeapot, nil, jsonHeader),
+				RespondWithJSON(http.StatusTeapot, ""),
 			)
 
 			// Send the request:
@@ -343,7 +341,7 @@ var _ = Describe("Methods", func() {
 		It("Accepts empty body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				RespondWithJSON(http.StatusOK, ""),
 			)
 
 			// Send the request:
@@ -360,7 +358,7 @@ var _ = Describe("Methods", func() {
 		It("Accepts empty body", func() {
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(http.StatusOK, nil, jsonHeader),
+				RespondWithJSON(http.StatusOK, ""),
 			)
 
 			// Send the request:
@@ -425,15 +423,7 @@ var _ = Describe("Methods", func() {
 
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(
-					http.StatusBadGateway,
-					content,
-					http.Header{
-						"Content-Type": []string{
-							"text/html",
-						},
-					},
-				),
+				RespondWithContent(http.StatusBadGateway, "text/html", content),
 			)
 
 			// Try to get the access token:
@@ -452,15 +442,7 @@ var _ = Describe("Methods", func() {
 
 			// Configure the server:
 			apiServer.AppendHandlers(
-				ghttp.RespondWith(
-					http.StatusBadGateway,
-					content,
-					http.Header{
-						"Content-Type": []string{
-							"text/html",
-						},
-					},
-				),
+				RespondWithContent(http.StatusBadGateway, "text/html", content),
 			)
 
 			// Try to get the access token:
