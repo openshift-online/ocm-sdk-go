@@ -59,13 +59,6 @@ var _ = Describe("Methods", func() {
 		// Create the API server:
 		apiServer = ghttp.NewServer()
 
-		// Create the logger:
-		logger, err = NewStdLoggerBuilder().
-			Streams(GinkgoWriter, GinkgoWriter).
-			Debug(true).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-
 		// Metrics subsystem - value doesn't matter but configuring it enables
 		// prometheus exporting, exercising the counter increment functionality
 		// (e.g. will catch inconsistent labels).
