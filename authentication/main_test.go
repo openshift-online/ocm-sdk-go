@@ -21,6 +21,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math/big"
 	"os"
 	"testing"
@@ -28,6 +29,7 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/ghttp"
 
 	"github.com/dgrijalva/jwt-go"
 
@@ -96,6 +98,14 @@ var _ = AfterSuite(func() {
 	err := os.Remove(keysFile)
 	Expect(err).ToNot(HaveOccurred())
 })
+
+// MakeTLSServer creates a test TLS server configured so that it sends log messages to the Ginkgo writer.
+func MakeTLSServer() *ghttp.Server {
+	server := ghttp.NewTLSServer()
+	server.Writer = GinkgoWriter
+	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	return server
+}
 
 // IssueToken generates a token with the claims resulting from merging the default claims and the
 // claims explicitly given.
