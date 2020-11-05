@@ -70,6 +70,17 @@ func (c *Connection) TokensContext(
 		expiresDuration = expiresIn[0]
 	}
 
+	// Configure the back-off so that it honours the deadline of the context passed
+	// to the method. Note that we need to specify explicitly the type of the variable
+	// because the backoff.NewExponentialBackOff function returns the implementation
+	// type but backoff.WithContext returns the interface instead.
+	exponentialBackoffMethod := backoff.NewExponentialBackOff()
+	exponentialBackoffMethod.MaxElapsedTime = 15 * time.Second
+	var backoffMethod backoff.BackOff = exponentialBackoffMethod
+	if ctx != nil {
+		backoffMethod = backoff.WithContext(backoffMethod, ctx)
+	}
+
 	attempt := 0
 	operation := func() error {
 		attempt++
@@ -97,8 +108,7 @@ func (c *Connection) TokensContext(
 		}
 		return nil
 	}
-	backoffMethod := backoff.NewExponentialBackOff()
-	backoffMethod.MaxElapsedTime = time.Second * 15
+
 	// nolint
 	backoff.Retry(operation, backoffMethod)
 	return access, refresh, err
