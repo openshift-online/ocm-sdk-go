@@ -49,7 +49,7 @@ var _ = Describe("Methods", func() {
 		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
-		oidServer = ghttp.NewServer()
+		oidServer = MakeServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
 				RespondWithTokens(accessToken, refreshToken),
@@ -57,7 +57,7 @@ var _ = Describe("Methods", func() {
 		)
 
 		// Create the API server:
-		apiServer = ghttp.NewServer()
+		apiServer = MakeServer()
 
 		// Metrics subsystem - value doesn't matter but configuring it enables
 		// prometheus exporting, exercising the counter increment functionality

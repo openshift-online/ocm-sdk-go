@@ -19,6 +19,7 @@ package sdk
 import (
 	"bytes"
 	"crypto/rsa"
+	"log"
 	"net/http"
 	"testing"
 	"text/template"
@@ -55,6 +56,14 @@ var _ = BeforeSuite(func() {
 		Build()
 	Expect(err).ToNot(HaveOccurred())
 })
+
+// MakeServer creates a test server configured so that it sends log messages to the Ginkgo writer.
+func MakeServer() *ghttp.Server {
+	server := ghttp.NewServer()
+	server.Writer = GinkgoWriter
+	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	return server
+}
 
 // RespondeWithContent responds with the given status code, content type and body.
 func RespondWithContent(status int, contentType, body string) http.HandlerFunc {

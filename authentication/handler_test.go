@@ -786,7 +786,7 @@ var _ = Describe("Handler", func() {
 
 	It("Doesn't load insecure keys by default", func() {
 		// Prepare the server:
-		server := NewTLSServer()
+		server := MakeTLSServer()
 		server.AppendHandlers(
 			RespondWith(http.StatusOK, keysBytes),
 		)
@@ -821,7 +821,7 @@ var _ = Describe("Handler", func() {
 
 	It("Loads insecure keys in insecure mode", func() {
 		// Prepare the server that will return the keys:
-		server := NewTLSServer()
+		server := MakeTLSServer()
 		server.AppendHandlers(
 			RespondWith(http.StatusOK, keysBytes),
 		)

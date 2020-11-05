@@ -44,8 +44,8 @@ var _ = Describe("Tokens", func() {
 
 	BeforeEach(func() {
 		// Create the servers:
-		oidServer = ghttp.NewServer()
-		apiServer = ghttp.NewServer()
+		oidServer = MakeServer()
+		apiServer = MakeServer()
 	})
 
 	AfterEach(func() {
