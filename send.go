@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"mime"
 	"net/http"
+	"net/url"
 	"path"
 	"regexp"
 	"strconv"
@@ -91,7 +92,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 
 func (c *Connection) send(ctx context.Context, request *http.Request) (response *http.Response,
 	err error) {
-	// Check that the request URL:
+	// Check the request URL:
 	if request.URL.Path == "" {
 		err = fmt.Errorf("request path is mandatory")
 		return
@@ -101,8 +102,12 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 		return
 	}
 
-	// Add the API URL to the request URL:
-	request.URL = c.apiURL.ResolveReference(request.URL)
+	// Add the base URL to the request URL:
+	base, err := c.selectBaseURL(ctx, request)
+	if err != nil {
+		return
+	}
+	request.URL = base.ResolveReference(request.URL)
 
 	// Check the request method and body:
 	switch request.Method {
@@ -215,6 +220,28 @@ func (c *Connection) contentSummary(mediaType string, response *http.Response) (
 		summary = fmt.Sprintf("%s...", string(runes[:limit]))
 	} else {
 		summary = string(runes)
+	}
+	return
+}
+
+// selectBaseURL selects the base URL that should be used for the given request, according its path
+// and the alternative URLs configured when the connection was created.
+func (c *Connection) selectBaseURL(ctx context.Context, request *http.Request) (base *url.URL,
+	err error) {
+	// Select the base URL that has the longest matching prefix. Note that it is enough to pick
+	// the first match because the entries have already been sorted by descending prefix length
+	// when the connection was created.
+	for _, entry := range c.urlTable {
+		if entry.re.MatchString(request.URL.Path) {
+			base = entry.url
+			return
+		}
+	}
+	if base == nil {
+		err = fmt.Errorf(
+			"can't find any matching URL for request path '%s'",
+			request.URL.Path,
+		)
 	}
 	return
 }
