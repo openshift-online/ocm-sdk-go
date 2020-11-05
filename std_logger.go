@@ -103,6 +103,7 @@ func (b *StdLoggerBuilder) Build() (logger *StdLogger, err error) {
 	logger.warnEnabled = b.warnEnabled
 	logger.errorEnabled = b.errorEnabled
 	logger.outStream = b.outStream
+	logger.errStream = b.errStream
 	if logger.outStream == nil {
 		logger.outStream = os.Stdout
 	}
