@@ -32,6 +32,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with access token", func() {
 		accessToken := DefaultToken("Bearer", 5*time.Minute)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(accessToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -42,6 +43,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with refresh token", func() {
 		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(refreshToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -52,6 +54,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with offline access token", func() {
 		offlineToken := DefaultToken("Offline", 0)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(offlineToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -63,6 +66,7 @@ var _ = Describe("Connection", func() {
 		accessToken := DefaultToken("Bearer", 5*time.Minute)
 		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(accessToken, refreshToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -74,6 +78,7 @@ var _ = Describe("Connection", func() {
 		accessToken := DefaultToken("Bearer", 5*time.Minute)
 		offlineToken := DefaultToken("Offline", 10*time.Hour)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(accessToken, offlineToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -83,6 +88,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can be created with user name and password", func() {
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			User("myuser", "mypassword").
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -92,6 +98,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can be created with client identifier and secret", func() {
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Client("myclientid", "myclientsecret").
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -102,6 +109,7 @@ var _ = Describe("Connection", func() {
 	It("Selects default OpenID server with default access token", func() {
 		accessToken := DefaultToken("Bearer", 5*time.Minute)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(accessToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -116,6 +124,7 @@ var _ = Describe("Connection", func() {
 	It("Selects default OpenID server with default refresh token", func() {
 		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(refreshToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -130,6 +139,7 @@ var _ = Describe("Connection", func() {
 	It("Selects default OpenID server with default offline access token", func() {
 		offlineToken := DefaultToken("Offline", 0)
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			Tokens(offlineToken).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -143,6 +153,7 @@ var _ = Describe("Connection", func() {
 
 	It("Honours explicitly provided OpenID server with user name and password", func() {
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			User("myuser", "mypassword").
 			TokenURL(DefaultTokenURL).
 			Client(DefaultClientID, DefaultClientSecret).
@@ -159,6 +170,7 @@ var _ = Describe("Connection", func() {
 	It("Use transport wrapper", func() {
 		transport := NewTestTransport()
 		connection, err := NewConnectionBuilder().
+			Logger(logger).
 			User("test", "test").
 			TransportWrapper(func(wrapped http.RoundTripper) http.RoundTripper {
 				return transport

@@ -37,27 +37,15 @@ var _ = Describe("Tokens", func() {
 	var oidServer *ghttp.Server
 	var apiServer *ghttp.Server
 
-	// Logger used during the tests:
-	var logger Logger
-
 	// Metrics subsystem - value doesn't matter but configuring it enables
 	// prometheus exporting, exercising the counter increment functionality
 	// (e.g. will catch inconsistent labels).
 	metrics := "test_subsystem"
 
 	BeforeEach(func() {
-		var err error
-
 		// Create the servers:
 		oidServer = ghttp.NewServer()
 		apiServer = ghttp.NewServer()
-
-		// Create the logger:
-		logger, err = NewStdLoggerBuilder().
-			Streams(GinkgoWriter, GinkgoWriter).
-			Debug(true).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
 	})
 
 	AfterEach(func() {

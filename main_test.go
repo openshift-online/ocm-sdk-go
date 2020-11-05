@@ -36,6 +36,9 @@ func TestClient(t *testing.T) {
 	RunSpecs(t, "Client")
 }
 
+// Logger used during the tests:
+var logger Logger
+
 var _ = BeforeSuite(func() {
 	var err error
 
@@ -43,6 +46,13 @@ var _ = BeforeSuite(func() {
 	jwtPublicKey, err = jwt.ParseRSAPublicKeyFromPEM([]byte(jwtPublicKeyPEM))
 	Expect(err).ToNot(HaveOccurred())
 	jwtPrivateKey, err = jwt.ParseRSAPrivateKeyFromPEM([]byte(jwtPrivateKeyPEM))
+	Expect(err).ToNot(HaveOccurred())
+
+	// Create the logger:
+	logger, err = NewStdLoggerBuilder().
+		Streams(GinkgoWriter, GinkgoWriter).
+		Debug(true).
+		Build()
 	Expect(err).ToNot(HaveOccurred())
 })
 
