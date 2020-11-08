@@ -183,7 +183,7 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 		var info os.FileInfo
 		info, err = os.Stat(file)
 		if err != nil {
-			err = fmt.Errorf("keys file '%s' doesn't exist: %v", file, err)
+			err = fmt.Errorf("keys file '%s' doesn't exist: %w", file, err)
 			return
 		}
 		if !info.Mode().IsRegular() {
@@ -197,12 +197,12 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 		var parsed *url.URL
 		parsed, err = url.Parse(addr)
 		if err != nil {
-			err = fmt.Errorf("keys URL '%s' isn't a valid URL: %v", addr, err)
+			err = fmt.Errorf("keys URL '%s' isn't a valid URL: %w", addr, err)
 			return
 		}
 		if !strings.EqualFold(parsed.Scheme, "https") {
 			err = fmt.Errorf(
-				"keys URL '%s' doesn't use the HTTPS protocol: %v",
+				"keys URL '%s' doesn't use the HTTPS protocol: %w",
 				addr, err,
 			)
 		}

@@ -19,6 +19,8 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
+	"errors"
 	"net/http"
 	"time"
 
@@ -286,6 +288,28 @@ var _ = Describe("Methods", func() {
 				Path("/mypath").
 				Send()
 			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("Wraps deadline exceeded error", func() {
+			// Configure the server so that it introduces an artificial delay:
+			apiServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						time.Sleep(10 * time.Millisecond)
+					}),
+					RespondWithJSON(http.StatusOK, ""),
+				),
+			)
+
+			// Send the request with a timeout smaller than the artificial delay
+			// introduced by the server so that a deadline exceeded error will be
+			// created and returned:
+			ctx, _ := context.WithTimeout(context.Background(), 5*time.Millisecond)
+			_, err := connection.Get().
+				Path("/mypath").
+				SendContext(ctx)
+			Expect(err).To(HaveOccurred())
+			Expect(errors.Is(err, context.DeadlineExceeded)).To(BeTrue())
 		})
 	})
 

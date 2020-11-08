@@ -125,7 +125,7 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 	// Get the access token:
 	token, _, err := c.TokensContext(ctx)
 	if err != nil {
-		err = fmt.Errorf("can't get access token: %v", err)
+		err = fmt.Errorf("can't get access token: %w", err)
 		return
 	}
 
@@ -148,7 +148,7 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 	// Send the request and get the response:
 	response, err = c.client.Do(request)
 	if err != nil {
-		err = fmt.Errorf("can't send request: %v", err)
+		err = fmt.Errorf("can't send request: %w", err)
 		return
 	}
 
@@ -182,7 +182,7 @@ func (c *Connection) checkContentType(response *http.Response) error {
 		if err != nil {
 			return fmt.Errorf(
 				"expected response content type 'application/json' but received "+
-					"'%s' and couldn't obtain content summary: %v",
+					"'%s' and couldn't obtain content summary: %w",
 				mediaType, err,
 			)
 		}
