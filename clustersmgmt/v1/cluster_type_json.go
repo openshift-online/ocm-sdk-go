@@ -94,14 +94,6 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteObjectEnd()
 		count++
 	}
-	if object.byoc != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("byoc")
-		stream.WriteBool(*object.byoc)
-		count++
-	}
 	if object.ccs != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -476,9 +468,6 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 				}
 			}
 			object.awsInfrastructureAccessRoleGrants = value
-		case "byoc":
-			value := iterator.ReadBool()
-			object.byoc = &value
 		case "ccs":
 			value := readCCS(iterator)
 			object.ccs = value

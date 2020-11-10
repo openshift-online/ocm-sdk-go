@@ -69,7 +69,6 @@ type ClusterBuilder struct {
 	api                               *ClusterAPIBuilder
 	aws                               *AWSBuilder
 	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantListBuilder
-	byoc                              *bool
 	ccs                               *CCSBuilder
 	dns                               *DNSBuilder
 	gcp                               *GCPBuilder
@@ -151,14 +150,6 @@ func (b *ClusterBuilder) AWS(value *AWSBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) AWSInfrastructureAccessRoleGrants(value *AWSInfrastructureAccessRoleGrantListBuilder) *ClusterBuilder {
 	b.awsInfrastructureAccessRoleGrants = value
-	return b
-}
-
-// BYOC sets the value of the 'BYOC' attribute to the given value.
-//
-//
-func (b *ClusterBuilder) BYOC(value bool) *ClusterBuilder {
-	b.byoc = &value
 	return b
 }
 
@@ -483,7 +474,6 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.awsInfrastructureAccessRoleGrants = nil
 	}
-	b.byoc = object.byoc
 	if object.ccs != nil {
 		b.ccs = NewCCS().Copy(object.ccs)
 	} else {
@@ -641,7 +631,6 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			return
 		}
 	}
-	object.byoc = b.byoc
 	if b.ccs != nil {
 		object.ccs, err = b.ccs.Build()
 		if err != nil {
