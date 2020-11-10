@@ -19,6 +19,7 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -168,6 +169,7 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Use transport wrapper", func() {
+		// Create a connection:
 		transport := NewTestTransport()
 		connection, err := NewConnectionBuilder().
 			Logger(logger).
@@ -178,8 +180,15 @@ var _ = Describe("Connection", func() {
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 		defer connection.Close()
-		_, _, err = connection.Tokens()
-		Expect(transport.called > 2).To(BeTrue()) // it means the retry was called
+
+		// Try to get the tokens using a explicit and short timeout to make the test run
+		// faster (by default it takes up to 15 seconds) but give it enough time to retry
+		// a few times:
+		ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
+		_, _, err = connection.TokensContext(ctx)
+
+		// Check that the transport was called at least three times:
+		Expect(transport.called).To(BeNumerically(">=", 3))
 		Expect(err).To(HaveOccurred())
 	})
 })

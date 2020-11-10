@@ -19,6 +19,8 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -309,7 +311,8 @@ var _ = Describe("Tokens", func() {
 				defer connection.Close()
 
 				// Try to get the access token:
-				_, _, err = connection.Tokens()
+				ctx, _ := context.WithTimeout(context.Background(), 100*time.Millisecond)
+				_, _, err = connection.TokensContext(ctx)
 				Expect(err).To(HaveOccurred())
 				message := err.Error()
 				Expect(message).To(ContainSubstring("text/plain"))
@@ -1055,6 +1058,44 @@ var _ = Describe("Tokens", func() {
 			// Get the tokens:
 			_, _, err = connection.Tokens()
 			Expect(err).To(HaveOccurred())
+		})
+
+		It("Honours context timeout", func() {
+			// Generate tokens:
+			refreshToken := DefaultToken("Refresh", 10*time.Hour)
+			accessToken := DefaultToken("Bearer", 5*time.Minute)
+
+			// Configure the server with a handler that introduces an
+			// artificial delay:
+			oidServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+						time.Sleep(10 * time.Millisecond)
+					}),
+					VerifyRefreshGrant(refreshToken),
+					RespondWithTokens(accessToken, refreshToken),
+				),
+			)
+
+			// Create the connection:
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				Metrics(metrics).
+				TokenURL(oidServer.URL()).
+				URL(apiServer.URL()).
+				Tokens(refreshToken).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			defer connection.Close()
+
+			// Request the token with a timeout smaller than the artificial
+			// delay introduced by the server:
+			ctx, _ := context.WithTimeout(context.Background(), 5*time.Millisecond)
+			_, _, err = connection.TokensContext(ctx)
+
+			// The request should fail with a context deadline exceeded error:
+			Expect(err).To(HaveOccurred())
+			Expect(errors.Is(err, context.DeadlineExceeded)).To(BeTrue())
 		})
 	})
 })
