@@ -79,13 +79,13 @@ func (c *Connection) TokensContext(
 			if code >= http.StatusInternalServerError {
 				c.logger.Error(ctx,
 					"OCM auth: failed to get tokens, got http code %d, "+
-						"will attempt to retry. err: %v",
+						"will attempt to retry. err: %w",
 					code, err)
 				return err
 			}
 			c.logger.Error(ctx,
 				"OCM auth: failed to get tokens, got http code %d, "+
-					"will not attempt to retry. err: %v",
+					"will not attempt to retry. err: %w",
 				code, err)
 			return backoff.Permanent(err)
 		}
@@ -330,7 +330,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	header.Set("Content-Type", "application/x-www-form-urlencoded")
 	header.Set("Accept", "application/json")
 	if err != nil {
-		err = fmt.Errorf("can't create request: %v", err)
+		err = fmt.Errorf("can't create request: %w", err)
 		return
 	}
 
@@ -342,7 +342,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	// Send the HTTP request:
 	response, err := c.client.Do(request)
 	if err != nil {
-		err = fmt.Errorf("can't send request: %v", err)
+		err = fmt.Errorf("can't send request: %w", err)
 		return
 	}
 	defer response.Body.Close()
@@ -358,7 +358,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	// Read the response body:
 	body, err = ioutil.ReadAll(response.Body)
 	if err != nil {
-		err = fmt.Errorf("can't read response: %v", err)
+		err = fmt.Errorf("can't read response: %w", err)
 		return
 	}
 
@@ -366,7 +366,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	result = &internal.TokenResponse{}
 	err = json.Unmarshal(body, result)
 	if err != nil {
-		err = fmt.Errorf("can't parse JSON response: %v", err)
+		err = fmt.Errorf("can't parse JSON response: %w", err)
 		return
 	}
 	if result.Error != nil {

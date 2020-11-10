@@ -366,7 +366,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		var token *jwt.Token
 		token, _, err = tokenParser.ParseUnverified(text, jwt.MapClaims{})
 		if err != nil {
-			err = fmt.Errorf("can't parse token %d: %v", i, err)
+			err = fmt.Errorf("can't parse token %d: %w", i, err)
 			return
 		}
 		claims, ok := token.Claims.(jwt.MapClaims)
@@ -406,7 +406,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 			Error(true).
 			Build()
 		if err != nil {
-			err = fmt.Errorf("can't create default logger: %v", err)
+			err = fmt.Errorf("can't create default logger: %w", err)
 			return
 		}
 		b.logger.Debug(ctx, "Logger wasn't provided, will use Go log")
@@ -424,7 +424,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 	tokenURL, err := url.Parse(rawTokenURL)
 	if err != nil {
-		err = fmt.Errorf("can't parse token URL '%s': %v", rawTokenURL, err)
+		err = fmt.Errorf("can't parse token URL '%s': %w", rawTokenURL, err)
 		return
 	}
 	clientID := b.clientID
@@ -465,7 +465,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 	apiURL, err := url.Parse(rawAPIURL)
 	if err != nil {
-		err = fmt.Errorf("can't parse API URL '%s': %v", rawAPIURL, err)
+		err = fmt.Errorf("can't parse API URL '%s': %w", rawAPIURL, err)
 		return
 	}
 
@@ -520,7 +520,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	if b.subsystem != "" {
 		err = connection.registerMetrics(b.subsystem)
 		if err != nil {
-			err = fmt.Errorf("can't register metrics: %v", err)
+			err = fmt.Errorf("can't register metrics: %w", err)
 			return
 		}
 	}
