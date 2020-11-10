@@ -90,13 +90,13 @@ func (c *Connection) TokensContext(
 			if code >= http.StatusInternalServerError {
 				c.logger.Error(ctx,
 					"OCM auth: failed to get tokens, got http code %d, "+
-						"will attempt to retry. err: %w",
+						"will attempt to retry. err: %v",
 					code, err)
 				return err
 			}
 			c.logger.Error(ctx,
 				"OCM auth: failed to get tokens, got http code %d, "+
-					"will not attempt to retry. err: %w",
+					"will not attempt to retry. err: %v",
 				code, err)
 			return backoff.Permanent(err)
 		}
