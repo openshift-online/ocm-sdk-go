@@ -21,6 +21,7 @@ import (
 	"crypto/rsa"
 	"log"
 	"net/http"
+	"regexp"
 	"testing"
 	"text/template"
 	"time"
@@ -84,11 +85,38 @@ func RespondWithJSON(status int, body string) http.HandlerFunc {
 }
 
 // RespondWithJSONTemplate responds with the given status code and with a JSON body that is
-// generated from the given template and the name value pairs given as arguments. For example, the
-// following code:
+// generated from the given template and arguments. See the EvaluateTemplate function for details
+// on how the template and the arguments are combined.
+func RespondWithJSONTemplate(status int, source string, args ...interface{}) http.HandlerFunc {
+	return RespondWithJSON(status, EvaluateTemplate(source, args...))
+}
+
+// RespondWithCookie responds to the request adding a cookie with the given name and value.
+func RespondWithCookie(name, value string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.SetCookie(w, &http.Cookie{
+			Name:  name,
+			Value: value,
+		})
+		return
+	}
+}
+
+// VerifyCookie checks that the request contains a cookie with the given name and value.
+func VerifyCookie(name, value string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie(name)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(cookie).ToNot(BeNil())
+		Expect(cookie.Value).To(Equal(value))
+		return
+	}
+}
+
+// EvaluateTemplate generates a string from the given templlate source and name value pairs. For
+// example the following code:
 //
-//	RespondWithJSONTemplate(
-//		http.StatusOK,
+//	EvaluateTemplate(
 //		`{
 //			"access_token": "{{ .AccessToken }}"
 //			"refresh_token": "{{ .RefreshToken }}"
@@ -97,13 +125,16 @@ func RespondWithJSON(status int, body string) http.HandlerFunc {
 //		"RefreshToken", "myrefreshtoken",
 //	)
 //
-// Will generate the following response:
+// Will generate the following string:
 //
 //	{
 //		"access_token": "myaccesstoken"
 //		"access_token": "myrefreshtoken"
 //	}
-func RespondWithJSONTemplate(status int, source string, args ...interface{}) http.HandlerFunc {
+//
+// To simplify embeding of the templates in Go source the function also removes the leading tabs
+// from the generated text.
+func EvaluateTemplate(source string, args ...interface{}) string {
 	// Check that there is an even number of args, and that the first of each pair is a string:
 	count := len(args)
 	Expect(count%2).To(
@@ -147,31 +178,17 @@ func RespondWithJSONTemplate(status int, source string, args ...interface{}) htt
 		"Can't execute template '%s': %v",
 		source, err,
 	)
+	result := buffer.String()
 
-	return RespondWithJSON(status, buffer.String())
+	// Remove the leading tabs:
+	result = leadingTabsRE.ReplaceAllString(result, "")
+
+	return result
 }
 
-// RespondWithCookie responds to the request adding a cookie with the given name and value.
-func RespondWithCookie(name, value string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		http.SetCookie(w, &http.Cookie{
-			Name:  name,
-			Value: value,
-		})
-		return
-	}
-}
-
-// VerifyCookie checks that the request contains a cookie with the given name and value.
-func VerifyCookie(name, value string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie(name)
-		Expect(err).ToNot(HaveOccurred())
-		Expect(cookie).ToNot(BeNil())
-		Expect(cookie.Value).To(Equal(value))
-		return
-	}
-}
+// leadingTabsRE is the regular expression used to remove leading tabs from strings generated with
+// the EvaluateTemplate function.
+var leadingTabsRE = regexp.MustCompile(`(?m)^\t*`)
 
 // DefaultToken generates a token issued by the default OpenID server and with the given type and
 // with the given life. If the life is zero the token will never expire. If the life is positive the
