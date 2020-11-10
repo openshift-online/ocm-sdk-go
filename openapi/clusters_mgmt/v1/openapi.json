@@ -5378,10 +5378,6 @@
               "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
             }
           },
-          "byoc": {
-            "description": "Flag indicating if the cluster is BYOC (customer cloud subscription).\n",
-            "type": "boolean"
-          },
           "ccs": {
             "description": "Contains configuration of a Customer Cloud Subscription cluster.\n",
             "$ref": "#/components/schemas/CCS"
@@ -5673,6 +5669,10 @@
       "ClusterNodes": {
         "description": "Counts of different classes of nodes inside a cluster.\n",
         "properties": {
+          "autoscale_compute": {
+            "description": "Details for auto-scaling the compute machine pool.\nCompute and AutoscaleCompute cannot be used together.    \n",
+            "$ref": "#/components/schemas/MachinePoolAutoscaling"
+          },
           "availability_zones": {
             "description": "The availability zones upon which the nodes are created.\n",
             "type": "array",
@@ -5681,7 +5681,7 @@
             }
           },
           "compute": {
-            "description": "Number of compute nodes of the cluster.\n",
+            "description": "Number of compute nodes of the cluster.\nCompute and AutoscaleCompute cannot be used together.    \n",
             "type": "integer",
             "format": "int32"
           },
@@ -6208,6 +6208,10 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "autoscaling": {
+            "description": "Details for auto-scaling the machine pool.\nReplicas and autoscaling cannot be used together.    \n",
+            "$ref": "#/components/schemas/MachinePoolAutoscaling"
+          },
           "availability_zones": {
             "description": "The availability zones upon which the nodes are created.\n",
             "type": "array",
@@ -6231,7 +6235,41 @@
             }
           },
           "replicas": {
-            "description": "The number of Machines (and Nodes) to create.\n",
+            "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.    \n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "taints": {
+            "description": "The taints set on the Nodes created.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Taint"
+            }
+          }
+        }
+      },
+      "MachinePoolAutoscaling": {
+        "description": "Representation of a autoscaling in a machine pool.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'MachinePoolAutoscaling' if this is a complete object or 'MachinePoolAutoscalingLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "max_replicas": {
+            "description": "The maximum number of replicas for the machine pool.\n",
+            "type": "integer",
+            "format": "int32"
+          },
+          "min_replicas": {
+            "description": "The minimum number of replicas for the machine pool.\n",
             "type": "integer",
             "format": "int32"
           }
@@ -6601,6 +6639,23 @@
             "items": {
               "type": "object"
             }
+          }
+        }
+      },
+      "Taint": {
+        "description": "Representation of a Taint set on a MachinePool in a cluster.\n",
+        "properties": {
+          "effect": {
+            "description": "The effect on the node for the pods matching the taint, i.e: NoSchedule, NoExecute, PreferNoSchedule.\n",
+            "type": "string"
+          },
+          "key": {
+            "description": "The key for the taint\n",
+            "type": "string"
+          },
+          "value": {
+            "description": "The value for the taint.\n",
+            "type": "string"
           }
         }
       },

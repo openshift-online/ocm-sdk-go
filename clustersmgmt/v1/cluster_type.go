@@ -81,7 +81,6 @@ type Cluster struct {
 	api                               *ClusterAPI
 	aws                               *AWS
 	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantList
-	byoc                              *bool
 	ccs                               *CCS
 	dns                               *DNS
 	gcp                               *GCP
@@ -175,7 +174,6 @@ func (o *Cluster) GetHREF() (value string, ok bool) {
 func (o *Cluster) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.awsInfrastructureAccessRoleGrants.Len() == 0 &&
-		o.byoc == nil &&
 		o.addons.Len() == 0 &&
 		o.clusterAdminEnabled == nil &&
 		o.creationTimestamp == nil &&
@@ -262,29 +260,6 @@ func (o *Cluster) GetAWSInfrastructureAccessRoleGrants() (value *AWSInfrastructu
 	ok = o != nil && o.awsInfrastructureAccessRoleGrants != nil
 	if ok {
 		value = o.awsInfrastructureAccessRoleGrants
-	}
-	return
-}
-
-// BYOC returns the value of the 'BYOC' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Flag indicating if the cluster is BYOC (customer cloud subscription).
-func (o *Cluster) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
-	}
-	return false
-}
-
-// GetBYOC returns the value of the 'BYOC' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Flag indicating if the cluster is BYOC (customer cloud subscription).
-func (o *Cluster) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
-	if ok {
-		value = *o.byoc
 	}
 	return
 }
