@@ -38,3 +38,19 @@ func readAddOnInstallationGetResponse(response *AddOnInstallationGetResponse, re
 func writeAddOnInstallationGetResponse(response *AddOnInstallationGetServerResponse, w http.ResponseWriter) error {
 	return MarshalAddOnInstallation(response.body, w)
 }
+func readAddOnInstallationUpdateRequest(request *AddOnInstallationUpdateServerRequest, r *http.Request) error {
+	var err error
+	request.body, err = UnmarshalAddOnInstallation(r.Body)
+	return err
+}
+func writeAddOnInstallationUpdateRequest(request *AddOnInstallationUpdateRequest, writer io.Writer) error {
+	return MarshalAddOnInstallation(request.body, writer)
+}
+func readAddOnInstallationUpdateResponse(response *AddOnInstallationUpdateResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalAddOnInstallation(reader)
+	return err
+}
+func writeAddOnInstallationUpdateResponse(response *AddOnInstallationUpdateServerResponse, w http.ResponseWriter) error {
+	return MarshalAddOnInstallation(response.body, w)
+}

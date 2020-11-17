@@ -34,6 +34,11 @@ type AddOnInstallationServer interface {
 	//
 	// Retrieves the details of the add-on installation.
 	Get(ctx context.Context, request *AddOnInstallationGetServerRequest, response *AddOnInstallationGetServerResponse) error
+
+	// Update handles a request for the 'update' method.
+	//
+	// Updates the add-on installation.
+	Update(ctx context.Context, request *AddOnInstallationUpdateServerRequest, response *AddOnInstallationUpdateServerResponse) error
 }
 
 // AddOnInstallationGetServerRequest is the request for the 'get' method.
@@ -61,6 +66,54 @@ func (r *AddOnInstallationGetServerResponse) Status(value int) *AddOnInstallatio
 	return r
 }
 
+// AddOnInstallationUpdateServerRequest is the request for the 'update' method.
+type AddOnInstallationUpdateServerRequest struct {
+	body *AddOnInstallation
+}
+
+// Body returns the value of the 'body' parameter.
+//
+//
+func (r *AddOnInstallationUpdateServerRequest) Body() *AddOnInstallation {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *AddOnInstallationUpdateServerRequest) GetBody() (value *AddOnInstallation, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// AddOnInstallationUpdateServerResponse is the response for the 'update' method.
+type AddOnInstallationUpdateServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *AddOnInstallation
+}
+
+// Body sets the value of the 'body' parameter.
+//
+//
+func (r *AddOnInstallationUpdateServerResponse) Body(value *AddOnInstallation) *AddOnInstallationUpdateServerResponse {
+	r.body = value
+	return r
+}
+
+// Status sets the status code.
+func (r *AddOnInstallationUpdateServerResponse) Status(value int) *AddOnInstallationUpdateServerResponse {
+	r.status = value
+	return r
+}
+
 // dispatchAddOnInstallation navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
@@ -69,6 +122,9 @@ func dispatchAddOnInstallation(w http.ResponseWriter, r *http.Request, server Ad
 		switch r.Method {
 		case "GET":
 			adaptAddOnInstallationGetRequest(w, r, server)
+			return
+		case "PATCH":
+			adaptAddOnInstallationUpdateRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -108,6 +164,41 @@ func adaptAddOnInstallationGetRequest(w http.ResponseWriter, r *http.Request, se
 		return
 	}
 	err = writeAddOnInstallationGetResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		return
+	}
+}
+
+// adaptAddOnInstallationUpdateRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptAddOnInstallationUpdateRequest(w http.ResponseWriter, r *http.Request, server AddOnInstallationServer) {
+	request := &AddOnInstallationUpdateServerRequest{}
+	err := readAddOnInstallationUpdateRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &AddOnInstallationUpdateServerResponse{}
+	response.status = 200
+	err = server.Update(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeAddOnInstallationUpdateResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
