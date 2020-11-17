@@ -3,6 +3,17 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.146 Nov 17 2020
+
+- Add `EvaluateTemplate` function for tests
+- Don't crash in debug mode deserializing an empty response
+- Update model to v0.0.99
+** Add deletion add-on installation endpoint
+** Add Update method to addon installation resource
+- Update metamodel tp v0.0.35
+** Update to version 4.8 of Antlr
+** Wrap errors
+
 == 0.1.145 Nov 10 2020
 
 - Update model to v0.0.98
