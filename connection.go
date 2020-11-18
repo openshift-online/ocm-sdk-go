@@ -38,6 +38,7 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/accountsmgmt"
 	"github.com/openshift-online/ocm-sdk-go/authorizations"
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
+	"github.com/openshift-online/ocm-sdk-go/configuration"
 	"github.com/openshift-online/ocm-sdk-go/servicelogs"
 )
 
@@ -79,6 +80,11 @@ type ConnectionBuilder struct {
 
 	// Metrics:
 	subsystem string
+
+	// Error detected while populating the builder. Once set calls to methods to
+	// set other builder parameters will be ignored and the Build method will
+	// exit inmediately returning this error.
+	err error
 }
 
 // TransportWrapper is a wrapper for a transport of type http.RoundTripper.
@@ -174,6 +180,9 @@ func NewConnectionBuilder() *ConnectionBuilder {
 //
 // You can also build your own logger, implementing the Logger interface.
 func (b *ConnectionBuilder) Logger(logger Logger) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.logger = logger
 	return b
 }
@@ -181,6 +190,9 @@ func (b *ConnectionBuilder) Logger(logger Logger) *ConnectionBuilder {
 // TokenURL sets the URL that will be used to request OpenID access tokens. The default is
 // `https://sso.redhat.com/auth/realms/cloud-services/protocol/openid-connect/token`.
 func (b *ConnectionBuilder) TokenURL(url string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.tokenURL = url
 	return b
 }
@@ -208,6 +220,9 @@ func (b *ConnectionBuilder) TokenURL(url string) *ConnectionBuilder {
 //
 // Note the empty client secret.
 func (b *ConnectionBuilder) Client(id string, secret string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.clientID = id
 	b.clientSecret = secret
 	return b
@@ -215,6 +230,9 @@ func (b *ConnectionBuilder) Client(id string, secret string) *ConnectionBuilder 
 
 // URL sets the base URL of the API gateway. The default is `https://api.openshift.com`.
 func (b *ConnectionBuilder) URL(url string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	return b.AlternativeURL("", url)
 }
 
@@ -232,6 +250,9 @@ func (b *ConnectionBuilder) URL(url string) *ConnectionBuilder {
 //
 // This method can be called multiple times to set alternative URLs for multiple prefixes.
 func (b *ConnectionBuilder) AlternativeURL(prefix, base string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.urlTable[prefix] = base
 	return b
 }
@@ -251,6 +272,9 @@ func (b *ConnectionBuilder) AlternativeURL(prefix, base string) *ConnectionBuild
 //
 // The effect is the same as calling the AlternativeURL multiple times.
 func (b *ConnectionBuilder) AlternativeURLs(entries map[string]string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	for prefix, base := range entries {
 		b.urlTable[prefix] = base
 	}
@@ -260,6 +284,9 @@ func (b *ConnectionBuilder) AlternativeURLs(entries map[string]string) *Connecti
 // Agent sets the `User-Agent` header that the client will use in all the HTTP requests. The default
 // is `OCM` followed by an slash and the version of the client, for example `OCM/0.0.0`.
 func (b *ConnectionBuilder) Agent(agent string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.agent = agent
 	return b
 }
@@ -285,6 +312,9 @@ func (b *ConnectionBuilder) Agent(agent string) *ConnectionBuilder {
 //
 // Note the empty client secret.
 func (b *ConnectionBuilder) User(name string, password string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.user = name
 	b.password = password
 	return b
@@ -303,7 +333,11 @@ func (b *ConnectionBuilder) User(name string, password string) *ConnectionBuilde
 //
 // If you just want to use the default 'openid' then there is no need to use this method.
 func (b *ConnectionBuilder) Scopes(values ...string) *ConnectionBuilder {
-	b.scopes = append(b.scopes, values...)
+	if b.err != nil {
+		return b
+	}
+	b.scopes = make([]string, len(values))
+	copy(b.scopes, values)
 	return b
 }
 
@@ -317,6 +351,9 @@ func (b *ConnectionBuilder) Scopes(values ...string) *ConnectionBuilder {
 // stop working when both tokens expire. That can happen, for example, if the connection isn't used
 // for a period of time longer than the life of the refresh token.
 func (b *ConnectionBuilder) Tokens(tokens ...string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.tokens = append(b.tokens, tokens...)
 	return b
 }
@@ -325,6 +362,9 @@ func (b *ConnectionBuilder) Tokens(tokens ...string) *ConnectionBuilder {
 // trusted by the connection. If this isn't explicitly specified then the client will trust the
 // certificate authorities trusted by default by the system.
 func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.trustedCASources = append(b.trustedCASources, value)
 	return b
 }
@@ -333,6 +373,9 @@ func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder 
 // trusted by the connection. If this isn't explicitly specified then the client will trust the
 // certificate authorities trusted by default by the system.
 func (b *ConnectionBuilder) TrustedCAFile(value string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.trustedCASources = append(b.trustedCASources, value)
 	return b
 }
@@ -340,6 +383,9 @@ func (b *ConnectionBuilder) TrustedCAFile(value string) *ConnectionBuilder {
 // Insecure enables insecure communication with the server. This disables verification of TLS
 // certificates and host names and it isn't recommended for a production environment.
 func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.insecure = flag
 	return b
 }
@@ -347,6 +393,9 @@ func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 // DisableKeepAlives disables HTTP keep-alives with the server. This is unrelated to similarly
 // named TCP keep-alives.
 func (b *ConnectionBuilder) DisableKeepAlives(flag bool) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.disableKeepAlives = flag
 	return b
 }
@@ -354,6 +403,9 @@ func (b *ConnectionBuilder) DisableKeepAlives(flag bool) *ConnectionBuilder {
 // TransportWrapper allows setting a transportWrapper layer into the connection for capturing and
 // manipulating the request or response.
 func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.transportWrapper = transportWrapper
 	return b
 }
@@ -408,7 +460,138 @@ func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) 
 // Note that setting this attribute is not enough to have metrics published, you also need to
 // create and start a metrics server, as described in the documentation of the Prometheus library.
 func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
 	b.subsystem = value
+	return b
+}
+
+// Load loads the connection configuration from the given source. The source must be a YAML
+// document with content similar to this:
+//
+//	url: https://my.server.com
+//	alternative_urls:
+//	- /api/clusters_mgmt: https://your.server.com
+//	- /api/accounts_mgmt: https://her.server.com
+//	token_url: https://openid.server.com
+//	user: myuser
+//	password: mypassword
+//	client_id: myclient
+//	client_secret: mysecret
+//	tokens:
+//	- eY...
+//	- eY...
+//	scopes:
+//	- openid
+//	insecure: false
+//	trusted_cas:
+//	- /my/ca.pem
+//	- /your/ca.pem
+//	agent: myagent
+//
+// Setting any of these fields in the file has the same effect that calling the corresponding method
+// of the builder.
+//
+// For details of the supported syntax see the documentation of the configuration package.
+func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
+
+	// Load the configuration:
+	var config *configuration.Object
+	config, b.err = configuration.New().
+		Load(source).
+		Build()
+	if b.err != nil {
+		return b
+	}
+	var view struct {
+		URL             *string           `yaml:"url"`
+		AlternativeURLs map[string]string `yaml:"alternative_urls"`
+		TokenURL        *string           `yaml:"token_url"`
+		User            *string           `yaml:"user"`
+		Password        *string           `yaml:"password"`
+		ClientID        *string           `yaml:"client_id"`
+		ClientSecret    *string           `yaml:"client_secret"`
+		Tokens          []string          `yaml:"tokens"`
+		Insecure        *bool             `yaml:"insecure"`
+		TrustedCAs      []string          `yaml:"trusted_cas"`
+		Scopes          []string          `yaml:"scopes"`
+		Agent           *string           `yaml:"agent"`
+	}
+	b.err = config.Populate(&view)
+	if b.err != nil {
+		return b
+	}
+
+	// URL:
+	if view.URL != nil {
+		b.URL(*view.URL)
+	}
+	if view.TokenURL != nil {
+		b.TokenURL(*view.TokenURL)
+	}
+
+	// Alternative URLs:
+	if view.AlternativeURLs != nil {
+		for prefix, base := range view.AlternativeURLs {
+			b.AlternativeURL(prefix, base)
+		}
+	}
+
+	// User and password:
+	var user string
+	var password string
+	if view.User != nil {
+		user = *view.User
+	}
+	if view.Password != nil {
+		password = *view.Password
+	}
+	if user != "" || password != "" {
+		b.User(user, password)
+	}
+
+	// Client identifier and secret:
+	var clientID string
+	var clientSecret string
+	if view.ClientID != nil {
+		clientID = *view.ClientID
+	}
+	if view.ClientSecret != nil {
+		clientSecret = *view.ClientSecret
+	}
+	if clientID != "" || clientSecret != "" {
+		b.Client(clientID, clientSecret)
+	}
+
+	// Tokens:
+	if view.Tokens != nil {
+		b.Tokens(view.Tokens...)
+	}
+
+	// Scopes:
+	if view.Scopes != nil {
+		b.Scopes(view.Scopes...)
+	}
+
+	// Insecure:
+	if view.Insecure != nil {
+		b.Insecure(*view.Insecure)
+	}
+
+	// Trusted CAs:
+	for _, trustedCA := range view.TrustedCAs {
+		b.TrustedCAFile(trustedCA)
+	}
+
+	// Agent:
+	if view.Agent != nil {
+		b.Agent(*view.Agent)
+	}
+
 	return b
 }
 
@@ -426,6 +609,12 @@ func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
 // can be reused to create multiple connections with the same configuration. It returns a pointer to
 // the connection, and an error if something fails when trying to create it.
 func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Connection, err error) {
+	// If an error has been detected while populating the builder then return it and finish:
+	if b.err != nil {
+		err = b.err
+		return
+	}
+
 	// Check that we have some kind of credentials or a token:
 	haveTokens := len(b.tokens) > 0
 	havePassword := b.user != "" && b.password != ""

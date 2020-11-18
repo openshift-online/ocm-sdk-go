@@ -227,9 +227,14 @@ func EvaluateTemplate(source string, args ...interface{}) string {
 	result := buffer.String()
 
 	// Remove the leading tabs:
-	result = leadingTabsRE.ReplaceAllString(result, "")
+	result = RemoveLeadingTabs(result)
 
 	return result
+}
+
+// RemoveLeadingTabs removes the leading tabs from the lines of the given string.
+func RemoveLeadingTabs(s string) string {
+	return leadingTabsRE.ReplaceAllString(s, "")
 }
 
 // leadingTabsRE is the regular expression used to remove leading tabs from strings generated with
