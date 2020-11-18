@@ -191,6 +191,132 @@ var _ = Describe("Connection", func() {
 		Expect(transport.called).To(BeNumerically(">=", 3))
 		Expect(err).To(HaveOccurred())
 	})
+
+	It("Can be created with one alternative URL", func() {
+		// Create the connection:
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			URL("https://my.server.com").
+			AlternativeURL("/api/clusters_mgmt", "https://your.server.com").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the URLs are set:
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
+		alternativeURLs := connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(1))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt",
+			"https://your.server.com",
+		))
+	})
+
+	It("Can be created with two alternative URLs", func() {
+		// Create the connection:
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			URL("https://my.server.com").
+			AlternativeURL("/api/clusters_mgmt", "https://your.server.com").
+			AlternativeURL("/api/accounts_mgmt", "https://her.server.com").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the URLs are set:
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
+		alternativeURLs := connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(2))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt",
+			"https://your.server.com",
+		))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/accounts_mgmt",
+			"https://her.server.com",
+		))
+	})
+
+	It("Can be created with a map of alternative URLs", func() {
+		// Create the connection:
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			URL("https://my.server.com").
+			AlternativeURLs(map[string]string{
+				"/api/clusters_mgmt": "https://your.server.com",
+				"/api/accounts_mgmt": "https://her.server.com",
+			}).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the URLs are set:
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
+		alternativeURLs := connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(2))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt",
+			"https://your.server.com",
+		))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/accounts_mgmt",
+			"https://her.server.com",
+		))
+	})
+
+	It("Altering returned alternative URLs doesn't affect internal state", func() {
+		// Create the connection:
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			URL("https://my.server.com").
+			AlternativeURLs(map[string]string{
+				"/api/clusters_mgmt": "https://your.server.com",
+				"/api/accounts_mgmt": "https://her.server.com",
+			}).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Try to modify the returned map of alternative URLs:
+		alternativeURLs := connection.AlternativeURLs()
+		alternativeURLs["/api/service_logs"] = "https://his.server.com"
+
+		// Check that map used internall hasn't changed:
+		alternativeURLs = connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(2))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt",
+			"https://your.server.com",
+		))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/accounts_mgmt",
+			"https://her.server.com",
+		))
+	})
+
+	It("Can't be created with invalid alternative URL prefix", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		_, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			AlternativeURL("junk", "https://api.openshift.com").
+			Build()
+		Expect(err).To(HaveOccurred())
+	})
+
+	It("Can't be created with invalid alternative URL", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		_, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			AlternativeURL("/api/clusters_mgmt", ":junk").
+			Build()
+		Expect(err).To(HaveOccurred())
+	})
 })
 
 type TestTransport struct {

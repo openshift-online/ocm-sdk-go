@@ -26,6 +26,8 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"regexp"
+	"sort"
 	"strings"
 	"sync"
 
@@ -65,7 +67,7 @@ type ConnectionBuilder struct {
 	tokenURL          string
 	clientID          string
 	clientSecret      string
-	apiURL            string
+	urlTable          map[string]string
 	agent             string
 	user              string
 	password          string
@@ -95,7 +97,7 @@ type Connection struct {
 	tokenURL          *url.URL
 	clientID          string
 	clientSecret      string
-	apiURL            *url.URL
+	urlTable          []urlTableEntry
 	agent             string
 	user              string
 	password          string
@@ -112,10 +114,40 @@ type Connection struct {
 	callDurationMetric  *prometheus.HistogramVec
 }
 
+// urlTableEntry is used to store one entry of the table that contains the correspondence between
+// path prefixes and base URLs. For example, for following table:
+//
+//	/clusters_mgmt -> https://my.server.com
+//	/accounts_mgmt -> https://your.server.com
+//
+// Will be reprsented by the following Go value:
+//
+//	[]urlTableEntry{
+//		{
+//			prefix: "/api/clusters_mgmt",
+//			re:     regexp.Compile("^/api/clusters_mgmt(/.*)?$"),
+//			url:    url.Parse("https://my.server.com"),
+//		},
+//		{
+//			prefix: "/api/accounts_mgmt",
+//			re:     regexp.Compile("^/api/accounts_mgmt(/.*)?$"),
+//			url:    url.Parse("https://your.server.com"),
+//		},
+//	}
+type urlTableEntry struct {
+	prefix string
+	re     *regexp.Regexp
+	url    *url.URL
+}
+
 // NewConnectionBuilder creates an builder that knows how to create connections with the default
 // configuration.
 func NewConnectionBuilder() *ConnectionBuilder {
-	return new(ConnectionBuilder)
+	return &ConnectionBuilder{
+		urlTable: map[string]string{
+			"": DefaultURL,
+		},
+	}
 }
 
 // Logger sets the logger that will be used by the connection. By default it uses the Go `log`
@@ -181,7 +213,45 @@ func (b *ConnectionBuilder) Client(id string, secret string) *ConnectionBuilder 
 
 // URL sets the base URL of the API gateway. The default is `https://api.openshift.com`.
 func (b *ConnectionBuilder) URL(url string) *ConnectionBuilder {
-	b.apiURL = url
+	return b.AlternativeURL("", url)
+}
+
+// AlternativeURL sets an alternative base URL for the given path prefix. For example, to configure
+// the connection so that it sends the requests for the clusters management service to
+// `https://my.server.com`:
+//
+//	connection, err := client.NewConnectionBuilder().
+//		URL("https://api.example.com").
+//		AlternativeURL("/api/clusters_mgmt", "https://my.server.com").
+//		Build()
+//
+// Requests for other paths that don't start with the given prefix will still be sent to the default
+// base URL.
+//
+// This method can be called multiple times to set alternative URLs for multiple prefixes.
+func (b *ConnectionBuilder) AlternativeURL(prefix, base string) *ConnectionBuilder {
+	b.urlTable[prefix] = base
+	return b
+}
+
+// AlternativeURLs sets an collection of alternative base URLs. For example, to configure the
+// connection so that it sends the requests for the clusters management service to
+// `https://my.server.com` and the requests for the accounts management service to
+// `https://your.server.com`:
+//
+//	connection, err := client.NewConnectionBuilder().
+//		URL("https://api.example.com").
+//		AlternativeURLs(map[string]string{
+//			"/api/clusters_mgmt": "https://my.server.com",
+//			"/api/accounts_mgmt": "https://your.server.com",
+//		}).
+//		Build()
+//
+// The effect is the same as calling the AlternativeURL multiple times.
+func (b *ConnectionBuilder) AlternativeURLs(entries map[string]string) *ConnectionBuilder {
+	for prefix, base := range entries {
+		b.urlTable[prefix] = base
+	}
 	return b
 }
 
@@ -457,15 +527,9 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		}
 	}
 
-	// Set the default URL, if needed:
-	rawAPIURL := b.apiURL
-	if rawAPIURL == "" {
-		rawAPIURL = DefaultURL
-		b.logger.Debug(ctx, "URL wasn't provided, will use the default '%s'", rawAPIURL)
-	}
-	apiURL, err := url.Parse(rawAPIURL)
+	// Create the URL table:
+	urlTable, err := b.createURLTable(ctx)
 	if err != nil {
-		err = fmt.Errorf("can't parse API URL '%s': %w", rawAPIURL, err)
 		return
 	}
 
@@ -503,7 +567,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		tokenURL:          tokenURL,
 		clientID:          clientID,
 		clientSecret:      clientSecret,
-		apiURL:            apiURL,
+		urlTable:          urlTable,
 		agent:             agent,
 		user:              b.user,
 		password:          b.password,
@@ -522,6 +586,73 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		if err != nil {
 			err = fmt.Errorf("can't register metrics: %w", err)
 			return
+		}
+	}
+
+	return
+}
+
+func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTableEntry, err error) {
+	// Check that all the prefixes are acceptable:
+	for prefix, base := range b.urlTable {
+		if !validPrefixRE.MatchString(prefix) {
+			err = fmt.Errorf(
+				"prefix '%s' for alternative URL '%s' isn't valid; it must start "+
+					"with a slash and be composed of slash separated segments "+
+					"containing only digits, letters, dashes and undercores",
+				prefix, base,
+			)
+			return
+		}
+	}
+
+	// Allocate space for the table:
+	table = make([]urlTableEntry, len(b.urlTable))
+
+	// For each alternative URL create the regular expression that will be used to check if
+	// paths match it, and parse the base URL:
+	i := 0
+	for prefix, base := range b.urlTable {
+		entry := &table[i]
+		entry.prefix = prefix
+		pattern := fmt.Sprintf("^%s(/.*)?$", regexp.QuoteMeta(prefix))
+		entry.re, err = regexp.Compile(pattern)
+		if err != nil {
+			err = fmt.Errorf(
+				"can't compile regular expression '%s' for alternative URL with "+
+					"prefix '%s' and URL '%s': %v",
+				pattern, prefix, base, err,
+			)
+			return
+		}
+		entry.url, err = url.Parse(base)
+		if err != nil {
+			err = fmt.Errorf(
+				"can't parse alternative URL '%s' for prefix '%s': %v",
+				base, prefix, err,
+			)
+			return
+		}
+		i++
+	}
+
+	// Sort the entries in descending order of the length of the prefix, so that later
+	// when matching it will be easier to select the longest prefix that matches:
+	sort.Slice(table, func(i, j int) bool {
+		lenI := len(table[i].prefix)
+		lenJ := len(table[j].prefix)
+		return lenI > lenJ
+	})
+
+	// Write to the log the resulting table:
+	if b.logger.DebugEnabled() {
+		for _, entry := range table {
+			b.logger.Debug(
+				ctx,
+				"Added alternative URL with prefix '%s', regular expression "+
+					"'%s' and URL '%s'",
+				entry.prefix, entry.re, entry.url,
+			)
 		}
 	}
 
@@ -580,7 +711,16 @@ func (c *Connection) Client() (id, secret string) {
 
 // URL returns the base URL of the API gateway.
 func (c *Connection) URL() string {
-	return c.apiURL.String()
+	// The base URL will most likely be the last in the URL table because it is sorted in
+	// descending order of the prefix length, so it is faster to traverse the table in
+	// reverse order.
+	for i := len(c.urlTable) - 1; i > 0; i-- {
+		entry := &c.urlTable[i]
+		if entry.prefix == "" {
+			return entry.url.String()
+		}
+	}
+	return ""
 }
 
 // Agent returns the `User-Agent` header that the client is using for all HTTP requests.
@@ -613,6 +753,20 @@ func (c *Connection) Insecure() bool {
 
 func (c *Connection) DisableKeepAlives() bool {
 	return c.disableKeepAlives
+}
+
+// AlternativeURLs returns the alternative URLs in use by the connection. Note that the map returned
+// is a copy of the data used internally, so changing it will have no effect on the connection.
+func (c *Connection) AlternativeURLs() map[string]string {
+	// Copy all the entries of the URL table except the one corresponding to the empty prefix, as
+	// that isn't usually set via the alternative URLs mechanism:
+	result := map[string]string{}
+	for _, entry := range c.urlTable {
+		if entry.prefix != "" {
+			result[entry.prefix] = entry.url.String()
+		}
+	}
+	return result
 }
 
 // AccountsMgmt returns the client for the accounts management service.
@@ -653,3 +807,6 @@ func (c *Connection) checkClosed() error {
 	}
 	return nil
 }
+
+// validPrefixRE is the regular expression used to check patch prefixes
+var validPrefixRE = regexp.MustCompile(`^((/\w+)*)?$`)
