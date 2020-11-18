@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -39,6 +40,10 @@ var _ = Describe("Tokens", func() {
 	var oidServer *ghttp.Server
 	var apiServer *ghttp.Server
 
+	// Names of the temporary files containing the CAs for the servers:
+	var oidCA string
+	var apiCA string
+
 	// Metrics subsystem - value doesn't matter but configuring it enables
 	// prometheus exporting, exercising the counter increment functionality
 	// (e.g. will catch inconsistent labels).
@@ -46,14 +51,20 @@ var _ = Describe("Tokens", func() {
 
 	BeforeEach(func() {
 		// Create the servers:
-		oidServer = MakeServer()
-		apiServer = MakeServer()
+		oidServer, oidCA = MakeServer()
+		apiServer, apiCA = MakeServer()
 	})
 
 	AfterEach(func() {
 		// Stop the servers:
 		oidServer.Close()
 		apiServer.Close()
+
+		// Remove the temporary CA files:
+		err := os.Remove(oidCA)
+		Expect(err).ToNot(HaveOccurred())
+		err = os.Remove(apiCA)
+		Expect(err).ToNot(HaveOccurred())
 	})
 
 	Describe("Refresh grant", func() {
@@ -76,6 +87,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -107,6 +120,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -143,6 +158,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(expiredAccess, refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -174,6 +191,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(firstAccess, refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -208,6 +227,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(firstAccess, refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -229,6 +250,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(accessToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -249,6 +272,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(accessToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -269,6 +294,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -305,6 +332,8 @@ var _ = Describe("Tokens", func() {
 					Metrics(metrics).
 					TokenURL(oidServer.URL()).
 					URL(apiServer.URL()).
+					TrustedCAFile(oidCA).
+					TrustedCAFile(apiCA).
 					Tokens(refreshToken).
 					Build()
 				Expect(err).ToNot(HaveOccurred())
@@ -345,6 +374,8 @@ var _ = Describe("Tokens", func() {
 					Metrics(metrics).
 					TokenURL(oidServer.URL()).
 					URL(apiServer.URL()).
+					TrustedCAFile(oidCA).
+					TrustedCAFile(apiCA).
 					Tokens(refreshToken).
 					Build()
 				Expect(err).ToNot(HaveOccurred())
@@ -384,6 +415,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(expiredAccess, refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -421,6 +454,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				User("myuser", "mypassword").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -457,6 +492,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				User("myuser", "mypassword").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -498,6 +535,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				User("myuser", "mypassword").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -539,6 +578,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				User("myuser", "mypassword").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -570,6 +611,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				User("baduser", "mypassword").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -595,6 +638,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				User("myuser", "badpassword").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -629,6 +674,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				User("myuser", "mypassword").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -657,6 +704,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(accessToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -679,6 +728,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(accessToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -711,6 +762,8 @@ var _ = Describe("Tokens", func() {
 				Logger(logger).
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
 				Build()
@@ -747,6 +800,8 @@ var _ = Describe("Tokens", func() {
 				Logger(logger).
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				URL(apiServer.URL()).
 				Client("myclient", "mysecret").
 				Build()
@@ -789,6 +844,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Client("myclient", "mysecret").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -830,6 +887,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Client("myclient", "mysecret").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -861,6 +920,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Client("badclient", "mysecret").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -886,6 +947,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Client("myclient", "badsecret").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -921,6 +984,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Client("myclient", "mysecret").
 				Tokens(oldAccess, oldRefresh).
 				Build()
@@ -958,6 +1023,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Client("myclient", "mysecret").
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -1004,6 +1071,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -1050,6 +1119,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -1083,6 +1154,8 @@ var _ = Describe("Tokens", func() {
 				Metrics(metrics).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(apiCA).
 				Tokens(refreshToken).
 				Build()
 			Expect(err).ToNot(HaveOccurred())

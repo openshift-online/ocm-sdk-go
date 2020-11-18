@@ -20,6 +20,7 @@ package sdk
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	. "github.com/onsi/ginkgo" // nolint
@@ -38,6 +39,11 @@ var _ = Describe("Alternative URLs", func() {
 	var defaultServer *ghttp.Server
 	var alternativeServer *ghttp.Server
 
+	// Names of the temporary files containing the CAs for the servers:
+	var oidCA string
+	var defaultCA string
+	var alternativeCA string
+
 	// URLs of the servers:
 	var oidURL string
 	var defaultURL string
@@ -49,7 +55,7 @@ var _ = Describe("Alternative URLs", func() {
 		refreshToken = DefaultToken("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
-		oidServer = MakeServer()
+		oidServer, oidCA = MakeServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
 				RespondWithTokens(accessToken, refreshToken),
@@ -58,9 +64,9 @@ var _ = Describe("Alternative URLs", func() {
 		oidURL = oidServer.URL()
 
 		// Create the API servers:
-		defaultServer = MakeServer()
+		defaultServer, defaultCA = MakeServer()
 		defaultURL = defaultServer.URL()
-		alternativeServer = MakeServer()
+		alternativeServer, alternativeCA = MakeServer()
 		alternativeURL = alternativeServer.URL()
 	})
 
@@ -69,6 +75,14 @@ var _ = Describe("Alternative URLs", func() {
 		oidServer.Close()
 		defaultServer.Close()
 		alternativeServer.Close()
+
+		// Remove the temporary CA files:
+		err := os.Remove(oidCA)
+		Expect(err).ToNot(HaveOccurred())
+		err = os.Remove(defaultCA)
+		Expect(err).ToNot(HaveOccurred())
+		err = os.Remove(alternativeCA)
+		Expect(err).ToNot(HaveOccurred())
 	})
 
 	Describe("Untyped get", func() {
@@ -88,6 +102,9 @@ var _ = Describe("Alternative URLs", func() {
 				TokenURL(oidURL).
 				Tokens(accessToken, refreshToken).
 				URL(defaultURL).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(defaultCA).
+				TrustedCAFile(alternativeCA).
 				AlternativeURL("/api/clusters_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -116,6 +133,9 @@ var _ = Describe("Alternative URLs", func() {
 				TokenURL(oidURL).
 				Tokens(accessToken, refreshToken).
 				URL(defaultURL).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(defaultCA).
+				TrustedCAFile(alternativeCA).
 				AlternativeURL("/api/accounts_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -144,6 +164,9 @@ var _ = Describe("Alternative URLs", func() {
 				TokenURL(oidURL).
 				Tokens(accessToken, refreshToken).
 				URL(defaultURL).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(defaultCA).
+				TrustedCAFile(alternativeCA).
 				AlternativeURL("/api/clusters_mgmt", defaultURL).
 				AlternativeURL("/api/clusters_mgmt/v1", alternativeURL).
 				Build()
@@ -175,6 +198,9 @@ var _ = Describe("Alternative URLs", func() {
 				TokenURL(oidURL).
 				Tokens(accessToken, refreshToken).
 				URL(defaultURL).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(defaultCA).
+				TrustedCAFile(alternativeCA).
 				AlternativeURL("/api/clusters_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -201,6 +227,9 @@ var _ = Describe("Alternative URLs", func() {
 				TokenURL(oidURL).
 				Tokens(accessToken, refreshToken).
 				URL(defaultURL).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(defaultCA).
+				TrustedCAFile(alternativeCA).
 				AlternativeURL("/api/accounts_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
@@ -227,6 +256,9 @@ var _ = Describe("Alternative URLs", func() {
 				TokenURL(oidURL).
 				Tokens(accessToken, refreshToken).
 				URL(defaultURL).
+				TrustedCAFile(oidCA).
+				TrustedCAFile(defaultCA).
+				TrustedCAFile(alternativeCA).
 				AlternativeURL("/api/clusters_mgmt", defaultURL).
 				AlternativeURL("/api/clusters_mgmt/v1", alternativeURL).
 				Build()

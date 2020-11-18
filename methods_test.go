@@ -22,6 +22,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"os"
 	"time"
 
 	. "github.com/onsi/ginkgo" // nolint
@@ -37,6 +38,10 @@ var _ = Describe("Methods", func() {
 	var oidServer *ghttp.Server
 	var apiServer *ghttp.Server
 
+	// Names of the temporary files containing the CAs for the servers:
+	var oidCA string
+	var apiCA string
+
 	// Logger used during the testss:
 	var logger Logger
 
@@ -51,7 +56,7 @@ var _ = Describe("Methods", func() {
 		refreshToken := DefaultToken("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
-		oidServer = MakeServer()
+		oidServer, oidCA = MakeServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
 				RespondWithTokens(accessToken, refreshToken),
@@ -59,7 +64,7 @@ var _ = Describe("Methods", func() {
 		)
 
 		// Create the API server:
-		apiServer = MakeServer()
+		apiServer, apiCA = MakeServer()
 
 		// Metrics subsystem - value doesn't matter but configuring it enables
 		// prometheus exporting, exercising the counter increment functionality
@@ -73,6 +78,8 @@ var _ = Describe("Methods", func() {
 			TokenURL(oidServer.URL()).
 			URL(apiServer.URL()).
 			Tokens(refreshToken).
+			TrustedCAFile(oidCA).
+			TrustedCAFile(apiCA).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 	})
@@ -84,6 +91,12 @@ var _ = Describe("Methods", func() {
 
 		// Close the connection:
 		err := connection.Close()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Remove the temporary CA files:
+		err = os.Remove(oidCA)
+		Expect(err).ToNot(HaveOccurred())
+		err = os.Remove(apiCA)
 		Expect(err).ToNot(HaveOccurred())
 	})
 

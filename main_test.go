@@ -19,18 +19,22 @@ package sdk
 import (
 	"bytes"
 	"crypto/rsa"
+	"crypto/tls"
+	"encoding/pem"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"regexp"
 	"testing"
 	"text/template"
 	"time"
 
-	. "github.com/onsi/ginkgo" // nolint
-	. "github.com/onsi/gomega" // nolint
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/onsi/gomega/ghttp"
+
+	. "github.com/onsi/ginkgo" // nolint
+	. "github.com/onsi/gomega" // nolint
 )
 
 func TestClient(t *testing.T) {
@@ -58,12 +62,54 @@ var _ = BeforeSuite(func() {
 	Expect(err).ToNot(HaveOccurred())
 })
 
-// MakeServer creates a test server configured so that it sends log messages to the Ginkgo writer.
-func MakeServer() *ghttp.Server {
-	server := ghttp.NewServer()
+// MakeServer creates a test server configured so that it sends log messages to the Ginkgo
+// writer. It returns the created server and the name of a temporary file that contains the
+// CA certificate that the client should trust in order to connect to the server. It is the
+// responsibility of the caller to delete this temporary file when it is no longer needed.
+func MakeServer() (server *ghttp.Server, ca string) {
+	// Create and configure the server:
+	server = ghttp.NewTLSServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
-	return server
+
+	// Fetch the CA certificate:
+	addr, err := url.Parse(server.URL())
+	Expect(err).ToNot(HaveOccurred())
+	conn, err := tls.Dial("tcp", addr.Host, &tls.Config{
+		InsecureSkipVerify: true, // nolint
+	})
+	Expect(err).ToNot(HaveOccurred())
+	defer func() {
+		err = conn.Close()
+		Expect(err).ToNot(HaveOccurred())
+	}()
+	err = conn.Handshake()
+	Expect(err).ToNot(HaveOccurred())
+	certs := conn.ConnectionState().PeerCertificates
+	Expect(certs).ToNot(BeNil())
+	Expect(len(certs)).To(BeNumerically(">=", 1))
+	cert := certs[len(certs)-1]
+	Expect(ca).ToNot(BeNil())
+
+	// Serialize the CA certificate:
+	Expect(cert.Raw).ToNot(BeNil())
+	block := &pem.Block{
+		Type:  "CERTIFICATE",
+		Bytes: cert.Raw,
+	}
+	buffer := pem.EncodeToMemory(block)
+	Expect(buffer).ToNot(BeNil())
+
+	// Store the CA certificate in a temporary file:
+	file, err := ioutil.TempFile("", "*.test.ca")
+	Expect(err).ToNot(HaveOccurred())
+	_, err = file.Write(buffer)
+	Expect(err).ToNot(HaveOccurred())
+	err = file.Close()
+	Expect(err).ToNot(HaveOccurred())
+	ca = file.Name()
+
+	return
 }
 
 // RespondeWithContent responds with the given status code, content type and body.

@@ -23,6 +23,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -61,7 +62,8 @@ var DefaultScopes = []string{
 type ConnectionBuilder struct {
 	// Basic attributes:
 	logger            Logger
-	trustedCAs        *x509.CertPool
+	trustedCASources  []interface{}
+	trustedCAPool     *x509.CertPool
 	insecure          bool
 	disableKeepAlives bool
 	tokenURL          string
@@ -323,7 +325,15 @@ func (b *ConnectionBuilder) Tokens(tokens ...string) *ConnectionBuilder {
 // trusted by the connection. If this isn't explicitly specified then the client will trust the
 // certificate authorities trusted by default by the system.
 func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder {
-	b.trustedCAs = value
+	b.trustedCASources = append(b.trustedCASources, value)
+	return b
+}
+
+// TrustedCAFile sets the name of a file that contains the certificate authorities that will be
+// trusted by the connection. If this isn't explicitly specified then the client will trust the
+// certificate authorities trusted by default by the system.
+func (b *ConnectionBuilder) TrustedCAFile(value string) *ConnectionBuilder {
+	b.trustedCASources = append(b.trustedCASources, value)
 	return b
 }
 
@@ -545,6 +555,12 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
+	// Load trusted CAs:
+	err = b.loadTrustedCAs(ctx)
+	if err != nil {
+		return
+	}
+
 	// Create the transport:
 	transport, err := b.createTransport()
 	if err != nil {
@@ -560,7 +576,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	// Allocate and populate the connection object:
 	connection = &Connection{
 		logger:            b.logger,
-		trustedCAs:        b.trustedCAs,
+		trustedCAs:        b.trustedCAPool,
 		insecure:          b.insecure,
 		disableKeepAlives: b.disableKeepAlives,
 		client:            client,
@@ -664,13 +680,58 @@ func (b *ConnectionBuilder) createCookieJar() (jar http.CookieJar, err error) {
 	return
 }
 
-func (b *ConnectionBuilder) createTransport() (transport http.RoundTripper, err error) {
+func (b *ConnectionBuilder) loadTrustedCAs(ctx context.Context) error {
+	var err error
+	b.trustedCAPool, err = x509.SystemCertPool()
+	if err != nil {
+		return err
+	}
+	for _, ca := range b.trustedCASources {
+		switch source := ca.(type) {
+		case *x509.CertPool:
+			b.logger.Debug(
+				ctx,
+				"Default trusted CA certificates have been explicitly replaced",
+			)
+			b.trustedCAPool = source
+		case string:
+			b.logger.Debug(
+				ctx,
+				"Loading trusted CA certificates from file '%s'",
+				source,
+			)
+			var buffer []byte
+			buffer, err = ioutil.ReadFile(source) // #nosec G304
+			if err != nil {
+				return fmt.Errorf(
+					"can't read trusted CA certificates from file '%s': %w",
+					source, err,
+				)
+			}
+			if !b.trustedCAPool.AppendCertsFromPEM(buffer) {
+				return fmt.Errorf(
+					"file '%s' doesn't contain any certificate",
+					source,
+				)
+			}
+		default:
+			return fmt.Errorf(
+				"don't know how to load trusted CA from source of type '%T'",
+				source,
+			)
+		}
+	}
+	return nil
+}
+
+func (b *ConnectionBuilder) createTransport() (
+	transport http.RoundTripper, err error) {
 	// Create the raw transport:
 	// #nosec 402
 	transport = &http.Transport{
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: b.insecure,
-			RootCAs:            b.trustedCAs,
+			RootCAs:            b.trustedCAPool,
 		},
 		Proxy:             http.ProxyFromEnvironment,
 		DisableKeepAlives: b.disableKeepAlives,
