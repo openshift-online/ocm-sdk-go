@@ -698,6 +698,32 @@ var _ = Describe("Object", func() {
 					Enabled: true,
 				},
 			),
+			Entry(
+				"Shell echo variable",
+				`
+				user: !shell echo -n ${MYUSER}
+				`,
+				map[string]string{
+					"MYUSER": "myuser",
+				},
+				nil,
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Shell cat file",
+				`
+				user: !shell cat myuser.txt
+				`,
+				nil,
+				map[string]string{
+					"myuser.txt": "myuser",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
 		)
 
 		It("Fails if environment variable doesn't exist", func() {
@@ -712,6 +738,36 @@ var _ = Describe("Object", func() {
 				Load([]byte(`mykey: !file /doesnotexist.txt`)).
 				Build()
 			Expect(err).To(HaveOccurred())
+		})
+
+		It("Fails if script writes to stderr", func() {
+			_, err := New().
+				Load([]byte(`mykey: !shell echo myerror 1>&2`)).
+				Build()
+			Expect(err).To(HaveOccurred())
+		})
+
+		It("Script error contains stdout and stderr", func() {
+			_, err := New().
+				Load([]byte(
+					`mykey: !shell echo myoutput; echo myerror 1>&2; exit 1`,
+				)).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("myoutput"))
+			Expect(message).To(ContainSubstring("myerror"))
+		})
+
+		It("Failes if script command doesn't exist", func() {
+			_, err := New().
+				Load([]byte(
+					`mykey: !shell doesnotexist`,
+				)).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("doesnotexist"))
 		})
 	})
 })
