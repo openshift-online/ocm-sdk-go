@@ -20,7 +20,10 @@ package sdk
 
 import (
 	"context"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/onsi/gomega/gbytes"
@@ -317,6 +320,300 @@ var _ = Describe("Connection", func() {
 			Build()
 		Expect(err).To(HaveOccurred())
 	})
+
+	It("Can be configured with a YAML file", func() {
+		// Create temporary files for the trusted CAs:
+		tmp, err := ioutil.TempDir("", "*.test.cas")
+		Expect(err).ToNot(HaveOccurred())
+		defer func() {
+			err = os.RemoveAll(tmp)
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Create a temporary YAML file containing the configuration:
+		generatedAccess := DefaultToken("Bearer", 5*time.Minute)
+		generatedRefresh := DefaultToken("Refresh", 10*time.Hour)
+		content := EvaluateTemplate(
+			`
+			url: https://my.server.com
+			alternative_urls:
+			  /api/clusters_mgmt: https://your.server.com
+			  /api/accounts_mgmt: https://her.server.com
+			token_url: https://openid.server.com
+			user: myuser
+			password: mypassword
+			client_id: myclient
+			client_secret: mysecret
+			tokens:
+			- {{ .AccessToken }}
+			- {{ .RefreshToken }}
+			scopes:
+			- openid
+			- myscope
+			insecure: true
+			trusted_cas:
+			- {{ .Tmp }}/myca.pem
+			- {{ .Tmp }}/yourca.pem
+			agent: myagent
+			`,
+			"Tmp", tmp,
+			"AccessToken", generatedAccess,
+			"RefreshToken", generatedRefresh,
+		)
+		file, err := ioutil.TempFile("", "*.yaml")
+		Expect(err).ToNot(HaveOccurred())
+		path := file.Name()
+		defer func() {
+			err = os.Remove(path)
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		_, err = file.WriteString(content)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Create the connection and verify it has been created with the configuration
+		// stored in the YAML file:
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Load(path).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
+		alternativeURLs := connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(2))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt", "https://your.server.com",
+		))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/accounts_mgmt", "https://her.server.com",
+		))
+		Expect(connection.TokenURL()).To(Equal("https://openid.server.com"))
+		user, password := connection.User()
+		Expect(user).To(Equal("myuser"))
+		Expect(password).To(Equal("mypassword"))
+		client, secret := connection.Client()
+		Expect(client).To(Equal("myclient"))
+		Expect(secret).To(Equal("mysecret"))
+		returnedAccess, returnedRefresh, err := connection.Tokens()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(returnedAccess).To(Equal(generatedAccess))
+		Expect(returnedRefresh).To(Equal(generatedRefresh))
+		defer func() {
+			err = connection.Close()
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
+		Expect(connection.Insecure()).To(BeTrue())
+		Expect(connection.Agent()).To(Equal("myagent"))
+	})
+
+	It("Method calls after load override configuration file", func() {
+		// Create temporary files for the trusted CAs:
+		tmp, err := ioutil.TempDir("", "*.test.cas")
+		Expect(err).ToNot(HaveOccurred())
+		defer func() {
+			err = os.RemoveAll(tmp)
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Create a temporary YAML file containing the configuration:
+		generatedAccess := DefaultToken("Bearer", 5*time.Minute)
+		generatedRefresh := DefaultToken("Refresh", 10*time.Hour)
+		content := EvaluateTemplate(
+			`
+			url: https://my.server.com
+			alternative_urls:
+			  /api/clusters_mgmt: https://your.server.com
+			  /api/accounts_mgmt: https://her.server.com
+			token_url: https://openid.server.com
+			user: myuser
+			password: mypassword
+			client_id: myclient
+			client_secret: mysecret
+			tokens:
+			- {{ .AccessToken }}
+			- {{ .RefreshToken }}
+			scopes:
+			- openid
+			- myscope
+			insecure: true
+			trusted_cas:
+			- {{ .Tmp }}/myca.pem
+			- {{ .Tmp }}/yourca.pem
+			agent: myagent
+			`,
+			"Tmp", tmp,
+			"AccessToken", generatedAccess,
+			"RefreshToken", generatedRefresh,
+		)
+		file, err := ioutil.TempFile("", "*.yaml")
+		Expect(err).ToNot(HaveOccurred())
+		path := file.Name()
+		defer func() {
+			err = os.Remove(path)
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		_, err = file.WriteString(content)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Load the configuration file and then configure the connection with method
+		// calls:
+		overridenAccess := DefaultToken("Bearer", 5*time.Minute)
+		overridenRefresh := DefaultToken("Refresh", 10*time.Hour)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Load(path).
+			URL("https://overriden.my.server.com").
+			AlternativeURL("/api/clusters_mgmt", "https://overriden.your.server.com").
+			AlternativeURL("/api/accounts_mgmt", "https://overriden.her.server.com").
+			TokenURL("https://overriden.openid.server.com").
+			User("overriden.myuser", "overriden.mypassword").
+			Client("overriden.myclient", "overriden.mysecret").
+			Tokens(overridenAccess, overridenRefresh).
+			Scopes("openid", "overriden.myscope").
+			Insecure(false).
+			Agent("overriden.myagent").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the actual settings are the ones set with the method calls:
+		Expect(connection.URL()).To(Equal("https://overriden.my.server.com"))
+		alternativeURLs := connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(2))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt", "https://overriden.your.server.com",
+		))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/accounts_mgmt", "https://overriden.her.server.com",
+		))
+		Expect(connection.TokenURL()).To(Equal("https://overriden.openid.server.com"))
+		user, password := connection.User()
+		Expect(user).To(Equal("overriden.myuser"))
+		Expect(password).To(Equal("overriden.mypassword"))
+		client, secret := connection.Client()
+		Expect(client).To(Equal("overriden.myclient"))
+		Expect(secret).To(Equal("overriden.mysecret"))
+		returnedAccess, returnedRefresh, err := connection.Tokens()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(returnedAccess).To(Equal(overridenAccess))
+		Expect(returnedRefresh).To(Equal(overridenRefresh))
+		defer func() {
+			err = connection.Close()
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		Expect(connection.Scopes()).To(ConsistOf("openid", "overriden.myscope"))
+		Expect(connection.Insecure()).To(BeFalse())
+		Expect(connection.Agent()).To(Equal("overriden.myagent"))
+	})
+
+	It("Method calls before load don't override configuration file", func() {
+		// Create temporary files for the trusted CAs:
+		tmp, err := ioutil.TempDir("", "*.test.cas")
+		Expect(err).ToNot(HaveOccurred())
+		defer func() {
+			err = os.RemoveAll(tmp)
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Create a temporary YAML file containing the configuration:
+		generatedAccess := DefaultToken("Bearer", 5*time.Minute)
+		generatedRefresh := DefaultToken("Refresh", 10*time.Hour)
+		content := EvaluateTemplate(
+			`
+			url: https://my.server.com
+			alternative_urls:
+			  /api/clusters_mgmt: https://your.server.com
+			  /api/accounts_mgmt: https://her.server.com
+			token_url: https://openid.server.com
+			user: myuser
+			password: mypassword
+			client_id: myclient
+			client_secret: mysecret
+			tokens:
+			- {{ .AccessToken }}
+			- {{ .RefreshToken }}
+			scopes:
+			- openid
+			- myscope
+			insecure: true
+			trusted_cas:
+			- {{ .Tmp }}/myca.pem
+			- {{ .Tmp }}/yourca.pem
+			agent: myagent
+			`,
+			"Tmp", tmp,
+			"AccessToken", generatedAccess,
+			"RefreshToken", generatedRefresh,
+		)
+		file, err := ioutil.TempFile("", "*.yaml")
+		Expect(err).ToNot(HaveOccurred())
+		path := file.Name()
+		defer func() {
+			err = os.Remove(path)
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		_, err = file.WriteString(content)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Configure the connection with methods call and then load the configuration file:
+		overridenAccess := DefaultToken("Bearer", 5*time.Minute)
+		overridenRefresh := DefaultToken("Refresh", 10*time.Hour)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("https://overriden.my.server.com").
+			AlternativeURL("/api/clusters_mgmt", "https://overriden.your.server.com").
+			AlternativeURL("/api/accounts_mgmt", "https://overriden.her.server.com").
+			TokenURL("https://overriden.openid.server.com").
+			User("overriden.myuser", "overriden.mypassword").
+			Client("overriden.myclient", "overriden.mysecret").
+			Tokens(overridenAccess, overridenRefresh).
+			Scopes("openid", "overriden.myscope").
+			Insecure(false).
+			Agent("overriden.myagent").
+			Load(path).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the actual settings are the ones from the file:
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
+		alternativeURLs := connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(2))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt", "https://your.server.com",
+		))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/accounts_mgmt", "https://her.server.com",
+		))
+		Expect(connection.TokenURL()).To(Equal("https://openid.server.com"))
+		user, password := connection.User()
+		Expect(user).To(Equal("myuser"))
+		Expect(password).To(Equal("mypassword"))
+		client, secret := connection.Client()
+		Expect(client).To(Equal("myclient"))
+		Expect(secret).To(Equal("mysecret"))
+		returnedAccess, returnedRefresh, err := connection.Tokens()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(returnedAccess).To(Equal(overridenAccess))
+		Expect(returnedRefresh).To(Equal(overridenRefresh))
+		defer func() {
+			err = connection.Close()
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
+		Expect(connection.Insecure()).To(BeTrue())
+		Expect(connection.Agent()).To(Equal("myagent"))
+	})
 })
 
 type TestTransport struct {
@@ -338,3 +635,91 @@ func (t *TestTransport) RoundTrip(request *http.Request) (response *http.Respons
 func NewTestTransport() *TestTransport {
 	return &TestTransport{called: 0}
 }
+
+// This certificate is used only to verify that the connection can load a certificate from
+// a file. It isn't valid for any other thing. It has been generated with the following
+// commmad:
+//
+//	openssl req \
+//	-x509 \
+//	-newkey rsa:4096 \
+//	-keyout myca.key \
+//	-nodes \
+//	-out myca.crt \
+//	-subj '/CN=myca.com' \
+//	-days 3650
+var mycaPEM = []byte(`
+-----BEGIN CERTIFICATE-----
+MIIFCzCCAvOgAwIBAgIUEy+dp9sWPdu59sahER7AxvapYOgwDQYJKoZIhvcNAQEL
+BQAwFTETMBEGA1UEAwwKeW91cmNhLmNvbTAeFw0yMDExMTgxNjUwMTNaFw0zMDEx
+MTYxNjUwMTNaMBUxEzARBgNVBAMMCnlvdXJjYS5jb20wggIiMA0GCSqGSIb3DQEB
+AQUAA4ICDwAwggIKAoICAQC7IXXeem/arTEAvujthKpzxMOaimpIq276rIaaehSf
+PKfwwFScz6KzkcRcCjzGlmQIUfe0VunL9xMfWcOBQ8u0LofJpcRE+AuYXdgAuuyH
+ijWukGZ4o1QGoSmS90TVOOLGA38gnPbQTAgJN8DzxccoOTVtdqsAZMK5zKGJ0IUa
+0ZkPJvs0QYfVYMgYCjiRCeTNze4Cwb/ecj9CZump2IUNm3oE28dUkzRCBysNAvKu
+Ms9HktnQft7BxoefdCZK04o8a1BLzZVSPe7qV+bk0+hD1xygoEPATzhuGl7Al9EI
+lkOJ8fv3uompnz5bHOeP2dNuwn9efeINtJcLlx8wySkU0oNTqQq9MVI7gRwUUAT0
+dLzETULngRhvjGSYEyST3vT27V444fVYkSVIjmji+SmzSejfZq/A1NTQ8M9TUWIs
+7dL562GJnsalPnI+m9XR5m3oajY+CYtcd5q1iIus+WrMXups8fQnpssJHioFs86s
+NEQ0Evbl0OGxxYivJwKbT6Oo86Uh3nUXXx/xxBI5HRmQap38EK6K0WZR3V7MBnpF
+xVv5vUO/zXc7DxAghcXb41XSTWGOM+AqaCIv+zys87/F6x1dmCkA8DCNxYlEeK88
+6xHuK5265iu/to9NSvzCAxmrz4fDea3eAxpZus39yN3N2ud2IAlMguicjZgLF3mg
+uQIDAQABo1MwUTAdBgNVHQ4EFgQUf37ek+qeiMRhZ0q6whksuPY4ezQwHwYDVR0j
+BBgwFoAUf37ek+qeiMRhZ0q6whksuPY4ezQwDwYDVR0TAQH/BAUwAwEB/zANBgkq
+hkiG9w0BAQsFAAOCAgEArP/sjXMURWamJFckKwpam+w8WPW3b0wq6GkQky6XDcXK
+sym5vJfQtQgzZV/rxb0RcO4ywPKYJK2ViREqksmlD5XLL/6grbe+rcIY55IVcFKe
+3ZfE7toa08gWV8kb9VP2KVNt5505jJUVtF8FxRxsu5W0x6b6Kegyotsd5/7tads9
+9qMOoiWOyWxdP4FZalNM8PXaF8pspNqeo/cvgFWvDTqtFvgH4vkLehMueAWmDML2
+lqYHCaMworpY3e8vfk6jK8b9fRmuXaGMlOTpY7XoF8OOSMI1LdPVSO/lo8DCJbge
+RoBHZ97fA8ShB+WRjBuAuh5ST/TEqTha+razhmauVT6CYtw9SSC0SK0ZbNg2oZoG
+CzrQhYf9gHXXPnp0qsuPbtHrMm3DPBHBUrfrlvVVmWjKCVipFdPyRXth9FtNguZn
+d5NUX3JwGRoez/xHv8nHyjdKmTCu8pmP/9SAoV/HUgpcSaEtXyZdlNd+SgIcgV/A
+00eSLesNr9/auzWklxh92oqDnd96IRueamFm6W0BCh64if//BCmAFelPHlWSP1ws
+nzNA++GMw2OXJ1cE/9GTU3or0eDGRgB9XIu+T/SLPXW9xBm0hZdt5gyYfEDmppHa
+nctMPznTWc+iYCMAwroHzJV40ZrVhllhNYrrOLigA7NfAiXelLmSbLx316TnoZM=
+-----END CERTIFICATE-----
+`)
+
+// This certificate is used only to verify that the connection can load a certificate from
+// a file. It isn't valid for any other thing. It has been generated with the following
+// commmad:
+//
+//	openssl req \
+//	-x509 \
+//	-newkey rsa:4096 \
+//	-keyout yourca.key \
+//	-nodes \
+//	-out yourca.crt \
+//	-subj '/CN=yourca.com' \
+//	-days 3650
+var yourcaPEM = []byte(`
+-----BEGIN CERTIFICATE-----
+MIIFCzCCAvOgAwIBAgIUOBKDkme46UAOif9G7fIfN0FTmAswDQYJKoZIhvcNAQEL
+BQAwFTETMBEGA1UEAwwKeW91cmNhLmNvbTAeFw0yMDExMTgxNjU0MTBaFw0zMDEx
+MTYxNjU0MTBaMBUxEzARBgNVBAMMCnlvdXJjYS5jb20wggIiMA0GCSqGSIb3DQEB
+AQUAA4ICDwAwggIKAoICAQCjCUIsLIE0gp7JQZHvwrl12IjYEQjJWEpsEbp/jpux
+ztUAVju5Cq8+V5DYIzHi6WHlottpp6obh4TaCHZroZxwXKCoUARJwtPqADhDX+tr
+Jy8gA2y5ixGxryyXVsAT3YkEBW05i82aKa+FB05T0eUS52SBS2V6Fd4XU19denx5
+rb1eFNor/rmG0gMCAsh/4oWw8DdBEU0qc/9vQ3lsWvGU1noYt/kwfAcaSydrqaIA
+EvK/sG1/hxWD+JBOUwrah0zxT+7x6FbzqX83m03HM7ZHJR+qNjtg31loQwocsn20
+qOM3vMQkqyqjnXMHtIleyhw7fWNqQcvS/f+A3QUosf3h90c/BVmoJ+QUsm9gOUFT
+jGWybFWRnukSY/CMazVQvSF3N6GDz0iQQFQEwtpLhe0UhpFs/UUOXUi2+JjLRkLf
+fIeyk+K9EAz8Nd+vOMgr7ud70MykF7X5FzGLwJfz5bj62XVVifA8yMNoxIdlRFZp
+H8OXzMwUO0+ktCf1StXCEV8/HoBP8BeKRl/PPqyHlY2rqXrNYq+ZXR+I25HWJcyJ
+UUWQBq66yfxEIR2L5tJoVf0P7Z+WcplX7bo8T06n92zV5pU6WPi2+xAob2cmR9M4
+thlHl5uUDIYRgXZ2RQnMhea2GcDtFi8zfeWIJTZ54CmUi326sToqvCbOrHMkxus9
+xwIDAQABo1MwUTAdBgNVHQ4EFgQU5anvmjhvY6yPqy9qKU6cZAjX88MwHwYDVR0j
+BBgwFoAU5anvmjhvY6yPqy9qKU6cZAjX88MwDwYDVR0TAQH/BAUwAwEB/zANBgkq
+hkiG9w0BAQsFAAOCAgEAH2x/DTPnfxw06RZmjGCWOJJOUiO9uW4dVtLUzdCmOkuX
+zngsqAB6Mqy+GXb4jsNdKdVR74Lb/9gv9WkXTxLPnW8sBmxC7NxjJZbQVlHuQK3U
+s8GGo1wwuR/kCcnckdRAuDf8BbllqpPq+zUm1ZzM2NnMtiptkojxpleJugttXGiw
+SHRh6hY3RZAKD6s6eyg67O6Dx3bFgyzYt91cG+YJPbSQh9hBhhlmp5GwOMg27u6N
+skSNZIK2SNs5Bael+WfiUiEB1cFwUc0TYPUSJEkLXvLcqqVzuj53IEU7UCifYqHQ
+xlhdROagJc8fSOQ0yEEwBPqDVRT3fJipAGRB7h8a0pEtfbD8M0df6DGkcRvOf/My
+B2Ss8ZrL+tLDKEJji6aZXlkFbs6aKko0cKbZQvquISgEdcZp3hQ4oc+eUmkOfkk6
+0D+7ZY3m4JDAr38tVDw3lG2I3THvmT8zdPZzujkZjHUvVqWaoEX1k6IUSZ5DnQ3H
+NIf/SfR7aXBeCsoJnCE+nsN/ba2twS8Wx1evuWDdlVGYrE4ujXpCAKspwi0mPirx
+bkAQVDU7e/Zr6P8ZI9P4w1MYZvKagPo1+hCCiEAaeNdgMoOwQbLpw6py0x7B+mxI
+ppX5DVNV8wJAb9KqeSXwd89Z5unpeS6KZsMcb5qiK60Lj12aLmZ8ip6s7xjAS8Q=
+-----END CERTIFICATE-----
+`)
