@@ -244,6 +244,23 @@ var _ = Describe("Object", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(config.MyKey).To(Equal("secondvalue"))
 		})
+
+		It("Decodes binary data", func() {
+			// Load the configuration:
+			object, err := New().
+				Load([]byte(`mykey: !!binary bXl2YWx1ZQ==`)).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(object).ToNot(BeNil())
+
+			// Populate the configuration:
+			var config struct {
+				MyKey string `yaml:"mykey"`
+			}
+			err = object.Populate(&config)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(config.MyKey).To(Equal("myvalue"))
+		})
 	})
 
 	Describe("Merge", func() {
