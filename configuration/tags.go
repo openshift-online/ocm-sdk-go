@@ -53,6 +53,7 @@ func registerTag(name string, process func(string, string, *yaml.Node) error) {
 func init() {
 	// Register tags:
 	registerTag("file", processFileTag)
+	registerTag("include", processIncludeTag)
 	registerTag("shell", processShellTag)
 	registerTag("variable", processVariableTag)
 }
@@ -158,6 +159,27 @@ func processShellTag(name, replacement string, node *yaml.Node) error {
 	if replacement != "" {
 		node.Tag = "!!" + replacement
 	}
+	return nil
+}
+
+// processIncludeTag is the implementation of the `!include` tag: replaces the node with the
+// result of loading another YAML file.
+func processIncludeTag(name, replacement string, node *yaml.Node) error {
+	file := node.Value
+	buffer, err := ioutil.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	var included yaml.Node
+	err = yaml.Unmarshal(buffer, &included)
+	if err != nil {
+		return err
+	}
+	err = processTags(&included)
+	if err != nil {
+		return err
+	}
+	*node = *included.Content[0]
 	return nil
 }
 

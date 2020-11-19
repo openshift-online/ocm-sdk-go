@@ -49,9 +49,10 @@ limitations under the License.
 //
 // The following tags are supported:
 //
-//	!variable MYVARIABLE - Is replaced by the content of the environment variable `MYVARIABLE`.
 //	!file /my/file.txt - Is replaced by the content of the file `/my/file.txt`.
+//	!include /my/file.yaml - Is replaced by the result of parsing the `/my/file.yaml` file.
 //	!shell myscript - Is replaced by the result of executing the `myscript` shell script.
+//	!variable MYVARIABLE - Is replaced by the content of the environment variable `MYVARIABLE`.
 //
 // Tag names can be abbreviated. For example these are all valid tags:
 //
@@ -59,6 +60,7 @@ limitations under the License.
 //	!v MYVARIABLE - Replaced by the content of the environment variablel `MYVARIABLE`.
 //	!f /my/file.txt - Replaced by the content of the `/my.file.txt` file.
 //	!sh myscript - Replaced by the result of execution the `myscript` shell script.
+//	!inc /my/file.yaml - Replaced by the result of parsing the `/my/file.yaml` file.
 //
 // The `file` tag trims all leading and traling white space from the content of the file.
 //

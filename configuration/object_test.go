@@ -724,6 +724,120 @@ var _ = Describe("Object", func() {
 					User: "myuser",
 				},
 			),
+			Entry(
+				"Include string",
+				`
+				user: !include myuser.yaml
+				`,
+				nil,
+				map[string]string{
+					"myuser.yaml": "myuser",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include bool",
+				`
+				enabled: !include myenabled.yaml
+				`,
+				nil,
+				map[string]string{
+					"myenabled.yaml": "true",
+				},
+				Config{
+					Enabled: true,
+				},
+			),
+			Entry(
+				"Include int",
+				`
+				id: !include myid.yaml
+				`,
+				nil,
+				map[string]string{
+					"myid.yaml": "123",
+				},
+				Config{
+					ID: 123,
+				},
+			),
+			Entry(
+				"Include map",
+				`
+				!include mymap.yaml
+				`,
+				nil,
+				map[string]string{
+					"mymap.yaml": "{ user: myuser, id: 123 }",
+				},
+				Config{
+					User: "myuser",
+					ID: 123,
+				},
+			),
+			Entry(
+				"Include chain",
+				`
+				user: !include first.yaml
+				`,
+				nil,
+				map[string]string{
+					"first.yaml": "!include second.yaml",
+					"second.yaml": "myuser",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include chain and variable",
+				`
+				user: !include first.yaml
+				`,
+				map[string]string{
+					"MYUSER": "myuser",
+				},
+				map[string]string{
+					"first.yaml": "!include second.yaml",
+					"second.yaml": "!variable MYUSER",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include chain and file",
+				`
+				user: !include first.yaml
+				`,
+				nil,
+				map[string]string{
+					"first.yaml": "!include second.yaml",
+					"second.yaml": "!file myuser.txt",
+					"myuser.txt": "myuser",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include chain and shell",
+				`
+				user: !include first.yaml
+				`,
+				map[string]string{
+					"MYUSER": "myuser",
+				},
+				map[string]string{
+					"first.yaml": "!include second.yaml",
+					"second.yaml": "!shell echo -n ${MYUSER}",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
 		)
 
 		It("Fails if environment variable doesn't exist", func() {
