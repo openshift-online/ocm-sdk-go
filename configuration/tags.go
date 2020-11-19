@@ -21,11 +21,9 @@ package configuration
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"strconv"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -36,49 +34,40 @@ import (
 // it as needed.
 type tagRegistryEntry struct {
 	name    string
-	process func(name, replacement string, node *yaml.Node) error
+	kind    yaml.Kind
+	process func(*yaml.Node) error
 }
 
-// tagRegistry stores the collection of tags.
-var tagRegistry []tagRegistryEntry
-
 // registerTag adds a tag to the registry.
-func registerTag(name string, process func(string, string, *yaml.Node) error) {
-	tagRegistry = append(tagRegistry, tagRegistryEntry{
+func (b *Builder) registerTag(name string, kind yaml.Kind, process func(*yaml.Node) error) {
+	b.tags = append(b.tags, tagRegistryEntry{
 		name:    name,
+		kind:    kind,
 		process: process,
 	})
 }
 
-func init() {
-	// Register tags:
-	registerTag("file", processFileTag)
-	registerTag("shell", processShellTag)
-	registerTag("variable", processVariableTag)
-}
-
-// processTags process the tags present in the given YAML tree and returns the result. The following
-// tags are supported:
-//
-//	!variable MYVARIABLE - Is replaced by the content of the environment variable `MYVARIABLE`.
-//	!file file /my/file.txt - Is replaced by the content of the file `/my/file.txt`.
-//
-// The function will return an error if a tag references an environment variable or file that doesn't
-// exist.
-func processTags(node *yaml.Node) error {
-	name, replacement := parseTag(node.Tag)
-	if name != "" {
-		for _, entry := range tagRegistry {
-			if strings.HasPrefix(entry.name, name) {
-				err := entry.process(name, replacement, node)
-				if err != nil {
-					return err
-				}
-			}
+// lookupTag tries to find an entry in the tag registry corresponding to the given name.
+func (b *Builder) lookupTag(name string) (result tagRegistryEntry, ok bool) {
+	for _, entry := range b.tags {
+		if strings.HasPrefix(entry.name, name) {
+			result = entry
+			ok = true
+			break
 		}
 	}
-	for _, child := range node.Content {
-		err := processTags(child)
+	return
+}
+
+// processTreeTags process recursively the tags present in the given YAML tree and returns the
+// result.
+func (b *Builder) processTreeTags(tree *yaml.Node) error {
+	err := b.processNodeTags(tree)
+	if err != nil {
+		return err
+	}
+	for _, node := range tree.Content {
+		err = b.processTreeTags(node)
 		if err != nil {
 			return err
 		}
@@ -86,40 +75,65 @@ func processTags(node *yaml.Node) error {
 	return nil
 }
 
-// processVariableTag is the implementation fo the `!variable` tag: replaces an environment variable
+// processNodeTags process the tags present in the given YAML node.
+func (b *Builder) processNodeTags(node *yaml.Node) error {
+	tag := node.ShortTag()
+	if strings.HasPrefix(tag, "!!") {
+		return nil
+	}
+	names := b.parseTag(tag)
+	for _, name := range names {
+		entry, ok := b.lookupTag(name)
+		if ok {
+			if entry.kind != node.Kind {
+				return b.nodeError(
+					node,
+					"tag '%s' expects %s node but found %s",
+					name,
+					b.kindString(entry.kind),
+					b.kindString(node.Kind),
+				)
+			}
+			err := entry.process(node)
+			if err != nil {
+				return err
+			}
+		} else {
+			return b.nodeError(node, "unsupported tag '%s'", name)
+		}
+	}
+	return nil
+}
+
+// processVariableTag is the implementation fo the `variable` tag: replaces an environment variable
 // reference with its value.
-func processVariableTag(name, replacement string, node *yaml.Node) error {
-	variable := strings.TrimSpace(node.Value)
+func (b *Builder) processVariableTag(node *yaml.Node) error {
+	variable := node.Value
 	result, ok := os.LookupEnv(variable)
 	if !ok {
-		return fmt.Errorf("can't find environment variable '%s'", name)
+		return b.nodeError(node, "can't find environment variable '%s'", variable)
 	}
 	node.SetString(result)
-	if replacement != "" {
-		node.Tag = "!!" + replacement
-	}
 	return nil
 }
 
-// processFileTag is the implementation of the `!file` tag: replaces a file reference with the
+// processFileTag is the implementation of the `file` tag: replaces a file reference with the
 // content of the file.
-func processFileTag(name, replacement string, node *yaml.Node) error {
-	file := strings.TrimSpace(node.Value)
+func (b *Builder) processFileTag(node *yaml.Node) error {
+	file := node.Value
 	data, err := ioutil.ReadFile(file) // #nosec G304
 	if err != nil {
-		return err
+		return b.nodeError(node, "%w", err)
 	}
-	result := strings.TrimSpace(string(data))
+	result := string(data)
 	node.SetString(result)
-	if replacement != "" {
-		node.Tag = "!!" + replacement
-	}
+	b.titleTree(file, node)
 	return nil
 }
 
-// processShellTag is the implementation of the `!shell` tag: replaces a shell script with
+// processScriptTag is the implementation of the `script` tag: replaces a script script with
 // the result of executing it.
-func processShellTag(name, replacement string, node *yaml.Node) error {
+func (b *Builder) processScriptTag(node *yaml.Node) error {
 	shell, ok := os.LookupEnv("SHELL")
 	if !ok {
 		shell = "/bin/sh"
@@ -140,47 +154,85 @@ func processShellTag(name, replacement string, node *yaml.Node) error {
 		err = nil
 	}
 	if err != nil {
-		return err
+		return b.nodeError(node, "%w", err)
 	}
 	code := cmd.ProcessState.ExitCode()
 	if code != 0 || stderr.Len() > 0 {
-		return fmt.Errorf(
-			"shell script '%s' finished with exit code %d, wrote '%s' to stdout "+
-				"and '%s' to stderr",
-			quoteForError(script),
+		return b.nodeError(
+			node,
+			"script '%s' finished with exit code %d, wrote '%s' to stdout and '%s' "+
+				"to stderr",
+			b.quoteForError(script),
 			code,
-			quoteForError(stdout.String()),
-			quoteForError(stderr.String()),
+			b.quoteForError(stdout.String()),
+			b.quoteForError(stderr.String()),
 		)
 	}
 	result := stdout.String()
 	node.SetString(result)
-	if replacement != "" {
-		node.Tag = "!!" + replacement
-	}
 	return nil
 }
 
-// parseTag extract from the given tag the name and the replacement. For example, the tag `!file`
-// has name `file` and no replacement and the tag `!file/int` has name `file` and
-// replacement `int`.
-func parseTag(tag string) (name, replacement string) {
-	if !strings.HasPrefix(tag, "!") {
-		return
-	}
-	slash := strings.Index(tag, "/")
-	if slash == -1 {
-		name = tag[1:]
-		replacement = ""
-	} else {
-		name = tag[1:slash]
-		replacement = tag[slash+1:]
-	}
-	return
+// processTrimTag is the implementation of the `trim` tag: trims leading and trailing white
+// space, including line breaks and tabs.
+func (b *Builder) processTrimTag(node *yaml.Node) error {
+	value := node.Value
+	value = strings.TrimSpace(value)
+	node.SetString(value)
+	return nil
 }
 
-// quoteForError prepares the given string so that it can be included in an error message.
-func quoteForError(s string) string {
-	r := strconv.Quote(s)
-	return r[1 : len(r)-1]
+// processYamlTag is the implementation of the `yaml` tag: parses the value as a YAML
+// document and replaces the current node with the result.
+func (b *Builder) processYamlTag(node *yaml.Node) error {
+	buffer := []byte(node.Value)
+	var parsed yaml.Node
+	err := yaml.Unmarshal(buffer, &parsed)
+	if err != nil {
+		return b.nodeError(node, "can't parse '%s': %w", buffer, err)
+	}
+	b.titleTree(b.titles[node], &parsed)
+	err = b.processTreeTags(&parsed)
+	if err != nil {
+		return err
+	}
+	*node = *parsed.Content[0]
+	return nil
+}
+
+// processStrTag is the implementation of the `string` tag: it explicitly sets the node kind
+// to `!!str`.
+func (b *Builder) processStringTag(node *yaml.Node) error {
+	node.Tag = "!!str"
+	return nil
+}
+
+// processIntegerTag is the implementation of the `integer` tag: it explicitly sets the node kind
+// to `!!int`.
+func (b *Builder) processIntegerTag(node *yaml.Node) error {
+	node.Tag = "!!int"
+	return nil
+}
+
+// processBooleanTag is the implementation of the `bool` tag: it explicitly sets the node kind
+// to `!!bool`.
+func (b *Builder) processBooleanTag(node *yaml.Node) error {
+	node.Tag = "!!bool"
+	return nil
+}
+
+// processFloatTag is the implementation of the `float` tag: it explicitly sets the node type
+// to `!!float`.
+func (b *Builder) processFloatTag(node *yaml.Node) error {
+	node.Tag = "!!float"
+	return nil
+}
+
+// parseTag extracts the coponents from the given tags. For example, the tag `!file/int` will be
+// parsed as a slice containing `file` and `int`.
+func (b *Builder) parseTag(tag string) []string {
+	if !strings.HasPrefix(tag, "!") {
+		return nil
+	}
+	return strings.Split(tag[1:], "/")
 }
