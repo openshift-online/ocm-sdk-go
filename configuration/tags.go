@@ -20,9 +20,12 @@ limitations under the License.
 package configuration
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"strconv"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -49,8 +52,9 @@ func registerTag(name string, process func(string, string, *yaml.Node) error) {
 
 func init() {
 	// Register tags:
-	registerTag("variable", processVariableTag)
 	registerTag("file", processFileTag)
+	registerTag("shell", processShellTag)
+	registerTag("variable", processVariableTag)
 }
 
 // processTags process the tags present in the given YAML tree and returns the result. The following
@@ -91,7 +95,9 @@ func processVariableTag(name, replacement string, node *yaml.Node) error {
 		return fmt.Errorf("can't find environment variable '%s'", name)
 	}
 	node.SetString(result)
-	node.Tag = "!!" + replacement
+	if replacement != "" {
+		node.Tag = "!!" + replacement
+	}
 	return nil
 }
 
@@ -105,7 +111,53 @@ func processFileTag(name, replacement string, node *yaml.Node) error {
 	}
 	result := strings.TrimSpace(string(data))
 	node.SetString(result)
-	node.Tag = "!!" + replacement
+	if replacement != "" {
+		node.Tag = "!!" + replacement
+	}
+	return nil
+}
+
+// processShellTag is the implementation of the `!shell` tag: replaces a shell script with
+// the result of executing it.
+func processShellTag(name, replacement string, node *yaml.Node) error {
+	shell, ok := os.LookupEnv("SHELL")
+	if !ok {
+		shell = "/bin/sh"
+	}
+	script := node.Value
+	stdin := strings.NewReader(script)
+	stdout := &bytes.Buffer{}
+	stderr := &bytes.Buffer{}
+	cmd := &exec.Cmd{
+		Path:   shell,
+		Stdin:  stdin,
+		Stdout: stdout,
+		Stderr: stderr,
+	}
+	err := cmd.Run()
+	_, exit := err.(*exec.ExitError)
+	if exit {
+		err = nil
+	}
+	if err != nil {
+		return err
+	}
+	code := cmd.ProcessState.ExitCode()
+	if code != 0 || stderr.Len() > 0 {
+		return fmt.Errorf(
+			"shell script '%s' finished with exit code %d, wrote '%s' to stdout "+
+				"and '%s' to stderr",
+			quoteForError(script),
+			code,
+			quoteForError(stdout.String()),
+			quoteForError(stderr.String()),
+		)
+	}
+	result := stdout.String()
+	node.SetString(result)
+	if replacement != "" {
+		node.Tag = "!!" + replacement
+	}
 	return nil
 }
 
@@ -125,4 +177,10 @@ func parseTag(tag string) (name, replacement string) {
 		replacement = tag[slash+1:]
 	}
 	return
+}
+
+// quoteForError prepares the given string so that it can be included in an error message.
+func quoteForError(s string) string {
+	r := strconv.Quote(s)
+	return r[1 : len(r)-1]
 }
