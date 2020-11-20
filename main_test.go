@@ -89,7 +89,7 @@ func MakeServer() (server *ghttp.Server, ca string) {
 	Expect(certs).ToNot(BeNil())
 	Expect(len(certs)).To(BeNumerically(">=", 1))
 	cert := certs[len(certs)-1]
-	Expect(ca).ToNot(BeNil())
+	Expect(cert).ToNot(BeNil())
 
 	// Serialize the CA certificate:
 	Expect(cert.Raw).ToNot(BeNil())
