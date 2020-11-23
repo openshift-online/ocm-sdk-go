@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.148 Nov 23 2020
+
+- Rename `!shell` configuration tag to `!script`.
+- Add `!yaml` configuration tag.
+
 == 0.1.147 Nov 19 2020
 
 - Add support for alternative URLs.
