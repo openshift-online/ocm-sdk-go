@@ -25,6 +25,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 
 	"gopkg.in/yaml.v3"
 )
@@ -32,7 +33,17 @@ import (
 // Builder contains the data and logic needed to populate a configuration object. Don't create
 // instances of this type directly, use the New function instead.
 type Builder struct {
+	// sources contains the list of sources where the configuration should be loaded from.
 	sources []interface{}
+
+	// tags contains for each tag information describing it, like its name and the kind of nodes
+	// that it can process.
+	tags []tagRegistryEntry
+
+	// titles contains the title for each node. This will usually be the name of the file that
+	// the node was loaded from. This is used to generate error messages that include the name
+	// of the file.
+	titles map[*yaml.Node]string
 }
 
 // Object contains configuration data.
@@ -66,6 +77,20 @@ func (b *Builder) Load(sources ...interface{}) *Builder {
 // Build uses the information stored in the builder to create and populate a configuration
 // object.
 func (b *Builder) Build() (object *Object, err error) {
+	// Add the builtin tags to the tag registry:
+	b.registerTag("boolean", yaml.ScalarNode, b.processBooleanTag)
+	b.registerTag("file", yaml.ScalarNode, b.processFileTag)
+	b.registerTag("float", yaml.ScalarNode, b.processFloatTag)
+	b.registerTag("integer", yaml.ScalarNode, b.processIntegerTag)
+	b.registerTag("script", yaml.ScalarNode, b.processScriptTag)
+	b.registerTag("string", yaml.ScalarNode, b.processStringTag)
+	b.registerTag("trim", yaml.ScalarNode, b.processTrimTag)
+	b.registerTag("variable", yaml.ScalarNode, b.processVariableTag)
+	b.registerTag("yaml", yaml.ScalarNode, b.processYamlTag)
+
+	// Initialize the titles index:
+	b.titles = map[*yaml.Node]string{}
+
 	// Merge the sources:
 	tree := &yaml.Node{}
 	for _, current := range b.sources {
@@ -73,7 +98,7 @@ func (b *Builder) Build() (object *Object, err error) {
 		case string:
 			err = b.mergeFile(source, tree)
 		case []byte:
-			err = b.mergeBytes(source, tree)
+			err = b.mergeBytes("", source, tree)
 		case io.Reader:
 			err = b.mergeReader(source, tree)
 		case yaml.Node:
@@ -92,12 +117,6 @@ func (b *Builder) Build() (object *Object, err error) {
 		}
 	}
 
-	// Process the tags:
-	err = processTags(tree)
-	if err != nil {
-		return
-	}
-
 	// Create and populate the object:
 	object = &Object{
 		tree: tree,
@@ -107,7 +126,7 @@ func (b *Builder) Build() (object *Object, err error) {
 }
 
 func (b *Builder) mergeString(src string, dst *yaml.Node) error {
-	return b.mergeBytes([]byte(src), dst)
+	return b.mergeBytes("", []byte(src), dst)
 }
 
 func (b *Builder) mergeReader(src io.Reader, dst *yaml.Node) error {
@@ -115,7 +134,7 @@ func (b *Builder) mergeReader(src io.Reader, dst *yaml.Node) error {
 	if err != nil {
 		return err
 	}
-	return b.mergeBytes(buffer, dst)
+	return b.mergeBytes("", buffer, dst)
 }
 
 func (b *Builder) mergeFile(src string, dst *yaml.Node) error {
@@ -130,7 +149,7 @@ func (b *Builder) mergeFile(src string, dst *yaml.Node) error {
 	if err != nil {
 		return err
 	}
-	return b.mergeBytes(buffer, dst)
+	return b.mergeBytes(src, buffer, dst)
 }
 
 func (b *Builder) mergeDir(src string, dst *yaml.Node) error {
@@ -161,12 +180,17 @@ func (b *Builder) mergeAny(src interface{}, dst *yaml.Node) error {
 	if err != nil {
 		return err
 	}
-	return b.mergeBytes(buffer, dst)
+	return b.mergeBytes("", buffer, dst)
 }
 
-func (b *Builder) mergeBytes(src []byte, dst *yaml.Node) error {
+func (b *Builder) mergeBytes(title string, src []byte, dst *yaml.Node) error {
 	var tree yaml.Node
 	err := yaml.Unmarshal(src, &tree)
+	if err != nil {
+		return err
+	}
+	b.titleTree(title, &tree)
+	err = b.processTreeTags(&tree)
 	if err != nil {
 		return err
 	}
@@ -258,6 +282,10 @@ func (b *Builder) mergeAlias(src, dst *yaml.Node) error {
 }
 
 func (b *Builder) deepCopy(src, dst *yaml.Node) {
+	// Copy the title:
+	b.titles[dst] = b.titles[src]
+
+	// Copy the content:
 	*dst = *src
 	if src.Content != nil {
 		size := len(src.Content)
@@ -269,11 +297,57 @@ func (b *Builder) deepCopy(src, dst *yaml.Node) {
 	}
 }
 
+func (b *Builder) nodeError(node *yaml.Node, format string, a ...interface{}) error {
+	format = "%s:%d:%d: " + format
+	title := b.titles[node]
+	if title == "" {
+		title = "unknown"
+	}
+	v := make([]interface{}, len(a)+3)
+	v[0], v[1], v[2] = title, node.Line, node.Column
+	copy(v[3:], a)
+	return fmt.Errorf(format, v...)
+}
+
+func (b *Builder) titleTree(title string, tree *yaml.Node) {
+	b.titles[tree] = title
+	for _, node := range tree.Content {
+		b.titleTree(title, node)
+	}
+}
+
+func (b *Builder) quoteForError(s string) string {
+	r := strconv.Quote(s)
+	return r[1 : len(r)-1]
+}
+
+func (b *Builder) kindString(kind yaml.Kind) string {
+	switch kind {
+	case yaml.DocumentNode:
+		return "document"
+	case yaml.SequenceNode:
+		return "sequence"
+	case yaml.MappingNode:
+		return "mapping"
+	case yaml.ScalarNode:
+		return "scalar"
+	case yaml.AliasNode:
+		return "alias"
+	}
+	return ""
+}
+
 // Populate populates the given destination object with the information stored in this
 // configuration object. The destination object should be a pointer to a variable containing
 // the same tags used by the yaml.Unmarshal method of the YAML library.
 func (o *Object) Populate(v interface{}) error {
 	return o.tree.Decode(v)
+}
+
+// Effective returns an array of bytes containing the YAML representation of the configuration
+// after processing all the tags.
+func (o *Object) Effective() (out []byte, err error) {
+	return yaml.Marshal(o.tree)
 }
 
 // MarshalYAML is the implementation of the yaml.Marshaller interface. This is intended to be able

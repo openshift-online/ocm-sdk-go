@@ -41,35 +41,33 @@ limitations under the License.
 //	}
 //
 // The advantage of using this configuration instead of using plain YAML is that configuration
-// sources can use the the `!variable` and `!file` tags to reference environment variables
-// or files. For example:
+// sources can use the tags to reference environment variables, files and scripts. For example:
 //
 //	mykey: !variable MYVARIABLE
 //	yourkey: !file /my/file.txt
 //
 // The following tags are supported:
 //
-//	!variable MYVARIABLE - Is replaced by the content of the environment variable `MYVARIABLE`.
 //	!file /my/file.txt - Is replaced by the content of the file `/my/file.txt`.
-//	!shell myscript - Is replaced by the result of executing the `myscript` shell script.
+//	!script myscript - Is replaced by the result of executing the `myscript` script.
+//	!trim mytext - Is replaced by the result of trimming white space from `mytext`.
+//	!variable MYVARIABLE - Is replaced by the content of the environment variable `MYVARIABLE`.
+//	!yaml mytext - Is replaced by the result of parsing `mytext` as YAML.
 //
 // Tag names can be abbreviated. For example these are all valid tags:
 //
-//	!var MYVARIABLE - Replaced by the content of the environment variablel `MYVARIABLE`.
-//	!v MYVARIABLE - Replaced by the content of the environment variablel `MYVARIABLE`.
 //	!f /my/file.txt - Replaced by the content of the `/my.file.txt` file.
-//	!sh myscript - Replaced by the result of execution the `myscript` shell script.
+//	!s myscript - Replaced by the result of execution the `myscript` script.
+//	!v MYVARIABLE - Replaced by the content of the environment variablel `MYVARIABLE`.
 //
-// The `file` tag trims all leading and traling white space from the content of the file.
+// By default the tags replace the value of node they are applied to with a string. This will not
+// work for fields that are declared of other types in the configuration struct. In those cases it
+// is possible to add a suffix to the tag to indicate the type of the replacmenet. For example:
 //
-// By default the tags replace the node they are applied to with a string. This will not work for
-// fields that are declared of other types in the configuration struct. In those cases it is
-// possible to add a suffix to the tag to indicate the type of the replacmenet.  For example:
-//
-//  # A configuration with an integer loaded from an environment variable
-//  # and a boolean loaded from a file:
-//  myid: !variable/int MYID
-//  myenabled: !file/bool /my/enabled.txt
+//	# A configuration with an integer loaded from an environment variable and a boolean
+//	# loaded from a file:
+//	myid: !variable/integer MYID
+//	myenabled: !file/boolean /my/enabled.txt
 //
 // This can be used with the following Go code:
 //
@@ -82,6 +80,11 @@ limitations under the License.
 //	if err != nil {
 //		...
 //	}
+//
+// Tags can be chained. For example to read a value from a file and trim white space from
+// the content:
+//
+//	mypassword: !file/trim mypassword.txt
 //
 // When multiple sources are configured (calling the Load method multiple times) they will all
 // be merged, and sources loaded later sources will override sources loaded earlier.

@@ -536,7 +536,7 @@ var _ = Describe("Object", func() {
 			Entry(
 				"Numeric environment variable",
 				`
-				id: !variable/int MYID
+				id: !variable/integer MYID
 				`,
 				map[string]string{
 					"MYID": "123",
@@ -549,7 +549,7 @@ var _ = Describe("Object", func() {
 			Entry(
 				"Boolean environment variable",
 				`
-				enabled: !variable/bool MYENABLED
+				enabled: !variable/boolean MYENABLED
 				`,
 				map[string]string{
 					"MYENABLED": "true",
@@ -602,7 +602,7 @@ var _ = Describe("Object", func() {
 				},
 			),
 			Entry(
-				"File with leading space",
+				"File with leading space preserved",
 				`
 				user: !file myuser.txt
 				`,
@@ -611,13 +611,39 @@ var _ = Describe("Object", func() {
 					"myuser.txt": " myuser",
 				},
 				Config{
+					User: " myuser",
+				},
+			),
+			Entry(
+				"File with leading space trimmed",
+				`
+				user: !file/trim myuser.txt
+				`,
+				nil,
+				map[string]string{
+					"myuser.txt": "myuser",
+				},
+				Config{
 					User: "myuser",
 				},
 			),
 			Entry(
-				"File with trailing space",
+				"File with trailing space preserved",
 				`
 				user: !file myuser.txt
+				`,
+				nil,
+				map[string]string{
+					"myuser.txt": "myuser ",
+				},
+				Config{
+					User: "myuser ",
+				},
+			),
+			Entry(
+				"File with trailing space trimmed",
+				`
+				user: !file/trim myuser.txt
 				`,
 				nil,
 				map[string]string{
@@ -628,9 +654,22 @@ var _ = Describe("Object", func() {
 				},
 			),
 			Entry(
-				"File with trailing line break",
+				"File with trailing line break preserved",
 				`
 				user: !file myuser.txt
+				`,
+				nil,
+				map[string]string{
+					"myuser.txt": "myuser\n",
+				},
+				Config{
+					User: "myuser\n",
+				},
+			),
+			Entry(
+				"File with trailing line break trimmed",
+				`
+				user: !file/trim myuser.txt
 				`,
 				nil,
 				map[string]string{
@@ -675,7 +714,7 @@ var _ = Describe("Object", func() {
 			Entry(
 				"Numeric file",
 				`
-				id: !file/int myid.txt
+				id: !file/integer myid.txt
 				`,
 				nil,
 				map[string]string{
@@ -688,7 +727,7 @@ var _ = Describe("Object", func() {
 			Entry(
 				"Boolean file",
 				`
-				enabled: !file/bool myenabled.txt
+				enabled: !file/boolean myenabled.txt
 				`,
 				nil,
 				map[string]string{
@@ -699,9 +738,9 @@ var _ = Describe("Object", func() {
 				},
 			),
 			Entry(
-				"Shell echo variable",
+				"Script echo variable",
 				`
-				user: !shell echo -n ${MYUSER}
+				user: !script echo -n ${MYUSER}
 				`,
 				map[string]string{
 					"MYUSER": "myuser",
@@ -712,9 +751,9 @@ var _ = Describe("Object", func() {
 				},
 			),
 			Entry(
-				"Shell cat file",
+				"Script cat file",
 				`
-				user: !shell cat myuser.txt
+				user: !script cat myuser.txt
 				`,
 				nil,
 				map[string]string{
@@ -724,7 +763,148 @@ var _ = Describe("Object", func() {
 					User: "myuser",
 				},
 			),
+			Entry(
+				"Include string",
+				`
+				user: !file/yaml myuser.yaml
+				`,
+				nil,
+				map[string]string{
+					"myuser.yaml": "myuser",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include boolean",
+				`
+				enabled: !file/yaml myenabled.yaml
+				`,
+				nil,
+				map[string]string{
+					"myenabled.yaml": "true",
+				},
+				Config{
+					Enabled: true,
+				},
+			),
+			Entry(
+				"Include int",
+				`
+				id: !file/yaml myid.yaml
+				`,
+				nil,
+				map[string]string{
+					"myid.yaml": "123",
+				},
+				Config{
+					ID: 123,
+				},
+			),
+			Entry(
+				"Include map",
+				`
+				!file/yaml mymap.yaml
+				`,
+				nil,
+				map[string]string{
+					"mymap.yaml": "{ user: myuser, id: 123 }",
+				},
+				Config{
+					User: "myuser",
+					ID:   123,
+				},
+			),
+			Entry(
+				"Include chain",
+				`
+				user: !file/yaml first.yaml
+				`,
+				nil,
+				map[string]string{
+					"first.yaml":  "!file/yaml second.yaml",
+					"second.yaml": "myuser",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include chain and variable",
+				`
+				user: !file/yaml first.yaml
+				`,
+				map[string]string{
+					"MYUSER": "myuser",
+				},
+				map[string]string{
+					"first.yaml":  "!file/yaml second.yaml",
+					"second.yaml": "!variable MYUSER",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include chain and file",
+				`
+				user: !file/yaml first.yaml
+				`,
+				nil,
+				map[string]string{
+					"first.yaml":  "!file/yaml second.yaml",
+					"second.yaml": "!file myuser.txt",
+					"myuser.txt":  "myuser",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Include chain and script",
+				`
+				user: !file/yaml first.yaml
+				`,
+				map[string]string{
+					"MYUSER": "myuser",
+				},
+				map[string]string{
+					"first.yaml":  "!file/yaml second.yaml",
+					"second.yaml": "!script echo -n ${MYUSER}",
+				},
+				Config{
+					User: "myuser",
+				},
+			),
+			Entry(
+				"Parse results of running script",
+				`!script/yaml echo user: myuser`,
+				nil,
+				nil,
+				Config{
+					User: "myuser",
+				},
+			),
 		)
+
+		It("Fails if first tag isn't supported", func() {
+			_, err := New().
+				Load([]byte(`mykey: !wrong junk`)).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("wrong"))
+		})
+
+		It("Fails if second tag isn't supported", func() {
+			_, err := New().
+				Load([]byte(`mykey: !script/wrong echo -n junk`)).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("wrong"))
+		})
 
 		It("Fails if environment variable doesn't exist", func() {
 			_, err := New().
@@ -733,16 +913,66 @@ var _ = Describe("Object", func() {
 			Expect(err).To(HaveOccurred())
 		})
 
-		It("Fails if file doesn't exist", func() {
+		It("Reports location of error for known source name", func() {
+			// Create a temporary file containing the configuration:
+			tmp, err := ioutil.TempFile("", "*.test.yaml")
+			Expect(err).ToNot(HaveOccurred())
+			name := tmp.Name()
+			defer func() {
+				err = os.Remove(name)
+				Expect(err).ToNot(HaveOccurred())
+			}()
+			_, err = tmp.Write([]byte(`mykey: !file /doesnotexist`))
+			Expect(err).ToNot(HaveOccurred())
+			err = tmp.Close()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Check that loading fails and that the error message contains the name of
+			// the source file:
+			_, err = New().
+				Load(name).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring(name + ":1:8"))
+		})
+
+		It("Reports location of error for included file", func() {
+			// Create the a temporary file containing the text to be included:
+			tmp, err := ioutil.TempFile("", "*.test.yaml")
+			Expect(err).ToNot(HaveOccurred())
+			name := tmp.Name()
+			defer func() {
+				err = os.Remove(name)
+				Expect(err).ToNot(HaveOccurred())
+			}()
+			_, err = tmp.Write([]byte(`yourkey: !file /doesnotexist`))
+			Expect(err).ToNot(HaveOccurred())
+			err = tmp.Close()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Check that loading fails and that the error message contains the name of
+			// the included file:
+			_, err = New().
+				Load([]byte(`mykey: !file/yaml ` + name)).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring(name + ":1:10:"))
+		})
+
+		It("Reports location of error for unknown source name", func() {
 			_, err := New().
 				Load([]byte(`mykey: !file /doesnotexist.txt`)).
 				Build()
 			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("unknown:1:8:"))
 		})
 
 		It("Fails if script writes to stderr", func() {
 			_, err := New().
-				Load([]byte(`mykey: !shell echo myerror 1>&2`)).
+				Load([]byte(`mykey: !script echo myerror 1>&2`)).
 				Build()
 			Expect(err).To(HaveOccurred())
 		})
@@ -750,7 +980,7 @@ var _ = Describe("Object", func() {
 		It("Script error contains stdout and stderr", func() {
 			_, err := New().
 				Load([]byte(
-					`mykey: !shell echo myoutput; echo myerror 1>&2; exit 1`,
+					`mykey: !script echo myoutput; echo myerror 1>&2; exit 1`,
 				)).
 				Build()
 			Expect(err).To(HaveOccurred())
@@ -759,15 +989,41 @@ var _ = Describe("Object", func() {
 			Expect(message).To(ContainSubstring("myerror"))
 		})
 
-		It("Failes if script command doesn't exist", func() {
+		It("Fails if script command doesn't exist", func() {
 			_, err := New().
 				Load([]byte(
-					`mykey: !shell doesnotexist`,
+					`mykey: !script doesnotexist`,
 				)).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
 			Expect(message).To(ContainSubstring("doesnotexist"))
+		})
+
+		It("Fails if finds sequence when expecting scalar", func() {
+			_, err := New().
+				Load([]byte(
+					`mykey: !variable []`,
+				)).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("variable"))
+			Expect(message).To(ContainSubstring("scalar"))
+			Expect(message).To(ContainSubstring("sequence"))
+		})
+
+		It("Fails if finds mapping when expecting scalar", func() {
+			_, err := New().
+				Load([]byte(
+					`mykey: !file {}`,
+				)).
+				Build()
+			Expect(err).To(HaveOccurred())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("file"))
+			Expect(message).To(ContainSubstring("scalar"))
+			Expect(message).To(ContainSubstring("mapping"))
 		})
 	})
 })
