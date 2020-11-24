@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.149 Nov 24 2020
+
+- Fix issue in the method that returns the URL of a connection: it was returning
+  an empty string when no alternative URLs were configured.
+
 == 0.1.148 Nov 23 2020
 
 - Rename `!shell` configuration tag to `!script`.
