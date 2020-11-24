@@ -964,7 +964,7 @@ func (c *Connection) URL() string {
 	// The base URL will most likely be the last in the URL table because it is sorted in
 	// descending order of the prefix length, so it is faster to traverse the table in
 	// reverse order.
-	for i := len(c.urlTable) - 1; i > 0; i-- {
+	for i := len(c.urlTable) - 1; i >= 0; i-- {
 		entry := &c.urlTable[i]
 		if entry.prefix == "" {
 			return entry.url.String()

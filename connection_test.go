@@ -373,6 +373,8 @@ var _ = Describe("Connection", func() {
 		}()
 		_, err = file.WriteString(content)
 		Expect(err).ToNot(HaveOccurred())
+		err = file.Close()
+		Expect(err).ToNot(HaveOccurred())
 
 		// Create the connection and verify it has been created with the configuration
 		// stored in the YAML file:
@@ -461,6 +463,8 @@ var _ = Describe("Connection", func() {
 			Expect(err).ToNot(HaveOccurred())
 		}()
 		_, err = file.WriteString(content)
+		Expect(err).ToNot(HaveOccurred())
+		err = file.Close()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Load the configuration file and then configure the connection with method
@@ -565,6 +569,8 @@ var _ = Describe("Connection", func() {
 		}()
 		_, err = file.WriteString(content)
 		Expect(err).ToNot(HaveOccurred())
+		err = file.Close()
+		Expect(err).ToNot(HaveOccurred())
 
 		// Configure the connection with methods call and then load the configuration file:
 		overridenAccess := DefaultToken("Bearer", 5*time.Minute)
@@ -613,6 +619,30 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
 		Expect(connection.Insecure()).To(BeTrue())
 		Expect(connection.Agent()).To(Equal("myagent"))
+	})
+
+	It("Returns configured URL when there are no alternative URLs", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("https://my.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
+	})
+
+	It("Returns configured URL when there are alternative URLs", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("https://my.server.com").
+			AlternativeURL("/api/clusters_mgmt", "https://your.server.com").
+			AlternativeURL("/api/accounts_mgmt", "https://her.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
 	})
 })
 
