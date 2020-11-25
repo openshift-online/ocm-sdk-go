@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.150 Nov 25 2020
+
+- update model to 0.0.100
+
 == 0.1.149 Nov 24 2020
 
 - Fix issue in the method that returns the URL of a connection: it was returning
