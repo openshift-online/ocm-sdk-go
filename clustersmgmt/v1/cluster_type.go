@@ -90,6 +90,7 @@ type Cluster struct {
 	console                           *ClusterConsole
 	creationTimestamp                 *time.Time
 	displayName                       *string
+	etcdEncryption                    *bool
 	expirationTimestamp               *time.Time
 	externalID                        *string
 	externalConfiguration             *ExternalConfiguration
@@ -105,6 +106,7 @@ type Cluster struct {
 	multiAZ                           *bool
 	name                              *string
 	network                           *Network
+	nodeDrainGracePeriod              *Value
 	nodes                             *ClusterNodes
 	openshiftVersion                  *string
 	product                           *Product
@@ -178,6 +180,7 @@ func (o *Cluster) Empty() bool {
 		o.clusterAdminEnabled == nil &&
 		o.creationTimestamp == nil &&
 		o.displayName == nil &&
+		o.etcdEncryption == nil &&
 		o.expirationTimestamp == nil &&
 		o.externalID == nil &&
 		o.groups.Len() == 0 &&
@@ -471,6 +474,31 @@ func (o *Cluster) GetDisplayName() (value string, ok bool) {
 	ok = o != nil && o.displayName != nil
 	if ok {
 		value = *o.displayName
+	}
+	return
+}
+
+// EtcdEncryption returns the value of the 'etcd_encryption' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates whether that etcd is encrypted or not.
+// This is set only during cluster creation.
+func (o *Cluster) EtcdEncryption() bool {
+	if o != nil && o.etcdEncryption != nil {
+		return *o.etcdEncryption
+	}
+	return false
+}
+
+// GetEtcdEncryption returns the value of the 'etcd_encryption' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates whether that etcd is encrypted or not.
+// This is set only during cluster creation.
+func (o *Cluster) GetEtcdEncryption() (value bool, ok bool) {
+	ok = o != nil && o.etcdEncryption != nil
+	if ok {
+		value = *o.etcdEncryption
 	}
 	return
 }
@@ -836,6 +864,29 @@ func (o *Cluster) GetNetwork() (value *Network, ok bool) {
 	ok = o != nil && o.network != nil
 	if ok {
 		value = o.network
+	}
+	return
+}
+
+// NodeDrainGracePeriod returns the value of the 'node_drain_grace_period' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Node drain grace period.
+func (o *Cluster) NodeDrainGracePeriod() *Value {
+	if o == nil {
+		return nil
+	}
+	return o.nodeDrainGracePeriod
+}
+
+// GetNodeDrainGracePeriod returns the value of the 'node_drain_grace_period' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Node drain grace period.
+func (o *Cluster) GetNodeDrainGracePeriod() (value *Value, ok bool) {
+	ok = o != nil && o.nodeDrainGracePeriod != nil
+	if ok {
+		value = o.nodeDrainGracePeriod
 	}
 	return
 }
