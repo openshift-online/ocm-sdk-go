@@ -78,6 +78,7 @@ type ClusterBuilder struct {
 	console                           *ClusterConsoleBuilder
 	creationTimestamp                 *time.Time
 	displayName                       *string
+	etcdEncryption                    *bool
 	expirationTimestamp               *time.Time
 	externalID                        *string
 	externalConfiguration             *ExternalConfigurationBuilder
@@ -93,6 +94,7 @@ type ClusterBuilder struct {
 	multiAZ                           *bool
 	name                              *string
 	network                           *NetworkBuilder
+	nodeDrainGracePeriod              *ValueBuilder
 	nodes                             *ClusterNodesBuilder
 	openshiftVersion                  *string
 	product                           *ProductBuilder
@@ -225,6 +227,14 @@ func (b *ClusterBuilder) DisplayName(value string) *ClusterBuilder {
 	return b
 }
 
+// EtcdEncryption sets the value of the 'etcd_encryption' attribute to the given value.
+//
+//
+func (b *ClusterBuilder) EtcdEncryption(value bool) *ClusterBuilder {
+	b.etcdEncryption = &value
+	return b
+}
+
 // ExpirationTimestamp sets the value of the 'expiration_timestamp' attribute to the given value.
 //
 //
@@ -343,6 +353,31 @@ func (b *ClusterBuilder) Name(value string) *ClusterBuilder {
 // Network configuration of a cluster.
 func (b *ClusterBuilder) Network(value *NetworkBuilder) *ClusterBuilder {
 	b.network = value
+	return b
+}
+
+// NodeDrainGracePeriod sets the value of the 'node_drain_grace_period' attribute to the given value.
+//
+// Numeric value and the unit used to measure it.
+//
+// Units are not mandatory, and they're not specified for some resources. For
+// resources that use bytes, the accepted units are:
+//
+// - 1 B = 1 byte
+// - 1 KB = 10^3 bytes
+// - 1 MB = 10^6 bytes
+// - 1 GB = 10^9 bytes
+// - 1 TB = 10^12 bytes
+// - 1 PB = 10^15 bytes
+//
+// - 1 B = 1 byte
+// - 1 KiB = 2^10 bytes
+// - 1 MiB = 2^20 bytes
+// - 1 GiB = 2^30 bytes
+// - 1 TiB = 2^40 bytes
+// - 1 PiB = 2^50 bytes
+func (b *ClusterBuilder) NodeDrainGracePeriod(value *ValueBuilder) *ClusterBuilder {
+	b.nodeDrainGracePeriod = value
 	return b
 }
 
@@ -507,6 +542,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	}
 	b.creationTimestamp = object.creationTimestamp
 	b.displayName = object.displayName
+	b.etcdEncryption = object.etcdEncryption
 	b.expirationTimestamp = object.expirationTimestamp
 	b.externalID = object.externalID
 	if object.externalConfiguration != nil {
@@ -553,6 +589,11 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.network = NewNetwork().Copy(object.network)
 	} else {
 		b.network = nil
+	}
+	if object.nodeDrainGracePeriod != nil {
+		b.nodeDrainGracePeriod = NewValue().Copy(object.nodeDrainGracePeriod)
+	} else {
+		b.nodeDrainGracePeriod = nil
 	}
 	if object.nodes != nil {
 		b.nodes = NewClusterNodes().Copy(object.nodes)
@@ -670,6 +711,7 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	}
 	object.creationTimestamp = b.creationTimestamp
 	object.displayName = b.displayName
+	object.etcdEncryption = b.etcdEncryption
 	object.expirationTimestamp = b.expirationTimestamp
 	object.externalID = b.externalID
 	if b.externalConfiguration != nil {
@@ -721,6 +763,12 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	object.name = b.name
 	if b.network != nil {
 		object.network, err = b.network.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.nodeDrainGracePeriod != nil {
+		object.nodeDrainGracePeriod, err = b.nodeDrainGracePeriod.Build()
 		if err != nil {
 			return
 		}

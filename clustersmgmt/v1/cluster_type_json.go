@@ -169,6 +169,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteString(*object.displayName)
 		count++
 	}
+	if object.etcdEncryption != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("etcd_encryption")
+		stream.WriteBool(*object.etcdEncryption)
+		count++
+	}
 	if object.expirationTimestamp != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -299,6 +307,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("network")
 		writeNetwork(object.network, stream)
+		count++
+	}
+	if object.nodeDrainGracePeriod != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("node_drain_grace_period")
+		writeValue(object.nodeDrainGracePeriod, stream)
 		count++
 	}
 	if object.nodes != nil {
@@ -517,6 +533,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "display_name":
 			value := iterator.ReadString()
 			object.displayName = &value
+		case "etcd_encryption":
+			value := iterator.ReadBool()
+			object.etcdEncryption = &value
 		case "expiration_timestamp":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
@@ -639,6 +658,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "network":
 			value := readNetwork(iterator)
 			object.network = value
+		case "node_drain_grace_period":
+			value := readValue(iterator)
+			object.nodeDrainGracePeriod = value
 		case "nodes":
 			value := readClusterNodes(iterator)
 			object.nodes = value
