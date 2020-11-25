@@ -27,13 +27,13 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	"github.com/onsi/gomega/ghttp"
-
 	"github.com/dgrijalva/jwt-go"
 
-	sdk "github.com/openshift-online/ocm-sdk-go"
+	"github.com/openshift-online/ocm-sdk-go/logging"
+
+	. "github.com/onsi/ginkgo" // nolint
+	. "github.com/onsi/gomega" // nolint
+	"github.com/onsi/gomega/ghttp"
 )
 
 func TestAuthentication(t *testing.T) {
@@ -46,7 +46,7 @@ var publicKey *rsa.PublicKey
 var privateKey *rsa.PrivateKey
 
 // Logger used for tests:
-var logger sdk.Logger
+var logger logging.Logger
 
 // JSON web key set used for tests:
 var keysBytes []byte
@@ -86,7 +86,7 @@ var _ = BeforeSuite(func() {
 	keysFile = keysFD.Name()
 
 	// Create the logger that will be used by all the tests:
-	logger, err = sdk.NewStdLoggerBuilder().
+	logger, err = logging.NewStdLoggerBuilder().
 		Streams(GinkgoWriter, GinkgoWriter).
 		Debug(true).
 		Build()

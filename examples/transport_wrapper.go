@@ -25,16 +25,17 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
+	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
 type LoggingTransport struct {
-	logger  sdk.Logger
+	logger  logging.Logger
 	wrapped http.RoundTripper
 }
 
 // NewLoggingTransport creates a transport that sends basic details of requests to the
 // given logger. The wrapped transport will be used actually send the requests.
-func NewLoggingTransport(logger sdk.Logger, wrapped http.RoundTripper) http.RoundTripper {
+func NewLoggingTransport(logger logging.Logger, wrapped http.RoundTripper) http.RoundTripper {
 	return &LoggingTransport{
 		logger:  logger,
 		wrapped: wrapped,
@@ -57,7 +58,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger:
-	logger, err := sdk.NewGoLoggerBuilder().
+	logger, err := logging.NewGoLoggerBuilder().
 		Debug(false).
 		Build()
 	if err != nil {

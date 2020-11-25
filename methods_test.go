@@ -42,9 +42,6 @@ var _ = Describe("Methods", func() {
 	var oidCA string
 	var apiCA string
 
-	// Logger used during the testss:
-	var logger Logger
-
 	// Connection used during the tests:
 	var connection *Connection
 

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This example shows how to use run of the metric queries provided for clusters management service.
+// This example shows how to run one of the metric queries provided for clusters management service.
 
 package main
 
@@ -24,6 +24,7 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
+	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
 func main() {
@@ -31,7 +32,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger that has the debug level enabled:
-	logger, err := sdk.NewGoLoggerBuilder().
+	logger, err := logging.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {

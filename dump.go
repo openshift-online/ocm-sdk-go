@@ -31,12 +31,14 @@ import (
 	"strings"
 
 	"gitlab.com/c0b/go-ordered-json"
+
+	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
 // dumpRoundTripper is a round tripper that dumps the details of the requests and the responses to
 // the log.
 type dumpRoundTripper struct {
-	logger Logger
+	logger logging.Logger
 	next   http.RoundTripper
 }
 

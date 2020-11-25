@@ -38,14 +38,14 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ghodss/yaml"
 
-	sdk "github.com/openshift-online/ocm-sdk-go"
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
 // HandlerBuilder contains the data and logic needed to create a new authentication handler. Don't
 // create objects of this type directly, use the NewHandler function instead.
 type HandlerBuilder struct {
-	logger       sdk.Logger
+	logger       logging.Logger
 	publicPaths  []string
 	keysFiles    []string
 	keysURLs     []string
@@ -58,7 +58,7 @@ type HandlerBuilder struct {
 // Handler is an HTTP handler that checks authentication using the JWT tokens from the authorization
 // header.
 type Handler struct {
-	logger        sdk.Logger
+	logger        logging.Logger
 	publicPaths   []*regexp.Regexp
 	tokenParser   *jwt.Parser
 	keysFiles     []string
@@ -78,7 +78,7 @@ func NewHandler() *HandlerBuilder {
 
 // Logger sets the logger that the middleware will use to send messages to the log. This is
 // mandatory.
-func (b *HandlerBuilder) Logger(value sdk.Logger) *HandlerBuilder {
+func (b *HandlerBuilder) Logger(value logging.Logger) *HandlerBuilder {
 	b.logger = value
 	return b
 }

@@ -14,44 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This file contains a logger that uses the standard output and error streams, or custom writers.
+// This file contains a logger that uses the Go `log` package.
 
-package sdk
+package logging
 
 import (
 	"context"
 	"fmt"
-	"io"
-	"os"
+	"log"
 )
 
-// StdLoggerBuilder contains the configuration and logic needed to build a logger that uses the
-// standard output and error streams, or custom writers.
-type StdLoggerBuilder struct {
+// GoLoggerBuilder contains the configuration and logic needed to build a logger that uses the Go
+// `log` package. Don't create instances of this type directly, use the NewGoLoggerBuilder function
+// instead.
+type GoLoggerBuilder struct {
 	debugEnabled bool
 	infoEnabled  bool
 	warnEnabled  bool
 	errorEnabled bool
-	outStream    io.Writer
-	errStream    io.Writer
 }
 
-// StdLogger is a logger that uses the standard output and error streams, or custom writers.
-type StdLogger struct {
+// GoLogger is a logger that uses the Go `log` package.
+type GoLogger struct {
 	debugEnabled bool
 	infoEnabled  bool
 	warnEnabled  bool
 	errorEnabled bool
-	outStream    io.Writer
-	errStream    io.Writer
 }
 
-// NewStdLoggerBuilder creates a builder that knows how to build a logger that uses the standard
-// output and error streams, or custom writers. By default these loggers will have enabled the
-// information, warning and error levels
-func NewStdLoggerBuilder() *StdLoggerBuilder {
+// NewGoLoggerBuilder creates a builder that knows how to build a logger that uses the Go `log`
+// package. By default these loggers will have enabled the information, warning and error levels
+func NewGoLoggerBuilder() *GoLoggerBuilder {
 	// Allocate the object:
-	builder := new(StdLoggerBuilder)
+	builder := new(GoLoggerBuilder)
 
 	// Set default values:
 	builder.debugEnabled = false
@@ -62,106 +57,98 @@ func NewStdLoggerBuilder() *StdLoggerBuilder {
 	return builder
 }
 
-// Streams sets the standard output and error streams to use. If not used then the logger will use
-// os.Stdout and os.Stderr.
-func (b *StdLoggerBuilder) Streams(out io.Writer, err io.Writer) *StdLoggerBuilder {
-	b.outStream = out
-	b.errStream = err
-	return b
-}
-
 // Debug enables or disables the debug level.
-func (b *StdLoggerBuilder) Debug(flag bool) *StdLoggerBuilder {
+func (b *GoLoggerBuilder) Debug(flag bool) *GoLoggerBuilder {
 	b.debugEnabled = flag
 	return b
 }
 
 // Info enables or disables the information level.
-func (b *StdLoggerBuilder) Info(flag bool) *StdLoggerBuilder {
+func (b *GoLoggerBuilder) Info(flag bool) *GoLoggerBuilder {
 	b.infoEnabled = flag
 	return b
 }
 
 // Warn enables or disables the warning level.
-func (b *StdLoggerBuilder) Warn(flag bool) *StdLoggerBuilder {
+func (b *GoLoggerBuilder) Warn(flag bool) *GoLoggerBuilder {
 	b.warnEnabled = flag
 	return b
 }
 
 // Error enables or disables the error level.
-func (b *StdLoggerBuilder) Error(flag bool) *StdLoggerBuilder {
+func (b *GoLoggerBuilder) Error(flag bool) *GoLoggerBuilder {
 	b.errorEnabled = flag
 	return b
 }
 
 // Build creates a new logger using the configuration stored in the builder.
-func (b *StdLoggerBuilder) Build() (logger *StdLogger, err error) {
+func (b *GoLoggerBuilder) Build() (logger *GoLogger, err error) {
 	// Allocate and populate the object:
-	logger = new(StdLogger)
+	logger = new(GoLogger)
 	logger.debugEnabled = b.debugEnabled
 	logger.infoEnabled = b.infoEnabled
 	logger.warnEnabled = b.warnEnabled
 	logger.errorEnabled = b.errorEnabled
-	logger.outStream = b.outStream
-	logger.errStream = b.errStream
-	if logger.outStream == nil {
-		logger.outStream = os.Stdout
-	}
-	if logger.errStream == nil {
-		logger.errStream = os.Stderr
-	}
 
 	return
 }
 
 // DebugEnabled returns true iff the debug level is enabled.
-func (l *StdLogger) DebugEnabled() bool {
+func (l *GoLogger) DebugEnabled() bool {
 	return l.debugEnabled
 }
 
 // InfoEnabled returns true iff the information level is enabled.
-func (l *StdLogger) InfoEnabled() bool {
+func (l *GoLogger) InfoEnabled() bool {
 	return l.infoEnabled
 }
 
 // WarnEnabled returns true iff the warning level is enabled.
-func (l *StdLogger) WarnEnabled() bool {
+func (l *GoLogger) WarnEnabled() bool {
 	return l.warnEnabled
 }
 
 // ErrorEnabled returns true iff the error level is enabled.
-func (l *StdLogger) ErrorEnabled() bool {
+func (l *GoLogger) ErrorEnabled() bool {
 	return l.errorEnabled
 }
 
 // Debug sends to the log a debug message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *StdLogger) Debug(ctx context.Context, format string, args ...interface{}) {
+func (l *GoLogger) Debug(ctx context.Context, format string, args ...interface{}) {
 	if l.debugEnabled {
-		fmt.Fprintf(l.outStream, format+"\n", args...)
+		msg := fmt.Sprintf(format, args...)
+		// #nosec G104
+		log.Output(1, msg)
 	}
 }
 
 // Info sends to the log an information message formatted using the fmt.Sprintf function and the
 // given format and arguments.
-func (l *StdLogger) Info(ctx context.Context, format string, args ...interface{}) {
+func (l *GoLogger) Info(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
-		fmt.Fprintf(l.outStream, format+"\n", args...)
+		msg := fmt.Sprintf(format, args...)
+		// #nosec G104
+		log.Output(1, msg)
 	}
 }
 
 // Warn sends to the log a warning message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *StdLogger) Warn(ctx context.Context, format string, args ...interface{}) {
+func (l *GoLogger) Warn(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
-		fmt.Fprintf(l.outStream, format+"\n", args...)
+		msg := fmt.Sprintf(format, args...)
+		// #nosec G104
+		log.Output(1, msg)
 	}
 }
 
 // Error sends to the log an error message formatted using the fmt.Sprintf function and the given
 // format and arguments.
-func (l *StdLogger) Error(ctx context.Context, format string, args ...interface{}) {
-	if l.infoEnabled {
-		fmt.Fprintf(l.errStream, format+"\n", args...)
+func (l *GoLogger) Error(ctx context.Context, format string, args ...interface{}) {
+	if l.errorEnabled {
+		msg := fmt.Sprintf(format, args...)
+		// #nosec G104
+		log.Output(1, msg)
 	}
 }
