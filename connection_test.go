@@ -110,6 +110,22 @@ var _ = Describe("Connection", func() {
 		Expect(connection).ToNot(BeNil())
 	})
 
+	It("Can be created with metrics subsystem", func() {
+		accessToken := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(accessToken).
+			MetricsSubsystem("my_subsystem").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection).ToNot(BeNil())
+		defer func() {
+			err = connection.Close()
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		Expect(connection.MetricsSubsystem()).To(Equal("my_subsystem"))
+	})
+
 	It("Selects default OpenID server with default access token", func() {
 		accessToken := DefaultToken("Bearer", 5*time.Minute)
 		connection, err := NewConnectionBuilder().

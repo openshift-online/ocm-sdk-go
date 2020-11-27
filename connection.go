@@ -117,6 +117,7 @@ type Connection struct {
 	scopes            []string
 
 	// Metrics:
+	metricsSubsystem    string
 	tokenCountMetric    *prometheus.CounterVec
 	tokenDurationMetric *prometheus.HistogramVec
 	callCountMetric     *prometheus.CounterVec
@@ -789,6 +790,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		accessToken:       accessToken,
 		refreshToken:      refreshToken,
 		scopes:            scopes,
+		metricsSubsystem:  b.metricsSubsystem,
 	}
 
 	// Create the mutex that protects token manipulations:
@@ -1012,6 +1014,12 @@ func (c *Connection) Insecure() bool {
 
 func (c *Connection) DisableKeepAlives() bool {
 	return c.disableKeepAlives
+}
+
+// MetricsSubsystem returns the name of the subsystem that is used by the connection to register
+// metrics with Prometheus. An empty string means that no metrics are registered.
+func (c *Connection) MetricsSubsystem() string {
+	return c.metricsSubsystem
 }
 
 // AlternativeURLs returns the alternative URLs in use by the connection. Note that the map returned
