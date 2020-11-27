@@ -50,6 +50,23 @@ var _ = Describe("Object", func() {
 			Expect(config.MyKey).To(Equal("myvalue"))
 		})
 
+		It("Can be loaded from string", func() {
+			// Load the configuration:
+			object, err := New().
+				Load(`mykey: myvalue`).
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(object).ToNot(BeNil())
+
+			// Populate the configuration:
+			var config struct {
+				MyKey string `yaml:"mykey"`
+			}
+			err = object.Populate(&config)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(config.MyKey).To(Equal("myvalue"))
+		})
+
 		It("Can be loaded from reader", func() {
 			// Load the configuration:
 			object, err := New().
@@ -162,7 +179,7 @@ var _ = Describe("Object", func() {
 		It("Can be loaded from configuration object", func() {
 			// Load the source configuration:
 			source, err := New().
-				Load([]byte(`mykey: myvalue`)).
+				Load(`mykey: myvalue`).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
 			Expect(source).ToNot(BeNil())
@@ -248,7 +265,7 @@ var _ = Describe("Object", func() {
 		It("Decodes binary data", func() {
 			// Load the configuration:
 			object, err := New().
-				Load([]byte(`mykey: !!binary bXl2YWx1ZQ==`)).
+				Load(`mykey: !!binary bXl2YWx1ZQ==`).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
 			Expect(object).ToNot(BeNil())
@@ -267,8 +284,8 @@ var _ = Describe("Object", func() {
 		It("Honours order of sources", func() {
 			// Load the configuration:
 			object, err := New().
-				Load([]byte(`mykey: myvalue`)).
-				Load([]byte(`mykey: yourvalue`)).
+				Load(`mykey: myvalue`).
+				Load(`mykey: yourvalue`).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
 			Expect(object).ToNot(BeNil())
@@ -285,8 +302,8 @@ var _ = Describe("Object", func() {
 		It("Adds item to slice", func() {
 			// Load the configuration:
 			object, err := New().
-				Load([]byte(`"myslice": [ "firstvalue" ]`)).
-				Load([]byte(`"myslice": [ "secondvalue" ]`)).
+				Load(`"myslice": [ "firstvalue" ]`).
+				Load(`"myslice": [ "secondvalue" ]`).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
 			Expect(object).ToNot(BeNil())
@@ -303,8 +320,8 @@ var _ = Describe("Object", func() {
 		It("Adds entry to map", func() {
 			// Load the configuration:
 			object, err := New().
-				Load([]byte(`"mymap": { firstkey: firstvalue }`)).
-				Load([]byte(`"mymap": { secondkey: secondvalue }`)).
+				Load(`"mymap": { firstkey: firstvalue }`).
+				Load(`"mymap": { secondkey: secondvalue }`).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
 			Expect(object).ToNot(BeNil())
@@ -354,13 +371,12 @@ var _ = Describe("Object", func() {
 		}
 
 		// Load the configuration:
-		source := RemoveLeadingTabs(`
+		object, err := New().
+			Load(`
 				topkey: topvalue
 				sub:
 				  subkey: subvalue
-			`)
-		object, err := New().
-			Load([]byte(source)).
+			`).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 		Expect(object).ToNot(BeNil())
@@ -421,11 +437,8 @@ var _ = Describe("Object", func() {
 					Expect(err).ToNot(HaveOccurred())
 				}()
 
-				// Remove leading tabs from the source:
-				source = RemoveLeadingTabs(source)
-
 				// Do the check:
-				object, err := New().Load([]byte(source)).Build()
+				object, err := New().Load(source).Build()
 				Expect(err).ToNot(HaveOccurred())
 				var config Config
 				err = object.Populate(&config)
@@ -890,7 +903,7 @@ var _ = Describe("Object", func() {
 
 		It("Fails if first tag isn't supported", func() {
 			_, err := New().
-				Load([]byte(`mykey: !wrong junk`)).
+				Load(`mykey: !wrong junk`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
@@ -899,7 +912,7 @@ var _ = Describe("Object", func() {
 
 		It("Fails if second tag isn't supported", func() {
 			_, err := New().
-				Load([]byte(`mykey: !script/wrong echo -n junk`)).
+				Load(`mykey: !script/wrong echo -n junk`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
@@ -908,7 +921,7 @@ var _ = Describe("Object", func() {
 
 		It("Fails if environment variable doesn't exist", func() {
 			_, err := New().
-				Load([]byte(`mykey: !variable DOESNOTEXIST`)).
+				Load(`mykey: !variable DOESNOTEXIST`).
 				Build()
 			Expect(err).To(HaveOccurred())
 		})
@@ -954,7 +967,7 @@ var _ = Describe("Object", func() {
 			// Check that loading fails and that the error message contains the name of
 			// the included file:
 			_, err = New().
-				Load([]byte(`mykey: !file/yaml ` + name)).
+				Load(`mykey: !file/yaml "` + name + `"`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
@@ -963,7 +976,7 @@ var _ = Describe("Object", func() {
 
 		It("Reports location of error for unknown source name", func() {
 			_, err := New().
-				Load([]byte(`mykey: !file /doesnotexist.txt`)).
+				Load(`mykey: !file /doesnotexist.txt`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
@@ -972,16 +985,14 @@ var _ = Describe("Object", func() {
 
 		It("Fails if script writes to stderr", func() {
 			_, err := New().
-				Load([]byte(`mykey: !script echo myerror 1>&2`)).
+				Load(`mykey: !script echo myerror 1>&2`).
 				Build()
 			Expect(err).To(HaveOccurred())
 		})
 
 		It("Script error contains stdout and stderr", func() {
 			_, err := New().
-				Load([]byte(
-					`mykey: !script echo myoutput; echo myerror 1>&2; exit 1`,
-				)).
+				Load(`mykey: !script echo myoutput; echo myerror 1>&2; exit 1`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
@@ -991,9 +1002,7 @@ var _ = Describe("Object", func() {
 
 		It("Fails if script command doesn't exist", func() {
 			_, err := New().
-				Load([]byte(
-					`mykey: !script doesnotexist`,
-				)).
+				Load(`mykey: !script doesnotexist`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
@@ -1002,9 +1011,7 @@ var _ = Describe("Object", func() {
 
 		It("Fails if finds sequence when expecting scalar", func() {
 			_, err := New().
-				Load([]byte(
-					`mykey: !variable []`,
-				)).
+				Load(`mykey: !variable []`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
@@ -1015,9 +1022,7 @@ var _ = Describe("Object", func() {
 
 		It("Fails if finds mapping when expecting scalar", func() {
 			_, err := New().
-				Load([]byte(
-					`mykey: !file {}`,
-				)).
+				Load(`mykey: !file {}`).
 				Build()
 			Expect(err).To(HaveOccurred())
 			message := err.Error()

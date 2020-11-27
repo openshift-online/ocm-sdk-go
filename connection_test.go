@@ -337,6 +337,88 @@ var _ = Describe("Connection", func() {
 		Expect(err).To(HaveOccurred())
 	})
 
+	It("Can be configured with a YAML string", func() {
+		// Create temporary files for the trusted CAs:
+		tmp, err := ioutil.TempDir("", "*.test.cas")
+		Expect(err).ToNot(HaveOccurred())
+		defer func() {
+			err = os.RemoveAll(tmp)
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Create the YAML configuration string:
+		generatedAccess := DefaultToken("Bearer", 5*time.Minute)
+		generatedRefresh := DefaultToken("Refresh", 10*time.Hour)
+		content := EvaluateTemplate(
+			`
+			url: https://my.server.com
+			alternative_urls:
+			  /api/clusters_mgmt: https://your.server.com
+			  /api/accounts_mgmt: https://her.server.com
+			token_url: https://openid.server.com
+			user: myuser
+			password: mypassword
+			client_id: myclient
+			client_secret: mysecret
+			tokens:
+			- {{ .AccessToken }}
+			- {{ .RefreshToken }}
+			scopes:
+			- openid
+			- myscope
+			insecure: true
+			trusted_cas:
+			- {{ .Tmp }}/myca.pem
+			- {{ .Tmp }}/yourca.pem
+			agent: myagent
+			metrics_subsystem: mysubsystem
+			`,
+			"Tmp", tmp,
+			"AccessToken", generatedAccess,
+			"RefreshToken", generatedRefresh,
+		)
+
+		// Create the connection and verify it has been created with the configuration
+		// stored in the YAML string:
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Load(content).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection.URL()).To(Equal("https://my.server.com"))
+		alternativeURLs := connection.AlternativeURLs()
+		Expect(alternativeURLs).To(HaveLen(2))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/clusters_mgmt", "https://your.server.com",
+		))
+		Expect(alternativeURLs).To(HaveKeyWithValue(
+			"/api/accounts_mgmt", "https://her.server.com",
+		))
+		Expect(connection.TokenURL()).To(Equal("https://openid.server.com"))
+		user, password := connection.User()
+		Expect(user).To(Equal("myuser"))
+		Expect(password).To(Equal("mypassword"))
+		client, secret := connection.Client()
+		Expect(client).To(Equal("myclient"))
+		Expect(secret).To(Equal("mysecret"))
+		returnedAccess, returnedRefresh, err := connection.Tokens()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(returnedAccess).To(Equal(generatedAccess))
+		Expect(returnedRefresh).To(Equal(generatedRefresh))
+		defer func() {
+			err = connection.Close()
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
+		Expect(connection.Insecure()).To(BeTrue())
+		Expect(connection.Agent()).To(Equal("myagent"))
+		Expect(connection.MetricsSubsystem()).To(Equal("mysubsystem"))
+	})
+
 	It("Can be configured with a YAML file", func() {
 		// Create temporary files for the trusted CAs:
 		tmp, err := ioutil.TempDir("", "*.test.cas")

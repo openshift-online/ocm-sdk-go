@@ -24,6 +24,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strconv"
 
@@ -58,11 +59,19 @@ func New() *Builder {
 
 // Load adds the given objects as sources where the configuration will be loaded from.
 //
-// If a source is a string it will be interpreted as the name of a file containing the YAML text.
+// If a source is a string ending in `.yaml` or `.yml` it will be interpreted as the name of a
+// file containing the YAML text.
 //
-// If a source is an array of bytes it will be interpreted as the actual YAML text.
+// If a source is a string ending in `.d` it will be interpreted as a directory containing YAML
+// files. The `.yaml` or `.yml` files inside that directory will be loaded in alphabetical order.
 //
-// If a source implements the io.Reader interface, then it will be sued to read in memory the YAML
+// Any string not ending in `.yaml`, `.yml` or `.d` will be interprested as actual YAML text. In
+// order to simplify embedding these strings in Go programs leading tabs will be removed from all
+// the lines of that YAML text.
+//
+// If a source is an array of bytes it will be interpreted as actual YAML text.
+//
+// If a source implements the io.Reader interface, then it will be used to read in memory the YAML
 // text.
 //
 // If the source can also be a yaml.Node or another configuration Object. In those cases the
@@ -96,7 +105,7 @@ func (b *Builder) Build() (object *Object, err error) {
 	for _, current := range b.sources {
 		switch source := current.(type) {
 		case string:
-			err = b.mergeFile(source, tree)
+			err = b.mergeString(source, tree)
 		case []byte:
 			err = b.mergeBytes("", source, tree)
 		case io.Reader:
@@ -126,6 +135,11 @@ func (b *Builder) Build() (object *Object, err error) {
 }
 
 func (b *Builder) mergeString(src string, dst *yaml.Node) error {
+	ext := filepath.Ext(src)
+	if ext == ".yaml" || ext == ".yml" || ext == ".d" {
+		return b.mergeFile(src, dst)
+	}
+	src = b.removeLeadingTabs(src)
 	return b.mergeBytes("", []byte(src), dst)
 }
 
@@ -336,6 +350,15 @@ func (b *Builder) kindString(kind yaml.Kind) string {
 	}
 	return ""
 }
+
+// removeLeadingTabs removes the leading tabs from the lines of the given string.
+func (b *Builder) removeLeadingTabs(s string) string {
+	return leadingTabsRE.ReplaceAllString(s, "")
+}
+
+// leadingTabsRE is the regular expression used to remove leading tabs from strings generated with
+// the EvaluateTemplate function.
+var leadingTabsRE = regexp.MustCompile(`(?m)^\t*`)
 
 // Populate populates the given destination object with the information stored in this
 // configuration object. The destination object should be a pointer to a variable containing
