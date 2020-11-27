@@ -518,18 +518,19 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 		return b
 	}
 	var view struct {
-		URL             *string           `yaml:"url"`
-		AlternativeURLs map[string]string `yaml:"alternative_urls"`
-		TokenURL        *string           `yaml:"token_url"`
-		User            *string           `yaml:"user"`
-		Password        *string           `yaml:"password"`
-		ClientID        *string           `yaml:"client_id"`
-		ClientSecret    *string           `yaml:"client_secret"`
-		Tokens          []string          `yaml:"tokens"`
-		Insecure        *bool             `yaml:"insecure"`
-		TrustedCAs      []string          `yaml:"trusted_cas"`
-		Scopes          []string          `yaml:"scopes"`
-		Agent           *string           `yaml:"agent"`
+		URL              *string           `yaml:"url"`
+		AlternativeURLs  map[string]string `yaml:"alternative_urls"`
+		TokenURL         *string           `yaml:"token_url"`
+		User             *string           `yaml:"user"`
+		Password         *string           `yaml:"password"`
+		ClientID         *string           `yaml:"client_id"`
+		ClientSecret     *string           `yaml:"client_secret"`
+		Tokens           []string          `yaml:"tokens"`
+		Insecure         *bool             `yaml:"insecure"`
+		TrustedCAs       []string          `yaml:"trusted_cas"`
+		Scopes           []string          `yaml:"scopes"`
+		Agent            *string           `yaml:"agent"`
+		MetricsSubsystem *string           `yaml:"metrics_subsystem"`
 	}
 	b.err = config.Populate(&view)
 	if b.err != nil {
@@ -600,6 +601,11 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 	// Agent:
 	if view.Agent != nil {
 		b.Agent(*view.Agent)
+	}
+
+	// Metrics subsystem:
+	if view.MetricsSubsystem != nil {
+		b.MetricsSubsystem(*view.MetricsSubsystem)
 	}
 
 	return b
