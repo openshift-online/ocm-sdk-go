@@ -33,6 +33,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/onsi/gomega/ghttp"
 
+	"github.com/openshift-online/ocm-sdk-go/logging"
+
 	. "github.com/onsi/ginkgo" // nolint
 	. "github.com/onsi/gomega" // nolint
 )
@@ -43,7 +45,7 @@ func TestClient(t *testing.T) {
 }
 
 // Logger used during the tests:
-var logger Logger
+var logger logging.Logger
 
 var _ = BeforeSuite(func() {
 	var err error
@@ -55,7 +57,7 @@ var _ = BeforeSuite(func() {
 	Expect(err).ToNot(HaveOccurred())
 
 	// Create the logger:
-	logger, err = NewStdLoggerBuilder().
+	logger, err = logging.NewStdLoggerBuilder().
 		Streams(GinkgoWriter, GinkgoWriter).
 		Debug(true).
 		Build()

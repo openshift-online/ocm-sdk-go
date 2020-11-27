@@ -16,7 +16,7 @@ limitations under the License.
 
 // This file contains a logger that uses the `glog` package.
 
-package sdk
+package logging
 
 import (
 	"context"

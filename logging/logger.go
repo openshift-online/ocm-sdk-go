@@ -16,7 +16,7 @@ limitations under the License.
 
 // This file contains the definition of the logger interface that is used by the client.
 
-package sdk
+package logging
 
 import (
 	"context"

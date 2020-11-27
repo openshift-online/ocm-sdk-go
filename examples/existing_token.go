@@ -27,6 +27,7 @@ import (
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
 func main() {
@@ -34,7 +35,7 @@ func main() {
 	ctx := context.Background()
 
 	// Create a logger that has the debug level enabled:
-	logger, err := sdk.NewGoLoggerBuilder().
+	logger, err := logging.NewGoLoggerBuilder().
 		Debug(true).
 		Build()
 	if err != nil {

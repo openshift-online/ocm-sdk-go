@@ -39,6 +39,7 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/authorizations"
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
 	"github.com/openshift-online/ocm-sdk-go/configuration"
+	"github.com/openshift-online/ocm-sdk-go/logging"
 	"github.com/openshift-online/ocm-sdk-go/servicelogs"
 )
 
@@ -62,7 +63,7 @@ var DefaultScopes = []string{
 // function instead.
 type ConnectionBuilder struct {
 	// Basic attributes:
-	logger            Logger
+	logger            logging.Logger
 	trustedCASources  []interface{}
 	trustedCAPool     *x509.CertPool
 	insecure          bool
@@ -97,7 +98,7 @@ type TransportWrapper func(http.RoundTripper) http.RoundTripper
 type Connection struct {
 	// Basic attributes:
 	closed            bool
-	logger            Logger
+	logger            logging.Logger
 	trustedCAs        *x509.CertPool
 	insecure          bool
 	disableKeepAlives bool
@@ -163,7 +164,7 @@ func NewConnectionBuilder() *ConnectionBuilder {
 // can create a logger and pass it to this method. For example:
 //
 //	// Create a logger with the debug level enabled:
-//	logger, err := client.NewGoLoggerBuilder().
+//	logger, err := logging.NewGoLoggerBuilder().
 //		Debug(true).
 //		Build()
 //	if err != nil {
@@ -179,7 +180,7 @@ func NewConnectionBuilder() *ConnectionBuilder {
 //	}
 //
 // You can also build your own logger, implementing the Logger interface.
-func (b *ConnectionBuilder) Logger(logger Logger) *ConnectionBuilder {
+func (b *ConnectionBuilder) Logger(logger logging.Logger) *ConnectionBuilder {
 	if b.err != nil {
 		return b
 	}
@@ -668,7 +669,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 
 	// Create the default logger, if needed:
 	if b.logger == nil {
-		b.logger, err = NewGoLoggerBuilder().
+		b.logger, err = logging.NewGoLoggerBuilder().
 			Debug(false).
 			Info(true).
 			Warn(true).
@@ -944,7 +945,7 @@ func (b *ConnectionBuilder) createTransport() (
 }
 
 // Logger returns the logger that is used by the connection.
-func (c *Connection) Logger() Logger {
+func (c *Connection) Logger() logging.Logger {
 	return c.logger
 }
 
