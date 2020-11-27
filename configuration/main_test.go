@@ -17,7 +17,6 @@ limitations under the License.
 package configuration
 
 import (
-	"regexp"
 	"testing"
 
 	. "github.com/onsi/ginkgo" // nolint
@@ -28,12 +27,3 @@ func TestConfiguration(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Configuration")
 }
-
-// RemoveLeadingTabs removes the leading tabs from the lines of the given string.
-func RemoveLeadingTabs(s string) string {
-	return leadingTabsRE.ReplaceAllString(s, "")
-}
-
-// leadingTabsRE is the regular expression used to remove leading tabs from strings generated with
-// the EvaluateTemplate function.
-var leadingTabsRE = regexp.MustCompile(`(?m)^\t*`)
