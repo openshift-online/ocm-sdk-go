@@ -80,7 +80,7 @@ type ConnectionBuilder struct {
 	transportWrapper  TransportWrapper
 
 	// Metrics:
-	subsystem string
+	metricsSubsystem string
 
 	// Error detected while populating the builder. Once set calls to methods to
 	// set other builder parameters will be ignored and the Build method will
@@ -411,10 +411,10 @@ func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) 
 	return b
 }
 
-// Metrics sets the name of the subsystem that will be used by the connection to register metrics
-// with Prometheus. If this isn't explicitly specified, or if it is an empty string, then no metrics
-// will be registered. For example, if the value is `api_outbound` then the following metrics will
-// be registered:
+// MetricsSubsystem sets the name of the subsystem that will be used by the connection to register
+// metrics with Prometheus. If this isn't explicitly specified, or if it is an empty string, then no
+// metrics will be registered.  For example, if the value is `api_outbound` then the following
+// metrics will be registered:
 //
 //	api_outbound_request_count - Number of API requests sent.
 //	api_outbound_request_duration_sum - Total time to send API requests, in seconds.
@@ -460,12 +460,20 @@ func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) 
 //
 // Note that setting this attribute is not enough to have metrics published, you also need to
 // create and start a metrics server, as described in the documentation of the Prometheus library.
-func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
+func (b *ConnectionBuilder) MetricsSubsystem(value string) *ConnectionBuilder {
 	if b.err != nil {
 		return b
 	}
-	b.subsystem = value
+	b.metricsSubsystem = value
 	return b
+}
+
+// Metrics sets the name of the subsystem that will be used by the connection to register metrics
+// with Prometheus.
+//
+// Deprecated: has been replaced by MetricsSubsystem.
+func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
+	return b.MetricsSubsystem(value)
 }
 
 // Load loads the connection configuration from the given source. The source must be a YAML
@@ -787,8 +795,8 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	connection.tokenMutex = &sync.Mutex{}
 
 	// Register metrics:
-	if b.subsystem != "" {
-		err = connection.registerMetrics(b.subsystem)
+	if b.metricsSubsystem != "" {
+		err = connection.registerMetrics(b.metricsSubsystem)
 		if err != nil {
 			err = fmt.Errorf("can't register metrics: %w", err)
 			return

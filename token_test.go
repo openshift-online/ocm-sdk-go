@@ -47,7 +47,7 @@ var _ = Describe("Tokens", func() {
 	// Metrics subsystem - value doesn't matter but configuring it enables
 	// prometheus exporting, exercising the counter increment functionality
 	// (e.g. will catch inconsistent labels).
-	metrics := "test_subsystem"
+	metricsSubsystem := "test_subsystem"
 
 	BeforeEach(func() {
 		// Create the servers:
@@ -84,7 +84,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -117,7 +117,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -155,7 +155,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -188,7 +188,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -224,7 +224,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -247,7 +247,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -269,7 +269,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -291,7 +291,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -329,7 +329,7 @@ var _ = Describe("Tokens", func() {
 				// Create the connection:
 				connection, err := NewConnectionBuilder().
 					Logger(logger).
-					Metrics(metrics).
+					MetricsSubsystem(metricsSubsystem).
 					TokenURL(oidServer.URL()).
 					URL(apiServer.URL()).
 					TrustedCAFile(oidCA).
@@ -371,7 +371,7 @@ var _ = Describe("Tokens", func() {
 				// Create the connection:
 				connection, err := NewConnectionBuilder().
 					Logger(logger).
-					Metrics(metrics).
+					MetricsSubsystem(metricsSubsystem).
 					TokenURL(oidServer.URL()).
 					URL(apiServer.URL()).
 					TrustedCAFile(oidCA).
@@ -412,7 +412,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -451,7 +451,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -489,7 +489,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -532,7 +532,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -575,7 +575,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -608,7 +608,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -635,7 +635,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -671,7 +671,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -701,7 +701,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -725,7 +725,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -760,7 +760,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				TrustedCAFile(oidCA).
 				TrustedCAFile(apiCA).
@@ -798,7 +798,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				TrustedCAFile(oidCA).
 				TrustedCAFile(apiCA).
@@ -841,7 +841,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -884,7 +884,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -917,7 +917,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -944,7 +944,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -981,7 +981,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -1020,7 +1020,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -1068,7 +1068,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -1116,7 +1116,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).
@@ -1151,7 +1151,7 @@ var _ = Describe("Tokens", func() {
 			// Create the connection:
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
-				Metrics(metrics).
+				MetricsSubsystem(metricsSubsystem).
 				TokenURL(oidServer.URL()).
 				URL(apiServer.URL()).
 				TrustedCAFile(oidCA).

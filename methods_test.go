@@ -66,12 +66,12 @@ var _ = Describe("Methods", func() {
 		// Metrics subsystem - value doesn't matter but configuring it enables
 		// prometheus exporting, exercising the counter increment functionality
 		// (e.g. will catch inconsistent labels).
-		metrics := "test_subsystem"
+		metricsSubsystem := "test_subsystem"
 
 		// Create the connection:
 		connection, err = NewConnectionBuilder().
 			Logger(logger).
-			Metrics(metrics).
+			MetricsSubsystem(metricsSubsystem).
 			TokenURL(oidServer.URL()).
 			URL(apiServer.URL()).
 			Tokens(refreshToken).
