@@ -80,7 +80,7 @@ type ConnectionBuilder struct {
 	transportWrapper  TransportWrapper
 
 	// Metrics:
-	subsystem string
+	metricsSubsystem string
 
 	// Error detected while populating the builder. Once set calls to methods to
 	// set other builder parameters will be ignored and the Build method will
@@ -117,6 +117,7 @@ type Connection struct {
 	scopes            []string
 
 	// Metrics:
+	metricsSubsystem    string
 	tokenCountMetric    *prometheus.CounterVec
 	tokenDurationMetric *prometheus.HistogramVec
 	callCountMetric     *prometheus.CounterVec
@@ -411,10 +412,10 @@ func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) 
 	return b
 }
 
-// Metrics sets the name of the subsystem that will be used by the connection to register metrics
-// with Prometheus. If this isn't explicitly specified, or if it is an empty string, then no metrics
-// will be registered. For example, if the value is `api_outbound` then the following metrics will
-// be registered:
+// MetricsSubsystem sets the name of the subsystem that will be used by the connection to register
+// metrics with Prometheus. If this isn't explicitly specified, or if it is an empty string, then no
+// metrics will be registered.  For example, if the value is `api_outbound` then the following
+// metrics will be registered:
 //
 //	api_outbound_request_count - Number of API requests sent.
 //	api_outbound_request_duration_sum - Total time to send API requests, in seconds.
@@ -460,12 +461,20 @@ func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) 
 //
 // Note that setting this attribute is not enough to have metrics published, you also need to
 // create and start a metrics server, as described in the documentation of the Prometheus library.
-func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
+func (b *ConnectionBuilder) MetricsSubsystem(value string) *ConnectionBuilder {
 	if b.err != nil {
 		return b
 	}
-	b.subsystem = value
+	b.metricsSubsystem = value
 	return b
+}
+
+// Metrics sets the name of the subsystem that will be used by the connection to register metrics
+// with Prometheus.
+//
+// Deprecated: has been replaced by MetricsSubsystem.
+func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
+	return b.MetricsSubsystem(value)
 }
 
 // Load loads the connection configuration from the given source. The source must be a YAML
@@ -509,18 +518,19 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 		return b
 	}
 	var view struct {
-		URL             *string           `yaml:"url"`
-		AlternativeURLs map[string]string `yaml:"alternative_urls"`
-		TokenURL        *string           `yaml:"token_url"`
-		User            *string           `yaml:"user"`
-		Password        *string           `yaml:"password"`
-		ClientID        *string           `yaml:"client_id"`
-		ClientSecret    *string           `yaml:"client_secret"`
-		Tokens          []string          `yaml:"tokens"`
-		Insecure        *bool             `yaml:"insecure"`
-		TrustedCAs      []string          `yaml:"trusted_cas"`
-		Scopes          []string          `yaml:"scopes"`
-		Agent           *string           `yaml:"agent"`
+		URL              *string           `yaml:"url"`
+		AlternativeURLs  map[string]string `yaml:"alternative_urls"`
+		TokenURL         *string           `yaml:"token_url"`
+		User             *string           `yaml:"user"`
+		Password         *string           `yaml:"password"`
+		ClientID         *string           `yaml:"client_id"`
+		ClientSecret     *string           `yaml:"client_secret"`
+		Tokens           []string          `yaml:"tokens"`
+		Insecure         *bool             `yaml:"insecure"`
+		TrustedCAs       []string          `yaml:"trusted_cas"`
+		Scopes           []string          `yaml:"scopes"`
+		Agent            *string           `yaml:"agent"`
+		MetricsSubsystem *string           `yaml:"metrics_subsystem"`
 	}
 	b.err = config.Populate(&view)
 	if b.err != nil {
@@ -591,6 +601,11 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 	// Agent:
 	if view.Agent != nil {
 		b.Agent(*view.Agent)
+	}
+
+	// Metrics subsystem:
+	if view.MetricsSubsystem != nil {
+		b.MetricsSubsystem(*view.MetricsSubsystem)
 	}
 
 	return b
@@ -781,14 +796,15 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		accessToken:       accessToken,
 		refreshToken:      refreshToken,
 		scopes:            scopes,
+		metricsSubsystem:  b.metricsSubsystem,
 	}
 
 	// Create the mutex that protects token manipulations:
 	connection.tokenMutex = &sync.Mutex{}
 
 	// Register metrics:
-	if b.subsystem != "" {
-		err = connection.registerMetrics(b.subsystem)
+	if b.metricsSubsystem != "" {
+		err = connection.registerMetrics(b.metricsSubsystem)
 		if err != nil {
 			err = fmt.Errorf("can't register metrics: %w", err)
 			return
@@ -1004,6 +1020,12 @@ func (c *Connection) Insecure() bool {
 
 func (c *Connection) DisableKeepAlives() bool {
 	return c.disableKeepAlives
+}
+
+// MetricsSubsystem returns the name of the subsystem that is used by the connection to register
+// metrics with Prometheus. An empty string means that no metrics are registered.
+func (c *Connection) MetricsSubsystem() string {
+	return c.metricsSubsystem
 }
 
 // AlternativeURLs returns the alternative URLs in use by the connection. Note that the map returned

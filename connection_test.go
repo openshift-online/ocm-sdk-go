@@ -110,6 +110,22 @@ var _ = Describe("Connection", func() {
 		Expect(connection).ToNot(BeNil())
 	})
 
+	It("Can be created with metrics subsystem", func() {
+		accessToken := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(accessToken).
+			MetricsSubsystem("my_subsystem").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection).ToNot(BeNil())
+		defer func() {
+			err = connection.Close()
+			Expect(err).ToNot(HaveOccurred())
+		}()
+		Expect(connection.MetricsSubsystem()).To(Equal("my_subsystem"))
+	})
+
 	It("Selects default OpenID server with default access token", func() {
 		accessToken := DefaultToken("Bearer", 5*time.Minute)
 		connection, err := NewConnectionBuilder().
@@ -359,6 +375,7 @@ var _ = Describe("Connection", func() {
 			- {{ .Tmp }}/myca.pem
 			- {{ .Tmp }}/yourca.pem
 			agent: myagent
+			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
 			"AccessToken", generatedAccess,
@@ -410,6 +427,7 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
 		Expect(connection.Insecure()).To(BeTrue())
 		Expect(connection.Agent()).To(Equal("myagent"))
+		Expect(connection.MetricsSubsystem()).To(Equal("mysubsystem"))
 	})
 
 	It("Method calls after load override configuration file", func() {
@@ -450,6 +468,7 @@ var _ = Describe("Connection", func() {
 			- {{ .Tmp }}/myca.pem
 			- {{ .Tmp }}/yourca.pem
 			agent: myagent
+			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
 			"AccessToken", generatedAccess,
@@ -484,6 +503,7 @@ var _ = Describe("Connection", func() {
 			Scopes("openid", "overriden.myscope").
 			Insecure(false).
 			Agent("overriden.myagent").
+			MetricsSubsystem("overriden_mysubsystem").
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 
@@ -515,6 +535,7 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "overriden.myscope"))
 		Expect(connection.Insecure()).To(BeFalse())
 		Expect(connection.Agent()).To(Equal("overriden.myagent"))
+		Expect(connection.MetricsSubsystem()).To(Equal("overriden_mysubsystem"))
 	})
 
 	It("Method calls before load don't override configuration file", func() {
@@ -555,6 +576,7 @@ var _ = Describe("Connection", func() {
 			- {{ .Tmp }}/myca.pem
 			- {{ .Tmp }}/yourca.pem
 			agent: myagent
+			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
 			"AccessToken", generatedAccess,
@@ -587,6 +609,7 @@ var _ = Describe("Connection", func() {
 			Scopes("openid", "overriden.myscope").
 			Insecure(false).
 			Agent("overriden.myagent").
+			MetricsSubsystem("overriden_mysubsystem").
 			Load(path).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -619,6 +642,7 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
 		Expect(connection.Insecure()).To(BeTrue())
 		Expect(connection.Agent()).To(Equal("myagent"))
+		Expect(connection.MetricsSubsystem()).To(Equal("mysubsystem"))
 	})
 
 	It("Returns configured URL when there are no alternative URLs", func() {
