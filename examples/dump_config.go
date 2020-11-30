@@ -28,8 +28,13 @@ import (
 func main() {
 	// Create the configuration and load all the files given in the command line:
 	builder := configuration.New()
-	for _, arg := range os.Args[1:] {
-		builder.Load(arg)
+	args := os.Args[1:]
+	if len(args) > 0 {
+		for _, arg := range args {
+			builder.Load(arg)
+		}
+	} else {
+		builder.Load(os.Stdin)
 	}
 	object, err := builder.Build()
 	if err != nil {
