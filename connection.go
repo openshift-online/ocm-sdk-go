@@ -777,6 +777,17 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		Jar:       jar,
 		Transport: transport,
 	}
+	if b.logger.DebugEnabled() {
+		client.CheckRedirect = func(request *http.Request, via []*http.Request) error {
+			b.logger.Info(
+				request.Context(),
+				"Following redirect from '%s' to '%s'",
+				via[0].URL,
+				request.URL,
+			)
+			return nil
+		}
+	}
 
 	// Allocate and populate the connection object:
 	connection = &Connection{
