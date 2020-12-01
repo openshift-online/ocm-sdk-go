@@ -750,6 +750,149 @@ var _ = Describe("Connection", func() {
 		Expect(err).ToNot(HaveOccurred())
 		Expect(connection.URL()).To(Equal("https://my.server.com"))
 	})
+
+	It("Can't be created with URL without scheme", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("my.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("my.server.com"))
+		Expect(message).To(ContainSubstring("scheme"))
+		Expect(message).To(ContainSubstring("http"))
+		Expect(message).To(ContainSubstring("https"))
+	})
+
+	It("Can't be created with URL with wrong scheme", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("junk://my.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("junk://my.server.com"))
+		Expect(message).To(ContainSubstring("scheme"))
+		Expect(message).To(ContainSubstring("http"))
+		Expect(message).To(ContainSubstring("https"))
+		Expect(message).To(ContainSubstring("junk"))
+	})
+
+	It("Can't be created with alternative URL wihout scheme", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			AlternativeURL("/api/clusters_mtmt", "my.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("my.server.com"))
+		Expect(message).To(ContainSubstring("scheme"))
+		Expect(message).To(ContainSubstring("http"))
+		Expect(message).To(ContainSubstring("https"))
+	})
+
+	It("Can't be created with alternative URL with wrong scheme", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			AlternativeURL("/api/clusters_mtmt", "junk://my.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("junk://my.server.com"))
+		Expect(message).To(ContainSubstring("scheme"))
+		Expect(message).To(ContainSubstring("http"))
+		Expect(message).To(ContainSubstring("https"))
+		Expect(message).To(ContainSubstring("junk"))
+	})
+
+	It("Can't be created with URL without host name", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		_, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("http:///mypath").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("http:///mypath"))
+		Expect(message).To(ContainSubstring("host name"))
+	})
+
+	It("Can't be created with alternative URL without host name", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			AlternativeURL("/api/clusters_mgmt", "http:///mypath").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("http:///mypath"))
+		Expect(message).To(ContainSubstring("host name"))
+	})
+
+	It("Can't be created with token URL without scheme", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("https://my.server.com").
+			TokenURL("your.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("your.server.com"))
+		Expect(message).To(ContainSubstring("scheme"))
+		Expect(message).To(ContainSubstring("http"))
+		Expect(message).To(ContainSubstring("https"))
+	})
+
+	It("Can't be created with token URL with wrong scheme", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("https://my.server.com").
+			TokenURL("junk://your.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("junk://your.server.com"))
+		Expect(message).To(ContainSubstring("scheme"))
+		Expect(message).To(ContainSubstring("http"))
+		Expect(message).To(ContainSubstring("https"))
+		Expect(message).To(ContainSubstring("junk"))
+	})
+
+	It("Can't be created with token URL without host name", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("http://my.server.com").
+			TokenURL("http:///yourpath").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("http:///yourpath"))
+		Expect(message).To(ContainSubstring("host name"))
+	})
 })
 
 type TestTransport struct {
