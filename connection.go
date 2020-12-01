@@ -707,7 +707,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 			rawTokenURL,
 		)
 	}
-	tokenURL, err := url.Parse(rawTokenURL)
+	tokenURL, err := b.parseURL(rawTokenURL)
 	if err != nil {
 		err = fmt.Errorf("can't parse token URL '%s': %w", rawTokenURL, err)
 		return
@@ -847,10 +847,10 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 			)
 			return
 		}
-		entry.url, err = url.Parse(base)
+		entry.url, err = b.parseURL(base)
 		if err != nil {
 			err = fmt.Errorf(
-				"can't parse alternative URL '%s' for prefix '%s': %v",
+				"can't parse alternative URL '%s' for prefix '%s': %w",
 				base, prefix, err,
 			)
 			return
@@ -957,6 +957,29 @@ func (b *ConnectionBuilder) createTransport() (
 		transport = b.transportWrapper(transport)
 	}
 
+	return
+}
+
+func (b *ConnectionBuilder) parseURL(text string) (result *url.URL, err error) {
+	result, err = url.Parse(text)
+	if err != nil {
+		return
+	}
+	scheme := strings.ToLower(result.Scheme)
+	if scheme != "http" && scheme != "https" {
+		result = nil
+		err = fmt.Errorf(
+			"URL '%s' should have scheme 'http' or 'https' but has '%s'",
+			text, scheme,
+		)
+		return
+	}
+	host := result.Hostname()
+	if host == "" {
+		result = nil
+		err = fmt.Errorf("URL '%s' doesn't have a host name", text)
+		return
+	}
 	return
 }
 
