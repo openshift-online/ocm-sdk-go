@@ -35,11 +35,6 @@ type AddOnInstallationsServer interface {
 	// Create a new add-on installation and add it to the collection of add-on installations on the cluster.
 	Add(ctx context.Context, request *AddOnInstallationsAddServerRequest, response *AddOnInstallationsAddServerResponse) error
 
-	// Delete handles a request for the 'delete' method.
-	//
-	// Delete an add-on installation and remove it from the collection of add-on installations on the cluster.
-	Delete(ctx context.Context, request *AddOnInstallationsDeleteServerRequest, response *AddOnInstallationsDeleteServerResponse) error
-
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of add-on installations.
@@ -95,22 +90,6 @@ func (r *AddOnInstallationsAddServerResponse) Body(value *AddOnInstallation) *Ad
 
 // Status sets the status code.
 func (r *AddOnInstallationsAddServerResponse) Status(value int) *AddOnInstallationsAddServerResponse {
-	r.status = value
-	return r
-}
-
-// AddOnInstallationsDeleteServerRequest is the request for the 'delete' method.
-type AddOnInstallationsDeleteServerRequest struct {
-}
-
-// AddOnInstallationsDeleteServerResponse is the response for the 'delete' method.
-type AddOnInstallationsDeleteServerResponse struct {
-	status int
-	err    *errors.Error
-}
-
-// Status sets the status code.
-func (r *AddOnInstallationsDeleteServerResponse) Status(value int) *AddOnInstallationsDeleteServerResponse {
 	r.status = value
 	return r
 }
@@ -321,9 +300,6 @@ func dispatchAddOnInstallations(w http.ResponseWriter, r *http.Request, server A
 		case "POST":
 			adaptAddOnInstallationsAddRequest(w, r, server)
 			return
-		case "DELETE":
-			adaptAddOnInstallationsDeleteRequest(w, r, server)
-			return
 		case "GET":
 			adaptAddOnInstallationsListRequest(w, r, server)
 			return
@@ -369,41 +345,6 @@ func adaptAddOnInstallationsAddRequest(w http.ResponseWriter, r *http.Request, s
 		return
 	}
 	err = writeAddOnInstallationsAddResponse(response, w)
-	if err != nil {
-		glog.Errorf(
-			"Can't write response for method '%s' and path '%s': %v",
-			r.Method, r.URL.Path, err,
-		)
-		return
-	}
-}
-
-// adaptAddOnInstallationsDeleteRequest translates the given HTTP request into a call to
-// the corresponding method of the given server. Then it translates the
-// results returned by that method into an HTTP response.
-func adaptAddOnInstallationsDeleteRequest(w http.ResponseWriter, r *http.Request, server AddOnInstallationsServer) {
-	request := &AddOnInstallationsDeleteServerRequest{}
-	err := readAddOnInstallationsDeleteRequest(request, r)
-	if err != nil {
-		glog.Errorf(
-			"Can't read request for method '%s' and path '%s': %v",
-			r.Method, r.URL.Path, err,
-		)
-		errors.SendInternalServerError(w, r)
-		return
-	}
-	response := &AddOnInstallationsDeleteServerResponse{}
-	response.status = 204
-	err = server.Delete(r.Context(), request, response)
-	if err != nil {
-		glog.Errorf(
-			"Can't process request for method '%s' and path '%s': %v",
-			r.Method, r.URL.Path, err,
-		)
-		errors.SendInternalServerError(w, r)
-		return
-	}
-	err = writeAddOnInstallationsDeleteResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

@@ -64,17 +64,6 @@ func (c *AddOnInstallationsClient) Add() *AddOnInstallationsAddRequest {
 	}
 }
 
-// Delete creates a request for the 'delete' method.
-//
-// Delete an add-on installation and remove it from the collection of add-on installations on the cluster.
-func (c *AddOnInstallationsClient) Delete() *AddOnInstallationsDeleteRequest {
-	return &AddOnInstallationsDeleteRequest{
-		transport: c.transport,
-		path:      c.path,
-		metric:    c.metric,
-	}
-}
-
 // List creates a request for the 'list' method.
 //
 // Retrieves the list of add-on installations.
@@ -242,101 +231,6 @@ func (r *AddOnInstallationsAddResponse) GetBody() (value *AddOnInstallation, ok 
 		value = r.body
 	}
 	return
-}
-
-// AddOnInstallationsDeleteRequest is the request for the 'delete' method.
-type AddOnInstallationsDeleteRequest struct {
-	transport http.RoundTripper
-	path      string
-	metric    string
-	query     url.Values
-	header    http.Header
-}
-
-// Parameter adds a query parameter.
-func (r *AddOnInstallationsDeleteRequest) Parameter(name string, value interface{}) *AddOnInstallationsDeleteRequest {
-	helpers.AddValue(&r.query, name, value)
-	return r
-}
-
-// Header adds a request header.
-func (r *AddOnInstallationsDeleteRequest) Header(name string, value interface{}) *AddOnInstallationsDeleteRequest {
-	helpers.AddHeader(&r.header, name, value)
-	return r
-}
-
-// Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnInstallationsDeleteRequest) Send() (result *AddOnInstallationsDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnInstallationsDeleteRequest) SendContext(ctx context.Context) (result *AddOnInstallationsDeleteResponse, err error) {
-	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
-	uri := &url.URL{
-		Path:     r.path,
-		RawQuery: query.Encode(),
-	}
-	request := &http.Request{
-		Method: "DELETE",
-		URL:    uri,
-		Header: header,
-	}
-	if ctx != nil {
-		request = request.WithContext(ctx)
-	}
-	response, err := r.transport.RoundTrip(request)
-	if err != nil {
-		return
-	}
-	defer response.Body.Close()
-	result = &AddOnInstallationsDeleteResponse{}
-	result.status = response.StatusCode
-	result.header = response.Header
-	if result.status >= 400 {
-		result.err, err = errors.UnmarshalError(response.Body)
-		if err != nil {
-			return
-		}
-		err = result.err
-		return
-	}
-	return
-}
-
-// AddOnInstallationsDeleteResponse is the response for the 'delete' method.
-type AddOnInstallationsDeleteResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-}
-
-// Status returns the response status code.
-func (r *AddOnInstallationsDeleteResponse) Status() int {
-	if r == nil {
-		return 0
-	}
-	return r.status
-}
-
-// Header returns header of the response.
-func (r *AddOnInstallationsDeleteResponse) Header() http.Header {
-	if r == nil {
-		return nil
-	}
-	return r.header
-}
-
-// Error returns the response error.
-func (r *AddOnInstallationsDeleteResponse) Error() *errors.Error {
-	if r == nil {
-		return nil
-	}
-	return r.err
 }
 
 // AddOnInstallationsListRequest is the request for the 'list' method.

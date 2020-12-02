@@ -42,18 +42,6 @@ func readAddOnInstallationsAddResponse(response *AddOnInstallationsAddResponse, 
 func writeAddOnInstallationsAddResponse(response *AddOnInstallationsAddServerResponse, w http.ResponseWriter) error {
 	return MarshalAddOnInstallation(response.body, w)
 }
-func readAddOnInstallationsDeleteRequest(request *AddOnInstallationsDeleteServerRequest, r *http.Request) error {
-	return nil
-}
-func writeAddOnInstallationsDeleteRequest(request *AddOnInstallationsDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readAddOnInstallationsDeleteResponse(response *AddOnInstallationsDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAddOnInstallationsDeleteResponse(response *AddOnInstallationsDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
 func readAddOnInstallationsListRequest(request *AddOnInstallationsListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()
