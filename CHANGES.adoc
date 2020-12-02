@@ -3,6 +3,17 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.151 Dec 2 2020
+- Move logging code to `logging` package
+- Rename `Metrics` to `MetricsSubsystem`
+- Add method to read metrics subsystem
+- Load metrics subsystem configuration from file
+- Load string if it doesn't look like a file
+- Load `os.Stdin` in dump configuration example
+- Reject URLs without scheme or host name
+- Add redirection tests
+- update model to 0.0.101
+
 == 0.1.150 Nov 25 2020
 
 - update model to 0.0.100
