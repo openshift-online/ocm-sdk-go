@@ -73,6 +73,14 @@ func writeAddOnParameter(object *AddOnParameter, stream *jsoniter.Stream) {
 		writeAddOn(object.addon, stream)
 		count++
 	}
+	if object.defaultValue != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("default_value")
+		stream.WriteString(*object.defaultValue)
+		count++
+	}
 	if object.description != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -168,6 +176,9 @@ func readAddOnParameter(iterator *jsoniter.Iterator) *AddOnParameter {
 		case "addon":
 			value := readAddOn(iterator)
 			object.addon = value
+		case "default_value":
+			value := iterator.ReadString()
+			object.defaultValue = &value
 		case "description":
 			value := iterator.ReadString()
 			object.description = &value
