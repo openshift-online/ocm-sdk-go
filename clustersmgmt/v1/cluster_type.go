@@ -117,6 +117,7 @@ type Cluster struct {
 	status                            *ClusterStatus
 	storageQuota                      *Value
 	subscription                      *Subscription
+	upgradeChannelGroup               *string
 	version                           *Version
 }
 
@@ -195,6 +196,7 @@ func (o *Cluster) Empty() bool {
 		o.openshiftVersion == nil &&
 		len(o.properties) == 0 &&
 		o.state == nil &&
+		o.upgradeChannelGroup == nil &&
 		true)
 }
 
@@ -1129,6 +1131,29 @@ func (o *Cluster) GetSubscription() (value *Subscription, ok bool) {
 	ok = o != nil && o.subscription != nil
 	if ok {
 		value = o.subscription
+	}
+	return
+}
+
+// UpgradeChannelGroup returns the value of the 'upgrade_channel_group' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Channel group to be used for upgrading the cluster. Valid values: stable (default), fast, candidate, nightly.
+func (o *Cluster) UpgradeChannelGroup() string {
+	if o != nil && o.upgradeChannelGroup != nil {
+		return *o.upgradeChannelGroup
+	}
+	return ""
+}
+
+// GetUpgradeChannelGroup returns the value of the 'upgrade_channel_group' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Channel group to be used for upgrading the cluster. Valid values: stable (default), fast, candidate, nightly.
+func (o *Cluster) GetUpgradeChannelGroup() (value string, ok bool) {
+	ok = o != nil && o.upgradeChannelGroup != nil
+	if ok {
+		value = *o.upgradeChannelGroup
 	}
 	return
 }

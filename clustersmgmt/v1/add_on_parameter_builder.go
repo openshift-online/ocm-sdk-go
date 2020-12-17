@@ -23,17 +23,18 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on parameter.
 type AddOnParameterBuilder struct {
-	id          *string
-	href        *string
-	link        bool
-	addon       *AddOnBuilder
-	description *string
-	editable    *bool
-	enabled     *bool
-	name        *string
-	required    *bool
-	validation  *string
-	valueType   *string
+	id           *string
+	href         *string
+	link         bool
+	addon        *AddOnBuilder
+	defaultValue *string
+	description  *string
+	editable     *bool
+	enabled      *bool
+	name         *string
+	required     *bool
+	validation   *string
+	valueType    *string
 }
 
 // NewAddOnParameter creates a new builder of 'add_on_parameter' objects.
@@ -64,6 +65,14 @@ func (b *AddOnParameterBuilder) Link(value bool) *AddOnParameterBuilder {
 // Representation of an add-on that can be installed in a cluster.
 func (b *AddOnParameterBuilder) Addon(value *AddOnBuilder) *AddOnParameterBuilder {
 	b.addon = value
+	return b
+}
+
+// DefaultValue sets the value of the 'default_value' attribute to the given value.
+//
+//
+func (b *AddOnParameterBuilder) DefaultValue(value string) *AddOnParameterBuilder {
+	b.defaultValue = &value
 	return b
 }
 
@@ -136,6 +145,7 @@ func (b *AddOnParameterBuilder) Copy(object *AddOnParameter) *AddOnParameterBuil
 	} else {
 		b.addon = nil
 	}
+	b.defaultValue = object.defaultValue
 	b.description = object.description
 	b.editable = object.editable
 	b.enabled = object.enabled
@@ -158,6 +168,7 @@ func (b *AddOnParameterBuilder) Build() (object *AddOnParameter, err error) {
 			return
 		}
 	}
+	object.defaultValue = b.defaultValue
 	object.description = b.description
 	object.editable = b.editable
 	object.enabled = b.enabled

@@ -413,6 +413,14 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeSubscription(object.subscription, stream)
 		count++
 	}
+	if object.upgradeChannelGroup != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("upgrade_channel_group")
+		stream.WriteString(*object.upgradeChannelGroup)
+		count++
+	}
 	if object.version != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -700,6 +708,9 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "subscription":
 			value := readSubscription(iterator)
 			object.subscription = value
+		case "upgrade_channel_group":
+			value := iterator.ReadString()
+			object.upgradeChannelGroup = &value
 		case "version":
 			value := readVersion(iterator)
 			object.version = value

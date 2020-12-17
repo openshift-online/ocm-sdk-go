@@ -5294,6 +5294,10 @@
             "description": "Link to add-on.\n",
             "$ref": "#/components/schemas/AddOn"
           },
+          "default_value": {
+            "description": "Indicates the value default for the add-on parameter\n",
+            "type": "string"
+          },
           "description": {
             "description": "Description of the add-on parameter.\n",
             "type": "string"
@@ -5626,6 +5630,10 @@
           "subscription": {
             "description": "Link to the subscription that comes from the account management service when the cluster\nis registered.\n",
             "$ref": "#/components/schemas/Subscription"
+          },
+          "upgrade_channel_group": {
+            "description": "Channel group to be used for upgrading the cluster. Valid values: stable (default), fast, candidate, nightly.\n",
+            "type": "string"
           },
           "version": {
             "description": "Link to the version of _OpenShift_ that will be used to install the cluster.\n",
