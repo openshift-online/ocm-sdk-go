@@ -3,7 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.152 Dec 17 2020
+
+- Update model to v0.0.102
+** add default value to add-on parameter type
+** Add upgrade channel group for a cluster
+
 == 0.1.151 Dec 2 2020
+
 - Move logging code to `logging` package
 - Rename `Metrics` to `MetricsSubsystem`
 - Add method to read metrics subsystem
