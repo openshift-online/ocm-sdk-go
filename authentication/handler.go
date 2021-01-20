@@ -52,6 +52,9 @@ type HandlerBuilder struct {
 	keysCAs      *x509.CertPool
 	keysInsecure bool
 	aclFiles     []string
+	service      string
+	error        string
+	operationID  func(*http.Request) string
 	next         http.Handler
 }
 
@@ -67,6 +70,9 @@ type Handler struct {
 	keys          *sync.Map
 	lastKeyReload time.Time
 	aclItems      map[string]*regexp.Regexp
+	service       string
+	error         string
+	operationID   func(*http.Request) string
 	next          http.Handler
 }
 
@@ -157,6 +163,80 @@ func (b *HandlerBuilder) ACLFile(value string) *HandlerBuilder {
 // correctly the request. This is mandatory.
 func (b *HandlerBuilder) Next(value http.Handler) *HandlerBuilder {
 	b.next = value
+	return b
+}
+
+// Service sets the identifier of the service that will be used to generate error codes. For
+// example, if the value is `my_service` then the JSON for error responses will be like this:
+//
+//	{
+//		"kind": "Error",
+//		"id": "401",
+//		"href": "/api/clusters_mgmt/v1/errors/401",
+//		"code": "MY-SERVICE-401",
+//		"reason": "Bearer token is expired"
+//	}
+//
+// When this isn't explicitly provided the value will be extracted from the second segment of the
+// request path. For example, if the request URL is `/api/clusters_mgmt/v1/cluster` the value will
+// be `clusters_mgmt`.
+func (b *HandlerBuilder) Service(value string) *HandlerBuilder {
+	b.service = value
+	return b
+}
+
+// Error sets the error identifier that will be used to generate JSON error responses. For example,
+// if the value is `123` then the JSON for error responses will be like this:
+//
+//	{
+//		"kind": "Error",
+//		"id": "11",
+//		"href": "/api/clusters_mgmt/v1/errors/11",
+//		"code": "CLUSTERS-MGMT-11",
+//		"reason": "Bearer token is expired"
+//	}
+//
+// When this isn't explicitly provided the value will be `401`. Note that changing this doesn't
+// change the HTTP response status, that will always be 401.
+func (b *HandlerBuilder) Error(value string) *HandlerBuilder {
+	b.error = value
+	return b
+}
+
+// OperationID sets a function that will be called each time an error is detected, passing the
+// details of the request that caused the error. The value returned by the function will be included
+// in the `operation_id` field of the JSON error response. For example, if the function returns
+// `123` the generated JSON error response will be like this:
+//
+//	{
+//		"kind": "Error",
+//		"id": "401",
+//		"href": "/api/clusters_mgmt/v1/errors/401",
+//		"code": "CLUSTERS-MGMT-401",
+//		"reason": "Bearer token is expired".
+//		"operation_id": "123"
+//	}
+//
+// For example, if the operation identifier is available in an HTTP header named `X-Operation-ID`
+// then the handler can be configured like this to use it:
+//
+//	handler, err := authentication.NewHandler().
+//		Logger(logger).
+//		KeysURL("https://...").
+//		OperationID(func(r *http.Request) string {
+//			return r.Header.Get("X-Operation-ID")
+//		}).
+//		Next(next).
+//		Build()
+//	if err != nil {
+//		...
+//	}
+//
+// If the function returns an empty string then the `operation_id` field will not be added.
+//
+// By default there is no function configured for this, so no `operation_id` field will be added.
+func (b *HandlerBuilder) OperationID(value func(r *http.Request) string) *HandlerBuilder {
+	b.operationID = value
 	return b
 }
 
@@ -259,6 +339,9 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 		keysClient:  keysClient,
 		keys:        keys,
 		aclItems:    aclItems,
+		service:     b.service,
+		error:       b.error,
+		operationID: b.operationID,
 		next:        b.next,
 	}
 
@@ -784,23 +867,35 @@ func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format strin
 	segments := strings.Split(r.URL.Path, "/")
 	realm := ""
 	builder := errors.NewError()
-	builder.ID(fmt.Sprintf("%d", http.StatusUnauthorized))
+	id := h.error
+	if id == "" {
+		id = fmt.Sprintf("%d", http.StatusUnauthorized)
+	}
+	builder.ID(id)
 	if len(segments) >= 4 {
-		prefix := segments[1]
-		service := segments[2]
+		service := h.service
+		if h.service == "" {
+			service = segments[2]
+		}
 		version := segments[3]
 		builder.HREF(fmt.Sprintf(
-			"/%s/%s/%s/errors/%d",
-			prefix, service, version, http.StatusUnauthorized,
+			"/%s/%s/%s/errors/%s",
+			segments[1], segments[2], segments[3], id,
 		))
 		builder.Code(fmt.Sprintf(
-			"%s-%d",
+			"%s-%s",
 			strings.ToUpper(strings.ReplaceAll(service, "_", "-")),
-			http.StatusUnauthorized,
+			id,
 		))
 		realm = fmt.Sprintf("%s/%s", service, version)
 	}
 	builder.Reason(fmt.Sprintf(format, args...))
+	if h.operationID != nil {
+		operationID := h.operationID(r)
+		if operationID != "" {
+			builder.OperationID(operationID)
+		}
+	}
 	body, err := builder.Build()
 	if err != nil {
 		h.logger.Error(ctx, "Can't build error response: %v", err)
@@ -809,7 +904,17 @@ func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format strin
 
 	// Send the response:
 	w.Header().Set("WWW-Authenticate", fmt.Sprintf("Bearer realm=\"%s\"", realm))
-	errors.SendError(w, r, body)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusUnauthorized)
+	err = errors.MarshalError(body, w)
+	if err != nil {
+		h.logger.Error(
+			r.Context(),
+			"Can't send response body for request '%s': %v",
+			r.URL.Path,
+			err,
+		)
+	}
 }
 
 // Regular expression used to extract the bearer token from the authorization header:
