@@ -55,7 +55,7 @@ var _ = Describe("Alternative URLs", func() {
 		refreshToken = DefaultToken("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
-		oidServer, oidCA = MakeServer()
+		oidServer, oidCA = MakeTCPTLSServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
 				RespondWithTokens(accessToken, refreshToken),
@@ -64,9 +64,9 @@ var _ = Describe("Alternative URLs", func() {
 		oidURL = oidServer.URL()
 
 		// Create the API servers:
-		defaultServer, defaultCA = MakeServer()
+		defaultServer, defaultCA = MakeTCPTLSServer()
 		defaultURL = defaultServer.URL()
-		alternativeServer, alternativeCA = MakeServer()
+		alternativeServer, alternativeCA = MakeTCPTLSServer()
 		alternativeURL = alternativeServer.URL()
 	})
 

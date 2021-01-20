@@ -21,12 +21,13 @@ package sdk
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"html"
 	"io/ioutil"
 	"mime"
+	"net"
 	"net/http"
-	"net/url"
 	"path"
 	"regexp"
 	"strconv"
@@ -150,8 +151,14 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 	}
 	request.Header.Set("Accept", "application/json")
 
+	// Select the client:
+	client, err := c.selectClient(ctx, base)
+	if err != nil {
+		return
+	}
+
 	// Send the request and get the response:
-	response, err = c.client.Do(request)
+	response, err = client.Do(request)
 	if err != nil {
 		err = fmt.Errorf("can't send request: %w", err)
 		return
@@ -226,7 +233,7 @@ func (c *Connection) contentSummary(mediaType string, response *http.Response) (
 
 // selectBaseURL selects the base URL that should be used for the given request, according its path
 // and the alternative URLs configured when the connection was created.
-func (c *Connection) selectBaseURL(ctx context.Context, request *http.Request) (base *url.URL,
+func (c *Connection) selectBaseURL(ctx context.Context, request *http.Request) (base *urlInfo,
 	err error) {
 	// Select the base URL that has the longest matching prefix. Note that it is enough to pick
 	// the first match because the entries have already been sorted by descending prefix length
@@ -243,5 +250,116 @@ func (c *Connection) selectBaseURL(ctx context.Context, request *http.Request) (
 			request.URL.Path,
 		)
 	}
+	return
+}
+
+// selectClient selects an HTTP client to use to connect to the given base URL.
+func (c *Connection) selectClient(ctx context.Context, base *urlInfo) (client *http.Client,
+	err error) {
+	// We need a client for TCP and another client for each combination of Unix and socket name,
+	// so we need to calculate the key for the clients table accordingly:
+	key := fmt.Sprintf("%s:%s", base.network, base.socket)
+
+	// We will be modifiying the table of clients so we need to acquire the lock before
+	// proceeding:
+	c.clientsMutex.Lock()
+	defer c.clientsMutex.Unlock()
+
+	// Get an existing client, or create a new one if it doesn't exist yet:
+	client, ok := c.clientsTable[key]
+	if ok {
+		c.logger.Debug(ctx, "Client for key '%s' already exists", key)
+		return
+	}
+	c.logger.Debug(ctx, "Client for key '%s' doesn't exist, will create it", key)
+	client, err = c.createClient(ctx, base)
+	if err != nil {
+		return
+	}
+	c.clientsTable[key] = client
+
+	return
+}
+
+// createClient creates a new HTTP client to use to connect to the given base URL.
+func (c *Connection) createClient(ctx context.Context, base *urlInfo) (client *http.Client,
+	err error) {
+	// Create the transport:
+	transport, err := c.createTransport(ctx, base)
+	if err != nil {
+		return
+	}
+
+	// Create the client:
+	client = &http.Client{
+		Jar:       c.cookieJar,
+		Transport: transport,
+	}
+	if c.logger.DebugEnabled() {
+		client.CheckRedirect = func(request *http.Request, via []*http.Request) error {
+			c.logger.Info(
+				request.Context(),
+				"Following redirect from '%s' to '%s'",
+				via[0].URL,
+				request.URL,
+			)
+			return nil
+		}
+	}
+
+	return
+}
+
+// createTransport creates a new HTTP transport to use to connect to the given base URL.
+func (c *Connection) createTransport(ctx context.Context, base *urlInfo) (
+	result http.RoundTripper, err error) {
+	// Prepare the TLS configuration:
+	// #nosec 402
+	config := &tls.Config{
+		ServerName:         base.Hostname(),
+		InsecureSkipVerify: c.insecure,
+		RootCAs:            c.trustedCAs,
+	}
+
+	// Create the transport:
+	transport := &http.Transport{
+		TLSClientConfig:   config,
+		Proxy:             http.ProxyFromEnvironment,
+		DisableKeepAlives: c.disableKeepAlives,
+	}
+
+	// In order to use Unix sockets we need to explicitly set dialers that use `unix` as network
+	// and the socket file as address, otherwise the HTTP client will always use `tcp` as the
+	// network and the host name from the request as the address:
+	if base.network == unixNetwork {
+		transport.DialContext = func(ctx context.Context, _, _ string) (net.Conn, error) {
+			dialer := net.Dialer{}
+			return dialer.DialContext(ctx, base.network, base.socket)
+		}
+		transport.DialTLSContext = func(ctx context.Context, _, _ string) (net.Conn, error) {
+			dialer := tls.Dialer{
+				Config: config,
+			}
+			return dialer.DialContext(ctx, base.network, base.socket)
+		}
+	}
+
+	// Prepare the result:
+	result = transport
+
+	// If debug is enabled then wrap the raw transport with the round tripper that sends the
+	// details of requests and responses to the log:
+	if c.logger.DebugEnabled() {
+		result = &dumpRoundTripper{
+			logger: c.logger,
+			next:   result,
+		}
+	}
+
+	// Wrap the transport with the round trippers provided by the user:
+	if c.transportWrapper != nil {
+		result = c.transportWrapper(result)
+	}
+
 	return
 }

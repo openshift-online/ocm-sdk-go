@@ -23,8 +23,10 @@ import (
 	"encoding/pem"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"regexp"
 	"testing"
 	"text/template"
@@ -64,20 +66,95 @@ var _ = BeforeSuite(func() {
 	Expect(err).ToNot(HaveOccurred())
 })
 
-// MakeServer creates a test server configured so that it sends log messages to the Ginkgo
-// writer. It returns the created server and the name of a temporary file that contains the
-// CA certificate that the client should trust in order to connect to the server. It is the
-// responsibility of the caller to delete this temporary file when it is no longer needed.
-func MakeServer() (server *ghttp.Server, ca string) {
-	// Create and configure the server:
-	server = ghttp.NewTLSServer()
+// MakeTCPServer creates a test server that listens in a TCP socket and configured so that it
+// sends log messages to the Ginkgo writer.
+func MakeTCPServer() *ghttp.Server {
+	server := ghttp.NewUnstartedServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.Start()
+	return server
+}
+
+// MakeUnixServer creates a test server that listens in a Unix socket and configured so that it
+// sends log messages to the Ginkgo writer. It returns the created server and name of a temporary
+// file containing the Unix socket. This file will be in a temporary directory, and the caller is
+// resposible for removing the directory once it is no longer needed.
+func MakeUnixServer() (server *ghttp.Server, socket string) {
+	// Create a temporary directory for the Unix sockets:
+	sockets, err := ioutil.TempDir("", "sockets")
+	Expect(err).ToNot(HaveOccurred())
+	socket = filepath.Join(sockets, "server.socket")
+
+	// Create the listener:
+	listener, err := net.Listen("unix", socket)
+	Expect(err).ToNot(HaveOccurred())
+
+	// Create and configure the server:
+	server = ghttp.NewUnstartedServer()
+	server.Writer = GinkgoWriter
+	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.Listener = listener
+	server.HTTPTestServer.Start()
+
+	return
+}
+
+// MakeTCPTLSServer creates a test server configured so that it sends log messages to the Ginkgo
+// writer. It returns the created server and the name of a temporary file that contains the CA
+// certificate that the client should trust in order to connect to the server. It is the
+// responsibility of the caller to delete this temporary file when it is no longer needed.
+func MakeTCPTLSServer() (server *ghttp.Server, ca string) {
+	// Create and configure the server:
+	server = ghttp.NewUnstartedServer()
+	server.Writer = GinkgoWriter
+	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.StartTLS()
 
 	// Fetch the CA certificate:
-	addr, err := url.Parse(server.URL())
+	address, err := url.Parse(server.URL())
 	Expect(err).ToNot(HaveOccurred())
-	conn, err := tls.Dial("tcp", addr.Host, &tls.Config{
+	ca = fetchCACertificate("tcp", address.Host)
+
+	return
+}
+
+// MakeUnixTLSServer creates a test server that listens in a Unix socket and configured so that it
+// sends log messages to the Ginkgo writer. It returns the created server, the name of a temporary
+// file that contains the CA certificate that the client should trust in order to connect to the
+// server and the name of a directory containing the Unix sockets. This file will be in a temporary
+// directory. It is the responsibility of the caller to remove these temporary directories and
+// files.
+func MakeUnixTLSServer() (server *ghttp.Server, ca, socket string) {
+	// Create a temporary directory for the Unix sockets:
+	sockets, err := ioutil.TempDir("", "sockets")
+	Expect(err).ToNot(HaveOccurred())
+	socket = filepath.Join(sockets, "server.socket")
+
+	// Create the listener:
+	listener, err := net.Listen("unix", socket)
+	Expect(err).ToNot(HaveOccurred())
+
+	// Create and configure the server:
+	server = ghttp.NewUnstartedServer()
+	server.Writer = GinkgoWriter
+	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.Listener = listener
+	server.HTTPTestServer.StartTLS()
+
+	// Fetch the CA certificate:
+	ca = fetchCACertificate("unix", socket)
+
+	return
+}
+
+// fetchCACertificates connects to the given network address and extracts the CA certificate from
+// the TLS handshake. It returns the path of a temporary file containing that CA certificate encoded
+// in PEM format. It is the responsibility of the caller to delete that file when it is no longer
+// needed.
+func fetchCACertificate(network, address string) string {
+	// Connect to the server and do the TLS handshake to obtain the certificate chain:
+	conn, err := tls.Dial(network, address, &tls.Config{
 		InsecureSkipVerify: true, // nolint
 	})
 	Expect(err).ToNot(HaveOccurred())
@@ -109,9 +186,9 @@ func MakeServer() (server *ghttp.Server, ca string) {
 	Expect(err).ToNot(HaveOccurred())
 	err = file.Close()
 	Expect(err).ToNot(HaveOccurred())
-	ca = file.Name()
 
-	return
+	// Return the path of the temporary file:
+	return file.Name()
 }
 
 // RespondeWithContent responds with the given status code, content type and body.

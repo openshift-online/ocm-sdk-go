@@ -51,8 +51,8 @@ var _ = Describe("Tokens", func() {
 
 	BeforeEach(func() {
 		// Create the servers:
-		oidServer, oidCA = MakeServer()
-		apiServer, apiCA = MakeServer()
+		oidServer, oidCA = MakeTCPTLSServer()
+		apiServer, apiCA = MakeTCPTLSServer()
 	})
 
 	AfterEach(func() {
@@ -999,7 +999,7 @@ var _ = Describe("Tokens", func() {
 			Expect(returnedRefresh).To(Equal(newRefresh))
 		})
 
-		It("Honors cookies", func() {
+		It("Honours cookies", func() {
 			// Generate the tokens:
 			expiredAccess := DefaultToken("Bearer", -5*time.Minute)
 			validAccess := DefaultToken("Bearer", 5*time.Minute)
