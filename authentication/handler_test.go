@@ -1244,4 +1244,101 @@ var _ = Describe("Handler", func() {
 			"reason": "Bearer token is malformed"
 		}`))
 	})
+
+	It("Honours explicit service identifier", func() {
+		// Prepare the next handler, which should never be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Service("my_service").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the response code contains the service identifier:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "MY-SERVICE-401",
+			"reason": "Bearer token is malformed"
+		}`))
+	})
+
+	It("Honours explicit error identifier", func() {
+		// Prepare the next handler, which should never be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Error("123").
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the response code contains the custom error identifier:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "123",
+			"href": "/api/clusters_mgmt/v1/errors/123",
+			"code": "CLUSTERS-MGMT-123",
+			"reason": "Bearer token is malformed"
+		}`))
+	})
+
+	It("Adds operation identifier", func() {
+		// Prepare the next handler, which should never be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			OperationID(func(r *http.Request) string {
+				return r.Header.Get("X-Operation-ID")
+			}).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Check that the response code contains the operation identifier:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer junk")
+		request.Header.Set("x-Operation-ID", "123")
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Bearer token is malformed",
+			"operation_id": "123"
+		}`))
+	})
 })
