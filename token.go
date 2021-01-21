@@ -349,8 +349,14 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 		request = request.WithContext(ctx)
 	}
 
+	// Select the HTTP client:
+	client, err := c.selectClient(ctx, c.tokenURL)
+	if err != nil {
+		return
+	}
+
 	// Send the HTTP request:
-	response, err := c.client.Do(request)
+	response, err := client.Do(request)
 	if err != nil {
 		err = fmt.Errorf("can't send request: %w", err)
 		return

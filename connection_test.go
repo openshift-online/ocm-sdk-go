@@ -893,6 +893,74 @@ var _ = Describe("Connection", func() {
 		Expect(message).To(ContainSubstring("http:///yourpath"))
 		Expect(message).To(ContainSubstring("host name"))
 	})
+
+	It("Can be created with Unix network and host", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("unix://my.server.com/tmp/api.socket").
+			Tokens(token).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection).ToNot(BeNil())
+	})
+
+	It("Can be created with Unix network and HTTPS", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("unix+https://my.server.com/tmp/api.socket").
+			Tokens(token).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(connection).ToNot(BeNil())
+	})
+
+	It("Can't be created with Unix network and no host", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("unix:/tmp/api.socket").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("unix:/tmp/api.socket"))
+		Expect(message).To(ContainSubstring("host"))
+		Expect(message).To(ContainSubstring("mandatory"))
+	})
+
+	It("Can't be created with incorrect network", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("junk+https://my.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("junk"))
+		Expect(message).To(ContainSubstring("network"))
+		Expect(message).To(ContainSubstring("tcp"))
+		Expect(message).To(ContainSubstring("unix"))
+	})
+
+	It("Can't be created with Unix network and no socket", func() {
+		token := DefaultToken("Bearer", 5*time.Minute)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			URL("unix://my.server.com").
+			Tokens(token).
+			Build()
+		Expect(err).To(HaveOccurred())
+		Expect(connection).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("unix"))
+		Expect(message).To(ContainSubstring("socket"))
+		Expect(message).To(ContainSubstring("path"))
+	})
 })
 
 type TestTransport struct {

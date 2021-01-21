@@ -61,7 +61,7 @@ var _ = Describe("Redirect", func() {
 		refreshToken = DefaultToken("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
-		oidServer, oidCA = MakeServer()
+		oidServer, oidCA = MakeTCPTLSServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
 				RespondWithTokens(accessToken, refreshToken),
@@ -70,9 +70,9 @@ var _ = Describe("Redirect", func() {
 		oidURL = oidServer.URL()
 
 		// Create the API servers:
-		redirectServer, redirectCA = MakeServer()
+		redirectServer, redirectCA = MakeTCPTLSServer()
 		redirectURL = redirectServer.URL()
-		realServer, realCA = MakeServer()
+		realServer, realCA = MakeTCPTLSServer()
 		realURL = realServer.URL()
 
 		// Configure the real server so that it verifies that the request is

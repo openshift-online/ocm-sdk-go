@@ -121,6 +121,9 @@ var redactFields = map[string]bool{
 func (d *dumpRoundTripper) dumpRequest(ctx context.Context, request *http.Request, body []byte) {
 	d.logger.Debug(ctx, "Request method is %s", request.Method)
 	d.logger.Debug(ctx, "Request URL is '%s'", request.URL)
+	if request.Host != "" {
+		d.logger.Debug(ctx, "Request header 'Host' is '%s'", request.Host)
+	}
 	header := request.Header
 	names := make([]string, len(header))
 	i := 0

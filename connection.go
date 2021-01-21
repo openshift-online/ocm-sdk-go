@@ -20,7 +20,6 @@ package sdk
 
 import (
 	"context"
-	"crypto/tls"
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
@@ -102,8 +101,10 @@ type Connection struct {
 	trustedCAs        *x509.CertPool
 	insecure          bool
 	disableKeepAlives bool
-	client            *http.Client
-	tokenURL          *url.URL
+	cookieJar         http.CookieJar
+	clientsMutex      *sync.Mutex
+	clientsTable      map[string]*http.Client
+	tokenURL          *urlInfo
 	clientID          string
 	clientSecret      string
 	urlTable          []urlTableEntry
@@ -115,6 +116,7 @@ type Connection struct {
 	accessToken       *jwt.Token
 	refreshToken      *jwt.Token
 	scopes            []string
+	transportWrapper  TransportWrapper
 
 	// Metrics:
 	metricsSubsystem    string
@@ -124,30 +126,20 @@ type Connection struct {
 	callDurationMetric  *prometheus.HistogramVec
 }
 
+// urlInfo contains a parsed URL and additional information extracted from the parameters, like the
+// network (tcp or unix) and the socket name (for Unix sockets).
+type urlInfo struct {
+	*url.URL
+	network string
+	socket  string
+}
+
 // urlTableEntry is used to store one entry of the table that contains the correspondence between
-// path prefixes and base URLs. For example, for following table:
-//
-//	/clusters_mgmt -> https://my.server.com
-//	/accounts_mgmt -> https://your.server.com
-//
-// Will be reprsented by the following Go value:
-//
-//	[]urlTableEntry{
-//		{
-//			prefix: "/api/clusters_mgmt",
-//			re:     regexp.Compile("^/api/clusters_mgmt(/.*)?$"),
-//			url:    url.Parse("https://my.server.com"),
-//		},
-//		{
-//			prefix: "/api/accounts_mgmt",
-//			re:     regexp.Compile("^/api/accounts_mgmt(/.*)?$"),
-//			url:    url.Parse("https://your.server.com"),
-//		},
-//	}
+// path prefixes and base URLs.
 type urlTableEntry struct {
 	prefix string
 	re     *regexp.Regexp
-	url    *url.URL
+	url    *urlInfo
 }
 
 // NewConnectionBuilder creates an builder that knows how to create connections with the default
@@ -206,7 +198,7 @@ func (b *ConnectionBuilder) TokenURL(url string) *ConnectionBuilder {
 // credentials grant do the following:
 //
 //	// Use the client credentials grant:
-//	connection, err := client.NewConnectionBuilder().
+//	connection, err := sdk.NewConnectionBuilder().
 //		Client("myclientid", "myclientsecret").
 //		Build()
 //
@@ -215,7 +207,7 @@ func (b *ConnectionBuilder) TokenURL(url string) *ConnectionBuilder {
 // secret blank. For example:
 //
 //	// Use the resource owner password grant:
-//	connection, err := client.NewConnectionBuilder().
+//	connection, err := sdk.NewConnectionBuilder().
 //		User("myuser", "mypassword").
 //		Client("myclientid", "").
 //		Build()
@@ -231,6 +223,18 @@ func (b *ConnectionBuilder) Client(id string, secret string) *ConnectionBuilder 
 }
 
 // URL sets the base URL of the API gateway. The default is `https://api.openshift.com`.
+//
+// To connect using a Unix sockets and HTTP use the `unix` URL scheme and put the name of socket file
+// in the URL path:
+//
+//	connection, err := sdk.NewConnectionBuilder().
+//		URL("unix://my.server.com/tmp/api.socket").
+//		Build()
+//
+// To connect using Unix sockets and HTTPS use `unix+https://my.server.com/tmp/api.socket`.
+//
+// Note that the host name is mandatory even when using Unix sockets because it is used to populate
+// the `Host` header sent to the server.
 func (b *ConnectionBuilder) URL(url string) *ConnectionBuilder {
 	if b.err != nil {
 		return b
@@ -707,7 +711,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 			rawTokenURL,
 		)
 	}
-	tokenURL, err := b.parseURL(rawTokenURL)
+	tokenURL, err := b.parseURL(ctx, rawTokenURL)
 	if err != nil {
 		err = fmt.Errorf("can't parse token URL '%s': %w", rawTokenURL, err)
 		return
@@ -755,7 +759,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 
 	// Create the cookie jar:
-	jar, err := b.createCookieJar()
+	cookieJar, err := b.createCookieJar()
 	if err != nil {
 		return
 	}
@@ -766,36 +770,15 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
-	// Create the transport:
-	transport, err := b.createTransport()
-	if err != nil {
-		return
-	}
-
-	// Create the HTTP client:
-	client := &http.Client{
-		Jar:       jar,
-		Transport: transport,
-	}
-	if b.logger.DebugEnabled() {
-		client.CheckRedirect = func(request *http.Request, via []*http.Request) error {
-			b.logger.Info(
-				request.Context(),
-				"Following redirect from '%s' to '%s'",
-				via[0].URL,
-				request.URL,
-			)
-			return nil
-		}
-	}
-
 	// Allocate and populate the connection object:
 	connection = &Connection{
 		logger:            b.logger,
 		trustedCAs:        b.trustedCAPool,
 		insecure:          b.insecure,
 		disableKeepAlives: b.disableKeepAlives,
-		client:            client,
+		cookieJar:         cookieJar,
+		clientsMutex:      &sync.Mutex{},
+		clientsTable:      map[string]*http.Client{},
 		tokenURL:          tokenURL,
 		clientID:          clientID,
 		clientSecret:      clientSecret,
@@ -803,15 +786,14 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		agent:             agent,
 		user:              b.user,
 		password:          b.password,
+		tokenMutex:        &sync.Mutex{},
 		tokenParser:       tokenParser,
 		accessToken:       accessToken,
 		refreshToken:      refreshToken,
 		scopes:            scopes,
 		metricsSubsystem:  b.metricsSubsystem,
+		transportWrapper:  b.transportWrapper,
 	}
-
-	// Create the mutex that protects token manipulations:
-	connection.tokenMutex = &sync.Mutex{}
 
 	// Register metrics:
 	if b.metricsSubsystem != "" {
@@ -858,7 +840,7 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 			)
 			return
 		}
-		entry.url, err = b.parseURL(base)
+		entry.url, err = b.parseURL(ctx, base)
 		if err != nil {
 			err = fmt.Errorf(
 				"can't parse alternative URL '%s' for prefix '%s': %w",
@@ -941,54 +923,88 @@ func (b *ConnectionBuilder) loadTrustedCAs(ctx context.Context) error {
 	return nil
 }
 
-func (b *ConnectionBuilder) createTransport() (
-	transport http.RoundTripper, err error) {
-	// Create the raw transport:
-	// #nosec 402
-	transport = &http.Transport{
-		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: b.insecure,
-			RootCAs:            b.trustedCAPool,
-		},
-		Proxy:             http.ProxyFromEnvironment,
-		DisableKeepAlives: b.disableKeepAlives,
+func (b *ConnectionBuilder) parseURL(ctx context.Context, text string) (result *urlInfo,
+	err error) {
+	// Parse the URL:
+	parsed, err := url.Parse(text)
+	if err != nil {
+		return
 	}
 
-	// If debug is enabled then wrap the raw transport with the round tripper that sends the
-	// details of requests and responses to the log:
-	if b.logger.DebugEnabled() {
-		transport = &dumpRoundTripper{
-			logger: b.logger,
-			next:   transport,
+	// Extract the network and protocol from the scheme:
+	network, protocol, err := b.parseScheme(ctx, parsed.Scheme)
+	if err != nil {
+		return
+	}
+
+	// Check that the host name is acceptable. Note that the host name is mandatory even when
+	// using Unix sockets, because it is used to populate the `Host` header.
+	host := parsed.Hostname()
+	if host == "" {
+		err = fmt.Errorf(
+			"host name in URL '%s' is mandatory, but it is empty",
+			text,
+		)
+		return
+	}
+
+	// Get the socket path is acceptable (only for Unix network):
+	socket := parsed.Path
+	if network == unixNetwork && socket == "" {
+		socket = parsed.Path
+		if socket == "" {
+			err = fmt.Errorf(
+				"path in URL '%s' is empty, but should contain the Unix "+
+					"socket path",
+				text,
+			)
+			return
 		}
 	}
 
-	// Wrap the transport with the round trippers provided by the user:
-	if b.transportWrapper != nil {
-		transport = b.transportWrapper(transport)
+	// The parsed URL will be used by the HTTP client, and this expects the scheme to be `http`
+	// or `https`, so we need to update it as it may be `unix` at this point:
+	parsed.Scheme = protocol
+
+	// Create and populate the result:
+	result = &urlInfo{
+		URL:     parsed,
+		network: network,
+		socket:  socket,
 	}
 
 	return
 }
 
-func (b *ConnectionBuilder) parseURL(text string) (result *url.URL, err error) {
-	result, err = url.Parse(text)
-	if err != nil {
-		return
+func (b *ConnectionBuilder) parseScheme(ctx context.Context, scheme string) (network, protocol string,
+	err error) {
+	scheme = strings.ToLower(scheme)
+	index := strings.Index(scheme, "+")
+	if index >= 0 {
+		network = scheme[0:index]
+		protocol = scheme[index+1:]
+	} else {
+		if scheme == unixNetwork {
+			network = scheme
+			protocol = httpProtocol
+		} else {
+			network = tcpNetwork
+			protocol = scheme
+		}
 	}
-	scheme := strings.ToLower(result.Scheme)
-	if scheme != "http" && scheme != "https" {
-		result = nil
+	if network != tcpNetwork && network != unixNetwork {
 		err = fmt.Errorf(
-			"URL '%s' should have scheme 'http' or 'https' but has '%s'",
-			text, scheme,
+			"network in scheme '%s' should should be 'tcp' or 'unix', but it is '%s'",
+			scheme, network,
 		)
 		return
 	}
-	host := result.Hostname()
-	if host == "" {
-		result = nil
-		err = fmt.Errorf("URL '%s' doesn't have a host name", text)
+	if protocol != httpProtocol && protocol != httpsProtocol {
+		err = fmt.Errorf(
+			"protocol in scheme '%s' should should be 'http' or 'https', but it "+
+				"is '%s'",
+			scheme, protocol,
+		)
 		return
 	}
 	return
@@ -1115,5 +1131,17 @@ func (c *Connection) checkClosed() error {
 	return nil
 }
 
-// validPrefixRE is the regular expression used to check patch prefixes
+// validPrefixRE is the regular expression used to check patch prefixes.
 var validPrefixRE = regexp.MustCompile(`^((/\w+)*)?$`)
+
+// Network names:
+const (
+	unixNetwork = "unix"
+	tcpNetwork  = "tcp"
+)
+
+// Protocol names:
+const (
+	httpProtocol  = "http"
+	httpsProtocol = "https"
+)
