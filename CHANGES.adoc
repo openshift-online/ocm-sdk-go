@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.153 Jan 21 2021
+
+- Add support for customizing the error responses of the authentication handler.
+- Add support for connecting to the server using Unix sockets.
+
 == 0.1.152 Dec 17 2020
 
 - Update model to v0.0.102
