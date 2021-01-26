@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.154 Jan 26 2021
+
+- Update to model 0.0.103:
+** Remove `cluster_admin_enabled` attribute from cluster type.
+** Add missing subscription, cluster authorization and plan attributes.
+
 == 0.1.153 Jan 21 2021
 
 - Add support for customizing the error responses of the authentication handler.
