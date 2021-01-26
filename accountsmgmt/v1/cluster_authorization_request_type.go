@@ -26,11 +26,15 @@ type ClusterAuthorizationRequest struct {
 	byoc              *bool
 	accountUsername   *string
 	availabilityZone  *string
+	cloudAccountID    *string
+	cloudProviderID   *string
 	clusterID         *string
 	disconnected      *bool
 	displayName       *string
 	externalClusterID *string
 	managed           *bool
+	productID         *string
+	productCategory   *string
 	reserve           *bool
 	resources         []*ReservedResource
 }
@@ -40,11 +44,15 @@ func (o *ClusterAuthorizationRequest) Empty() bool {
 	return o == nil || (o.byoc == nil &&
 		o.accountUsername == nil &&
 		o.availabilityZone == nil &&
+		o.cloudAccountID == nil &&
+		o.cloudProviderID == nil &&
 		o.clusterID == nil &&
 		o.disconnected == nil &&
 		o.displayName == nil &&
 		o.externalClusterID == nil &&
 		o.managed == nil &&
+		o.productID == nil &&
+		o.productCategory == nil &&
 		o.reserve == nil &&
 		len(o.resources) == 0 &&
 		true)
@@ -115,6 +123,52 @@ func (o *ClusterAuthorizationRequest) GetAvailabilityZone() (value string, ok bo
 	ok = o != nil && o.availabilityZone != nil
 	if ok {
 		value = *o.availabilityZone
+	}
+	return
+}
+
+// CloudAccountID returns the value of the 'cloud_account_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) CloudAccountID() string {
+	if o != nil && o.cloudAccountID != nil {
+		return *o.cloudAccountID
+	}
+	return ""
+}
+
+// GetCloudAccountID returns the value of the 'cloud_account_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetCloudAccountID() (value string, ok bool) {
+	ok = o != nil && o.cloudAccountID != nil
+	if ok {
+		value = *o.cloudAccountID
+	}
+	return
+}
+
+// CloudProviderID returns the value of the 'cloud_provider_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) CloudProviderID() string {
+	if o != nil && o.cloudProviderID != nil {
+		return *o.cloudProviderID
+	}
+	return ""
+}
+
+// GetCloudProviderID returns the value of the 'cloud_provider_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetCloudProviderID() (value string, ok bool) {
+	ok = o != nil && o.cloudProviderID != nil
+	if ok {
+		value = *o.cloudProviderID
 	}
 	return
 }
@@ -230,6 +284,52 @@ func (o *ClusterAuthorizationRequest) GetManaged() (value bool, ok bool) {
 	ok = o != nil && o.managed != nil
 	if ok {
 		value = *o.managed
+	}
+	return
+}
+
+// ProductID returns the value of the 'product_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) ProductID() string {
+	if o != nil && o.productID != nil {
+		return *o.productID
+	}
+	return ""
+}
+
+// GetProductID returns the value of the 'product_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetProductID() (value string, ok bool) {
+	ok = o != nil && o.productID != nil
+	if ok {
+		value = *o.productID
+	}
+	return
+}
+
+// ProductCategory returns the value of the 'product_category' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *ClusterAuthorizationRequest) ProductCategory() string {
+	if o != nil && o.productCategory != nil {
+		return *o.productCategory
+	}
+	return ""
+}
+
+// GetProductCategory returns the value of the 'product_category' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *ClusterAuthorizationRequest) GetProductCategory() (value string, ok bool) {
+	ok = o != nil && o.productCategory != nil
+	if ok {
+		value = *o.productCategory
 	}
 	return
 }

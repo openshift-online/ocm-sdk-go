@@ -4158,6 +4158,12 @@
           "availability_zone": {
             "type": "string"
           },
+          "cloud_account_id": {
+            "type": "string"
+          },
+          "cloud_provider_id": {
+            "type": "string"
+          },
           "cluster_id": {
             "type": "string"
           },
@@ -4172,6 +4178,12 @@
           },
           "managed": {
             "type": "boolean"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "product_category": {
+            "type": "string"
           },
           "reserve": {
             "type": "boolean"
@@ -4359,6 +4371,9 @@
           },
           "href": {
             "description": "Self link.\n",
+            "type": "string"
+          },
+          "category": {
             "type": "string"
           },
           "name": {
@@ -4747,6 +4762,12 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "cloud_account_id": {
+            "type": "string"
+          },
+          "cloud_provider_id": {
+            "type": "string"
+          },
           "cluster_id": {
             "type": "string"
           },
@@ -4798,6 +4819,12 @@
           },
           "product_bundle": {
             "$ref": "#/components/schemas/ProductBundleEnum"
+          },
+          "provenance": {
+            "type": "string"
+          },
+          "region_id": {
+            "type": "string"
           },
           "service_level": {
             "$ref": "#/components/schemas/ServiceLevelEnum"

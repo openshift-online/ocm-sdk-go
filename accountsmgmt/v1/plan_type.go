@@ -35,11 +35,12 @@ const PlanNilKind = "PlanNil"
 //
 //
 type Plan struct {
-	id    *string
-	href  *string
-	link  bool
-	name  *string
-	type_ *string
+	id       *string
+	href     *string
+	link     bool
+	category *string
+	name     *string
+	type_    *string
 }
 
 // Kind returns the name of the type of the object.
@@ -97,9 +98,33 @@ func (o *Plan) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Plan) Empty() bool {
 	return o == nil || (o.id == nil &&
+		o.category == nil &&
 		o.name == nil &&
 		o.type_ == nil &&
 		true)
+}
+
+// Category returns the value of the 'category' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Plan) Category() string {
+	if o != nil && o.category != nil {
+		return *o.category
+	}
+	return ""
+}
+
+// GetCategory returns the value of the 'category' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Plan) GetCategory() (value string, ok bool) {
+	ok = o != nil && o.category != nil
+	if ok {
+		value = *o.category
+	}
+	return
 }
 
 // Name returns the value of the 'name' attribute, or

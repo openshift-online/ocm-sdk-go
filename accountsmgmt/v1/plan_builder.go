@@ -23,11 +23,12 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type PlanBuilder struct {
-	id    *string
-	href  *string
-	link  bool
-	name  *string
-	type_ *string
+	id       *string
+	href     *string
+	link     bool
+	category *string
+	name     *string
+	type_    *string
 }
 
 // NewPlan creates a new builder of 'plan' objects.
@@ -50,6 +51,14 @@ func (b *PlanBuilder) HREF(value string) *PlanBuilder {
 // Link sets the flag that indicates if this is a link.
 func (b *PlanBuilder) Link(value bool) *PlanBuilder {
 	b.link = value
+	return b
+}
+
+// Category sets the value of the 'category' attribute to the given value.
+//
+//
+func (b *PlanBuilder) Category(value string) *PlanBuilder {
+	b.category = &value
 	return b
 }
 
@@ -77,6 +86,7 @@ func (b *PlanBuilder) Copy(object *Plan) *PlanBuilder {
 	b.id = object.id
 	b.href = object.href
 	b.link = object.link
+	b.category = object.category
 	b.name = object.name
 	b.type_ = object.type_
 	return b
@@ -88,6 +98,7 @@ func (b *PlanBuilder) Build() (object *Plan, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	object.category = b.category
 	object.name = b.name
 	object.type_ = b.type_
 	return

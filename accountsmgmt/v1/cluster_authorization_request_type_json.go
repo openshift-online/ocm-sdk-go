@@ -63,6 +63,22 @@ func writeClusterAuthorizationRequest(object *ClusterAuthorizationRequest, strea
 		stream.WriteString(*object.availabilityZone)
 		count++
 	}
+	if object.cloudAccountID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cloud_account_id")
+		stream.WriteString(*object.cloudAccountID)
+		count++
+	}
+	if object.cloudProviderID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cloud_provider_id")
+		stream.WriteString(*object.cloudProviderID)
+		count++
+	}
 	if object.clusterID != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -101,6 +117,22 @@ func writeClusterAuthorizationRequest(object *ClusterAuthorizationRequest, strea
 		}
 		stream.WriteObjectField("managed")
 		stream.WriteBool(*object.managed)
+		count++
+	}
+	if object.productID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("product_id")
+		stream.WriteString(*object.productID)
+		count++
+	}
+	if object.productCategory != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("product_category")
+		stream.WriteString(*object.productCategory)
 		count++
 	}
 	if object.reserve != nil {
@@ -155,6 +187,12 @@ func readClusterAuthorizationRequest(iterator *jsoniter.Iterator) *ClusterAuthor
 		case "availability_zone":
 			value := iterator.ReadString()
 			object.availabilityZone = &value
+		case "cloud_account_id":
+			value := iterator.ReadString()
+			object.cloudAccountID = &value
+		case "cloud_provider_id":
+			value := iterator.ReadString()
+			object.cloudProviderID = &value
 		case "cluster_id":
 			value := iterator.ReadString()
 			object.clusterID = &value
@@ -170,6 +208,12 @@ func readClusterAuthorizationRequest(iterator *jsoniter.Iterator) *ClusterAuthor
 		case "managed":
 			value := iterator.ReadBool()
 			object.managed = &value
+		case "product_id":
+			value := iterator.ReadString()
+			object.productID = &value
+		case "product_category":
+			value := iterator.ReadString()
+			object.productCategory = &value
 		case "reserve":
 			value := iterator.ReadBool()
 			object.reserve = &value

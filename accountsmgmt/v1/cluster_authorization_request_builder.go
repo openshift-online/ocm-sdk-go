@@ -26,11 +26,15 @@ type ClusterAuthorizationRequestBuilder struct {
 	byoc              *bool
 	accountUsername   *string
 	availabilityZone  *string
+	cloudAccountID    *string
+	cloudProviderID   *string
 	clusterID         *string
 	disconnected      *bool
 	displayName       *string
 	externalClusterID *string
 	managed           *bool
+	productID         *string
+	productCategory   *string
 	reserve           *bool
 	resources         []*ReservedResourceBuilder
 }
@@ -61,6 +65,22 @@ func (b *ClusterAuthorizationRequestBuilder) AccountUsername(value string) *Clus
 //
 func (b *ClusterAuthorizationRequestBuilder) AvailabilityZone(value string) *ClusterAuthorizationRequestBuilder {
 	b.availabilityZone = &value
+	return b
+}
+
+// CloudAccountID sets the value of the 'cloud_account_ID' attribute to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) CloudAccountID(value string) *ClusterAuthorizationRequestBuilder {
+	b.cloudAccountID = &value
+	return b
+}
+
+// CloudProviderID sets the value of the 'cloud_provider_ID' attribute to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) CloudProviderID(value string) *ClusterAuthorizationRequestBuilder {
+	b.cloudProviderID = &value
 	return b
 }
 
@@ -104,6 +124,22 @@ func (b *ClusterAuthorizationRequestBuilder) Managed(value bool) *ClusterAuthori
 	return b
 }
 
+// ProductID sets the value of the 'product_ID' attribute to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) ProductID(value string) *ClusterAuthorizationRequestBuilder {
+	b.productID = &value
+	return b
+}
+
+// ProductCategory sets the value of the 'product_category' attribute to the given value.
+//
+//
+func (b *ClusterAuthorizationRequestBuilder) ProductCategory(value string) *ClusterAuthorizationRequestBuilder {
+	b.productCategory = &value
+	return b
+}
+
 // Reserve sets the value of the 'reserve' attribute to the given value.
 //
 //
@@ -129,11 +165,15 @@ func (b *ClusterAuthorizationRequestBuilder) Copy(object *ClusterAuthorizationRe
 	b.byoc = object.byoc
 	b.accountUsername = object.accountUsername
 	b.availabilityZone = object.availabilityZone
+	b.cloudAccountID = object.cloudAccountID
+	b.cloudProviderID = object.cloudProviderID
 	b.clusterID = object.clusterID
 	b.disconnected = object.disconnected
 	b.displayName = object.displayName
 	b.externalClusterID = object.externalClusterID
 	b.managed = object.managed
+	b.productID = object.productID
+	b.productCategory = object.productCategory
 	b.reserve = object.reserve
 	if object.resources != nil {
 		b.resources = make([]*ReservedResourceBuilder, len(object.resources))
@@ -152,11 +192,15 @@ func (b *ClusterAuthorizationRequestBuilder) Build() (object *ClusterAuthorizati
 	object.byoc = b.byoc
 	object.accountUsername = b.accountUsername
 	object.availabilityZone = b.availabilityZone
+	object.cloudAccountID = b.cloudAccountID
+	object.cloudProviderID = b.cloudProviderID
 	object.clusterID = b.clusterID
 	object.disconnected = b.disconnected
 	object.displayName = b.displayName
 	object.externalClusterID = b.externalClusterID
 	object.managed = b.managed
+	object.productID = b.productID
+	object.productCategory = b.productCategory
 	object.reserve = b.reserve
 	if b.resources != nil {
 		object.resources = make([]*ReservedResource, len(b.resources))

@@ -86,7 +86,6 @@ type Cluster struct {
 	gcp                               *GCP
 	addons                            *AddOnInstallationList
 	cloudProvider                     *CloudProvider
-	clusterAdminEnabled               *bool
 	console                           *ClusterConsole
 	creationTimestamp                 *time.Time
 	displayName                       *string
@@ -178,7 +177,6 @@ func (o *Cluster) Empty() bool {
 	return o == nil || (o.id == nil &&
 		o.awsInfrastructureAccessRoleGrants.Len() == 0 &&
 		o.addons.Len() == 0 &&
-		o.clusterAdminEnabled == nil &&
 		o.creationTimestamp == nil &&
 		o.displayName == nil &&
 		o.etcdEncryption == nil &&
@@ -380,29 +378,6 @@ func (o *Cluster) GetCloudProvider() (value *CloudProvider, ok bool) {
 	ok = o != nil && o.cloudProvider != nil
 	if ok {
 		value = o.cloudProvider
-	}
-	return
-}
-
-// ClusterAdminEnabled returns the value of the 'cluster_admin_enabled' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Flag indicating if cluster-admin access is enabled.
-func (o *Cluster) ClusterAdminEnabled() bool {
-	if o != nil && o.clusterAdminEnabled != nil {
-		return *o.clusterAdminEnabled
-	}
-	return false
-}
-
-// GetClusterAdminEnabled returns the value of the 'cluster_admin_enabled' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Flag indicating if cluster-admin access is enabled.
-func (o *Cluster) GetClusterAdminEnabled() (value bool, ok bool) {
-	ok = o != nil && o.clusterAdminEnabled != nil
-	if ok {
-		value = *o.clusterAdminEnabled
 	}
 	return
 }
