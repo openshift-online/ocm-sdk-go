@@ -65,6 +65,14 @@ func writePlan(object *Plan, stream *jsoniter.Stream) {
 		stream.WriteString(*object.href)
 		count++
 	}
+	if object.category != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("category")
+		stream.WriteString(*object.category)
+		count++
+	}
 	if object.name != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -117,6 +125,9 @@ func readPlan(iterator *jsoniter.Iterator) *Plan {
 		case "href":
 			value := iterator.ReadString()
 			object.href = &value
+		case "category":
+			value := iterator.ReadString()
+			object.category = &value
 		case "name":
 			value := iterator.ReadString()
 			object.name = &value

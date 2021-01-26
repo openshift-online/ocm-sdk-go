@@ -137,14 +137,6 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeCloudProvider(object.cloudProvider, stream)
 		count++
 	}
-	if object.clusterAdminEnabled != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("cluster_admin_enabled")
-		stream.WriteBool(*object.clusterAdminEnabled)
-		count++
-	}
 	if object.console != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -525,9 +517,6 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 		case "cloud_provider":
 			value := readCloudProvider(iterator)
 			object.cloudProvider = value
-		case "cluster_admin_enabled":
-			value := iterator.ReadBool()
-			object.clusterAdminEnabled = &value
 		case "console":
 			value := readClusterConsole(iterator)
 			object.console = value

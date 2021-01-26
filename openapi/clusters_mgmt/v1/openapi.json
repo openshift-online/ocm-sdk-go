@@ -5489,10 +5489,6 @@
             "description": "Link to the cloud provider where the cluster is installed.\n",
             "$ref": "#/components/schemas/CloudProvider"
           },
-          "cluster_admin_enabled": {
-            "description": "Flag indicating if cluster-admin access is enabled.\n",
-            "type": "boolean"
-          },
           "console": {
             "description": "Information about the console of the cluster.\n",
             "$ref": "#/components/schemas/ClusterConsole"

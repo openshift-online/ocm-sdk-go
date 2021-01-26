@@ -30,6 +30,8 @@ type SubscriptionBuilder struct {
 	id                *string
 	href              *string
 	link              bool
+	cloudAccountID    *string
+	cloudProviderID   *string
 	clusterID         *string
 	consumerUUID      *string
 	cpuTotal          *int
@@ -44,6 +46,8 @@ type SubscriptionBuilder struct {
 	organizationID    *string
 	plan              *PlanBuilder
 	productBundle     *ProductBundleEnum
+	provenance        *string
+	regionID          *string
 	serviceLevel      *ServiceLevelEnum
 	socketTotal       *int
 	status            *string
@@ -73,6 +77,22 @@ func (b *SubscriptionBuilder) HREF(value string) *SubscriptionBuilder {
 // Link sets the flag that indicates if this is a link.
 func (b *SubscriptionBuilder) Link(value bool) *SubscriptionBuilder {
 	b.link = value
+	return b
+}
+
+// CloudAccountID sets the value of the 'cloud_account_ID' attribute to the given value.
+//
+//
+func (b *SubscriptionBuilder) CloudAccountID(value string) *SubscriptionBuilder {
+	b.cloudAccountID = &value
+	return b
+}
+
+// CloudProviderID sets the value of the 'cloud_provider_ID' attribute to the given value.
+//
+//
+func (b *SubscriptionBuilder) CloudProviderID(value string) *SubscriptionBuilder {
+	b.cloudProviderID = &value
 	return b
 }
 
@@ -189,6 +209,22 @@ func (b *SubscriptionBuilder) ProductBundle(value ProductBundleEnum) *Subscripti
 	return b
 }
 
+// Provenance sets the value of the 'provenance' attribute to the given value.
+//
+//
+func (b *SubscriptionBuilder) Provenance(value string) *SubscriptionBuilder {
+	b.provenance = &value
+	return b
+}
+
+// RegionID sets the value of the 'region_ID' attribute to the given value.
+//
+//
+func (b *SubscriptionBuilder) RegionID(value string) *SubscriptionBuilder {
+	b.regionID = &value
+	return b
+}
+
 // ServiceLevel sets the value of the 'service_level' attribute to the given value.
 //
 // Service Level of Subscription.
@@ -253,6 +289,8 @@ func (b *SubscriptionBuilder) Copy(object *Subscription) *SubscriptionBuilder {
 	b.id = object.id
 	b.href = object.href
 	b.link = object.link
+	b.cloudAccountID = object.cloudAccountID
+	b.cloudProviderID = object.cloudProviderID
 	b.clusterID = object.clusterID
 	b.consumerUUID = object.consumerUUID
 	b.cpuTotal = object.cpuTotal
@@ -282,6 +320,8 @@ func (b *SubscriptionBuilder) Copy(object *Subscription) *SubscriptionBuilder {
 		b.plan = nil
 	}
 	b.productBundle = object.productBundle
+	b.provenance = object.provenance
+	b.regionID = object.regionID
 	b.serviceLevel = object.serviceLevel
 	b.socketTotal = object.socketTotal
 	b.status = object.status
@@ -298,6 +338,8 @@ func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.link = b.link
+	object.cloudAccountID = b.cloudAccountID
+	object.cloudProviderID = b.cloudProviderID
 	object.clusterID = b.clusterID
 	object.consumerUUID = b.consumerUUID
 	object.cpuTotal = b.cpuTotal
@@ -330,6 +372,8 @@ func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 		}
 	}
 	object.productBundle = b.productBundle
+	object.provenance = b.provenance
+	object.regionID = b.regionID
 	object.serviceLevel = b.serviceLevel
 	object.socketTotal = b.socketTotal
 	object.status = b.status

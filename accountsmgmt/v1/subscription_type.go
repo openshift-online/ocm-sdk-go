@@ -42,6 +42,8 @@ type Subscription struct {
 	id                *string
 	href              *string
 	link              bool
+	cloudAccountID    *string
+	cloudProviderID   *string
 	clusterID         *string
 	consumerUUID      *string
 	cpuTotal          *int
@@ -56,6 +58,8 @@ type Subscription struct {
 	organizationID    *string
 	plan              *Plan
 	productBundle     *ProductBundleEnum
+	provenance        *string
+	regionID          *string
 	serviceLevel      *ServiceLevelEnum
 	socketTotal       *int
 	status            *string
@@ -120,6 +124,8 @@ func (o *Subscription) GetHREF() (value string, ok bool) {
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Subscription) Empty() bool {
 	return o == nil || (o.id == nil &&
+		o.cloudAccountID == nil &&
+		o.cloudProviderID == nil &&
 		o.clusterID == nil &&
 		o.consumerUUID == nil &&
 		o.cpuTotal == nil &&
@@ -132,6 +138,8 @@ func (o *Subscription) Empty() bool {
 		o.managed == nil &&
 		o.organizationID == nil &&
 		o.productBundle == nil &&
+		o.provenance == nil &&
+		o.regionID == nil &&
 		o.serviceLevel == nil &&
 		o.socketTotal == nil &&
 		o.status == nil &&
@@ -140,6 +148,52 @@ func (o *Subscription) Empty() bool {
 		o.updatedAt == nil &&
 		o.usage == nil &&
 		true)
+}
+
+// CloudAccountID returns the value of the 'cloud_account_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) CloudAccountID() string {
+	if o != nil && o.cloudAccountID != nil {
+		return *o.cloudAccountID
+	}
+	return ""
+}
+
+// GetCloudAccountID returns the value of the 'cloud_account_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetCloudAccountID() (value string, ok bool) {
+	ok = o != nil && o.cloudAccountID != nil
+	if ok {
+		value = *o.cloudAccountID
+	}
+	return
+}
+
+// CloudProviderID returns the value of the 'cloud_provider_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) CloudProviderID() string {
+	if o != nil && o.cloudProviderID != nil {
+		return *o.cloudProviderID
+	}
+	return ""
+}
+
+// GetCloudProviderID returns the value of the 'cloud_provider_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetCloudProviderID() (value string, ok bool) {
+	ok = o != nil && o.cloudProviderID != nil
+	if ok {
+		value = *o.cloudProviderID
+	}
+	return
 }
 
 // ClusterID returns the value of the 'cluster_ID' attribute, or
@@ -460,6 +514,52 @@ func (o *Subscription) GetProductBundle() (value ProductBundleEnum, ok bool) {
 	ok = o != nil && o.productBundle != nil
 	if ok {
 		value = *o.productBundle
+	}
+	return
+}
+
+// Provenance returns the value of the 'provenance' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) Provenance() string {
+	if o != nil && o.provenance != nil {
+		return *o.provenance
+	}
+	return ""
+}
+
+// GetProvenance returns the value of the 'provenance' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetProvenance() (value string, ok bool) {
+	ok = o != nil && o.provenance != nil
+	if ok {
+		value = *o.provenance
+	}
+	return
+}
+
+// RegionID returns the value of the 'region_ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+//
+func (o *Subscription) RegionID() string {
+	if o != nil && o.regionID != nil {
+		return *o.regionID
+	}
+	return ""
+}
+
+// GetRegionID returns the value of the 'region_ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+//
+func (o *Subscription) GetRegionID() (value string, ok bool) {
+	ok = o != nil && o.regionID != nil
+	if ok {
+		value = *o.regionID
 	}
 	return
 }

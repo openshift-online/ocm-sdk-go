@@ -66,6 +66,22 @@ func writeSubscription(object *Subscription, stream *jsoniter.Stream) {
 		stream.WriteString(*object.href)
 		count++
 	}
+	if object.cloudAccountID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cloud_account_id")
+		stream.WriteString(*object.cloudAccountID)
+		count++
+	}
+	if object.cloudProviderID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("cloud_provider_id")
+		stream.WriteString(*object.cloudProviderID)
+		count++
+	}
 	if object.clusterID != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -178,6 +194,22 @@ func writeSubscription(object *Subscription, stream *jsoniter.Stream) {
 		stream.WriteString(string(*object.productBundle))
 		count++
 	}
+	if object.provenance != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("provenance")
+		stream.WriteString(*object.provenance)
+		count++
+	}
+	if object.regionID != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("region_id")
+		stream.WriteString(*object.regionID)
+		count++
+	}
 	if object.serviceLevel != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -270,6 +302,12 @@ func readSubscription(iterator *jsoniter.Iterator) *Subscription {
 		case "href":
 			value := iterator.ReadString()
 			object.href = &value
+		case "cloud_account_id":
+			value := iterator.ReadString()
+			object.cloudAccountID = &value
+		case "cloud_provider_id":
+			value := iterator.ReadString()
+			object.cloudProviderID = &value
 		case "cluster_id":
 			value := iterator.ReadString()
 			object.clusterID = &value
@@ -325,6 +363,12 @@ func readSubscription(iterator *jsoniter.Iterator) *Subscription {
 			text := iterator.ReadString()
 			value := ProductBundleEnum(text)
 			object.productBundle = &value
+		case "provenance":
+			value := iterator.ReadString()
+			object.provenance = &value
+		case "region_id":
+			value := iterator.ReadString()
+			object.regionID = &value
 		case "service_level":
 			text := iterator.ReadString()
 			value := ServiceLevelEnum(text)
