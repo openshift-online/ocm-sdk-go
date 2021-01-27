@@ -37,6 +37,7 @@ type AddOnBuilder struct {
 	name                 *string
 	operatorName         *string
 	parameters           *AddOnParameterListBuilder
+	requirements         []*AddOnRequirementBuilder
 	resourceCost         *float64
 	resourceName         *string
 	targetNamespace      *string
@@ -153,6 +154,15 @@ func (b *AddOnBuilder) Parameters(value *AddOnParameterListBuilder) *AddOnBuilde
 	return b
 }
 
+// Requirements sets the value of the 'requirements' attribute to the given values.
+//
+//
+func (b *AddOnBuilder) Requirements(values ...*AddOnRequirementBuilder) *AddOnBuilder {
+	b.requirements = make([]*AddOnRequirementBuilder, len(values))
+	copy(b.requirements, values)
+	return b
+}
+
 // ResourceCost sets the value of the 'resource_cost' attribute to the given value.
 //
 //
@@ -200,6 +210,14 @@ func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	} else {
 		b.parameters = nil
 	}
+	if object.requirements != nil {
+		b.requirements = make([]*AddOnRequirementBuilder, len(object.requirements))
+		for i, v := range object.requirements {
+			b.requirements[i] = NewAddOnRequirement().Copy(v)
+		}
+	} else {
+		b.requirements = nil
+	}
 	b.resourceCost = object.resourceCost
 	b.resourceName = object.resourceName
 	b.targetNamespace = object.targetNamespace
@@ -226,6 +244,15 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 		object.parameters, err = b.parameters.Build()
 		if err != nil {
 			return
+		}
+	}
+	if b.requirements != nil {
+		object.requirements = make([]*AddOnRequirement, len(b.requirements))
+		for i, v := range b.requirements {
+			object.requirements[i], err = v.Build()
+			if err != nil {
+				return
+			}
 		}
 	}
 	object.resourceCost = b.resourceCost
