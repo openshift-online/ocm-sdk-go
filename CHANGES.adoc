@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.155 Jan 27 2021
+
+- Update to model 0.0.104:
+** Add addon requirement type.
+
 == 0.1.154 Jan 26 2021
 
 - Update to model 0.0.103:
