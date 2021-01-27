@@ -156,6 +156,14 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		stream.WriteObjectEnd()
 		count++
 	}
+	if object.requirements != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("requirements")
+		writeAddOnRequirementList(object.requirements, stream)
+		count++
+	}
 	if object.resourceCost != nil {
 		if count > 0 {
 			stream.WriteMore()
@@ -268,6 +276,9 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 				}
 			}
 			object.parameters = value
+		case "requirements":
+			value := readAddOnRequirementList(iterator)
+			object.requirements = value
 		case "resource_cost":
 			value := iterator.ReadFloat64()
 			object.resourceCost = &value

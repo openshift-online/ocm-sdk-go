@@ -5132,7 +5132,7 @@
             "type": "boolean"
           },
           "has_external_resources": {
-            "description": "Indicates if this add-on has external resources associated with it \n",
+            "description": "Indicates if this add-on has external resources associated with it\n",
             "type": "boolean"
           },
           "hidden": {
@@ -5164,6 +5164,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AddOnParameter"
+            }
+          },
+          "requirements": {
+            "description": "List of requirements for this add-on.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnRequirement"
             }
           },
           "resource_cost": {
@@ -5324,6 +5331,30 @@
           },
           "value_type": {
             "description": "Type of value of the add-on parameter.\n",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnRequirement": {
+        "description": "Representation of an add-on requirement.\n",
+        "properties": {
+          "id": {
+            "description": "ID of the add-on requirement.\n",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data for the add-on requirement.\n",
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "enabled": {
+            "description": "Indicates if this requirement is enabled for the add-on.\n",
+            "type": "boolean"
+          },
+          "resource": {
+            "description": "Type of resource of the add-on requirement.\n",
             "type": "string"
           }
         }

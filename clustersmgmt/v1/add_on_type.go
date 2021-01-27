@@ -49,6 +49,7 @@ type AddOn struct {
 	name                 *string
 	operatorName         *string
 	parameters           *AddOnParameterList
+	requirements         []*AddOnRequirement
 	resourceCost         *float64
 	resourceName         *string
 	targetNamespace      *string
@@ -120,6 +121,7 @@ func (o *AddOn) Empty() bool {
 		o.name == nil &&
 		o.operatorName == nil &&
 		o.parameters.Len() == 0 &&
+		len(o.requirements) == 0 &&
 		o.resourceCost == nil &&
 		o.resourceName == nil &&
 		o.targetNamespace == nil &&
@@ -375,6 +377,29 @@ func (o *AddOn) GetParameters() (value *AddOnParameterList, ok bool) {
 	ok = o != nil && o.parameters != nil
 	if ok {
 		value = o.parameters
+	}
+	return
+}
+
+// Requirements returns the value of the 'requirements' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// List of requirements for this add-on.
+func (o *AddOn) Requirements() []*AddOnRequirement {
+	if o == nil {
+		return nil
+	}
+	return o.requirements
+}
+
+// GetRequirements returns the value of the 'requirements' attribute and
+// a flag indicating if the attribute has a value.
+//
+// List of requirements for this add-on.
+func (o *AddOn) GetRequirements() (value []*AddOnRequirement, ok bool) {
+	ok = o != nil && o.requirements != nil
+	if ok {
+		value = o.requirements
 	}
 	return
 }
