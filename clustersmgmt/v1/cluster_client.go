@@ -76,6 +76,29 @@ func (c *ClusterClient) Get() *ClusterGetRequest {
 	}
 }
 
+// Hibernate creates a request for the 'hibernate' method.
+//
+// Initiates cluster hibernation. While hibernating a cluster will not consume any cloud provider infrastructure
+// but will be counted for quota.
+func (c *ClusterClient) Hibernate() *ClusterHibernateRequest {
+	return &ClusterHibernateRequest{
+		transport: c.transport,
+		path:      path.Join(c.path, "hibernate"),
+		metric:    path.Join(c.metric, "hibernate"),
+	}
+}
+
+// Resume creates a request for the 'resume' method.
+//
+// Resumes from Hibernation.
+func (c *ClusterClient) Resume() *ClusterResumeRequest {
+	return &ClusterResumeRequest{
+		transport: c.transport,
+		path:      path.Join(c.path, "resume"),
+		metric:    path.Join(c.metric, "resume"),
+	}
+}
+
 // Update creates a request for the 'update' method.
 //
 // Updates the cluster.
@@ -578,6 +601,196 @@ func (r *ClusterGetResponse) GetBody() (value *Cluster, ok bool) {
 		value = r.body
 	}
 	return
+}
+
+// ClusterHibernateRequest is the request for the 'hibernate' method.
+type ClusterHibernateRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *ClusterHibernateRequest) Parameter(name string, value interface{}) *ClusterHibernateRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *ClusterHibernateRequest) Header(name string, value interface{}) *ClusterHibernateRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *ClusterHibernateRequest) Send() (result *ClusterHibernateResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ClusterHibernateRequest) SendContext(ctx context.Context) (result *ClusterHibernateResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: "POST",
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = &ClusterHibernateResponse{}
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// ClusterHibernateResponse is the response for the 'hibernate' method.
+type ClusterHibernateResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *ClusterHibernateResponse) Status() int {
+	if r == nil {
+		return 0
+	}
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *ClusterHibernateResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
+	return r.header
+}
+
+// Error returns the response error.
+func (r *ClusterHibernateResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
+	return r.err
+}
+
+// ClusterResumeRequest is the request for the 'resume' method.
+type ClusterResumeRequest struct {
+	transport http.RoundTripper
+	path      string
+	metric    string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *ClusterResumeRequest) Parameter(name string, value interface{}) *ClusterResumeRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *ClusterResumeRequest) Header(name string, value interface{}) *ClusterResumeRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *ClusterResumeRequest) Send() (result *ClusterResumeResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *ClusterResumeRequest) SendContext(ctx context.Context) (result *ClusterResumeResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.SetHeader(r.header, r.metric)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: "POST",
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = &ClusterResumeResponse{}
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalError(response.Body)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// ClusterResumeResponse is the response for the 'resume' method.
+type ClusterResumeResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *ClusterResumeResponse) Status() int {
+	if r == nil {
+		return 0
+	}
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *ClusterResumeResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
+	return r.header
+}
+
+// Error returns the response error.
+func (r *ClusterResumeResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
+	return r.err
 }
 
 // ClusterUpdateRequest is the request for the 'update' method.

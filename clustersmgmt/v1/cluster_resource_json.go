@@ -50,6 +50,30 @@ func readClusterGetResponse(response *ClusterGetResponse, reader io.Reader) erro
 func writeClusterGetResponse(response *ClusterGetServerResponse, w http.ResponseWriter) error {
 	return MarshalCluster(response.body, w)
 }
+func readClusterHibernateRequest(request *ClusterHibernateServerRequest, r *http.Request) error {
+	return nil
+}
+func writeClusterHibernateRequest(request *ClusterHibernateRequest, writer io.Writer) error {
+	return nil
+}
+func readClusterHibernateResponse(response *ClusterHibernateResponse, reader io.Reader) error {
+	return nil
+}
+func writeClusterHibernateResponse(response *ClusterHibernateServerResponse, w http.ResponseWriter) error {
+	return nil
+}
+func readClusterResumeRequest(request *ClusterResumeServerRequest, r *http.Request) error {
+	return nil
+}
+func writeClusterResumeRequest(request *ClusterResumeRequest, writer io.Writer) error {
+	return nil
+}
+func readClusterResumeResponse(response *ClusterResumeResponse, reader io.Reader) error {
+	return nil
+}
+func writeClusterResumeResponse(response *ClusterResumeServerResponse, w http.ResponseWriter) error {
+	return nil
+}
 func readClusterUpdateRequest(request *ClusterUpdateServerRequest, r *http.Request) error {
 	var err error
 	request.body, err = UnmarshalCluster(r.Body)
