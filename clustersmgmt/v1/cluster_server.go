@@ -40,6 +40,17 @@ type ClusterServer interface {
 	// Retrieves the details of the cluster.
 	Get(ctx context.Context, request *ClusterGetServerRequest, response *ClusterGetServerResponse) error
 
+	// Hibernate handles a request for the 'hibernate' method.
+	//
+	// Initiates cluster hibernation. While hibernating a cluster will not consume any cloud provider infrastructure
+	// but will be counted for quota.
+	Hibernate(ctx context.Context, request *ClusterHibernateServerRequest, response *ClusterHibernateServerResponse) error
+
+	// Resume handles a request for the 'resume' method.
+	//
+	// Resumes from Hibernation.
+	Resume(ctx context.Context, request *ClusterResumeServerRequest, response *ClusterResumeServerResponse) error
+
 	// Update handles a request for the 'update' method.
 	//
 	// Updates the cluster.
@@ -158,6 +169,38 @@ func (r *ClusterGetServerResponse) Status(value int) *ClusterGetServerResponse {
 	return r
 }
 
+// ClusterHibernateServerRequest is the request for the 'hibernate' method.
+type ClusterHibernateServerRequest struct {
+}
+
+// ClusterHibernateServerResponse is the response for the 'hibernate' method.
+type ClusterHibernateServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// Status sets the status code.
+func (r *ClusterHibernateServerResponse) Status(value int) *ClusterHibernateServerResponse {
+	r.status = value
+	return r
+}
+
+// ClusterResumeServerRequest is the request for the 'resume' method.
+type ClusterResumeServerRequest struct {
+}
+
+// ClusterResumeServerResponse is the response for the 'resume' method.
+type ClusterResumeServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// Status sets the status code.
+func (r *ClusterResumeServerResponse) Status(value int) *ClusterResumeServerResponse {
+	r.status = value
+	return r
+}
+
 // ClusterUpdateServerRequest is the request for the 'update' method.
 type ClusterUpdateServerRequest struct {
 	body *Cluster
@@ -227,6 +270,20 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 		}
 	}
 	switch segments[0] {
+	case "hibernate":
+		if r.Method != "POST" {
+			errors.SendMethodNotAllowed(w, r)
+			return
+		}
+		adaptClusterHibernateRequest(w, r, server)
+		return
+	case "resume":
+		if r.Method != "POST" {
+			errors.SendMethodNotAllowed(w, r)
+			return
+		}
+		adaptClusterResumeRequest(w, r, server)
+		return
 	case "aws_infrastructure_access_role_grants":
 		target := server.AWSInfrastructureAccessRoleGrants()
 		if target == nil {
@@ -392,6 +449,76 @@ func adaptClusterGetRequest(w http.ResponseWriter, r *http.Request, server Clust
 		return
 	}
 	err = writeClusterGetResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		return
+	}
+}
+
+// adaptClusterHibernateRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptClusterHibernateRequest(w http.ResponseWriter, r *http.Request, server ClusterServer) {
+	request := &ClusterHibernateServerRequest{}
+	err := readClusterHibernateRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &ClusterHibernateServerResponse{}
+	response.status = 200
+	err = server.Hibernate(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeClusterHibernateResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		return
+	}
+}
+
+// adaptClusterResumeRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptClusterResumeRequest(w http.ResponseWriter, r *http.Request, server ClusterServer) {
+	request := &ClusterResumeServerRequest{}
+	err := readClusterResumeRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &ClusterResumeServerResponse{}
+	response.status = 200
+	err = server.Resume(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeClusterResumeResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
