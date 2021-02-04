@@ -118,7 +118,6 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 				"Request body is not allowed for the '%s' method",
 				request.Method,
 			)
-			return
 		}
 	case http.MethodPost, http.MethodPatch, http.MethodPut:
 		// POST and PATCH and PUT don't need to have a body. It is up to the server to decide if
