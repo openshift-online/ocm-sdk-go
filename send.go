@@ -114,8 +114,8 @@ func (c *Connection) send(ctx context.Context, request *http.Request) (response 
 	switch request.Method {
 	case http.MethodGet, http.MethodDelete:
 		if request.Body != nil {
-			err = fmt.Errorf(
-				"request body is not allowed for the '%s' method",
+			c.logger.Warn(ctx,
+				"Request body is not allowed for the '%s' method",
 				request.Method,
 			)
 			return
