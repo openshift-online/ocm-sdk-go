@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.156 Feb 4 2021
+
+- Update to model 0.0.105:
+** Add cluster hibernation support 
+- Declare go 1.15 in go.mod
+- connection: Skip loading SystemCertPool on Windows
+
 == 0.1.155 Jan 27 2021
 
 - Update to model 0.0.104:
