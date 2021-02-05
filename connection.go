@@ -27,7 +27,6 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"regexp"
-	"runtime"
 	"sort"
 	"strings"
 	"sync"
@@ -882,16 +881,9 @@ func (b *ConnectionBuilder) createCookieJar() (jar http.CookieJar, err error) {
 
 func (b *ConnectionBuilder) loadTrustedCAs(ctx context.Context) error {
 	var err error
-	if runtime.GOOS == "windows" {
-		// crypto/x509: system root pool is not available on Windows
-		// @see https://github.com/golang/go/issues/16736
-		// @see https://github.com/golang/go/issues/18609
-		b.trustedCAPool = x509.NewCertPool()
-	} else {
-		b.trustedCAPool, err = x509.SystemCertPool()
-		if err != nil {
-			return err
-		}
+	b.trustedCAPool, err = b.loadSystemCAs()
+	if err != nil {
+		return err
 	}
 	for _, ca := range b.trustedCASources {
 		switch source := ca.(type) {
