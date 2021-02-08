@@ -39,44 +39,50 @@ func MarshalTermsReviewResponse(object *TermsReviewResponse, writer io.Writer) e
 func writeTermsReviewResponse(object *TermsReviewResponse, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.accountId != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_id")
-		stream.WriteString(*object.accountId)
+		stream.WriteString(object.accountId)
 		count++
 	}
-	if object.organizationID != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
-	if object.redirectUrl != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("redirect_url")
-		stream.WriteString(*object.redirectUrl)
+		stream.WriteString(object.redirectUrl)
 		count++
 	}
-	if object.termsAvailable != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("terms_available")
-		stream.WriteBool(*object.termsAvailable)
+		stream.WriteBool(object.termsAvailable)
 		count++
 	}
-	if object.termsRequired != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("terms_required")
-		stream.WriteBool(*object.termsRequired)
+		stream.WriteBool(object.termsRequired)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -108,19 +114,24 @@ func readTermsReviewResponse(iterator *jsoniter.Iterator) *TermsReviewResponse {
 		switch field {
 		case "account_id":
 			value := iterator.ReadString()
-			object.accountId = &value
+			object.accountId = value
+			object.bitmap_ |= 1
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 2
 		case "redirect_url":
 			value := iterator.ReadString()
-			object.redirectUrl = &value
+			object.redirectUrl = value
+			object.bitmap_ |= 4
 		case "terms_available":
 			value := iterator.ReadBool()
-			object.termsAvailable = &value
+			object.termsAvailable = value
+			object.bitmap_ |= 8
 		case "terms_required":
 			value := iterator.ReadBool()
-			object.termsRequired = &value
+			object.termsRequired = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

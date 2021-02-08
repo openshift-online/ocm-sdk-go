@@ -23,32 +23,34 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationRequestBuilder struct {
-	byoc              *bool
-	accountUsername   *string
-	availabilityZone  *string
-	cloudAccountID    *string
-	cloudProviderID   *string
-	clusterID         *string
-	disconnected      *bool
-	displayName       *string
-	externalClusterID *string
-	managed           *bool
-	productID         *string
-	productCategory   *string
-	reserve           *bool
+	bitmap_           uint32
+	accountUsername   string
+	availabilityZone  string
+	cloudAccountID    string
+	cloudProviderID   string
+	clusterID         string
+	displayName       string
+	externalClusterID string
+	productID         string
+	productCategory   string
 	resources         []*ReservedResourceBuilder
+	byoc              bool
+	disconnected      bool
+	managed           bool
+	reserve           bool
 }
 
 // NewClusterAuthorizationRequest creates a new builder of 'cluster_authorization_request' objects.
 func NewClusterAuthorizationRequest() *ClusterAuthorizationRequestBuilder {
-	return new(ClusterAuthorizationRequestBuilder)
+	return &ClusterAuthorizationRequestBuilder{}
 }
 
 // BYOC sets the value of the 'BYOC' attribute to the given value.
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) BYOC(value bool) *ClusterAuthorizationRequestBuilder {
-	b.byoc = &value
+	b.byoc = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -56,7 +58,8 @@ func (b *ClusterAuthorizationRequestBuilder) BYOC(value bool) *ClusterAuthorizat
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) AccountUsername(value string) *ClusterAuthorizationRequestBuilder {
-	b.accountUsername = &value
+	b.accountUsername = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -64,7 +67,8 @@ func (b *ClusterAuthorizationRequestBuilder) AccountUsername(value string) *Clus
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) AvailabilityZone(value string) *ClusterAuthorizationRequestBuilder {
-	b.availabilityZone = &value
+	b.availabilityZone = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -72,7 +76,8 @@ func (b *ClusterAuthorizationRequestBuilder) AvailabilityZone(value string) *Clu
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) CloudAccountID(value string) *ClusterAuthorizationRequestBuilder {
-	b.cloudAccountID = &value
+	b.cloudAccountID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -80,7 +85,8 @@ func (b *ClusterAuthorizationRequestBuilder) CloudAccountID(value string) *Clust
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) CloudProviderID(value string) *ClusterAuthorizationRequestBuilder {
-	b.cloudProviderID = &value
+	b.cloudProviderID = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -88,7 +94,8 @@ func (b *ClusterAuthorizationRequestBuilder) CloudProviderID(value string) *Clus
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) ClusterID(value string) *ClusterAuthorizationRequestBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -96,7 +103,8 @@ func (b *ClusterAuthorizationRequestBuilder) ClusterID(value string) *ClusterAut
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) Disconnected(value bool) *ClusterAuthorizationRequestBuilder {
-	b.disconnected = &value
+	b.disconnected = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -104,7 +112,8 @@ func (b *ClusterAuthorizationRequestBuilder) Disconnected(value bool) *ClusterAu
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) DisplayName(value string) *ClusterAuthorizationRequestBuilder {
-	b.displayName = &value
+	b.displayName = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -112,7 +121,8 @@ func (b *ClusterAuthorizationRequestBuilder) DisplayName(value string) *ClusterA
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) ExternalClusterID(value string) *ClusterAuthorizationRequestBuilder {
-	b.externalClusterID = &value
+	b.externalClusterID = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -120,7 +130,8 @@ func (b *ClusterAuthorizationRequestBuilder) ExternalClusterID(value string) *Cl
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) Managed(value bool) *ClusterAuthorizationRequestBuilder {
-	b.managed = &value
+	b.managed = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -128,7 +139,8 @@ func (b *ClusterAuthorizationRequestBuilder) Managed(value bool) *ClusterAuthori
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) ProductID(value string) *ClusterAuthorizationRequestBuilder {
-	b.productID = &value
+	b.productID = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -136,7 +148,8 @@ func (b *ClusterAuthorizationRequestBuilder) ProductID(value string) *ClusterAut
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) ProductCategory(value string) *ClusterAuthorizationRequestBuilder {
-	b.productCategory = &value
+	b.productCategory = value
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -144,7 +157,8 @@ func (b *ClusterAuthorizationRequestBuilder) ProductCategory(value string) *Clus
 //
 //
 func (b *ClusterAuthorizationRequestBuilder) Reserve(value bool) *ClusterAuthorizationRequestBuilder {
-	b.reserve = &value
+	b.reserve = value
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -154,6 +168,7 @@ func (b *ClusterAuthorizationRequestBuilder) Reserve(value bool) *ClusterAuthori
 func (b *ClusterAuthorizationRequestBuilder) Resources(values ...*ReservedResourceBuilder) *ClusterAuthorizationRequestBuilder {
 	b.resources = make([]*ReservedResourceBuilder, len(values))
 	copy(b.resources, values)
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -162,6 +177,7 @@ func (b *ClusterAuthorizationRequestBuilder) Copy(object *ClusterAuthorizationRe
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.byoc = object.byoc
 	b.accountUsername = object.accountUsername
 	b.availabilityZone = object.availabilityZone
@@ -189,6 +205,7 @@ func (b *ClusterAuthorizationRequestBuilder) Copy(object *ClusterAuthorizationRe
 // Build creates a 'cluster_authorization_request' object using the configuration stored in the builder.
 func (b *ClusterAuthorizationRequestBuilder) Build() (object *ClusterAuthorizationRequest, err error) {
 	object = new(ClusterAuthorizationRequest)
+	object.bitmap_ = b.bitmap_
 	object.byoc = b.byoc
 	object.accountUsername = b.accountUsername
 	object.availabilityZone = b.availabilityZone

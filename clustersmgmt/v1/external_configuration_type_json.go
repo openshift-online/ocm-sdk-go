@@ -39,7 +39,9 @@ func MarshalExternalConfiguration(object *ExternalConfiguration, writer io.Write
 func writeExternalConfiguration(object *ExternalConfiguration, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.labels != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.labels != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -50,7 +52,8 @@ func writeExternalConfiguration(object *ExternalConfiguration, stream *jsoniter.
 		stream.WriteObjectEnd()
 		count++
 	}
-	if object.syncsets != nil {
+	present_ = object.bitmap_&2 != 0 && object.syncsets != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -100,8 +103,7 @@ func readExternalConfiguration(iterator *jsoniter.Iterator) *ExternalConfigurati
 					text := iterator.ReadString()
 					value.link = text == LabelListLinkKind
 				case "href":
-					text := iterator.ReadString()
-					value.href = &text
+					value.href = iterator.ReadString()
 				case "items":
 					value.items = readLabelList(iterator)
 				default:
@@ -109,6 +111,7 @@ func readExternalConfiguration(iterator *jsoniter.Iterator) *ExternalConfigurati
 				}
 			}
 			object.labels = value
+			object.bitmap_ |= 1
 		case "syncsets":
 			value := &SyncsetList{}
 			for {
@@ -121,8 +124,7 @@ func readExternalConfiguration(iterator *jsoniter.Iterator) *ExternalConfigurati
 					text := iterator.ReadString()
 					value.link = text == SyncsetListLinkKind
 				case "href":
-					text := iterator.ReadString()
-					value.href = &text
+					value.href = iterator.ReadString()
 				case "items":
 					value.items = readSyncsetList(iterator)
 				default:
@@ -130,6 +132,7 @@ func readExternalConfiguration(iterator *jsoniter.Iterator) *ExternalConfigurati
 				}
 			}
 			object.syncsets = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

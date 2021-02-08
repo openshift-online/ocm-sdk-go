@@ -24,15 +24,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 // A template parameter is used in an email to replace placeholder content with
 // values specific to the email recipient.
 type TemplateParameter struct {
-	content *string
-	name    *string
+	bitmap_ uint32
+	content string
+	name    string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *TemplateParameter) Empty() bool {
-	return o == nil || (o.content == nil &&
-		o.name == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Content returns the value of the 'content' attribute, or
@@ -40,8 +39,8 @@ func (o *TemplateParameter) Empty() bool {
 //
 // The content that will replace the template parameter in the email
 func (o *TemplateParameter) Content() string {
-	if o != nil && o.content != nil {
-		return *o.content
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.content
 	}
 	return ""
 }
@@ -51,9 +50,9 @@ func (o *TemplateParameter) Content() string {
 //
 // The content that will replace the template parameter in the email
 func (o *TemplateParameter) GetContent() (value string, ok bool) {
-	ok = o != nil && o.content != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.content
+		value = o.content
 	}
 	return
 }
@@ -63,8 +62,8 @@ func (o *TemplateParameter) GetContent() (value string, ok bool) {
 //
 // Name of the value to be replaced
 func (o *TemplateParameter) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -74,9 +73,9 @@ func (o *TemplateParameter) Name() string {
 //
 // Name of the value to be replaced
 func (o *TemplateParameter) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -95,7 +94,7 @@ const TemplateParameterListNilKind = "TemplateParameterListNil"
 
 // TemplateParameterList is a list of values of the 'template_parameter' type.
 type TemplateParameterList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*TemplateParameter
 }

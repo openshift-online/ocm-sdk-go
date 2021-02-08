@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Representation of a capability review response.
 type CapabilityReviewResponseBuilder struct {
-	result *string
+	bitmap_ uint32
+	result  string
 }
 
 // NewCapabilityReviewResponse creates a new builder of 'capability_review_response' objects.
 func NewCapabilityReviewResponse() *CapabilityReviewResponseBuilder {
-	return new(CapabilityReviewResponseBuilder)
+	return &CapabilityReviewResponseBuilder{}
 }
 
 // Result sets the value of the 'result' attribute to the given value.
 //
 //
 func (b *CapabilityReviewResponseBuilder) Result(value string) *CapabilityReviewResponseBuilder {
-	b.result = &value
+	b.result = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *CapabilityReviewResponseBuilder) Copy(object *CapabilityReviewResponse)
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.result = object.result
 	return b
 }
@@ -51,6 +54,7 @@ func (b *CapabilityReviewResponseBuilder) Copy(object *CapabilityReviewResponse)
 // Build creates a 'capability_review_response' object using the configuration stored in the builder.
 func (b *CapabilityReviewResponseBuilder) Build() (object *CapabilityReviewResponse, err error) {
 	object = new(CapabilityReviewResponse)
+	object.bitmap_ = b.bitmap_
 	object.result = b.result
 	return
 }

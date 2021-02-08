@@ -23,17 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Request to perform a resource access review.
 type ResourceReviewRequest struct {
-	accountUsername *string
-	action          *string
-	resourceType    *string
+	bitmap_         uint32
+	accountUsername string
+	action          string
+	resourceType    string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ResourceReviewRequest) Empty() bool {
-	return o == nil || (o.accountUsername == nil &&
-		o.action == nil &&
-		o.resourceType == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AccountUsername returns the value of the 'account_username' attribute, or
@@ -41,8 +39,8 @@ func (o *ResourceReviewRequest) Empty() bool {
 //
 // Name of the account that is trying to access the resource.
 func (o *ResourceReviewRequest) AccountUsername() string {
-	if o != nil && o.accountUsername != nil {
-		return *o.accountUsername
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.accountUsername
 	}
 	return ""
 }
@@ -52,9 +50,9 @@ func (o *ResourceReviewRequest) AccountUsername() string {
 //
 // Name of the account that is trying to access the resource.
 func (o *ResourceReviewRequest) GetAccountUsername() (value string, ok bool) {
-	ok = o != nil && o.accountUsername != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.accountUsername
+		value = o.accountUsername
 	}
 	return
 }
@@ -64,8 +62,8 @@ func (o *ResourceReviewRequest) GetAccountUsername() (value string, ok bool) {
 //
 // Action that will be performed on the resource.
 func (o *ResourceReviewRequest) Action() string {
-	if o != nil && o.action != nil {
-		return *o.action
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.action
 	}
 	return ""
 }
@@ -75,9 +73,9 @@ func (o *ResourceReviewRequest) Action() string {
 //
 // Action that will be performed on the resource.
 func (o *ResourceReviewRequest) GetAction() (value string, ok bool) {
-	ok = o != nil && o.action != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.action
+		value = o.action
 	}
 	return
 }
@@ -87,8 +85,8 @@ func (o *ResourceReviewRequest) GetAction() (value string, ok bool) {
 //
 // Type of resource.
 func (o *ResourceReviewRequest) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -98,9 +96,9 @@ func (o *ResourceReviewRequest) ResourceType() string {
 //
 // Type of resource.
 func (o *ResourceReviewRequest) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -119,7 +117,7 @@ const ResourceReviewRequestListNilKind = "ResourceReviewRequestListNil"
 
 // ResourceReviewRequestList is a list of values of the 'resource_review_request' type.
 type ResourceReviewRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ResourceReviewRequest
 }

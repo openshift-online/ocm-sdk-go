@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of cluster external configuration.
 type ExternalConfiguration struct {
+	bitmap_  uint32
 	labels   *LabelList
 	syncsets *SyncsetList
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ExternalConfiguration) Empty() bool {
-	return o == nil || (o.labels.Len() == 0 &&
-		o.syncsets.Len() == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Labels returns the value of the 'labels' attribute, or
@@ -39,10 +38,10 @@ func (o *ExternalConfiguration) Empty() bool {
 //
 // list of labels externally configured on the clusterdeployment.
 func (o *ExternalConfiguration) Labels() *LabelList {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.labels
 	}
-	return o.labels
+	return nil
 }
 
 // GetLabels returns the value of the 'labels' attribute and
@@ -50,7 +49,7 @@ func (o *ExternalConfiguration) Labels() *LabelList {
 //
 // list of labels externally configured on the clusterdeployment.
 func (o *ExternalConfiguration) GetLabels() (value *LabelList, ok bool) {
-	ok = o != nil && o.labels != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.labels
 	}
@@ -62,10 +61,10 @@ func (o *ExternalConfiguration) GetLabels() (value *LabelList, ok bool) {
 //
 // list of syncsets externally configured on the cluster.
 func (o *ExternalConfiguration) Syncsets() *SyncsetList {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.syncsets
 	}
-	return o.syncsets
+	return nil
 }
 
 // GetSyncsets returns the value of the 'syncsets' attribute and
@@ -73,7 +72,7 @@ func (o *ExternalConfiguration) Syncsets() *SyncsetList {
 //
 // list of syncsets externally configured on the cluster.
 func (o *ExternalConfiguration) GetSyncsets() (value *SyncsetList, ok bool) {
-	ok = o != nil && o.syncsets != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.syncsets
 	}
@@ -94,7 +93,7 @@ const ExternalConfigurationListNilKind = "ExternalConfigurationListNil"
 
 // ExternalConfigurationList is a list of values of the 'external_configuration' type.
 type ExternalConfigurationList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ExternalConfiguration
 }

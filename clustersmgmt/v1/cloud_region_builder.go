@@ -23,36 +23,38 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Description of a region of a cloud provider.
 type CloudRegionBuilder struct {
-	id              *string
-	href            *string
-	link            bool
+	bitmap_         uint32
+	id              string
+	href            string
 	cloudProvider   *CloudProviderBuilder
-	displayName     *string
-	enabled         *bool
-	name            *string
-	supportsMultiAZ *bool
+	displayName     string
+	name            string
+	enabled         bool
+	supportsMultiAZ bool
 }
 
 // NewCloudRegion creates a new builder of 'cloud_region' objects.
 func NewCloudRegion() *CloudRegionBuilder {
-	return new(CloudRegionBuilder)
+	return &CloudRegionBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *CloudRegionBuilder) Link(value bool) *CloudRegionBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *CloudRegionBuilder) ID(value string) *CloudRegionBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *CloudRegionBuilder) HREF(value string) *CloudRegionBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *CloudRegionBuilder) Link(value bool) *CloudRegionBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -61,6 +63,11 @@ func (b *CloudRegionBuilder) Link(value bool) *CloudRegionBuilder {
 // Cloud provider.
 func (b *CloudRegionBuilder) CloudProvider(value *CloudProviderBuilder) *CloudRegionBuilder {
 	b.cloudProvider = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -68,7 +75,8 @@ func (b *CloudRegionBuilder) CloudProvider(value *CloudProviderBuilder) *CloudRe
 //
 //
 func (b *CloudRegionBuilder) DisplayName(value string) *CloudRegionBuilder {
-	b.displayName = &value
+	b.displayName = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -76,7 +84,8 @@ func (b *CloudRegionBuilder) DisplayName(value string) *CloudRegionBuilder {
 //
 //
 func (b *CloudRegionBuilder) Enabled(value bool) *CloudRegionBuilder {
-	b.enabled = &value
+	b.enabled = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -84,7 +93,8 @@ func (b *CloudRegionBuilder) Enabled(value bool) *CloudRegionBuilder {
 //
 //
 func (b *CloudRegionBuilder) Name(value string) *CloudRegionBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -92,7 +102,8 @@ func (b *CloudRegionBuilder) Name(value string) *CloudRegionBuilder {
 //
 //
 func (b *CloudRegionBuilder) SupportsMultiAZ(value bool) *CloudRegionBuilder {
-	b.supportsMultiAZ = &value
+	b.supportsMultiAZ = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -101,9 +112,9 @@ func (b *CloudRegionBuilder) Copy(object *CloudRegion) *CloudRegionBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.cloudProvider != nil {
 		b.cloudProvider = NewCloudProvider().Copy(object.cloudProvider)
 	} else {
@@ -121,7 +132,7 @@ func (b *CloudRegionBuilder) Build() (object *CloudRegion, err error) {
 	object = new(CloudRegion)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.cloudProvider != nil {
 		object.cloudProvider, err = b.cloudProvider.Build()
 		if err != nil {

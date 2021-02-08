@@ -23,36 +23,38 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an AWS infrastructure access role grant.
 type AWSInfrastructureAccessRoleGrantBuilder struct {
-	id               *string
-	href             *string
-	link             bool
-	consoleURL       *string
+	bitmap_          uint32
+	id               string
+	href             string
+	consoleURL       string
 	role             *AWSInfrastructureAccessRoleBuilder
-	state            *AWSInfrastructureAccessRoleGrantState
-	stateDescription *string
-	userARN          *string
+	state            AWSInfrastructureAccessRoleGrantState
+	stateDescription string
+	userARN          string
 }
 
 // NewAWSInfrastructureAccessRoleGrant creates a new builder of 'AWS_infrastructure_access_role_grant' objects.
 func NewAWSInfrastructureAccessRoleGrant() *AWSInfrastructureAccessRoleGrantBuilder {
-	return new(AWSInfrastructureAccessRoleGrantBuilder)
+	return &AWSInfrastructureAccessRoleGrantBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *AWSInfrastructureAccessRoleGrantBuilder) Link(value bool) *AWSInfrastructureAccessRoleGrantBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *AWSInfrastructureAccessRoleGrantBuilder) ID(value string) *AWSInfrastructureAccessRoleGrantBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *AWSInfrastructureAccessRoleGrantBuilder) HREF(value string) *AWSInfrastructureAccessRoleGrantBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *AWSInfrastructureAccessRoleGrantBuilder) Link(value bool) *AWSInfrastructureAccessRoleGrantBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -60,7 +62,8 @@ func (b *AWSInfrastructureAccessRoleGrantBuilder) Link(value bool) *AWSInfrastru
 //
 //
 func (b *AWSInfrastructureAccessRoleGrantBuilder) ConsoleURL(value string) *AWSInfrastructureAccessRoleGrantBuilder {
-	b.consoleURL = &value
+	b.consoleURL = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -69,6 +72,11 @@ func (b *AWSInfrastructureAccessRoleGrantBuilder) ConsoleURL(value string) *AWSI
 // A set of acces permissions for AWS resources
 func (b *AWSInfrastructureAccessRoleGrantBuilder) Role(value *AWSInfrastructureAccessRoleBuilder) *AWSInfrastructureAccessRoleGrantBuilder {
 	b.role = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -76,7 +84,8 @@ func (b *AWSInfrastructureAccessRoleGrantBuilder) Role(value *AWSInfrastructureA
 //
 // State of an AWS infrastructure access role grant.
 func (b *AWSInfrastructureAccessRoleGrantBuilder) State(value AWSInfrastructureAccessRoleGrantState) *AWSInfrastructureAccessRoleGrantBuilder {
-	b.state = &value
+	b.state = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -84,7 +93,8 @@ func (b *AWSInfrastructureAccessRoleGrantBuilder) State(value AWSInfrastructureA
 //
 //
 func (b *AWSInfrastructureAccessRoleGrantBuilder) StateDescription(value string) *AWSInfrastructureAccessRoleGrantBuilder {
-	b.stateDescription = &value
+	b.stateDescription = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -92,7 +102,8 @@ func (b *AWSInfrastructureAccessRoleGrantBuilder) StateDescription(value string)
 //
 //
 func (b *AWSInfrastructureAccessRoleGrantBuilder) UserARN(value string) *AWSInfrastructureAccessRoleGrantBuilder {
-	b.userARN = &value
+	b.userARN = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -101,9 +112,9 @@ func (b *AWSInfrastructureAccessRoleGrantBuilder) Copy(object *AWSInfrastructure
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.consoleURL = object.consoleURL
 	if object.role != nil {
 		b.role = NewAWSInfrastructureAccessRole().Copy(object.role)
@@ -121,7 +132,7 @@ func (b *AWSInfrastructureAccessRoleGrantBuilder) Build() (object *AWSInfrastruc
 	object = new(AWSInfrastructureAccessRoleGrant)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.consoleURL = b.consoleURL
 	if b.role != nil {
 		object.role, err = b.role.Build()

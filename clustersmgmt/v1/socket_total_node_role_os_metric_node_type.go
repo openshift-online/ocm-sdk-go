@@ -28,19 +28,16 @@ import (
 // Representation of information from telemetry about a the socket capacity
 // by node role and OS.
 type SocketTotalNodeRoleOSMetricNode struct {
+	bitmap_         uint32
 	nodeRoles       []string
-	operatingSystem *string
-	socketTotal     *float64
-	time            *time.Time
+	operatingSystem string
+	socketTotal     float64
+	time            time.Time
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SocketTotalNodeRoleOSMetricNode) Empty() bool {
-	return o == nil || (len(o.nodeRoles) == 0 &&
-		o.operatingSystem == nil &&
-		o.socketTotal == nil &&
-		o.time == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // NodeRoles returns the value of the 'node_roles' attribute, or
@@ -48,10 +45,10 @@ func (o *SocketTotalNodeRoleOSMetricNode) Empty() bool {
 //
 // Representation of the node role for a cluster.
 func (o *SocketTotalNodeRoleOSMetricNode) NodeRoles() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.nodeRoles
 	}
-	return o.nodeRoles
+	return nil
 }
 
 // GetNodeRoles returns the value of the 'node_roles' attribute and
@@ -59,7 +56,7 @@ func (o *SocketTotalNodeRoleOSMetricNode) NodeRoles() []string {
 //
 // Representation of the node role for a cluster.
 func (o *SocketTotalNodeRoleOSMetricNode) GetNodeRoles() (value []string, ok bool) {
-	ok = o != nil && o.nodeRoles != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.nodeRoles
 	}
@@ -71,8 +68,8 @@ func (o *SocketTotalNodeRoleOSMetricNode) GetNodeRoles() (value []string, ok boo
 //
 // The operating system.
 func (o *SocketTotalNodeRoleOSMetricNode) OperatingSystem() string {
-	if o != nil && o.operatingSystem != nil {
-		return *o.operatingSystem
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.operatingSystem
 	}
 	return ""
 }
@@ -82,9 +79,9 @@ func (o *SocketTotalNodeRoleOSMetricNode) OperatingSystem() string {
 //
 // The operating system.
 func (o *SocketTotalNodeRoleOSMetricNode) GetOperatingSystem() (value string, ok bool) {
-	ok = o != nil && o.operatingSystem != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.operatingSystem
+		value = o.operatingSystem
 	}
 	return
 }
@@ -94,8 +91,8 @@ func (o *SocketTotalNodeRoleOSMetricNode) GetOperatingSystem() (value string, ok
 //
 // The total socket capacity of nodes with this set of roles and operating system.
 func (o *SocketTotalNodeRoleOSMetricNode) SocketTotal() float64 {
-	if o != nil && o.socketTotal != nil {
-		return *o.socketTotal
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.socketTotal
 	}
 	return 0.0
 }
@@ -105,9 +102,9 @@ func (o *SocketTotalNodeRoleOSMetricNode) SocketTotal() float64 {
 //
 // The total socket capacity of nodes with this set of roles and operating system.
 func (o *SocketTotalNodeRoleOSMetricNode) GetSocketTotal() (value float64, ok bool) {
-	ok = o != nil && o.socketTotal != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.socketTotal
+		value = o.socketTotal
 	}
 	return
 }
@@ -117,8 +114,8 @@ func (o *SocketTotalNodeRoleOSMetricNode) GetSocketTotal() (value float64, ok bo
 //
 //
 func (o *SocketTotalNodeRoleOSMetricNode) Time() time.Time {
-	if o != nil && o.time != nil {
-		return *o.time
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.time
 	}
 	return time.Time{}
 }
@@ -128,9 +125,9 @@ func (o *SocketTotalNodeRoleOSMetricNode) Time() time.Time {
 //
 //
 func (o *SocketTotalNodeRoleOSMetricNode) GetTime() (value time.Time, ok bool) {
-	ok = o != nil && o.time != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.time
+		value = o.time
 	}
 	return
 }
@@ -149,7 +146,7 @@ const SocketTotalNodeRoleOSMetricNodeListNilKind = "SocketTotalNodeRoleOSMetricN
 
 // SocketTotalNodeRoleOSMetricNodeList is a list of values of the 'socket_total_node_role_OS_metric_node' type.
 type SocketTotalNodeRoleOSMetricNodeList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SocketTotalNodeRoleOSMetricNode
 }

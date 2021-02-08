@@ -23,21 +23,23 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Specification for different classes of nodes inside a flavour.
 type GCPFlavourBuilder struct {
-	computeInstanceType *string
-	infraInstanceType   *string
-	masterInstanceType  *string
+	bitmap_             uint32
+	computeInstanceType string
+	infraInstanceType   string
+	masterInstanceType  string
 }
 
 // NewGCPFlavour creates a new builder of 'GCP_flavour' objects.
 func NewGCPFlavour() *GCPFlavourBuilder {
-	return new(GCPFlavourBuilder)
+	return &GCPFlavourBuilder{}
 }
 
 // ComputeInstanceType sets the value of the 'compute_instance_type' attribute to the given value.
 //
 //
 func (b *GCPFlavourBuilder) ComputeInstanceType(value string) *GCPFlavourBuilder {
-	b.computeInstanceType = &value
+	b.computeInstanceType = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,7 +47,8 @@ func (b *GCPFlavourBuilder) ComputeInstanceType(value string) *GCPFlavourBuilder
 //
 //
 func (b *GCPFlavourBuilder) InfraInstanceType(value string) *GCPFlavourBuilder {
-	b.infraInstanceType = &value
+	b.infraInstanceType = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,7 +56,8 @@ func (b *GCPFlavourBuilder) InfraInstanceType(value string) *GCPFlavourBuilder {
 //
 //
 func (b *GCPFlavourBuilder) MasterInstanceType(value string) *GCPFlavourBuilder {
-	b.masterInstanceType = &value
+	b.masterInstanceType = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,6 +66,7 @@ func (b *GCPFlavourBuilder) Copy(object *GCPFlavour) *GCPFlavourBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.computeInstanceType = object.computeInstanceType
 	b.infraInstanceType = object.infraInstanceType
 	b.masterInstanceType = object.masterInstanceType
@@ -71,6 +76,7 @@ func (b *GCPFlavourBuilder) Copy(object *GCPFlavour) *GCPFlavourBuilder {
 // Build creates a 'GCP_flavour' object using the configuration stored in the builder.
 func (b *GCPFlavourBuilder) Build() (object *GCPFlavour, err error) {
 	object = new(GCPFlavour)
+	object.bitmap_ = b.bitmap_
 	object.computeInstanceType = b.computeInstanceType
 	object.infraInstanceType = b.infraInstanceType
 	object.masterInstanceType = b.masterInstanceType

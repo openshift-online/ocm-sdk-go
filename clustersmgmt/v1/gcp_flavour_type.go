@@ -23,17 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Specification for different classes of nodes inside a flavour.
 type GCPFlavour struct {
-	computeInstanceType *string
-	infraInstanceType   *string
-	masterInstanceType  *string
+	bitmap_             uint32
+	computeInstanceType string
+	infraInstanceType   string
+	masterInstanceType  string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *GCPFlavour) Empty() bool {
-	return o == nil || (o.computeInstanceType == nil &&
-		o.infraInstanceType == nil &&
-		o.masterInstanceType == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // ComputeInstanceType returns the value of the 'compute_instance_type' attribute, or
@@ -43,8 +41,8 @@ func (o *GCPFlavour) Empty() bool {
 //
 // User can be overridden specifying in the cluster itself a type for compute node.
 func (o *GCPFlavour) ComputeInstanceType() string {
-	if o != nil && o.computeInstanceType != nil {
-		return *o.computeInstanceType
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.computeInstanceType
 	}
 	return ""
 }
@@ -56,9 +54,9 @@ func (o *GCPFlavour) ComputeInstanceType() string {
 //
 // User can be overridden specifying in the cluster itself a type for compute node.
 func (o *GCPFlavour) GetComputeInstanceType() (value string, ok bool) {
-	ok = o != nil && o.computeInstanceType != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.computeInstanceType
+		value = o.computeInstanceType
 	}
 	return
 }
@@ -68,8 +66,8 @@ func (o *GCPFlavour) GetComputeInstanceType() (value string, ok bool) {
 //
 // GCP default instance type for the infra volume.
 func (o *GCPFlavour) InfraInstanceType() string {
-	if o != nil && o.infraInstanceType != nil {
-		return *o.infraInstanceType
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.infraInstanceType
 	}
 	return ""
 }
@@ -79,9 +77,9 @@ func (o *GCPFlavour) InfraInstanceType() string {
 //
 // GCP default instance type for the infra volume.
 func (o *GCPFlavour) GetInfraInstanceType() (value string, ok bool) {
-	ok = o != nil && o.infraInstanceType != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.infraInstanceType
+		value = o.infraInstanceType
 	}
 	return
 }
@@ -91,8 +89,8 @@ func (o *GCPFlavour) GetInfraInstanceType() (value string, ok bool) {
 //
 // GCP default instance type for the master volume.
 func (o *GCPFlavour) MasterInstanceType() string {
-	if o != nil && o.masterInstanceType != nil {
-		return *o.masterInstanceType
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.masterInstanceType
 	}
 	return ""
 }
@@ -102,9 +100,9 @@ func (o *GCPFlavour) MasterInstanceType() string {
 //
 // GCP default instance type for the master volume.
 func (o *GCPFlavour) GetMasterInstanceType() (value string, ok bool) {
-	ok = o != nil && o.masterInstanceType != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.masterInstanceType
+		value = o.masterInstanceType
 	}
 	return
 }
@@ -123,7 +121,7 @@ const GCPFlavourListNilKind = "GCPFlavourListNil"
 
 // GCPFlavourList is a list of values of the 'GCP_flavour' type.
 type GCPFlavourList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*GCPFlavour
 }

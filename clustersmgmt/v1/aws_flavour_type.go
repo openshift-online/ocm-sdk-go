@@ -23,20 +23,18 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Specification for different classes of nodes inside a flavour.
 type AWSFlavour struct {
-	computeInstanceType *string
-	infraInstanceType   *string
+	bitmap_             uint32
+	computeInstanceType string
+	infraInstanceType   string
 	infraVolume         *AWSVolume
-	masterInstanceType  *string
+	masterInstanceType  string
 	masterVolume        *AWSVolume
 	workerVolume        *AWSVolume
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AWSFlavour) Empty() bool {
-	return o == nil || (o.computeInstanceType == nil &&
-		o.infraInstanceType == nil &&
-		o.masterInstanceType == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // ComputeInstanceType returns the value of the 'compute_instance_type' attribute, or
@@ -46,8 +44,8 @@ func (o *AWSFlavour) Empty() bool {
 //
 // User can be overridden specifying in the cluster itself a type for compute node.
 func (o *AWSFlavour) ComputeInstanceType() string {
-	if o != nil && o.computeInstanceType != nil {
-		return *o.computeInstanceType
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.computeInstanceType
 	}
 	return ""
 }
@@ -59,9 +57,9 @@ func (o *AWSFlavour) ComputeInstanceType() string {
 //
 // User can be overridden specifying in the cluster itself a type for compute node.
 func (o *AWSFlavour) GetComputeInstanceType() (value string, ok bool) {
-	ok = o != nil && o.computeInstanceType != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.computeInstanceType
+		value = o.computeInstanceType
 	}
 	return
 }
@@ -71,8 +69,8 @@ func (o *AWSFlavour) GetComputeInstanceType() (value string, ok bool) {
 //
 // AWS default instance type for the infra volume.
 func (o *AWSFlavour) InfraInstanceType() string {
-	if o != nil && o.infraInstanceType != nil {
-		return *o.infraInstanceType
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.infraInstanceType
 	}
 	return ""
 }
@@ -82,9 +80,9 @@ func (o *AWSFlavour) InfraInstanceType() string {
 //
 // AWS default instance type for the infra volume.
 func (o *AWSFlavour) GetInfraInstanceType() (value string, ok bool) {
-	ok = o != nil && o.infraInstanceType != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.infraInstanceType
+		value = o.infraInstanceType
 	}
 	return
 }
@@ -94,10 +92,10 @@ func (o *AWSFlavour) GetInfraInstanceType() (value string, ok bool) {
 //
 // Infra volume specification.
 func (o *AWSFlavour) InfraVolume() *AWSVolume {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.infraVolume
 	}
-	return o.infraVolume
+	return nil
 }
 
 // GetInfraVolume returns the value of the 'infra_volume' attribute and
@@ -105,7 +103,7 @@ func (o *AWSFlavour) InfraVolume() *AWSVolume {
 //
 // Infra volume specification.
 func (o *AWSFlavour) GetInfraVolume() (value *AWSVolume, ok bool) {
-	ok = o != nil && o.infraVolume != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.infraVolume
 	}
@@ -117,8 +115,8 @@ func (o *AWSFlavour) GetInfraVolume() (value *AWSVolume, ok bool) {
 //
 // AWS default instance type for the master volume.
 func (o *AWSFlavour) MasterInstanceType() string {
-	if o != nil && o.masterInstanceType != nil {
-		return *o.masterInstanceType
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.masterInstanceType
 	}
 	return ""
 }
@@ -128,9 +126,9 @@ func (o *AWSFlavour) MasterInstanceType() string {
 //
 // AWS default instance type for the master volume.
 func (o *AWSFlavour) GetMasterInstanceType() (value string, ok bool) {
-	ok = o != nil && o.masterInstanceType != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.masterInstanceType
+		value = o.masterInstanceType
 	}
 	return
 }
@@ -140,10 +138,10 @@ func (o *AWSFlavour) GetMasterInstanceType() (value string, ok bool) {
 //
 // Master volume specification.
 func (o *AWSFlavour) MasterVolume() *AWSVolume {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.masterVolume
 	}
-	return o.masterVolume
+	return nil
 }
 
 // GetMasterVolume returns the value of the 'master_volume' attribute and
@@ -151,7 +149,7 @@ func (o *AWSFlavour) MasterVolume() *AWSVolume {
 //
 // Master volume specification.
 func (o *AWSFlavour) GetMasterVolume() (value *AWSVolume, ok bool) {
-	ok = o != nil && o.masterVolume != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.masterVolume
 	}
@@ -163,10 +161,10 @@ func (o *AWSFlavour) GetMasterVolume() (value *AWSVolume, ok bool) {
 //
 // Worker volume specification.
 func (o *AWSFlavour) WorkerVolume() *AWSVolume {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.workerVolume
 	}
-	return o.workerVolume
+	return nil
 }
 
 // GetWorkerVolume returns the value of the 'worker_volume' attribute and
@@ -174,7 +172,7 @@ func (o *AWSFlavour) WorkerVolume() *AWSVolume {
 //
 // Worker volume specification.
 func (o *AWSFlavour) GetWorkerVolume() (value *AWSVolume, ok bool) {
-	ok = o != nil && o.workerVolume != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.workerVolume
 	}
@@ -195,7 +193,7 @@ const AWSFlavourListNilKind = "AWSFlavourListNil"
 
 // AWSFlavourList is a list of values of the 'AWS_flavour' type.
 type AWSFlavourList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AWSFlavour
 }

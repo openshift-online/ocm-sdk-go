@@ -23,42 +23,44 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an identity provider.
 type IdentityProviderBuilder struct {
-	id            *string
-	href          *string
-	link          bool
+	bitmap_       uint32
+	id            string
+	href          string
 	ldap          *LDAPIdentityProviderBuilder
-	challenge     *bool
 	github        *GithubIdentityProviderBuilder
 	gitlab        *GitlabIdentityProviderBuilder
 	google        *GoogleIdentityProviderBuilder
 	htpasswd      *HTPasswdIdentityProviderBuilder
-	login         *bool
-	mappingMethod *IdentityProviderMappingMethod
-	name          *string
+	mappingMethod IdentityProviderMappingMethod
+	name          string
 	openID        *OpenIDIdentityProviderBuilder
-	type_         *IdentityProviderType
+	type_         IdentityProviderType
+	challenge     bool
+	login         bool
 }
 
 // NewIdentityProvider creates a new builder of 'identity_provider' objects.
 func NewIdentityProvider() *IdentityProviderBuilder {
-	return new(IdentityProviderBuilder)
+	return &IdentityProviderBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *IdentityProviderBuilder) Link(value bool) *IdentityProviderBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *IdentityProviderBuilder) ID(value string) *IdentityProviderBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *IdentityProviderBuilder) HREF(value string) *IdentityProviderBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *IdentityProviderBuilder) Link(value bool) *IdentityProviderBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -67,6 +69,11 @@ func (b *IdentityProviderBuilder) Link(value bool) *IdentityProviderBuilder {
 // Details for `ldap` identity providers.
 func (b *IdentityProviderBuilder) LDAP(value *LDAPIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.ldap = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -74,7 +81,8 @@ func (b *IdentityProviderBuilder) LDAP(value *LDAPIdentityProviderBuilder) *Iden
 //
 //
 func (b *IdentityProviderBuilder) Challenge(value bool) *IdentityProviderBuilder {
-	b.challenge = &value
+	b.challenge = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -83,6 +91,11 @@ func (b *IdentityProviderBuilder) Challenge(value bool) *IdentityProviderBuilder
 // Details for `github` identity providers.
 func (b *IdentityProviderBuilder) Github(value *GithubIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.github = value
+	if value != nil {
+		b.bitmap_ |= 32
+	} else {
+		b.bitmap_ &^= 32
+	}
 	return b
 }
 
@@ -91,6 +104,11 @@ func (b *IdentityProviderBuilder) Github(value *GithubIdentityProviderBuilder) *
 // Details for `gitlab` identity providers.
 func (b *IdentityProviderBuilder) Gitlab(value *GitlabIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.gitlab = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -99,6 +117,11 @@ func (b *IdentityProviderBuilder) Gitlab(value *GitlabIdentityProviderBuilder) *
 // Details for `google` identity providers.
 func (b *IdentityProviderBuilder) Google(value *GoogleIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.google = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
@@ -107,6 +130,11 @@ func (b *IdentityProviderBuilder) Google(value *GoogleIdentityProviderBuilder) *
 // Details for `htpasswd` identity providers.
 func (b *IdentityProviderBuilder) Htpasswd(value *HTPasswdIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.htpasswd = value
+	if value != nil {
+		b.bitmap_ |= 256
+	} else {
+		b.bitmap_ &^= 256
+	}
 	return b
 }
 
@@ -114,7 +142,8 @@ func (b *IdentityProviderBuilder) Htpasswd(value *HTPasswdIdentityProviderBuilde
 //
 //
 func (b *IdentityProviderBuilder) Login(value bool) *IdentityProviderBuilder {
-	b.login = &value
+	b.login = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -122,7 +151,8 @@ func (b *IdentityProviderBuilder) Login(value bool) *IdentityProviderBuilder {
 //
 // Controls how mappings are established between provider identities and user objects.
 func (b *IdentityProviderBuilder) MappingMethod(value IdentityProviderMappingMethod) *IdentityProviderBuilder {
-	b.mappingMethod = &value
+	b.mappingMethod = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -130,7 +160,8 @@ func (b *IdentityProviderBuilder) MappingMethod(value IdentityProviderMappingMet
 //
 //
 func (b *IdentityProviderBuilder) Name(value string) *IdentityProviderBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -139,6 +170,11 @@ func (b *IdentityProviderBuilder) Name(value string) *IdentityProviderBuilder {
 // Details for `openid` identity providers.
 func (b *IdentityProviderBuilder) OpenID(value *OpenIDIdentityProviderBuilder) *IdentityProviderBuilder {
 	b.openID = value
+	if value != nil {
+		b.bitmap_ |= 4096
+	} else {
+		b.bitmap_ &^= 4096
+	}
 	return b
 }
 
@@ -146,7 +182,8 @@ func (b *IdentityProviderBuilder) OpenID(value *OpenIDIdentityProviderBuilder) *
 //
 // Type of identity provider.
 func (b *IdentityProviderBuilder) Type(value IdentityProviderType) *IdentityProviderBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -155,9 +192,9 @@ func (b *IdentityProviderBuilder) Copy(object *IdentityProvider) *IdentityProvid
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.ldap != nil {
 		b.ldap = NewLDAPIdentityProvider().Copy(object.ldap)
 	} else {
@@ -201,7 +238,7 @@ func (b *IdentityProviderBuilder) Build() (object *IdentityProvider, err error) 
 	object = new(IdentityProvider)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.ldap != nil {
 		object.ldap, err = b.ldap.Build()
 		if err != nil {

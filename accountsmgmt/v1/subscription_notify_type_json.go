@@ -39,63 +39,72 @@ func MarshalSubscriptionNotify(object *SubscriptionNotify, writer io.Writer) err
 func writeSubscriptionNotify(object *SubscriptionNotify, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.bccAddress != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("bcc_address")
-		stream.WriteString(*object.bccAddress)
+		stream.WriteString(object.bccAddress)
 		count++
 	}
-	if object.clusterID != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_id")
-		stream.WriteString(*object.clusterID)
+		stream.WriteString(object.clusterID)
 		count++
 	}
-	if object.clusterUUID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_uuid")
-		stream.WriteString(*object.clusterUUID)
+		stream.WriteString(object.clusterUUID)
 		count++
 	}
-	if object.includeRedHatAssociates != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("include_red_hat_associates")
-		stream.WriteBool(*object.includeRedHatAssociates)
+		stream.WriteBool(object.includeRedHatAssociates)
 		count++
 	}
-	if object.subject != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subject")
-		stream.WriteString(*object.subject)
+		stream.WriteString(object.subject)
 		count++
 	}
-	if object.subscriptionID != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subscription_id")
-		stream.WriteString(*object.subscriptionID)
+		stream.WriteString(object.subscriptionID)
 		count++
 	}
-	if object.templateName != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("template_name")
-		stream.WriteString(*object.templateName)
+		stream.WriteString(object.templateName)
 		count++
 	}
-	if object.templateParameters != nil {
+	present_ = object.bitmap_&128 != 0 && object.templateParameters != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -132,28 +141,36 @@ func readSubscriptionNotify(iterator *jsoniter.Iterator) *SubscriptionNotify {
 		switch field {
 		case "bcc_address":
 			value := iterator.ReadString()
-			object.bccAddress = &value
+			object.bccAddress = value
+			object.bitmap_ |= 1
 		case "cluster_id":
 			value := iterator.ReadString()
-			object.clusterID = &value
+			object.clusterID = value
+			object.bitmap_ |= 2
 		case "cluster_uuid":
 			value := iterator.ReadString()
-			object.clusterUUID = &value
+			object.clusterUUID = value
+			object.bitmap_ |= 4
 		case "include_red_hat_associates":
 			value := iterator.ReadBool()
-			object.includeRedHatAssociates = &value
+			object.includeRedHatAssociates = value
+			object.bitmap_ |= 8
 		case "subject":
 			value := iterator.ReadString()
-			object.subject = &value
+			object.subject = value
+			object.bitmap_ |= 16
 		case "subscription_id":
 			value := iterator.ReadString()
-			object.subscriptionID = &value
+			object.subscriptionID = value
+			object.bitmap_ |= 32
 		case "template_name":
 			value := iterator.ReadString()
-			object.templateName = &value
+			object.templateName = value
+			object.bitmap_ |= 64
 		case "template_parameters":
 			value := readTemplateParameterList(iterator)
 			object.templateParameters = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

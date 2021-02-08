@@ -23,17 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `google` identity providers.
 type GoogleIdentityProvider struct {
-	clientID     *string
-	clientSecret *string
-	hostedDomain *string
+	bitmap_      uint32
+	clientID     string
+	clientSecret string
+	hostedDomain string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *GoogleIdentityProvider) Empty() bool {
-	return o == nil || (o.clientID == nil &&
-		o.clientSecret == nil &&
-		o.hostedDomain == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // ClientID returns the value of the 'client_ID' attribute, or
@@ -41,8 +39,8 @@ func (o *GoogleIdentityProvider) Empty() bool {
 //
 // Client identifier of a registered _Google_ project.
 func (o *GoogleIdentityProvider) ClientID() string {
-	if o != nil && o.clientID != nil {
-		return *o.clientID
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.clientID
 	}
 	return ""
 }
@@ -52,9 +50,9 @@ func (o *GoogleIdentityProvider) ClientID() string {
 //
 // Client identifier of a registered _Google_ project.
 func (o *GoogleIdentityProvider) GetClientID() (value string, ok bool) {
-	ok = o != nil && o.clientID != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.clientID
+		value = o.clientID
 	}
 	return
 }
@@ -64,8 +62,8 @@ func (o *GoogleIdentityProvider) GetClientID() (value string, ok bool) {
 //
 // Client secret issued by _Google_.
 func (o *GoogleIdentityProvider) ClientSecret() string {
-	if o != nil && o.clientSecret != nil {
-		return *o.clientSecret
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.clientSecret
 	}
 	return ""
 }
@@ -75,9 +73,9 @@ func (o *GoogleIdentityProvider) ClientSecret() string {
 //
 // Client secret issued by _Google_.
 func (o *GoogleIdentityProvider) GetClientSecret() (value string, ok bool) {
-	ok = o != nil && o.clientSecret != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.clientSecret
+		value = o.clientSecret
 	}
 	return
 }
@@ -87,8 +85,8 @@ func (o *GoogleIdentityProvider) GetClientSecret() (value string, ok bool) {
 //
 // Optional hosted domain to restrict sign-in accounts to.
 func (o *GoogleIdentityProvider) HostedDomain() string {
-	if o != nil && o.hostedDomain != nil {
-		return *o.hostedDomain
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.hostedDomain
 	}
 	return ""
 }
@@ -98,9 +96,9 @@ func (o *GoogleIdentityProvider) HostedDomain() string {
 //
 // Optional hosted domain to restrict sign-in accounts to.
 func (o *GoogleIdentityProvider) GetHostedDomain() (value string, ok bool) {
-	ok = o != nil && o.hostedDomain != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.hostedDomain
+		value = o.hostedDomain
 	}
 	return
 }
@@ -119,7 +117,7 @@ const GoogleIdentityProviderListNilKind = "GoogleIdentityProviderListNil"
 
 // GoogleIdentityProviderList is a list of values of the 'google_identity_provider' type.
 type GoogleIdentityProviderList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*GoogleIdentityProvider
 }

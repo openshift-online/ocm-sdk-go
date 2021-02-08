@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type SummaryMetrics struct {
-	name   *string
-	vector []*SummarySample
+	bitmap_ uint32
+	name    string
+	vector  []*SummarySample
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SummaryMetrics) Empty() bool {
-	return o == nil || (o.name == nil &&
-		len(o.vector) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Name returns the value of the 'name' attribute, or
@@ -39,8 +38,8 @@ func (o *SummaryMetrics) Empty() bool {
 //
 //
 func (o *SummaryMetrics) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *SummaryMetrics) Name() string {
 //
 //
 func (o *SummaryMetrics) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -62,10 +61,10 @@ func (o *SummaryMetrics) GetName() (value string, ok bool) {
 //
 //
 func (o *SummaryMetrics) Vector() []*SummarySample {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.vector
 	}
-	return o.vector
+	return nil
 }
 
 // GetVector returns the value of the 'vector' attribute and
@@ -73,7 +72,7 @@ func (o *SummaryMetrics) Vector() []*SummarySample {
 //
 //
 func (o *SummaryMetrics) GetVector() (value []*SummarySample, ok bool) {
-	ok = o != nil && o.vector != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.vector
 	}
@@ -94,7 +93,7 @@ const SummaryMetricsListNilKind = "SummaryMetricsListNil"
 
 // SummaryMetricsList is a list of values of the 'summary_metrics' type.
 type SummaryMetricsList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SummaryMetrics
 }

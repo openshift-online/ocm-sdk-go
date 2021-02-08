@@ -40,41 +40,41 @@ func MarshalIngress(object *Ingress, writer io.Writer) error {
 func writeIngress(object *Ingress, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(IngressLinkKind)
 	} else {
 		stream.WriteString(IngressKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.dnsName != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("dns_name")
-		stream.WriteString(*object.dnsName)
+		stream.WriteString(object.dnsName)
 		count++
 	}
-	if object.cluster != nil {
+	present_ = object.bitmap_&16 != 0 && object.cluster != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -82,44 +82,51 @@ func writeIngress(object *Ingress, stream *jsoniter.Stream) {
 		writeCluster(object.cluster, stream)
 		count++
 	}
-	if object.default_ != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("default")
-		stream.WriteBool(*object.default_)
+		stream.WriteBool(object.default_)
 		count++
 	}
-	if object.listening != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("listening")
-		stream.WriteString(string(*object.listening))
+		stream.WriteString(string(object.listening))
 		count++
 	}
-	if object.routeSelectors != nil {
+	present_ = object.bitmap_&128 != 0 && object.routeSelectors != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("route_selectors")
-		stream.WriteObjectStart()
-		keys := make([]string, len(object.routeSelectors))
-		i := 0
-		for key := range object.routeSelectors {
-			keys[i] = key
-			i++
-		}
-		sort.Strings(keys)
-		for i, key := range keys {
-			if i > 0 {
-				stream.WriteMore()
+		if object.routeSelectors != nil {
+			stream.WriteObjectStart()
+			keys := make([]string, len(object.routeSelectors))
+			i := 0
+			for key := range object.routeSelectors {
+				keys[i] = key
+				i++
 			}
-			item := object.routeSelectors[key]
-			stream.WriteObjectField(key)
-			stream.WriteString(item)
+			sort.Strings(keys)
+			for i, key := range keys {
+				if i > 0 {
+					stream.WriteMore()
+				}
+				item := object.routeSelectors[key]
+				stream.WriteObjectField(key)
+				stream.WriteString(item)
+			}
+			stream.WriteObjectEnd()
+		} else {
+			stream.WriteNil()
 		}
-		stream.WriteObjectEnd()
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -151,26 +158,32 @@ func readIngress(iterator *jsoniter.Iterator) *Ingress {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == IngressLinkKind
+			if value == IngressLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "dns_name":
 			value := iterator.ReadString()
-			object.dnsName = &value
+			object.dnsName = value
+			object.bitmap_ |= 8
 		case "cluster":
 			value := readCluster(iterator)
 			object.cluster = value
+			object.bitmap_ |= 16
 		case "default":
 			value := iterator.ReadBool()
-			object.default_ = &value
+			object.default_ = value
+			object.bitmap_ |= 32
 		case "listening":
 			text := iterator.ReadString()
 			value := ListeningMethod(text)
-			object.listening = &value
+			object.listening = value
+			object.bitmap_ |= 64
 		case "route_selectors":
 			value := map[string]string{}
 			for {
@@ -182,6 +195,7 @@ func readIngress(iterator *jsoniter.Iterator) *Ingress {
 				value[key] = item
 			}
 			object.routeSelectors = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

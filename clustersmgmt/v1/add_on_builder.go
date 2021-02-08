@@ -23,46 +23,48 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on that can be installed in a cluster.
 type AddOnBuilder struct {
-	id                   *string
-	href                 *string
-	link                 bool
-	description          *string
-	docsLink             *string
-	enabled              *bool
-	hasExternalResources *bool
-	hidden               *bool
-	icon                 *string
-	installMode          *AddOnInstallMode
-	label                *string
-	name                 *string
-	operatorName         *string
+	bitmap_              uint32
+	id                   string
+	href                 string
+	description          string
+	docsLink             string
+	icon                 string
+	installMode          AddOnInstallMode
+	label                string
+	name                 string
+	operatorName         string
 	parameters           *AddOnParameterListBuilder
 	requirements         []*AddOnRequirementBuilder
-	resourceCost         *float64
-	resourceName         *string
-	targetNamespace      *string
+	resourceCost         float64
+	resourceName         string
+	targetNamespace      string
+	enabled              bool
+	hasExternalResources bool
+	hidden               bool
 }
 
 // NewAddOn creates a new builder of 'add_on' objects.
 func NewAddOn() *AddOnBuilder {
-	return new(AddOnBuilder)
+	return &AddOnBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *AddOnBuilder) Link(value bool) *AddOnBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *AddOnBuilder) ID(value string) *AddOnBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *AddOnBuilder) HREF(value string) *AddOnBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *AddOnBuilder) Link(value bool) *AddOnBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -70,7 +72,8 @@ func (b *AddOnBuilder) Link(value bool) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) Description(value string) *AddOnBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -78,7 +81,8 @@ func (b *AddOnBuilder) Description(value string) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) DocsLink(value string) *AddOnBuilder {
-	b.docsLink = &value
+	b.docsLink = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -86,7 +90,8 @@ func (b *AddOnBuilder) DocsLink(value string) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) Enabled(value bool) *AddOnBuilder {
-	b.enabled = &value
+	b.enabled = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -94,7 +99,8 @@ func (b *AddOnBuilder) Enabled(value bool) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) HasExternalResources(value bool) *AddOnBuilder {
-	b.hasExternalResources = &value
+	b.hasExternalResources = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -102,7 +108,8 @@ func (b *AddOnBuilder) HasExternalResources(value bool) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) Hidden(value bool) *AddOnBuilder {
-	b.hidden = &value
+	b.hidden = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -110,7 +117,8 @@ func (b *AddOnBuilder) Hidden(value bool) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) Icon(value string) *AddOnBuilder {
-	b.icon = &value
+	b.icon = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -118,7 +126,8 @@ func (b *AddOnBuilder) Icon(value string) *AddOnBuilder {
 //
 // Representation of an add-on InstallMode field.
 func (b *AddOnBuilder) InstallMode(value AddOnInstallMode) *AddOnBuilder {
-	b.installMode = &value
+	b.installMode = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -126,7 +135,8 @@ func (b *AddOnBuilder) InstallMode(value AddOnInstallMode) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) Label(value string) *AddOnBuilder {
-	b.label = &value
+	b.label = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -134,7 +144,8 @@ func (b *AddOnBuilder) Label(value string) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) Name(value string) *AddOnBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -142,7 +153,8 @@ func (b *AddOnBuilder) Name(value string) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) OperatorName(value string) *AddOnBuilder {
-	b.operatorName = &value
+	b.operatorName = value
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -151,6 +163,7 @@ func (b *AddOnBuilder) OperatorName(value string) *AddOnBuilder {
 //
 func (b *AddOnBuilder) Parameters(value *AddOnParameterListBuilder) *AddOnBuilder {
 	b.parameters = value
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -160,6 +173,7 @@ func (b *AddOnBuilder) Parameters(value *AddOnParameterListBuilder) *AddOnBuilde
 func (b *AddOnBuilder) Requirements(values ...*AddOnRequirementBuilder) *AddOnBuilder {
 	b.requirements = make([]*AddOnRequirementBuilder, len(values))
 	copy(b.requirements, values)
+	b.bitmap_ |= 16384
 	return b
 }
 
@@ -167,7 +181,8 @@ func (b *AddOnBuilder) Requirements(values ...*AddOnRequirementBuilder) *AddOnBu
 //
 //
 func (b *AddOnBuilder) ResourceCost(value float64) *AddOnBuilder {
-	b.resourceCost = &value
+	b.resourceCost = value
+	b.bitmap_ |= 32768
 	return b
 }
 
@@ -175,7 +190,8 @@ func (b *AddOnBuilder) ResourceCost(value float64) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
-	b.resourceName = &value
+	b.resourceName = value
+	b.bitmap_ |= 65536
 	return b
 }
 
@@ -183,7 +199,8 @@ func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
 //
 //
 func (b *AddOnBuilder) TargetNamespace(value string) *AddOnBuilder {
-	b.targetNamespace = &value
+	b.targetNamespace = value
+	b.bitmap_ |= 131072
 	return b
 }
 
@@ -192,9 +209,9 @@ func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.description = object.description
 	b.docsLink = object.docsLink
 	b.enabled = object.enabled
@@ -229,7 +246,7 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 	object = new(AddOn)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.description = b.description
 	object.docsLink = b.docsLink
 	object.enabled = b.enabled

@@ -35,12 +35,12 @@ const AWSInfrastructureAccessRoleNilKind = "AWSInfrastructureAccessRoleNil"
 //
 // A set of acces permissions for AWS resources
 type AWSInfrastructureAccessRole struct {
-	id          *string
-	href        *string
-	link        bool
-	description *string
-	displayName *string
-	state       *AWSInfrastructureAccessRoleState
+	bitmap_     uint32
+	id          string
+	href        string
+	description string
+	displayName string
+	state       AWSInfrastructureAccessRoleState
 }
 
 // Kind returns the name of the type of the object.
@@ -48,16 +48,21 @@ func (o *AWSInfrastructureAccessRole) Kind() string {
 	if o == nil {
 		return AWSInfrastructureAccessRoleNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return AWSInfrastructureAccessRoleLinkKind
 	}
 	return AWSInfrastructureAccessRoleKind
 }
 
+// Link returns true iif this is a link.
+func (o *AWSInfrastructureAccessRole) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *AWSInfrastructureAccessRole) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -65,22 +70,17 @@ func (o *AWSInfrastructureAccessRole) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *AWSInfrastructureAccessRole) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *AWSInfrastructureAccessRole) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *AWSInfrastructureAccessRole) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -88,20 +88,16 @@ func (o *AWSInfrastructureAccessRole) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *AWSInfrastructureAccessRole) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AWSInfrastructureAccessRole) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.description == nil &&
-		o.displayName == nil &&
-		o.state == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Description returns the value of the 'description' attribute, or
@@ -109,8 +105,8 @@ func (o *AWSInfrastructureAccessRole) Empty() bool {
 //
 // Description of the role.
 func (o *AWSInfrastructureAccessRole) Description() string {
-	if o != nil && o.description != nil {
-		return *o.description
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.description
 	}
 	return ""
 }
@@ -120,9 +116,9 @@ func (o *AWSInfrastructureAccessRole) Description() string {
 //
 // Description of the role.
 func (o *AWSInfrastructureAccessRole) GetDescription() (value string, ok bool) {
-	ok = o != nil && o.description != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.description
+		value = o.description
 	}
 	return
 }
@@ -132,8 +128,8 @@ func (o *AWSInfrastructureAccessRole) GetDescription() (value string, ok bool) {
 //
 // Human friendly identifier of the role, for example `Read only`.
 func (o *AWSInfrastructureAccessRole) DisplayName() string {
-	if o != nil && o.displayName != nil {
-		return *o.displayName
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.displayName
 	}
 	return ""
 }
@@ -143,9 +139,9 @@ func (o *AWSInfrastructureAccessRole) DisplayName() string {
 //
 // Human friendly identifier of the role, for example `Read only`.
 func (o *AWSInfrastructureAccessRole) GetDisplayName() (value string, ok bool) {
-	ok = o != nil && o.displayName != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.displayName
+		value = o.displayName
 	}
 	return
 }
@@ -155,8 +151,8 @@ func (o *AWSInfrastructureAccessRole) GetDisplayName() (value string, ok bool) {
 //
 // State of the role.
 func (o *AWSInfrastructureAccessRole) State() AWSInfrastructureAccessRoleState {
-	if o != nil && o.state != nil {
-		return *o.state
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.state
 	}
 	return AWSInfrastructureAccessRoleState("")
 }
@@ -166,9 +162,9 @@ func (o *AWSInfrastructureAccessRole) State() AWSInfrastructureAccessRoleState {
 //
 // State of the role.
 func (o *AWSInfrastructureAccessRole) GetState() (value AWSInfrastructureAccessRoleState, ok bool) {
-	ok = o != nil && o.state != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.state
+		value = o.state
 	}
 	return
 }
@@ -187,7 +183,7 @@ const AWSInfrastructureAccessRoleListNilKind = "AWSInfrastructureAccessRoleListN
 
 // AWSInfrastructureAccessRoleList is a list of values of the 'AWS_infrastructure_access_role' type.
 type AWSInfrastructureAccessRoleList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AWSInfrastructureAccessRole
 }
@@ -210,8 +206,8 @@ func (l *AWSInfrastructureAccessRoleList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *AWSInfrastructureAccessRoleList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -219,9 +215,9 @@ func (l *AWSInfrastructureAccessRoleList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *AWSInfrastructureAccessRoleList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

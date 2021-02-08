@@ -23,23 +23,25 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 // Registration of a new subscription.
 type SubscriptionRegistrationBuilder struct {
-	clusterUUID *string
-	consoleURL  *string
-	displayName *string
-	planID      *PlanID
-	status      *string
+	bitmap_     uint32
+	clusterUUID string
+	consoleURL  string
+	displayName string
+	planID      PlanID
+	status      string
 }
 
 // NewSubscriptionRegistration creates a new builder of 'subscription_registration' objects.
 func NewSubscriptionRegistration() *SubscriptionRegistrationBuilder {
-	return new(SubscriptionRegistrationBuilder)
+	return &SubscriptionRegistrationBuilder{}
 }
 
 // ClusterUUID sets the value of the 'cluster_UUID' attribute to the given value.
 //
 //
 func (b *SubscriptionRegistrationBuilder) ClusterUUID(value string) *SubscriptionRegistrationBuilder {
-	b.clusterUUID = &value
+	b.clusterUUID = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -47,7 +49,8 @@ func (b *SubscriptionRegistrationBuilder) ClusterUUID(value string) *Subscriptio
 //
 //
 func (b *SubscriptionRegistrationBuilder) ConsoleURL(value string) *SubscriptionRegistrationBuilder {
-	b.consoleURL = &value
+	b.consoleURL = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -55,7 +58,8 @@ func (b *SubscriptionRegistrationBuilder) ConsoleURL(value string) *Subscription
 //
 //
 func (b *SubscriptionRegistrationBuilder) DisplayName(value string) *SubscriptionRegistrationBuilder {
-	b.displayName = &value
+	b.displayName = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -63,7 +67,8 @@ func (b *SubscriptionRegistrationBuilder) DisplayName(value string) *Subscriptio
 //
 // Plan ID of subscription.
 func (b *SubscriptionRegistrationBuilder) PlanID(value PlanID) *SubscriptionRegistrationBuilder {
-	b.planID = &value
+	b.planID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -71,7 +76,8 @@ func (b *SubscriptionRegistrationBuilder) PlanID(value PlanID) *SubscriptionRegi
 //
 //
 func (b *SubscriptionRegistrationBuilder) Status(value string) *SubscriptionRegistrationBuilder {
-	b.status = &value
+	b.status = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -80,6 +86,7 @@ func (b *SubscriptionRegistrationBuilder) Copy(object *SubscriptionRegistration)
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.clusterUUID = object.clusterUUID
 	b.consoleURL = object.consoleURL
 	b.displayName = object.displayName
@@ -91,6 +98,7 @@ func (b *SubscriptionRegistrationBuilder) Copy(object *SubscriptionRegistration)
 // Build creates a 'subscription_registration' object using the configuration stored in the builder.
 func (b *SubscriptionRegistrationBuilder) Build() (object *SubscriptionRegistration, err error) {
 	object = new(SubscriptionRegistration)
+	object.bitmap_ = b.bitmap_
 	object.clusterUUID = b.clusterUUID
 	object.consoleURL = b.consoleURL
 	object.displayName = b.displayName

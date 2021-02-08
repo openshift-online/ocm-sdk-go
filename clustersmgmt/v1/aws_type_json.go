@@ -39,31 +39,36 @@ func MarshalAWS(object *AWS, writer io.Writer) error {
 func writeAWS(object *AWS, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.accessKeyID != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("access_key_id")
-		stream.WriteString(*object.accessKeyID)
+		stream.WriteString(object.accessKeyID)
 		count++
 	}
-	if object.accountID != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_id")
-		stream.WriteString(*object.accountID)
+		stream.WriteString(object.accountID)
 		count++
 	}
-	if object.secretAccessKey != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("secret_access_key")
-		stream.WriteString(*object.secretAccessKey)
+		stream.WriteString(object.secretAccessKey)
 		count++
 	}
-	if object.subnetIDs != nil {
+	present_ = object.bitmap_&8 != 0 && object.subnetIDs != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -100,16 +105,20 @@ func readAWS(iterator *jsoniter.Iterator) *AWS {
 		switch field {
 		case "access_key_id":
 			value := iterator.ReadString()
-			object.accessKeyID = &value
+			object.accessKeyID = value
+			object.bitmap_ |= 1
 		case "account_id":
 			value := iterator.ReadString()
-			object.accountID = &value
+			object.accountID = value
+			object.bitmap_ |= 2
 		case "secret_access_key":
 			value := iterator.ReadString()
-			object.secretAccessKey = &value
+			object.secretAccessKey = value
+			object.bitmap_ |= 4
 		case "subnet_ids":
 			value := readStringList(iterator)
 			object.subnetIDs = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

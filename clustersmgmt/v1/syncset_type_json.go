@@ -39,33 +39,32 @@ func MarshalSyncset(object *Syncset, writer io.Writer) error {
 func writeSyncset(object *Syncset, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(SyncsetLinkKind)
 	} else {
 		stream.WriteString(SyncsetKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.resources != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.resources != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -102,16 +101,19 @@ func readSyncset(iterator *jsoniter.Iterator) *Syncset {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == SyncsetLinkKind
+			if value == SyncsetLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "resources":
 			value := readInterfaceList(iterator)
 			object.resources = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

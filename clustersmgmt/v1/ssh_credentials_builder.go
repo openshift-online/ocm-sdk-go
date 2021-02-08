@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // SSH key pair of a cluster.
 type SSHCredentialsBuilder struct {
-	privateKey *string
-	publicKey  *string
+	bitmap_    uint32
+	privateKey string
+	publicKey  string
 }
 
 // NewSSHCredentials creates a new builder of 'SSH_credentials' objects.
 func NewSSHCredentials() *SSHCredentialsBuilder {
-	return new(SSHCredentialsBuilder)
+	return &SSHCredentialsBuilder{}
 }
 
 // PrivateKey sets the value of the 'private_key' attribute to the given value.
 //
 //
 func (b *SSHCredentialsBuilder) PrivateKey(value string) *SSHCredentialsBuilder {
-	b.privateKey = &value
+	b.privateKey = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *SSHCredentialsBuilder) PrivateKey(value string) *SSHCredentialsBuilder 
 //
 //
 func (b *SSHCredentialsBuilder) PublicKey(value string) *SSHCredentialsBuilder {
-	b.publicKey = &value
+	b.publicKey = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *SSHCredentialsBuilder) Copy(object *SSHCredentials) *SSHCredentialsBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.privateKey = object.privateKey
 	b.publicKey = object.publicKey
 	return b
@@ -61,6 +65,7 @@ func (b *SSHCredentialsBuilder) Copy(object *SSHCredentials) *SSHCredentialsBuil
 // Build creates a 'SSH_credentials' object using the configuration stored in the builder.
 func (b *SSHCredentialsBuilder) Build() (object *SSHCredentials, err error) {
 	object = new(SSHCredentials)
+	object.bitmap_ = b.bitmap_
 	object.privateKey = b.privateKey
 	object.publicKey = b.publicKey
 	return

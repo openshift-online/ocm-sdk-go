@@ -24,13 +24,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Representation of information from telemetry about the socket capacity by node
 // role and OS of a cluster.
 type SocketTotalsNodeRoleOSMetricNode struct {
+	bitmap_      uint32
 	socketTotals []*SocketTotalNodeRoleOSMetricNode
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SocketTotalsNodeRoleOSMetricNode) Empty() bool {
-	return o == nil || (len(o.socketTotals) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // SocketTotals returns the value of the 'socket_totals' attribute, or
@@ -38,10 +38,10 @@ func (o *SocketTotalsNodeRoleOSMetricNode) Empty() bool {
 //
 //
 func (o *SocketTotalsNodeRoleOSMetricNode) SocketTotals() []*SocketTotalNodeRoleOSMetricNode {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.socketTotals
 	}
-	return o.socketTotals
+	return nil
 }
 
 // GetSocketTotals returns the value of the 'socket_totals' attribute and
@@ -49,7 +49,7 @@ func (o *SocketTotalsNodeRoleOSMetricNode) SocketTotals() []*SocketTotalNodeRole
 //
 //
 func (o *SocketTotalsNodeRoleOSMetricNode) GetSocketTotals() (value []*SocketTotalNodeRoleOSMetricNode, ok bool) {
-	ok = o != nil && o.socketTotals != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.socketTotals
 	}
@@ -70,7 +70,7 @@ const SocketTotalsNodeRoleOSMetricNodeListNilKind = "SocketTotalsNodeRoleOSMetri
 
 // SocketTotalsNodeRoleOSMetricNodeList is a list of values of the 'socket_totals_node_role_OS_metric_node' type.
 type SocketTotalsNodeRoleOSMetricNodeList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SocketTotalsNodeRoleOSMetricNode
 }

@@ -40,20 +40,23 @@ func MarshalSample(object *Sample, writer io.Writer) error {
 func writeSample(object *Sample, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.time != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("time")
-		stream.WriteString((*object.time).Format(time.RFC3339))
+		stream.WriteString((object.time).Format(time.RFC3339))
 		count++
 	}
-	if object.value != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("value")
-		stream.WriteFloat64(*object.value)
+		stream.WriteFloat64(object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -89,10 +92,12 @@ func readSample(iterator *jsoniter.Iterator) *Sample {
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.time = &value
+			object.time = value
+			object.bitmap_ |= 1
 		case "value":
 			value := iterator.ReadFloat64()
-			object.value = &value
+			object.value = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

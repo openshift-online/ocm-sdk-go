@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `htpasswd` identity providers.
 type HTPasswdIdentityProvider struct {
-	password *string
-	username *string
+	bitmap_  uint32
+	password string
+	username string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *HTPasswdIdentityProvider) Empty() bool {
-	return o == nil || (o.password == nil &&
-		o.username == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Password returns the value of the 'password' attribute, or
@@ -39,8 +38,8 @@ func (o *HTPasswdIdentityProvider) Empty() bool {
 //
 // Password to be used in the _HTPasswd_ data file.
 func (o *HTPasswdIdentityProvider) Password() string {
-	if o != nil && o.password != nil {
-		return *o.password
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.password
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *HTPasswdIdentityProvider) Password() string {
 //
 // Password to be used in the _HTPasswd_ data file.
 func (o *HTPasswdIdentityProvider) GetPassword() (value string, ok bool) {
-	ok = o != nil && o.password != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.password
+		value = o.password
 	}
 	return
 }
@@ -62,8 +61,8 @@ func (o *HTPasswdIdentityProvider) GetPassword() (value string, ok bool) {
 //
 // Username to be used in the _HTPasswd_ data file.
 func (o *HTPasswdIdentityProvider) Username() string {
-	if o != nil && o.username != nil {
-		return *o.username
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.username
 	}
 	return ""
 }
@@ -73,9 +72,9 @@ func (o *HTPasswdIdentityProvider) Username() string {
 //
 // Username to be used in the _HTPasswd_ data file.
 func (o *HTPasswdIdentityProvider) GetUsername() (value string, ok bool) {
-	ok = o != nil && o.username != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.username
+		value = o.username
 	}
 	return
 }
@@ -94,7 +93,7 @@ const HTPasswdIdentityProviderListNilKind = "HTPasswdIdentityProviderListNil"
 
 // HTPasswdIdentityProviderList is a list of values of the 'HT_passwd_identity_provider' type.
 type HTPasswdIdentityProviderList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*HTPasswdIdentityProvider
 }

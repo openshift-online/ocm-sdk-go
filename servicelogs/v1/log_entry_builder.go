@@ -27,38 +27,40 @@ import (
 //
 //
 type LogEntryBuilder struct {
-	id           *string
-	href         *string
-	link         bool
-	clusterUUID  *string
-	description  *string
-	internalOnly *bool
-	serviceName  *string
-	severity     *Severity
-	summary      *string
-	timestamp    *time.Time
+	bitmap_      uint32
+	id           string
+	href         string
+	clusterUUID  string
+	description  string
+	serviceName  string
+	severity     Severity
+	summary      string
+	timestamp    time.Time
+	internalOnly bool
 }
 
 // NewLogEntry creates a new builder of 'log_entry' objects.
 func NewLogEntry() *LogEntryBuilder {
-	return new(LogEntryBuilder)
+	return &LogEntryBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *LogEntryBuilder) Link(value bool) *LogEntryBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *LogEntryBuilder) ID(value string) *LogEntryBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *LogEntryBuilder) HREF(value string) *LogEntryBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *LogEntryBuilder) Link(value bool) *LogEntryBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -66,7 +68,8 @@ func (b *LogEntryBuilder) Link(value bool) *LogEntryBuilder {
 //
 //
 func (b *LogEntryBuilder) ClusterUUID(value string) *LogEntryBuilder {
-	b.clusterUUID = &value
+	b.clusterUUID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -74,7 +77,8 @@ func (b *LogEntryBuilder) ClusterUUID(value string) *LogEntryBuilder {
 //
 //
 func (b *LogEntryBuilder) Description(value string) *LogEntryBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -82,7 +86,8 @@ func (b *LogEntryBuilder) Description(value string) *LogEntryBuilder {
 //
 //
 func (b *LogEntryBuilder) InternalOnly(value bool) *LogEntryBuilder {
-	b.internalOnly = &value
+	b.internalOnly = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -90,7 +95,8 @@ func (b *LogEntryBuilder) InternalOnly(value bool) *LogEntryBuilder {
 //
 //
 func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
-	b.serviceName = &value
+	b.serviceName = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -98,7 +104,8 @@ func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
 //
 //
 func (b *LogEntryBuilder) Severity(value Severity) *LogEntryBuilder {
-	b.severity = &value
+	b.severity = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -106,7 +113,8 @@ func (b *LogEntryBuilder) Severity(value Severity) *LogEntryBuilder {
 //
 //
 func (b *LogEntryBuilder) Summary(value string) *LogEntryBuilder {
-	b.summary = &value
+	b.summary = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -114,7 +122,8 @@ func (b *LogEntryBuilder) Summary(value string) *LogEntryBuilder {
 //
 //
 func (b *LogEntryBuilder) Timestamp(value time.Time) *LogEntryBuilder {
-	b.timestamp = &value
+	b.timestamp = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -123,9 +132,9 @@ func (b *LogEntryBuilder) Copy(object *LogEntry) *LogEntryBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.clusterUUID = object.clusterUUID
 	b.description = object.description
 	b.internalOnly = object.internalOnly
@@ -141,7 +150,7 @@ func (b *LogEntryBuilder) Build() (object *LogEntry, err error) {
 	object = new(LogEntry)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.clusterUUID = b.clusterUUID
 	object.description = b.description
 	object.internalOnly = b.internalOnly

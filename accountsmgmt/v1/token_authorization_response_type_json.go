@@ -39,7 +39,9 @@ func MarshalTokenAuthorizationResponse(object *TokenAuthorizationResponse, write
 func writeTokenAuthorizationResponse(object *TokenAuthorizationResponse, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.account != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.account != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -77,6 +79,7 @@ func readTokenAuthorizationResponse(iterator *jsoniter.Iterator) *TokenAuthoriza
 		case "account":
 			value := readAccount(iterator)
 			object.account = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

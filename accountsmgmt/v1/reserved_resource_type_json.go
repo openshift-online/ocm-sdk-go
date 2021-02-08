@@ -40,60 +40,68 @@ func MarshalReservedResource(object *ReservedResource, writer io.Writer) error {
 func writeReservedResource(object *ReservedResource, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.byoc != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("byoc")
-		stream.WriteBool(*object.byoc)
+		stream.WriteBool(object.byoc)
 		count++
 	}
-	if object.availabilityZoneType != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("availability_zone_type")
-		stream.WriteString(*object.availabilityZoneType)
+		stream.WriteString(object.availabilityZoneType)
 		count++
 	}
-	if object.count != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("count")
-		stream.WriteInt(*object.count)
+		stream.WriteInt(object.count)
 		count++
 	}
-	if object.createdAt != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("created_at")
-		stream.WriteString((*object.createdAt).Format(time.RFC3339))
+		stream.WriteString((object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.resourceName != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_name")
-		stream.WriteString(*object.resourceName)
+		stream.WriteString(object.resourceName)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
-	if object.updatedAt != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_at")
-		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
+		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -125,33 +133,40 @@ func readReservedResource(iterator *jsoniter.Iterator) *ReservedResource {
 		switch field {
 		case "byoc":
 			value := iterator.ReadBool()
-			object.byoc = &value
+			object.byoc = value
+			object.bitmap_ |= 1
 		case "availability_zone_type":
 			value := iterator.ReadString()
-			object.availabilityZoneType = &value
+			object.availabilityZoneType = value
+			object.bitmap_ |= 2
 		case "count":
 			value := iterator.ReadInt()
-			object.count = &value
+			object.count = value
+			object.bitmap_ |= 4
 		case "created_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.createdAt = &value
+			object.createdAt = value
+			object.bitmap_ |= 8
 		case "resource_name":
 			value := iterator.ReadString()
-			object.resourceName = &value
+			object.resourceName = value
+			object.bitmap_ |= 16
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 32
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedAt = &value
+			object.updatedAt = value
+			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}

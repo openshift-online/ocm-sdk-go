@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Information about the API of a cluster.
 type ClusterAPI struct {
-	url       *string
-	listening *ListeningMethod
+	bitmap_   uint32
+	url       string
+	listening ListeningMethod
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterAPI) Empty() bool {
-	return o == nil || (o.url == nil &&
-		o.listening == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // URL returns the value of the 'URL' attribute, or
@@ -39,8 +38,8 @@ func (o *ClusterAPI) Empty() bool {
 //
 // The URL of the API server of the cluster.
 func (o *ClusterAPI) URL() string {
-	if o != nil && o.url != nil {
-		return *o.url
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.url
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *ClusterAPI) URL() string {
 //
 // The URL of the API server of the cluster.
 func (o *ClusterAPI) GetURL() (value string, ok bool) {
-	ok = o != nil && o.url != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.url
+		value = o.url
 	}
 	return
 }
@@ -62,8 +61,8 @@ func (o *ClusterAPI) GetURL() (value string, ok bool) {
 //
 // The listening method of the API server.
 func (o *ClusterAPI) Listening() ListeningMethod {
-	if o != nil && o.listening != nil {
-		return *o.listening
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.listening
 	}
 	return ListeningMethod("")
 }
@@ -73,9 +72,9 @@ func (o *ClusterAPI) Listening() ListeningMethod {
 //
 // The listening method of the API server.
 func (o *ClusterAPI) GetListening() (value ListeningMethod, ok bool) {
-	ok = o != nil && o.listening != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.listening
+		value = o.listening
 	}
 	return
 }
@@ -94,7 +93,7 @@ const ClusterAPIListNilKind = "ClusterAPIListNil"
 
 // ClusterAPIList is a list of values of the 'cluster_API' type.
 type ClusterAPIList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterAPI
 }

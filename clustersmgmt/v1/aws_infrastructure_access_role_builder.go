@@ -23,34 +23,36 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // A set of acces permissions for AWS resources
 type AWSInfrastructureAccessRoleBuilder struct {
-	id          *string
-	href        *string
-	link        bool
-	description *string
-	displayName *string
-	state       *AWSInfrastructureAccessRoleState
+	bitmap_     uint32
+	id          string
+	href        string
+	description string
+	displayName string
+	state       AWSInfrastructureAccessRoleState
 }
 
 // NewAWSInfrastructureAccessRole creates a new builder of 'AWS_infrastructure_access_role' objects.
 func NewAWSInfrastructureAccessRole() *AWSInfrastructureAccessRoleBuilder {
-	return new(AWSInfrastructureAccessRoleBuilder)
+	return &AWSInfrastructureAccessRoleBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *AWSInfrastructureAccessRoleBuilder) Link(value bool) *AWSInfrastructureAccessRoleBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *AWSInfrastructureAccessRoleBuilder) ID(value string) *AWSInfrastructureAccessRoleBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *AWSInfrastructureAccessRoleBuilder) HREF(value string) *AWSInfrastructureAccessRoleBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *AWSInfrastructureAccessRoleBuilder) Link(value bool) *AWSInfrastructureAccessRoleBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -58,7 +60,8 @@ func (b *AWSInfrastructureAccessRoleBuilder) Link(value bool) *AWSInfrastructure
 //
 //
 func (b *AWSInfrastructureAccessRoleBuilder) Description(value string) *AWSInfrastructureAccessRoleBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -66,7 +69,8 @@ func (b *AWSInfrastructureAccessRoleBuilder) Description(value string) *AWSInfra
 //
 //
 func (b *AWSInfrastructureAccessRoleBuilder) DisplayName(value string) *AWSInfrastructureAccessRoleBuilder {
-	b.displayName = &value
+	b.displayName = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,7 +78,8 @@ func (b *AWSInfrastructureAccessRoleBuilder) DisplayName(value string) *AWSInfra
 //
 // State of an AWS infrastructure access role.
 func (b *AWSInfrastructureAccessRoleBuilder) State(value AWSInfrastructureAccessRoleState) *AWSInfrastructureAccessRoleBuilder {
-	b.state = &value
+	b.state = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -83,9 +88,9 @@ func (b *AWSInfrastructureAccessRoleBuilder) Copy(object *AWSInfrastructureAcces
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.description = object.description
 	b.displayName = object.displayName
 	b.state = object.state
@@ -97,7 +102,7 @@ func (b *AWSInfrastructureAccessRoleBuilder) Build() (object *AWSInfrastructureA
 	object = new(AWSInfrastructureAccessRole)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.description = b.description
 	object.displayName = b.displayName
 	object.state = b.state

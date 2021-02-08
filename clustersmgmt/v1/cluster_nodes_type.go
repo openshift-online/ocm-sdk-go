@@ -23,25 +23,20 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Counts of different classes of nodes inside a cluster.
 type ClusterNodes struct {
+	bitmap_            uint32
 	autoscaleCompute   *MachinePoolAutoscaling
 	availabilityZones  []string
-	compute            *int
+	compute            int
 	computeLabels      map[string]string
 	computeMachineType *MachineType
-	infra              *int
-	master             *int
-	total              *int
+	infra              int
+	master             int
+	total              int
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterNodes) Empty() bool {
-	return o == nil || (len(o.availabilityZones) == 0 &&
-		o.compute == nil &&
-		len(o.computeLabels) == 0 &&
-		o.infra == nil &&
-		o.master == nil &&
-		o.total == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AutoscaleCompute returns the value of the 'autoscale_compute' attribute, or
@@ -50,10 +45,10 @@ func (o *ClusterNodes) Empty() bool {
 // Details for auto-scaling the compute machine pool.
 // Compute and AutoscaleCompute cannot be used together.
 func (o *ClusterNodes) AutoscaleCompute() *MachinePoolAutoscaling {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.autoscaleCompute
 	}
-	return o.autoscaleCompute
+	return nil
 }
 
 // GetAutoscaleCompute returns the value of the 'autoscale_compute' attribute and
@@ -62,7 +57,7 @@ func (o *ClusterNodes) AutoscaleCompute() *MachinePoolAutoscaling {
 // Details for auto-scaling the compute machine pool.
 // Compute and AutoscaleCompute cannot be used together.
 func (o *ClusterNodes) GetAutoscaleCompute() (value *MachinePoolAutoscaling, ok bool) {
-	ok = o != nil && o.autoscaleCompute != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.autoscaleCompute
 	}
@@ -74,10 +69,10 @@ func (o *ClusterNodes) GetAutoscaleCompute() (value *MachinePoolAutoscaling, ok 
 //
 // The availability zones upon which the nodes are created.
 func (o *ClusterNodes) AvailabilityZones() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.availabilityZones
 	}
-	return o.availabilityZones
+	return nil
 }
 
 // GetAvailabilityZones returns the value of the 'availability_zones' attribute and
@@ -85,7 +80,7 @@ func (o *ClusterNodes) AvailabilityZones() []string {
 //
 // The availability zones upon which the nodes are created.
 func (o *ClusterNodes) GetAvailabilityZones() (value []string, ok bool) {
-	ok = o != nil && o.availabilityZones != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.availabilityZones
 	}
@@ -98,8 +93,8 @@ func (o *ClusterNodes) GetAvailabilityZones() (value []string, ok bool) {
 // Number of compute nodes of the cluster.
 // Compute and AutoscaleCompute cannot be used together.
 func (o *ClusterNodes) Compute() int {
-	if o != nil && o.compute != nil {
-		return *o.compute
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.compute
 	}
 	return 0
 }
@@ -110,9 +105,9 @@ func (o *ClusterNodes) Compute() int {
 // Number of compute nodes of the cluster.
 // Compute and AutoscaleCompute cannot be used together.
 func (o *ClusterNodes) GetCompute() (value int, ok bool) {
-	ok = o != nil && o.compute != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.compute
+		value = o.compute
 	}
 	return
 }
@@ -122,10 +117,10 @@ func (o *ClusterNodes) GetCompute() (value int, ok bool) {
 //
 // The labels set on the "default" compute machine pool.
 func (o *ClusterNodes) ComputeLabels() map[string]string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.computeLabels
 	}
-	return o.computeLabels
+	return nil
 }
 
 // GetComputeLabels returns the value of the 'compute_labels' attribute and
@@ -133,7 +128,7 @@ func (o *ClusterNodes) ComputeLabels() map[string]string {
 //
 // The labels set on the "default" compute machine pool.
 func (o *ClusterNodes) GetComputeLabels() (value map[string]string, ok bool) {
-	ok = o != nil && o.computeLabels != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.computeLabels
 	}
@@ -145,10 +140,10 @@ func (o *ClusterNodes) GetComputeLabels() (value map[string]string, ok bool) {
 //
 // The compute machine type to use, for example `r5.xlarge`.
 func (o *ClusterNodes) ComputeMachineType() *MachineType {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.computeMachineType
 	}
-	return o.computeMachineType
+	return nil
 }
 
 // GetComputeMachineType returns the value of the 'compute_machine_type' attribute and
@@ -156,7 +151,7 @@ func (o *ClusterNodes) ComputeMachineType() *MachineType {
 //
 // The compute machine type to use, for example `r5.xlarge`.
 func (o *ClusterNodes) GetComputeMachineType() (value *MachineType, ok bool) {
-	ok = o != nil && o.computeMachineType != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.computeMachineType
 	}
@@ -168,8 +163,8 @@ func (o *ClusterNodes) GetComputeMachineType() (value *MachineType, ok bool) {
 //
 // Number of infrastructure nodes of the cluster.
 func (o *ClusterNodes) Infra() int {
-	if o != nil && o.infra != nil {
-		return *o.infra
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.infra
 	}
 	return 0
 }
@@ -179,9 +174,9 @@ func (o *ClusterNodes) Infra() int {
 //
 // Number of infrastructure nodes of the cluster.
 func (o *ClusterNodes) GetInfra() (value int, ok bool) {
-	ok = o != nil && o.infra != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.infra
+		value = o.infra
 	}
 	return
 }
@@ -191,8 +186,8 @@ func (o *ClusterNodes) GetInfra() (value int, ok bool) {
 //
 // Number of master nodes of the cluster.
 func (o *ClusterNodes) Master() int {
-	if o != nil && o.master != nil {
-		return *o.master
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.master
 	}
 	return 0
 }
@@ -202,9 +197,9 @@ func (o *ClusterNodes) Master() int {
 //
 // Number of master nodes of the cluster.
 func (o *ClusterNodes) GetMaster() (value int, ok bool) {
-	ok = o != nil && o.master != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.master
+		value = o.master
 	}
 	return
 }
@@ -214,8 +209,8 @@ func (o *ClusterNodes) GetMaster() (value int, ok bool) {
 //
 // Total number of nodes of the cluster.
 func (o *ClusterNodes) Total() int {
-	if o != nil && o.total != nil {
-		return *o.total
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.total
 	}
 	return 0
 }
@@ -225,9 +220,9 @@ func (o *ClusterNodes) Total() int {
 //
 // Total number of nodes of the cluster.
 func (o *ClusterNodes) GetTotal() (value int, ok bool) {
-	ok = o != nil && o.total != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.total
+		value = o.total
 	}
 	return
 }
@@ -246,7 +241,7 @@ const ClusterNodesListNilKind = "ClusterNodesListNil"
 
 // ClusterNodesList is a list of values of the 'cluster_nodes' type.
 type ClusterNodesList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterNodes
 }

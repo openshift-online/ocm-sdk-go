@@ -23,33 +23,35 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type RoleBuilder struct {
-	id          *string
-	href        *string
-	link        bool
-	name        *string
+	bitmap_     uint32
+	id          string
+	href        string
+	name        string
 	permissions []*PermissionBuilder
 }
 
 // NewRole creates a new builder of 'role' objects.
 func NewRole() *RoleBuilder {
-	return new(RoleBuilder)
+	return &RoleBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *RoleBuilder) Link(value bool) *RoleBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *RoleBuilder) ID(value string) *RoleBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *RoleBuilder) HREF(value string) *RoleBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *RoleBuilder) Link(value bool) *RoleBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -57,7 +59,8 @@ func (b *RoleBuilder) Link(value bool) *RoleBuilder {
 //
 //
 func (b *RoleBuilder) Name(value string) *RoleBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -67,6 +70,7 @@ func (b *RoleBuilder) Name(value string) *RoleBuilder {
 func (b *RoleBuilder) Permissions(values ...*PermissionBuilder) *RoleBuilder {
 	b.permissions = make([]*PermissionBuilder, len(values))
 	copy(b.permissions, values)
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -75,9 +79,9 @@ func (b *RoleBuilder) Copy(object *Role) *RoleBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.name = object.name
 	if object.permissions != nil {
 		b.permissions = make([]*PermissionBuilder, len(object.permissions))
@@ -95,7 +99,7 @@ func (b *RoleBuilder) Build() (object *Role, err error) {
 	object = new(Role)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.name = b.name
 	if b.permissions != nil {
 		object.permissions = make([]*Permission, len(b.permissions))

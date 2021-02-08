@@ -39,46 +39,46 @@ func MarshalPermission(object *Permission, writer io.Writer) error {
 func writePermission(object *Permission, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(PermissionLinkKind)
 	} else {
 		stream.WriteString(PermissionKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.action != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("action")
-		stream.WriteString(string(*object.action))
+		stream.WriteString(string(object.action))
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -110,20 +110,24 @@ func readPermission(iterator *jsoniter.Iterator) *Permission {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == PermissionLinkKind
+			if value == PermissionLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "action":
 			text := iterator.ReadString()
 			value := Action(text)
-			object.action = &value
+			object.action = value
+			object.bitmap_ |= 8
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

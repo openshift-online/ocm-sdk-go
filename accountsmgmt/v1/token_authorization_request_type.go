@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type TokenAuthorizationRequest struct {
-	authorizationToken *string
+	bitmap_            uint32
+	authorizationToken string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *TokenAuthorizationRequest) Empty() bool {
-	return o == nil || (o.authorizationToken == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AuthorizationToken returns the value of the 'authorization_token' attribute, or
@@ -37,8 +37,8 @@ func (o *TokenAuthorizationRequest) Empty() bool {
 //
 // The pull secret of a given account
 func (o *TokenAuthorizationRequest) AuthorizationToken() string {
-	if o != nil && o.authorizationToken != nil {
-		return *o.authorizationToken
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.authorizationToken
 	}
 	return ""
 }
@@ -48,9 +48,9 @@ func (o *TokenAuthorizationRequest) AuthorizationToken() string {
 //
 // The pull secret of a given account
 func (o *TokenAuthorizationRequest) GetAuthorizationToken() (value string, ok bool) {
-	ok = o != nil && o.authorizationToken != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.authorizationToken
+		value = o.authorizationToken
 	}
 	return
 }
@@ -69,7 +69,7 @@ const TokenAuthorizationRequestListNilKind = "TokenAuthorizationRequestListNil"
 
 // TokenAuthorizationRequestList is a list of values of the 'token_authorization_request' type.
 type TokenAuthorizationRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*TokenAuthorizationRequest
 }

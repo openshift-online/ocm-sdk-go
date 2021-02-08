@@ -39,113 +39,122 @@ func MarshalAddOn(object *AddOn, writer io.Writer) error {
 func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(AddOnLinkKind)
 	} else {
 		stream.WriteString(AddOnKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.description != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("description")
-		stream.WriteString(*object.description)
+		stream.WriteString(object.description)
 		count++
 	}
-	if object.docsLink != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("docs_link")
-		stream.WriteString(*object.docsLink)
+		stream.WriteString(object.docsLink)
 		count++
 	}
-	if object.enabled != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("enabled")
-		stream.WriteBool(*object.enabled)
+		stream.WriteBool(object.enabled)
 		count++
 	}
-	if object.hasExternalResources != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("has_external_resources")
-		stream.WriteBool(*object.hasExternalResources)
+		stream.WriteBool(object.hasExternalResources)
 		count++
 	}
-	if object.hidden != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("hidden")
-		stream.WriteBool(*object.hidden)
+		stream.WriteBool(object.hidden)
 		count++
 	}
-	if object.icon != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("icon")
-		stream.WriteString(*object.icon)
+		stream.WriteString(object.icon)
 		count++
 	}
-	if object.installMode != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("install_mode")
-		stream.WriteString(string(*object.installMode))
+		stream.WriteString(string(object.installMode))
 		count++
 	}
-	if object.label != nil {
+	present_ = object.bitmap_&1024 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("label")
-		stream.WriteString(*object.label)
+		stream.WriteString(object.label)
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&2048 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.operatorName != nil {
+	present_ = object.bitmap_&4096 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("operator_name")
-		stream.WriteString(*object.operatorName)
+		stream.WriteString(object.operatorName)
 		count++
 	}
-	if object.parameters != nil {
+	present_ = object.bitmap_&8192 != 0 && object.parameters != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -156,7 +165,8 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		stream.WriteObjectEnd()
 		count++
 	}
-	if object.requirements != nil {
+	present_ = object.bitmap_&16384 != 0 && object.requirements != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -164,28 +174,31 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		writeAddOnRequirementList(object.requirements, stream)
 		count++
 	}
-	if object.resourceCost != nil {
+	present_ = object.bitmap_&32768 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_cost")
-		stream.WriteFloat64(*object.resourceCost)
+		stream.WriteFloat64(object.resourceCost)
 		count++
 	}
-	if object.resourceName != nil {
+	present_ = object.bitmap_&65536 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_name")
-		stream.WriteString(*object.resourceName)
+		stream.WriteString(object.resourceName)
 		count++
 	}
-	if object.targetNamespace != nil {
+	present_ = object.bitmap_&131072 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("target_namespace")
-		stream.WriteString(*object.targetNamespace)
+		stream.WriteString(object.targetNamespace)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -217,44 +230,56 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == AddOnLinkKind
+			if value == AddOnLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "description":
 			value := iterator.ReadString()
-			object.description = &value
+			object.description = value
+			object.bitmap_ |= 8
 		case "docs_link":
 			value := iterator.ReadString()
-			object.docsLink = &value
+			object.docsLink = value
+			object.bitmap_ |= 16
 		case "enabled":
 			value := iterator.ReadBool()
-			object.enabled = &value
+			object.enabled = value
+			object.bitmap_ |= 32
 		case "has_external_resources":
 			value := iterator.ReadBool()
-			object.hasExternalResources = &value
+			object.hasExternalResources = value
+			object.bitmap_ |= 64
 		case "hidden":
 			value := iterator.ReadBool()
-			object.hidden = &value
+			object.hidden = value
+			object.bitmap_ |= 128
 		case "icon":
 			value := iterator.ReadString()
-			object.icon = &value
+			object.icon = value
+			object.bitmap_ |= 256
 		case "install_mode":
 			text := iterator.ReadString()
 			value := AddOnInstallMode(text)
-			object.installMode = &value
+			object.installMode = value
+			object.bitmap_ |= 512
 		case "label":
 			value := iterator.ReadString()
-			object.label = &value
+			object.label = value
+			object.bitmap_ |= 1024
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 2048
 		case "operator_name":
 			value := iterator.ReadString()
-			object.operatorName = &value
+			object.operatorName = value
+			object.bitmap_ |= 4096
 		case "parameters":
 			value := &AddOnParameterList{}
 			for {
@@ -267,8 +292,7 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 					text := iterator.ReadString()
 					value.link = text == AddOnParameterListLinkKind
 				case "href":
-					text := iterator.ReadString()
-					value.href = &text
+					value.href = iterator.ReadString()
 				case "items":
 					value.items = readAddOnParameterList(iterator)
 				default:
@@ -276,18 +300,23 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 				}
 			}
 			object.parameters = value
+			object.bitmap_ |= 8192
 		case "requirements":
 			value := readAddOnRequirementList(iterator)
 			object.requirements = value
+			object.bitmap_ |= 16384
 		case "resource_cost":
 			value := iterator.ReadFloat64()
-			object.resourceCost = &value
+			object.resourceCost = value
+			object.bitmap_ |= 32768
 		case "resource_name":
 			value := iterator.ReadString()
-			object.resourceName = &value
+			object.resourceName = value
+			object.bitmap_ |= 65536
 		case "target_namespace":
 			value := iterator.ReadString()
-			object.targetNamespace = &value
+			object.targetNamespace = value
+			object.bitmap_ |= 131072
 		default:
 			iterator.ReadAny()
 		}

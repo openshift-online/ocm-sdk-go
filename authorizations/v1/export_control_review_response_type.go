@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 //
 type ExportControlReviewResponse struct {
-	restricted *bool
+	bitmap_    uint32
+	restricted bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ExportControlReviewResponse) Empty() bool {
-	return o == nil || (o.restricted == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Restricted returns the value of the 'restricted' attribute, or
@@ -37,8 +37,8 @@ func (o *ExportControlReviewResponse) Empty() bool {
 //
 //
 func (o *ExportControlReviewResponse) Restricted() bool {
-	if o != nil && o.restricted != nil {
-		return *o.restricted
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.restricted
 	}
 	return false
 }
@@ -48,9 +48,9 @@ func (o *ExportControlReviewResponse) Restricted() bool {
 //
 //
 func (o *ExportControlReviewResponse) GetRestricted() (value bool, ok bool) {
-	ok = o != nil && o.restricted != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.restricted
+		value = o.restricted
 	}
 	return
 }
@@ -69,7 +69,7 @@ const ExportControlReviewResponseListNilKind = "ExportControlReviewResponseListN
 
 // ExportControlReviewResponseList is a list of values of the 'export_control_review_response' type.
 type ExportControlReviewResponseList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ExportControlReviewResponse
 }

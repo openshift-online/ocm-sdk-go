@@ -39,14 +39,14 @@ const LabelNilKind = "LabelNil"
 //
 //
 type Label struct {
-	id        *string
-	href      *string
-	link      bool
-	createdAt *time.Time
-	internal  *bool
-	key       *string
-	updatedAt *time.Time
-	value     *string
+	bitmap_   uint32
+	id        string
+	href      string
+	createdAt time.Time
+	key       string
+	updatedAt time.Time
+	value     string
+	internal  bool
 }
 
 // Kind returns the name of the type of the object.
@@ -54,16 +54,21 @@ func (o *Label) Kind() string {
 	if o == nil {
 		return LabelNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return LabelLinkKind
 	}
 	return LabelKind
 }
 
+// Link returns true iif this is a link.
+func (o *Label) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Label) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -71,22 +76,17 @@ func (o *Label) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Label) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Label) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Label) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -94,22 +94,16 @@ func (o *Label) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Label) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Label) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.createdAt == nil &&
-		o.internal == nil &&
-		o.key == nil &&
-		o.updatedAt == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // CreatedAt returns the value of the 'created_at' attribute, or
@@ -117,8 +111,8 @@ func (o *Label) Empty() bool {
 //
 //
 func (o *Label) CreatedAt() time.Time {
-	if o != nil && o.createdAt != nil {
-		return *o.createdAt
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.createdAt
 	}
 	return time.Time{}
 }
@@ -128,9 +122,9 @@ func (o *Label) CreatedAt() time.Time {
 //
 //
 func (o *Label) GetCreatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.createdAt != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.createdAt
+		value = o.createdAt
 	}
 	return
 }
@@ -140,8 +134,8 @@ func (o *Label) GetCreatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *Label) Internal() bool {
-	if o != nil && o.internal != nil {
-		return *o.internal
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.internal
 	}
 	return false
 }
@@ -151,9 +145,9 @@ func (o *Label) Internal() bool {
 //
 //
 func (o *Label) GetInternal() (value bool, ok bool) {
-	ok = o != nil && o.internal != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.internal
+		value = o.internal
 	}
 	return
 }
@@ -163,8 +157,8 @@ func (o *Label) GetInternal() (value bool, ok bool) {
 //
 //
 func (o *Label) Key() string {
-	if o != nil && o.key != nil {
-		return *o.key
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.key
 	}
 	return ""
 }
@@ -174,9 +168,9 @@ func (o *Label) Key() string {
 //
 //
 func (o *Label) GetKey() (value string, ok bool) {
-	ok = o != nil && o.key != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.key
+		value = o.key
 	}
 	return
 }
@@ -186,8 +180,8 @@ func (o *Label) GetKey() (value string, ok bool) {
 //
 //
 func (o *Label) UpdatedAt() time.Time {
-	if o != nil && o.updatedAt != nil {
-		return *o.updatedAt
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.updatedAt
 	}
 	return time.Time{}
 }
@@ -197,9 +191,9 @@ func (o *Label) UpdatedAt() time.Time {
 //
 //
 func (o *Label) GetUpdatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedAt != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.updatedAt
+		value = o.updatedAt
 	}
 	return
 }
@@ -209,8 +203,8 @@ func (o *Label) GetUpdatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *Label) Value() string {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.value
 	}
 	return ""
 }
@@ -220,9 +214,9 @@ func (o *Label) Value() string {
 //
 //
 func (o *Label) GetValue() (value string, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -241,7 +235,7 @@ const LabelListNilKind = "LabelListNil"
 
 // LabelList is a list of values of the 'label' type.
 type LabelList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Label
 }
@@ -264,8 +258,8 @@ func (l *LabelList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *LabelList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -273,9 +267,9 @@ func (l *LabelList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *LabelList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

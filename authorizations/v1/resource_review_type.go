@@ -23,25 +23,19 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Contains the result of performing a resource access review.
 type ResourceReview struct {
-	accountUsername *string
-	action          *string
+	bitmap_         uint32
+	accountUsername string
+	action          string
 	clusterIDs      []string
 	clusterUUIDs    []string
 	organizationIDs []string
-	resourceType    *string
+	resourceType    string
 	subscriptionIDs []string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ResourceReview) Empty() bool {
-	return o == nil || (o.accountUsername == nil &&
-		o.action == nil &&
-		len(o.clusterIDs) == 0 &&
-		len(o.clusterUUIDs) == 0 &&
-		len(o.organizationIDs) == 0 &&
-		o.resourceType == nil &&
-		len(o.subscriptionIDs) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AccountUsername returns the value of the 'account_username' attribute, or
@@ -49,8 +43,8 @@ func (o *ResourceReview) Empty() bool {
 //
 // Name of the account that is trying to perform the access.
 func (o *ResourceReview) AccountUsername() string {
-	if o != nil && o.accountUsername != nil {
-		return *o.accountUsername
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.accountUsername
 	}
 	return ""
 }
@@ -60,9 +54,9 @@ func (o *ResourceReview) AccountUsername() string {
 //
 // Name of the account that is trying to perform the access.
 func (o *ResourceReview) GetAccountUsername() (value string, ok bool) {
-	ok = o != nil && o.accountUsername != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.accountUsername
+		value = o.accountUsername
 	}
 	return
 }
@@ -72,8 +66,8 @@ func (o *ResourceReview) GetAccountUsername() (value string, ok bool) {
 //
 // Action that will the user is trying to perform.
 func (o *ResourceReview) Action() string {
-	if o != nil && o.action != nil {
-		return *o.action
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.action
 	}
 	return ""
 }
@@ -83,9 +77,9 @@ func (o *ResourceReview) Action() string {
 //
 // Action that will the user is trying to perform.
 func (o *ResourceReview) GetAction() (value string, ok bool) {
-	ok = o != nil && o.action != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.action
+		value = o.action
 	}
 	return
 }
@@ -95,10 +89,10 @@ func (o *ResourceReview) GetAction() (value string, ok bool) {
 //
 // Identifiers of the Clusters (internal ids) that the user has permission to perform the action upon.
 func (o *ResourceReview) ClusterIDs() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clusterIDs
 	}
-	return o.clusterIDs
+	return nil
 }
 
 // GetClusterIDs returns the value of the 'cluster_IDs' attribute and
@@ -106,7 +100,7 @@ func (o *ResourceReview) ClusterIDs() []string {
 //
 // Identifiers of the Clusters (internal ids) that the user has permission to perform the action upon.
 func (o *ResourceReview) GetClusterIDs() (value []string, ok bool) {
-	ok = o != nil && o.clusterIDs != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.clusterIDs
 	}
@@ -118,10 +112,10 @@ func (o *ResourceReview) GetClusterIDs() (value []string, ok bool) {
 //
 // Identifiers which Clusters (external ids) that the user has permission to perform the action upon.
 func (o *ResourceReview) ClusterUUIDs() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.clusterUUIDs
 	}
-	return o.clusterUUIDs
+	return nil
 }
 
 // GetClusterUUIDs returns the value of the 'cluster_UUIDs' attribute and
@@ -129,7 +123,7 @@ func (o *ResourceReview) ClusterUUIDs() []string {
 //
 // Identifiers which Clusters (external ids) that the user has permission to perform the action upon.
 func (o *ResourceReview) GetClusterUUIDs() (value []string, ok bool) {
-	ok = o != nil && o.clusterUUIDs != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.clusterUUIDs
 	}
@@ -142,10 +136,10 @@ func (o *ResourceReview) GetClusterUUIDs() (value []string, ok bool) {
 // Identifiers of the organizations that the user has permissions to perform the action
 // upon.
 func (o *ResourceReview) OrganizationIDs() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.organizationIDs
 	}
-	return o.organizationIDs
+	return nil
 }
 
 // GetOrganizationIDs returns the value of the 'organization_IDs' attribute and
@@ -154,7 +148,7 @@ func (o *ResourceReview) OrganizationIDs() []string {
 // Identifiers of the organizations that the user has permissions to perform the action
 // upon.
 func (o *ResourceReview) GetOrganizationIDs() (value []string, ok bool) {
-	ok = o != nil && o.organizationIDs != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.organizationIDs
 	}
@@ -166,8 +160,8 @@ func (o *ResourceReview) GetOrganizationIDs() (value []string, ok bool) {
 //
 // Type of resource.
 func (o *ResourceReview) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -177,9 +171,9 @@ func (o *ResourceReview) ResourceType() string {
 //
 // Type of resource.
 func (o *ResourceReview) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -189,10 +183,10 @@ func (o *ResourceReview) GetResourceType() (value string, ok bool) {
 //
 // Identifiers of the subscriptions that the user has permission to perform the action upon.
 func (o *ResourceReview) SubscriptionIDs() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.subscriptionIDs
 	}
-	return o.subscriptionIDs
+	return nil
 }
 
 // GetSubscriptionIDs returns the value of the 'subscription_IDs' attribute and
@@ -200,7 +194,7 @@ func (o *ResourceReview) SubscriptionIDs() []string {
 //
 // Identifiers of the subscriptions that the user has permission to perform the action upon.
 func (o *ResourceReview) GetSubscriptionIDs() (value []string, ok bool) {
-	ok = o != nil && o.subscriptionIDs != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.subscriptionIDs
 	}
@@ -221,7 +215,7 @@ const ResourceReviewListNilKind = "ResourceReviewListNil"
 
 // ResourceReviewList is a list of values of the 'resource_review' type.
 type ResourceReviewList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ResourceReview
 }

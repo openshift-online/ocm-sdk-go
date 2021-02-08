@@ -35,12 +35,12 @@ const ProvisionShardNilKind = "ProvisionShardNil"
 //
 // Contains the properties of the provision shard, including AWS and GCP related configurations
 type ProvisionShard struct {
-	id                       *string
-	href                     *string
-	link                     bool
+	bitmap_                  uint32
+	id                       string
+	href                     string
 	awsAccountOperatorConfig *ServerConfig
-	awsBaseDomain            *string
-	gcpBaseDomain            *string
+	awsBaseDomain            string
+	gcpBaseDomain            string
 	gcpProjectOperator       *ServerConfig
 	hiveConfig               *ServerConfig
 }
@@ -50,16 +50,21 @@ func (o *ProvisionShard) Kind() string {
 	if o == nil {
 		return ProvisionShardNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return ProvisionShardLinkKind
 	}
 	return ProvisionShardKind
 }
 
+// Link returns true iif this is a link.
+func (o *ProvisionShard) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *ProvisionShard) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -67,22 +72,17 @@ func (o *ProvisionShard) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *ProvisionShard) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *ProvisionShard) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *ProvisionShard) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -90,19 +90,16 @@ func (o *ProvisionShard) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *ProvisionShard) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ProvisionShard) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.awsBaseDomain == nil &&
-		o.gcpBaseDomain == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // AWSAccountOperatorConfig returns the value of the 'AWS_account_operator_config' attribute, or
@@ -110,10 +107,10 @@ func (o *ProvisionShard) Empty() bool {
 //
 // Contains the configuration for the AWS account operator
 func (o *ProvisionShard) AWSAccountOperatorConfig() *ServerConfig {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.awsAccountOperatorConfig
 	}
-	return o.awsAccountOperatorConfig
+	return nil
 }
 
 // GetAWSAccountOperatorConfig returns the value of the 'AWS_account_operator_config' attribute and
@@ -121,7 +118,7 @@ func (o *ProvisionShard) AWSAccountOperatorConfig() *ServerConfig {
 //
 // Contains the configuration for the AWS account operator
 func (o *ProvisionShard) GetAWSAccountOperatorConfig() (value *ServerConfig, ok bool) {
-	ok = o != nil && o.awsAccountOperatorConfig != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.awsAccountOperatorConfig
 	}
@@ -133,8 +130,8 @@ func (o *ProvisionShard) GetAWSAccountOperatorConfig() (value *ServerConfig, ok 
 //
 // Contains the AWS base domain
 func (o *ProvisionShard) AWSBaseDomain() string {
-	if o != nil && o.awsBaseDomain != nil {
-		return *o.awsBaseDomain
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.awsBaseDomain
 	}
 	return ""
 }
@@ -144,9 +141,9 @@ func (o *ProvisionShard) AWSBaseDomain() string {
 //
 // Contains the AWS base domain
 func (o *ProvisionShard) GetAWSBaseDomain() (value string, ok bool) {
-	ok = o != nil && o.awsBaseDomain != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.awsBaseDomain
+		value = o.awsBaseDomain
 	}
 	return
 }
@@ -156,8 +153,8 @@ func (o *ProvisionShard) GetAWSBaseDomain() (value string, ok bool) {
 //
 // Contains the GCP base domain
 func (o *ProvisionShard) GCPBaseDomain() string {
-	if o != nil && o.gcpBaseDomain != nil {
-		return *o.gcpBaseDomain
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.gcpBaseDomain
 	}
 	return ""
 }
@@ -167,9 +164,9 @@ func (o *ProvisionShard) GCPBaseDomain() string {
 //
 // Contains the GCP base domain
 func (o *ProvisionShard) GetGCPBaseDomain() (value string, ok bool) {
-	ok = o != nil && o.gcpBaseDomain != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.gcpBaseDomain
+		value = o.gcpBaseDomain
 	}
 	return
 }
@@ -179,10 +176,10 @@ func (o *ProvisionShard) GetGCPBaseDomain() (value string, ok bool) {
 //
 // Contains the configuration for the GCP project operator
 func (o *ProvisionShard) GCPProjectOperator() *ServerConfig {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.gcpProjectOperator
 	}
-	return o.gcpProjectOperator
+	return nil
 }
 
 // GetGCPProjectOperator returns the value of the 'GCP_project_operator' attribute and
@@ -190,7 +187,7 @@ func (o *ProvisionShard) GCPProjectOperator() *ServerConfig {
 //
 // Contains the configuration for the GCP project operator
 func (o *ProvisionShard) GetGCPProjectOperator() (value *ServerConfig, ok bool) {
-	ok = o != nil && o.gcpProjectOperator != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.gcpProjectOperator
 	}
@@ -202,10 +199,10 @@ func (o *ProvisionShard) GetGCPProjectOperator() (value *ServerConfig, ok bool) 
 //
 // Contains the configuration for Hive
 func (o *ProvisionShard) HiveConfig() *ServerConfig {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.hiveConfig
 	}
-	return o.hiveConfig
+	return nil
 }
 
 // GetHiveConfig returns the value of the 'hive_config' attribute and
@@ -213,7 +210,7 @@ func (o *ProvisionShard) HiveConfig() *ServerConfig {
 //
 // Contains the configuration for Hive
 func (o *ProvisionShard) GetHiveConfig() (value *ServerConfig, ok bool) {
-	ok = o != nil && o.hiveConfig != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.hiveConfig
 	}
@@ -234,7 +231,7 @@ const ProvisionShardListNilKind = "ProvisionShardListNil"
 
 // ProvisionShardList is a list of values of the 'provision_shard' type.
 type ProvisionShardList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ProvisionShard
 }
@@ -257,8 +254,8 @@ func (l *ProvisionShardList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *ProvisionShardList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -266,9 +263,9 @@ func (l *ProvisionShardList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *ProvisionShardList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

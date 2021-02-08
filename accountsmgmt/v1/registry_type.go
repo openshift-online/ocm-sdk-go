@@ -39,17 +39,17 @@ const RegistryNilKind = "RegistryNil"
 //
 //
 type Registry struct {
-	id         *string
-	href       *string
-	link       bool
-	url        *string
-	cloudAlias *bool
-	createdAt  *time.Time
-	name       *string
-	orgName    *string
-	teamName   *string
-	type_      *string
-	updatedAt  *time.Time
+	bitmap_    uint32
+	id         string
+	href       string
+	url        string
+	createdAt  time.Time
+	name       string
+	orgName    string
+	teamName   string
+	type_      string
+	updatedAt  time.Time
+	cloudAlias bool
 }
 
 // Kind returns the name of the type of the object.
@@ -57,16 +57,21 @@ func (o *Registry) Kind() string {
 	if o == nil {
 		return RegistryNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return RegistryLinkKind
 	}
 	return RegistryKind
 }
 
+// Link returns true iif this is a link.
+func (o *Registry) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Registry) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -74,22 +79,17 @@ func (o *Registry) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Registry) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Registry) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Registry) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -97,25 +97,16 @@ func (o *Registry) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Registry) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Registry) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.url == nil &&
-		o.cloudAlias == nil &&
-		o.createdAt == nil &&
-		o.name == nil &&
-		o.orgName == nil &&
-		o.teamName == nil &&
-		o.type_ == nil &&
-		o.updatedAt == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // URL returns the value of the 'URL' attribute, or
@@ -123,8 +114,8 @@ func (o *Registry) Empty() bool {
 //
 //
 func (o *Registry) URL() string {
-	if o != nil && o.url != nil {
-		return *o.url
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.url
 	}
 	return ""
 }
@@ -134,9 +125,9 @@ func (o *Registry) URL() string {
 //
 //
 func (o *Registry) GetURL() (value string, ok bool) {
-	ok = o != nil && o.url != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.url
+		value = o.url
 	}
 	return
 }
@@ -146,8 +137,8 @@ func (o *Registry) GetURL() (value string, ok bool) {
 //
 //
 func (o *Registry) CloudAlias() bool {
-	if o != nil && o.cloudAlias != nil {
-		return *o.cloudAlias
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.cloudAlias
 	}
 	return false
 }
@@ -157,9 +148,9 @@ func (o *Registry) CloudAlias() bool {
 //
 //
 func (o *Registry) GetCloudAlias() (value bool, ok bool) {
-	ok = o != nil && o.cloudAlias != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.cloudAlias
+		value = o.cloudAlias
 	}
 	return
 }
@@ -169,8 +160,8 @@ func (o *Registry) GetCloudAlias() (value bool, ok bool) {
 //
 //
 func (o *Registry) CreatedAt() time.Time {
-	if o != nil && o.createdAt != nil {
-		return *o.createdAt
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.createdAt
 	}
 	return time.Time{}
 }
@@ -180,9 +171,9 @@ func (o *Registry) CreatedAt() time.Time {
 //
 //
 func (o *Registry) GetCreatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.createdAt != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.createdAt
+		value = o.createdAt
 	}
 	return
 }
@@ -192,8 +183,8 @@ func (o *Registry) GetCreatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *Registry) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -203,9 +194,9 @@ func (o *Registry) Name() string {
 //
 //
 func (o *Registry) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -215,8 +206,8 @@ func (o *Registry) GetName() (value string, ok bool) {
 //
 //
 func (o *Registry) OrgName() string {
-	if o != nil && o.orgName != nil {
-		return *o.orgName
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.orgName
 	}
 	return ""
 }
@@ -226,9 +217,9 @@ func (o *Registry) OrgName() string {
 //
 //
 func (o *Registry) GetOrgName() (value string, ok bool) {
-	ok = o != nil && o.orgName != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.orgName
+		value = o.orgName
 	}
 	return
 }
@@ -238,8 +229,8 @@ func (o *Registry) GetOrgName() (value string, ok bool) {
 //
 //
 func (o *Registry) TeamName() string {
-	if o != nil && o.teamName != nil {
-		return *o.teamName
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.teamName
 	}
 	return ""
 }
@@ -249,9 +240,9 @@ func (o *Registry) TeamName() string {
 //
 //
 func (o *Registry) GetTeamName() (value string, ok bool) {
-	ok = o != nil && o.teamName != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.teamName
+		value = o.teamName
 	}
 	return
 }
@@ -261,8 +252,8 @@ func (o *Registry) GetTeamName() (value string, ok bool) {
 //
 //
 func (o *Registry) Type() string {
-	if o != nil && o.type_ != nil {
-		return *o.type_
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.type_
 	}
 	return ""
 }
@@ -272,9 +263,9 @@ func (o *Registry) Type() string {
 //
 //
 func (o *Registry) GetType() (value string, ok bool) {
-	ok = o != nil && o.type_ != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
-		value = *o.type_
+		value = o.type_
 	}
 	return
 }
@@ -284,8 +275,8 @@ func (o *Registry) GetType() (value string, ok bool) {
 //
 //
 func (o *Registry) UpdatedAt() time.Time {
-	if o != nil && o.updatedAt != nil {
-		return *o.updatedAt
+	if o != nil && o.bitmap_&1024 != 0 {
+		return o.updatedAt
 	}
 	return time.Time{}
 }
@@ -295,9 +286,9 @@ func (o *Registry) UpdatedAt() time.Time {
 //
 //
 func (o *Registry) GetUpdatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedAt != nil
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
-		value = *o.updatedAt
+		value = o.updatedAt
 	}
 	return
 }
@@ -316,7 +307,7 @@ const RegistryListNilKind = "RegistryListNil"
 
 // RegistryList is a list of values of the 'registry' type.
 type RegistryList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Registry
 }
@@ -339,8 +330,8 @@ func (l *RegistryList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *RegistryList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -348,9 +339,9 @@ func (l *RegistryList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *RegistryList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

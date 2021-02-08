@@ -39,86 +39,91 @@ func MarshalSupportCaseRequest(object *SupportCaseRequest, writer io.Writer) err
 func writeSupportCaseRequest(object *SupportCaseRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(SupportCaseRequestLinkKind)
 	} else {
 		stream.WriteString(SupportCaseRequestKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.clusterId != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_id")
-		stream.WriteString(*object.clusterId)
+		stream.WriteString(object.clusterId)
 		count++
 	}
-	if object.clusterUuid != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_uuid")
-		stream.WriteString(*object.clusterUuid)
+		stream.WriteString(object.clusterUuid)
 		count++
 	}
-	if object.description != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("description")
-		stream.WriteString(*object.description)
+		stream.WriteString(object.description)
 		count++
 	}
-	if object.eventStreamId != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("event_stream_id")
-		stream.WriteString(*object.eventStreamId)
+		stream.WriteString(object.eventStreamId)
 		count++
 	}
-	if object.severity != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("severity")
-		stream.WriteString(*object.severity)
+		stream.WriteString(object.severity)
 		count++
 	}
-	if object.subscriptionId != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subscription_id")
-		stream.WriteString(*object.subscriptionId)
+		stream.WriteString(object.subscriptionId)
 		count++
 	}
-	if object.summary != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("summary")
-		stream.WriteString(*object.summary)
+		stream.WriteString(object.summary)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -150,34 +155,43 @@ func readSupportCaseRequest(iterator *jsoniter.Iterator) *SupportCaseRequest {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == SupportCaseRequestLinkKind
+			if value == SupportCaseRequestLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "cluster_id":
 			value := iterator.ReadString()
-			object.clusterId = &value
+			object.clusterId = value
+			object.bitmap_ |= 8
 		case "cluster_uuid":
 			value := iterator.ReadString()
-			object.clusterUuid = &value
+			object.clusterUuid = value
+			object.bitmap_ |= 16
 		case "description":
 			value := iterator.ReadString()
-			object.description = &value
+			object.description = value
+			object.bitmap_ |= 32
 		case "event_stream_id":
 			value := iterator.ReadString()
-			object.eventStreamId = &value
+			object.eventStreamId = value
+			object.bitmap_ |= 64
 		case "severity":
 			value := iterator.ReadString()
-			object.severity = &value
+			object.severity = value
+			object.bitmap_ |= 128
 		case "subscription_id":
 			value := iterator.ReadString()
-			object.subscriptionId = &value
+			object.subscriptionId = value
+			object.bitmap_ |= 256
 		case "summary":
 			value := iterator.ReadString()
-			object.summary = &value
+			object.summary = value
+			object.bitmap_ |= 512
 		default:
 			iterator.ReadAny()
 		}

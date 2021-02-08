@@ -40,7 +40,9 @@ func MarshalClusterNodes(object *ClusterNodes, writer io.Writer) error {
 func writeClusterNodes(object *ClusterNodes, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.autoscaleCompute != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.autoscaleCompute != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -48,7 +50,8 @@ func writeClusterNodes(object *ClusterNodes, stream *jsoniter.Stream) {
 		writeMachinePoolAutoscaling(object.autoscaleCompute, stream)
 		count++
 	}
-	if object.availabilityZones != nil {
+	present_ = object.bitmap_&2 != 0 && object.availabilityZones != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -56,39 +59,46 @@ func writeClusterNodes(object *ClusterNodes, stream *jsoniter.Stream) {
 		writeStringList(object.availabilityZones, stream)
 		count++
 	}
-	if object.compute != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("compute")
-		stream.WriteInt(*object.compute)
+		stream.WriteInt(object.compute)
 		count++
 	}
-	if object.computeLabels != nil {
+	present_ = object.bitmap_&8 != 0 && object.computeLabels != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("compute_labels")
-		stream.WriteObjectStart()
-		keys := make([]string, len(object.computeLabels))
-		i := 0
-		for key := range object.computeLabels {
-			keys[i] = key
-			i++
-		}
-		sort.Strings(keys)
-		for i, key := range keys {
-			if i > 0 {
-				stream.WriteMore()
+		if object.computeLabels != nil {
+			stream.WriteObjectStart()
+			keys := make([]string, len(object.computeLabels))
+			i := 0
+			for key := range object.computeLabels {
+				keys[i] = key
+				i++
 			}
-			item := object.computeLabels[key]
-			stream.WriteObjectField(key)
-			stream.WriteString(item)
+			sort.Strings(keys)
+			for i, key := range keys {
+				if i > 0 {
+					stream.WriteMore()
+				}
+				item := object.computeLabels[key]
+				stream.WriteObjectField(key)
+				stream.WriteString(item)
+			}
+			stream.WriteObjectEnd()
+		} else {
+			stream.WriteNil()
 		}
-		stream.WriteObjectEnd()
 		count++
 	}
-	if object.computeMachineType != nil {
+	present_ = object.bitmap_&16 != 0 && object.computeMachineType != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -96,28 +106,31 @@ func writeClusterNodes(object *ClusterNodes, stream *jsoniter.Stream) {
 		writeMachineType(object.computeMachineType, stream)
 		count++
 	}
-	if object.infra != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("infra")
-		stream.WriteInt(*object.infra)
+		stream.WriteInt(object.infra)
 		count++
 	}
-	if object.master != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("master")
-		stream.WriteInt(*object.master)
+		stream.WriteInt(object.master)
 		count++
 	}
-	if object.total != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("total")
-		stream.WriteInt(*object.total)
+		stream.WriteInt(object.total)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -150,12 +163,15 @@ func readClusterNodes(iterator *jsoniter.Iterator) *ClusterNodes {
 		case "autoscale_compute":
 			value := readMachinePoolAutoscaling(iterator)
 			object.autoscaleCompute = value
+			object.bitmap_ |= 1
 		case "availability_zones":
 			value := readStringList(iterator)
 			object.availabilityZones = value
+			object.bitmap_ |= 2
 		case "compute":
 			value := iterator.ReadInt()
-			object.compute = &value
+			object.compute = value
+			object.bitmap_ |= 4
 		case "compute_labels":
 			value := map[string]string{}
 			for {
@@ -167,18 +183,23 @@ func readClusterNodes(iterator *jsoniter.Iterator) *ClusterNodes {
 				value[key] = item
 			}
 			object.computeLabels = value
+			object.bitmap_ |= 8
 		case "compute_machine_type":
 			value := readMachineType(iterator)
 			object.computeMachineType = value
+			object.bitmap_ |= 16
 		case "infra":
 			value := iterator.ReadInt()
-			object.infra = &value
+			object.infra = value
+			object.bitmap_ |= 32
 		case "master":
 			value := iterator.ReadInt()
-			object.master = &value
+			object.master = value
+			object.bitmap_ |= 64
 		case "total":
 			value := iterator.ReadInt()
-			object.total = &value
+			object.total = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

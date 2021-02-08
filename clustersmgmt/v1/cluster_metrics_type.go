@@ -23,23 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Cluster metrics received via telemetry.
 type ClusterMetrics struct {
+	bitmap_                   uint32
 	cpu                       *ClusterMetric
 	computeNodesCPU           *ClusterMetric
 	computeNodesMemory        *ClusterMetric
 	computeNodesSockets       *ClusterMetric
-	criticalAlertsFiring      *int
+	criticalAlertsFiring      int
 	memory                    *ClusterMetric
 	nodes                     *ClusterNodes
-	operatorsConditionFailing *int
+	operatorsConditionFailing int
 	sockets                   *ClusterMetric
 	storage                   *ClusterMetric
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterMetrics) Empty() bool {
-	return o == nil || (o.criticalAlertsFiring == nil &&
-		o.operatorsConditionFailing == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // CPU returns the value of the 'CPU' attribute, or
@@ -47,10 +46,10 @@ func (o *ClusterMetrics) Empty() bool {
 //
 // The amount of CPU provisioned and used in the cluster.
 func (o *ClusterMetrics) CPU() *ClusterMetric {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.cpu
 	}
-	return o.cpu
+	return nil
 }
 
 // GetCPU returns the value of the 'CPU' attribute and
@@ -58,7 +57,7 @@ func (o *ClusterMetrics) CPU() *ClusterMetric {
 //
 // The amount of CPU provisioned and used in the cluster.
 func (o *ClusterMetrics) GetCPU() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.cpu != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.cpu
 	}
@@ -70,10 +69,10 @@ func (o *ClusterMetrics) GetCPU() (value *ClusterMetric, ok bool) {
 //
 // The amount of CPU provisioned and used in the cluster by compute nodes.
 func (o *ClusterMetrics) ComputeNodesCPU() *ClusterMetric {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.computeNodesCPU
 	}
-	return o.computeNodesCPU
+	return nil
 }
 
 // GetComputeNodesCPU returns the value of the 'compute_nodes_CPU' attribute and
@@ -81,7 +80,7 @@ func (o *ClusterMetrics) ComputeNodesCPU() *ClusterMetric {
 //
 // The amount of CPU provisioned and used in the cluster by compute nodes.
 func (o *ClusterMetrics) GetComputeNodesCPU() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.computeNodesCPU != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.computeNodesCPU
 	}
@@ -93,10 +92,10 @@ func (o *ClusterMetrics) GetComputeNodesCPU() (value *ClusterMetric, ok bool) {
 //
 // The amount of memory provisioned and used in the cluster by compute nodes.
 func (o *ClusterMetrics) ComputeNodesMemory() *ClusterMetric {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.computeNodesMemory
 	}
-	return o.computeNodesMemory
+	return nil
 }
 
 // GetComputeNodesMemory returns the value of the 'compute_nodes_memory' attribute and
@@ -104,7 +103,7 @@ func (o *ClusterMetrics) ComputeNodesMemory() *ClusterMetric {
 //
 // The amount of memory provisioned and used in the cluster by compute nodes.
 func (o *ClusterMetrics) GetComputeNodesMemory() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.computeNodesMemory != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.computeNodesMemory
 	}
@@ -116,10 +115,10 @@ func (o *ClusterMetrics) GetComputeNodesMemory() (value *ClusterMetric, ok bool)
 //
 // The amount of sockets provisioned and used in the cluster by compute nodes.
 func (o *ClusterMetrics) ComputeNodesSockets() *ClusterMetric {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.computeNodesSockets
 	}
-	return o.computeNodesSockets
+	return nil
 }
 
 // GetComputeNodesSockets returns the value of the 'compute_nodes_sockets' attribute and
@@ -127,7 +126,7 @@ func (o *ClusterMetrics) ComputeNodesSockets() *ClusterMetric {
 //
 // The amount of sockets provisioned and used in the cluster by compute nodes.
 func (o *ClusterMetrics) GetComputeNodesSockets() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.computeNodesSockets != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.computeNodesSockets
 	}
@@ -139,8 +138,8 @@ func (o *ClusterMetrics) GetComputeNodesSockets() (value *ClusterMetric, ok bool
 //
 // CriticalAlertsFiring contains information about critical alerts firing.
 func (o *ClusterMetrics) CriticalAlertsFiring() int {
-	if o != nil && o.criticalAlertsFiring != nil {
-		return *o.criticalAlertsFiring
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.criticalAlertsFiring
 	}
 	return 0
 }
@@ -150,9 +149,9 @@ func (o *ClusterMetrics) CriticalAlertsFiring() int {
 //
 // CriticalAlertsFiring contains information about critical alerts firing.
 func (o *ClusterMetrics) GetCriticalAlertsFiring() (value int, ok bool) {
-	ok = o != nil && o.criticalAlertsFiring != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.criticalAlertsFiring
+		value = o.criticalAlertsFiring
 	}
 	return
 }
@@ -162,10 +161,10 @@ func (o *ClusterMetrics) GetCriticalAlertsFiring() (value int, ok bool) {
 //
 // The amount of memory provisioned and used in the cluster.
 func (o *ClusterMetrics) Memory() *ClusterMetric {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.memory
 	}
-	return o.memory
+	return nil
 }
 
 // GetMemory returns the value of the 'memory' attribute and
@@ -173,7 +172,7 @@ func (o *ClusterMetrics) Memory() *ClusterMetric {
 //
 // The amount of memory provisioned and used in the cluster.
 func (o *ClusterMetrics) GetMemory() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.memory != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.memory
 	}
@@ -185,10 +184,10 @@ func (o *ClusterMetrics) GetMemory() (value *ClusterMetric, ok bool) {
 //
 // The number of nodes provisioned for the cluster.
 func (o *ClusterMetrics) Nodes() *ClusterNodes {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.nodes
 	}
-	return o.nodes
+	return nil
 }
 
 // GetNodes returns the value of the 'nodes' attribute and
@@ -196,7 +195,7 @@ func (o *ClusterMetrics) Nodes() *ClusterNodes {
 //
 // The number of nodes provisioned for the cluster.
 func (o *ClusterMetrics) GetNodes() (value *ClusterNodes, ok bool) {
-	ok = o != nil && o.nodes != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.nodes
 	}
@@ -208,8 +207,8 @@ func (o *ClusterMetrics) GetNodes() (value *ClusterNodes, ok bool) {
 //
 // OperatorsConditionFailing contains information about operator in failing condition in the cluster.
 func (o *ClusterMetrics) OperatorsConditionFailing() int {
-	if o != nil && o.operatorsConditionFailing != nil {
-		return *o.operatorsConditionFailing
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.operatorsConditionFailing
 	}
 	return 0
 }
@@ -219,9 +218,9 @@ func (o *ClusterMetrics) OperatorsConditionFailing() int {
 //
 // OperatorsConditionFailing contains information about operator in failing condition in the cluster.
 func (o *ClusterMetrics) GetOperatorsConditionFailing() (value int, ok bool) {
-	ok = o != nil && o.operatorsConditionFailing != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.operatorsConditionFailing
+		value = o.operatorsConditionFailing
 	}
 	return
 }
@@ -231,10 +230,10 @@ func (o *ClusterMetrics) GetOperatorsConditionFailing() (value int, ok bool) {
 //
 // The amount of sockets provisioned and used in the cluster.
 func (o *ClusterMetrics) Sockets() *ClusterMetric {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.sockets
 	}
-	return o.sockets
+	return nil
 }
 
 // GetSockets returns the value of the 'sockets' attribute and
@@ -242,7 +241,7 @@ func (o *ClusterMetrics) Sockets() *ClusterMetric {
 //
 // The amount of sockets provisioned and used in the cluster.
 func (o *ClusterMetrics) GetSockets() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.sockets != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
 		value = o.sockets
 	}
@@ -256,10 +255,10 @@ func (o *ClusterMetrics) GetSockets() (value *ClusterMetric, ok bool) {
 //
 // WARNING: This isn't currently populated.
 func (o *ClusterMetrics) Storage() *ClusterMetric {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.storage
 	}
-	return o.storage
+	return nil
 }
 
 // GetStorage returns the value of the 'storage' attribute and
@@ -269,7 +268,7 @@ func (o *ClusterMetrics) Storage() *ClusterMetric {
 //
 // WARNING: This isn't currently populated.
 func (o *ClusterMetrics) GetStorage() (value *ClusterMetric, ok bool) {
-	ok = o != nil && o.storage != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.storage
 	}
@@ -290,7 +289,7 @@ const ClusterMetricsListNilKind = "ClusterMetricsListNil"
 
 // ClusterMetricsList is a list of values of the 'cluster_metrics' type.
 type ClusterMetricsList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterMetrics
 }

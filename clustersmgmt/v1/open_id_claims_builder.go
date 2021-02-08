@@ -23,6 +23,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // _OpenID_ identity provider claims.
 type OpenIDClaimsBuilder struct {
+	bitmap_           uint32
 	email             []string
 	name              []string
 	preferredUsername []string
@@ -30,7 +31,7 @@ type OpenIDClaimsBuilder struct {
 
 // NewOpenIDClaims creates a new builder of 'open_ID_claims' objects.
 func NewOpenIDClaims() *OpenIDClaimsBuilder {
-	return new(OpenIDClaimsBuilder)
+	return &OpenIDClaimsBuilder{}
 }
 
 // Email sets the value of the 'email' attribute to the given values.
@@ -39,6 +40,7 @@ func NewOpenIDClaims() *OpenIDClaimsBuilder {
 func (b *OpenIDClaimsBuilder) Email(values ...string) *OpenIDClaimsBuilder {
 	b.email = make([]string, len(values))
 	copy(b.email, values)
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -48,6 +50,7 @@ func (b *OpenIDClaimsBuilder) Email(values ...string) *OpenIDClaimsBuilder {
 func (b *OpenIDClaimsBuilder) Name(values ...string) *OpenIDClaimsBuilder {
 	b.name = make([]string, len(values))
 	copy(b.name, values)
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -57,6 +60,7 @@ func (b *OpenIDClaimsBuilder) Name(values ...string) *OpenIDClaimsBuilder {
 func (b *OpenIDClaimsBuilder) PreferredUsername(values ...string) *OpenIDClaimsBuilder {
 	b.preferredUsername = make([]string, len(values))
 	copy(b.preferredUsername, values)
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,6 +69,7 @@ func (b *OpenIDClaimsBuilder) Copy(object *OpenIDClaims) *OpenIDClaimsBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.email != nil {
 		b.email = make([]string, len(object.email))
 		copy(b.email, object.email)
@@ -89,6 +94,7 @@ func (b *OpenIDClaimsBuilder) Copy(object *OpenIDClaims) *OpenIDClaimsBuilder {
 // Build creates a 'open_ID_claims' object using the configuration stored in the builder.
 func (b *OpenIDClaimsBuilder) Build() (object *OpenIDClaims, err error) {
 	object = new(OpenIDClaims)
+	object.bitmap_ = b.bitmap_
 	if b.email != nil {
 		object.email = make([]string, len(b.email))
 		copy(object.email, b.email)

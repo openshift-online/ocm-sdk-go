@@ -23,40 +23,42 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type SupportCaseResponseBuilder struct {
-	id             *string
-	href           *string
-	link           bool
-	uri            *string
-	caseNumber     *string
-	clusterId      *string
-	clusterUuid    *string
-	description    *string
-	severity       *string
-	status         *string
-	subscriptionId *string
-	summary        *string
+	bitmap_        uint32
+	id             string
+	href           string
+	uri            string
+	caseNumber     string
+	clusterId      string
+	clusterUuid    string
+	description    string
+	severity       string
+	status         string
+	subscriptionId string
+	summary        string
 }
 
 // NewSupportCaseResponse creates a new builder of 'support_case_response' objects.
 func NewSupportCaseResponse() *SupportCaseResponseBuilder {
-	return new(SupportCaseResponseBuilder)
+	return &SupportCaseResponseBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *SupportCaseResponseBuilder) Link(value bool) *SupportCaseResponseBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *SupportCaseResponseBuilder) ID(value string) *SupportCaseResponseBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *SupportCaseResponseBuilder) HREF(value string) *SupportCaseResponseBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *SupportCaseResponseBuilder) Link(value bool) *SupportCaseResponseBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -64,7 +66,8 @@ func (b *SupportCaseResponseBuilder) Link(value bool) *SupportCaseResponseBuilde
 //
 //
 func (b *SupportCaseResponseBuilder) URI(value string) *SupportCaseResponseBuilder {
-	b.uri = &value
+	b.uri = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -72,7 +75,8 @@ func (b *SupportCaseResponseBuilder) URI(value string) *SupportCaseResponseBuild
 //
 //
 func (b *SupportCaseResponseBuilder) CaseNumber(value string) *SupportCaseResponseBuilder {
-	b.caseNumber = &value
+	b.caseNumber = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -80,7 +84,8 @@ func (b *SupportCaseResponseBuilder) CaseNumber(value string) *SupportCaseRespon
 //
 //
 func (b *SupportCaseResponseBuilder) ClusterId(value string) *SupportCaseResponseBuilder {
-	b.clusterId = &value
+	b.clusterId = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -88,7 +93,8 @@ func (b *SupportCaseResponseBuilder) ClusterId(value string) *SupportCaseRespons
 //
 //
 func (b *SupportCaseResponseBuilder) ClusterUuid(value string) *SupportCaseResponseBuilder {
-	b.clusterUuid = &value
+	b.clusterUuid = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -96,7 +102,8 @@ func (b *SupportCaseResponseBuilder) ClusterUuid(value string) *SupportCaseRespo
 //
 //
 func (b *SupportCaseResponseBuilder) Description(value string) *SupportCaseResponseBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -104,7 +111,8 @@ func (b *SupportCaseResponseBuilder) Description(value string) *SupportCaseRespo
 //
 //
 func (b *SupportCaseResponseBuilder) Severity(value string) *SupportCaseResponseBuilder {
-	b.severity = &value
+	b.severity = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -112,7 +120,8 @@ func (b *SupportCaseResponseBuilder) Severity(value string) *SupportCaseResponse
 //
 //
 func (b *SupportCaseResponseBuilder) Status(value string) *SupportCaseResponseBuilder {
-	b.status = &value
+	b.status = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -120,7 +129,8 @@ func (b *SupportCaseResponseBuilder) Status(value string) *SupportCaseResponseBu
 //
 //
 func (b *SupportCaseResponseBuilder) SubscriptionId(value string) *SupportCaseResponseBuilder {
-	b.subscriptionId = &value
+	b.subscriptionId = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -128,7 +138,8 @@ func (b *SupportCaseResponseBuilder) SubscriptionId(value string) *SupportCaseRe
 //
 //
 func (b *SupportCaseResponseBuilder) Summary(value string) *SupportCaseResponseBuilder {
-	b.summary = &value
+	b.summary = value
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -137,9 +148,9 @@ func (b *SupportCaseResponseBuilder) Copy(object *SupportCaseResponse) *SupportC
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.uri = object.uri
 	b.caseNumber = object.caseNumber
 	b.clusterId = object.clusterId
@@ -157,7 +168,7 @@ func (b *SupportCaseResponseBuilder) Build() (object *SupportCaseResponse, err e
 	object = new(SupportCaseResponse)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.uri = b.uri
 	object.caseNumber = b.caseNumber
 	object.clusterId = b.clusterId

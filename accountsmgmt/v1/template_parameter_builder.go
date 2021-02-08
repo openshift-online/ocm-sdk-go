@@ -24,20 +24,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 // A template parameter is used in an email to replace placeholder content with
 // values specific to the email recipient.
 type TemplateParameterBuilder struct {
-	content *string
-	name    *string
+	bitmap_ uint32
+	content string
+	name    string
 }
 
 // NewTemplateParameter creates a new builder of 'template_parameter' objects.
 func NewTemplateParameter() *TemplateParameterBuilder {
-	return new(TemplateParameterBuilder)
+	return &TemplateParameterBuilder{}
 }
 
 // Content sets the value of the 'content' attribute to the given value.
 //
 //
 func (b *TemplateParameterBuilder) Content(value string) *TemplateParameterBuilder {
-	b.content = &value
+	b.content = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,7 +47,8 @@ func (b *TemplateParameterBuilder) Content(value string) *TemplateParameterBuild
 //
 //
 func (b *TemplateParameterBuilder) Name(value string) *TemplateParameterBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,6 +57,7 @@ func (b *TemplateParameterBuilder) Copy(object *TemplateParameter) *TemplatePara
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.content = object.content
 	b.name = object.name
 	return b
@@ -62,6 +66,7 @@ func (b *TemplateParameterBuilder) Copy(object *TemplateParameter) *TemplatePara
 // Build creates a 'template_parameter' object using the configuration stored in the builder.
 func (b *TemplateParameterBuilder) Build() (object *TemplateParameter, err error) {
 	object = new(TemplateParameter)
+	object.bitmap_ = b.bitmap_
 	object.content = b.content
 	object.name = b.name
 	return

@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Provides information about a node from specific type in the cluster.
 type NodeInfoBuilder struct {
-	amount *int
-	type_  *NodeType
+	bitmap_ uint32
+	amount  int
+	type_   NodeType
 }
 
 // NewNodeInfo creates a new builder of 'node_info' objects.
 func NewNodeInfo() *NodeInfoBuilder {
-	return new(NodeInfoBuilder)
+	return &NodeInfoBuilder{}
 }
 
 // Amount sets the value of the 'amount' attribute to the given value.
 //
 //
 func (b *NodeInfoBuilder) Amount(value int) *NodeInfoBuilder {
-	b.amount = &value
+	b.amount = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *NodeInfoBuilder) Amount(value int) *NodeInfoBuilder {
 //
 // Type of node received via telemetry.
 func (b *NodeInfoBuilder) Type(value NodeType) *NodeInfoBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *NodeInfoBuilder) Copy(object *NodeInfo) *NodeInfoBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.amount = object.amount
 	b.type_ = object.type_
 	return b
@@ -61,6 +65,7 @@ func (b *NodeInfoBuilder) Copy(object *NodeInfo) *NodeInfoBuilder {
 // Build creates a 'node_info' object using the configuration stored in the builder.
 func (b *NodeInfoBuilder) Build() (object *NodeInfo, err error) {
 	object = new(NodeInfo)
+	object.bitmap_ = b.bitmap_
 	object.amount = b.amount
 	object.type_ = b.type_
 	return

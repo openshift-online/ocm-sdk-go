@@ -17,28 +17,14 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/servicelogs/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// Metadata contains the version metadata.
-type Metadata struct {
-	bitmap_       uint32
-	serverVersion string
-}
+// BillingModel represents the values of the 'billing_model' enumerated type.
+type BillingModel string
 
-// ServerVersion returns the version of the server.
-func (m *Metadata) ServerVersion() string {
-	if m != nil && m.bitmap_&1 != 0 {
-		return m.serverVersion
-	}
-	return ""
-}
-
-// GetServerVersion returns the value of the server version and a flag indicating if
-// the attribute has a value.
-func (m *Metadata) GetServerVersion() (value string, ok bool) {
-	ok = m != nil && m.bitmap_&1 != 0
-	if ok {
-		value = m.serverVersion
-	}
-	return
-}
+const (
+	// Red Hat Marketplace billing model.
+	BillingModelMarketplace BillingModel = "marketplace"
+	// Standard. This is the default billing model
+	BillingModelStandard BillingModel = "standard"
+)

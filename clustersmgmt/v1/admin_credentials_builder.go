@@ -24,20 +24,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Temporary administrator credentials generated during the installation of the
 // cluster.
 type AdminCredentialsBuilder struct {
-	password *string
-	user     *string
+	bitmap_  uint32
+	password string
+	user     string
 }
 
 // NewAdminCredentials creates a new builder of 'admin_credentials' objects.
 func NewAdminCredentials() *AdminCredentialsBuilder {
-	return new(AdminCredentialsBuilder)
+	return &AdminCredentialsBuilder{}
 }
 
 // Password sets the value of the 'password' attribute to the given value.
 //
 //
 func (b *AdminCredentialsBuilder) Password(value string) *AdminCredentialsBuilder {
-	b.password = &value
+	b.password = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,7 +47,8 @@ func (b *AdminCredentialsBuilder) Password(value string) *AdminCredentialsBuilde
 //
 //
 func (b *AdminCredentialsBuilder) User(value string) *AdminCredentialsBuilder {
-	b.user = &value
+	b.user = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,6 +57,7 @@ func (b *AdminCredentialsBuilder) Copy(object *AdminCredentials) *AdminCredentia
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.password = object.password
 	b.user = object.user
 	return b
@@ -62,6 +66,7 @@ func (b *AdminCredentialsBuilder) Copy(object *AdminCredentials) *AdminCredentia
 // Build creates a 'admin_credentials' object using the configuration stored in the builder.
 func (b *AdminCredentialsBuilder) Build() (object *AdminCredentials, err error) {
 	object = new(AdminCredentials)
+	object.bitmap_ = b.bitmap_
 	object.password = b.password
 	object.user = b.user
 	return

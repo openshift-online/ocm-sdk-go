@@ -39,7 +39,9 @@ func MarshalCPUTotalsNodeRoleOSMetricNode(object *CPUTotalsNodeRoleOSMetricNode,
 func writeCPUTotalsNodeRoleOSMetricNode(object *CPUTotalsNodeRoleOSMetricNode, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.cpuTotals != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.cpuTotals != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -77,6 +79,7 @@ func readCPUTotalsNodeRoleOSMetricNode(iterator *jsoniter.Iterator) *CPUTotalsNo
 		case "cpu_totals":
 			value := readCPUTotalNodeRoleOSMetricNodeList(iterator)
 			object.cpuTotals = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

@@ -35,14 +35,14 @@ const ClusterStatusNilKind = "ClusterStatusNil"
 //
 // Detailed status of a cluster.
 type ClusterStatus struct {
-	id                    *string
-	href                  *string
-	link                  bool
-	dnsReady              *bool
-	description           *string
-	provisionErrorCode    *string
-	provisionErrorMessage *string
-	state                 *ClusterState
+	bitmap_               uint32
+	id                    string
+	href                  string
+	description           string
+	provisionErrorCode    string
+	provisionErrorMessage string
+	state                 ClusterState
+	dnsReady              bool
 }
 
 // Kind returns the name of the type of the object.
@@ -50,16 +50,21 @@ func (o *ClusterStatus) Kind() string {
 	if o == nil {
 		return ClusterStatusNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return ClusterStatusLinkKind
 	}
 	return ClusterStatusKind
 }
 
+// Link returns true iif this is a link.
+func (o *ClusterStatus) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *ClusterStatus) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -67,22 +72,17 @@ func (o *ClusterStatus) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *ClusterStatus) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *ClusterStatus) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *ClusterStatus) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -90,22 +90,16 @@ func (o *ClusterStatus) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *ClusterStatus) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterStatus) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.dnsReady == nil &&
-		o.description == nil &&
-		o.provisionErrorCode == nil &&
-		o.provisionErrorMessage == nil &&
-		o.state == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // DNSReady returns the value of the 'DNS_ready' attribute, or
@@ -113,8 +107,8 @@ func (o *ClusterStatus) Empty() bool {
 //
 // DNSReady from Provisioner
 func (o *ClusterStatus) DNSReady() bool {
-	if o != nil && o.dnsReady != nil {
-		return *o.dnsReady
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.dnsReady
 	}
 	return false
 }
@@ -124,9 +118,9 @@ func (o *ClusterStatus) DNSReady() bool {
 //
 // DNSReady from Provisioner
 func (o *ClusterStatus) GetDNSReady() (value bool, ok bool) {
-	ok = o != nil && o.dnsReady != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.dnsReady
+		value = o.dnsReady
 	}
 	return
 }
@@ -136,8 +130,8 @@ func (o *ClusterStatus) GetDNSReady() (value bool, ok bool) {
 //
 // Detailed description of the cluster status.
 func (o *ClusterStatus) Description() string {
-	if o != nil && o.description != nil {
-		return *o.description
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.description
 	}
 	return ""
 }
@@ -147,9 +141,9 @@ func (o *ClusterStatus) Description() string {
 //
 // Detailed description of the cluster status.
 func (o *ClusterStatus) GetDescription() (value string, ok bool) {
-	ok = o != nil && o.description != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.description
+		value = o.description
 	}
 	return
 }
@@ -159,8 +153,8 @@ func (o *ClusterStatus) GetDescription() (value string, ok bool) {
 //
 // Provisioning Error Code
 func (o *ClusterStatus) ProvisionErrorCode() string {
-	if o != nil && o.provisionErrorCode != nil {
-		return *o.provisionErrorCode
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.provisionErrorCode
 	}
 	return ""
 }
@@ -170,9 +164,9 @@ func (o *ClusterStatus) ProvisionErrorCode() string {
 //
 // Provisioning Error Code
 func (o *ClusterStatus) GetProvisionErrorCode() (value string, ok bool) {
-	ok = o != nil && o.provisionErrorCode != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.provisionErrorCode
+		value = o.provisionErrorCode
 	}
 	return
 }
@@ -182,8 +176,8 @@ func (o *ClusterStatus) GetProvisionErrorCode() (value string, ok bool) {
 //
 // Provisioning Error Message
 func (o *ClusterStatus) ProvisionErrorMessage() string {
-	if o != nil && o.provisionErrorMessage != nil {
-		return *o.provisionErrorMessage
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.provisionErrorMessage
 	}
 	return ""
 }
@@ -193,9 +187,9 @@ func (o *ClusterStatus) ProvisionErrorMessage() string {
 //
 // Provisioning Error Message
 func (o *ClusterStatus) GetProvisionErrorMessage() (value string, ok bool) {
-	ok = o != nil && o.provisionErrorMessage != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.provisionErrorMessage
+		value = o.provisionErrorMessage
 	}
 	return
 }
@@ -205,8 +199,8 @@ func (o *ClusterStatus) GetProvisionErrorMessage() (value string, ok bool) {
 //
 // The overall state of the cluster.
 func (o *ClusterStatus) State() ClusterState {
-	if o != nil && o.state != nil {
-		return *o.state
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.state
 	}
 	return ClusterState("")
 }
@@ -216,9 +210,9 @@ func (o *ClusterStatus) State() ClusterState {
 //
 // The overall state of the cluster.
 func (o *ClusterStatus) GetState() (value ClusterState, ok bool) {
-	ok = o != nil && o.state != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.state
+		value = o.state
 	}
 	return
 }
@@ -237,7 +231,7 @@ const ClusterStatusListNilKind = "ClusterStatusListNil"
 
 // ClusterStatusList is a list of values of the 'cluster_status' type.
 type ClusterStatusList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterStatus
 }
@@ -260,8 +254,8 @@ func (l *ClusterStatusList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *ClusterStatusList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -269,9 +263,9 @@ func (l *ClusterStatusList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *ClusterStatusList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

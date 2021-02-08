@@ -39,38 +39,37 @@ func MarshalServerConfig(object *ServerConfig, writer io.Writer) error {
 func writeServerConfig(object *ServerConfig, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(ServerConfigLinkKind)
 	} else {
 		stream.WriteString(ServerConfigKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.server != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("server")
-		stream.WriteString(*object.server)
+		stream.WriteString(object.server)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -102,16 +101,19 @@ func readServerConfig(iterator *jsoniter.Iterator) *ServerConfig {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == ServerConfigLinkKind
+			if value == ServerConfigLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "server":
 			value := iterator.ReadString()
-			object.server = &value
+			object.server = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

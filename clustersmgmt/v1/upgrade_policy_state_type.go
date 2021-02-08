@@ -35,11 +35,11 @@ const UpgradePolicyStateNilKind = "UpgradePolicyStateNil"
 //
 // Representation of an upgrade policy state that that is set for a cluster.
 type UpgradePolicyState struct {
-	id          *string
-	href        *string
-	link        bool
-	description *string
-	value       *string
+	bitmap_     uint32
+	id          string
+	href        string
+	description string
+	value       string
 }
 
 // Kind returns the name of the type of the object.
@@ -47,16 +47,21 @@ func (o *UpgradePolicyState) Kind() string {
 	if o == nil {
 		return UpgradePolicyStateNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return UpgradePolicyStateLinkKind
 	}
 	return UpgradePolicyStateKind
 }
 
+// Link returns true iif this is a link.
+func (o *UpgradePolicyState) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *UpgradePolicyState) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -64,22 +69,17 @@ func (o *UpgradePolicyState) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *UpgradePolicyState) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *UpgradePolicyState) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *UpgradePolicyState) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -87,19 +87,16 @@ func (o *UpgradePolicyState) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *UpgradePolicyState) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *UpgradePolicyState) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.description == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Description returns the value of the 'description' attribute, or
@@ -107,8 +104,8 @@ func (o *UpgradePolicyState) Empty() bool {
 //
 // Description of the state.
 func (o *UpgradePolicyState) Description() string {
-	if o != nil && o.description != nil {
-		return *o.description
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.description
 	}
 	return ""
 }
@@ -118,9 +115,9 @@ func (o *UpgradePolicyState) Description() string {
 //
 // Description of the state.
 func (o *UpgradePolicyState) GetDescription() (value string, ok bool) {
-	ok = o != nil && o.description != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.description
+		value = o.description
 	}
 	return
 }
@@ -130,8 +127,8 @@ func (o *UpgradePolicyState) GetDescription() (value string, ok bool) {
 //
 // State value, can be 'pending', 'started', 'delayed', 'failed' or 'completed'.
 func (o *UpgradePolicyState) Value() string {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.value
 	}
 	return ""
 }
@@ -141,9 +138,9 @@ func (o *UpgradePolicyState) Value() string {
 //
 // State value, can be 'pending', 'started', 'delayed', 'failed' or 'completed'.
 func (o *UpgradePolicyState) GetValue() (value string, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -162,7 +159,7 @@ const UpgradePolicyStateListNilKind = "UpgradePolicyStateListNil"
 
 // UpgradePolicyStateList is a list of values of the 'upgrade_policy_state' type.
 type UpgradePolicyStateList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*UpgradePolicyState
 }
@@ -185,8 +182,8 @@ func (l *UpgradePolicyStateList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *UpgradePolicyStateList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -194,9 +191,9 @@ func (l *UpgradePolicyStateList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *UpgradePolicyStateList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

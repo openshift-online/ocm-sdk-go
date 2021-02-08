@@ -23,21 +23,23 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Registration of a new cluster to the service.
 type ClusterRegistrationBuilder struct {
-	externalID     *string
-	organizationID *string
-	subscriptionID *string
+	bitmap_        uint32
+	externalID     string
+	organizationID string
+	subscriptionID string
 }
 
 // NewClusterRegistration creates a new builder of 'cluster_registration' objects.
 func NewClusterRegistration() *ClusterRegistrationBuilder {
-	return new(ClusterRegistrationBuilder)
+	return &ClusterRegistrationBuilder{}
 }
 
 // ExternalID sets the value of the 'external_ID' attribute to the given value.
 //
 //
 func (b *ClusterRegistrationBuilder) ExternalID(value string) *ClusterRegistrationBuilder {
-	b.externalID = &value
+	b.externalID = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,7 +47,8 @@ func (b *ClusterRegistrationBuilder) ExternalID(value string) *ClusterRegistrati
 //
 //
 func (b *ClusterRegistrationBuilder) OrganizationID(value string) *ClusterRegistrationBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,7 +56,8 @@ func (b *ClusterRegistrationBuilder) OrganizationID(value string) *ClusterRegist
 //
 //
 func (b *ClusterRegistrationBuilder) SubscriptionID(value string) *ClusterRegistrationBuilder {
-	b.subscriptionID = &value
+	b.subscriptionID = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,6 +66,7 @@ func (b *ClusterRegistrationBuilder) Copy(object *ClusterRegistration) *ClusterR
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.externalID = object.externalID
 	b.organizationID = object.organizationID
 	b.subscriptionID = object.subscriptionID
@@ -71,6 +76,7 @@ func (b *ClusterRegistrationBuilder) Copy(object *ClusterRegistration) *ClusterR
 // Build creates a 'cluster_registration' object using the configuration stored in the builder.
 func (b *ClusterRegistrationBuilder) Build() (object *ClusterRegistration, err error) {
 	object = new(ClusterRegistration)
+	object.bitmap_ = b.bitmap_
 	object.externalID = b.externalID
 	object.organizationID = b.organizationID
 	object.subscriptionID = b.subscriptionID

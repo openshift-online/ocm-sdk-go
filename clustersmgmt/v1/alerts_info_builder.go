@@ -23,12 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Provides information about the alerts firing on the cluster.
 type AlertsInfoBuilder struct {
-	alerts []*AlertInfoBuilder
+	bitmap_ uint32
+	alerts  []*AlertInfoBuilder
 }
 
 // NewAlertsInfo creates a new builder of 'alerts_info' objects.
 func NewAlertsInfo() *AlertsInfoBuilder {
-	return new(AlertsInfoBuilder)
+	return &AlertsInfoBuilder{}
 }
 
 // Alerts sets the value of the 'alerts' attribute to the given values.
@@ -37,6 +38,7 @@ func NewAlertsInfo() *AlertsInfoBuilder {
 func (b *AlertsInfoBuilder) Alerts(values ...*AlertInfoBuilder) *AlertsInfoBuilder {
 	b.alerts = make([]*AlertInfoBuilder, len(values))
 	copy(b.alerts, values)
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,6 +47,7 @@ func (b *AlertsInfoBuilder) Copy(object *AlertsInfo) *AlertsInfoBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.alerts != nil {
 		b.alerts = make([]*AlertInfoBuilder, len(object.alerts))
 		for i, v := range object.alerts {
@@ -59,6 +62,7 @@ func (b *AlertsInfoBuilder) Copy(object *AlertsInfo) *AlertsInfoBuilder {
 // Build creates a 'alerts_info' object using the configuration stored in the builder.
 func (b *AlertsInfoBuilder) Build() (object *AlertsInfo, err error) {
 	object = new(AlertsInfo)
+	object.bitmap_ = b.bitmap_
 	if b.alerts != nil {
 		object.alerts = make([]*AlertInfo, len(b.alerts))
 		for i, v := range b.alerts {

@@ -24,23 +24,25 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 // Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]
 // review response.
 type TermsReviewResponseBuilder struct {
-	accountId      *string
-	organizationID *string
-	redirectUrl    *string
-	termsAvailable *bool
-	termsRequired  *bool
+	bitmap_        uint32
+	accountId      string
+	organizationID string
+	redirectUrl    string
+	termsAvailable bool
+	termsRequired  bool
 }
 
 // NewTermsReviewResponse creates a new builder of 'terms_review_response' objects.
 func NewTermsReviewResponse() *TermsReviewResponseBuilder {
-	return new(TermsReviewResponseBuilder)
+	return &TermsReviewResponseBuilder{}
 }
 
 // AccountId sets the value of the 'account_id' attribute to the given value.
 //
 //
 func (b *TermsReviewResponseBuilder) AccountId(value string) *TermsReviewResponseBuilder {
-	b.accountId = &value
+	b.accountId = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -48,7 +50,8 @@ func (b *TermsReviewResponseBuilder) AccountId(value string) *TermsReviewRespons
 //
 //
 func (b *TermsReviewResponseBuilder) OrganizationID(value string) *TermsReviewResponseBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -56,7 +59,8 @@ func (b *TermsReviewResponseBuilder) OrganizationID(value string) *TermsReviewRe
 //
 //
 func (b *TermsReviewResponseBuilder) RedirectUrl(value string) *TermsReviewResponseBuilder {
-	b.redirectUrl = &value
+	b.redirectUrl = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -64,7 +68,8 @@ func (b *TermsReviewResponseBuilder) RedirectUrl(value string) *TermsReviewRespo
 //
 //
 func (b *TermsReviewResponseBuilder) TermsAvailable(value bool) *TermsReviewResponseBuilder {
-	b.termsAvailable = &value
+	b.termsAvailable = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -72,7 +77,8 @@ func (b *TermsReviewResponseBuilder) TermsAvailable(value bool) *TermsReviewResp
 //
 //
 func (b *TermsReviewResponseBuilder) TermsRequired(value bool) *TermsReviewResponseBuilder {
-	b.termsRequired = &value
+	b.termsRequired = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -81,6 +87,7 @@ func (b *TermsReviewResponseBuilder) Copy(object *TermsReviewResponse) *TermsRev
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountId = object.accountId
 	b.organizationID = object.organizationID
 	b.redirectUrl = object.redirectUrl
@@ -92,6 +99,7 @@ func (b *TermsReviewResponseBuilder) Copy(object *TermsReviewResponse) *TermsRev
 // Build creates a 'terms_review_response' object using the configuration stored in the builder.
 func (b *TermsReviewResponseBuilder) Build() (object *TermsReviewResponse, err error) {
 	object = new(TermsReviewResponse)
+	object.bitmap_ = b.bitmap_
 	object.accountId = b.accountId
 	object.organizationID = b.organizationID
 	object.redirectUrl = b.redirectUrl

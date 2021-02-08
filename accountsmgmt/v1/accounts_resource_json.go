@@ -119,10 +119,10 @@ func writeAccountsListResponse(response *AccountsListServerResponse, w http.Resp
 	stream.WriteObjectField("kind")
 	count := 1
 	stream.WriteString(AccountListKind)
-	if response.items != nil && response.items.href != nil {
+	if response.items != nil && response.items.href != "" {
 		stream.WriteMore()
 		stream.WriteObjectField("href")
-		stream.WriteString(*response.items.href)
+		stream.WriteString(response.items.href)
 		count++
 	}
 	if response.page != nil {

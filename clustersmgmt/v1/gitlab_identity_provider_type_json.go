@@ -39,36 +39,41 @@ func MarshalGitlabIdentityProvider(object *GitlabIdentityProvider, writer io.Wri
 func writeGitlabIdentityProvider(object *GitlabIdentityProvider, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.ca != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("ca")
-		stream.WriteString(*object.ca)
+		stream.WriteString(object.ca)
 		count++
 	}
-	if object.url != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("url")
-		stream.WriteString(*object.url)
+		stream.WriteString(object.url)
 		count++
 	}
-	if object.clientID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_id")
-		stream.WriteString(*object.clientID)
+		stream.WriteString(object.clientID)
 		count++
 	}
-	if object.clientSecret != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_secret")
-		stream.WriteString(*object.clientSecret)
+		stream.WriteString(object.clientSecret)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -100,16 +105,20 @@ func readGitlabIdentityProvider(iterator *jsoniter.Iterator) *GitlabIdentityProv
 		switch field {
 		case "ca":
 			value := iterator.ReadString()
-			object.ca = &value
+			object.ca = value
+			object.bitmap_ |= 1
 		case "url":
 			value := iterator.ReadString()
-			object.url = &value
+			object.url = value
+			object.bitmap_ |= 2
 		case "client_id":
 			value := iterator.ReadString()
-			object.clientID = &value
+			object.clientID = value
+			object.bitmap_ |= 4
 		case "client_secret":
 			value := iterator.ReadString()
-			object.clientSecret = &value
+			object.clientSecret = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

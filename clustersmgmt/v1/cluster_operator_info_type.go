@@ -27,21 +27,17 @@ import (
 //
 //
 type ClusterOperatorInfo struct {
-	condition *ClusterOperatorState
-	name      *string
-	reason    *string
-	time      *time.Time
-	version   *string
+	bitmap_   uint32
+	condition ClusterOperatorState
+	name      string
+	reason    string
+	time      time.Time
+	version   string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterOperatorInfo) Empty() bool {
-	return o == nil || (o.condition == nil &&
-		o.name == nil &&
-		o.reason == nil &&
-		o.time == nil &&
-		o.version == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Condition returns the value of the 'condition' attribute, or
@@ -49,8 +45,8 @@ func (o *ClusterOperatorInfo) Empty() bool {
 //
 // Operator status.  Empty string if unknown.
 func (o *ClusterOperatorInfo) Condition() ClusterOperatorState {
-	if o != nil && o.condition != nil {
-		return *o.condition
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.condition
 	}
 	return ClusterOperatorState("")
 }
@@ -60,9 +56,9 @@ func (o *ClusterOperatorInfo) Condition() ClusterOperatorState {
 //
 // Operator status.  Empty string if unknown.
 func (o *ClusterOperatorInfo) GetCondition() (value ClusterOperatorState, ok bool) {
-	ok = o != nil && o.condition != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.condition
+		value = o.condition
 	}
 	return
 }
@@ -72,8 +68,8 @@ func (o *ClusterOperatorInfo) GetCondition() (value ClusterOperatorState, ok boo
 //
 // Name of the operator.
 func (o *ClusterOperatorInfo) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -83,9 +79,9 @@ func (o *ClusterOperatorInfo) Name() string {
 //
 // Name of the operator.
 func (o *ClusterOperatorInfo) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -95,8 +91,8 @@ func (o *ClusterOperatorInfo) GetName() (value string, ok bool) {
 //
 // Extra detail on condition, if available.  Empty string if unknown.
 func (o *ClusterOperatorInfo) Reason() string {
-	if o != nil && o.reason != nil {
-		return *o.reason
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.reason
 	}
 	return ""
 }
@@ -106,9 +102,9 @@ func (o *ClusterOperatorInfo) Reason() string {
 //
 // Extra detail on condition, if available.  Empty string if unknown.
 func (o *ClusterOperatorInfo) GetReason() (value string, ok bool) {
-	ok = o != nil && o.reason != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.reason
+		value = o.reason
 	}
 	return
 }
@@ -118,8 +114,8 @@ func (o *ClusterOperatorInfo) GetReason() (value string, ok bool) {
 //
 // Time when the sample was obtained, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format.
 func (o *ClusterOperatorInfo) Time() time.Time {
-	if o != nil && o.time != nil {
-		return *o.time
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.time
 	}
 	return time.Time{}
 }
@@ -129,9 +125,9 @@ func (o *ClusterOperatorInfo) Time() time.Time {
 //
 // Time when the sample was obtained, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format.
 func (o *ClusterOperatorInfo) GetTime() (value time.Time, ok bool) {
-	ok = o != nil && o.time != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.time
+		value = o.time
 	}
 	return
 }
@@ -141,8 +137,8 @@ func (o *ClusterOperatorInfo) GetTime() (value time.Time, ok bool) {
 //
 // Current version of the operator.  Empty string if unknown.
 func (o *ClusterOperatorInfo) Version() string {
-	if o != nil && o.version != nil {
-		return *o.version
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.version
 	}
 	return ""
 }
@@ -152,9 +148,9 @@ func (o *ClusterOperatorInfo) Version() string {
 //
 // Current version of the operator.  Empty string if unknown.
 func (o *ClusterOperatorInfo) GetVersion() (value string, ok bool) {
-	ok = o != nil && o.version != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.version
+		value = o.version
 	}
 	return
 }
@@ -173,7 +169,7 @@ const ClusterOperatorInfoListNilKind = "ClusterOperatorInfoListNil"
 
 // ClusterOperatorInfoList is a list of values of the 'cluster_operator_info' type.
 type ClusterOperatorInfoList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterOperatorInfo
 }

@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Metric included in a dashboard.
 type Metric struct {
-	name   *string
-	vector []*Sample
+	bitmap_ uint32
+	name    string
+	vector  []*Sample
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Metric) Empty() bool {
-	return o == nil || (o.name == nil &&
-		len(o.vector) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Name returns the value of the 'name' attribute, or
@@ -39,8 +38,8 @@ func (o *Metric) Empty() bool {
 //
 // Name of the metric.
 func (o *Metric) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *Metric) Name() string {
 //
 // Name of the metric.
 func (o *Metric) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -62,10 +61,10 @@ func (o *Metric) GetName() (value string, ok bool) {
 //
 // Samples of the metric.
 func (o *Metric) Vector() []*Sample {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.vector
 	}
-	return o.vector
+	return nil
 }
 
 // GetVector returns the value of the 'vector' attribute and
@@ -73,7 +72,7 @@ func (o *Metric) Vector() []*Sample {
 //
 // Samples of the metric.
 func (o *Metric) GetVector() (value []*Sample, ok bool) {
-	ok = o != nil && o.vector != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.vector
 	}
@@ -94,7 +93,7 @@ const MetricListNilKind = "MetricListNil"
 
 // MetricList is a list of values of the 'metric' type.
 type MetricList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Metric
 }

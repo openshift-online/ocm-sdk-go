@@ -39,20 +39,23 @@ func MarshalAdminCredentials(object *AdminCredentials, writer io.Writer) error {
 func writeAdminCredentials(object *AdminCredentials, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.password != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("password")
-		stream.WriteString(*object.password)
+		stream.WriteString(object.password)
 		count++
 	}
-	if object.user != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("user")
-		stream.WriteString(*object.user)
+		stream.WriteString(object.user)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,10 +87,12 @@ func readAdminCredentials(iterator *jsoniter.Iterator) *AdminCredentials {
 		switch field {
 		case "password":
 			value := iterator.ReadString()
-			object.password = &value
+			object.password = value
+			object.bitmap_ |= 1
 		case "user":
 			value := iterator.ReadString()
-			object.user = &value
+			object.user = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

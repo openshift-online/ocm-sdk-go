@@ -23,25 +23,27 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type QuotaSummaryBuilder struct {
-	byoc                 *bool
-	allowed              *int
-	availabilityZoneType *string
-	organizationID       *string
-	reserved             *int
-	resourceName         *string
-	resourceType         *string
+	bitmap_              uint32
+	allowed              int
+	availabilityZoneType string
+	organizationID       string
+	reserved             int
+	resourceName         string
+	resourceType         string
+	byoc                 bool
 }
 
 // NewQuotaSummary creates a new builder of 'quota_summary' objects.
 func NewQuotaSummary() *QuotaSummaryBuilder {
-	return new(QuotaSummaryBuilder)
+	return &QuotaSummaryBuilder{}
 }
 
 // BYOC sets the value of the 'BYOC' attribute to the given value.
 //
 //
 func (b *QuotaSummaryBuilder) BYOC(value bool) *QuotaSummaryBuilder {
-	b.byoc = &value
+	b.byoc = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -49,7 +51,8 @@ func (b *QuotaSummaryBuilder) BYOC(value bool) *QuotaSummaryBuilder {
 //
 //
 func (b *QuotaSummaryBuilder) Allowed(value int) *QuotaSummaryBuilder {
-	b.allowed = &value
+	b.allowed = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -57,7 +60,8 @@ func (b *QuotaSummaryBuilder) Allowed(value int) *QuotaSummaryBuilder {
 //
 //
 func (b *QuotaSummaryBuilder) AvailabilityZoneType(value string) *QuotaSummaryBuilder {
-	b.availabilityZoneType = &value
+	b.availabilityZoneType = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,7 +69,8 @@ func (b *QuotaSummaryBuilder) AvailabilityZoneType(value string) *QuotaSummaryBu
 //
 //
 func (b *QuotaSummaryBuilder) OrganizationID(value string) *QuotaSummaryBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -73,7 +78,8 @@ func (b *QuotaSummaryBuilder) OrganizationID(value string) *QuotaSummaryBuilder 
 //
 //
 func (b *QuotaSummaryBuilder) Reserved(value int) *QuotaSummaryBuilder {
-	b.reserved = &value
+	b.reserved = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -81,7 +87,8 @@ func (b *QuotaSummaryBuilder) Reserved(value int) *QuotaSummaryBuilder {
 //
 //
 func (b *QuotaSummaryBuilder) ResourceName(value string) *QuotaSummaryBuilder {
-	b.resourceName = &value
+	b.resourceName = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -89,7 +96,8 @@ func (b *QuotaSummaryBuilder) ResourceName(value string) *QuotaSummaryBuilder {
 //
 //
 func (b *QuotaSummaryBuilder) ResourceType(value string) *QuotaSummaryBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -98,6 +106,7 @@ func (b *QuotaSummaryBuilder) Copy(object *QuotaSummary) *QuotaSummaryBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.byoc = object.byoc
 	b.allowed = object.allowed
 	b.availabilityZoneType = object.availabilityZoneType
@@ -111,6 +120,7 @@ func (b *QuotaSummaryBuilder) Copy(object *QuotaSummary) *QuotaSummaryBuilder {
 // Build creates a 'quota_summary' object using the configuration stored in the builder.
 func (b *QuotaSummaryBuilder) Build() (object *QuotaSummary, err error) {
 	object = new(QuotaSummary)
+	object.bitmap_ = b.bitmap_
 	object.byoc = b.byoc
 	object.allowed = b.allowed
 	object.availabilityZoneType = b.availabilityZoneType

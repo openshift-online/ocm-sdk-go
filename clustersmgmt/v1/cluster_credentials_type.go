@@ -35,12 +35,12 @@ const ClusterCredentialsNilKind = "ClusterCredentialsNil"
 //
 // Credentials of the a cluster.
 type ClusterCredentials struct {
-	id         *string
-	href       *string
-	link       bool
+	bitmap_    uint32
+	id         string
+	href       string
 	ssh        *SSHCredentials
 	admin      *AdminCredentials
-	kubeconfig *string
+	kubeconfig string
 }
 
 // Kind returns the name of the type of the object.
@@ -48,16 +48,21 @@ func (o *ClusterCredentials) Kind() string {
 	if o == nil {
 		return ClusterCredentialsNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return ClusterCredentialsLinkKind
 	}
 	return ClusterCredentialsKind
 }
 
+// Link returns true iif this is a link.
+func (o *ClusterCredentials) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *ClusterCredentials) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -65,22 +70,17 @@ func (o *ClusterCredentials) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *ClusterCredentials) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *ClusterCredentials) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *ClusterCredentials) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -88,18 +88,16 @@ func (o *ClusterCredentials) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *ClusterCredentials) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterCredentials) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.kubeconfig == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // SSH returns the value of the 'SSH' attribute, or
@@ -107,10 +105,10 @@ func (o *ClusterCredentials) Empty() bool {
 //
 // SSH key pair of the cluster.
 func (o *ClusterCredentials) SSH() *SSHCredentials {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.ssh
 	}
-	return o.ssh
+	return nil
 }
 
 // GetSSH returns the value of the 'SSH' attribute and
@@ -118,7 +116,7 @@ func (o *ClusterCredentials) SSH() *SSHCredentials {
 //
 // SSH key pair of the cluster.
 func (o *ClusterCredentials) GetSSH() (value *SSHCredentials, ok bool) {
-	ok = o != nil && o.ssh != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.ssh
 	}
@@ -131,10 +129,10 @@ func (o *ClusterCredentials) GetSSH() (value *SSHCredentials, ok bool) {
 // Temporary administrator credentials generated during the installation
 // of the cluster.
 func (o *ClusterCredentials) Admin() *AdminCredentials {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.admin
 	}
-	return o.admin
+	return nil
 }
 
 // GetAdmin returns the value of the 'admin' attribute and
@@ -143,7 +141,7 @@ func (o *ClusterCredentials) Admin() *AdminCredentials {
 // Temporary administrator credentials generated during the installation
 // of the cluster.
 func (o *ClusterCredentials) GetAdmin() (value *AdminCredentials, ok bool) {
-	ok = o != nil && o.admin != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.admin
 	}
@@ -155,8 +153,8 @@ func (o *ClusterCredentials) GetAdmin() (value *AdminCredentials, ok bool) {
 //
 // Administrator _kubeconfig_ file for the cluster.
 func (o *ClusterCredentials) Kubeconfig() string {
-	if o != nil && o.kubeconfig != nil {
-		return *o.kubeconfig
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.kubeconfig
 	}
 	return ""
 }
@@ -166,9 +164,9 @@ func (o *ClusterCredentials) Kubeconfig() string {
 //
 // Administrator _kubeconfig_ file for the cluster.
 func (o *ClusterCredentials) GetKubeconfig() (value string, ok bool) {
-	ok = o != nil && o.kubeconfig != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.kubeconfig
+		value = o.kubeconfig
 	}
 	return
 }
@@ -187,7 +185,7 @@ const ClusterCredentialsListNilKind = "ClusterCredentialsListNil"
 
 // ClusterCredentialsList is a list of values of the 'cluster_credentials' type.
 type ClusterCredentialsList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterCredentials
 }
@@ -210,8 +208,8 @@ func (l *ClusterCredentialsList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *ClusterCredentialsList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -219,9 +217,9 @@ func (l *ClusterCredentialsList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *ClusterCredentialsList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

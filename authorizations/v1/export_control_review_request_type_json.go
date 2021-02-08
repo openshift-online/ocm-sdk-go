@@ -39,12 +39,14 @@ func MarshalExportControlReviewRequest(object *ExportControlReviewRequest, write
 func writeExportControlReviewRequest(object *ExportControlReviewRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.accountUsername != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_username")
-		stream.WriteString(*object.accountUsername)
+		stream.WriteString(object.accountUsername)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readExportControlReviewRequest(iterator *jsoniter.Iterator) *ExportControlR
 		switch field {
 		case "account_username":
 			value := iterator.ReadString()
-			object.accountUsername = &value
+			object.accountUsername = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

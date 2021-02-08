@@ -40,118 +40,127 @@ func MarshalResourceQuota(object *ResourceQuota, writer io.Writer) error {
 func writeResourceQuota(object *ResourceQuota, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(ResourceQuotaLinkKind)
 	} else {
 		stream.WriteString(ResourceQuotaKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.byoc != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("byoc")
-		stream.WriteBool(*object.byoc)
+		stream.WriteBool(object.byoc)
 		count++
 	}
-	if object.sku != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("sku")
-		stream.WriteString(*object.sku)
+		stream.WriteString(object.sku)
 		count++
 	}
-	if object.allowed != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("allowed")
-		stream.WriteInt(*object.allowed)
+		stream.WriteInt(object.allowed)
 		count++
 	}
-	if object.availabilityZoneType != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("availability_zone_type")
-		stream.WriteString(*object.availabilityZoneType)
+		stream.WriteString(object.availabilityZoneType)
 		count++
 	}
-	if object.createdAt != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("created_at")
-		stream.WriteString((*object.createdAt).Format(time.RFC3339))
+		stream.WriteString((object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.organizationID != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
-	if object.resourceName != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_name")
-		stream.WriteString(*object.resourceName)
+		stream.WriteString(object.resourceName)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&1024 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
-	if object.skuCount != nil {
+	present_ = object.bitmap_&2048 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("sku_count")
-		stream.WriteInt(*object.skuCount)
+		stream.WriteInt(object.skuCount)
 		count++
 	}
-	if object.type_ != nil {
+	present_ = object.bitmap_&4096 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("type")
-		stream.WriteString(*object.type_)
+		stream.WriteString(object.type_)
 		count++
 	}
-	if object.updatedAt != nil {
+	present_ = object.bitmap_&8192 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_at")
-		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
+		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -183,54 +192,67 @@ func readResourceQuota(iterator *jsoniter.Iterator) *ResourceQuota {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == ResourceQuotaLinkKind
+			if value == ResourceQuotaLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "byoc":
 			value := iterator.ReadBool()
-			object.byoc = &value
+			object.byoc = value
+			object.bitmap_ |= 8
 		case "sku":
 			value := iterator.ReadString()
-			object.sku = &value
+			object.sku = value
+			object.bitmap_ |= 16
 		case "allowed":
 			value := iterator.ReadInt()
-			object.allowed = &value
+			object.allowed = value
+			object.bitmap_ |= 32
 		case "availability_zone_type":
 			value := iterator.ReadString()
-			object.availabilityZoneType = &value
+			object.availabilityZoneType = value
+			object.bitmap_ |= 64
 		case "created_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.createdAt = &value
+			object.createdAt = value
+			object.bitmap_ |= 128
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 256
 		case "resource_name":
 			value := iterator.ReadString()
-			object.resourceName = &value
+			object.resourceName = value
+			object.bitmap_ |= 512
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 1024
 		case "sku_count":
 			value := iterator.ReadInt()
-			object.skuCount = &value
+			object.skuCount = value
+			object.bitmap_ |= 2048
 		case "type":
 			value := iterator.ReadString()
-			object.type_ = &value
+			object.type_ = value
+			object.bitmap_ |= 4096
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedAt = &value
+			object.updatedAt = value
+			object.bitmap_ |= 8192
 		default:
 			iterator.ReadAny()
 		}

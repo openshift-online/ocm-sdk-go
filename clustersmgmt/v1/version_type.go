@@ -35,15 +35,15 @@ const VersionNilKind = "VersionNil"
 //
 // Representation of an _OpenShift_ version.
 type Version struct {
-	id                *string
-	href              *string
-	link              bool
-	rosaEnabled       *bool
+	bitmap_           uint32
+	id                string
+	href              string
 	availableUpgrades []string
-	channelGroup      *string
-	default_          *bool
-	enabled           *bool
-	rawID             *string
+	channelGroup      string
+	rawID             string
+	rosaEnabled       bool
+	default_          bool
+	enabled           bool
 }
 
 // Kind returns the name of the type of the object.
@@ -51,16 +51,21 @@ func (o *Version) Kind() string {
 	if o == nil {
 		return VersionNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return VersionLinkKind
 	}
 	return VersionKind
 }
 
+// Link returns true iif this is a link.
+func (o *Version) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Version) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -68,22 +73,17 @@ func (o *Version) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Version) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Version) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Version) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -91,23 +91,16 @@ func (o *Version) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Version) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Version) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.rosaEnabled == nil &&
-		len(o.availableUpgrades) == 0 &&
-		o.channelGroup == nil &&
-		o.default_ == nil &&
-		o.enabled == nil &&
-		o.rawID == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // ROSAEnabled returns the value of the 'ROSA_enabled' attribute, or
@@ -115,8 +108,8 @@ func (o *Version) Empty() bool {
 //
 // ROSAEnabled indicates whether this version can be used to create ROSA clusters.
 func (o *Version) ROSAEnabled() bool {
-	if o != nil && o.rosaEnabled != nil {
-		return *o.rosaEnabled
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.rosaEnabled
 	}
 	return false
 }
@@ -126,9 +119,9 @@ func (o *Version) ROSAEnabled() bool {
 //
 // ROSAEnabled indicates whether this version can be used to create ROSA clusters.
 func (o *Version) GetROSAEnabled() (value bool, ok bool) {
-	ok = o != nil && o.rosaEnabled != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.rosaEnabled
+		value = o.rosaEnabled
 	}
 	return
 }
@@ -138,10 +131,10 @@ func (o *Version) GetROSAEnabled() (value bool, ok bool) {
 //
 // AvailableUpgrades is the list of versions this version can be upgraded to.
 func (o *Version) AvailableUpgrades() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.availableUpgrades
 	}
-	return o.availableUpgrades
+	return nil
 }
 
 // GetAvailableUpgrades returns the value of the 'available_upgrades' attribute and
@@ -149,7 +142,7 @@ func (o *Version) AvailableUpgrades() []string {
 //
 // AvailableUpgrades is the list of versions this version can be upgraded to.
 func (o *Version) GetAvailableUpgrades() (value []string, ok bool) {
-	ok = o != nil && o.availableUpgrades != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.availableUpgrades
 	}
@@ -163,8 +156,8 @@ func (o *Version) GetAvailableUpgrades() (value []string, ok bool) {
 // ChannelGroup is a mechanism to partition the images to different groups,
 // each image belongs to only a single group.
 func (o *Version) ChannelGroup() string {
-	if o != nil && o.channelGroup != nil {
-		return *o.channelGroup
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.channelGroup
 	}
 	return ""
 }
@@ -176,9 +169,9 @@ func (o *Version) ChannelGroup() string {
 // ChannelGroup is a mechanism to partition the images to different groups,
 // each image belongs to only a single group.
 func (o *Version) GetChannelGroup() (value string, ok bool) {
-	ok = o != nil && o.channelGroup != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.channelGroup
+		value = o.channelGroup
 	}
 	return
 }
@@ -189,8 +182,8 @@ func (o *Version) GetChannelGroup() (value string, ok bool) {
 // Indicates if this should be selected as the default version when a cluster is created
 // without specifying explicitly the version.
 func (o *Version) Default() bool {
-	if o != nil && o.default_ != nil {
-		return *o.default_
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.default_
 	}
 	return false
 }
@@ -201,9 +194,9 @@ func (o *Version) Default() bool {
 // Indicates if this should be selected as the default version when a cluster is created
 // without specifying explicitly the version.
 func (o *Version) GetDefault() (value bool, ok bool) {
-	ok = o != nil && o.default_ != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.default_
+		value = o.default_
 	}
 	return
 }
@@ -213,8 +206,8 @@ func (o *Version) GetDefault() (value bool, ok bool) {
 //
 // Indicates if this version can be used to create clusters.
 func (o *Version) Enabled() bool {
-	if o != nil && o.enabled != nil {
-		return *o.enabled
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.enabled
 	}
 	return false
 }
@@ -224,9 +217,9 @@ func (o *Version) Enabled() bool {
 //
 // Indicates if this version can be used to create clusters.
 func (o *Version) GetEnabled() (value bool, ok bool) {
-	ok = o != nil && o.enabled != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.enabled
+		value = o.enabled
 	}
 	return
 }
@@ -236,8 +229,8 @@ func (o *Version) GetEnabled() (value bool, ok bool) {
 //
 // RawID is the id of the version - without channel group and prefix.
 func (o *Version) RawID() string {
-	if o != nil && o.rawID != nil {
-		return *o.rawID
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.rawID
 	}
 	return ""
 }
@@ -247,9 +240,9 @@ func (o *Version) RawID() string {
 //
 // RawID is the id of the version - without channel group and prefix.
 func (o *Version) GetRawID() (value string, ok bool) {
-	ok = o != nil && o.rawID != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.rawID
+		value = o.rawID
 	}
 	return
 }
@@ -268,7 +261,7 @@ const VersionListNilKind = "VersionListNil"
 
 // VersionList is a list of values of the 'version' type.
 type VersionList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Version
 }
@@ -291,8 +284,8 @@ func (l *VersionList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *VersionList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -300,9 +293,9 @@ func (l *VersionList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *VersionList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

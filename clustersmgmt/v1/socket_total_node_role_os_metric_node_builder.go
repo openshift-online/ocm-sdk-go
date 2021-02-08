@@ -28,15 +28,16 @@ import (
 // Representation of information from telemetry about a the socket capacity
 // by node role and OS.
 type SocketTotalNodeRoleOSMetricNodeBuilder struct {
+	bitmap_         uint32
 	nodeRoles       []string
-	operatingSystem *string
-	socketTotal     *float64
-	time            *time.Time
+	operatingSystem string
+	socketTotal     float64
+	time            time.Time
 }
 
 // NewSocketTotalNodeRoleOSMetricNode creates a new builder of 'socket_total_node_role_OS_metric_node' objects.
 func NewSocketTotalNodeRoleOSMetricNode() *SocketTotalNodeRoleOSMetricNodeBuilder {
-	return new(SocketTotalNodeRoleOSMetricNodeBuilder)
+	return &SocketTotalNodeRoleOSMetricNodeBuilder{}
 }
 
 // NodeRoles sets the value of the 'node_roles' attribute to the given values.
@@ -45,6 +46,7 @@ func NewSocketTotalNodeRoleOSMetricNode() *SocketTotalNodeRoleOSMetricNodeBuilde
 func (b *SocketTotalNodeRoleOSMetricNodeBuilder) NodeRoles(values ...string) *SocketTotalNodeRoleOSMetricNodeBuilder {
 	b.nodeRoles = make([]string, len(values))
 	copy(b.nodeRoles, values)
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -52,7 +54,8 @@ func (b *SocketTotalNodeRoleOSMetricNodeBuilder) NodeRoles(values ...string) *So
 //
 //
 func (b *SocketTotalNodeRoleOSMetricNodeBuilder) OperatingSystem(value string) *SocketTotalNodeRoleOSMetricNodeBuilder {
-	b.operatingSystem = &value
+	b.operatingSystem = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -60,7 +63,8 @@ func (b *SocketTotalNodeRoleOSMetricNodeBuilder) OperatingSystem(value string) *
 //
 //
 func (b *SocketTotalNodeRoleOSMetricNodeBuilder) SocketTotal(value float64) *SocketTotalNodeRoleOSMetricNodeBuilder {
-	b.socketTotal = &value
+	b.socketTotal = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -68,7 +72,8 @@ func (b *SocketTotalNodeRoleOSMetricNodeBuilder) SocketTotal(value float64) *Soc
 //
 //
 func (b *SocketTotalNodeRoleOSMetricNodeBuilder) Time(value time.Time) *SocketTotalNodeRoleOSMetricNodeBuilder {
-	b.time = &value
+	b.time = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -77,6 +82,7 @@ func (b *SocketTotalNodeRoleOSMetricNodeBuilder) Copy(object *SocketTotalNodeRol
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.nodeRoles != nil {
 		b.nodeRoles = make([]string, len(object.nodeRoles))
 		copy(b.nodeRoles, object.nodeRoles)
@@ -92,6 +98,7 @@ func (b *SocketTotalNodeRoleOSMetricNodeBuilder) Copy(object *SocketTotalNodeRol
 // Build creates a 'socket_total_node_role_OS_metric_node' object using the configuration stored in the builder.
 func (b *SocketTotalNodeRoleOSMetricNodeBuilder) Build() (object *SocketTotalNodeRoleOSMetricNode, err error) {
 	object = new(SocketTotalNodeRoleOSMetricNode)
+	object.bitmap_ = b.bitmap_
 	if b.nodeRoles != nil {
 		object.nodeRoles = make([]string, len(b.nodeRoles))
 		copy(object.nodeRoles, b.nodeRoles)

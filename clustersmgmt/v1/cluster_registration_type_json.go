@@ -39,28 +39,32 @@ func MarshalClusterRegistration(object *ClusterRegistration, writer io.Writer) e
 func writeClusterRegistration(object *ClusterRegistration, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.externalID != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("external_id")
-		stream.WriteString(*object.externalID)
+		stream.WriteString(object.externalID)
 		count++
 	}
-	if object.organizationID != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
-	if object.subscriptionID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subscription_id")
-		stream.WriteString(*object.subscriptionID)
+		stream.WriteString(object.subscriptionID)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -92,13 +96,16 @@ func readClusterRegistration(iterator *jsoniter.Iterator) *ClusterRegistration {
 		switch field {
 		case "external_id":
 			value := iterator.ReadString()
-			object.externalID = &value
+			object.externalID = value
+			object.bitmap_ |= 1
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 2
 		case "subscription_id":
 			value := iterator.ReadString()
-			object.subscriptionID = &value
+			object.subscriptionID = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

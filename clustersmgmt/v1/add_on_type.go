@@ -35,24 +35,24 @@ const AddOnNilKind = "AddOnNil"
 //
 // Representation of an add-on that can be installed in a cluster.
 type AddOn struct {
-	id                   *string
-	href                 *string
-	link                 bool
-	description          *string
-	docsLink             *string
-	enabled              *bool
-	hasExternalResources *bool
-	hidden               *bool
-	icon                 *string
-	installMode          *AddOnInstallMode
-	label                *string
-	name                 *string
-	operatorName         *string
+	bitmap_              uint32
+	id                   string
+	href                 string
+	description          string
+	docsLink             string
+	icon                 string
+	installMode          AddOnInstallMode
+	label                string
+	name                 string
+	operatorName         string
 	parameters           *AddOnParameterList
 	requirements         []*AddOnRequirement
-	resourceCost         *float64
-	resourceName         *string
-	targetNamespace      *string
+	resourceCost         float64
+	resourceName         string
+	targetNamespace      string
+	enabled              bool
+	hasExternalResources bool
+	hidden               bool
 }
 
 // Kind returns the name of the type of the object.
@@ -60,16 +60,21 @@ func (o *AddOn) Kind() string {
 	if o == nil {
 		return AddOnNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return AddOnLinkKind
 	}
 	return AddOnKind
 }
 
+// Link returns true iif this is a link.
+func (o *AddOn) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *AddOn) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -77,22 +82,17 @@ func (o *AddOn) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *AddOn) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *AddOn) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *AddOn) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -100,32 +100,16 @@ func (o *AddOn) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *AddOn) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AddOn) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.description == nil &&
-		o.docsLink == nil &&
-		o.enabled == nil &&
-		o.hasExternalResources == nil &&
-		o.hidden == nil &&
-		o.icon == nil &&
-		o.installMode == nil &&
-		o.label == nil &&
-		o.name == nil &&
-		o.operatorName == nil &&
-		o.parameters.Len() == 0 &&
-		len(o.requirements) == 0 &&
-		o.resourceCost == nil &&
-		o.resourceName == nil &&
-		o.targetNamespace == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Description returns the value of the 'description' attribute, or
@@ -133,8 +117,8 @@ func (o *AddOn) Empty() bool {
 //
 // Description of the add-on.
 func (o *AddOn) Description() string {
-	if o != nil && o.description != nil {
-		return *o.description
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.description
 	}
 	return ""
 }
@@ -144,9 +128,9 @@ func (o *AddOn) Description() string {
 //
 // Description of the add-on.
 func (o *AddOn) GetDescription() (value string, ok bool) {
-	ok = o != nil && o.description != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.description
+		value = o.description
 	}
 	return
 }
@@ -156,8 +140,8 @@ func (o *AddOn) GetDescription() (value string, ok bool) {
 //
 // Link to documentation about the add-on.
 func (o *AddOn) DocsLink() string {
-	if o != nil && o.docsLink != nil {
-		return *o.docsLink
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.docsLink
 	}
 	return ""
 }
@@ -167,9 +151,9 @@ func (o *AddOn) DocsLink() string {
 //
 // Link to documentation about the add-on.
 func (o *AddOn) GetDocsLink() (value string, ok bool) {
-	ok = o != nil && o.docsLink != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.docsLink
+		value = o.docsLink
 	}
 	return
 }
@@ -179,8 +163,8 @@ func (o *AddOn) GetDocsLink() (value string, ok bool) {
 //
 // Indicates if this add-on can be added to clusters.
 func (o *AddOn) Enabled() bool {
-	if o != nil && o.enabled != nil {
-		return *o.enabled
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.enabled
 	}
 	return false
 }
@@ -190,9 +174,9 @@ func (o *AddOn) Enabled() bool {
 //
 // Indicates if this add-on can be added to clusters.
 func (o *AddOn) GetEnabled() (value bool, ok bool) {
-	ok = o != nil && o.enabled != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.enabled
+		value = o.enabled
 	}
 	return
 }
@@ -202,8 +186,8 @@ func (o *AddOn) GetEnabled() (value bool, ok bool) {
 //
 // Indicates if this add-on has external resources associated with it
 func (o *AddOn) HasExternalResources() bool {
-	if o != nil && o.hasExternalResources != nil {
-		return *o.hasExternalResources
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.hasExternalResources
 	}
 	return false
 }
@@ -213,9 +197,9 @@ func (o *AddOn) HasExternalResources() bool {
 //
 // Indicates if this add-on has external resources associated with it
 func (o *AddOn) GetHasExternalResources() (value bool, ok bool) {
-	ok = o != nil && o.hasExternalResources != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.hasExternalResources
+		value = o.hasExternalResources
 	}
 	return
 }
@@ -225,8 +209,8 @@ func (o *AddOn) GetHasExternalResources() (value bool, ok bool) {
 //
 // Indicates if this add-on is hidden.
 func (o *AddOn) Hidden() bool {
-	if o != nil && o.hidden != nil {
-		return *o.hidden
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.hidden
 	}
 	return false
 }
@@ -236,9 +220,9 @@ func (o *AddOn) Hidden() bool {
 //
 // Indicates if this add-on is hidden.
 func (o *AddOn) GetHidden() (value bool, ok bool) {
-	ok = o != nil && o.hidden != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.hidden
+		value = o.hidden
 	}
 	return
 }
@@ -248,8 +232,8 @@ func (o *AddOn) GetHidden() (value bool, ok bool) {
 //
 // Base64-encoded icon representing an add-on. The icon should be in PNG format.
 func (o *AddOn) Icon() string {
-	if o != nil && o.icon != nil {
-		return *o.icon
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.icon
 	}
 	return ""
 }
@@ -259,9 +243,9 @@ func (o *AddOn) Icon() string {
 //
 // Base64-encoded icon representing an add-on. The icon should be in PNG format.
 func (o *AddOn) GetIcon() (value string, ok bool) {
-	ok = o != nil && o.icon != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.icon
+		value = o.icon
 	}
 	return
 }
@@ -271,8 +255,8 @@ func (o *AddOn) GetIcon() (value string, ok bool) {
 //
 // The mode in which the addon is deployed.
 func (o *AddOn) InstallMode() AddOnInstallMode {
-	if o != nil && o.installMode != nil {
-		return *o.installMode
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.installMode
 	}
 	return AddOnInstallMode("")
 }
@@ -282,9 +266,9 @@ func (o *AddOn) InstallMode() AddOnInstallMode {
 //
 // The mode in which the addon is deployed.
 func (o *AddOn) GetInstallMode() (value AddOnInstallMode, ok bool) {
-	ok = o != nil && o.installMode != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
-		value = *o.installMode
+		value = o.installMode
 	}
 	return
 }
@@ -294,8 +278,8 @@ func (o *AddOn) GetInstallMode() (value AddOnInstallMode, ok bool) {
 //
 // Label used to attach to a cluster deployment when add-on is installed.
 func (o *AddOn) Label() string {
-	if o != nil && o.label != nil {
-		return *o.label
+	if o != nil && o.bitmap_&1024 != 0 {
+		return o.label
 	}
 	return ""
 }
@@ -305,9 +289,9 @@ func (o *AddOn) Label() string {
 //
 // Label used to attach to a cluster deployment when add-on is installed.
 func (o *AddOn) GetLabel() (value string, ok bool) {
-	ok = o != nil && o.label != nil
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
-		value = *o.label
+		value = o.label
 	}
 	return
 }
@@ -317,8 +301,8 @@ func (o *AddOn) GetLabel() (value string, ok bool) {
 //
 // Name of the add-on.
 func (o *AddOn) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&2048 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -328,9 +312,9 @@ func (o *AddOn) Name() string {
 //
 // Name of the add-on.
 func (o *AddOn) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&2048 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -340,8 +324,8 @@ func (o *AddOn) GetName() (value string, ok bool) {
 //
 // The name of the operator installed by this add-on.
 func (o *AddOn) OperatorName() string {
-	if o != nil && o.operatorName != nil {
-		return *o.operatorName
+	if o != nil && o.bitmap_&4096 != 0 {
+		return o.operatorName
 	}
 	return ""
 }
@@ -351,9 +335,9 @@ func (o *AddOn) OperatorName() string {
 //
 // The name of the operator installed by this add-on.
 func (o *AddOn) GetOperatorName() (value string, ok bool) {
-	ok = o != nil && o.operatorName != nil
+	ok = o != nil && o.bitmap_&4096 != 0
 	if ok {
-		value = *o.operatorName
+		value = o.operatorName
 	}
 	return
 }
@@ -363,10 +347,10 @@ func (o *AddOn) GetOperatorName() (value string, ok bool) {
 //
 // List of parameters for this add-on.
 func (o *AddOn) Parameters() *AddOnParameterList {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8192 != 0 {
+		return o.parameters
 	}
-	return o.parameters
+	return nil
 }
 
 // GetParameters returns the value of the 'parameters' attribute and
@@ -374,7 +358,7 @@ func (o *AddOn) Parameters() *AddOnParameterList {
 //
 // List of parameters for this add-on.
 func (o *AddOn) GetParameters() (value *AddOnParameterList, ok bool) {
-	ok = o != nil && o.parameters != nil
+	ok = o != nil && o.bitmap_&8192 != 0
 	if ok {
 		value = o.parameters
 	}
@@ -386,10 +370,10 @@ func (o *AddOn) GetParameters() (value *AddOnParameterList, ok bool) {
 //
 // List of requirements for this add-on.
 func (o *AddOn) Requirements() []*AddOnRequirement {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16384 != 0 {
+		return o.requirements
 	}
-	return o.requirements
+	return nil
 }
 
 // GetRequirements returns the value of the 'requirements' attribute and
@@ -397,7 +381,7 @@ func (o *AddOn) Requirements() []*AddOnRequirement {
 //
 // List of requirements for this add-on.
 func (o *AddOn) GetRequirements() (value []*AddOnRequirement, ok bool) {
-	ok = o != nil && o.requirements != nil
+	ok = o != nil && o.bitmap_&16384 != 0
 	if ok {
 		value = o.requirements
 	}
@@ -409,8 +393,8 @@ func (o *AddOn) GetRequirements() (value []*AddOnRequirement, ok bool) {
 //
 // Used to determine how many units of quota an add-on consumes per resource name.
 func (o *AddOn) ResourceCost() float64 {
-	if o != nil && o.resourceCost != nil {
-		return *o.resourceCost
+	if o != nil && o.bitmap_&32768 != 0 {
+		return o.resourceCost
 	}
 	return 0.0
 }
@@ -420,9 +404,9 @@ func (o *AddOn) ResourceCost() float64 {
 //
 // Used to determine how many units of quota an add-on consumes per resource name.
 func (o *AddOn) GetResourceCost() (value float64, ok bool) {
-	ok = o != nil && o.resourceCost != nil
+	ok = o != nil && o.bitmap_&32768 != 0
 	if ok {
-		value = *o.resourceCost
+		value = o.resourceCost
 	}
 	return
 }
@@ -432,8 +416,8 @@ func (o *AddOn) GetResourceCost() (value float64, ok bool) {
 //
 // Used to determine from where to reserve quota for this add-on.
 func (o *AddOn) ResourceName() string {
-	if o != nil && o.resourceName != nil {
-		return *o.resourceName
+	if o != nil && o.bitmap_&65536 != 0 {
+		return o.resourceName
 	}
 	return ""
 }
@@ -443,9 +427,9 @@ func (o *AddOn) ResourceName() string {
 //
 // Used to determine from where to reserve quota for this add-on.
 func (o *AddOn) GetResourceName() (value string, ok bool) {
-	ok = o != nil && o.resourceName != nil
+	ok = o != nil && o.bitmap_&65536 != 0
 	if ok {
-		value = *o.resourceName
+		value = o.resourceName
 	}
 	return
 }
@@ -455,8 +439,8 @@ func (o *AddOn) GetResourceName() (value string, ok bool) {
 //
 // The namespace in which the addon CRD exists.
 func (o *AddOn) TargetNamespace() string {
-	if o != nil && o.targetNamespace != nil {
-		return *o.targetNamespace
+	if o != nil && o.bitmap_&131072 != 0 {
+		return o.targetNamespace
 	}
 	return ""
 }
@@ -466,9 +450,9 @@ func (o *AddOn) TargetNamespace() string {
 //
 // The namespace in which the addon CRD exists.
 func (o *AddOn) GetTargetNamespace() (value string, ok bool) {
-	ok = o != nil && o.targetNamespace != nil
+	ok = o != nil && o.bitmap_&131072 != 0
 	if ok {
-		value = *o.targetNamespace
+		value = o.targetNamespace
 	}
 	return
 }
@@ -487,7 +471,7 @@ const AddOnListNilKind = "AddOnListNil"
 
 // AddOnList is a list of values of the 'add_on' type.
 type AddOnList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AddOn
 }
@@ -510,8 +494,8 @@ func (l *AddOnList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *AddOnList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -519,9 +503,9 @@ func (l *AddOnList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *AddOnList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

@@ -27,43 +27,45 @@ import (
 //
 //
 type RoleBindingBuilder struct {
-	id             *string
-	href           *string
-	link           bool
+	bitmap_        uint32
+	id             string
+	href           string
 	account        *AccountBuilder
-	accountID      *string
-	configManaged  *bool
-	createdAt      *time.Time
+	accountID      string
+	createdAt      time.Time
 	organization   *OrganizationBuilder
-	organizationID *string
+	organizationID string
 	role           *RoleBuilder
-	roleID         *string
+	roleID         string
 	subscription   *SubscriptionBuilder
-	subscriptionID *string
-	type_          *string
-	updatedAt      *time.Time
+	subscriptionID string
+	type_          string
+	updatedAt      time.Time
+	configManaged  bool
 }
 
 // NewRoleBinding creates a new builder of 'role_binding' objects.
 func NewRoleBinding() *RoleBindingBuilder {
-	return new(RoleBindingBuilder)
+	return &RoleBindingBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *RoleBindingBuilder) Link(value bool) *RoleBindingBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *RoleBindingBuilder) ID(value string) *RoleBindingBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *RoleBindingBuilder) HREF(value string) *RoleBindingBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *RoleBindingBuilder) Link(value bool) *RoleBindingBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -72,6 +74,11 @@ func (b *RoleBindingBuilder) Link(value bool) *RoleBindingBuilder {
 //
 func (b *RoleBindingBuilder) Account(value *AccountBuilder) *RoleBindingBuilder {
 	b.account = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -79,7 +86,8 @@ func (b *RoleBindingBuilder) Account(value *AccountBuilder) *RoleBindingBuilder 
 //
 //
 func (b *RoleBindingBuilder) AccountID(value string) *RoleBindingBuilder {
-	b.accountID = &value
+	b.accountID = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -87,7 +95,8 @@ func (b *RoleBindingBuilder) AccountID(value string) *RoleBindingBuilder {
 //
 //
 func (b *RoleBindingBuilder) ConfigManaged(value bool) *RoleBindingBuilder {
-	b.configManaged = &value
+	b.configManaged = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -95,7 +104,8 @@ func (b *RoleBindingBuilder) ConfigManaged(value bool) *RoleBindingBuilder {
 //
 //
 func (b *RoleBindingBuilder) CreatedAt(value time.Time) *RoleBindingBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -104,6 +114,11 @@ func (b *RoleBindingBuilder) CreatedAt(value time.Time) *RoleBindingBuilder {
 //
 func (b *RoleBindingBuilder) Organization(value *OrganizationBuilder) *RoleBindingBuilder {
 	b.organization = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
@@ -111,7 +126,8 @@ func (b *RoleBindingBuilder) Organization(value *OrganizationBuilder) *RoleBindi
 //
 //
 func (b *RoleBindingBuilder) OrganizationID(value string) *RoleBindingBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -120,6 +136,11 @@ func (b *RoleBindingBuilder) OrganizationID(value string) *RoleBindingBuilder {
 //
 func (b *RoleBindingBuilder) Role(value *RoleBuilder) *RoleBindingBuilder {
 	b.role = value
+	if value != nil {
+		b.bitmap_ |= 512
+	} else {
+		b.bitmap_ &^= 512
+	}
 	return b
 }
 
@@ -127,7 +148,8 @@ func (b *RoleBindingBuilder) Role(value *RoleBuilder) *RoleBindingBuilder {
 //
 //
 func (b *RoleBindingBuilder) RoleID(value string) *RoleBindingBuilder {
-	b.roleID = &value
+	b.roleID = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -136,6 +158,11 @@ func (b *RoleBindingBuilder) RoleID(value string) *RoleBindingBuilder {
 //
 func (b *RoleBindingBuilder) Subscription(value *SubscriptionBuilder) *RoleBindingBuilder {
 	b.subscription = value
+	if value != nil {
+		b.bitmap_ |= 2048
+	} else {
+		b.bitmap_ &^= 2048
+	}
 	return b
 }
 
@@ -143,7 +170,8 @@ func (b *RoleBindingBuilder) Subscription(value *SubscriptionBuilder) *RoleBindi
 //
 //
 func (b *RoleBindingBuilder) SubscriptionID(value string) *RoleBindingBuilder {
-	b.subscriptionID = &value
+	b.subscriptionID = value
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -151,7 +179,8 @@ func (b *RoleBindingBuilder) SubscriptionID(value string) *RoleBindingBuilder {
 //
 //
 func (b *RoleBindingBuilder) Type(value string) *RoleBindingBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -159,7 +188,8 @@ func (b *RoleBindingBuilder) Type(value string) *RoleBindingBuilder {
 //
 //
 func (b *RoleBindingBuilder) UpdatedAt(value time.Time) *RoleBindingBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 16384
 	return b
 }
 
@@ -168,9 +198,9 @@ func (b *RoleBindingBuilder) Copy(object *RoleBinding) *RoleBindingBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.account != nil {
 		b.account = NewAccount().Copy(object.account)
 	} else {
@@ -207,7 +237,7 @@ func (b *RoleBindingBuilder) Build() (object *RoleBinding, err error) {
 	object = new(RoleBinding)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.account != nil {
 		object.account, err = b.account.Build()
 		if err != nil {

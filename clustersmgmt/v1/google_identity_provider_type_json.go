@@ -39,28 +39,32 @@ func MarshalGoogleIdentityProvider(object *GoogleIdentityProvider, writer io.Wri
 func writeGoogleIdentityProvider(object *GoogleIdentityProvider, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.clientID != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_id")
-		stream.WriteString(*object.clientID)
+		stream.WriteString(object.clientID)
 		count++
 	}
-	if object.clientSecret != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_secret")
-		stream.WriteString(*object.clientSecret)
+		stream.WriteString(object.clientSecret)
 		count++
 	}
-	if object.hostedDomain != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("hosted_domain")
-		stream.WriteString(*object.hostedDomain)
+		stream.WriteString(object.hostedDomain)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -92,13 +96,16 @@ func readGoogleIdentityProvider(iterator *jsoniter.Iterator) *GoogleIdentityProv
 		switch field {
 		case "client_id":
 			value := iterator.ReadString()
-			object.clientID = &value
+			object.clientID = value
+			object.bitmap_ |= 1
 		case "client_secret":
 			value := iterator.ReadString()
-			object.clientSecret = &value
+			object.clientSecret = value
+			object.bitmap_ |= 2
 		case "hosted_domain":
 			value := iterator.ReadString()
-			object.hostedDomain = &value
+			object.hostedDomain = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

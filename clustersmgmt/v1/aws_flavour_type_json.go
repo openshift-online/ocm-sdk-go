@@ -39,23 +39,27 @@ func MarshalAWSFlavour(object *AWSFlavour, writer io.Writer) error {
 func writeAWSFlavour(object *AWSFlavour, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.computeInstanceType != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("compute_instance_type")
-		stream.WriteString(*object.computeInstanceType)
+		stream.WriteString(object.computeInstanceType)
 		count++
 	}
-	if object.infraInstanceType != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("infra_instance_type")
-		stream.WriteString(*object.infraInstanceType)
+		stream.WriteString(object.infraInstanceType)
 		count++
 	}
-	if object.infraVolume != nil {
+	present_ = object.bitmap_&4 != 0 && object.infraVolume != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -63,15 +67,17 @@ func writeAWSFlavour(object *AWSFlavour, stream *jsoniter.Stream) {
 		writeAWSVolume(object.infraVolume, stream)
 		count++
 	}
-	if object.masterInstanceType != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("master_instance_type")
-		stream.WriteString(*object.masterInstanceType)
+		stream.WriteString(object.masterInstanceType)
 		count++
 	}
-	if object.masterVolume != nil {
+	present_ = object.bitmap_&16 != 0 && object.masterVolume != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -79,7 +85,8 @@ func writeAWSFlavour(object *AWSFlavour, stream *jsoniter.Stream) {
 		writeAWSVolume(object.masterVolume, stream)
 		count++
 	}
-	if object.workerVolume != nil {
+	present_ = object.bitmap_&32 != 0 && object.workerVolume != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -116,22 +123,28 @@ func readAWSFlavour(iterator *jsoniter.Iterator) *AWSFlavour {
 		switch field {
 		case "compute_instance_type":
 			value := iterator.ReadString()
-			object.computeInstanceType = &value
+			object.computeInstanceType = value
+			object.bitmap_ |= 1
 		case "infra_instance_type":
 			value := iterator.ReadString()
-			object.infraInstanceType = &value
+			object.infraInstanceType = value
+			object.bitmap_ |= 2
 		case "infra_volume":
 			value := readAWSVolume(iterator)
 			object.infraVolume = value
+			object.bitmap_ |= 4
 		case "master_instance_type":
 			value := iterator.ReadString()
-			object.masterInstanceType = &value
+			object.masterInstanceType = value
+			object.bitmap_ |= 8
 		case "master_volume":
 			value := readAWSVolume(iterator)
 			object.masterVolume = value
+			object.bitmap_ |= 16
 		case "worker_volume":
 			value := readAWSVolume(iterator)
 			object.workerVolume = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}

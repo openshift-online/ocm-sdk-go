@@ -23,21 +23,17 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 // Registration of a new subscription.
 type SubscriptionRegistration struct {
-	clusterUUID *string
-	consoleURL  *string
-	displayName *string
-	planID      *PlanID
-	status      *string
+	bitmap_     uint32
+	clusterUUID string
+	consoleURL  string
+	displayName string
+	planID      PlanID
+	status      string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SubscriptionRegistration) Empty() bool {
-	return o == nil || (o.clusterUUID == nil &&
-		o.consoleURL == nil &&
-		o.displayName == nil &&
-		o.planID == nil &&
-		o.status == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // ClusterUUID returns the value of the 'cluster_UUID' attribute, or
@@ -45,8 +41,8 @@ func (o *SubscriptionRegistration) Empty() bool {
 //
 // External cluster ID.
 func (o *SubscriptionRegistration) ClusterUUID() string {
-	if o != nil && o.clusterUUID != nil {
-		return *o.clusterUUID
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.clusterUUID
 	}
 	return ""
 }
@@ -56,9 +52,9 @@ func (o *SubscriptionRegistration) ClusterUUID() string {
 //
 // External cluster ID.
 func (o *SubscriptionRegistration) GetClusterUUID() (value string, ok bool) {
-	ok = o != nil && o.clusterUUID != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.clusterUUID
+		value = o.clusterUUID
 	}
 	return
 }
@@ -68,8 +64,8 @@ func (o *SubscriptionRegistration) GetClusterUUID() (value string, ok bool) {
 //
 // Console URL of subscription (optional).
 func (o *SubscriptionRegistration) ConsoleURL() string {
-	if o != nil && o.consoleURL != nil {
-		return *o.consoleURL
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.consoleURL
 	}
 	return ""
 }
@@ -79,9 +75,9 @@ func (o *SubscriptionRegistration) ConsoleURL() string {
 //
 // Console URL of subscription (optional).
 func (o *SubscriptionRegistration) GetConsoleURL() (value string, ok bool) {
-	ok = o != nil && o.consoleURL != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.consoleURL
+		value = o.consoleURL
 	}
 	return
 }
@@ -91,8 +87,8 @@ func (o *SubscriptionRegistration) GetConsoleURL() (value string, ok bool) {
 //
 // Display name of subscription (optional).
 func (o *SubscriptionRegistration) DisplayName() string {
-	if o != nil && o.displayName != nil {
-		return *o.displayName
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.displayName
 	}
 	return ""
 }
@@ -102,9 +98,9 @@ func (o *SubscriptionRegistration) DisplayName() string {
 //
 // Display name of subscription (optional).
 func (o *SubscriptionRegistration) GetDisplayName() (value string, ok bool) {
-	ok = o != nil && o.displayName != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.displayName
+		value = o.displayName
 	}
 	return
 }
@@ -114,8 +110,8 @@ func (o *SubscriptionRegistration) GetDisplayName() (value string, ok bool) {
 //
 // Plan ID of subscription.
 func (o *SubscriptionRegistration) PlanID() PlanID {
-	if o != nil && o.planID != nil {
-		return *o.planID
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.planID
 	}
 	return PlanID("")
 }
@@ -125,9 +121,9 @@ func (o *SubscriptionRegistration) PlanID() PlanID {
 //
 // Plan ID of subscription.
 func (o *SubscriptionRegistration) GetPlanID() (value PlanID, ok bool) {
-	ok = o != nil && o.planID != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.planID
+		value = o.planID
 	}
 	return
 }
@@ -137,8 +133,8 @@ func (o *SubscriptionRegistration) GetPlanID() (value PlanID, ok bool) {
 //
 // Status of subscription.
 func (o *SubscriptionRegistration) Status() string {
-	if o != nil && o.status != nil {
-		return *o.status
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.status
 	}
 	return ""
 }
@@ -148,9 +144,9 @@ func (o *SubscriptionRegistration) Status() string {
 //
 // Status of subscription.
 func (o *SubscriptionRegistration) GetStatus() (value string, ok bool) {
-	ok = o != nil && o.status != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.status
+		value = o.status
 	}
 	return
 }
@@ -169,7 +165,7 @@ const SubscriptionRegistrationListNilKind = "SubscriptionRegistrationListNil"
 
 // SubscriptionRegistrationList is a list of values of the 'subscription_registration' type.
 type SubscriptionRegistrationList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SubscriptionRegistration
 }

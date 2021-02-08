@@ -39,52 +39,59 @@ func MarshalSelfAccessReviewRequest(object *SelfAccessReviewRequest, writer io.W
 func writeSelfAccessReviewRequest(object *SelfAccessReviewRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.action != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("action")
-		stream.WriteString(*object.action)
+		stream.WriteString(object.action)
 		count++
 	}
-	if object.clusterID != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_id")
-		stream.WriteString(*object.clusterID)
+		stream.WriteString(object.clusterID)
 		count++
 	}
-	if object.clusterUUID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_uuid")
-		stream.WriteString(*object.clusterUUID)
+		stream.WriteString(object.clusterUUID)
 		count++
 	}
-	if object.organizationID != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
-	if object.subscriptionID != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subscription_id")
-		stream.WriteString(*object.subscriptionID)
+		stream.WriteString(object.subscriptionID)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -116,22 +123,28 @@ func readSelfAccessReviewRequest(iterator *jsoniter.Iterator) *SelfAccessReviewR
 		switch field {
 		case "action":
 			value := iterator.ReadString()
-			object.action = &value
+			object.action = value
+			object.bitmap_ |= 1
 		case "cluster_id":
 			value := iterator.ReadString()
-			object.clusterID = &value
+			object.clusterID = value
+			object.bitmap_ |= 2
 		case "cluster_uuid":
 			value := iterator.ReadString()
-			object.clusterUUID = &value
+			object.clusterUUID = value
+			object.bitmap_ |= 4
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 8
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 16
 		case "subscription_id":
 			value := iterator.ReadString()
-			object.subscriptionID = &value
+			object.subscriptionID = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}

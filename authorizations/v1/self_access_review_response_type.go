@@ -23,25 +23,19 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Representation of an access review response, performed against oneself
 type SelfAccessReviewResponse struct {
-	action         *string
-	allowed        *bool
-	clusterID      *string
-	clusterUUID    *string
-	organizationID *string
-	resourceType   *string
-	subscriptionID *string
+	bitmap_        uint32
+	action         string
+	clusterID      string
+	clusterUUID    string
+	organizationID string
+	resourceType   string
+	subscriptionID string
+	allowed        bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SelfAccessReviewResponse) Empty() bool {
-	return o == nil || (o.action == nil &&
-		o.allowed == nil &&
-		o.clusterID == nil &&
-		o.clusterUUID == nil &&
-		o.organizationID == nil &&
-		o.resourceType == nil &&
-		o.subscriptionID == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Action returns the value of the 'action' attribute, or
@@ -49,8 +43,8 @@ func (o *SelfAccessReviewResponse) Empty() bool {
 //
 // Indicates the action, one of: [get,list,create,delete,update]
 func (o *SelfAccessReviewResponse) Action() string {
-	if o != nil && o.action != nil {
-		return *o.action
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.action
 	}
 	return ""
 }
@@ -60,9 +54,9 @@ func (o *SelfAccessReviewResponse) Action() string {
 //
 // Indicates the action, one of: [get,list,create,delete,update]
 func (o *SelfAccessReviewResponse) GetAction() (value string, ok bool) {
-	ok = o != nil && o.action != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.action
+		value = o.action
 	}
 	return
 }
@@ -72,8 +66,8 @@ func (o *SelfAccessReviewResponse) GetAction() (value string, ok bool) {
 //
 // Defines whether the action on the specified resource type is allowed
 func (o *SelfAccessReviewResponse) Allowed() bool {
-	if o != nil && o.allowed != nil {
-		return *o.allowed
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.allowed
 	}
 	return false
 }
@@ -83,9 +77,9 @@ func (o *SelfAccessReviewResponse) Allowed() bool {
 //
 // Defines whether the action on the specified resource type is allowed
 func (o *SelfAccessReviewResponse) GetAllowed() (value bool, ok bool) {
-	ok = o != nil && o.allowed != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.allowed
+		value = o.allowed
 	}
 	return
 }
@@ -95,8 +89,8 @@ func (o *SelfAccessReviewResponse) GetAllowed() (value bool, ok bool) {
 //
 // Indicates which Cluster (internal id) the resource type belongs to
 func (o *SelfAccessReviewResponse) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clusterID
 	}
 	return ""
 }
@@ -106,9 +100,9 @@ func (o *SelfAccessReviewResponse) ClusterID() string {
 //
 // Indicates which Cluster (internal id) the resource type belongs to
 func (o *SelfAccessReviewResponse) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.clusterID
+		value = o.clusterID
 	}
 	return
 }
@@ -118,8 +112,8 @@ func (o *SelfAccessReviewResponse) GetClusterID() (value string, ok bool) {
 //
 // Indicates which Cluster (external id) the resource type belongs to
 func (o *SelfAccessReviewResponse) ClusterUUID() string {
-	if o != nil && o.clusterUUID != nil {
-		return *o.clusterUUID
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.clusterUUID
 	}
 	return ""
 }
@@ -129,9 +123,9 @@ func (o *SelfAccessReviewResponse) ClusterUUID() string {
 //
 // Indicates which Cluster (external id) the resource type belongs to
 func (o *SelfAccessReviewResponse) GetClusterUUID() (value string, ok bool) {
-	ok = o != nil && o.clusterUUID != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.clusterUUID
+		value = o.clusterUUID
 	}
 	return
 }
@@ -141,8 +135,8 @@ func (o *SelfAccessReviewResponse) GetClusterUUID() (value string, ok bool) {
 //
 // Indicates which Organization the resource type belongs to
 func (o *SelfAccessReviewResponse) OrganizationID() string {
-	if o != nil && o.organizationID != nil {
-		return *o.organizationID
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.organizationID
 	}
 	return ""
 }
@@ -152,9 +146,9 @@ func (o *SelfAccessReviewResponse) OrganizationID() string {
 //
 // Indicates which Organization the resource type belongs to
 func (o *SelfAccessReviewResponse) GetOrganizationID() (value string, ok bool) {
-	ok = o != nil && o.organizationID != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.organizationID
+		value = o.organizationID
 	}
 	return
 }
@@ -165,8 +159,8 @@ func (o *SelfAccessReviewResponse) GetOrganizationID() (value string, ok bool) {
 // Indicates the type of the resource an action would be taken on.
 // See uhc-account-manager/openapi/openapi.yaml for a list of possible values
 func (o *SelfAccessReviewResponse) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -177,9 +171,9 @@ func (o *SelfAccessReviewResponse) ResourceType() string {
 // Indicates the type of the resource an action would be taken on.
 // See uhc-account-manager/openapi/openapi.yaml for a list of possible values
 func (o *SelfAccessReviewResponse) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -189,8 +183,8 @@ func (o *SelfAccessReviewResponse) GetResourceType() (value string, ok bool) {
 //
 // Indicates which Subscription the resource type belongs to
 func (o *SelfAccessReviewResponse) SubscriptionID() string {
-	if o != nil && o.subscriptionID != nil {
-		return *o.subscriptionID
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.subscriptionID
 	}
 	return ""
 }
@@ -200,9 +194,9 @@ func (o *SelfAccessReviewResponse) SubscriptionID() string {
 //
 // Indicates which Subscription the resource type belongs to
 func (o *SelfAccessReviewResponse) GetSubscriptionID() (value string, ok bool) {
-	ok = o != nil && o.subscriptionID != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.subscriptionID
+		value = o.subscriptionID
 	}
 	return
 }
@@ -221,7 +215,7 @@ const SelfAccessReviewResponseListNilKind = "SelfAccessReviewResponseListNil"
 
 // SelfAccessReviewResponseList is a list of values of the 'self_access_review_response' type.
 type SelfAccessReviewResponseList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SelfAccessReviewResponse
 }

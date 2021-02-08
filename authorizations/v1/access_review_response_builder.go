@@ -23,26 +23,28 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Representation of an access review response
 type AccessReviewResponseBuilder struct {
-	accountUsername *string
-	action          *string
-	allowed         *bool
-	clusterID       *string
-	clusterUUID     *string
-	organizationID  *string
-	resourceType    *string
-	subscriptionID  *string
+	bitmap_         uint32
+	accountUsername string
+	action          string
+	clusterID       string
+	clusterUUID     string
+	organizationID  string
+	resourceType    string
+	subscriptionID  string
+	allowed         bool
 }
 
 // NewAccessReviewResponse creates a new builder of 'access_review_response' objects.
 func NewAccessReviewResponse() *AccessReviewResponseBuilder {
-	return new(AccessReviewResponseBuilder)
+	return &AccessReviewResponseBuilder{}
 }
 
 // AccountUsername sets the value of the 'account_username' attribute to the given value.
 //
 //
 func (b *AccessReviewResponseBuilder) AccountUsername(value string) *AccessReviewResponseBuilder {
-	b.accountUsername = &value
+	b.accountUsername = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -50,7 +52,8 @@ func (b *AccessReviewResponseBuilder) AccountUsername(value string) *AccessRevie
 //
 //
 func (b *AccessReviewResponseBuilder) Action(value string) *AccessReviewResponseBuilder {
-	b.action = &value
+	b.action = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -58,7 +61,8 @@ func (b *AccessReviewResponseBuilder) Action(value string) *AccessReviewResponse
 //
 //
 func (b *AccessReviewResponseBuilder) Allowed(value bool) *AccessReviewResponseBuilder {
-	b.allowed = &value
+	b.allowed = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -66,7 +70,8 @@ func (b *AccessReviewResponseBuilder) Allowed(value bool) *AccessReviewResponseB
 //
 //
 func (b *AccessReviewResponseBuilder) ClusterID(value string) *AccessReviewResponseBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -74,7 +79,8 @@ func (b *AccessReviewResponseBuilder) ClusterID(value string) *AccessReviewRespo
 //
 //
 func (b *AccessReviewResponseBuilder) ClusterUUID(value string) *AccessReviewResponseBuilder {
-	b.clusterUUID = &value
+	b.clusterUUID = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -82,7 +88,8 @@ func (b *AccessReviewResponseBuilder) ClusterUUID(value string) *AccessReviewRes
 //
 //
 func (b *AccessReviewResponseBuilder) OrganizationID(value string) *AccessReviewResponseBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -90,7 +97,8 @@ func (b *AccessReviewResponseBuilder) OrganizationID(value string) *AccessReview
 //
 //
 func (b *AccessReviewResponseBuilder) ResourceType(value string) *AccessReviewResponseBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -98,7 +106,8 @@ func (b *AccessReviewResponseBuilder) ResourceType(value string) *AccessReviewRe
 //
 //
 func (b *AccessReviewResponseBuilder) SubscriptionID(value string) *AccessReviewResponseBuilder {
-	b.subscriptionID = &value
+	b.subscriptionID = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -107,6 +116,7 @@ func (b *AccessReviewResponseBuilder) Copy(object *AccessReviewResponse) *Access
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountUsername = object.accountUsername
 	b.action = object.action
 	b.allowed = object.allowed
@@ -121,6 +131,7 @@ func (b *AccessReviewResponseBuilder) Copy(object *AccessReviewResponse) *Access
 // Build creates a 'access_review_response' object using the configuration stored in the builder.
 func (b *AccessReviewResponseBuilder) Build() (object *AccessReviewResponse, err error) {
 	object = new(AccessReviewResponse)
+	object.bitmap_ = b.bitmap_
 	object.accountUsername = b.accountUsername
 	object.action = b.action
 	object.allowed = b.allowed

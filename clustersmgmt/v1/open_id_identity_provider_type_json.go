@@ -40,15 +40,18 @@ func MarshalOpenIDIdentityProvider(object *OpenIDIdentityProvider, writer io.Wri
 func writeOpenIDIdentityProvider(object *OpenIDIdentityProvider, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.ca != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("ca")
-		stream.WriteString(*object.ca)
+		stream.WriteString(object.ca)
 		count++
 	}
-	if object.claims != nil {
+	present_ = object.bitmap_&2 != 0 && object.claims != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -56,47 +59,55 @@ func writeOpenIDIdentityProvider(object *OpenIDIdentityProvider, stream *jsonite
 		writeOpenIDClaims(object.claims, stream)
 		count++
 	}
-	if object.clientID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_id")
-		stream.WriteString(*object.clientID)
+		stream.WriteString(object.clientID)
 		count++
 	}
-	if object.clientSecret != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_secret")
-		stream.WriteString(*object.clientSecret)
+		stream.WriteString(object.clientSecret)
 		count++
 	}
-	if object.extraAuthorizeParameters != nil {
+	present_ = object.bitmap_&16 != 0 && object.extraAuthorizeParameters != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("extra_authorize_parameters")
-		stream.WriteObjectStart()
-		keys := make([]string, len(object.extraAuthorizeParameters))
-		i := 0
-		for key := range object.extraAuthorizeParameters {
-			keys[i] = key
-			i++
-		}
-		sort.Strings(keys)
-		for i, key := range keys {
-			if i > 0 {
-				stream.WriteMore()
+		if object.extraAuthorizeParameters != nil {
+			stream.WriteObjectStart()
+			keys := make([]string, len(object.extraAuthorizeParameters))
+			i := 0
+			for key := range object.extraAuthorizeParameters {
+				keys[i] = key
+				i++
 			}
-			item := object.extraAuthorizeParameters[key]
-			stream.WriteObjectField(key)
-			stream.WriteString(item)
+			sort.Strings(keys)
+			for i, key := range keys {
+				if i > 0 {
+					stream.WriteMore()
+				}
+				item := object.extraAuthorizeParameters[key]
+				stream.WriteObjectField(key)
+				stream.WriteString(item)
+			}
+			stream.WriteObjectEnd()
+		} else {
+			stream.WriteNil()
 		}
-		stream.WriteObjectEnd()
 		count++
 	}
-	if object.extraScopes != nil {
+	present_ = object.bitmap_&32 != 0 && object.extraScopes != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -104,12 +115,13 @@ func writeOpenIDIdentityProvider(object *OpenIDIdentityProvider, stream *jsonite
 		writeStringList(object.extraScopes, stream)
 		count++
 	}
-	if object.issuer != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("issuer")
-		stream.WriteString(*object.issuer)
+		stream.WriteString(object.issuer)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -141,16 +153,20 @@ func readOpenIDIdentityProvider(iterator *jsoniter.Iterator) *OpenIDIdentityProv
 		switch field {
 		case "ca":
 			value := iterator.ReadString()
-			object.ca = &value
+			object.ca = value
+			object.bitmap_ |= 1
 		case "claims":
 			value := readOpenIDClaims(iterator)
 			object.claims = value
+			object.bitmap_ |= 2
 		case "client_id":
 			value := iterator.ReadString()
-			object.clientID = &value
+			object.clientID = value
+			object.bitmap_ |= 4
 		case "client_secret":
 			value := iterator.ReadString()
-			object.clientSecret = &value
+			object.clientSecret = value
+			object.bitmap_ |= 8
 		case "extra_authorize_parameters":
 			value := map[string]string{}
 			for {
@@ -162,12 +178,15 @@ func readOpenIDIdentityProvider(iterator *jsoniter.Iterator) *OpenIDIdentityProv
 				value[key] = item
 			}
 			object.extraAuthorizeParameters = value
+			object.bitmap_ |= 16
 		case "extra_scopes":
 			value := readStringList(iterator)
 			object.extraScopes = value
+			object.bitmap_ |= 32
 		case "issuer":
 			value := iterator.ReadString()
-			object.issuer = &value
+			object.issuer = value
+			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}

@@ -23,24 +23,19 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `openid` identity providers.
 type OpenIDIdentityProvider struct {
-	ca                       *string
+	bitmap_                  uint32
+	ca                       string
 	claims                   *OpenIDClaims
-	clientID                 *string
-	clientSecret             *string
+	clientID                 string
+	clientSecret             string
 	extraAuthorizeParameters map[string]string
 	extraScopes              []string
-	issuer                   *string
+	issuer                   string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *OpenIDIdentityProvider) Empty() bool {
-	return o == nil || (o.ca == nil &&
-		o.clientID == nil &&
-		o.clientSecret == nil &&
-		len(o.extraAuthorizeParameters) == 0 &&
-		len(o.extraScopes) == 0 &&
-		o.issuer == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // CA returns the value of the 'CA' attribute, or
@@ -48,8 +43,8 @@ func (o *OpenIDIdentityProvider) Empty() bool {
 //
 // Certificate bunde to use to validate server certificates for the configured URL.
 func (o *OpenIDIdentityProvider) CA() string {
-	if o != nil && o.ca != nil {
-		return *o.ca
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.ca
 	}
 	return ""
 }
@@ -59,9 +54,9 @@ func (o *OpenIDIdentityProvider) CA() string {
 //
 // Certificate bunde to use to validate server certificates for the configured URL.
 func (o *OpenIDIdentityProvider) GetCA() (value string, ok bool) {
-	ok = o != nil && o.ca != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.ca
+		value = o.ca
 	}
 	return
 }
@@ -71,10 +66,10 @@ func (o *OpenIDIdentityProvider) GetCA() (value string, ok bool) {
 //
 // Claims used to configure the provider.
 func (o *OpenIDIdentityProvider) Claims() *OpenIDClaims {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.claims
 	}
-	return o.claims
+	return nil
 }
 
 // GetClaims returns the value of the 'claims' attribute and
@@ -82,7 +77,7 @@ func (o *OpenIDIdentityProvider) Claims() *OpenIDClaims {
 //
 // Claims used to configure the provider.
 func (o *OpenIDIdentityProvider) GetClaims() (value *OpenIDClaims, ok bool) {
-	ok = o != nil && o.claims != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.claims
 	}
@@ -94,8 +89,8 @@ func (o *OpenIDIdentityProvider) GetClaims() (value *OpenIDClaims, ok bool) {
 //
 // Identifier of a client registered with the _OpenID_ provider.
 func (o *OpenIDIdentityProvider) ClientID() string {
-	if o != nil && o.clientID != nil {
-		return *o.clientID
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clientID
 	}
 	return ""
 }
@@ -105,9 +100,9 @@ func (o *OpenIDIdentityProvider) ClientID() string {
 //
 // Identifier of a client registered with the _OpenID_ provider.
 func (o *OpenIDIdentityProvider) GetClientID() (value string, ok bool) {
-	ok = o != nil && o.clientID != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.clientID
+		value = o.clientID
 	}
 	return
 }
@@ -117,8 +112,8 @@ func (o *OpenIDIdentityProvider) GetClientID() (value string, ok bool) {
 //
 // Client secret.
 func (o *OpenIDIdentityProvider) ClientSecret() string {
-	if o != nil && o.clientSecret != nil {
-		return *o.clientSecret
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.clientSecret
 	}
 	return ""
 }
@@ -128,9 +123,9 @@ func (o *OpenIDIdentityProvider) ClientSecret() string {
 //
 // Client secret.
 func (o *OpenIDIdentityProvider) GetClientSecret() (value string, ok bool) {
-	ok = o != nil && o.clientSecret != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.clientSecret
+		value = o.clientSecret
 	}
 	return
 }
@@ -140,10 +135,10 @@ func (o *OpenIDIdentityProvider) GetClientSecret() (value string, ok bool) {
 //
 // Optional map of extra parameters to add to the authorization token request.
 func (o *OpenIDIdentityProvider) ExtraAuthorizeParameters() map[string]string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.extraAuthorizeParameters
 	}
-	return o.extraAuthorizeParameters
+	return nil
 }
 
 // GetExtraAuthorizeParameters returns the value of the 'extra_authorize_parameters' attribute and
@@ -151,7 +146,7 @@ func (o *OpenIDIdentityProvider) ExtraAuthorizeParameters() map[string]string {
 //
 // Optional map of extra parameters to add to the authorization token request.
 func (o *OpenIDIdentityProvider) GetExtraAuthorizeParameters() (value map[string]string, ok bool) {
-	ok = o != nil && o.extraAuthorizeParameters != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.extraAuthorizeParameters
 	}
@@ -164,10 +159,10 @@ func (o *OpenIDIdentityProvider) GetExtraAuthorizeParameters() (value map[string
 // Optional list of scopes to request, in addition to the `openid` scope, during the
 // authorization token request.
 func (o *OpenIDIdentityProvider) ExtraScopes() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.extraScopes
 	}
-	return o.extraScopes
+	return nil
 }
 
 // GetExtraScopes returns the value of the 'extra_scopes' attribute and
@@ -176,7 +171,7 @@ func (o *OpenIDIdentityProvider) ExtraScopes() []string {
 // Optional list of scopes to request, in addition to the `openid` scope, during the
 // authorization token request.
 func (o *OpenIDIdentityProvider) GetExtraScopes() (value []string, ok bool) {
-	ok = o != nil && o.extraScopes != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.extraScopes
 	}
@@ -188,8 +183,8 @@ func (o *OpenIDIdentityProvider) GetExtraScopes() (value []string, ok bool) {
 //
 // The URL that the OpenID Provider asserts as the Issuer Identifier
 func (o *OpenIDIdentityProvider) Issuer() string {
-	if o != nil && o.issuer != nil {
-		return *o.issuer
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.issuer
 	}
 	return ""
 }
@@ -199,9 +194,9 @@ func (o *OpenIDIdentityProvider) Issuer() string {
 //
 // The URL that the OpenID Provider asserts as the Issuer Identifier
 func (o *OpenIDIdentityProvider) GetIssuer() (value string, ok bool) {
-	ok = o != nil && o.issuer != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.issuer
+		value = o.issuer
 	}
 	return
 }
@@ -220,7 +215,7 @@ const OpenIDIdentityProviderListNilKind = "OpenIDIdentityProviderListNil"
 
 // OpenIDIdentityProviderList is a list of values of the 'open_ID_identity_provider' type.
 type OpenIDIdentityProviderList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*OpenIDIdentityProvider
 }

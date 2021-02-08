@@ -23,21 +23,23 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `google` identity providers.
 type GoogleIdentityProviderBuilder struct {
-	clientID     *string
-	clientSecret *string
-	hostedDomain *string
+	bitmap_      uint32
+	clientID     string
+	clientSecret string
+	hostedDomain string
 }
 
 // NewGoogleIdentityProvider creates a new builder of 'google_identity_provider' objects.
 func NewGoogleIdentityProvider() *GoogleIdentityProviderBuilder {
-	return new(GoogleIdentityProviderBuilder)
+	return &GoogleIdentityProviderBuilder{}
 }
 
 // ClientID sets the value of the 'client_ID' attribute to the given value.
 //
 //
 func (b *GoogleIdentityProviderBuilder) ClientID(value string) *GoogleIdentityProviderBuilder {
-	b.clientID = &value
+	b.clientID = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,7 +47,8 @@ func (b *GoogleIdentityProviderBuilder) ClientID(value string) *GoogleIdentityPr
 //
 //
 func (b *GoogleIdentityProviderBuilder) ClientSecret(value string) *GoogleIdentityProviderBuilder {
-	b.clientSecret = &value
+	b.clientSecret = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,7 +56,8 @@ func (b *GoogleIdentityProviderBuilder) ClientSecret(value string) *GoogleIdenti
 //
 //
 func (b *GoogleIdentityProviderBuilder) HostedDomain(value string) *GoogleIdentityProviderBuilder {
-	b.hostedDomain = &value
+	b.hostedDomain = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,6 +66,7 @@ func (b *GoogleIdentityProviderBuilder) Copy(object *GoogleIdentityProvider) *Go
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.clientID = object.clientID
 	b.clientSecret = object.clientSecret
 	b.hostedDomain = object.hostedDomain
@@ -71,6 +76,7 @@ func (b *GoogleIdentityProviderBuilder) Copy(object *GoogleIdentityProvider) *Go
 // Build creates a 'google_identity_provider' object using the configuration stored in the builder.
 func (b *GoogleIdentityProviderBuilder) Build() (object *GoogleIdentityProvider, err error) {
 	object = new(GoogleIdentityProvider)
+	object.bitmap_ = b.bitmap_
 	object.clientID = b.clientID
 	object.clientSecret = b.clientSecret
 	object.hostedDomain = b.hostedDomain

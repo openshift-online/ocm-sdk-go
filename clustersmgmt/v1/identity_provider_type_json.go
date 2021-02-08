@@ -39,33 +39,32 @@ func MarshalIdentityProvider(object *IdentityProvider, writer io.Writer) error {
 func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(IdentityProviderLinkKind)
 	} else {
 		stream.WriteString(IdentityProviderKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.ldap != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.ldap != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -73,15 +72,17 @@ func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 		writeLDAPIdentityProvider(object.ldap, stream)
 		count++
 	}
-	if object.challenge != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("challenge")
-		stream.WriteBool(*object.challenge)
+		stream.WriteBool(object.challenge)
 		count++
 	}
-	if object.github != nil {
+	present_ = object.bitmap_&32 != 0 && object.github != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -89,7 +90,8 @@ func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 		writeGithubIdentityProvider(object.github, stream)
 		count++
 	}
-	if object.gitlab != nil {
+	present_ = object.bitmap_&64 != 0 && object.gitlab != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -97,7 +99,8 @@ func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 		writeGitlabIdentityProvider(object.gitlab, stream)
 		count++
 	}
-	if object.google != nil {
+	present_ = object.bitmap_&128 != 0 && object.google != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -105,7 +108,8 @@ func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 		writeGoogleIdentityProvider(object.google, stream)
 		count++
 	}
-	if object.htpasswd != nil {
+	present_ = object.bitmap_&256 != 0 && object.htpasswd != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -113,31 +117,35 @@ func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 		writeHTPasswdIdentityProvider(object.htpasswd, stream)
 		count++
 	}
-	if object.login != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("login")
-		stream.WriteBool(*object.login)
+		stream.WriteBool(object.login)
 		count++
 	}
-	if object.mappingMethod != nil {
+	present_ = object.bitmap_&1024 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("mapping_method")
-		stream.WriteString(string(*object.mappingMethod))
+		stream.WriteString(string(object.mappingMethod))
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&2048 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.openID != nil {
+	present_ = object.bitmap_&4096 != 0 && object.openID != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -145,12 +153,13 @@ func writeIdentityProvider(object *IdentityProvider, stream *jsoniter.Stream) {
 		writeOpenIDIdentityProvider(object.openID, stream)
 		count++
 	}
-	if object.type_ != nil {
+	present_ = object.bitmap_&8192 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("type")
-		stream.WriteString(string(*object.type_))
+		stream.WriteString(string(object.type_))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -182,48 +191,61 @@ func readIdentityProvider(iterator *jsoniter.Iterator) *IdentityProvider {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == IdentityProviderLinkKind
+			if value == IdentityProviderLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "ldap":
 			value := readLDAPIdentityProvider(iterator)
 			object.ldap = value
+			object.bitmap_ |= 8
 		case "challenge":
 			value := iterator.ReadBool()
-			object.challenge = &value
+			object.challenge = value
+			object.bitmap_ |= 16
 		case "github":
 			value := readGithubIdentityProvider(iterator)
 			object.github = value
+			object.bitmap_ |= 32
 		case "gitlab":
 			value := readGitlabIdentityProvider(iterator)
 			object.gitlab = value
+			object.bitmap_ |= 64
 		case "google":
 			value := readGoogleIdentityProvider(iterator)
 			object.google = value
+			object.bitmap_ |= 128
 		case "htpasswd":
 			value := readHTPasswdIdentityProvider(iterator)
 			object.htpasswd = value
+			object.bitmap_ |= 256
 		case "login":
 			value := iterator.ReadBool()
-			object.login = &value
+			object.login = value
+			object.bitmap_ |= 512
 		case "mapping_method":
 			text := iterator.ReadString()
 			value := IdentityProviderMappingMethod(text)
-			object.mappingMethod = &value
+			object.mappingMethod = value
+			object.bitmap_ |= 1024
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 2048
 		case "open_id":
 			value := readOpenIDIdentityProvider(iterator)
 			object.openID = value
+			object.bitmap_ |= 4096
 		case "type":
 			text := iterator.ReadString()
 			value := IdentityProviderType(text)
-			object.type_ = &value
+			object.type_ = value
+			object.bitmap_ |= 8192
 		default:
 			iterator.ReadAny()
 		}

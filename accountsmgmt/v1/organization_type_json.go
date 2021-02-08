@@ -40,57 +40,59 @@ func MarshalOrganization(object *Organization, writer io.Writer) error {
 func writeOrganization(object *Organization, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(OrganizationLinkKind)
 	} else {
 		stream.WriteString(OrganizationKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.createdAt != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("created_at")
-		stream.WriteString((*object.createdAt).Format(time.RFC3339))
+		stream.WriteString((object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.ebsAccountID != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("ebs_account_id")
-		stream.WriteString(*object.ebsAccountID)
+		stream.WriteString(object.ebsAccountID)
 		count++
 	}
-	if object.externalID != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("external_id")
-		stream.WriteString(*object.externalID)
+		stream.WriteString(object.externalID)
 		count++
 	}
-	if object.labels != nil {
+	present_ = object.bitmap_&64 != 0 && object.labels != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -98,20 +100,22 @@ func writeOrganization(object *Organization, stream *jsoniter.Stream) {
 		writeLabelList(object.labels, stream)
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.updatedAt != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_at")
-		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
+		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -143,39 +147,47 @@ func readOrganization(iterator *jsoniter.Iterator) *Organization {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == OrganizationLinkKind
+			if value == OrganizationLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "created_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.createdAt = &value
+			object.createdAt = value
+			object.bitmap_ |= 8
 		case "ebs_account_id":
 			value := iterator.ReadString()
-			object.ebsAccountID = &value
+			object.ebsAccountID = value
+			object.bitmap_ |= 16
 		case "external_id":
 			value := iterator.ReadString()
-			object.externalID = &value
+			object.externalID = value
+			object.bitmap_ |= 32
 		case "labels":
 			value := readLabelList(iterator)
 			object.labels = value
+			object.bitmap_ |= 64
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 128
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedAt = &value
+			object.updatedAt = value
+			object.bitmap_ |= 256
 		default:
 			iterator.ReadAny()
 		}

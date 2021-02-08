@@ -23,19 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `gitlab` identity providers.
 type GitlabIdentityProvider struct {
-	ca           *string
-	url          *string
-	clientID     *string
-	clientSecret *string
+	bitmap_      uint32
+	ca           string
+	url          string
+	clientID     string
+	clientSecret string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *GitlabIdentityProvider) Empty() bool {
-	return o == nil || (o.ca == nil &&
-		o.url == nil &&
-		o.clientID == nil &&
-		o.clientSecret == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // CA returns the value of the 'CA' attribute, or
@@ -43,8 +40,8 @@ func (o *GitlabIdentityProvider) Empty() bool {
 //
 // Optional trusted certificate authority bundle to use when making requests tot he server.
 func (o *GitlabIdentityProvider) CA() string {
-	if o != nil && o.ca != nil {
-		return *o.ca
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.ca
 	}
 	return ""
 }
@@ -54,9 +51,9 @@ func (o *GitlabIdentityProvider) CA() string {
 //
 // Optional trusted certificate authority bundle to use when making requests tot he server.
 func (o *GitlabIdentityProvider) GetCA() (value string, ok bool) {
-	ok = o != nil && o.ca != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.ca
+		value = o.ca
 	}
 	return
 }
@@ -66,8 +63,8 @@ func (o *GitlabIdentityProvider) GetCA() (value string, ok bool) {
 //
 // URL of the _GitLab_ instance.
 func (o *GitlabIdentityProvider) URL() string {
-	if o != nil && o.url != nil {
-		return *o.url
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.url
 	}
 	return ""
 }
@@ -77,9 +74,9 @@ func (o *GitlabIdentityProvider) URL() string {
 //
 // URL of the _GitLab_ instance.
 func (o *GitlabIdentityProvider) GetURL() (value string, ok bool) {
-	ok = o != nil && o.url != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.url
+		value = o.url
 	}
 	return
 }
@@ -89,8 +86,8 @@ func (o *GitlabIdentityProvider) GetURL() (value string, ok bool) {
 //
 // Client identifier of a registered _GitLab_ OAuth application.
 func (o *GitlabIdentityProvider) ClientID() string {
-	if o != nil && o.clientID != nil {
-		return *o.clientID
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clientID
 	}
 	return ""
 }
@@ -100,9 +97,9 @@ func (o *GitlabIdentityProvider) ClientID() string {
 //
 // Client identifier of a registered _GitLab_ OAuth application.
 func (o *GitlabIdentityProvider) GetClientID() (value string, ok bool) {
-	ok = o != nil && o.clientID != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.clientID
+		value = o.clientID
 	}
 	return
 }
@@ -112,8 +109,8 @@ func (o *GitlabIdentityProvider) GetClientID() (value string, ok bool) {
 //
 // Client secret issued by _GitLab_.
 func (o *GitlabIdentityProvider) ClientSecret() string {
-	if o != nil && o.clientSecret != nil {
-		return *o.clientSecret
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.clientSecret
 	}
 	return ""
 }
@@ -123,9 +120,9 @@ func (o *GitlabIdentityProvider) ClientSecret() string {
 //
 // Client secret issued by _GitLab_.
 func (o *GitlabIdentityProvider) GetClientSecret() (value string, ok bool) {
-	ok = o != nil && o.clientSecret != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.clientSecret
+		value = o.clientSecret
 	}
 	return
 }
@@ -144,7 +141,7 @@ const GitlabIdentityProviderListNilKind = "GitlabIdentityProviderListNil"
 
 // GitlabIdentityProviderList is a list of values of the 'gitlab_identity_provider' type.
 type GitlabIdentityProviderList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*GitlabIdentityProvider
 }

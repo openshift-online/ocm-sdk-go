@@ -35,10 +35,10 @@ const RoleNilKind = "RoleNil"
 //
 //
 type Role struct {
-	id          *string
-	href        *string
-	link        bool
-	name        *string
+	bitmap_     uint32
+	id          string
+	href        string
+	name        string
 	permissions []*Permission
 }
 
@@ -47,16 +47,21 @@ func (o *Role) Kind() string {
 	if o == nil {
 		return RoleNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return RoleLinkKind
 	}
 	return RoleKind
 }
 
+// Link returns true iif this is a link.
+func (o *Role) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Role) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -64,22 +69,17 @@ func (o *Role) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Role) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Role) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Role) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -87,19 +87,16 @@ func (o *Role) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Role) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Role) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.name == nil &&
-		len(o.permissions) == 0 &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Name returns the value of the 'name' attribute, or
@@ -107,8 +104,8 @@ func (o *Role) Empty() bool {
 //
 //
 func (o *Role) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -118,9 +115,9 @@ func (o *Role) Name() string {
 //
 //
 func (o *Role) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -130,10 +127,10 @@ func (o *Role) GetName() (value string, ok bool) {
 //
 //
 func (o *Role) Permissions() []*Permission {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.permissions
 	}
-	return o.permissions
+	return nil
 }
 
 // GetPermissions returns the value of the 'permissions' attribute and
@@ -141,7 +138,7 @@ func (o *Role) Permissions() []*Permission {
 //
 //
 func (o *Role) GetPermissions() (value []*Permission, ok bool) {
-	ok = o != nil && o.permissions != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.permissions
 	}
@@ -162,7 +159,7 @@ const RoleListNilKind = "RoleListNil"
 
 // RoleList is a list of values of the 'role' type.
 type RoleList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Role
 }
@@ -185,8 +182,8 @@ func (l *RoleList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *RoleList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -194,9 +191,9 @@ func (l *RoleList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *RoleList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

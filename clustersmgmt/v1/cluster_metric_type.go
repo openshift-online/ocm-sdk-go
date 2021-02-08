@@ -28,15 +28,15 @@ import (
 // Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
 // a cluster.
 type ClusterMetric struct {
+	bitmap_          uint32
 	total            *Value
-	updatedTimestamp *time.Time
+	updatedTimestamp time.Time
 	used             *Value
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterMetric) Empty() bool {
-	return o == nil || (o.updatedTimestamp == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Total returns the value of the 'total' attribute, or
@@ -45,10 +45,10 @@ func (o *ClusterMetric) Empty() bool {
 // Total amount of the resource that exists in the cluster. For example the total amount
 // of RAM.
 func (o *ClusterMetric) Total() *Value {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.total
 	}
-	return o.total
+	return nil
 }
 
 // GetTotal returns the value of the 'total' attribute and
@@ -57,7 +57,7 @@ func (o *ClusterMetric) Total() *Value {
 // Total amount of the resource that exists in the cluster. For example the total amount
 // of RAM.
 func (o *ClusterMetric) GetTotal() (value *Value, ok bool) {
-	ok = o != nil && o.total != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.total
 	}
@@ -69,8 +69,8 @@ func (o *ClusterMetric) GetTotal() (value *Value, ok bool) {
 //
 // Collection timestamp of the metric.
 func (o *ClusterMetric) UpdatedTimestamp() time.Time {
-	if o != nil && o.updatedTimestamp != nil {
-		return *o.updatedTimestamp
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.updatedTimestamp
 	}
 	return time.Time{}
 }
@@ -80,9 +80,9 @@ func (o *ClusterMetric) UpdatedTimestamp() time.Time {
 //
 // Collection timestamp of the metric.
 func (o *ClusterMetric) GetUpdatedTimestamp() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedTimestamp != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.updatedTimestamp
+		value = o.updatedTimestamp
 	}
 	return
 }
@@ -93,10 +93,10 @@ func (o *ClusterMetric) GetUpdatedTimestamp() (value time.Time, ok bool) {
 // Amount of the resource that is currently in use in the cluster. Fore example the amount
 // of RAM in use.
 func (o *ClusterMetric) Used() *Value {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.used
 	}
-	return o.used
+	return nil
 }
 
 // GetUsed returns the value of the 'used' attribute and
@@ -105,7 +105,7 @@ func (o *ClusterMetric) Used() *Value {
 // Amount of the resource that is currently in use in the cluster. Fore example the amount
 // of RAM in use.
 func (o *ClusterMetric) GetUsed() (value *Value, ok bool) {
-	ok = o != nil && o.used != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.used
 	}
@@ -126,7 +126,7 @@ const ClusterMetricListNilKind = "ClusterMetricListNil"
 
 // ClusterMetricList is a list of values of the 'cluster_metric' type.
 type ClusterMetricList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterMetric
 }

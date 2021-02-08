@@ -35,11 +35,11 @@ const LabelNilKind = "LabelNil"
 //
 // Representation of a label in clusterdeployment.
 type Label struct {
-	id    *string
-	href  *string
-	link  bool
-	key   *string
-	value *string
+	bitmap_ uint32
+	id      string
+	href    string
+	key     string
+	value   string
 }
 
 // Kind returns the name of the type of the object.
@@ -47,16 +47,21 @@ func (o *Label) Kind() string {
 	if o == nil {
 		return LabelNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return LabelLinkKind
 	}
 	return LabelKind
 }
 
+// Link returns true iif this is a link.
+func (o *Label) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Label) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -64,22 +69,17 @@ func (o *Label) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Label) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Label) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Label) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -87,19 +87,16 @@ func (o *Label) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Label) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Label) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.key == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Key returns the value of the 'key' attribute, or
@@ -107,8 +104,8 @@ func (o *Label) Empty() bool {
 //
 // the key of the label
 func (o *Label) Key() string {
-	if o != nil && o.key != nil {
-		return *o.key
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.key
 	}
 	return ""
 }
@@ -118,9 +115,9 @@ func (o *Label) Key() string {
 //
 // the key of the label
 func (o *Label) GetKey() (value string, ok bool) {
-	ok = o != nil && o.key != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.key
+		value = o.key
 	}
 	return
 }
@@ -130,8 +127,8 @@ func (o *Label) GetKey() (value string, ok bool) {
 //
 // the value to set in the label
 func (o *Label) Value() string {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.value
 	}
 	return ""
 }
@@ -141,9 +138,9 @@ func (o *Label) Value() string {
 //
 // the value to set in the label
 func (o *Label) GetValue() (value string, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -162,7 +159,7 @@ const LabelListNilKind = "LabelListNil"
 
 // LabelList is a list of values of the 'label' type.
 type LabelList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Label
 }
@@ -185,8 +182,8 @@ func (l *LabelList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *LabelList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -194,9 +191,9 @@ func (l *LabelList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *LabelList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

@@ -39,41 +39,41 @@ func MarshalVersion(object *Version, writer io.Writer) error {
 func writeVersion(object *Version, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(VersionLinkKind)
 	} else {
 		stream.WriteString(VersionKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.rosaEnabled != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("rosa_enabled")
-		stream.WriteBool(*object.rosaEnabled)
+		stream.WriteBool(object.rosaEnabled)
 		count++
 	}
-	if object.availableUpgrades != nil {
+	present_ = object.bitmap_&16 != 0 && object.availableUpgrades != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -81,36 +81,40 @@ func writeVersion(object *Version, stream *jsoniter.Stream) {
 		writeStringList(object.availableUpgrades, stream)
 		count++
 	}
-	if object.channelGroup != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("channel_group")
-		stream.WriteString(*object.channelGroup)
+		stream.WriteString(object.channelGroup)
 		count++
 	}
-	if object.default_ != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("default")
-		stream.WriteBool(*object.default_)
+		stream.WriteBool(object.default_)
 		count++
 	}
-	if object.enabled != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("enabled")
-		stream.WriteBool(*object.enabled)
+		stream.WriteBool(object.enabled)
 		count++
 	}
-	if object.rawID != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("raw_id")
-		stream.WriteString(*object.rawID)
+		stream.WriteString(object.rawID)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -142,31 +146,39 @@ func readVersion(iterator *jsoniter.Iterator) *Version {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == VersionLinkKind
+			if value == VersionLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "rosa_enabled":
 			value := iterator.ReadBool()
-			object.rosaEnabled = &value
+			object.rosaEnabled = value
+			object.bitmap_ |= 8
 		case "available_upgrades":
 			value := readStringList(iterator)
 			object.availableUpgrades = value
+			object.bitmap_ |= 16
 		case "channel_group":
 			value := iterator.ReadString()
-			object.channelGroup = &value
+			object.channelGroup = value
+			object.bitmap_ |= 32
 		case "default":
 			value := iterator.ReadBool()
-			object.default_ = &value
+			object.default_ = value
+			object.bitmap_ |= 64
 		case "enabled":
 			value := iterator.ReadBool()
-			object.enabled = &value
+			object.enabled = value
+			object.bitmap_ |= 128
 		case "raw_id":
 			value := iterator.ReadString()
-			object.rawID = &value
+			object.rawID = value
+			object.bitmap_ |= 256
 		default:
 			iterator.ReadAny()
 		}

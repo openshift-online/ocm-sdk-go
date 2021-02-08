@@ -39,46 +39,46 @@ func MarshalCCS(object *CCS, writer io.Writer) error {
 func writeCCS(object *CCS, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(CCSLinkKind)
 	} else {
 		stream.WriteString(CCSKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.disableSCPChecks != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("disable_scp_checks")
-		stream.WriteBool(*object.disableSCPChecks)
+		stream.WriteBool(object.disableSCPChecks)
 		count++
 	}
-	if object.enabled != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("enabled")
-		stream.WriteBool(*object.enabled)
+		stream.WriteBool(object.enabled)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -110,19 +110,23 @@ func readCCS(iterator *jsoniter.Iterator) *CCS {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == CCSLinkKind
+			if value == CCSLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "disable_scp_checks":
 			value := iterator.ReadBool()
-			object.disableSCPChecks = &value
+			object.disableSCPChecks = value
+			object.bitmap_ |= 8
 		case "enabled":
 			value := iterator.ReadBool()
-			object.enabled = &value
+			object.enabled = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

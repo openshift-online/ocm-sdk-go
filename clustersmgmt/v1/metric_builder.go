@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Metric included in a dashboard.
 type MetricBuilder struct {
-	name   *string
-	vector []*SampleBuilder
+	bitmap_ uint32
+	name    string
+	vector  []*SampleBuilder
 }
 
 // NewMetric creates a new builder of 'metric' objects.
 func NewMetric() *MetricBuilder {
-	return new(MetricBuilder)
+	return &MetricBuilder{}
 }
 
 // Name sets the value of the 'name' attribute to the given value.
 //
 //
 func (b *MetricBuilder) Name(value string) *MetricBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,6 +48,7 @@ func (b *MetricBuilder) Name(value string) *MetricBuilder {
 func (b *MetricBuilder) Vector(values ...*SampleBuilder) *MetricBuilder {
 	b.vector = make([]*SampleBuilder, len(values))
 	copy(b.vector, values)
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,6 +57,7 @@ func (b *MetricBuilder) Copy(object *Metric) *MetricBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.name = object.name
 	if object.vector != nil {
 		b.vector = make([]*SampleBuilder, len(object.vector))
@@ -69,6 +73,7 @@ func (b *MetricBuilder) Copy(object *Metric) *MetricBuilder {
 // Build creates a 'metric' object using the configuration stored in the builder.
 func (b *MetricBuilder) Build() (object *Metric, err error) {
 	object = new(Metric)
+	object.bitmap_ = b.bitmap_
 	object.name = b.name
 	if b.vector != nil {
 		object.vector = make([]*Sample, len(b.vector))

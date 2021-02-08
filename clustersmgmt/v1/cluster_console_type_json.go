@@ -39,12 +39,14 @@ func MarshalClusterConsole(object *ClusterConsole, writer io.Writer) error {
 func writeClusterConsole(object *ClusterConsole, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.url != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("url")
-		stream.WriteString(*object.url)
+		stream.WriteString(object.url)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readClusterConsole(iterator *jsoniter.Iterator) *ClusterConsole {
 		switch field {
 		case "url":
 			value := iterator.ReadString()
-			object.url = &value
+			object.url = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

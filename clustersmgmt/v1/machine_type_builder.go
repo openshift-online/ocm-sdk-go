@@ -23,37 +23,39 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Machine type.
 type MachineTypeBuilder struct {
-	id            *string
-	href          *string
-	link          bool
+	bitmap_       uint32
+	id            string
+	href          string
 	cpu           *ValueBuilder
-	category      *MachineTypeCategory
+	category      MachineTypeCategory
 	cloudProvider *CloudProviderBuilder
 	memory        *ValueBuilder
-	name          *string
-	size          *MachineTypeSize
+	name          string
+	size          MachineTypeSize
 }
 
 // NewMachineType creates a new builder of 'machine_type' objects.
 func NewMachineType() *MachineTypeBuilder {
-	return new(MachineTypeBuilder)
+	return &MachineTypeBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *MachineTypeBuilder) Link(value bool) *MachineTypeBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *MachineTypeBuilder) ID(value string) *MachineTypeBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *MachineTypeBuilder) HREF(value string) *MachineTypeBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *MachineTypeBuilder) Link(value bool) *MachineTypeBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -79,6 +81,11 @@ func (b *MachineTypeBuilder) Link(value bool) *MachineTypeBuilder {
 // - 1 PiB = 2^50 bytes
 func (b *MachineTypeBuilder) CPU(value *ValueBuilder) *MachineTypeBuilder {
 	b.cpu = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -86,7 +93,8 @@ func (b *MachineTypeBuilder) CPU(value *ValueBuilder) *MachineTypeBuilder {
 //
 // Machine type category.
 func (b *MachineTypeBuilder) Category(value MachineTypeCategory) *MachineTypeBuilder {
-	b.category = &value
+	b.category = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -95,6 +103,11 @@ func (b *MachineTypeBuilder) Category(value MachineTypeCategory) *MachineTypeBui
 // Cloud provider.
 func (b *MachineTypeBuilder) CloudProvider(value *CloudProviderBuilder) *MachineTypeBuilder {
 	b.cloudProvider = value
+	if value != nil {
+		b.bitmap_ |= 32
+	} else {
+		b.bitmap_ &^= 32
+	}
 	return b
 }
 
@@ -120,6 +133,11 @@ func (b *MachineTypeBuilder) CloudProvider(value *CloudProviderBuilder) *Machine
 // - 1 PiB = 2^50 bytes
 func (b *MachineTypeBuilder) Memory(value *ValueBuilder) *MachineTypeBuilder {
 	b.memory = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -127,7 +145,8 @@ func (b *MachineTypeBuilder) Memory(value *ValueBuilder) *MachineTypeBuilder {
 //
 //
 func (b *MachineTypeBuilder) Name(value string) *MachineTypeBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -135,7 +154,8 @@ func (b *MachineTypeBuilder) Name(value string) *MachineTypeBuilder {
 //
 // Machine type size.
 func (b *MachineTypeBuilder) Size(value MachineTypeSize) *MachineTypeBuilder {
-	b.size = &value
+	b.size = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -144,9 +164,9 @@ func (b *MachineTypeBuilder) Copy(object *MachineType) *MachineTypeBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.cpu != nil {
 		b.cpu = NewValue().Copy(object.cpu)
 	} else {
@@ -173,7 +193,7 @@ func (b *MachineTypeBuilder) Build() (object *MachineType, err error) {
 	object = new(MachineType)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.cpu != nil {
 		object.cpu, err = b.cpu.Build()
 		if err != nil {

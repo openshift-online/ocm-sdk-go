@@ -27,42 +27,44 @@ import (
 //
 //
 type ResourceQuotaBuilder struct {
-	id                   *string
-	href                 *string
-	link                 bool
-	byoc                 *bool
-	sku                  *string
-	allowed              *int
-	availabilityZoneType *string
-	createdAt            *time.Time
-	organizationID       *string
-	resourceName         *string
-	resourceType         *string
-	skuCount             *int
-	type_                *string
-	updatedAt            *time.Time
+	bitmap_              uint32
+	id                   string
+	href                 string
+	sku                  string
+	allowed              int
+	availabilityZoneType string
+	createdAt            time.Time
+	organizationID       string
+	resourceName         string
+	resourceType         string
+	skuCount             int
+	type_                string
+	updatedAt            time.Time
+	byoc                 bool
 }
 
 // NewResourceQuota creates a new builder of 'resource_quota' objects.
 func NewResourceQuota() *ResourceQuotaBuilder {
-	return new(ResourceQuotaBuilder)
+	return &ResourceQuotaBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *ResourceQuotaBuilder) Link(value bool) *ResourceQuotaBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *ResourceQuotaBuilder) ID(value string) *ResourceQuotaBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *ResourceQuotaBuilder) HREF(value string) *ResourceQuotaBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *ResourceQuotaBuilder) Link(value bool) *ResourceQuotaBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -70,7 +72,8 @@ func (b *ResourceQuotaBuilder) Link(value bool) *ResourceQuotaBuilder {
 //
 //
 func (b *ResourceQuotaBuilder) BYOC(value bool) *ResourceQuotaBuilder {
-	b.byoc = &value
+	b.byoc = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -78,7 +81,8 @@ func (b *ResourceQuotaBuilder) BYOC(value bool) *ResourceQuotaBuilder {
 //
 //
 func (b *ResourceQuotaBuilder) SKU(value string) *ResourceQuotaBuilder {
-	b.sku = &value
+	b.sku = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -86,7 +90,8 @@ func (b *ResourceQuotaBuilder) SKU(value string) *ResourceQuotaBuilder {
 //
 //
 func (b *ResourceQuotaBuilder) Allowed(value int) *ResourceQuotaBuilder {
-	b.allowed = &value
+	b.allowed = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -94,7 +99,8 @@ func (b *ResourceQuotaBuilder) Allowed(value int) *ResourceQuotaBuilder {
 //
 //
 func (b *ResourceQuotaBuilder) AvailabilityZoneType(value string) *ResourceQuotaBuilder {
-	b.availabilityZoneType = &value
+	b.availabilityZoneType = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -102,7 +108,8 @@ func (b *ResourceQuotaBuilder) AvailabilityZoneType(value string) *ResourceQuota
 //
 //
 func (b *ResourceQuotaBuilder) CreatedAt(value time.Time) *ResourceQuotaBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -110,7 +117,8 @@ func (b *ResourceQuotaBuilder) CreatedAt(value time.Time) *ResourceQuotaBuilder 
 //
 //
 func (b *ResourceQuotaBuilder) OrganizationID(value string) *ResourceQuotaBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -118,7 +126,8 @@ func (b *ResourceQuotaBuilder) OrganizationID(value string) *ResourceQuotaBuilde
 //
 //
 func (b *ResourceQuotaBuilder) ResourceName(value string) *ResourceQuotaBuilder {
-	b.resourceName = &value
+	b.resourceName = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -126,7 +135,8 @@ func (b *ResourceQuotaBuilder) ResourceName(value string) *ResourceQuotaBuilder 
 //
 //
 func (b *ResourceQuotaBuilder) ResourceType(value string) *ResourceQuotaBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -134,7 +144,8 @@ func (b *ResourceQuotaBuilder) ResourceType(value string) *ResourceQuotaBuilder 
 //
 //
 func (b *ResourceQuotaBuilder) SkuCount(value int) *ResourceQuotaBuilder {
-	b.skuCount = &value
+	b.skuCount = value
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -142,7 +153,8 @@ func (b *ResourceQuotaBuilder) SkuCount(value int) *ResourceQuotaBuilder {
 //
 //
 func (b *ResourceQuotaBuilder) Type(value string) *ResourceQuotaBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -150,7 +162,8 @@ func (b *ResourceQuotaBuilder) Type(value string) *ResourceQuotaBuilder {
 //
 //
 func (b *ResourceQuotaBuilder) UpdatedAt(value time.Time) *ResourceQuotaBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -159,9 +172,9 @@ func (b *ResourceQuotaBuilder) Copy(object *ResourceQuota) *ResourceQuotaBuilder
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.byoc = object.byoc
 	b.sku = object.sku
 	b.allowed = object.allowed
@@ -181,7 +194,7 @@ func (b *ResourceQuotaBuilder) Build() (object *ResourceQuota, err error) {
 	object = new(ResourceQuota)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.byoc = b.byoc
 	object.sku = b.sku
 	object.allowed = b.allowed

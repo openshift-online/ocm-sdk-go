@@ -23,32 +23,34 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of a group of users.
 type GroupBuilder struct {
-	id    *string
-	href  *string
-	link  bool
-	users *UserListBuilder
+	bitmap_ uint32
+	id      string
+	href    string
+	users   *UserListBuilder
 }
 
 // NewGroup creates a new builder of 'group' objects.
 func NewGroup() *GroupBuilder {
-	return new(GroupBuilder)
+	return &GroupBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *GroupBuilder) Link(value bool) *GroupBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *GroupBuilder) ID(value string) *GroupBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *GroupBuilder) HREF(value string) *GroupBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *GroupBuilder) Link(value bool) *GroupBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -57,6 +59,7 @@ func (b *GroupBuilder) Link(value bool) *GroupBuilder {
 //
 func (b *GroupBuilder) Users(value *UserListBuilder) *GroupBuilder {
 	b.users = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,9 +68,9 @@ func (b *GroupBuilder) Copy(object *Group) *GroupBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.users != nil {
 		b.users = NewUserList().Copy(object.users)
 	} else {
@@ -81,7 +84,7 @@ func (b *GroupBuilder) Build() (object *Group, err error) {
 	object = new(Group)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.users != nil {
 		object.users, err = b.users.Build()
 		if err != nil {

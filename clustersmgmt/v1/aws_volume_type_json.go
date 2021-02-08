@@ -39,28 +39,32 @@ func MarshalAWSVolume(object *AWSVolume, writer io.Writer) error {
 func writeAWSVolume(object *AWSVolume, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.iops != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("iops")
-		stream.WriteInt(*object.iops)
+		stream.WriteInt(object.iops)
 		count++
 	}
-	if object.size != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("size")
-		stream.WriteInt(*object.size)
+		stream.WriteInt(object.size)
 		count++
 	}
-	if object.type_ != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("type")
-		stream.WriteString(*object.type_)
+		stream.WriteString(object.type_)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -92,13 +96,16 @@ func readAWSVolume(iterator *jsoniter.Iterator) *AWSVolume {
 		switch field {
 		case "iops":
 			value := iterator.ReadInt()
-			object.iops = &value
+			object.iops = value
+			object.bitmap_ |= 1
 		case "size":
 			value := iterator.ReadInt()
-			object.size = &value
+			object.size = value
+			object.bitmap_ |= 2
 		case "type":
 			value := iterator.ReadString()
-			object.type_ = &value
+			object.type_ = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

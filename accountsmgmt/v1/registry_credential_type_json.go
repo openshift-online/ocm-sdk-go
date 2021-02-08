@@ -40,33 +40,32 @@ func MarshalRegistryCredential(object *RegistryCredential, writer io.Writer) err
 func writeRegistryCredential(object *RegistryCredential, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(RegistryCredentialLinkKind)
 	} else {
 		stream.WriteString(RegistryCredentialKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.account != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.account != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -74,23 +73,26 @@ func writeRegistryCredential(object *RegistryCredential, stream *jsoniter.Stream
 		writeAccount(object.account, stream)
 		count++
 	}
-	if object.createdAt != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("created_at")
-		stream.WriteString((*object.createdAt).Format(time.RFC3339))
+		stream.WriteString((object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.externalResourceID != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("external_resource_id")
-		stream.WriteString(*object.externalResourceID)
+		stream.WriteString(object.externalResourceID)
 		count++
 	}
-	if object.registry != nil {
+	present_ = object.bitmap_&64 != 0 && object.registry != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -98,28 +100,31 @@ func writeRegistryCredential(object *RegistryCredential, stream *jsoniter.Stream
 		writeRegistry(object.registry, stream)
 		count++
 	}
-	if object.token != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("token")
-		stream.WriteString(*object.token)
+		stream.WriteString(object.token)
 		count++
 	}
-	if object.updatedAt != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_at")
-		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
+		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
-	if object.username != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("username")
-		stream.WriteString(*object.username)
+		stream.WriteString(object.username)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -151,42 +156,51 @@ func readRegistryCredential(iterator *jsoniter.Iterator) *RegistryCredential {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == RegistryCredentialLinkKind
+			if value == RegistryCredentialLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "account":
 			value := readAccount(iterator)
 			object.account = value
+			object.bitmap_ |= 8
 		case "created_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.createdAt = &value
+			object.createdAt = value
+			object.bitmap_ |= 16
 		case "external_resource_id":
 			value := iterator.ReadString()
-			object.externalResourceID = &value
+			object.externalResourceID = value
+			object.bitmap_ |= 32
 		case "registry":
 			value := readRegistry(iterator)
 			object.registry = value
+			object.bitmap_ |= 64
 		case "token":
 			value := iterator.ReadString()
-			object.token = &value
+			object.token = value
+			object.bitmap_ |= 128
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedAt = &value
+			object.updatedAt = value
+			object.bitmap_ |= 256
 		case "username":
 			value := iterator.ReadString()
-			object.username = &value
+			object.username = value
+			object.bitmap_ |= 512
 		default:
 			iterator.ReadAny()
 		}

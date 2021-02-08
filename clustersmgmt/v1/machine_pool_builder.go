@@ -23,38 +23,40 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of a machine pool in a cluster.
 type MachinePoolBuilder struct {
-	id                *string
-	href              *string
-	link              bool
+	bitmap_           uint32
+	id                string
+	href              string
 	autoscaling       *MachinePoolAutoscalingBuilder
 	availabilityZones []string
 	cluster           *ClusterBuilder
-	instanceType      *string
+	instanceType      string
 	labels            map[string]string
-	replicas          *int
+	replicas          int
 	taints            []*TaintBuilder
 }
 
 // NewMachinePool creates a new builder of 'machine_pool' objects.
 func NewMachinePool() *MachinePoolBuilder {
-	return new(MachinePoolBuilder)
+	return &MachinePoolBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *MachinePoolBuilder) Link(value bool) *MachinePoolBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *MachinePoolBuilder) ID(value string) *MachinePoolBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *MachinePoolBuilder) HREF(value string) *MachinePoolBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *MachinePoolBuilder) Link(value bool) *MachinePoolBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -63,6 +65,11 @@ func (b *MachinePoolBuilder) Link(value bool) *MachinePoolBuilder {
 // Representation of a autoscaling in a machine pool.
 func (b *MachinePoolBuilder) Autoscaling(value *MachinePoolAutoscalingBuilder) *MachinePoolBuilder {
 	b.autoscaling = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -72,6 +79,7 @@ func (b *MachinePoolBuilder) Autoscaling(value *MachinePoolAutoscalingBuilder) *
 func (b *MachinePoolBuilder) AvailabilityZones(values ...string) *MachinePoolBuilder {
 	b.availabilityZones = make([]string, len(values))
 	copy(b.availabilityZones, values)
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -116,6 +124,11 @@ func (b *MachinePoolBuilder) AvailabilityZones(values ...string) *MachinePoolBui
 // Services account.
 func (b *MachinePoolBuilder) Cluster(value *ClusterBuilder) *MachinePoolBuilder {
 	b.cluster = value
+	if value != nil {
+		b.bitmap_ |= 32
+	} else {
+		b.bitmap_ &^= 32
+	}
 	return b
 }
 
@@ -123,7 +136,8 @@ func (b *MachinePoolBuilder) Cluster(value *ClusterBuilder) *MachinePoolBuilder 
 //
 //
 func (b *MachinePoolBuilder) InstanceType(value string) *MachinePoolBuilder {
-	b.instanceType = &value
+	b.instanceType = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -132,6 +146,11 @@ func (b *MachinePoolBuilder) InstanceType(value string) *MachinePoolBuilder {
 //
 func (b *MachinePoolBuilder) Labels(value map[string]string) *MachinePoolBuilder {
 	b.labels = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
@@ -139,7 +158,8 @@ func (b *MachinePoolBuilder) Labels(value map[string]string) *MachinePoolBuilder
 //
 //
 func (b *MachinePoolBuilder) Replicas(value int) *MachinePoolBuilder {
-	b.replicas = &value
+	b.replicas = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -149,6 +169,7 @@ func (b *MachinePoolBuilder) Replicas(value int) *MachinePoolBuilder {
 func (b *MachinePoolBuilder) Taints(values ...*TaintBuilder) *MachinePoolBuilder {
 	b.taints = make([]*TaintBuilder, len(values))
 	copy(b.taints, values)
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -157,9 +178,9 @@ func (b *MachinePoolBuilder) Copy(object *MachinePool) *MachinePoolBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.autoscaling != nil {
 		b.autoscaling = NewMachinePoolAutoscaling().Copy(object.autoscaling)
 	} else {
@@ -178,7 +199,7 @@ func (b *MachinePoolBuilder) Copy(object *MachinePool) *MachinePoolBuilder {
 	}
 	b.instanceType = object.instanceType
 	if len(object.labels) > 0 {
-		b.labels = make(map[string]string)
+		b.labels = map[string]string{}
 		for k, v := range object.labels {
 			b.labels[k] = v
 		}
@@ -202,7 +223,7 @@ func (b *MachinePoolBuilder) Build() (object *MachinePool, err error) {
 	object = new(MachinePool)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.autoscaling != nil {
 		object.autoscaling, err = b.autoscaling.Build()
 		if err != nil {

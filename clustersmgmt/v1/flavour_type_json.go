@@ -39,33 +39,32 @@ func MarshalFlavour(object *Flavour, writer io.Writer) error {
 func writeFlavour(object *Flavour, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(FlavourLinkKind)
 	} else {
 		stream.WriteString(FlavourKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.aws != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.aws != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -73,7 +72,8 @@ func writeFlavour(object *Flavour, stream *jsoniter.Stream) {
 		writeAWSFlavour(object.aws, stream)
 		count++
 	}
-	if object.gcp != nil {
+	present_ = object.bitmap_&16 != 0 && object.gcp != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -81,15 +81,17 @@ func writeFlavour(object *Flavour, stream *jsoniter.Stream) {
 		writeGCPFlavour(object.gcp, stream)
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.network != nil {
+	present_ = object.bitmap_&64 != 0 && object.network != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -97,7 +99,8 @@ func writeFlavour(object *Flavour, stream *jsoniter.Stream) {
 		writeNetwork(object.network, stream)
 		count++
 	}
-	if object.nodes != nil {
+	present_ = object.bitmap_&128 != 0 && object.nodes != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -134,28 +137,35 @@ func readFlavour(iterator *jsoniter.Iterator) *Flavour {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == FlavourLinkKind
+			if value == FlavourLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "aws":
 			value := readAWSFlavour(iterator)
 			object.aws = value
+			object.bitmap_ |= 8
 		case "gcp":
 			value := readGCPFlavour(iterator)
 			object.gcp = value
+			object.bitmap_ |= 16
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 32
 		case "network":
 			value := readNetwork(iterator)
 			object.network = value
+			object.bitmap_ |= 64
 		case "nodes":
 			value := readFlavourNodes(iterator)
 			object.nodes = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

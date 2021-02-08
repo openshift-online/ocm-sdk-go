@@ -39,7 +39,9 @@ func MarshalSocketTotalsNodeRoleOSMetricNode(object *SocketTotalsNodeRoleOSMetri
 func writeSocketTotalsNodeRoleOSMetricNode(object *SocketTotalsNodeRoleOSMetricNode, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.socketTotals != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.socketTotals != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -77,6 +79,7 @@ func readSocketTotalsNodeRoleOSMetricNode(iterator *jsoniter.Iterator) *SocketTo
 		case "socket_totals":
 			value := readSocketTotalNodeRoleOSMetricNodeList(iterator)
 			object.socketTotals = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

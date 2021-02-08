@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type AccessTokenAuthBuilder struct {
-	auth  *string
-	email *string
+	bitmap_ uint32
+	auth    string
+	email   string
 }
 
 // NewAccessTokenAuth creates a new builder of 'access_token_auth' objects.
 func NewAccessTokenAuth() *AccessTokenAuthBuilder {
-	return new(AccessTokenAuthBuilder)
+	return &AccessTokenAuthBuilder{}
 }
 
 // Auth sets the value of the 'auth' attribute to the given value.
 //
 //
 func (b *AccessTokenAuthBuilder) Auth(value string) *AccessTokenAuthBuilder {
-	b.auth = &value
+	b.auth = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *AccessTokenAuthBuilder) Auth(value string) *AccessTokenAuthBuilder {
 //
 //
 func (b *AccessTokenAuthBuilder) Email(value string) *AccessTokenAuthBuilder {
-	b.email = &value
+	b.email = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *AccessTokenAuthBuilder) Copy(object *AccessTokenAuth) *AccessTokenAuthB
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.auth = object.auth
 	b.email = object.email
 	return b
@@ -61,6 +65,7 @@ func (b *AccessTokenAuthBuilder) Copy(object *AccessTokenAuth) *AccessTokenAuthB
 // Build creates a 'access_token_auth' object using the configuration stored in the builder.
 func (b *AccessTokenAuthBuilder) Build() (object *AccessTokenAuth, err error) {
 	object = new(AccessTokenAuth)
+	object.bitmap_ = b.bitmap_
 	object.auth = b.auth
 	object.email = b.email
 	return

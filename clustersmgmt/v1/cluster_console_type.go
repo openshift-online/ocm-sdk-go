@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Information about the console of a cluster.
 type ClusterConsole struct {
-	url *string
+	bitmap_ uint32
+	url     string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterConsole) Empty() bool {
-	return o == nil || (o.url == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // URL returns the value of the 'URL' attribute, or
@@ -37,8 +37,8 @@ func (o *ClusterConsole) Empty() bool {
 //
 // The URL of the console of the cluster.
 func (o *ClusterConsole) URL() string {
-	if o != nil && o.url != nil {
-		return *o.url
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.url
 	}
 	return ""
 }
@@ -48,9 +48,9 @@ func (o *ClusterConsole) URL() string {
 //
 // The URL of the console of the cluster.
 func (o *ClusterConsole) GetURL() (value string, ok bool) {
-	ok = o != nil && o.url != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.url
+		value = o.url
 	}
 	return
 }
@@ -69,7 +69,7 @@ const ClusterConsoleListNilKind = "ClusterConsoleListNil"
 
 // ClusterConsoleList is a list of values of the 'cluster_console' type.
 type ClusterConsoleList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterConsole
 }

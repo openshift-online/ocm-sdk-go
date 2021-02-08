@@ -23,12 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Provides information about the nodes in the cluster.
 type NodesInfoBuilder struct {
-	nodes []*NodeInfoBuilder
+	bitmap_ uint32
+	nodes   []*NodeInfoBuilder
 }
 
 // NewNodesInfo creates a new builder of 'nodes_info' objects.
 func NewNodesInfo() *NodesInfoBuilder {
-	return new(NodesInfoBuilder)
+	return &NodesInfoBuilder{}
 }
 
 // Nodes sets the value of the 'nodes' attribute to the given values.
@@ -37,6 +38,7 @@ func NewNodesInfo() *NodesInfoBuilder {
 func (b *NodesInfoBuilder) Nodes(values ...*NodeInfoBuilder) *NodesInfoBuilder {
 	b.nodes = make([]*NodeInfoBuilder, len(values))
 	copy(b.nodes, values)
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,6 +47,7 @@ func (b *NodesInfoBuilder) Copy(object *NodesInfo) *NodesInfoBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.nodes != nil {
 		b.nodes = make([]*NodeInfoBuilder, len(object.nodes))
 		for i, v := range object.nodes {
@@ -59,6 +62,7 @@ func (b *NodesInfoBuilder) Copy(object *NodesInfo) *NodesInfoBuilder {
 // Build creates a 'nodes_info' object using the configuration stored in the builder.
 func (b *NodesInfoBuilder) Build() (object *NodesInfo, err error) {
 	object = new(NodesInfo)
+	object.bitmap_ = b.bitmap_
 	if b.nodes != nil {
 		object.nodes = make([]*NodeInfo, len(b.nodes))
 		for i, v := range b.nodes {

@@ -23,32 +23,34 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of a server config
 type ServerConfigBuilder struct {
-	id     *string
-	href   *string
-	link   bool
-	server *string
+	bitmap_ uint32
+	id      string
+	href    string
+	server  string
 }
 
 // NewServerConfig creates a new builder of 'server_config' objects.
 func NewServerConfig() *ServerConfigBuilder {
-	return new(ServerConfigBuilder)
+	return &ServerConfigBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *ServerConfigBuilder) Link(value bool) *ServerConfigBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *ServerConfigBuilder) ID(value string) *ServerConfigBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *ServerConfigBuilder) HREF(value string) *ServerConfigBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *ServerConfigBuilder) Link(value bool) *ServerConfigBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -56,7 +58,8 @@ func (b *ServerConfigBuilder) Link(value bool) *ServerConfigBuilder {
 //
 //
 func (b *ServerConfigBuilder) Server(value string) *ServerConfigBuilder {
-	b.server = &value
+	b.server = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,9 +68,9 @@ func (b *ServerConfigBuilder) Copy(object *ServerConfig) *ServerConfigBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.server = object.server
 	return b
 }
@@ -77,7 +80,7 @@ func (b *ServerConfigBuilder) Build() (object *ServerConfig, err error) {
 	object = new(ServerConfig)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.server = b.server
 	return
 }

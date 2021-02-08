@@ -39,12 +39,14 @@ func MarshalExportControlReviewResponse(object *ExportControlReviewResponse, wri
 func writeExportControlReviewResponse(object *ExportControlReviewResponse, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.restricted != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("restricted")
-		stream.WriteBool(*object.restricted)
+		stream.WriteBool(object.restricted)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readExportControlReviewResponse(iterator *jsoniter.Iterator) *ExportControl
 		switch field {
 		case "restricted":
 			value := iterator.ReadBool()
-			object.restricted = &value
+			object.restricted = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

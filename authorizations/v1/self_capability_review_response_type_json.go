@@ -39,12 +39,14 @@ func MarshalSelfCapabilityReviewResponse(object *SelfCapabilityReviewResponse, w
 func writeSelfCapabilityReviewResponse(object *SelfCapabilityReviewResponse, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.result != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("result")
-		stream.WriteString(*object.result)
+		stream.WriteString(object.result)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readSelfCapabilityReviewResponse(iterator *jsoniter.Iterator) *SelfCapabili
 		switch field {
 		case "result":
 			value := iterator.ReadString()
-			object.result = &value
+			object.result = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

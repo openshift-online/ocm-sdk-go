@@ -40,33 +40,32 @@ func MarshalRoleBinding(object *RoleBinding, writer io.Writer) error {
 func writeRoleBinding(object *RoleBinding, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(RoleBindingLinkKind)
 	} else {
 		stream.WriteString(RoleBindingKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.account != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.account != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -74,31 +73,35 @@ func writeRoleBinding(object *RoleBinding, stream *jsoniter.Stream) {
 		writeAccount(object.account, stream)
 		count++
 	}
-	if object.accountID != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_id")
-		stream.WriteString(*object.accountID)
+		stream.WriteString(object.accountID)
 		count++
 	}
-	if object.configManaged != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("config_managed")
-		stream.WriteBool(*object.configManaged)
+		stream.WriteBool(object.configManaged)
 		count++
 	}
-	if object.createdAt != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("created_at")
-		stream.WriteString((*object.createdAt).Format(time.RFC3339))
+		stream.WriteString((object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.organization != nil {
+	present_ = object.bitmap_&128 != 0 && object.organization != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -106,15 +109,17 @@ func writeRoleBinding(object *RoleBinding, stream *jsoniter.Stream) {
 		writeOrganization(object.organization, stream)
 		count++
 	}
-	if object.organizationID != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
-	if object.role != nil {
+	present_ = object.bitmap_&512 != 0 && object.role != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -122,15 +127,17 @@ func writeRoleBinding(object *RoleBinding, stream *jsoniter.Stream) {
 		writeRole(object.role, stream)
 		count++
 	}
-	if object.roleID != nil {
+	present_ = object.bitmap_&1024 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("role_id")
-		stream.WriteString(*object.roleID)
+		stream.WriteString(object.roleID)
 		count++
 	}
-	if object.subscription != nil {
+	present_ = object.bitmap_&2048 != 0 && object.subscription != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -138,28 +145,31 @@ func writeRoleBinding(object *RoleBinding, stream *jsoniter.Stream) {
 		writeSubscription(object.subscription, stream)
 		count++
 	}
-	if object.subscriptionID != nil {
+	present_ = object.bitmap_&4096 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subscription_id")
-		stream.WriteString(*object.subscriptionID)
+		stream.WriteString(object.subscriptionID)
 		count++
 	}
-	if object.type_ != nil {
+	present_ = object.bitmap_&8192 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("type")
-		stream.WriteString(*object.type_)
+		stream.WriteString(object.type_)
 		count++
 	}
-	if object.updatedAt != nil {
+	present_ = object.bitmap_&16384 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_at")
-		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
+		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -191,57 +201,71 @@ func readRoleBinding(iterator *jsoniter.Iterator) *RoleBinding {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == RoleBindingLinkKind
+			if value == RoleBindingLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "account":
 			value := readAccount(iterator)
 			object.account = value
+			object.bitmap_ |= 8
 		case "account_id":
 			value := iterator.ReadString()
-			object.accountID = &value
+			object.accountID = value
+			object.bitmap_ |= 16
 		case "config_managed":
 			value := iterator.ReadBool()
-			object.configManaged = &value
+			object.configManaged = value
+			object.bitmap_ |= 32
 		case "created_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.createdAt = &value
+			object.createdAt = value
+			object.bitmap_ |= 64
 		case "organization":
 			value := readOrganization(iterator)
 			object.organization = value
+			object.bitmap_ |= 128
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 256
 		case "role":
 			value := readRole(iterator)
 			object.role = value
+			object.bitmap_ |= 512
 		case "role_id":
 			value := iterator.ReadString()
-			object.roleID = &value
+			object.roleID = value
+			object.bitmap_ |= 1024
 		case "subscription":
 			value := readSubscription(iterator)
 			object.subscription = value
+			object.bitmap_ |= 2048
 		case "subscription_id":
 			value := iterator.ReadString()
-			object.subscriptionID = &value
+			object.subscriptionID = value
+			object.bitmap_ |= 4096
 		case "type":
 			value := iterator.ReadString()
-			object.type_ = &value
+			object.type_ = value
+			object.bitmap_ |= 8192
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedAt = &value
+			object.updatedAt = value
+			object.bitmap_ |= 16384
 		default:
 			iterator.ReadAny()
 		}

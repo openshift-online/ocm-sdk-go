@@ -39,7 +39,9 @@ func MarshalLDAPAttributes(object *LDAPAttributes, writer io.Writer) error {
 func writeLDAPAttributes(object *LDAPAttributes, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.id != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.id != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -47,7 +49,8 @@ func writeLDAPAttributes(object *LDAPAttributes, stream *jsoniter.Stream) {
 		writeStringList(object.id, stream)
 		count++
 	}
-	if object.email != nil {
+	present_ = object.bitmap_&2 != 0 && object.email != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -55,7 +58,8 @@ func writeLDAPAttributes(object *LDAPAttributes, stream *jsoniter.Stream) {
 		writeStringList(object.email, stream)
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&4 != 0 && object.name != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -63,7 +67,8 @@ func writeLDAPAttributes(object *LDAPAttributes, stream *jsoniter.Stream) {
 		writeStringList(object.name, stream)
 		count++
 	}
-	if object.preferredUsername != nil {
+	present_ = object.bitmap_&8 != 0 && object.preferredUsername != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -101,15 +106,19 @@ func readLDAPAttributes(iterator *jsoniter.Iterator) *LDAPAttributes {
 		case "id":
 			value := readStringList(iterator)
 			object.id = value
+			object.bitmap_ |= 1
 		case "email":
 			value := readStringList(iterator)
 			object.email = value
+			object.bitmap_ |= 2
 		case "name":
 			value := readStringList(iterator)
 			object.name = value
+			object.bitmap_ |= 4
 		case "preferred_username":
 			value := readStringList(iterator)
 			object.preferredUsername = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

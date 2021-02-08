@@ -40,44 +40,50 @@ func MarshalClusterOperatorInfo(object *ClusterOperatorInfo, writer io.Writer) e
 func writeClusterOperatorInfo(object *ClusterOperatorInfo, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.condition != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("condition")
-		stream.WriteString(string(*object.condition))
+		stream.WriteString(string(object.condition))
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.reason != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("reason")
-		stream.WriteString(*object.reason)
+		stream.WriteString(object.reason)
 		count++
 	}
-	if object.time != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("time")
-		stream.WriteString((*object.time).Format(time.RFC3339))
+		stream.WriteString((object.time).Format(time.RFC3339))
 		count++
 	}
-	if object.version != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("version")
-		stream.WriteString(*object.version)
+		stream.WriteString(object.version)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -110,23 +116,28 @@ func readClusterOperatorInfo(iterator *jsoniter.Iterator) *ClusterOperatorInfo {
 		case "condition":
 			text := iterator.ReadString()
 			value := ClusterOperatorState(text)
-			object.condition = &value
+			object.condition = value
+			object.bitmap_ |= 1
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 2
 		case "reason":
 			value := iterator.ReadString()
-			object.reason = &value
+			object.reason = value
+			object.bitmap_ |= 4
 		case "time":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.time = &value
+			object.time = value
+			object.bitmap_ |= 8
 		case "version":
 			value := iterator.ReadString()
-			object.version = &value
+			object.version = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

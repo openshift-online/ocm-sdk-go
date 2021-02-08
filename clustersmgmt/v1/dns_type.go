@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // DNS settings of the cluster.
 type DNS struct {
-	baseDomain *string
+	bitmap_    uint32
+	baseDomain string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *DNS) Empty() bool {
-	return o == nil || (o.baseDomain == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // BaseDomain returns the value of the 'base_domain' attribute, or
@@ -80,8 +80,8 @@ func (o *DNS) Empty() bool {
 // When the cluster is created in Amazon Web Services it is necessary to create this base
 // DNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).
 func (o *DNS) BaseDomain() string {
-	if o != nil && o.baseDomain != nil {
-		return *o.baseDomain
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.baseDomain
 	}
 	return ""
 }
@@ -134,9 +134,9 @@ func (o *DNS) BaseDomain() string {
 // When the cluster is created in Amazon Web Services it is necessary to create this base
 // DNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).
 func (o *DNS) GetBaseDomain() (value string, ok bool) {
-	ok = o != nil && o.baseDomain != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.baseDomain
+		value = o.baseDomain
 	}
 	return
 }
@@ -155,7 +155,7 @@ const DNSListNilKind = "DNSListNil"
 
 // DNSList is a list of values of the 'DNS' type.
 type DNSList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*DNS
 }

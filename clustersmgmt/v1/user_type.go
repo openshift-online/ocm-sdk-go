@@ -35,9 +35,9 @@ const UserNilKind = "UserNil"
 //
 // Representation of a user.
 type User struct {
-	id   *string
-	href *string
-	link bool
+	bitmap_ uint32
+	id      string
+	href    string
 }
 
 // Kind returns the name of the type of the object.
@@ -45,16 +45,21 @@ func (o *User) Kind() string {
 	if o == nil {
 		return UserNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return UserLinkKind
 	}
 	return UserKind
 }
 
+// Link returns true iif this is a link.
+func (o *User) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *User) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -62,22 +67,17 @@ func (o *User) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *User) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *User) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *User) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -85,17 +85,16 @@ func (o *User) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *User) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *User) Empty() bool {
-	return o == nil || (o.id == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // UserListKind is the name of the type used to represent list of objects of
@@ -112,7 +111,7 @@ const UserListNilKind = "UserListNil"
 
 // UserList is a list of values of the 'user' type.
 type UserList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*User
 }
@@ -135,8 +134,8 @@ func (l *UserList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *UserList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -144,9 +143,9 @@ func (l *UserList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *UserList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

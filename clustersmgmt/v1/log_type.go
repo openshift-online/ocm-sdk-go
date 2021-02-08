@@ -35,10 +35,10 @@ const LogNilKind = "LogNil"
 //
 // Log of the cluster.
 type Log struct {
-	id      *string
-	href    *string
-	link    bool
-	content *string
+	bitmap_ uint32
+	id      string
+	href    string
+	content string
 }
 
 // Kind returns the name of the type of the object.
@@ -46,16 +46,21 @@ func (o *Log) Kind() string {
 	if o == nil {
 		return LogNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return LogLinkKind
 	}
 	return LogKind
 }
 
+// Link returns true iif this is a link.
+func (o *Log) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Log) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -63,22 +68,17 @@ func (o *Log) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Log) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Log) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Log) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -86,18 +86,16 @@ func (o *Log) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Log) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Log) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.content == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Content returns the value of the 'content' attribute, or
@@ -105,8 +103,8 @@ func (o *Log) Empty() bool {
 //
 // Content of the log.
 func (o *Log) Content() string {
-	if o != nil && o.content != nil {
-		return *o.content
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.content
 	}
 	return ""
 }
@@ -116,9 +114,9 @@ func (o *Log) Content() string {
 //
 // Content of the log.
 func (o *Log) GetContent() (value string, ok bool) {
-	ok = o != nil && o.content != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.content
+		value = o.content
 	}
 	return
 }
@@ -137,7 +135,7 @@ const LogListNilKind = "LogListNil"
 
 // LogList is a list of values of the 'log' type.
 type LogList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Log
 }
@@ -160,8 +158,8 @@ func (l *LogList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *LogList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -169,9 +167,9 @@ func (l *LogList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *LogList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

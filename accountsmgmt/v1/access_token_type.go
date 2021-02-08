@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type AccessToken struct {
-	auths map[string]*AccessTokenAuth
+	bitmap_ uint32
+	auths   map[string]*AccessTokenAuth
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AccessToken) Empty() bool {
-	return o == nil || (len(o.auths) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Auths returns the value of the 'auths' attribute, or
@@ -37,10 +37,10 @@ func (o *AccessToken) Empty() bool {
 //
 //
 func (o *AccessToken) Auths() map[string]*AccessTokenAuth {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.auths
 	}
-	return o.auths
+	return nil
 }
 
 // GetAuths returns the value of the 'auths' attribute and
@@ -48,7 +48,7 @@ func (o *AccessToken) Auths() map[string]*AccessTokenAuth {
 //
 //
 func (o *AccessToken) GetAuths() (value map[string]*AccessTokenAuth, ok bool) {
-	ok = o != nil && o.auths != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.auths
 	}
@@ -69,7 +69,7 @@ const AccessTokenListNilKind = "AccessTokenListNil"
 
 // AccessTokenList is a list of values of the 'access_token' type.
 type AccessTokenList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AccessToken
 }

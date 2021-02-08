@@ -3,6 +3,21 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.157 Feb 8 2021
+
+- Accept Empty Reader as non-nil req body
+- Missplaced return after warning from send
+- Add trusted CA certificates for Windows
+- Update metamodel to v0.0.36:
+** Use Go 1.15
+** Add `documentedSupport` and `namedSupport`
+** Add `typedSupport`
+** Make reporter streams configurable
+** Add presence bitmap
+- Update model to v0.0.106:
+** Add billing_model field to cluster type
+** subscriptions: Add label locator
+
 == 0.1.156 Feb 4 2021
 
 - Update to model 0.0.105:

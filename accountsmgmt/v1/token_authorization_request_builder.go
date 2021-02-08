@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type TokenAuthorizationRequestBuilder struct {
-	authorizationToken *string
+	bitmap_            uint32
+	authorizationToken string
 }
 
 // NewTokenAuthorizationRequest creates a new builder of 'token_authorization_request' objects.
 func NewTokenAuthorizationRequest() *TokenAuthorizationRequestBuilder {
-	return new(TokenAuthorizationRequestBuilder)
+	return &TokenAuthorizationRequestBuilder{}
 }
 
 // AuthorizationToken sets the value of the 'authorization_token' attribute to the given value.
 //
 //
 func (b *TokenAuthorizationRequestBuilder) AuthorizationToken(value string) *TokenAuthorizationRequestBuilder {
-	b.authorizationToken = &value
+	b.authorizationToken = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *TokenAuthorizationRequestBuilder) Copy(object *TokenAuthorizationReques
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.authorizationToken = object.authorizationToken
 	return b
 }
@@ -51,6 +54,7 @@ func (b *TokenAuthorizationRequestBuilder) Copy(object *TokenAuthorizationReques
 // Build creates a 'token_authorization_request' object using the configuration stored in the builder.
 func (b *TokenAuthorizationRequestBuilder) Build() (object *TokenAuthorizationRequest, err error) {
 	object = new(TokenAuthorizationRequest)
+	object.bitmap_ = b.bitmap_
 	object.authorizationToken = b.authorizationToken
 	return
 }

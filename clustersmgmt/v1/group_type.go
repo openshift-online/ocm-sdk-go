@@ -35,10 +35,10 @@ const GroupNilKind = "GroupNil"
 //
 // Representation of a group of users.
 type Group struct {
-	id    *string
-	href  *string
-	link  bool
-	users *UserList
+	bitmap_ uint32
+	id      string
+	href    string
+	users   *UserList
 }
 
 // Kind returns the name of the type of the object.
@@ -46,16 +46,21 @@ func (o *Group) Kind() string {
 	if o == nil {
 		return GroupNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return GroupLinkKind
 	}
 	return GroupKind
 }
 
+// Link returns true iif this is a link.
+func (o *Group) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Group) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -63,22 +68,17 @@ func (o *Group) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Group) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Group) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Group) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -86,18 +86,16 @@ func (o *Group) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Group) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Group) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.users.Len() == 0 &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Users returns the value of the 'users' attribute, or
@@ -105,10 +103,10 @@ func (o *Group) Empty() bool {
 //
 // List of users of the group.
 func (o *Group) Users() *UserList {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.users
 	}
-	return o.users
+	return nil
 }
 
 // GetUsers returns the value of the 'users' attribute and
@@ -116,7 +114,7 @@ func (o *Group) Users() *UserList {
 //
 // List of users of the group.
 func (o *Group) GetUsers() (value *UserList, ok bool) {
-	ok = o != nil && o.users != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.users
 	}
@@ -137,7 +135,7 @@ const GroupListNilKind = "GroupListNil"
 
 // GroupList is a list of values of the 'group' type.
 type GroupList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Group
 }
@@ -160,8 +158,8 @@ func (l *GroupList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *GroupList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -169,9 +167,9 @@ func (l *GroupList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *GroupList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

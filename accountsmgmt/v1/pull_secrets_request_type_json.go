@@ -39,12 +39,14 @@ func MarshalPullSecretsRequest(object *PullSecretsRequest, writer io.Writer) err
 func writePullSecretsRequest(object *PullSecretsRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.externalResourceId != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("external_resource_id")
-		stream.WriteString(*object.externalResourceId)
+		stream.WriteString(object.externalResourceId)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readPullSecretsRequest(iterator *jsoniter.Iterator) *PullSecretsRequest {
 		switch field {
 		case "external_resource_id":
 			value := iterator.ReadString()
-			object.externalResourceId = &value
+			object.externalResourceId = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

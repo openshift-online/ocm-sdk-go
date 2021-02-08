@@ -39,65 +39,68 @@ func MarshalSKU(object *SKU, writer io.Writer) error {
 func writeSKU(object *SKU, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(SKULinkKind)
 	} else {
 		stream.WriteString(SKUKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.byoc != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("byoc")
-		stream.WriteBool(*object.byoc)
+		stream.WriteBool(object.byoc)
 		count++
 	}
-	if object.availabilityZoneType != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("availability_zone_type")
-		stream.WriteString(*object.availabilityZoneType)
+		stream.WriteString(object.availabilityZoneType)
 		count++
 	}
-	if object.resourceName != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_name")
-		stream.WriteString(*object.resourceName)
+		stream.WriteString(object.resourceName)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
-	if object.resources != nil {
+	present_ = object.bitmap_&128 != 0 && object.resources != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -134,28 +137,35 @@ func readSKU(iterator *jsoniter.Iterator) *SKU {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == SKULinkKind
+			if value == SKULinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "byoc":
 			value := iterator.ReadBool()
-			object.byoc = &value
+			object.byoc = value
+			object.bitmap_ |= 8
 		case "availability_zone_type":
 			value := iterator.ReadString()
-			object.availabilityZoneType = &value
+			object.availabilityZoneType = value
+			object.bitmap_ |= 16
 		case "resource_name":
 			value := iterator.ReadString()
-			object.resourceName = &value
+			object.resourceName = value
+			object.bitmap_ |= 32
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 64
 		case "resources":
 			value := readResourceList(iterator)
 			object.resources = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

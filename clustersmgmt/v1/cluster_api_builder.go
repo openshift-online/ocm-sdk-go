@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Information about the API of a cluster.
 type ClusterAPIBuilder struct {
-	url       *string
-	listening *ListeningMethod
+	bitmap_   uint32
+	url       string
+	listening ListeningMethod
 }
 
 // NewClusterAPI creates a new builder of 'cluster_API' objects.
 func NewClusterAPI() *ClusterAPIBuilder {
-	return new(ClusterAPIBuilder)
+	return &ClusterAPIBuilder{}
 }
 
 // URL sets the value of the 'URL' attribute to the given value.
 //
 //
 func (b *ClusterAPIBuilder) URL(value string) *ClusterAPIBuilder {
-	b.url = &value
+	b.url = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *ClusterAPIBuilder) URL(value string) *ClusterAPIBuilder {
 //
 // Cluster components listening method.
 func (b *ClusterAPIBuilder) Listening(value ListeningMethod) *ClusterAPIBuilder {
-	b.listening = &value
+	b.listening = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *ClusterAPIBuilder) Copy(object *ClusterAPI) *ClusterAPIBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.url = object.url
 	b.listening = object.listening
 	return b
@@ -61,6 +65,7 @@ func (b *ClusterAPIBuilder) Copy(object *ClusterAPI) *ClusterAPIBuilder {
 // Build creates a 'cluster_API' object using the configuration stored in the builder.
 func (b *ClusterAPIBuilder) Build() (object *ClusterAPI, err error) {
 	object = new(ClusterAPI)
+	object.bitmap_ = b.bitmap_
 	object.url = b.url
 	object.listening = b.listening
 	return

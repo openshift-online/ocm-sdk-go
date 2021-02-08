@@ -39,60 +39,68 @@ func MarshalQuotaSummary(object *QuotaSummary, writer io.Writer) error {
 func writeQuotaSummary(object *QuotaSummary, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.byoc != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("byoc")
-		stream.WriteBool(*object.byoc)
+		stream.WriteBool(object.byoc)
 		count++
 	}
-	if object.allowed != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("allowed")
-		stream.WriteInt(*object.allowed)
+		stream.WriteInt(object.allowed)
 		count++
 	}
-	if object.availabilityZoneType != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("availability_zone_type")
-		stream.WriteString(*object.availabilityZoneType)
+		stream.WriteString(object.availabilityZoneType)
 		count++
 	}
-	if object.organizationID != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
-	if object.reserved != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("reserved")
-		stream.WriteInt(*object.reserved)
+		stream.WriteInt(object.reserved)
 		count++
 	}
-	if object.resourceName != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_name")
-		stream.WriteString(*object.resourceName)
+		stream.WriteString(object.resourceName)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -124,25 +132,32 @@ func readQuotaSummary(iterator *jsoniter.Iterator) *QuotaSummary {
 		switch field {
 		case "byoc":
 			value := iterator.ReadBool()
-			object.byoc = &value
+			object.byoc = value
+			object.bitmap_ |= 1
 		case "allowed":
 			value := iterator.ReadInt()
-			object.allowed = &value
+			object.allowed = value
+			object.bitmap_ |= 2
 		case "availability_zone_type":
 			value := iterator.ReadString()
-			object.availabilityZoneType = &value
+			object.availabilityZoneType = value
+			object.bitmap_ |= 4
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 8
 		case "reserved":
 			value := iterator.ReadInt()
-			object.reserved = &value
+			object.reserved = value
+			object.bitmap_ |= 16
 		case "resource_name":
 			value := iterator.ReadString()
-			object.resourceName = &value
+			object.resourceName = value
+			object.bitmap_ |= 32
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}

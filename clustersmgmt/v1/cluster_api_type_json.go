@@ -39,20 +39,23 @@ func MarshalClusterAPI(object *ClusterAPI, writer io.Writer) error {
 func writeClusterAPI(object *ClusterAPI, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.url != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("url")
-		stream.WriteString(*object.url)
+		stream.WriteString(object.url)
 		count++
 	}
-	if object.listening != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("listening")
-		stream.WriteString(string(*object.listening))
+		stream.WriteString(string(object.listening))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,11 +87,13 @@ func readClusterAPI(iterator *jsoniter.Iterator) *ClusterAPI {
 		switch field {
 		case "url":
 			value := iterator.ReadString()
-			object.url = &value
+			object.url = value
+			object.bitmap_ |= 1
 		case "listening":
 			text := iterator.ReadString()
 			value := ListeningMethod(text)
-			object.listening = &value
+			object.listening = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

@@ -27,25 +27,19 @@ import (
 //
 //
 type ReservedResource struct {
-	byoc                 *bool
-	availabilityZoneType *string
-	count                *int
-	createdAt            *time.Time
-	resourceName         *string
-	resourceType         *string
-	updatedAt            *time.Time
+	bitmap_              uint32
+	availabilityZoneType string
+	count                int
+	createdAt            time.Time
+	resourceName         string
+	resourceType         string
+	updatedAt            time.Time
+	byoc                 bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ReservedResource) Empty() bool {
-	return o == nil || (o.byoc == nil &&
-		o.availabilityZoneType == nil &&
-		o.count == nil &&
-		o.createdAt == nil &&
-		o.resourceName == nil &&
-		o.resourceType == nil &&
-		o.updatedAt == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // BYOC returns the value of the 'BYOC' attribute, or
@@ -53,8 +47,8 @@ func (o *ReservedResource) Empty() bool {
 //
 //
 func (o *ReservedResource) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.byoc
 	}
 	return false
 }
@@ -64,9 +58,9 @@ func (o *ReservedResource) BYOC() bool {
 //
 //
 func (o *ReservedResource) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.byoc
+		value = o.byoc
 	}
 	return
 }
@@ -76,8 +70,8 @@ func (o *ReservedResource) GetBYOC() (value bool, ok bool) {
 //
 //
 func (o *ReservedResource) AvailabilityZoneType() string {
-	if o != nil && o.availabilityZoneType != nil {
-		return *o.availabilityZoneType
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.availabilityZoneType
 	}
 	return ""
 }
@@ -87,9 +81,9 @@ func (o *ReservedResource) AvailabilityZoneType() string {
 //
 //
 func (o *ReservedResource) GetAvailabilityZoneType() (value string, ok bool) {
-	ok = o != nil && o.availabilityZoneType != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.availabilityZoneType
+		value = o.availabilityZoneType
 	}
 	return
 }
@@ -99,8 +93,8 @@ func (o *ReservedResource) GetAvailabilityZoneType() (value string, ok bool) {
 //
 //
 func (o *ReservedResource) Count() int {
-	if o != nil && o.count != nil {
-		return *o.count
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.count
 	}
 	return 0
 }
@@ -110,9 +104,9 @@ func (o *ReservedResource) Count() int {
 //
 //
 func (o *ReservedResource) GetCount() (value int, ok bool) {
-	ok = o != nil && o.count != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.count
+		value = o.count
 	}
 	return
 }
@@ -122,8 +116,8 @@ func (o *ReservedResource) GetCount() (value int, ok bool) {
 //
 //
 func (o *ReservedResource) CreatedAt() time.Time {
-	if o != nil && o.createdAt != nil {
-		return *o.createdAt
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.createdAt
 	}
 	return time.Time{}
 }
@@ -133,9 +127,9 @@ func (o *ReservedResource) CreatedAt() time.Time {
 //
 //
 func (o *ReservedResource) GetCreatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.createdAt != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.createdAt
+		value = o.createdAt
 	}
 	return
 }
@@ -145,8 +139,8 @@ func (o *ReservedResource) GetCreatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *ReservedResource) ResourceName() string {
-	if o != nil && o.resourceName != nil {
-		return *o.resourceName
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.resourceName
 	}
 	return ""
 }
@@ -156,9 +150,9 @@ func (o *ReservedResource) ResourceName() string {
 //
 //
 func (o *ReservedResource) GetResourceName() (value string, ok bool) {
-	ok = o != nil && o.resourceName != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.resourceName
+		value = o.resourceName
 	}
 	return
 }
@@ -168,8 +162,8 @@ func (o *ReservedResource) GetResourceName() (value string, ok bool) {
 //
 //
 func (o *ReservedResource) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -179,9 +173,9 @@ func (o *ReservedResource) ResourceType() string {
 //
 //
 func (o *ReservedResource) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -191,8 +185,8 @@ func (o *ReservedResource) GetResourceType() (value string, ok bool) {
 //
 //
 func (o *ReservedResource) UpdatedAt() time.Time {
-	if o != nil && o.updatedAt != nil {
-		return *o.updatedAt
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.updatedAt
 	}
 	return time.Time{}
 }
@@ -202,9 +196,9 @@ func (o *ReservedResource) UpdatedAt() time.Time {
 //
 //
 func (o *ReservedResource) GetUpdatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedAt != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.updatedAt
+		value = o.updatedAt
 	}
 	return
 }
@@ -223,7 +217,7 @@ const ReservedResourceListNilKind = "ReservedResourceListNil"
 
 // ReservedResourceList is a list of values of the 'reserved_resource' type.
 type ReservedResourceList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ReservedResource
 }

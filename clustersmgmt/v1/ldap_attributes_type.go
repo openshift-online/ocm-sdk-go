@@ -23,6 +23,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // LDAP attributes used to configure the LDAP identity provider.
 type LDAPAttributes struct {
+	bitmap_           uint32
 	id                []string
 	email             []string
 	name              []string
@@ -31,11 +32,7 @@ type LDAPAttributes struct {
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *LDAPAttributes) Empty() bool {
-	return o == nil || (len(o.id) == 0 &&
-		len(o.email) == 0 &&
-		len(o.name) == 0 &&
-		len(o.preferredUsername) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // ID returns the value of the 'ID' attribute, or
@@ -43,10 +40,10 @@ func (o *LDAPAttributes) Empty() bool {
 //
 // List of attributes to use as the identity.
 func (o *LDAPAttributes) ID() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.id
 	}
-	return o.id
+	return nil
 }
 
 // GetID returns the value of the 'ID' attribute and
@@ -54,7 +51,7 @@ func (o *LDAPAttributes) ID() []string {
 //
 // List of attributes to use as the identity.
 func (o *LDAPAttributes) GetID() (value []string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.id
 	}
@@ -66,10 +63,10 @@ func (o *LDAPAttributes) GetID() (value []string, ok bool) {
 //
 // List of attributes to use as the mail address.
 func (o *LDAPAttributes) Email() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.email
 	}
-	return o.email
+	return nil
 }
 
 // GetEmail returns the value of the 'email' attribute and
@@ -77,7 +74,7 @@ func (o *LDAPAttributes) Email() []string {
 //
 // List of attributes to use as the mail address.
 func (o *LDAPAttributes) GetEmail() (value []string, ok bool) {
-	ok = o != nil && o.email != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.email
 	}
@@ -89,10 +86,10 @@ func (o *LDAPAttributes) GetEmail() (value []string, ok bool) {
 //
 // List of attributes to use as the display name.
 func (o *LDAPAttributes) Name() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.name
 	}
-	return o.name
+	return nil
 }
 
 // GetName returns the value of the 'name' attribute and
@@ -100,7 +97,7 @@ func (o *LDAPAttributes) Name() []string {
 //
 // List of attributes to use as the display name.
 func (o *LDAPAttributes) GetName() (value []string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.name
 	}
@@ -112,10 +109,10 @@ func (o *LDAPAttributes) GetName() (value []string, ok bool) {
 //
 // List of attributes to use as the preferred user name when provisioning a user.
 func (o *LDAPAttributes) PreferredUsername() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.preferredUsername
 	}
-	return o.preferredUsername
+	return nil
 }
 
 // GetPreferredUsername returns the value of the 'preferred_username' attribute and
@@ -123,7 +120,7 @@ func (o *LDAPAttributes) PreferredUsername() []string {
 //
 // List of attributes to use as the preferred user name when provisioning a user.
 func (o *LDAPAttributes) GetPreferredUsername() (value []string, ok bool) {
-	ok = o != nil && o.preferredUsername != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.preferredUsername
 	}
@@ -144,7 +141,7 @@ const LDAPAttributesListNilKind = "LDAPAttributesListNil"
 
 // LDAPAttributesList is a list of values of the 'LDAP_attributes' type.
 type LDAPAttributesList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*LDAPAttributes
 }

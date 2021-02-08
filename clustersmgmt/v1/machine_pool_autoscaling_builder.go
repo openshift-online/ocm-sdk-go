@@ -23,33 +23,35 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of a autoscaling in a machine pool.
 type MachinePoolAutoscalingBuilder struct {
-	id          *string
-	href        *string
-	link        bool
-	maxReplicas *int
-	minReplicas *int
+	bitmap_     uint32
+	id          string
+	href        string
+	maxReplicas int
+	minReplicas int
 }
 
 // NewMachinePoolAutoscaling creates a new builder of 'machine_pool_autoscaling' objects.
 func NewMachinePoolAutoscaling() *MachinePoolAutoscalingBuilder {
-	return new(MachinePoolAutoscalingBuilder)
+	return &MachinePoolAutoscalingBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *MachinePoolAutoscalingBuilder) Link(value bool) *MachinePoolAutoscalingBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *MachinePoolAutoscalingBuilder) ID(value string) *MachinePoolAutoscalingBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *MachinePoolAutoscalingBuilder) HREF(value string) *MachinePoolAutoscalingBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *MachinePoolAutoscalingBuilder) Link(value bool) *MachinePoolAutoscalingBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -57,7 +59,8 @@ func (b *MachinePoolAutoscalingBuilder) Link(value bool) *MachinePoolAutoscaling
 //
 //
 func (b *MachinePoolAutoscalingBuilder) MaxReplicas(value int) *MachinePoolAutoscalingBuilder {
-	b.maxReplicas = &value
+	b.maxReplicas = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,7 +68,8 @@ func (b *MachinePoolAutoscalingBuilder) MaxReplicas(value int) *MachinePoolAutos
 //
 //
 func (b *MachinePoolAutoscalingBuilder) MinReplicas(value int) *MachinePoolAutoscalingBuilder {
-	b.minReplicas = &value
+	b.minReplicas = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,9 +78,9 @@ func (b *MachinePoolAutoscalingBuilder) Copy(object *MachinePoolAutoscaling) *Ma
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.maxReplicas = object.maxReplicas
 	b.minReplicas = object.minReplicas
 	return b
@@ -87,7 +91,7 @@ func (b *MachinePoolAutoscalingBuilder) Build() (object *MachinePoolAutoscaling,
 	object = new(MachinePoolAutoscaling)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.maxReplicas = b.maxReplicas
 	object.minReplicas = b.minReplicas
 	return

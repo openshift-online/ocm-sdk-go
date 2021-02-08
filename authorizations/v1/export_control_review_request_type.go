@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 //
 type ExportControlReviewRequest struct {
-	accountUsername *string
+	bitmap_         uint32
+	accountUsername string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ExportControlReviewRequest) Empty() bool {
-	return o == nil || (o.accountUsername == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AccountUsername returns the value of the 'account_username' attribute, or
@@ -37,8 +37,8 @@ func (o *ExportControlReviewRequest) Empty() bool {
 //
 //
 func (o *ExportControlReviewRequest) AccountUsername() string {
-	if o != nil && o.accountUsername != nil {
-		return *o.accountUsername
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.accountUsername
 	}
 	return ""
 }
@@ -48,9 +48,9 @@ func (o *ExportControlReviewRequest) AccountUsername() string {
 //
 //
 func (o *ExportControlReviewRequest) GetAccountUsername() (value string, ok bool) {
-	ok = o != nil && o.accountUsername != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.accountUsername
+		value = o.accountUsername
 	}
 	return
 }
@@ -69,7 +69,7 @@ const ExportControlReviewRequestListNilKind = "ExportControlReviewRequestListNil
 
 // ExportControlReviewRequestList is a list of values of the 'export_control_review_request' type.
 type ExportControlReviewRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ExportControlReviewRequest
 }

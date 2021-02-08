@@ -23,19 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // _Amazon Web Services_ specific settings of a cluster.
 type AWS struct {
-	accessKeyID     *string
-	accountID       *string
-	secretAccessKey *string
+	bitmap_         uint32
+	accessKeyID     string
+	accountID       string
+	secretAccessKey string
 	subnetIDs       []string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AWS) Empty() bool {
-	return o == nil || (o.accessKeyID == nil &&
-		o.accountID == nil &&
-		o.secretAccessKey == nil &&
-		len(o.subnetIDs) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AccessKeyID returns the value of the 'access_key_ID' attribute, or
@@ -43,8 +40,8 @@ func (o *AWS) Empty() bool {
 //
 // AWS access key identifier.
 func (o *AWS) AccessKeyID() string {
-	if o != nil && o.accessKeyID != nil {
-		return *o.accessKeyID
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.accessKeyID
 	}
 	return ""
 }
@@ -54,9 +51,9 @@ func (o *AWS) AccessKeyID() string {
 //
 // AWS access key identifier.
 func (o *AWS) GetAccessKeyID() (value string, ok bool) {
-	ok = o != nil && o.accessKeyID != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.accessKeyID
+		value = o.accessKeyID
 	}
 	return
 }
@@ -66,8 +63,8 @@ func (o *AWS) GetAccessKeyID() (value string, ok bool) {
 //
 // AWS account identifier.
 func (o *AWS) AccountID() string {
-	if o != nil && o.accountID != nil {
-		return *o.accountID
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.accountID
 	}
 	return ""
 }
@@ -77,9 +74,9 @@ func (o *AWS) AccountID() string {
 //
 // AWS account identifier.
 func (o *AWS) GetAccountID() (value string, ok bool) {
-	ok = o != nil && o.accountID != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.accountID
+		value = o.accountID
 	}
 	return
 }
@@ -89,8 +86,8 @@ func (o *AWS) GetAccountID() (value string, ok bool) {
 //
 // AWS secret access key.
 func (o *AWS) SecretAccessKey() string {
-	if o != nil && o.secretAccessKey != nil {
-		return *o.secretAccessKey
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.secretAccessKey
 	}
 	return ""
 }
@@ -100,9 +97,9 @@ func (o *AWS) SecretAccessKey() string {
 //
 // AWS secret access key.
 func (o *AWS) GetSecretAccessKey() (value string, ok bool) {
-	ok = o != nil && o.secretAccessKey != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.secretAccessKey
+		value = o.secretAccessKey
 	}
 	return
 }
@@ -112,10 +109,10 @@ func (o *AWS) GetSecretAccessKey() (value string, ok bool) {
 //
 // SubnetIDs are the subnet ids to be used when installing the cluster.
 func (o *AWS) SubnetIDs() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.subnetIDs
 	}
-	return o.subnetIDs
+	return nil
 }
 
 // GetSubnetIDs returns the value of the 'subnet_IDs' attribute and
@@ -123,7 +120,7 @@ func (o *AWS) SubnetIDs() []string {
 //
 // SubnetIDs are the subnet ids to be used when installing the cluster.
 func (o *AWS) GetSubnetIDs() (value []string, ok bool) {
-	ok = o != nil && o.subnetIDs != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.subnetIDs
 	}
@@ -144,7 +141,7 @@ const AWSListNilKind = "AWSListNil"
 
 // AWSList is a list of values of the 'AWS' type.
 type AWSList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AWS
 }

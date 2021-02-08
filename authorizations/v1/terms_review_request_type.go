@@ -24,13 +24,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 // Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]
 // review requests.
 type TermsReviewRequest struct {
-	accountUsername *string
+	bitmap_         uint32
+	accountUsername string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *TermsReviewRequest) Empty() bool {
-	return o == nil || (o.accountUsername == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AccountUsername returns the value of the 'account_username' attribute, or
@@ -38,8 +38,8 @@ func (o *TermsReviewRequest) Empty() bool {
 //
 // Defines the username of the account of which Terms is being reviewed.
 func (o *TermsReviewRequest) AccountUsername() string {
-	if o != nil && o.accountUsername != nil {
-		return *o.accountUsername
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.accountUsername
 	}
 	return ""
 }
@@ -49,9 +49,9 @@ func (o *TermsReviewRequest) AccountUsername() string {
 //
 // Defines the username of the account of which Terms is being reviewed.
 func (o *TermsReviewRequest) GetAccountUsername() (value string, ok bool) {
-	ok = o != nil && o.accountUsername != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.accountUsername
+		value = o.accountUsername
 	}
 	return
 }
@@ -70,7 +70,7 @@ const TermsReviewRequestListNilKind = "TermsReviewRequestListNil"
 
 // TermsReviewRequestList is a list of values of the 'terms_review_request' type.
 type TermsReviewRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*TermsReviewRequest
 }

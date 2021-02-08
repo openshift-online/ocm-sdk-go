@@ -23,31 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Google cloud platform settings of a cluster.
 type GCP struct {
-	authURI                 *string
-	authProviderX509CertURL *string
-	clientID                *string
-	clientX509CertURL       *string
-	clientEmail             *string
-	privateKey              *string
-	privateKeyID            *string
-	projectID               *string
-	tokenURI                *string
-	type_                   *string
+	bitmap_                 uint32
+	authURI                 string
+	authProviderX509CertURL string
+	clientID                string
+	clientX509CertURL       string
+	clientEmail             string
+	privateKey              string
+	privateKeyID            string
+	projectID               string
+	tokenURI                string
+	type_                   string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *GCP) Empty() bool {
-	return o == nil || (o.authURI == nil &&
-		o.authProviderX509CertURL == nil &&
-		o.clientID == nil &&
-		o.clientX509CertURL == nil &&
-		o.clientEmail == nil &&
-		o.privateKey == nil &&
-		o.privateKeyID == nil &&
-		o.projectID == nil &&
-		o.tokenURI == nil &&
-		o.type_ == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AuthURI returns the value of the 'auth_URI' attribute, or
@@ -55,8 +46,8 @@ func (o *GCP) Empty() bool {
 //
 // GCP authentication uri
 func (o *GCP) AuthURI() string {
-	if o != nil && o.authURI != nil {
-		return *o.authURI
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.authURI
 	}
 	return ""
 }
@@ -66,9 +57,9 @@ func (o *GCP) AuthURI() string {
 //
 // GCP authentication uri
 func (o *GCP) GetAuthURI() (value string, ok bool) {
-	ok = o != nil && o.authURI != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.authURI
+		value = o.authURI
 	}
 	return
 }
@@ -78,8 +69,8 @@ func (o *GCP) GetAuthURI() (value string, ok bool) {
 //
 // GCP Authentication provider x509 certificate url
 func (o *GCP) AuthProviderX509CertURL() string {
-	if o != nil && o.authProviderX509CertURL != nil {
-		return *o.authProviderX509CertURL
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.authProviderX509CertURL
 	}
 	return ""
 }
@@ -89,9 +80,9 @@ func (o *GCP) AuthProviderX509CertURL() string {
 //
 // GCP Authentication provider x509 certificate url
 func (o *GCP) GetAuthProviderX509CertURL() (value string, ok bool) {
-	ok = o != nil && o.authProviderX509CertURL != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.authProviderX509CertURL
+		value = o.authProviderX509CertURL
 	}
 	return
 }
@@ -101,8 +92,8 @@ func (o *GCP) GetAuthProviderX509CertURL() (value string, ok bool) {
 //
 // GCP client identifier
 func (o *GCP) ClientID() string {
-	if o != nil && o.clientID != nil {
-		return *o.clientID
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clientID
 	}
 	return ""
 }
@@ -112,9 +103,9 @@ func (o *GCP) ClientID() string {
 //
 // GCP client identifier
 func (o *GCP) GetClientID() (value string, ok bool) {
-	ok = o != nil && o.clientID != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.clientID
+		value = o.clientID
 	}
 	return
 }
@@ -124,8 +115,8 @@ func (o *GCP) GetClientID() (value string, ok bool) {
 //
 // GCP client x509 certificate url
 func (o *GCP) ClientX509CertURL() string {
-	if o != nil && o.clientX509CertURL != nil {
-		return *o.clientX509CertURL
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.clientX509CertURL
 	}
 	return ""
 }
@@ -135,9 +126,9 @@ func (o *GCP) ClientX509CertURL() string {
 //
 // GCP client x509 certificate url
 func (o *GCP) GetClientX509CertURL() (value string, ok bool) {
-	ok = o != nil && o.clientX509CertURL != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.clientX509CertURL
+		value = o.clientX509CertURL
 	}
 	return
 }
@@ -147,8 +138,8 @@ func (o *GCP) GetClientX509CertURL() (value string, ok bool) {
 //
 // GCP client email
 func (o *GCP) ClientEmail() string {
-	if o != nil && o.clientEmail != nil {
-		return *o.clientEmail
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.clientEmail
 	}
 	return ""
 }
@@ -158,9 +149,9 @@ func (o *GCP) ClientEmail() string {
 //
 // GCP client email
 func (o *GCP) GetClientEmail() (value string, ok bool) {
-	ok = o != nil && o.clientEmail != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.clientEmail
+		value = o.clientEmail
 	}
 	return
 }
@@ -170,8 +161,8 @@ func (o *GCP) GetClientEmail() (value string, ok bool) {
 //
 // GCP private key
 func (o *GCP) PrivateKey() string {
-	if o != nil && o.privateKey != nil {
-		return *o.privateKey
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.privateKey
 	}
 	return ""
 }
@@ -181,9 +172,9 @@ func (o *GCP) PrivateKey() string {
 //
 // GCP private key
 func (o *GCP) GetPrivateKey() (value string, ok bool) {
-	ok = o != nil && o.privateKey != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.privateKey
+		value = o.privateKey
 	}
 	return
 }
@@ -193,8 +184,8 @@ func (o *GCP) GetPrivateKey() (value string, ok bool) {
 //
 // GCP private key identifier
 func (o *GCP) PrivateKeyID() string {
-	if o != nil && o.privateKeyID != nil {
-		return *o.privateKeyID
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.privateKeyID
 	}
 	return ""
 }
@@ -204,9 +195,9 @@ func (o *GCP) PrivateKeyID() string {
 //
 // GCP private key identifier
 func (o *GCP) GetPrivateKeyID() (value string, ok bool) {
-	ok = o != nil && o.privateKeyID != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.privateKeyID
+		value = o.privateKeyID
 	}
 	return
 }
@@ -216,8 +207,8 @@ func (o *GCP) GetPrivateKeyID() (value string, ok bool) {
 //
 // GCP project identifier.
 func (o *GCP) ProjectID() string {
-	if o != nil && o.projectID != nil {
-		return *o.projectID
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.projectID
 	}
 	return ""
 }
@@ -227,9 +218,9 @@ func (o *GCP) ProjectID() string {
 //
 // GCP project identifier.
 func (o *GCP) GetProjectID() (value string, ok bool) {
-	ok = o != nil && o.projectID != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.projectID
+		value = o.projectID
 	}
 	return
 }
@@ -239,8 +230,8 @@ func (o *GCP) GetProjectID() (value string, ok bool) {
 //
 // GCP token uri
 func (o *GCP) TokenURI() string {
-	if o != nil && o.tokenURI != nil {
-		return *o.tokenURI
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.tokenURI
 	}
 	return ""
 }
@@ -250,9 +241,9 @@ func (o *GCP) TokenURI() string {
 //
 // GCP token uri
 func (o *GCP) GetTokenURI() (value string, ok bool) {
-	ok = o != nil && o.tokenURI != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.tokenURI
+		value = o.tokenURI
 	}
 	return
 }
@@ -262,8 +253,8 @@ func (o *GCP) GetTokenURI() (value string, ok bool) {
 //
 // GCP the type of the service the key belongs to
 func (o *GCP) Type() string {
-	if o != nil && o.type_ != nil {
-		return *o.type_
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.type_
 	}
 	return ""
 }
@@ -273,9 +264,9 @@ func (o *GCP) Type() string {
 //
 // GCP the type of the service the key belongs to
 func (o *GCP) GetType() (value string, ok bool) {
-	ok = o != nil && o.type_ != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
-		value = *o.type_
+		value = o.type_
 	}
 	return
 }
@@ -294,7 +285,7 @@ const GCPListNilKind = "GCPListNil"
 
 // GCPList is a list of values of the 'GCP' type.
 type GCPList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*GCP
 }

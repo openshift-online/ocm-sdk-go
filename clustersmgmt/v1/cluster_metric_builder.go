@@ -28,14 +28,15 @@ import (
 // Metric describing the total and used amount of some resource (like RAM, CPU and storage) in
 // a cluster.
 type ClusterMetricBuilder struct {
+	bitmap_          uint32
 	total            *ValueBuilder
-	updatedTimestamp *time.Time
+	updatedTimestamp time.Time
 	used             *ValueBuilder
 }
 
 // NewClusterMetric creates a new builder of 'cluster_metric' objects.
 func NewClusterMetric() *ClusterMetricBuilder {
-	return new(ClusterMetricBuilder)
+	return &ClusterMetricBuilder{}
 }
 
 // Total sets the value of the 'total' attribute to the given value.
@@ -60,6 +61,11 @@ func NewClusterMetric() *ClusterMetricBuilder {
 // - 1 PiB = 2^50 bytes
 func (b *ClusterMetricBuilder) Total(value *ValueBuilder) *ClusterMetricBuilder {
 	b.total = value
+	if value != nil {
+		b.bitmap_ |= 1
+	} else {
+		b.bitmap_ &^= 1
+	}
 	return b
 }
 
@@ -67,7 +73,8 @@ func (b *ClusterMetricBuilder) Total(value *ValueBuilder) *ClusterMetricBuilder 
 //
 //
 func (b *ClusterMetricBuilder) UpdatedTimestamp(value time.Time) *ClusterMetricBuilder {
-	b.updatedTimestamp = &value
+	b.updatedTimestamp = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -93,6 +100,11 @@ func (b *ClusterMetricBuilder) UpdatedTimestamp(value time.Time) *ClusterMetricB
 // - 1 PiB = 2^50 bytes
 func (b *ClusterMetricBuilder) Used(value *ValueBuilder) *ClusterMetricBuilder {
 	b.used = value
+	if value != nil {
+		b.bitmap_ |= 4
+	} else {
+		b.bitmap_ &^= 4
+	}
 	return b
 }
 
@@ -101,6 +113,7 @@ func (b *ClusterMetricBuilder) Copy(object *ClusterMetric) *ClusterMetricBuilder
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.total != nil {
 		b.total = NewValue().Copy(object.total)
 	} else {
@@ -118,6 +131,7 @@ func (b *ClusterMetricBuilder) Copy(object *ClusterMetric) *ClusterMetricBuilder
 // Build creates a 'cluster_metric' object using the configuration stored in the builder.
 func (b *ClusterMetricBuilder) Build() (object *ClusterMetric, err error) {
 	object = new(ClusterMetric)
+	object.bitmap_ = b.bitmap_
 	if b.total != nil {
 		object.total, err = b.total.Build()
 		if err != nil {

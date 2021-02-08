@@ -23,34 +23,36 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Credentials of the a cluster.
 type ClusterCredentialsBuilder struct {
-	id         *string
-	href       *string
-	link       bool
+	bitmap_    uint32
+	id         string
+	href       string
 	ssh        *SSHCredentialsBuilder
 	admin      *AdminCredentialsBuilder
-	kubeconfig *string
+	kubeconfig string
 }
 
 // NewClusterCredentials creates a new builder of 'cluster_credentials' objects.
 func NewClusterCredentials() *ClusterCredentialsBuilder {
-	return new(ClusterCredentialsBuilder)
+	return &ClusterCredentialsBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *ClusterCredentialsBuilder) Link(value bool) *ClusterCredentialsBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *ClusterCredentialsBuilder) ID(value string) *ClusterCredentialsBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *ClusterCredentialsBuilder) HREF(value string) *ClusterCredentialsBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *ClusterCredentialsBuilder) Link(value bool) *ClusterCredentialsBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -59,6 +61,11 @@ func (b *ClusterCredentialsBuilder) Link(value bool) *ClusterCredentialsBuilder 
 // SSH key pair of a cluster.
 func (b *ClusterCredentialsBuilder) SSH(value *SSHCredentialsBuilder) *ClusterCredentialsBuilder {
 	b.ssh = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -68,6 +75,11 @@ func (b *ClusterCredentialsBuilder) SSH(value *SSHCredentialsBuilder) *ClusterCr
 // cluster.
 func (b *ClusterCredentialsBuilder) Admin(value *AdminCredentialsBuilder) *ClusterCredentialsBuilder {
 	b.admin = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -75,7 +87,8 @@ func (b *ClusterCredentialsBuilder) Admin(value *AdminCredentialsBuilder) *Clust
 //
 //
 func (b *ClusterCredentialsBuilder) Kubeconfig(value string) *ClusterCredentialsBuilder {
-	b.kubeconfig = &value
+	b.kubeconfig = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -84,9 +97,9 @@ func (b *ClusterCredentialsBuilder) Copy(object *ClusterCredentials) *ClusterCre
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.ssh != nil {
 		b.ssh = NewSSHCredentials().Copy(object.ssh)
 	} else {
@@ -106,7 +119,7 @@ func (b *ClusterCredentialsBuilder) Build() (object *ClusterCredentials, err err
 	object = new(ClusterCredentials)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.ssh != nil {
 		object.ssh, err = b.ssh.Build()
 		if err != nil {

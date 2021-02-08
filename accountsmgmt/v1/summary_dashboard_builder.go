@@ -23,32 +23,34 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type SummaryDashboardBuilder struct {
-	id      *string
-	href    *string
-	link    bool
+	bitmap_ uint32
+	id      string
+	href    string
 	metrics []*SummaryMetricsBuilder
 }
 
 // NewSummaryDashboard creates a new builder of 'summary_dashboard' objects.
 func NewSummaryDashboard() *SummaryDashboardBuilder {
-	return new(SummaryDashboardBuilder)
+	return &SummaryDashboardBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *SummaryDashboardBuilder) Link(value bool) *SummaryDashboardBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *SummaryDashboardBuilder) ID(value string) *SummaryDashboardBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *SummaryDashboardBuilder) HREF(value string) *SummaryDashboardBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *SummaryDashboardBuilder) Link(value bool) *SummaryDashboardBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -58,6 +60,7 @@ func (b *SummaryDashboardBuilder) Link(value bool) *SummaryDashboardBuilder {
 func (b *SummaryDashboardBuilder) Metrics(values ...*SummaryMetricsBuilder) *SummaryDashboardBuilder {
 	b.metrics = make([]*SummaryMetricsBuilder, len(values))
 	copy(b.metrics, values)
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -66,9 +69,9 @@ func (b *SummaryDashboardBuilder) Copy(object *SummaryDashboard) *SummaryDashboa
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.metrics != nil {
 		b.metrics = make([]*SummaryMetricsBuilder, len(object.metrics))
 		for i, v := range object.metrics {
@@ -85,7 +88,7 @@ func (b *SummaryDashboardBuilder) Build() (object *SummaryDashboard, err error) 
 	object = new(SummaryDashboard)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.metrics != nil {
 		object.metrics = make([]*SummaryMetrics, len(b.metrics))
 		for i, v := range b.metrics {

@@ -39,12 +39,14 @@ func MarshalDNS(object *DNS, writer io.Writer) error {
 func writeDNS(object *DNS, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.baseDomain != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("base_domain")
-		stream.WriteString(*object.baseDomain)
+		stream.WriteString(object.baseDomain)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readDNS(iterator *jsoniter.Iterator) *DNS {
 		switch field {
 		case "base_domain":
 			value := iterator.ReadString()
-			object.baseDomain = &value
+			object.baseDomain = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

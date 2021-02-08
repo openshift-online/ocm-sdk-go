@@ -23,33 +23,35 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Collection of metrics intended to render a graphical dashboard.
 type DashboardBuilder struct {
-	id      *string
-	href    *string
-	link    bool
+	bitmap_ uint32
+	id      string
+	href    string
 	metrics []*MetricBuilder
-	name    *string
+	name    string
 }
 
 // NewDashboard creates a new builder of 'dashboard' objects.
 func NewDashboard() *DashboardBuilder {
-	return new(DashboardBuilder)
+	return &DashboardBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *DashboardBuilder) Link(value bool) *DashboardBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *DashboardBuilder) ID(value string) *DashboardBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *DashboardBuilder) HREF(value string) *DashboardBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *DashboardBuilder) Link(value bool) *DashboardBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -59,6 +61,7 @@ func (b *DashboardBuilder) Link(value bool) *DashboardBuilder {
 func (b *DashboardBuilder) Metrics(values ...*MetricBuilder) *DashboardBuilder {
 	b.metrics = make([]*MetricBuilder, len(values))
 	copy(b.metrics, values)
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -66,7 +69,8 @@ func (b *DashboardBuilder) Metrics(values ...*MetricBuilder) *DashboardBuilder {
 //
 //
 func (b *DashboardBuilder) Name(value string) *DashboardBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -75,9 +79,9 @@ func (b *DashboardBuilder) Copy(object *Dashboard) *DashboardBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.metrics != nil {
 		b.metrics = make([]*MetricBuilder, len(object.metrics))
 		for i, v := range object.metrics {
@@ -95,7 +99,7 @@ func (b *DashboardBuilder) Build() (object *Dashboard, err error) {
 	object = new(Dashboard)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.metrics != nil {
 		object.metrics = make([]*Metric, len(b.metrics))
 		for i, v := range b.metrics {
