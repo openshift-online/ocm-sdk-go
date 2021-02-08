@@ -5463,6 +5463,14 @@
           }
         }
       },
+      "BillingModel": {
+        "description": "Billing model for cluster resources.\n",
+        "type": "string",
+        "enum": [
+          "marketplace",
+          "standard"
+        ]
+      },
       "CloudProvider": {
         "description": "Cloud provider.\n",
         "properties": {
@@ -5573,6 +5581,10 @@
             "items": {
               "$ref": "#/components/schemas/AddOnInstallation"
             }
+          },
+          "billing_model": {
+            "description": "Billing model for cluster resources.\n",
+            "$ref": "#/components/schemas/BillingModel"
           },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.\n",

@@ -39,33 +39,32 @@ func MarshalSummaryDashboard(object *SummaryDashboard, writer io.Writer) error {
 func writeSummaryDashboard(object *SummaryDashboard, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(SummaryDashboardLinkKind)
 	} else {
 		stream.WriteString(SummaryDashboardKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.metrics != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.metrics != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -102,16 +101,19 @@ func readSummaryDashboard(iterator *jsoniter.Iterator) *SummaryDashboard {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == SummaryDashboardLinkKind
+			if value == SummaryDashboardLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "metrics":
 			value := readSummaryMetricsList(iterator)
 			object.metrics = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

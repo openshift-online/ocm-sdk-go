@@ -39,23 +39,27 @@ func MarshalLDAPIdentityProvider(object *LDAPIdentityProvider, writer io.Writer)
 func writeLDAPIdentityProvider(object *LDAPIdentityProvider, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.ca != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("ca")
-		stream.WriteString(*object.ca)
+		stream.WriteString(object.ca)
 		count++
 	}
-	if object.url != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("url")
-		stream.WriteString(*object.url)
+		stream.WriteString(object.url)
 		count++
 	}
-	if object.attributes != nil {
+	present_ = object.bitmap_&4 != 0 && object.attributes != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -63,28 +67,31 @@ func writeLDAPIdentityProvider(object *LDAPIdentityProvider, stream *jsoniter.St
 		writeLDAPAttributes(object.attributes, stream)
 		count++
 	}
-	if object.bindDN != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("bind_dn")
-		stream.WriteString(*object.bindDN)
+		stream.WriteString(object.bindDN)
 		count++
 	}
-	if object.bindPassword != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("bind_password")
-		stream.WriteString(*object.bindPassword)
+		stream.WriteString(object.bindPassword)
 		count++
 	}
-	if object.insecure != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("insecure")
-		stream.WriteBool(*object.insecure)
+		stream.WriteBool(object.insecure)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -116,22 +123,28 @@ func readLDAPIdentityProvider(iterator *jsoniter.Iterator) *LDAPIdentityProvider
 		switch field {
 		case "ca":
 			value := iterator.ReadString()
-			object.ca = &value
+			object.ca = value
+			object.bitmap_ |= 1
 		case "url":
 			value := iterator.ReadString()
-			object.url = &value
+			object.url = value
+			object.bitmap_ |= 2
 		case "attributes":
 			value := readLDAPAttributes(iterator)
 			object.attributes = value
+			object.bitmap_ |= 4
 		case "bind_dn":
 			value := iterator.ReadString()
-			object.bindDN = &value
+			object.bindDN = value
+			object.bitmap_ |= 8
 		case "bind_password":
 			value := iterator.ReadString()
-			object.bindPassword = &value
+			object.bindPassword = value
+			object.bitmap_ |= 16
 		case "insecure":
 			value := iterator.ReadBool()
-			object.insecure = &value
+			object.insecure = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}

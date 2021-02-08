@@ -23,22 +23,24 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `gitlab` identity providers.
 type GitlabIdentityProviderBuilder struct {
-	ca           *string
-	url          *string
-	clientID     *string
-	clientSecret *string
+	bitmap_      uint32
+	ca           string
+	url          string
+	clientID     string
+	clientSecret string
 }
 
 // NewGitlabIdentityProvider creates a new builder of 'gitlab_identity_provider' objects.
 func NewGitlabIdentityProvider() *GitlabIdentityProviderBuilder {
-	return new(GitlabIdentityProviderBuilder)
+	return &GitlabIdentityProviderBuilder{}
 }
 
 // CA sets the value of the 'CA' attribute to the given value.
 //
 //
 func (b *GitlabIdentityProviderBuilder) CA(value string) *GitlabIdentityProviderBuilder {
-	b.ca = &value
+	b.ca = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,7 +48,8 @@ func (b *GitlabIdentityProviderBuilder) CA(value string) *GitlabIdentityProvider
 //
 //
 func (b *GitlabIdentityProviderBuilder) URL(value string) *GitlabIdentityProviderBuilder {
-	b.url = &value
+	b.url = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,7 +57,8 @@ func (b *GitlabIdentityProviderBuilder) URL(value string) *GitlabIdentityProvide
 //
 //
 func (b *GitlabIdentityProviderBuilder) ClientID(value string) *GitlabIdentityProviderBuilder {
-	b.clientID = &value
+	b.clientID = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,7 +66,8 @@ func (b *GitlabIdentityProviderBuilder) ClientID(value string) *GitlabIdentityPr
 //
 //
 func (b *GitlabIdentityProviderBuilder) ClientSecret(value string) *GitlabIdentityProviderBuilder {
-	b.clientSecret = &value
+	b.clientSecret = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -71,6 +76,7 @@ func (b *GitlabIdentityProviderBuilder) Copy(object *GitlabIdentityProvider) *Gi
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.ca = object.ca
 	b.url = object.url
 	b.clientID = object.clientID
@@ -81,6 +87,7 @@ func (b *GitlabIdentityProviderBuilder) Copy(object *GitlabIdentityProvider) *Gi
 // Build creates a 'gitlab_identity_provider' object using the configuration stored in the builder.
 func (b *GitlabIdentityProviderBuilder) Build() (object *GitlabIdentityProvider, err error) {
 	object = new(GitlabIdentityProvider)
+	object.bitmap_ = b.bitmap_
 	object.ca = b.ca
 	object.url = b.url
 	object.clientID = b.clientID

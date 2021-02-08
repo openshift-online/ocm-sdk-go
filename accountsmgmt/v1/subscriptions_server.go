@@ -40,6 +40,11 @@ type SubscriptionsServer interface {
 	// Create a new subscription and register a cluster for it.
 	Post(ctx context.Context, request *SubscriptionsPostServerRequest, response *SubscriptionsPostServerResponse) error
 
+	// Labels returns the target 'generic_labels' resource.
+	//
+	// Reference to the list of labels of a specific subscription.
+	Labels() GenericLabelsServer
+
 	// Subscription returns the target 'subscription' server for the given identifier.
 	//
 	// Reference to the service that manages a specific subscription.
@@ -421,6 +426,13 @@ func dispatchSubscriptions(w http.ResponseWriter, r *http.Request, server Subscr
 		}
 	}
 	switch segments[0] {
+	case "labels":
+		target := server.Labels()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchGenericLabels(w, r, target, segments[1:])
 	default:
 		target := server.Subscription(segments[0])
 		if target == nil {

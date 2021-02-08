@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type PullSecretsRequestBuilder struct {
-	externalResourceId *string
+	bitmap_            uint32
+	externalResourceId string
 }
 
 // NewPullSecretsRequest creates a new builder of 'pull_secrets_request' objects.
 func NewPullSecretsRequest() *PullSecretsRequestBuilder {
-	return new(PullSecretsRequestBuilder)
+	return &PullSecretsRequestBuilder{}
 }
 
 // ExternalResourceId sets the value of the 'external_resource_id' attribute to the given value.
 //
 //
 func (b *PullSecretsRequestBuilder) ExternalResourceId(value string) *PullSecretsRequestBuilder {
-	b.externalResourceId = &value
+	b.externalResourceId = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *PullSecretsRequestBuilder) Copy(object *PullSecretsRequest) *PullSecret
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.externalResourceId = object.externalResourceId
 	return b
 }
@@ -51,6 +54,7 @@ func (b *PullSecretsRequestBuilder) Copy(object *PullSecretsRequest) *PullSecret
 // Build creates a 'pull_secrets_request' object using the configuration stored in the builder.
 func (b *PullSecretsRequestBuilder) Build() (object *PullSecretsRequest, err error) {
 	object = new(PullSecretsRequest)
+	object.bitmap_ = b.bitmap_
 	object.externalResourceId = b.externalResourceId
 	return
 }

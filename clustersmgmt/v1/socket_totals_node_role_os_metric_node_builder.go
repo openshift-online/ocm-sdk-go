@@ -24,12 +24,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Representation of information from telemetry about the socket capacity by node
 // role and OS of a cluster.
 type SocketTotalsNodeRoleOSMetricNodeBuilder struct {
+	bitmap_      uint32
 	socketTotals []*SocketTotalNodeRoleOSMetricNodeBuilder
 }
 
 // NewSocketTotalsNodeRoleOSMetricNode creates a new builder of 'socket_totals_node_role_OS_metric_node' objects.
 func NewSocketTotalsNodeRoleOSMetricNode() *SocketTotalsNodeRoleOSMetricNodeBuilder {
-	return new(SocketTotalsNodeRoleOSMetricNodeBuilder)
+	return &SocketTotalsNodeRoleOSMetricNodeBuilder{}
 }
 
 // SocketTotals sets the value of the 'socket_totals' attribute to the given values.
@@ -38,6 +39,7 @@ func NewSocketTotalsNodeRoleOSMetricNode() *SocketTotalsNodeRoleOSMetricNodeBuil
 func (b *SocketTotalsNodeRoleOSMetricNodeBuilder) SocketTotals(values ...*SocketTotalNodeRoleOSMetricNodeBuilder) *SocketTotalsNodeRoleOSMetricNodeBuilder {
 	b.socketTotals = make([]*SocketTotalNodeRoleOSMetricNodeBuilder, len(values))
 	copy(b.socketTotals, values)
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,6 +48,7 @@ func (b *SocketTotalsNodeRoleOSMetricNodeBuilder) Copy(object *SocketTotalsNodeR
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.socketTotals != nil {
 		b.socketTotals = make([]*SocketTotalNodeRoleOSMetricNodeBuilder, len(object.socketTotals))
 		for i, v := range object.socketTotals {
@@ -60,6 +63,7 @@ func (b *SocketTotalsNodeRoleOSMetricNodeBuilder) Copy(object *SocketTotalsNodeR
 // Build creates a 'socket_totals_node_role_OS_metric_node' object using the configuration stored in the builder.
 func (b *SocketTotalsNodeRoleOSMetricNodeBuilder) Build() (object *SocketTotalsNodeRoleOSMetricNode, err error) {
 	object = new(SocketTotalsNodeRoleOSMetricNode)
+	object.bitmap_ = b.bitmap_
 	if b.socketTotals != nil {
 		object.socketTotals = make([]*SocketTotalNodeRoleOSMetricNode, len(b.socketTotals))
 		for i, v := range b.socketTotals {

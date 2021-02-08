@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // SSH key pair of a cluster.
 type SSHCredentials struct {
-	privateKey *string
-	publicKey  *string
+	bitmap_    uint32
+	privateKey string
+	publicKey  string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SSHCredentials) Empty() bool {
-	return o == nil || (o.privateKey == nil &&
-		o.publicKey == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // PrivateKey returns the value of the 'private_key' attribute, or
@@ -39,8 +38,8 @@ func (o *SSHCredentials) Empty() bool {
 //
 // SSH private key of the cluster.
 func (o *SSHCredentials) PrivateKey() string {
-	if o != nil && o.privateKey != nil {
-		return *o.privateKey
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.privateKey
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *SSHCredentials) PrivateKey() string {
 //
 // SSH private key of the cluster.
 func (o *SSHCredentials) GetPrivateKey() (value string, ok bool) {
-	ok = o != nil && o.privateKey != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.privateKey
+		value = o.privateKey
 	}
 	return
 }
@@ -62,8 +61,8 @@ func (o *SSHCredentials) GetPrivateKey() (value string, ok bool) {
 //
 // SSH public key of the cluster.
 func (o *SSHCredentials) PublicKey() string {
-	if o != nil && o.publicKey != nil {
-		return *o.publicKey
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.publicKey
 	}
 	return ""
 }
@@ -73,9 +72,9 @@ func (o *SSHCredentials) PublicKey() string {
 //
 // SSH public key of the cluster.
 func (o *SSHCredentials) GetPublicKey() (value string, ok bool) {
-	ok = o != nil && o.publicKey != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.publicKey
+		value = o.publicKey
 	}
 	return
 }
@@ -94,7 +93,7 @@ const SSHCredentialsListNilKind = "SSHCredentialsListNil"
 
 // SSHCredentialsList is a list of values of the 'SSH_credentials' type.
 type SSHCredentialsList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SSHCredentials
 }

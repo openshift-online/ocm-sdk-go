@@ -23,24 +23,26 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `github` identity providers.
 type GithubIdentityProviderBuilder struct {
-	ca            *string
-	clientID      *string
-	clientSecret  *string
-	hostname      *string
+	bitmap_       uint32
+	ca            string
+	clientID      string
+	clientSecret  string
+	hostname      string
 	organizations []string
 	teams         []string
 }
 
 // NewGithubIdentityProvider creates a new builder of 'github_identity_provider' objects.
 func NewGithubIdentityProvider() *GithubIdentityProviderBuilder {
-	return new(GithubIdentityProviderBuilder)
+	return &GithubIdentityProviderBuilder{}
 }
 
 // CA sets the value of the 'CA' attribute to the given value.
 //
 //
 func (b *GithubIdentityProviderBuilder) CA(value string) *GithubIdentityProviderBuilder {
-	b.ca = &value
+	b.ca = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -48,7 +50,8 @@ func (b *GithubIdentityProviderBuilder) CA(value string) *GithubIdentityProvider
 //
 //
 func (b *GithubIdentityProviderBuilder) ClientID(value string) *GithubIdentityProviderBuilder {
-	b.clientID = &value
+	b.clientID = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -56,7 +59,8 @@ func (b *GithubIdentityProviderBuilder) ClientID(value string) *GithubIdentityPr
 //
 //
 func (b *GithubIdentityProviderBuilder) ClientSecret(value string) *GithubIdentityProviderBuilder {
-	b.clientSecret = &value
+	b.clientSecret = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -64,7 +68,8 @@ func (b *GithubIdentityProviderBuilder) ClientSecret(value string) *GithubIdenti
 //
 //
 func (b *GithubIdentityProviderBuilder) Hostname(value string) *GithubIdentityProviderBuilder {
-	b.hostname = &value
+	b.hostname = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -74,6 +79,7 @@ func (b *GithubIdentityProviderBuilder) Hostname(value string) *GithubIdentityPr
 func (b *GithubIdentityProviderBuilder) Organizations(values ...string) *GithubIdentityProviderBuilder {
 	b.organizations = make([]string, len(values))
 	copy(b.organizations, values)
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -83,6 +89,7 @@ func (b *GithubIdentityProviderBuilder) Organizations(values ...string) *GithubI
 func (b *GithubIdentityProviderBuilder) Teams(values ...string) *GithubIdentityProviderBuilder {
 	b.teams = make([]string, len(values))
 	copy(b.teams, values)
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -91,6 +98,7 @@ func (b *GithubIdentityProviderBuilder) Copy(object *GithubIdentityProvider) *Gi
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.ca = object.ca
 	b.clientID = object.clientID
 	b.clientSecret = object.clientSecret
@@ -113,6 +121,7 @@ func (b *GithubIdentityProviderBuilder) Copy(object *GithubIdentityProvider) *Gi
 // Build creates a 'github_identity_provider' object using the configuration stored in the builder.
 func (b *GithubIdentityProviderBuilder) Build() (object *GithubIdentityProvider, err error) {
 	object = new(GithubIdentityProvider)
+	object.bitmap_ = b.bitmap_
 	object.ca = b.ca
 	object.clientID = b.clientID
 	object.clientSecret = b.clientSecret

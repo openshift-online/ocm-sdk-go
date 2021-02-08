@@ -23,6 +23,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // LDAP attributes used to configure the LDAP identity provider.
 type LDAPAttributesBuilder struct {
+	bitmap_           uint32
 	id                []string
 	email             []string
 	name              []string
@@ -31,7 +32,7 @@ type LDAPAttributesBuilder struct {
 
 // NewLDAPAttributes creates a new builder of 'LDAP_attributes' objects.
 func NewLDAPAttributes() *LDAPAttributesBuilder {
-	return new(LDAPAttributesBuilder)
+	return &LDAPAttributesBuilder{}
 }
 
 // ID sets the value of the 'ID' attribute to the given values.
@@ -40,6 +41,7 @@ func NewLDAPAttributes() *LDAPAttributesBuilder {
 func (b *LDAPAttributesBuilder) ID(values ...string) *LDAPAttributesBuilder {
 	b.id = make([]string, len(values))
 	copy(b.id, values)
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -49,6 +51,7 @@ func (b *LDAPAttributesBuilder) ID(values ...string) *LDAPAttributesBuilder {
 func (b *LDAPAttributesBuilder) Email(values ...string) *LDAPAttributesBuilder {
 	b.email = make([]string, len(values))
 	copy(b.email, values)
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -58,6 +61,7 @@ func (b *LDAPAttributesBuilder) Email(values ...string) *LDAPAttributesBuilder {
 func (b *LDAPAttributesBuilder) Name(values ...string) *LDAPAttributesBuilder {
 	b.name = make([]string, len(values))
 	copy(b.name, values)
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -67,6 +71,7 @@ func (b *LDAPAttributesBuilder) Name(values ...string) *LDAPAttributesBuilder {
 func (b *LDAPAttributesBuilder) PreferredUsername(values ...string) *LDAPAttributesBuilder {
 	b.preferredUsername = make([]string, len(values))
 	copy(b.preferredUsername, values)
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -75,6 +80,7 @@ func (b *LDAPAttributesBuilder) Copy(object *LDAPAttributes) *LDAPAttributesBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.id != nil {
 		b.id = make([]string, len(object.id))
 		copy(b.id, object.id)
@@ -105,6 +111,7 @@ func (b *LDAPAttributesBuilder) Copy(object *LDAPAttributes) *LDAPAttributesBuil
 // Build creates a 'LDAP_attributes' object using the configuration stored in the builder.
 func (b *LDAPAttributesBuilder) Build() (object *LDAPAttributes, err error) {
 	object = new(LDAPAttributes)
+	object.bitmap_ = b.bitmap_
 	if b.id != nil {
 		object.id = make([]string, len(b.id))
 		copy(object.id, b.id)

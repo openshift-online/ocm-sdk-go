@@ -39,84 +39,95 @@ func MarshalGCP(object *GCP, writer io.Writer) error {
 func writeGCP(object *GCP, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.authURI != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("auth_uri")
-		stream.WriteString(*object.authURI)
+		stream.WriteString(object.authURI)
 		count++
 	}
-	if object.authProviderX509CertURL != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("auth_provider_x509_cert_url")
-		stream.WriteString(*object.authProviderX509CertURL)
+		stream.WriteString(object.authProviderX509CertURL)
 		count++
 	}
-	if object.clientID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_id")
-		stream.WriteString(*object.clientID)
+		stream.WriteString(object.clientID)
 		count++
 	}
-	if object.clientX509CertURL != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_x509_cert_url")
-		stream.WriteString(*object.clientX509CertURL)
+		stream.WriteString(object.clientX509CertURL)
 		count++
 	}
-	if object.clientEmail != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_email")
-		stream.WriteString(*object.clientEmail)
+		stream.WriteString(object.clientEmail)
 		count++
 	}
-	if object.privateKey != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("private_key")
-		stream.WriteString(*object.privateKey)
+		stream.WriteString(object.privateKey)
 		count++
 	}
-	if object.privateKeyID != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("private_key_id")
-		stream.WriteString(*object.privateKeyID)
+		stream.WriteString(object.privateKeyID)
 		count++
 	}
-	if object.projectID != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("project_id")
-		stream.WriteString(*object.projectID)
+		stream.WriteString(object.projectID)
 		count++
 	}
-	if object.tokenURI != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("token_uri")
-		stream.WriteString(*object.tokenURI)
+		stream.WriteString(object.tokenURI)
 		count++
 	}
-	if object.type_ != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("type")
-		stream.WriteString(*object.type_)
+		stream.WriteString(object.type_)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -148,34 +159,44 @@ func readGCP(iterator *jsoniter.Iterator) *GCP {
 		switch field {
 		case "auth_uri":
 			value := iterator.ReadString()
-			object.authURI = &value
+			object.authURI = value
+			object.bitmap_ |= 1
 		case "auth_provider_x509_cert_url":
 			value := iterator.ReadString()
-			object.authProviderX509CertURL = &value
+			object.authProviderX509CertURL = value
+			object.bitmap_ |= 2
 		case "client_id":
 			value := iterator.ReadString()
-			object.clientID = &value
+			object.clientID = value
+			object.bitmap_ |= 4
 		case "client_x509_cert_url":
 			value := iterator.ReadString()
-			object.clientX509CertURL = &value
+			object.clientX509CertURL = value
+			object.bitmap_ |= 8
 		case "client_email":
 			value := iterator.ReadString()
-			object.clientEmail = &value
+			object.clientEmail = value
+			object.bitmap_ |= 16
 		case "private_key":
 			value := iterator.ReadString()
-			object.privateKey = &value
+			object.privateKey = value
+			object.bitmap_ |= 32
 		case "private_key_id":
 			value := iterator.ReadString()
-			object.privateKeyID = &value
+			object.privateKeyID = value
+			object.bitmap_ |= 64
 		case "project_id":
 			value := iterator.ReadString()
-			object.projectID = &value
+			object.projectID = value
+			object.bitmap_ |= 128
 		case "token_uri":
 			value := iterator.ReadString()
-			object.tokenURI = &value
+			object.tokenURI = value
+			object.bitmap_ |= 256
 		case "type":
 			value := iterator.ReadString()
-			object.type_ = &value
+			object.type_ = value
+			object.bitmap_ |= 512
 		default:
 			iterator.ReadAny()
 		}

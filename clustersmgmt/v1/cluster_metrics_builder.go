@@ -23,21 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Cluster metrics received via telemetry.
 type ClusterMetricsBuilder struct {
+	bitmap_                   uint32
 	cpu                       *ClusterMetricBuilder
 	computeNodesCPU           *ClusterMetricBuilder
 	computeNodesMemory        *ClusterMetricBuilder
 	computeNodesSockets       *ClusterMetricBuilder
-	criticalAlertsFiring      *int
+	criticalAlertsFiring      int
 	memory                    *ClusterMetricBuilder
 	nodes                     *ClusterNodesBuilder
-	operatorsConditionFailing *int
+	operatorsConditionFailing int
 	sockets                   *ClusterMetricBuilder
 	storage                   *ClusterMetricBuilder
 }
 
 // NewClusterMetrics creates a new builder of 'cluster_metrics' objects.
 func NewClusterMetrics() *ClusterMetricsBuilder {
-	return new(ClusterMetricsBuilder)
+	return &ClusterMetricsBuilder{}
 }
 
 // CPU sets the value of the 'CPU' attribute to the given value.
@@ -46,6 +47,11 @@ func NewClusterMetrics() *ClusterMetricsBuilder {
 // a cluster.
 func (b *ClusterMetricsBuilder) CPU(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.cpu = value
+	if value != nil {
+		b.bitmap_ |= 1
+	} else {
+		b.bitmap_ &^= 1
+	}
 	return b
 }
 
@@ -55,6 +61,11 @@ func (b *ClusterMetricsBuilder) CPU(value *ClusterMetricBuilder) *ClusterMetrics
 // a cluster.
 func (b *ClusterMetricsBuilder) ComputeNodesCPU(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.computeNodesCPU = value
+	if value != nil {
+		b.bitmap_ |= 2
+	} else {
+		b.bitmap_ &^= 2
+	}
 	return b
 }
 
@@ -64,6 +75,11 @@ func (b *ClusterMetricsBuilder) ComputeNodesCPU(value *ClusterMetricBuilder) *Cl
 // a cluster.
 func (b *ClusterMetricsBuilder) ComputeNodesMemory(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.computeNodesMemory = value
+	if value != nil {
+		b.bitmap_ |= 4
+	} else {
+		b.bitmap_ &^= 4
+	}
 	return b
 }
 
@@ -73,6 +89,11 @@ func (b *ClusterMetricsBuilder) ComputeNodesMemory(value *ClusterMetricBuilder) 
 // a cluster.
 func (b *ClusterMetricsBuilder) ComputeNodesSockets(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.computeNodesSockets = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -80,7 +101,8 @@ func (b *ClusterMetricsBuilder) ComputeNodesSockets(value *ClusterMetricBuilder)
 //
 //
 func (b *ClusterMetricsBuilder) CriticalAlertsFiring(value int) *ClusterMetricsBuilder {
-	b.criticalAlertsFiring = &value
+	b.criticalAlertsFiring = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -90,6 +112,11 @@ func (b *ClusterMetricsBuilder) CriticalAlertsFiring(value int) *ClusterMetricsB
 // a cluster.
 func (b *ClusterMetricsBuilder) Memory(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.memory = value
+	if value != nil {
+		b.bitmap_ |= 32
+	} else {
+		b.bitmap_ &^= 32
+	}
 	return b
 }
 
@@ -98,6 +125,11 @@ func (b *ClusterMetricsBuilder) Memory(value *ClusterMetricBuilder) *ClusterMetr
 // Counts of different classes of nodes inside a cluster.
 func (b *ClusterMetricsBuilder) Nodes(value *ClusterNodesBuilder) *ClusterMetricsBuilder {
 	b.nodes = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -105,7 +137,8 @@ func (b *ClusterMetricsBuilder) Nodes(value *ClusterNodesBuilder) *ClusterMetric
 //
 //
 func (b *ClusterMetricsBuilder) OperatorsConditionFailing(value int) *ClusterMetricsBuilder {
-	b.operatorsConditionFailing = &value
+	b.operatorsConditionFailing = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -115,6 +148,11 @@ func (b *ClusterMetricsBuilder) OperatorsConditionFailing(value int) *ClusterMet
 // a cluster.
 func (b *ClusterMetricsBuilder) Sockets(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.sockets = value
+	if value != nil {
+		b.bitmap_ |= 256
+	} else {
+		b.bitmap_ &^= 256
+	}
 	return b
 }
 
@@ -124,6 +162,11 @@ func (b *ClusterMetricsBuilder) Sockets(value *ClusterMetricBuilder) *ClusterMet
 // a cluster.
 func (b *ClusterMetricsBuilder) Storage(value *ClusterMetricBuilder) *ClusterMetricsBuilder {
 	b.storage = value
+	if value != nil {
+		b.bitmap_ |= 512
+	} else {
+		b.bitmap_ &^= 512
+	}
 	return b
 }
 
@@ -132,6 +175,7 @@ func (b *ClusterMetricsBuilder) Copy(object *ClusterMetrics) *ClusterMetricsBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.cpu != nil {
 		b.cpu = NewClusterMetric().Copy(object.cpu)
 	} else {
@@ -180,6 +224,7 @@ func (b *ClusterMetricsBuilder) Copy(object *ClusterMetrics) *ClusterMetricsBuil
 // Build creates a 'cluster_metrics' object using the configuration stored in the builder.
 func (b *ClusterMetricsBuilder) Build() (object *ClusterMetrics, err error) {
 	object = new(ClusterMetrics)
+	object.bitmap_ = b.bitmap_
 	if b.cpu != nil {
 		object.cpu, err = b.cpu.Build()
 		if err != nil {

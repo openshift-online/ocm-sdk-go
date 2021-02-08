@@ -35,15 +35,15 @@ const MachineTypeNilKind = "MachineTypeNil"
 //
 // Machine type.
 type MachineType struct {
-	id            *string
-	href          *string
-	link          bool
+	bitmap_       uint32
+	id            string
+	href          string
 	cpu           *Value
-	category      *MachineTypeCategory
+	category      MachineTypeCategory
 	cloudProvider *CloudProvider
 	memory        *Value
-	name          *string
-	size          *MachineTypeSize
+	name          string
+	size          MachineTypeSize
 }
 
 // Kind returns the name of the type of the object.
@@ -51,16 +51,21 @@ func (o *MachineType) Kind() string {
 	if o == nil {
 		return MachineTypeNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return MachineTypeLinkKind
 	}
 	return MachineTypeKind
 }
 
+// Link returns true iif this is a link.
+func (o *MachineType) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *MachineType) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -68,22 +73,17 @@ func (o *MachineType) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *MachineType) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *MachineType) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *MachineType) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -91,20 +91,16 @@ func (o *MachineType) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *MachineType) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *MachineType) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.category == nil &&
-		o.name == nil &&
-		o.size == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // CPU returns the value of the 'CPU' attribute, or
@@ -112,10 +108,10 @@ func (o *MachineType) Empty() bool {
 //
 // The amount of cpu's of the machine type.
 func (o *MachineType) CPU() *Value {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.cpu
 	}
-	return o.cpu
+	return nil
 }
 
 // GetCPU returns the value of the 'CPU' attribute and
@@ -123,7 +119,7 @@ func (o *MachineType) CPU() *Value {
 //
 // The amount of cpu's of the machine type.
 func (o *MachineType) GetCPU() (value *Value, ok bool) {
-	ok = o != nil && o.cpu != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.cpu
 	}
@@ -135,8 +131,8 @@ func (o *MachineType) GetCPU() (value *Value, ok bool) {
 //
 // The category which the machine type is suitable for.
 func (o *MachineType) Category() MachineTypeCategory {
-	if o != nil && o.category != nil {
-		return *o.category
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.category
 	}
 	return MachineTypeCategory("")
 }
@@ -146,9 +142,9 @@ func (o *MachineType) Category() MachineTypeCategory {
 //
 // The category which the machine type is suitable for.
 func (o *MachineType) GetCategory() (value MachineTypeCategory, ok bool) {
-	ok = o != nil && o.category != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.category
+		value = o.category
 	}
 	return
 }
@@ -158,10 +154,10 @@ func (o *MachineType) GetCategory() (value MachineTypeCategory, ok bool) {
 //
 // Link to the cloud provider that the machine type belongs to.
 func (o *MachineType) CloudProvider() *CloudProvider {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.cloudProvider
 	}
-	return o.cloudProvider
+	return nil
 }
 
 // GetCloudProvider returns the value of the 'cloud_provider' attribute and
@@ -169,7 +165,7 @@ func (o *MachineType) CloudProvider() *CloudProvider {
 //
 // Link to the cloud provider that the machine type belongs to.
 func (o *MachineType) GetCloudProvider() (value *CloudProvider, ok bool) {
-	ok = o != nil && o.cloudProvider != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.cloudProvider
 	}
@@ -181,10 +177,10 @@ func (o *MachineType) GetCloudProvider() (value *CloudProvider, ok bool) {
 //
 // The amount of memory of the machine type.
 func (o *MachineType) Memory() *Value {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.memory
 	}
-	return o.memory
+	return nil
 }
 
 // GetMemory returns the value of the 'memory' attribute and
@@ -192,7 +188,7 @@ func (o *MachineType) Memory() *Value {
 //
 // The amount of memory of the machine type.
 func (o *MachineType) GetMemory() (value *Value, ok bool) {
-	ok = o != nil && o.memory != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.memory
 	}
@@ -204,8 +200,8 @@ func (o *MachineType) GetMemory() (value *Value, ok bool) {
 //
 // Human friendly identifier of the machine type, for example `r5.xlarge - Memory Optimized`.
 func (o *MachineType) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -215,9 +211,9 @@ func (o *MachineType) Name() string {
 //
 // Human friendly identifier of the machine type, for example `r5.xlarge - Memory Optimized`.
 func (o *MachineType) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -227,8 +223,8 @@ func (o *MachineType) GetName() (value string, ok bool) {
 //
 // The size of the machine type.
 func (o *MachineType) Size() MachineTypeSize {
-	if o != nil && o.size != nil {
-		return *o.size
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.size
 	}
 	return MachineTypeSize("")
 }
@@ -238,9 +234,9 @@ func (o *MachineType) Size() MachineTypeSize {
 //
 // The size of the machine type.
 func (o *MachineType) GetSize() (value MachineTypeSize, ok bool) {
-	ok = o != nil && o.size != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.size
+		value = o.size
 	}
 	return
 }
@@ -259,7 +255,7 @@ const MachineTypeListNilKind = "MachineTypeListNil"
 
 // MachineTypeList is a list of values of the 'machine_type' type.
 type MachineTypeList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*MachineType
 }
@@ -282,8 +278,8 @@ func (l *MachineTypeList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *MachineTypeList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -291,9 +287,9 @@ func (l *MachineTypeList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *MachineTypeList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

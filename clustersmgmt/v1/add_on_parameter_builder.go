@@ -23,40 +23,42 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on parameter.
 type AddOnParameterBuilder struct {
-	id           *string
-	href         *string
-	link         bool
+	bitmap_      uint32
+	id           string
+	href         string
 	addon        *AddOnBuilder
-	defaultValue *string
-	description  *string
-	editable     *bool
-	enabled      *bool
-	name         *string
-	required     *bool
-	validation   *string
-	valueType    *string
+	defaultValue string
+	description  string
+	name         string
+	validation   string
+	valueType    string
+	editable     bool
+	enabled      bool
+	required     bool
 }
 
 // NewAddOnParameter creates a new builder of 'add_on_parameter' objects.
 func NewAddOnParameter() *AddOnParameterBuilder {
-	return new(AddOnParameterBuilder)
+	return &AddOnParameterBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *AddOnParameterBuilder) Link(value bool) *AddOnParameterBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *AddOnParameterBuilder) ID(value string) *AddOnParameterBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *AddOnParameterBuilder) HREF(value string) *AddOnParameterBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *AddOnParameterBuilder) Link(value bool) *AddOnParameterBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,6 +67,11 @@ func (b *AddOnParameterBuilder) Link(value bool) *AddOnParameterBuilder {
 // Representation of an add-on that can be installed in a cluster.
 func (b *AddOnParameterBuilder) Addon(value *AddOnBuilder) *AddOnParameterBuilder {
 	b.addon = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -72,7 +79,8 @@ func (b *AddOnParameterBuilder) Addon(value *AddOnBuilder) *AddOnParameterBuilde
 //
 //
 func (b *AddOnParameterBuilder) DefaultValue(value string) *AddOnParameterBuilder {
-	b.defaultValue = &value
+	b.defaultValue = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -80,7 +88,8 @@ func (b *AddOnParameterBuilder) DefaultValue(value string) *AddOnParameterBuilde
 //
 //
 func (b *AddOnParameterBuilder) Description(value string) *AddOnParameterBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -88,7 +97,8 @@ func (b *AddOnParameterBuilder) Description(value string) *AddOnParameterBuilder
 //
 //
 func (b *AddOnParameterBuilder) Editable(value bool) *AddOnParameterBuilder {
-	b.editable = &value
+	b.editable = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -96,7 +106,8 @@ func (b *AddOnParameterBuilder) Editable(value bool) *AddOnParameterBuilder {
 //
 //
 func (b *AddOnParameterBuilder) Enabled(value bool) *AddOnParameterBuilder {
-	b.enabled = &value
+	b.enabled = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -104,7 +115,8 @@ func (b *AddOnParameterBuilder) Enabled(value bool) *AddOnParameterBuilder {
 //
 //
 func (b *AddOnParameterBuilder) Name(value string) *AddOnParameterBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -112,7 +124,8 @@ func (b *AddOnParameterBuilder) Name(value string) *AddOnParameterBuilder {
 //
 //
 func (b *AddOnParameterBuilder) Required(value bool) *AddOnParameterBuilder {
-	b.required = &value
+	b.required = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -120,7 +133,8 @@ func (b *AddOnParameterBuilder) Required(value bool) *AddOnParameterBuilder {
 //
 //
 func (b *AddOnParameterBuilder) Validation(value string) *AddOnParameterBuilder {
-	b.validation = &value
+	b.validation = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -128,7 +142,8 @@ func (b *AddOnParameterBuilder) Validation(value string) *AddOnParameterBuilder 
 //
 //
 func (b *AddOnParameterBuilder) ValueType(value string) *AddOnParameterBuilder {
-	b.valueType = &value
+	b.valueType = value
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -137,9 +152,9 @@ func (b *AddOnParameterBuilder) Copy(object *AddOnParameter) *AddOnParameterBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.addon != nil {
 		b.addon = NewAddOn().Copy(object.addon)
 	} else {
@@ -161,7 +176,7 @@ func (b *AddOnParameterBuilder) Build() (object *AddOnParameter, err error) {
 	object = new(AddOnParameter)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.addon != nil {
 		object.addon, err = b.addon.Build()
 		if err != nil {

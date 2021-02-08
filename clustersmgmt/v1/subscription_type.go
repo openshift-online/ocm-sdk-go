@@ -35,9 +35,9 @@ const SubscriptionNilKind = "SubscriptionNil"
 //
 // Definition of a subscription.
 type Subscription struct {
-	id   *string
-	href *string
-	link bool
+	bitmap_ uint32
+	id      string
+	href    string
 }
 
 // Kind returns the name of the type of the object.
@@ -45,16 +45,21 @@ func (o *Subscription) Kind() string {
 	if o == nil {
 		return SubscriptionNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return SubscriptionLinkKind
 	}
 	return SubscriptionKind
 }
 
+// Link returns true iif this is a link.
+func (o *Subscription) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Subscription) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -62,22 +67,17 @@ func (o *Subscription) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Subscription) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Subscription) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Subscription) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -85,17 +85,16 @@ func (o *Subscription) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Subscription) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Subscription) Empty() bool {
-	return o == nil || (o.id == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // SubscriptionListKind is the name of the type used to represent list of objects of
@@ -112,7 +111,7 @@ const SubscriptionListNilKind = "SubscriptionListNil"
 
 // SubscriptionList is a list of values of the 'subscription' type.
 type SubscriptionList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Subscription
 }
@@ -135,8 +134,8 @@ func (l *SubscriptionList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *SubscriptionList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -144,9 +143,9 @@ func (l *SubscriptionList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *SubscriptionList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

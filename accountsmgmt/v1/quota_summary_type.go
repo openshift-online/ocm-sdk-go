@@ -23,25 +23,19 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type QuotaSummary struct {
-	byoc                 *bool
-	allowed              *int
-	availabilityZoneType *string
-	organizationID       *string
-	reserved             *int
-	resourceName         *string
-	resourceType         *string
+	bitmap_              uint32
+	allowed              int
+	availabilityZoneType string
+	organizationID       string
+	reserved             int
+	resourceName         string
+	resourceType         string
+	byoc                 bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *QuotaSummary) Empty() bool {
-	return o == nil || (o.byoc == nil &&
-		o.allowed == nil &&
-		o.availabilityZoneType == nil &&
-		o.organizationID == nil &&
-		o.reserved == nil &&
-		o.resourceName == nil &&
-		o.resourceType == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // BYOC returns the value of the 'BYOC' attribute, or
@@ -49,8 +43,8 @@ func (o *QuotaSummary) Empty() bool {
 //
 //
 func (o *QuotaSummary) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.byoc
 	}
 	return false
 }
@@ -60,9 +54,9 @@ func (o *QuotaSummary) BYOC() bool {
 //
 //
 func (o *QuotaSummary) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.byoc
+		value = o.byoc
 	}
 	return
 }
@@ -72,8 +66,8 @@ func (o *QuotaSummary) GetBYOC() (value bool, ok bool) {
 //
 //
 func (o *QuotaSummary) Allowed() int {
-	if o != nil && o.allowed != nil {
-		return *o.allowed
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.allowed
 	}
 	return 0
 }
@@ -83,9 +77,9 @@ func (o *QuotaSummary) Allowed() int {
 //
 //
 func (o *QuotaSummary) GetAllowed() (value int, ok bool) {
-	ok = o != nil && o.allowed != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.allowed
+		value = o.allowed
 	}
 	return
 }
@@ -95,8 +89,8 @@ func (o *QuotaSummary) GetAllowed() (value int, ok bool) {
 //
 //
 func (o *QuotaSummary) AvailabilityZoneType() string {
-	if o != nil && o.availabilityZoneType != nil {
-		return *o.availabilityZoneType
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.availabilityZoneType
 	}
 	return ""
 }
@@ -106,9 +100,9 @@ func (o *QuotaSummary) AvailabilityZoneType() string {
 //
 //
 func (o *QuotaSummary) GetAvailabilityZoneType() (value string, ok bool) {
-	ok = o != nil && o.availabilityZoneType != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.availabilityZoneType
+		value = o.availabilityZoneType
 	}
 	return
 }
@@ -118,8 +112,8 @@ func (o *QuotaSummary) GetAvailabilityZoneType() (value string, ok bool) {
 //
 //
 func (o *QuotaSummary) OrganizationID() string {
-	if o != nil && o.organizationID != nil {
-		return *o.organizationID
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.organizationID
 	}
 	return ""
 }
@@ -129,9 +123,9 @@ func (o *QuotaSummary) OrganizationID() string {
 //
 //
 func (o *QuotaSummary) GetOrganizationID() (value string, ok bool) {
-	ok = o != nil && o.organizationID != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.organizationID
+		value = o.organizationID
 	}
 	return
 }
@@ -141,8 +135,8 @@ func (o *QuotaSummary) GetOrganizationID() (value string, ok bool) {
 //
 //
 func (o *QuotaSummary) Reserved() int {
-	if o != nil && o.reserved != nil {
-		return *o.reserved
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.reserved
 	}
 	return 0
 }
@@ -152,9 +146,9 @@ func (o *QuotaSummary) Reserved() int {
 //
 //
 func (o *QuotaSummary) GetReserved() (value int, ok bool) {
-	ok = o != nil && o.reserved != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.reserved
+		value = o.reserved
 	}
 	return
 }
@@ -164,8 +158,8 @@ func (o *QuotaSummary) GetReserved() (value int, ok bool) {
 //
 //
 func (o *QuotaSummary) ResourceName() string {
-	if o != nil && o.resourceName != nil {
-		return *o.resourceName
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.resourceName
 	}
 	return ""
 }
@@ -175,9 +169,9 @@ func (o *QuotaSummary) ResourceName() string {
 //
 //
 func (o *QuotaSummary) GetResourceName() (value string, ok bool) {
-	ok = o != nil && o.resourceName != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.resourceName
+		value = o.resourceName
 	}
 	return
 }
@@ -187,8 +181,8 @@ func (o *QuotaSummary) GetResourceName() (value string, ok bool) {
 //
 //
 func (o *QuotaSummary) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -198,9 +192,9 @@ func (o *QuotaSummary) ResourceType() string {
 //
 //
 func (o *QuotaSummary) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -219,7 +213,7 @@ const QuotaSummaryListNilKind = "QuotaSummaryListNil"
 
 // QuotaSummaryList is a list of values of the 'quota_summary' type.
 type QuotaSummaryList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*QuotaSummary
 }

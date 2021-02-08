@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type AccessTokenAuth struct {
-	auth  *string
-	email *string
+	bitmap_ uint32
+	auth    string
+	email   string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AccessTokenAuth) Empty() bool {
-	return o == nil || (o.auth == nil &&
-		o.email == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Auth returns the value of the 'auth' attribute, or
@@ -39,8 +38,8 @@ func (o *AccessTokenAuth) Empty() bool {
 //
 //
 func (o *AccessTokenAuth) Auth() string {
-	if o != nil && o.auth != nil {
-		return *o.auth
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.auth
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *AccessTokenAuth) Auth() string {
 //
 //
 func (o *AccessTokenAuth) GetAuth() (value string, ok bool) {
-	ok = o != nil && o.auth != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.auth
+		value = o.auth
 	}
 	return
 }
@@ -62,8 +61,8 @@ func (o *AccessTokenAuth) GetAuth() (value string, ok bool) {
 //
 //
 func (o *AccessTokenAuth) Email() string {
-	if o != nil && o.email != nil {
-		return *o.email
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.email
 	}
 	return ""
 }
@@ -73,9 +72,9 @@ func (o *AccessTokenAuth) Email() string {
 //
 //
 func (o *AccessTokenAuth) GetEmail() (value string, ok bool) {
-	ok = o != nil && o.email != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.email
+		value = o.email
 	}
 	return
 }
@@ -94,7 +93,7 @@ const AccessTokenAuthListNilKind = "AccessTokenAuthListNil"
 
 // AccessTokenAuthList is a list of values of the 'access_token_auth' type.
 type AccessTokenAuthList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AccessTokenAuth
 }

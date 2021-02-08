@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterRegistrationRequest struct {
-	authorizationToken *string
-	clusterID          *string
+	bitmap_            uint32
+	authorizationToken string
+	clusterID          string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterRegistrationRequest) Empty() bool {
-	return o == nil || (o.authorizationToken == nil &&
-		o.clusterID == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AuthorizationToken returns the value of the 'authorization_token' attribute, or
@@ -39,8 +38,8 @@ func (o *ClusterRegistrationRequest) Empty() bool {
 //
 //
 func (o *ClusterRegistrationRequest) AuthorizationToken() string {
-	if o != nil && o.authorizationToken != nil {
-		return *o.authorizationToken
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.authorizationToken
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *ClusterRegistrationRequest) AuthorizationToken() string {
 //
 //
 func (o *ClusterRegistrationRequest) GetAuthorizationToken() (value string, ok bool) {
-	ok = o != nil && o.authorizationToken != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.authorizationToken
+		value = o.authorizationToken
 	}
 	return
 }
@@ -62,8 +61,8 @@ func (o *ClusterRegistrationRequest) GetAuthorizationToken() (value string, ok b
 //
 //
 func (o *ClusterRegistrationRequest) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.clusterID
 	}
 	return ""
 }
@@ -73,9 +72,9 @@ func (o *ClusterRegistrationRequest) ClusterID() string {
 //
 //
 func (o *ClusterRegistrationRequest) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.clusterID
+		value = o.clusterID
 	}
 	return
 }
@@ -94,7 +93,7 @@ const ClusterRegistrationRequestListNilKind = "ClusterRegistrationRequestListNil
 
 // ClusterRegistrationRequestList is a list of values of the 'cluster_registration_request' type.
 type ClusterRegistrationRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterRegistrationRequest
 }

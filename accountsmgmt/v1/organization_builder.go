@@ -27,37 +27,39 @@ import (
 //
 //
 type OrganizationBuilder struct {
-	id           *string
-	href         *string
-	link         bool
-	createdAt    *time.Time
-	ebsAccountID *string
-	externalID   *string
+	bitmap_      uint32
+	id           string
+	href         string
+	createdAt    time.Time
+	ebsAccountID string
+	externalID   string
 	labels       []*LabelBuilder
-	name         *string
-	updatedAt    *time.Time
+	name         string
+	updatedAt    time.Time
 }
 
 // NewOrganization creates a new builder of 'organization' objects.
 func NewOrganization() *OrganizationBuilder {
-	return new(OrganizationBuilder)
+	return &OrganizationBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *OrganizationBuilder) Link(value bool) *OrganizationBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *OrganizationBuilder) ID(value string) *OrganizationBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *OrganizationBuilder) HREF(value string) *OrganizationBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *OrganizationBuilder) Link(value bool) *OrganizationBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,7 +67,8 @@ func (b *OrganizationBuilder) Link(value bool) *OrganizationBuilder {
 //
 //
 func (b *OrganizationBuilder) CreatedAt(value time.Time) *OrganizationBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -73,7 +76,8 @@ func (b *OrganizationBuilder) CreatedAt(value time.Time) *OrganizationBuilder {
 //
 //
 func (b *OrganizationBuilder) EbsAccountID(value string) *OrganizationBuilder {
-	b.ebsAccountID = &value
+	b.ebsAccountID = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -81,7 +85,8 @@ func (b *OrganizationBuilder) EbsAccountID(value string) *OrganizationBuilder {
 //
 //
 func (b *OrganizationBuilder) ExternalID(value string) *OrganizationBuilder {
-	b.externalID = &value
+	b.externalID = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -91,6 +96,7 @@ func (b *OrganizationBuilder) ExternalID(value string) *OrganizationBuilder {
 func (b *OrganizationBuilder) Labels(values ...*LabelBuilder) *OrganizationBuilder {
 	b.labels = make([]*LabelBuilder, len(values))
 	copy(b.labels, values)
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -98,7 +104,8 @@ func (b *OrganizationBuilder) Labels(values ...*LabelBuilder) *OrganizationBuild
 //
 //
 func (b *OrganizationBuilder) Name(value string) *OrganizationBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -106,7 +113,8 @@ func (b *OrganizationBuilder) Name(value string) *OrganizationBuilder {
 //
 //
 func (b *OrganizationBuilder) UpdatedAt(value time.Time) *OrganizationBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -115,9 +123,9 @@ func (b *OrganizationBuilder) Copy(object *Organization) *OrganizationBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.createdAt = object.createdAt
 	b.ebsAccountID = object.ebsAccountID
 	b.externalID = object.externalID
@@ -139,7 +147,7 @@ func (b *OrganizationBuilder) Build() (object *Organization, err error) {
 	object = new(Organization)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.createdAt = b.createdAt
 	object.ebsAccountID = b.ebsAccountID
 	object.externalID = b.externalID

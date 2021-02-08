@@ -23,33 +23,35 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 //
 type CCSBuilder struct {
-	id               *string
-	href             *string
-	link             bool
-	disableSCPChecks *bool
-	enabled          *bool
+	bitmap_          uint32
+	id               string
+	href             string
+	disableSCPChecks bool
+	enabled          bool
 }
 
 // NewCCS creates a new builder of 'CCS' objects.
 func NewCCS() *CCSBuilder {
-	return new(CCSBuilder)
+	return &CCSBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *CCSBuilder) Link(value bool) *CCSBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *CCSBuilder) ID(value string) *CCSBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *CCSBuilder) HREF(value string) *CCSBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *CCSBuilder) Link(value bool) *CCSBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -57,7 +59,8 @@ func (b *CCSBuilder) Link(value bool) *CCSBuilder {
 //
 //
 func (b *CCSBuilder) DisableSCPChecks(value bool) *CCSBuilder {
-	b.disableSCPChecks = &value
+	b.disableSCPChecks = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,7 +68,8 @@ func (b *CCSBuilder) DisableSCPChecks(value bool) *CCSBuilder {
 //
 //
 func (b *CCSBuilder) Enabled(value bool) *CCSBuilder {
-	b.enabled = &value
+	b.enabled = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,9 +78,9 @@ func (b *CCSBuilder) Copy(object *CCS) *CCSBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.disableSCPChecks = object.disableSCPChecks
 	b.enabled = object.enabled
 	return b
@@ -87,7 +91,7 @@ func (b *CCSBuilder) Build() (object *CCS, err error) {
 	object = new(CCS)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.disableSCPChecks = b.disableSCPChecks
 	object.enabled = b.enabled
 	return

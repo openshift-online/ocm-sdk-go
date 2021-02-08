@@ -23,19 +23,20 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Counts of different classes of nodes inside a cluster.
 type ClusterNodesBuilder struct {
+	bitmap_            uint32
 	autoscaleCompute   *MachinePoolAutoscalingBuilder
 	availabilityZones  []string
-	compute            *int
+	compute            int
 	computeLabels      map[string]string
 	computeMachineType *MachineTypeBuilder
-	infra              *int
-	master             *int
-	total              *int
+	infra              int
+	master             int
+	total              int
 }
 
 // NewClusterNodes creates a new builder of 'cluster_nodes' objects.
 func NewClusterNodes() *ClusterNodesBuilder {
-	return new(ClusterNodesBuilder)
+	return &ClusterNodesBuilder{}
 }
 
 // AutoscaleCompute sets the value of the 'autoscale_compute' attribute to the given value.
@@ -43,6 +44,11 @@ func NewClusterNodes() *ClusterNodesBuilder {
 // Representation of a autoscaling in a machine pool.
 func (b *ClusterNodesBuilder) AutoscaleCompute(value *MachinePoolAutoscalingBuilder) *ClusterNodesBuilder {
 	b.autoscaleCompute = value
+	if value != nil {
+		b.bitmap_ |= 1
+	} else {
+		b.bitmap_ &^= 1
+	}
 	return b
 }
 
@@ -52,6 +58,7 @@ func (b *ClusterNodesBuilder) AutoscaleCompute(value *MachinePoolAutoscalingBuil
 func (b *ClusterNodesBuilder) AvailabilityZones(values ...string) *ClusterNodesBuilder {
 	b.availabilityZones = make([]string, len(values))
 	copy(b.availabilityZones, values)
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -59,7 +66,8 @@ func (b *ClusterNodesBuilder) AvailabilityZones(values ...string) *ClusterNodesB
 //
 //
 func (b *ClusterNodesBuilder) Compute(value int) *ClusterNodesBuilder {
-	b.compute = &value
+	b.compute = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -68,6 +76,11 @@ func (b *ClusterNodesBuilder) Compute(value int) *ClusterNodesBuilder {
 //
 func (b *ClusterNodesBuilder) ComputeLabels(value map[string]string) *ClusterNodesBuilder {
 	b.computeLabels = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -76,6 +89,11 @@ func (b *ClusterNodesBuilder) ComputeLabels(value map[string]string) *ClusterNod
 // Machine type.
 func (b *ClusterNodesBuilder) ComputeMachineType(value *MachineTypeBuilder) *ClusterNodesBuilder {
 	b.computeMachineType = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -83,7 +101,8 @@ func (b *ClusterNodesBuilder) ComputeMachineType(value *MachineTypeBuilder) *Clu
 //
 //
 func (b *ClusterNodesBuilder) Infra(value int) *ClusterNodesBuilder {
-	b.infra = &value
+	b.infra = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -91,7 +110,8 @@ func (b *ClusterNodesBuilder) Infra(value int) *ClusterNodesBuilder {
 //
 //
 func (b *ClusterNodesBuilder) Master(value int) *ClusterNodesBuilder {
-	b.master = &value
+	b.master = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -99,7 +119,8 @@ func (b *ClusterNodesBuilder) Master(value int) *ClusterNodesBuilder {
 //
 //
 func (b *ClusterNodesBuilder) Total(value int) *ClusterNodesBuilder {
-	b.total = &value
+	b.total = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -108,6 +129,7 @@ func (b *ClusterNodesBuilder) Copy(object *ClusterNodes) *ClusterNodesBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.autoscaleCompute != nil {
 		b.autoscaleCompute = NewMachinePoolAutoscaling().Copy(object.autoscaleCompute)
 	} else {
@@ -121,7 +143,7 @@ func (b *ClusterNodesBuilder) Copy(object *ClusterNodes) *ClusterNodesBuilder {
 	}
 	b.compute = object.compute
 	if len(object.computeLabels) > 0 {
-		b.computeLabels = make(map[string]string)
+		b.computeLabels = map[string]string{}
 		for k, v := range object.computeLabels {
 			b.computeLabels[k] = v
 		}
@@ -142,6 +164,7 @@ func (b *ClusterNodesBuilder) Copy(object *ClusterNodes) *ClusterNodesBuilder {
 // Build creates a 'cluster_nodes' object using the configuration stored in the builder.
 func (b *ClusterNodesBuilder) Build() (object *ClusterNodes, err error) {
 	object = new(ClusterNodes)
+	object.bitmap_ = b.bitmap_
 	if b.autoscaleCompute != nil {
 		object.autoscaleCompute, err = b.autoscaleCompute.Build()
 		if err != nil {

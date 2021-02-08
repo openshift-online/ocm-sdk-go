@@ -35,10 +35,10 @@ const ProductNilKind = "ProductNil"
 //
 // Representation of an product that can be selected as a cluster type.
 type Product struct {
-	id   *string
-	href *string
-	link bool
-	name *string
+	bitmap_ uint32
+	id      string
+	href    string
+	name    string
 }
 
 // Kind returns the name of the type of the object.
@@ -46,16 +46,21 @@ func (o *Product) Kind() string {
 	if o == nil {
 		return ProductNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return ProductLinkKind
 	}
 	return ProductKind
 }
 
+// Link returns true iif this is a link.
+func (o *Product) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Product) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -63,22 +68,17 @@ func (o *Product) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Product) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Product) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Product) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -86,18 +86,16 @@ func (o *Product) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Product) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Product) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.name == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Name returns the value of the 'name' attribute, or
@@ -105,8 +103,8 @@ func (o *Product) Empty() bool {
 //
 // Name of the product.
 func (o *Product) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -116,9 +114,9 @@ func (o *Product) Name() string {
 //
 // Name of the product.
 func (o *Product) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -137,7 +135,7 @@ const ProductListNilKind = "ProductListNil"
 
 // ProductList is a list of values of the 'product' type.
 type ProductList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Product
 }
@@ -160,8 +158,8 @@ func (l *ProductList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *ProductList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -169,9 +167,9 @@ func (l *ProductList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *ProductList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

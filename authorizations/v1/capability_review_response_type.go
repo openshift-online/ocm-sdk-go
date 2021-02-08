@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Representation of a capability review response.
 type CapabilityReviewResponse struct {
-	result *string
+	bitmap_ uint32
+	result  string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CapabilityReviewResponse) Empty() bool {
-	return o == nil || (o.result == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Result returns the value of the 'result' attribute, or
@@ -37,8 +37,8 @@ func (o *CapabilityReviewResponse) Empty() bool {
 //
 //
 func (o *CapabilityReviewResponse) Result() string {
-	if o != nil && o.result != nil {
-		return *o.result
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.result
 	}
 	return ""
 }
@@ -48,9 +48,9 @@ func (o *CapabilityReviewResponse) Result() string {
 //
 //
 func (o *CapabilityReviewResponse) GetResult() (value string, ok bool) {
-	ok = o != nil && o.result != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.result
+		value = o.result
 	}
 	return
 }
@@ -69,7 +69,7 @@ const CapabilityReviewResponseListNilKind = "CapabilityReviewResponseListNil"
 
 // CapabilityReviewResponseList is a list of values of the 'capability_review_response' type.
 type CapabilityReviewResponseList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*CapabilityReviewResponse
 }

@@ -23,21 +23,23 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationResponseBuilder struct {
-	allowed         *bool
+	bitmap_         uint32
 	excessResources []*ReservedResourceBuilder
 	subscription    *SubscriptionBuilder
+	allowed         bool
 }
 
 // NewClusterAuthorizationResponse creates a new builder of 'cluster_authorization_response' objects.
 func NewClusterAuthorizationResponse() *ClusterAuthorizationResponseBuilder {
-	return new(ClusterAuthorizationResponseBuilder)
+	return &ClusterAuthorizationResponseBuilder{}
 }
 
 // Allowed sets the value of the 'allowed' attribute to the given value.
 //
 //
 func (b *ClusterAuthorizationResponseBuilder) Allowed(value bool) *ClusterAuthorizationResponseBuilder {
-	b.allowed = &value
+	b.allowed = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -47,6 +49,7 @@ func (b *ClusterAuthorizationResponseBuilder) Allowed(value bool) *ClusterAuthor
 func (b *ClusterAuthorizationResponseBuilder) ExcessResources(values ...*ReservedResourceBuilder) *ClusterAuthorizationResponseBuilder {
 	b.excessResources = make([]*ReservedResourceBuilder, len(values))
 	copy(b.excessResources, values)
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -55,6 +58,11 @@ func (b *ClusterAuthorizationResponseBuilder) ExcessResources(values ...*Reserve
 //
 func (b *ClusterAuthorizationResponseBuilder) Subscription(value *SubscriptionBuilder) *ClusterAuthorizationResponseBuilder {
 	b.subscription = value
+	if value != nil {
+		b.bitmap_ |= 4
+	} else {
+		b.bitmap_ &^= 4
+	}
 	return b
 }
 
@@ -63,6 +71,7 @@ func (b *ClusterAuthorizationResponseBuilder) Copy(object *ClusterAuthorizationR
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.allowed = object.allowed
 	if object.excessResources != nil {
 		b.excessResources = make([]*ReservedResourceBuilder, len(object.excessResources))
@@ -83,6 +92,7 @@ func (b *ClusterAuthorizationResponseBuilder) Copy(object *ClusterAuthorizationR
 // Build creates a 'cluster_authorization_response' object using the configuration stored in the builder.
 func (b *ClusterAuthorizationResponseBuilder) Build() (object *ClusterAuthorizationResponse, err error) {
 	object = new(ClusterAuthorizationResponse)
+	object.bitmap_ = b.bitmap_
 	object.allowed = b.allowed
 	if b.excessResources != nil {
 		object.excessResources = make([]*ReservedResource, len(b.excessResources))

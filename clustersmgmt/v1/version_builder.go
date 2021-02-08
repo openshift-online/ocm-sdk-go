@@ -23,37 +23,39 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an _OpenShift_ version.
 type VersionBuilder struct {
-	id                *string
-	href              *string
-	link              bool
-	rosaEnabled       *bool
+	bitmap_           uint32
+	id                string
+	href              string
 	availableUpgrades []string
-	channelGroup      *string
-	default_          *bool
-	enabled           *bool
-	rawID             *string
+	channelGroup      string
+	rawID             string
+	rosaEnabled       bool
+	default_          bool
+	enabled           bool
 }
 
 // NewVersion creates a new builder of 'version' objects.
 func NewVersion() *VersionBuilder {
-	return new(VersionBuilder)
+	return &VersionBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *VersionBuilder) Link(value bool) *VersionBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *VersionBuilder) ID(value string) *VersionBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *VersionBuilder) HREF(value string) *VersionBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *VersionBuilder) Link(value bool) *VersionBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -61,7 +63,8 @@ func (b *VersionBuilder) Link(value bool) *VersionBuilder {
 //
 //
 func (b *VersionBuilder) ROSAEnabled(value bool) *VersionBuilder {
-	b.rosaEnabled = &value
+	b.rosaEnabled = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -71,6 +74,7 @@ func (b *VersionBuilder) ROSAEnabled(value bool) *VersionBuilder {
 func (b *VersionBuilder) AvailableUpgrades(values ...string) *VersionBuilder {
 	b.availableUpgrades = make([]string, len(values))
 	copy(b.availableUpgrades, values)
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -78,7 +82,8 @@ func (b *VersionBuilder) AvailableUpgrades(values ...string) *VersionBuilder {
 //
 //
 func (b *VersionBuilder) ChannelGroup(value string) *VersionBuilder {
-	b.channelGroup = &value
+	b.channelGroup = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -86,7 +91,8 @@ func (b *VersionBuilder) ChannelGroup(value string) *VersionBuilder {
 //
 //
 func (b *VersionBuilder) Default(value bool) *VersionBuilder {
-	b.default_ = &value
+	b.default_ = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -94,7 +100,8 @@ func (b *VersionBuilder) Default(value bool) *VersionBuilder {
 //
 //
 func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
-	b.enabled = &value
+	b.enabled = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -102,7 +109,8 @@ func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
 //
 //
 func (b *VersionBuilder) RawID(value string) *VersionBuilder {
-	b.rawID = &value
+	b.rawID = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -111,9 +119,9 @@ func (b *VersionBuilder) Copy(object *Version) *VersionBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.rosaEnabled = object.rosaEnabled
 	if object.availableUpgrades != nil {
 		b.availableUpgrades = make([]string, len(object.availableUpgrades))
@@ -133,7 +141,7 @@ func (b *VersionBuilder) Build() (object *Version, err error) {
 	object = new(Version)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.rosaEnabled = b.rosaEnabled
 	if b.availableUpgrades != nil {
 		object.availableUpgrades = make([]string, len(b.availableUpgrades))

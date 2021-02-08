@@ -23,22 +23,24 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on requirement.
 type AddOnRequirementBuilder struct {
-	id       *string
+	bitmap_  uint32
+	id       string
 	data     map[string]interface{}
-	enabled  *bool
-	resource *string
+	resource string
+	enabled  bool
 }
 
 // NewAddOnRequirement creates a new builder of 'add_on_requirement' objects.
 func NewAddOnRequirement() *AddOnRequirementBuilder {
-	return new(AddOnRequirementBuilder)
+	return &AddOnRequirementBuilder{}
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
 //
 //
 func (b *AddOnRequirementBuilder) ID(value string) *AddOnRequirementBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -47,6 +49,11 @@ func (b *AddOnRequirementBuilder) ID(value string) *AddOnRequirementBuilder {
 //
 func (b *AddOnRequirementBuilder) Data(value map[string]interface{}) *AddOnRequirementBuilder {
 	b.data = value
+	if value != nil {
+		b.bitmap_ |= 2
+	} else {
+		b.bitmap_ &^= 2
+	}
 	return b
 }
 
@@ -54,7 +61,8 @@ func (b *AddOnRequirementBuilder) Data(value map[string]interface{}) *AddOnRequi
 //
 //
 func (b *AddOnRequirementBuilder) Enabled(value bool) *AddOnRequirementBuilder {
-	b.enabled = &value
+	b.enabled = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,7 +70,8 @@ func (b *AddOnRequirementBuilder) Enabled(value bool) *AddOnRequirementBuilder {
 //
 //
 func (b *AddOnRequirementBuilder) Resource(value string) *AddOnRequirementBuilder {
-	b.resource = &value
+	b.resource = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -71,9 +80,10 @@ func (b *AddOnRequirementBuilder) Copy(object *AddOnRequirement) *AddOnRequireme
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	if len(object.data) > 0 {
-		b.data = make(map[string]interface{})
+		b.data = map[string]interface{}{}
 		for k, v := range object.data {
 			b.data[k] = v
 		}
@@ -88,6 +98,7 @@ func (b *AddOnRequirementBuilder) Copy(object *AddOnRequirement) *AddOnRequireme
 // Build creates a 'add_on_requirement' object using the configuration stored in the builder.
 func (b *AddOnRequirementBuilder) Build() (object *AddOnRequirement, err error) {
 	object = new(AddOnRequirement)
+	object.bitmap_ = b.bitmap_
 	object.id = b.id
 	if b.data != nil {
 		object.data = make(map[string]interface{})

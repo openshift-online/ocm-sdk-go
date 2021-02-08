@@ -39,20 +39,23 @@ func MarshalTemplateParameter(object *TemplateParameter, writer io.Writer) error
 func writeTemplateParameter(object *TemplateParameter, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.content != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("content")
-		stream.WriteString(*object.content)
+		stream.WriteString(object.content)
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,10 +87,12 @@ func readTemplateParameter(iterator *jsoniter.Iterator) *TemplateParameter {
 		switch field {
 		case "content":
 			value := iterator.ReadString()
-			object.content = &value
+			object.content = value
+			object.bitmap_ |= 1
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

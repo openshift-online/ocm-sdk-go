@@ -35,12 +35,12 @@ const SkuRuleNilKind = "SkuRuleNil"
 //
 // Identifies sku rule
 type SkuRule struct {
-	id      *string
-	href    *string
-	link    bool
-	allowed *int
-	quotaId *string
-	sku     *string
+	bitmap_ uint32
+	id      string
+	href    string
+	allowed int
+	quotaId string
+	sku     string
 }
 
 // Kind returns the name of the type of the object.
@@ -48,16 +48,21 @@ func (o *SkuRule) Kind() string {
 	if o == nil {
 		return SkuRuleNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return SkuRuleLinkKind
 	}
 	return SkuRuleKind
 }
 
+// Link returns true iif this is a link.
+func (o *SkuRule) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *SkuRule) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -65,22 +70,17 @@ func (o *SkuRule) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *SkuRule) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *SkuRule) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *SkuRule) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -88,20 +88,16 @@ func (o *SkuRule) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *SkuRule) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SkuRule) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.allowed == nil &&
-		o.quotaId == nil &&
-		o.sku == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Allowed returns the value of the 'allowed' attribute, or
@@ -109,8 +105,8 @@ func (o *SkuRule) Empty() bool {
 //
 // Specifies the allowed parameter for calculation
 func (o *SkuRule) Allowed() int {
-	if o != nil && o.allowed != nil {
-		return *o.allowed
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.allowed
 	}
 	return 0
 }
@@ -120,9 +116,9 @@ func (o *SkuRule) Allowed() int {
 //
 // Specifies the allowed parameter for calculation
 func (o *SkuRule) GetAllowed() (value int, ok bool) {
-	ok = o != nil && o.allowed != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.allowed
+		value = o.allowed
 	}
 	return
 }
@@ -132,8 +128,8 @@ func (o *SkuRule) GetAllowed() (value int, ok bool) {
 //
 // Specifies the quota id
 func (o *SkuRule) QuotaId() string {
-	if o != nil && o.quotaId != nil {
-		return *o.quotaId
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.quotaId
 	}
 	return ""
 }
@@ -143,9 +139,9 @@ func (o *SkuRule) QuotaId() string {
 //
 // Specifies the quota id
 func (o *SkuRule) GetQuotaId() (value string, ok bool) {
-	ok = o != nil && o.quotaId != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.quotaId
+		value = o.quotaId
 	}
 	return
 }
@@ -155,8 +151,8 @@ func (o *SkuRule) GetQuotaId() (value string, ok bool) {
 //
 // Specifies the sku, such as ""MW00504""
 func (o *SkuRule) Sku() string {
-	if o != nil && o.sku != nil {
-		return *o.sku
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.sku
 	}
 	return ""
 }
@@ -166,9 +162,9 @@ func (o *SkuRule) Sku() string {
 //
 // Specifies the sku, such as ""MW00504""
 func (o *SkuRule) GetSku() (value string, ok bool) {
-	ok = o != nil && o.sku != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.sku
+		value = o.sku
 	}
 	return
 }
@@ -187,7 +183,7 @@ const SkuRuleListNilKind = "SkuRuleListNil"
 
 // SkuRuleList is a list of values of the 'sku_rule' type.
 type SkuRuleList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SkuRule
 }
@@ -210,8 +206,8 @@ func (l *SkuRuleList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *SkuRuleList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -219,9 +215,9 @@ func (l *SkuRuleList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *SkuRuleList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

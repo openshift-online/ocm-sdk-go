@@ -35,15 +35,15 @@ const MachinePoolNilKind = "MachinePoolNil"
 //
 // Representation of a machine pool in a cluster.
 type MachinePool struct {
-	id                *string
-	href              *string
-	link              bool
+	bitmap_           uint32
+	id                string
+	href              string
 	autoscaling       *MachinePoolAutoscaling
 	availabilityZones []string
 	cluster           *Cluster
-	instanceType      *string
+	instanceType      string
 	labels            map[string]string
-	replicas          *int
+	replicas          int
 	taints            []*Taint
 }
 
@@ -52,16 +52,21 @@ func (o *MachinePool) Kind() string {
 	if o == nil {
 		return MachinePoolNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return MachinePoolLinkKind
 	}
 	return MachinePoolKind
 }
 
+// Link returns true iif this is a link.
+func (o *MachinePool) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *MachinePool) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -69,22 +74,17 @@ func (o *MachinePool) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *MachinePool) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *MachinePool) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *MachinePool) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -92,22 +92,16 @@ func (o *MachinePool) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *MachinePool) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *MachinePool) Empty() bool {
-	return o == nil || (o.id == nil &&
-		len(o.availabilityZones) == 0 &&
-		o.instanceType == nil &&
-		len(o.labels) == 0 &&
-		o.replicas == nil &&
-		len(o.taints) == 0 &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Autoscaling returns the value of the 'autoscaling' attribute, or
@@ -116,10 +110,10 @@ func (o *MachinePool) Empty() bool {
 // Details for auto-scaling the machine pool.
 // Replicas and autoscaling cannot be used together.
 func (o *MachinePool) Autoscaling() *MachinePoolAutoscaling {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.autoscaling
 	}
-	return o.autoscaling
+	return nil
 }
 
 // GetAutoscaling returns the value of the 'autoscaling' attribute and
@@ -128,7 +122,7 @@ func (o *MachinePool) Autoscaling() *MachinePoolAutoscaling {
 // Details for auto-scaling the machine pool.
 // Replicas and autoscaling cannot be used together.
 func (o *MachinePool) GetAutoscaling() (value *MachinePoolAutoscaling, ok bool) {
-	ok = o != nil && o.autoscaling != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.autoscaling
 	}
@@ -140,10 +134,10 @@ func (o *MachinePool) GetAutoscaling() (value *MachinePoolAutoscaling, ok bool) 
 //
 // The availability zones upon which the nodes are created.
 func (o *MachinePool) AvailabilityZones() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.availabilityZones
 	}
-	return o.availabilityZones
+	return nil
 }
 
 // GetAvailabilityZones returns the value of the 'availability_zones' attribute and
@@ -151,7 +145,7 @@ func (o *MachinePool) AvailabilityZones() []string {
 //
 // The availability zones upon which the nodes are created.
 func (o *MachinePool) GetAvailabilityZones() (value []string, ok bool) {
-	ok = o != nil && o.availabilityZones != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.availabilityZones
 	}
@@ -163,10 +157,10 @@ func (o *MachinePool) GetAvailabilityZones() (value []string, ok bool) {
 //
 // ID used to identify the cluster that this machinepool is attached to.
 func (o *MachinePool) Cluster() *Cluster {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.cluster
 	}
-	return o.cluster
+	return nil
 }
 
 // GetCluster returns the value of the 'cluster' attribute and
@@ -174,7 +168,7 @@ func (o *MachinePool) Cluster() *Cluster {
 //
 // ID used to identify the cluster that this machinepool is attached to.
 func (o *MachinePool) GetCluster() (value *Cluster, ok bool) {
-	ok = o != nil && o.cluster != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.cluster
 	}
@@ -186,8 +180,8 @@ func (o *MachinePool) GetCluster() (value *Cluster, ok bool) {
 //
 // The instance type of Nodes to create.
 func (o *MachinePool) InstanceType() string {
-	if o != nil && o.instanceType != nil {
-		return *o.instanceType
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.instanceType
 	}
 	return ""
 }
@@ -197,9 +191,9 @@ func (o *MachinePool) InstanceType() string {
 //
 // The instance type of Nodes to create.
 func (o *MachinePool) GetInstanceType() (value string, ok bool) {
-	ok = o != nil && o.instanceType != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.instanceType
+		value = o.instanceType
 	}
 	return
 }
@@ -209,10 +203,10 @@ func (o *MachinePool) GetInstanceType() (value string, ok bool) {
 //
 // The labels set on the Nodes created.
 func (o *MachinePool) Labels() map[string]string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.labels
 	}
-	return o.labels
+	return nil
 }
 
 // GetLabels returns the value of the 'labels' attribute and
@@ -220,7 +214,7 @@ func (o *MachinePool) Labels() map[string]string {
 //
 // The labels set on the Nodes created.
 func (o *MachinePool) GetLabels() (value map[string]string, ok bool) {
-	ok = o != nil && o.labels != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.labels
 	}
@@ -233,8 +227,8 @@ func (o *MachinePool) GetLabels() (value map[string]string, ok bool) {
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *MachinePool) Replicas() int {
-	if o != nil && o.replicas != nil {
-		return *o.replicas
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.replicas
 	}
 	return 0
 }
@@ -245,9 +239,9 @@ func (o *MachinePool) Replicas() int {
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *MachinePool) GetReplicas() (value int, ok bool) {
-	ok = o != nil && o.replicas != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.replicas
+		value = o.replicas
 	}
 	return
 }
@@ -257,10 +251,10 @@ func (o *MachinePool) GetReplicas() (value int, ok bool) {
 //
 // The taints set on the Nodes created.
 func (o *MachinePool) Taints() []*Taint {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.taints
 	}
-	return o.taints
+	return nil
 }
 
 // GetTaints returns the value of the 'taints' attribute and
@@ -268,7 +262,7 @@ func (o *MachinePool) Taints() []*Taint {
 //
 // The taints set on the Nodes created.
 func (o *MachinePool) GetTaints() (value []*Taint, ok bool) {
-	ok = o != nil && o.taints != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.taints
 	}
@@ -289,7 +283,7 @@ const MachinePoolListNilKind = "MachinePoolListNil"
 
 // MachinePoolList is a list of values of the 'machine_pool' type.
 type MachinePoolList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*MachinePool
 }
@@ -312,8 +306,8 @@ func (l *MachinePoolList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *MachinePoolList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -321,9 +315,9 @@ func (l *MachinePoolList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *MachinePoolList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

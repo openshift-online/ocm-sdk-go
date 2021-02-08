@@ -23,31 +23,33 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Definition of a subscription.
 type SubscriptionBuilder struct {
-	id   *string
-	href *string
-	link bool
+	bitmap_ uint32
+	id      string
+	href    string
 }
 
 // NewSubscription creates a new builder of 'subscription' objects.
 func NewSubscription() *SubscriptionBuilder {
-	return new(SubscriptionBuilder)
+	return &SubscriptionBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *SubscriptionBuilder) Link(value bool) *SubscriptionBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *SubscriptionBuilder) ID(value string) *SubscriptionBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *SubscriptionBuilder) HREF(value string) *SubscriptionBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *SubscriptionBuilder) Link(value bool) *SubscriptionBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -56,9 +58,9 @@ func (b *SubscriptionBuilder) Copy(object *Subscription) *SubscriptionBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	return b
 }
 
@@ -67,6 +69,6 @@ func (b *SubscriptionBuilder) Build() (object *Subscription, err error) {
 	object = new(Subscription)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	return
 }

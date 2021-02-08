@@ -35,11 +35,11 @@ const PermissionNilKind = "PermissionNil"
 //
 //
 type Permission struct {
-	id           *string
-	href         *string
-	link         bool
-	action       *Action
-	resourceType *string
+	bitmap_      uint32
+	id           string
+	href         string
+	action       Action
+	resourceType string
 }
 
 // Kind returns the name of the type of the object.
@@ -47,16 +47,21 @@ func (o *Permission) Kind() string {
 	if o == nil {
 		return PermissionNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return PermissionLinkKind
 	}
 	return PermissionKind
 }
 
+// Link returns true iif this is a link.
+func (o *Permission) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Permission) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -64,22 +69,17 @@ func (o *Permission) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Permission) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Permission) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Permission) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -87,19 +87,16 @@ func (o *Permission) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Permission) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Permission) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.action == nil &&
-		o.resourceType == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Action returns the value of the 'action' attribute, or
@@ -107,8 +104,8 @@ func (o *Permission) Empty() bool {
 //
 //
 func (o *Permission) Action() Action {
-	if o != nil && o.action != nil {
-		return *o.action
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.action
 	}
 	return Action("")
 }
@@ -118,9 +115,9 @@ func (o *Permission) Action() Action {
 //
 //
 func (o *Permission) GetAction() (value Action, ok bool) {
-	ok = o != nil && o.action != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.action
+		value = o.action
 	}
 	return
 }
@@ -130,8 +127,8 @@ func (o *Permission) GetAction() (value Action, ok bool) {
 //
 //
 func (o *Permission) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -141,9 +138,9 @@ func (o *Permission) ResourceType() string {
 //
 //
 func (o *Permission) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -162,7 +159,7 @@ const PermissionListNilKind = "PermissionListNil"
 
 // PermissionList is a list of values of the 'permission' type.
 type PermissionList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Permission
 }
@@ -185,8 +182,8 @@ func (l *PermissionList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *PermissionList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -194,9 +191,9 @@ func (l *PermissionList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *PermissionList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

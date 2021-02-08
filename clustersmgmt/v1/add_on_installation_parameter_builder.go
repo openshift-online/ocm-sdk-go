@@ -23,32 +23,34 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on installation parameter.
 type AddOnInstallationParameterBuilder struct {
-	id    *string
-	href  *string
-	link  bool
-	value *string
+	bitmap_ uint32
+	id      string
+	href    string
+	value   string
 }
 
 // NewAddOnInstallationParameter creates a new builder of 'add_on_installation_parameter' objects.
 func NewAddOnInstallationParameter() *AddOnInstallationParameterBuilder {
-	return new(AddOnInstallationParameterBuilder)
+	return &AddOnInstallationParameterBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *AddOnInstallationParameterBuilder) Link(value bool) *AddOnInstallationParameterBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *AddOnInstallationParameterBuilder) ID(value string) *AddOnInstallationParameterBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *AddOnInstallationParameterBuilder) HREF(value string) *AddOnInstallationParameterBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *AddOnInstallationParameterBuilder) Link(value bool) *AddOnInstallationParameterBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -56,7 +58,8 @@ func (b *AddOnInstallationParameterBuilder) Link(value bool) *AddOnInstallationP
 //
 //
 func (b *AddOnInstallationParameterBuilder) Value(value string) *AddOnInstallationParameterBuilder {
-	b.value = &value
+	b.value = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,9 +68,9 @@ func (b *AddOnInstallationParameterBuilder) Copy(object *AddOnInstallationParame
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.value = object.value
 	return b
 }
@@ -77,7 +80,7 @@ func (b *AddOnInstallationParameterBuilder) Build() (object *AddOnInstallationPa
 	object = new(AddOnInstallationParameter)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.value = b.value
 	return
 }

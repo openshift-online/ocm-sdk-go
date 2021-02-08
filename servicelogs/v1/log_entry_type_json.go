@@ -40,86 +40,91 @@ func MarshalLogEntry(object *LogEntry, writer io.Writer) error {
 func writeLogEntry(object *LogEntry, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(LogEntryLinkKind)
 	} else {
 		stream.WriteString(LogEntryKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.clusterUUID != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_uuid")
-		stream.WriteString(*object.clusterUUID)
+		stream.WriteString(object.clusterUUID)
 		count++
 	}
-	if object.description != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("description")
-		stream.WriteString(*object.description)
+		stream.WriteString(object.description)
 		count++
 	}
-	if object.internalOnly != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("internal_only")
-		stream.WriteBool(*object.internalOnly)
+		stream.WriteBool(object.internalOnly)
 		count++
 	}
-	if object.serviceName != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("service_name")
-		stream.WriteString(*object.serviceName)
+		stream.WriteString(object.serviceName)
 		count++
 	}
-	if object.severity != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("severity")
-		stream.WriteString(string(*object.severity))
+		stream.WriteString(string(object.severity))
 		count++
 	}
-	if object.summary != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("summary")
-		stream.WriteString(*object.summary)
+		stream.WriteString(object.summary)
 		count++
 	}
-	if object.timestamp != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("timestamp")
-		stream.WriteString((*object.timestamp).Format(time.RFC3339))
+		stream.WriteString((object.timestamp).Format(time.RFC3339))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -151,39 +156,48 @@ func readLogEntry(iterator *jsoniter.Iterator) *LogEntry {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == LogEntryLinkKind
+			if value == LogEntryLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "cluster_uuid":
 			value := iterator.ReadString()
-			object.clusterUUID = &value
+			object.clusterUUID = value
+			object.bitmap_ |= 8
 		case "description":
 			value := iterator.ReadString()
-			object.description = &value
+			object.description = value
+			object.bitmap_ |= 16
 		case "internal_only":
 			value := iterator.ReadBool()
-			object.internalOnly = &value
+			object.internalOnly = value
+			object.bitmap_ |= 32
 		case "service_name":
 			value := iterator.ReadString()
-			object.serviceName = &value
+			object.serviceName = value
+			object.bitmap_ |= 64
 		case "severity":
 			text := iterator.ReadString()
 			value := Severity(text)
-			object.severity = &value
+			object.severity = value
+			object.bitmap_ |= 128
 		case "summary":
 			value := iterator.ReadString()
-			object.summary = &value
+			object.summary = value
+			object.bitmap_ |= 256
 		case "timestamp":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.timestamp = &value
+			object.timestamp = value
+			object.bitmap_ |= 512
 		default:
 			iterator.ReadAny()
 		}

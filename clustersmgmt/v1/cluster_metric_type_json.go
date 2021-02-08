@@ -40,7 +40,9 @@ func MarshalClusterMetric(object *ClusterMetric, writer io.Writer) error {
 func writeClusterMetric(object *ClusterMetric, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.total != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.total != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -48,15 +50,17 @@ func writeClusterMetric(object *ClusterMetric, stream *jsoniter.Stream) {
 		writeValue(object.total, stream)
 		count++
 	}
-	if object.updatedTimestamp != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_timestamp")
-		stream.WriteString((*object.updatedTimestamp).Format(time.RFC3339))
+		stream.WriteString((object.updatedTimestamp).Format(time.RFC3339))
 		count++
 	}
-	if object.used != nil {
+	present_ = object.bitmap_&4 != 0 && object.used != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -94,16 +98,19 @@ func readClusterMetric(iterator *jsoniter.Iterator) *ClusterMetric {
 		case "total":
 			value := readValue(iterator)
 			object.total = value
+			object.bitmap_ |= 1
 		case "updated_timestamp":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedTimestamp = &value
+			object.updatedTimestamp = value
+			object.bitmap_ |= 2
 		case "used":
 			value := readValue(iterator)
 			object.used = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

@@ -111,10 +111,10 @@ func writeRegistryCredentialsListResponse(response *RegistryCredentialsListServe
 	stream.WriteObjectField("kind")
 	count := 1
 	stream.WriteString(RegistryCredentialListKind)
-	if response.items != nil && response.items.href != nil {
+	if response.items != nil && response.items.href != "" {
 		stream.WriteMore()
 		stream.WriteObjectField("href")
-		stream.WriteString(*response.items.href)
+		stream.WriteString(response.items.href)
 		count++
 	}
 	if response.page != nil {

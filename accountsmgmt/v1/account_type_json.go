@@ -40,81 +40,86 @@ func MarshalAccount(object *Account, writer io.Writer) error {
 func writeAccount(object *Account, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(AccountLinkKind)
 	} else {
 		stream.WriteString(AccountKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.banCode != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("ban_code")
-		stream.WriteString(*object.banCode)
+		stream.WriteString(object.banCode)
 		count++
 	}
-	if object.banDescription != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("ban_description")
-		stream.WriteString(*object.banDescription)
+		stream.WriteString(object.banDescription)
 		count++
 	}
-	if object.banned != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("banned")
-		stream.WriteBool(*object.banned)
+		stream.WriteBool(object.banned)
 		count++
 	}
-	if object.createdAt != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("created_at")
-		stream.WriteString((*object.createdAt).Format(time.RFC3339))
+		stream.WriteString((object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.email != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("email")
-		stream.WriteString(*object.email)
+		stream.WriteString(object.email)
 		count++
 	}
-	if object.firstName != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("first_name")
-		stream.WriteString(*object.firstName)
+		stream.WriteString(object.firstName)
 		count++
 	}
-	if object.labels != nil {
+	present_ = object.bitmap_&512 != 0 && object.labels != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -122,15 +127,17 @@ func writeAccount(object *Account, stream *jsoniter.Stream) {
 		writeLabelList(object.labels, stream)
 		count++
 	}
-	if object.lastName != nil {
+	present_ = object.bitmap_&1024 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("last_name")
-		stream.WriteString(*object.lastName)
+		stream.WriteString(object.lastName)
 		count++
 	}
-	if object.organization != nil {
+	present_ = object.bitmap_&2048 != 0 && object.organization != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -138,28 +145,31 @@ func writeAccount(object *Account, stream *jsoniter.Stream) {
 		writeOrganization(object.organization, stream)
 		count++
 	}
-	if object.serviceAccount != nil {
+	present_ = object.bitmap_&4096 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("service_account")
-		stream.WriteBool(*object.serviceAccount)
+		stream.WriteBool(object.serviceAccount)
 		count++
 	}
-	if object.updatedAt != nil {
+	present_ = object.bitmap_&8192 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_at")
-		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
+		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
-	if object.username != nil {
+	present_ = object.bitmap_&16384 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("username")
-		stream.WriteString(*object.username)
+		stream.WriteString(object.username)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -191,57 +201,71 @@ func readAccount(iterator *jsoniter.Iterator) *Account {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == AccountLinkKind
+			if value == AccountLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "ban_code":
 			value := iterator.ReadString()
-			object.banCode = &value
+			object.banCode = value
+			object.bitmap_ |= 8
 		case "ban_description":
 			value := iterator.ReadString()
-			object.banDescription = &value
+			object.banDescription = value
+			object.bitmap_ |= 16
 		case "banned":
 			value := iterator.ReadBool()
-			object.banned = &value
+			object.banned = value
+			object.bitmap_ |= 32
 		case "created_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.createdAt = &value
+			object.createdAt = value
+			object.bitmap_ |= 64
 		case "email":
 			value := iterator.ReadString()
-			object.email = &value
+			object.email = value
+			object.bitmap_ |= 128
 		case "first_name":
 			value := iterator.ReadString()
-			object.firstName = &value
+			object.firstName = value
+			object.bitmap_ |= 256
 		case "labels":
 			value := readLabelList(iterator)
 			object.labels = value
+			object.bitmap_ |= 512
 		case "last_name":
 			value := iterator.ReadString()
-			object.lastName = &value
+			object.lastName = value
+			object.bitmap_ |= 1024
 		case "organization":
 			value := readOrganization(iterator)
 			object.organization = value
+			object.bitmap_ |= 2048
 		case "service_account":
 			value := iterator.ReadBool()
-			object.serviceAccount = &value
+			object.serviceAccount = value
+			object.bitmap_ |= 4096
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedAt = &value
+			object.updatedAt = value
+			object.bitmap_ |= 8192
 		case "username":
 			value := iterator.ReadString()
-			object.username = &value
+			object.username = value
+			object.bitmap_ |= 16384
 		default:
 			iterator.ReadAny()
 		}

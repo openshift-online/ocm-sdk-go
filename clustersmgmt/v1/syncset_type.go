@@ -35,9 +35,9 @@ const SyncsetNilKind = "SyncsetNil"
 //
 // Representation of a syncset.
 type Syncset struct {
-	id        *string
-	href      *string
-	link      bool
+	bitmap_   uint32
+	id        string
+	href      string
 	resources []interface{}
 }
 
@@ -46,16 +46,21 @@ func (o *Syncset) Kind() string {
 	if o == nil {
 		return SyncsetNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return SyncsetLinkKind
 	}
 	return SyncsetKind
 }
 
+// Link returns true iif this is a link.
+func (o *Syncset) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Syncset) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -63,22 +68,17 @@ func (o *Syncset) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Syncset) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Syncset) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Syncset) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -86,18 +86,16 @@ func (o *Syncset) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Syncset) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Syncset) Empty() bool {
-	return o == nil || (o.id == nil &&
-		len(o.resources) == 0 &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Resources returns the value of the 'resources' attribute, or
@@ -105,10 +103,10 @@ func (o *Syncset) Empty() bool {
 //
 // List of k8s objects to configure for the cluster.
 func (o *Syncset) Resources() []interface{} {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.resources
 	}
-	return o.resources
+	return nil
 }
 
 // GetResources returns the value of the 'resources' attribute and
@@ -116,7 +114,7 @@ func (o *Syncset) Resources() []interface{} {
 //
 // List of k8s objects to configure for the cluster.
 func (o *Syncset) GetResources() (value []interface{}, ok bool) {
-	ok = o != nil && o.resources != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.resources
 	}
@@ -137,7 +135,7 @@ const SyncsetListNilKind = "SyncsetListNil"
 
 // SyncsetList is a list of values of the 'syncset' type.
 type SyncsetList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Syncset
 }
@@ -160,8 +158,8 @@ func (l *SyncsetList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *SyncsetList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -169,9 +167,9 @@ func (l *SyncsetList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *SyncsetList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

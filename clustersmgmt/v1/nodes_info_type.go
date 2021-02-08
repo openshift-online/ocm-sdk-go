@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Provides information about the nodes in the cluster.
 type NodesInfo struct {
-	nodes []*NodeInfo
+	bitmap_ uint32
+	nodes   []*NodeInfo
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *NodesInfo) Empty() bool {
-	return o == nil || (len(o.nodes) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Nodes returns the value of the 'nodes' attribute, or
@@ -37,10 +37,10 @@ func (o *NodesInfo) Empty() bool {
 //
 //
 func (o *NodesInfo) Nodes() []*NodeInfo {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.nodes
 	}
-	return o.nodes
+	return nil
 }
 
 // GetNodes returns the value of the 'nodes' attribute and
@@ -48,7 +48,7 @@ func (o *NodesInfo) Nodes() []*NodeInfo {
 //
 //
 func (o *NodesInfo) GetNodes() (value []*NodeInfo, ok bool) {
-	ok = o != nil && o.nodes != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.nodes
 	}
@@ -69,7 +69,7 @@ const NodesInfoListNilKind = "NodesInfoListNil"
 
 // NodesInfoList is a list of values of the 'nodes_info' type.
 type NodesInfoList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*NodesInfo
 }

@@ -39,7 +39,9 @@ func MarshalNodesInfo(object *NodesInfo, writer io.Writer) error {
 func writeNodesInfo(object *NodesInfo, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.nodes != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.nodes != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -77,6 +79,7 @@ func readNodesInfo(iterator *jsoniter.Iterator) *NodesInfo {
 		case "nodes":
 			value := readNodeInfoList(iterator)
 			object.nodes = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

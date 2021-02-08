@@ -40,15 +40,18 @@ func MarshalCPUTotalNodeRoleOSMetricNode(object *CPUTotalNodeRoleOSMetricNode, w
 func writeCPUTotalNodeRoleOSMetricNode(object *CPUTotalNodeRoleOSMetricNode, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.cpuTotal != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cpu_total")
-		stream.WriteFloat64(*object.cpuTotal)
+		stream.WriteFloat64(object.cpuTotal)
 		count++
 	}
-	if object.nodeRoles != nil {
+	present_ = object.bitmap_&2 != 0 && object.nodeRoles != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -56,20 +59,22 @@ func writeCPUTotalNodeRoleOSMetricNode(object *CPUTotalNodeRoleOSMetricNode, str
 		writeStringList(object.nodeRoles, stream)
 		count++
 	}
-	if object.operatingSystem != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("operating_system")
-		stream.WriteString(*object.operatingSystem)
+		stream.WriteString(object.operatingSystem)
 		count++
 	}
-	if object.time != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("time")
-		stream.WriteString((*object.time).Format(time.RFC3339))
+		stream.WriteString((object.time).Format(time.RFC3339))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -101,20 +106,24 @@ func readCPUTotalNodeRoleOSMetricNode(iterator *jsoniter.Iterator) *CPUTotalNode
 		switch field {
 		case "cpu_total":
 			value := iterator.ReadFloat64()
-			object.cpuTotal = &value
+			object.cpuTotal = value
+			object.bitmap_ |= 1
 		case "node_roles":
 			value := readStringList(iterator)
 			object.nodeRoles = value
+			object.bitmap_ |= 2
 		case "operating_system":
 			value := iterator.ReadString()
-			object.operatingSystem = &value
+			object.operatingSystem = value
+			object.bitmap_ |= 4
 		case "time":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.time = &value
+			object.time = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

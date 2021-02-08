@@ -35,12 +35,12 @@ const PlanNilKind = "PlanNil"
 //
 //
 type Plan struct {
-	id       *string
-	href     *string
-	link     bool
-	category *string
-	name     *string
-	type_    *string
+	bitmap_  uint32
+	id       string
+	href     string
+	category string
+	name     string
+	type_    string
 }
 
 // Kind returns the name of the type of the object.
@@ -48,16 +48,21 @@ func (o *Plan) Kind() string {
 	if o == nil {
 		return PlanNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return PlanLinkKind
 	}
 	return PlanKind
 }
 
+// Link returns true iif this is a link.
+func (o *Plan) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Plan) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -65,22 +70,17 @@ func (o *Plan) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Plan) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Plan) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Plan) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -88,20 +88,16 @@ func (o *Plan) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Plan) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Plan) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.category == nil &&
-		o.name == nil &&
-		o.type_ == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Category returns the value of the 'category' attribute, or
@@ -109,8 +105,8 @@ func (o *Plan) Empty() bool {
 //
 //
 func (o *Plan) Category() string {
-	if o != nil && o.category != nil {
-		return *o.category
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.category
 	}
 	return ""
 }
@@ -120,9 +116,9 @@ func (o *Plan) Category() string {
 //
 //
 func (o *Plan) GetCategory() (value string, ok bool) {
-	ok = o != nil && o.category != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.category
+		value = o.category
 	}
 	return
 }
@@ -132,8 +128,8 @@ func (o *Plan) GetCategory() (value string, ok bool) {
 //
 //
 func (o *Plan) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -143,9 +139,9 @@ func (o *Plan) Name() string {
 //
 //
 func (o *Plan) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -155,8 +151,8 @@ func (o *Plan) GetName() (value string, ok bool) {
 //
 //
 func (o *Plan) Type() string {
-	if o != nil && o.type_ != nil {
-		return *o.type_
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.type_
 	}
 	return ""
 }
@@ -166,9 +162,9 @@ func (o *Plan) Type() string {
 //
 //
 func (o *Plan) GetType() (value string, ok bool) {
-	ok = o != nil && o.type_ != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.type_
+		value = o.type_
 	}
 	return
 }
@@ -187,7 +183,7 @@ const PlanListNilKind = "PlanListNil"
 
 // PlanList is a list of values of the 'plan' type.
 type PlanList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Plan
 }
@@ -210,8 +206,8 @@ func (l *PlanList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *PlanList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -219,9 +215,9 @@ func (l *PlanList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *PlanList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

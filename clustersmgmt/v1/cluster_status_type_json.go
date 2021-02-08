@@ -39,70 +39,73 @@ func MarshalClusterStatus(object *ClusterStatus, writer io.Writer) error {
 func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(ClusterStatusLinkKind)
 	} else {
 		stream.WriteString(ClusterStatusKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.dnsReady != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("dns_ready")
-		stream.WriteBool(*object.dnsReady)
+		stream.WriteBool(object.dnsReady)
 		count++
 	}
-	if object.description != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("description")
-		stream.WriteString(*object.description)
+		stream.WriteString(object.description)
 		count++
 	}
-	if object.provisionErrorCode != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("provision_error_code")
-		stream.WriteString(*object.provisionErrorCode)
+		stream.WriteString(object.provisionErrorCode)
 		count++
 	}
-	if object.provisionErrorMessage != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("provision_error_message")
-		stream.WriteString(*object.provisionErrorMessage)
+		stream.WriteString(object.provisionErrorMessage)
 		count++
 	}
-	if object.state != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("state")
-		stream.WriteString(string(*object.state))
+		stream.WriteString(string(object.state))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -134,29 +137,36 @@ func readClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == ClusterStatusLinkKind
+			if value == ClusterStatusLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "dns_ready":
 			value := iterator.ReadBool()
-			object.dnsReady = &value
+			object.dnsReady = value
+			object.bitmap_ |= 8
 		case "description":
 			value := iterator.ReadString()
-			object.description = &value
+			object.description = value
+			object.bitmap_ |= 16
 		case "provision_error_code":
 			value := iterator.ReadString()
-			object.provisionErrorCode = &value
+			object.provisionErrorCode = value
+			object.bitmap_ |= 32
 		case "provision_error_message":
 			value := iterator.ReadString()
-			object.provisionErrorMessage = &value
+			object.provisionErrorMessage = value
+			object.bitmap_ |= 64
 		case "state":
 			text := iterator.ReadString()
 			value := ClusterState(text)
-			object.state = &value
+			object.state = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

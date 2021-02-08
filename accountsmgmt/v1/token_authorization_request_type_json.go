@@ -39,12 +39,14 @@ func MarshalTokenAuthorizationRequest(object *TokenAuthorizationRequest, writer 
 func writeTokenAuthorizationRequest(object *TokenAuthorizationRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.authorizationToken != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("authorization_token")
-		stream.WriteString(*object.authorizationToken)
+		stream.WriteString(object.authorizationToken)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readTokenAuthorizationRequest(iterator *jsoniter.Iterator) *TokenAuthorizat
 		switch field {
 		case "authorization_token":
 			value := iterator.ReadString()
-			object.authorizationToken = &value
+			object.authorizationToken = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

@@ -39,20 +39,23 @@ func MarshalValue(object *Value, writer io.Writer) error {
 func writeValue(object *Value, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.unit != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("unit")
-		stream.WriteString(*object.unit)
+		stream.WriteString(object.unit)
 		count++
 	}
-	if object.value != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("value")
-		stream.WriteFloat64(*object.value)
+		stream.WriteFloat64(object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,10 +87,12 @@ func readValue(iterator *jsoniter.Iterator) *Value {
 		switch field {
 		case "unit":
 			value := iterator.ReadString()
-			object.unit = &value
+			object.unit = value
+			object.bitmap_ |= 1
 		case "value":
 			value := iterator.ReadFloat64()
-			object.value = &value
+			object.value = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

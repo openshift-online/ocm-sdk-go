@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // DNS settings of the cluster.
 type DNSBuilder struct {
-	baseDomain *string
+	bitmap_    uint32
+	baseDomain string
 }
 
 // NewDNS creates a new builder of 'DNS' objects.
 func NewDNS() *DNSBuilder {
-	return new(DNSBuilder)
+	return &DNSBuilder{}
 }
 
 // BaseDomain sets the value of the 'base_domain' attribute to the given value.
 //
 //
 func (b *DNSBuilder) BaseDomain(value string) *DNSBuilder {
-	b.baseDomain = &value
+	b.baseDomain = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *DNSBuilder) Copy(object *DNS) *DNSBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.baseDomain = object.baseDomain
 	return b
 }
@@ -51,6 +54,7 @@ func (b *DNSBuilder) Copy(object *DNS) *DNSBuilder {
 // Build creates a 'DNS' object using the configuration stored in the builder.
 func (b *DNSBuilder) Build() (object *DNS, err error) {
 	object = new(DNS)
+	object.bitmap_ = b.bitmap_
 	object.baseDomain = b.baseDomain
 	return
 }

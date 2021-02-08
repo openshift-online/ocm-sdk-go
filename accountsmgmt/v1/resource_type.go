@@ -35,15 +35,15 @@ const ResourceNilKind = "ResourceNil"
 //
 // Identifies computing resources
 type Resource struct {
-	id                   *string
-	href                 *string
-	link                 bool
-	byoc                 *bool
-	sku                  *string
-	allowed              *int
-	availabilityZoneType *string
-	resourceName         *string
-	resourceType         *string
+	bitmap_              uint32
+	id                   string
+	href                 string
+	sku                  string
+	allowed              int
+	availabilityZoneType string
+	resourceName         string
+	resourceType         string
+	byoc                 bool
 }
 
 // Kind returns the name of the type of the object.
@@ -51,16 +51,21 @@ func (o *Resource) Kind() string {
 	if o == nil {
 		return ResourceNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return ResourceLinkKind
 	}
 	return ResourceKind
 }
 
+// Link returns true iif this is a link.
+func (o *Resource) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Resource) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -68,22 +73,17 @@ func (o *Resource) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Resource) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Resource) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Resource) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -91,23 +91,16 @@ func (o *Resource) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Resource) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Resource) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.byoc == nil &&
-		o.sku == nil &&
-		o.allowed == nil &&
-		o.availabilityZoneType == nil &&
-		o.resourceName == nil &&
-		o.resourceType == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // BYOC returns the value of the 'BYOC' attribute, or
@@ -115,8 +108,8 @@ func (o *Resource) Empty() bool {
 //
 //
 func (o *Resource) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.byoc
 	}
 	return false
 }
@@ -126,9 +119,9 @@ func (o *Resource) BYOC() bool {
 //
 //
 func (o *Resource) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.byoc
+		value = o.byoc
 	}
 	return
 }
@@ -138,8 +131,8 @@ func (o *Resource) GetBYOC() (value bool, ok bool) {
 //
 //
 func (o *Resource) SKU() string {
-	if o != nil && o.sku != nil {
-		return *o.sku
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.sku
 	}
 	return ""
 }
@@ -149,9 +142,9 @@ func (o *Resource) SKU() string {
 //
 //
 func (o *Resource) GetSKU() (value string, ok bool) {
-	ok = o != nil && o.sku != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.sku
+		value = o.sku
 	}
 	return
 }
@@ -161,8 +154,8 @@ func (o *Resource) GetSKU() (value string, ok bool) {
 //
 // Number of allowed nodes
 func (o *Resource) Allowed() int {
-	if o != nil && o.allowed != nil {
-		return *o.allowed
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.allowed
 	}
 	return 0
 }
@@ -172,9 +165,9 @@ func (o *Resource) Allowed() int {
 //
 // Number of allowed nodes
 func (o *Resource) GetAllowed() (value int, ok bool) {
-	ok = o != nil && o.allowed != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.allowed
+		value = o.allowed
 	}
 	return
 }
@@ -184,8 +177,8 @@ func (o *Resource) GetAllowed() (value int, ok bool) {
 //
 //
 func (o *Resource) AvailabilityZoneType() string {
-	if o != nil && o.availabilityZoneType != nil {
-		return *o.availabilityZoneType
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.availabilityZoneType
 	}
 	return ""
 }
@@ -195,9 +188,9 @@ func (o *Resource) AvailabilityZoneType() string {
 //
 //
 func (o *Resource) GetAvailabilityZoneType() (value string, ok bool) {
-	ok = o != nil && o.availabilityZoneType != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.availabilityZoneType
+		value = o.availabilityZoneType
 	}
 	return
 }
@@ -207,8 +200,8 @@ func (o *Resource) GetAvailabilityZoneType() (value string, ok bool) {
 //
 // platform-specific name, such as "M5.2Xlarge" for a type of EC2 node
 func (o *Resource) ResourceName() string {
-	if o != nil && o.resourceName != nil {
-		return *o.resourceName
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.resourceName
 	}
 	return ""
 }
@@ -218,9 +211,9 @@ func (o *Resource) ResourceName() string {
 //
 // platform-specific name, such as "M5.2Xlarge" for a type of EC2 node
 func (o *Resource) GetResourceName() (value string, ok bool) {
-	ok = o != nil && o.resourceName != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.resourceName
+		value = o.resourceName
 	}
 	return
 }
@@ -230,8 +223,8 @@ func (o *Resource) GetResourceName() (value string, ok bool) {
 //
 //
 func (o *Resource) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -241,9 +234,9 @@ func (o *Resource) ResourceType() string {
 //
 //
 func (o *Resource) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -262,7 +255,7 @@ const ResourceListNilKind = "ResourceListNil"
 
 // ResourceList is a list of values of the 'resource' type.
 type ResourceList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Resource
 }
@@ -285,8 +278,8 @@ func (l *ResourceList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *ResourceList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -294,9 +287,9 @@ func (l *ResourceList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *ResourceList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

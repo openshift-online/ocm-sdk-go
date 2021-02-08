@@ -39,44 +39,50 @@ func MarshalSubscriptionRegistration(object *SubscriptionRegistration, writer io
 func writeSubscriptionRegistration(object *SubscriptionRegistration, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.clusterUUID != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_uuid")
-		stream.WriteString(*object.clusterUUID)
+		stream.WriteString(object.clusterUUID)
 		count++
 	}
-	if object.consoleURL != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("console_url")
-		stream.WriteString(*object.consoleURL)
+		stream.WriteString(object.consoleURL)
 		count++
 	}
-	if object.displayName != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("display_name")
-		stream.WriteString(*object.displayName)
+		stream.WriteString(object.displayName)
 		count++
 	}
-	if object.planID != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("plan_id")
-		stream.WriteString(string(*object.planID))
+		stream.WriteString(string(object.planID))
 		count++
 	}
-	if object.status != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("status")
-		stream.WriteString(*object.status)
+		stream.WriteString(object.status)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -108,20 +114,25 @@ func readSubscriptionRegistration(iterator *jsoniter.Iterator) *SubscriptionRegi
 		switch field {
 		case "cluster_uuid":
 			value := iterator.ReadString()
-			object.clusterUUID = &value
+			object.clusterUUID = value
+			object.bitmap_ |= 1
 		case "console_url":
 			value := iterator.ReadString()
-			object.consoleURL = &value
+			object.consoleURL = value
+			object.bitmap_ |= 2
 		case "display_name":
 			value := iterator.ReadString()
-			object.displayName = &value
+			object.displayName = value
+			object.bitmap_ |= 4
 		case "plan_id":
 			text := iterator.ReadString()
 			value := PlanID(text)
-			object.planID = &value
+			object.planID = value
+			object.bitmap_ |= 8
 		case "status":
 			value := iterator.ReadString()
-			object.status = &value
+			object.status = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

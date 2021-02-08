@@ -35,14 +35,14 @@ const AWSInfrastructureAccessRoleGrantNilKind = "AWSInfrastructureAccessRoleGran
 //
 // Representation of an AWS infrastructure access role grant.
 type AWSInfrastructureAccessRoleGrant struct {
-	id               *string
-	href             *string
-	link             bool
-	consoleURL       *string
+	bitmap_          uint32
+	id               string
+	href             string
+	consoleURL       string
 	role             *AWSInfrastructureAccessRole
-	state            *AWSInfrastructureAccessRoleGrantState
-	stateDescription *string
-	userARN          *string
+	state            AWSInfrastructureAccessRoleGrantState
+	stateDescription string
+	userARN          string
 }
 
 // Kind returns the name of the type of the object.
@@ -50,16 +50,21 @@ func (o *AWSInfrastructureAccessRoleGrant) Kind() string {
 	if o == nil {
 		return AWSInfrastructureAccessRoleGrantNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return AWSInfrastructureAccessRoleGrantLinkKind
 	}
 	return AWSInfrastructureAccessRoleGrantKind
 }
 
+// Link returns true iif this is a link.
+func (o *AWSInfrastructureAccessRoleGrant) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *AWSInfrastructureAccessRoleGrant) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -67,22 +72,17 @@ func (o *AWSInfrastructureAccessRoleGrant) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *AWSInfrastructureAccessRoleGrant) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *AWSInfrastructureAccessRoleGrant) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *AWSInfrastructureAccessRoleGrant) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -90,21 +90,16 @@ func (o *AWSInfrastructureAccessRoleGrant) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *AWSInfrastructureAccessRoleGrant) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AWSInfrastructureAccessRoleGrant) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.consoleURL == nil &&
-		o.state == nil &&
-		o.stateDescription == nil &&
-		o.userARN == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // ConsoleURL returns the value of the 'console_URL' attribute, or
@@ -112,8 +107,8 @@ func (o *AWSInfrastructureAccessRoleGrant) Empty() bool {
 //
 // URL to switch to the role in AWS console.
 func (o *AWSInfrastructureAccessRoleGrant) ConsoleURL() string {
-	if o != nil && o.consoleURL != nil {
-		return *o.consoleURL
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.consoleURL
 	}
 	return ""
 }
@@ -123,9 +118,9 @@ func (o *AWSInfrastructureAccessRoleGrant) ConsoleURL() string {
 //
 // URL to switch to the role in AWS console.
 func (o *AWSInfrastructureAccessRoleGrant) GetConsoleURL() (value string, ok bool) {
-	ok = o != nil && o.consoleURL != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.consoleURL
+		value = o.consoleURL
 	}
 	return
 }
@@ -136,10 +131,10 @@ func (o *AWSInfrastructureAccessRoleGrant) GetConsoleURL() (value string, ok boo
 // Link to AWS infrastructure access role.
 // Grant must use a 'valid' role.
 func (o *AWSInfrastructureAccessRoleGrant) Role() *AWSInfrastructureAccessRole {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.role
 	}
-	return o.role
+	return nil
 }
 
 // GetRole returns the value of the 'role' attribute and
@@ -148,7 +143,7 @@ func (o *AWSInfrastructureAccessRoleGrant) Role() *AWSInfrastructureAccessRole {
 // Link to AWS infrastructure access role.
 // Grant must use a 'valid' role.
 func (o *AWSInfrastructureAccessRoleGrant) GetRole() (value *AWSInfrastructureAccessRole, ok bool) {
-	ok = o != nil && o.role != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.role
 	}
@@ -160,8 +155,8 @@ func (o *AWSInfrastructureAccessRoleGrant) GetRole() (value *AWSInfrastructureAc
 //
 // State of the grant.
 func (o *AWSInfrastructureAccessRoleGrant) State() AWSInfrastructureAccessRoleGrantState {
-	if o != nil && o.state != nil {
-		return *o.state
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.state
 	}
 	return AWSInfrastructureAccessRoleGrantState("")
 }
@@ -171,9 +166,9 @@ func (o *AWSInfrastructureAccessRoleGrant) State() AWSInfrastructureAccessRoleGr
 //
 // State of the grant.
 func (o *AWSInfrastructureAccessRoleGrant) GetState() (value AWSInfrastructureAccessRoleGrantState, ok bool) {
-	ok = o != nil && o.state != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.state
+		value = o.state
 	}
 	return
 }
@@ -184,8 +179,8 @@ func (o *AWSInfrastructureAccessRoleGrant) GetState() (value AWSInfrastructureAc
 // Description of the state.
 // Will be empty unless state is 'Failed'.
 func (o *AWSInfrastructureAccessRoleGrant) StateDescription() string {
-	if o != nil && o.stateDescription != nil {
-		return *o.stateDescription
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.stateDescription
 	}
 	return ""
 }
@@ -196,9 +191,9 @@ func (o *AWSInfrastructureAccessRoleGrant) StateDescription() string {
 // Description of the state.
 // Will be empty unless state is 'Failed'.
 func (o *AWSInfrastructureAccessRoleGrant) GetStateDescription() (value string, ok bool) {
-	ok = o != nil && o.stateDescription != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.stateDescription
+		value = o.stateDescription
 	}
 	return
 }
@@ -208,8 +203,8 @@ func (o *AWSInfrastructureAccessRoleGrant) GetStateDescription() (value string, 
 //
 // The user AWS IAM ARN we want to grant the role.
 func (o *AWSInfrastructureAccessRoleGrant) UserARN() string {
-	if o != nil && o.userARN != nil {
-		return *o.userARN
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.userARN
 	}
 	return ""
 }
@@ -219,9 +214,9 @@ func (o *AWSInfrastructureAccessRoleGrant) UserARN() string {
 //
 // The user AWS IAM ARN we want to grant the role.
 func (o *AWSInfrastructureAccessRoleGrant) GetUserARN() (value string, ok bool) {
-	ok = o != nil && o.userARN != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.userARN
+		value = o.userARN
 	}
 	return
 }
@@ -240,7 +235,7 @@ const AWSInfrastructureAccessRoleGrantListNilKind = "AWSInfrastructureAccessRole
 
 // AWSInfrastructureAccessRoleGrantList is a list of values of the 'AWS_infrastructure_access_role_grant' type.
 type AWSInfrastructureAccessRoleGrantList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AWSInfrastructureAccessRoleGrant
 }
@@ -263,8 +258,8 @@ func (l *AWSInfrastructureAccessRoleGrantList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *AWSInfrastructureAccessRoleGrantList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -272,9 +267,9 @@ func (l *AWSInfrastructureAccessRoleGrantList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *AWSInfrastructureAccessRoleGrantList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

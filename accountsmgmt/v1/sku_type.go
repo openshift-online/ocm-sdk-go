@@ -35,14 +35,14 @@ const SKUNilKind = "SKUNil"
 //
 // Identifies computing resources
 type SKU struct {
-	id                   *string
-	href                 *string
-	link                 bool
-	byoc                 *bool
-	availabilityZoneType *string
-	resourceName         *string
-	resourceType         *string
+	bitmap_              uint32
+	id                   string
+	href                 string
+	availabilityZoneType string
+	resourceName         string
+	resourceType         string
 	resources            []*Resource
+	byoc                 bool
 }
 
 // Kind returns the name of the type of the object.
@@ -50,16 +50,21 @@ func (o *SKU) Kind() string {
 	if o == nil {
 		return SKUNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return SKULinkKind
 	}
 	return SKUKind
 }
 
+// Link returns true iif this is a link.
+func (o *SKU) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *SKU) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -67,22 +72,17 @@ func (o *SKU) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *SKU) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *SKU) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *SKU) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -90,22 +90,16 @@ func (o *SKU) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *SKU) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SKU) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.byoc == nil &&
-		o.availabilityZoneType == nil &&
-		o.resourceName == nil &&
-		o.resourceType == nil &&
-		len(o.resources) == 0 &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // BYOC returns the value of the 'BYOC' attribute, or
@@ -113,8 +107,8 @@ func (o *SKU) Empty() bool {
 //
 //
 func (o *SKU) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.byoc
 	}
 	return false
 }
@@ -124,9 +118,9 @@ func (o *SKU) BYOC() bool {
 //
 //
 func (o *SKU) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.byoc
+		value = o.byoc
 	}
 	return
 }
@@ -136,8 +130,8 @@ func (o *SKU) GetBYOC() (value bool, ok bool) {
 //
 //
 func (o *SKU) AvailabilityZoneType() string {
-	if o != nil && o.availabilityZoneType != nil {
-		return *o.availabilityZoneType
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.availabilityZoneType
 	}
 	return ""
 }
@@ -147,9 +141,9 @@ func (o *SKU) AvailabilityZoneType() string {
 //
 //
 func (o *SKU) GetAvailabilityZoneType() (value string, ok bool) {
-	ok = o != nil && o.availabilityZoneType != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.availabilityZoneType
+		value = o.availabilityZoneType
 	}
 	return
 }
@@ -159,8 +153,8 @@ func (o *SKU) GetAvailabilityZoneType() (value string, ok bool) {
 //
 // platform-specific name, such as "M5.2Xlarge" for a type of EC2 node
 func (o *SKU) ResourceName() string {
-	if o != nil && o.resourceName != nil {
-		return *o.resourceName
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.resourceName
 	}
 	return ""
 }
@@ -170,9 +164,9 @@ func (o *SKU) ResourceName() string {
 //
 // platform-specific name, such as "M5.2Xlarge" for a type of EC2 node
 func (o *SKU) GetResourceName() (value string, ok bool) {
-	ok = o != nil && o.resourceName != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.resourceName
+		value = o.resourceName
 	}
 	return
 }
@@ -182,8 +176,8 @@ func (o *SKU) GetResourceName() (value string, ok bool) {
 //
 //
 func (o *SKU) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -193,9 +187,9 @@ func (o *SKU) ResourceType() string {
 //
 //
 func (o *SKU) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -205,10 +199,10 @@ func (o *SKU) GetResourceType() (value string, ok bool) {
 //
 //
 func (o *SKU) Resources() []*Resource {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.resources
 	}
-	return o.resources
+	return nil
 }
 
 // GetResources returns the value of the 'resources' attribute and
@@ -216,7 +210,7 @@ func (o *SKU) Resources() []*Resource {
 //
 //
 func (o *SKU) GetResources() (value []*Resource, ok bool) {
-	ok = o != nil && o.resources != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.resources
 	}
@@ -237,7 +231,7 @@ const SKUListNilKind = "SKUListNil"
 
 // SKUList is a list of values of the 'SKU' type.
 type SKUList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SKU
 }
@@ -260,8 +254,8 @@ func (l *SKUList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *SKUList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -269,9 +263,9 @@ func (l *SKUList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *SKUList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

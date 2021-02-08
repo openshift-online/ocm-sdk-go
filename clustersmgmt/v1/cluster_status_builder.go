@@ -23,36 +23,38 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Detailed status of a cluster.
 type ClusterStatusBuilder struct {
-	id                    *string
-	href                  *string
-	link                  bool
-	dnsReady              *bool
-	description           *string
-	provisionErrorCode    *string
-	provisionErrorMessage *string
-	state                 *ClusterState
+	bitmap_               uint32
+	id                    string
+	href                  string
+	description           string
+	provisionErrorCode    string
+	provisionErrorMessage string
+	state                 ClusterState
+	dnsReady              bool
 }
 
 // NewClusterStatus creates a new builder of 'cluster_status' objects.
 func NewClusterStatus() *ClusterStatusBuilder {
-	return new(ClusterStatusBuilder)
+	return &ClusterStatusBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *ClusterStatusBuilder) Link(value bool) *ClusterStatusBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *ClusterStatusBuilder) ID(value string) *ClusterStatusBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *ClusterStatusBuilder) HREF(value string) *ClusterStatusBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *ClusterStatusBuilder) Link(value bool) *ClusterStatusBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -60,7 +62,8 @@ func (b *ClusterStatusBuilder) Link(value bool) *ClusterStatusBuilder {
 //
 //
 func (b *ClusterStatusBuilder) DNSReady(value bool) *ClusterStatusBuilder {
-	b.dnsReady = &value
+	b.dnsReady = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -68,7 +71,8 @@ func (b *ClusterStatusBuilder) DNSReady(value bool) *ClusterStatusBuilder {
 //
 //
 func (b *ClusterStatusBuilder) Description(value string) *ClusterStatusBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -76,7 +80,8 @@ func (b *ClusterStatusBuilder) Description(value string) *ClusterStatusBuilder {
 //
 //
 func (b *ClusterStatusBuilder) ProvisionErrorCode(value string) *ClusterStatusBuilder {
-	b.provisionErrorCode = &value
+	b.provisionErrorCode = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -84,7 +89,8 @@ func (b *ClusterStatusBuilder) ProvisionErrorCode(value string) *ClusterStatusBu
 //
 //
 func (b *ClusterStatusBuilder) ProvisionErrorMessage(value string) *ClusterStatusBuilder {
-	b.provisionErrorMessage = &value
+	b.provisionErrorMessage = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -92,7 +98,8 @@ func (b *ClusterStatusBuilder) ProvisionErrorMessage(value string) *ClusterStatu
 //
 // Overall state of a cluster.
 func (b *ClusterStatusBuilder) State(value ClusterState) *ClusterStatusBuilder {
-	b.state = &value
+	b.state = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -101,9 +108,9 @@ func (b *ClusterStatusBuilder) Copy(object *ClusterStatus) *ClusterStatusBuilder
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.dnsReady = object.dnsReady
 	b.description = object.description
 	b.provisionErrorCode = object.provisionErrorCode
@@ -117,7 +124,7 @@ func (b *ClusterStatusBuilder) Build() (object *ClusterStatus, err error) {
 	object = new(ClusterStatus)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.dnsReady = b.dnsReady
 	object.description = b.description
 	object.provisionErrorCode = b.provisionErrorCode

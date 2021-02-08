@@ -23,25 +23,27 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Representation of a capability review.
 type CapabilityReviewRequestBuilder struct {
-	accountUsername *string
-	capability      *string
-	clusterID       *string
-	organizationID  *string
-	resourceType    *string
-	subscriptionID  *string
-	type_           *string
+	bitmap_         uint32
+	accountUsername string
+	capability      string
+	clusterID       string
+	organizationID  string
+	resourceType    string
+	subscriptionID  string
+	type_           string
 }
 
 // NewCapabilityReviewRequest creates a new builder of 'capability_review_request' objects.
 func NewCapabilityReviewRequest() *CapabilityReviewRequestBuilder {
-	return new(CapabilityReviewRequestBuilder)
+	return &CapabilityReviewRequestBuilder{}
 }
 
 // AccountUsername sets the value of the 'account_username' attribute to the given value.
 //
 //
 func (b *CapabilityReviewRequestBuilder) AccountUsername(value string) *CapabilityReviewRequestBuilder {
-	b.accountUsername = &value
+	b.accountUsername = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -49,7 +51,8 @@ func (b *CapabilityReviewRequestBuilder) AccountUsername(value string) *Capabili
 //
 //
 func (b *CapabilityReviewRequestBuilder) Capability(value string) *CapabilityReviewRequestBuilder {
-	b.capability = &value
+	b.capability = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -57,7 +60,8 @@ func (b *CapabilityReviewRequestBuilder) Capability(value string) *CapabilityRev
 //
 //
 func (b *CapabilityReviewRequestBuilder) ClusterID(value string) *CapabilityReviewRequestBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,7 +69,8 @@ func (b *CapabilityReviewRequestBuilder) ClusterID(value string) *CapabilityRevi
 //
 //
 func (b *CapabilityReviewRequestBuilder) OrganizationID(value string) *CapabilityReviewRequestBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -73,7 +78,8 @@ func (b *CapabilityReviewRequestBuilder) OrganizationID(value string) *Capabilit
 //
 //
 func (b *CapabilityReviewRequestBuilder) ResourceType(value string) *CapabilityReviewRequestBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -81,7 +87,8 @@ func (b *CapabilityReviewRequestBuilder) ResourceType(value string) *CapabilityR
 //
 //
 func (b *CapabilityReviewRequestBuilder) SubscriptionID(value string) *CapabilityReviewRequestBuilder {
-	b.subscriptionID = &value
+	b.subscriptionID = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -89,7 +96,8 @@ func (b *CapabilityReviewRequestBuilder) SubscriptionID(value string) *Capabilit
 //
 //
 func (b *CapabilityReviewRequestBuilder) Type(value string) *CapabilityReviewRequestBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -98,6 +106,7 @@ func (b *CapabilityReviewRequestBuilder) Copy(object *CapabilityReviewRequest) *
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountUsername = object.accountUsername
 	b.capability = object.capability
 	b.clusterID = object.clusterID
@@ -111,6 +120,7 @@ func (b *CapabilityReviewRequestBuilder) Copy(object *CapabilityReviewRequest) *
 // Build creates a 'capability_review_request' object using the configuration stored in the builder.
 func (b *CapabilityReviewRequestBuilder) Build() (object *CapabilityReviewRequest, err error) {
 	object = new(CapabilityReviewRequest)
+	object.bitmap_ = b.bitmap_
 	object.accountUsername = b.accountUsername
 	object.capability = b.capability
 	object.clusterID = b.clusterID

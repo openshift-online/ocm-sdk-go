@@ -23,24 +23,26 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Specification for different classes of nodes inside a flavour.
 type AWSFlavourBuilder struct {
-	computeInstanceType *string
-	infraInstanceType   *string
+	bitmap_             uint32
+	computeInstanceType string
+	infraInstanceType   string
 	infraVolume         *AWSVolumeBuilder
-	masterInstanceType  *string
+	masterInstanceType  string
 	masterVolume        *AWSVolumeBuilder
 	workerVolume        *AWSVolumeBuilder
 }
 
 // NewAWSFlavour creates a new builder of 'AWS_flavour' objects.
 func NewAWSFlavour() *AWSFlavourBuilder {
-	return new(AWSFlavourBuilder)
+	return &AWSFlavourBuilder{}
 }
 
 // ComputeInstanceType sets the value of the 'compute_instance_type' attribute to the given value.
 //
 //
 func (b *AWSFlavourBuilder) ComputeInstanceType(value string) *AWSFlavourBuilder {
-	b.computeInstanceType = &value
+	b.computeInstanceType = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -48,7 +50,8 @@ func (b *AWSFlavourBuilder) ComputeInstanceType(value string) *AWSFlavourBuilder
 //
 //
 func (b *AWSFlavourBuilder) InfraInstanceType(value string) *AWSFlavourBuilder {
-	b.infraInstanceType = &value
+	b.infraInstanceType = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -57,6 +60,11 @@ func (b *AWSFlavourBuilder) InfraInstanceType(value string) *AWSFlavourBuilder {
 // Holds settings for an AWS storage volume.
 func (b *AWSFlavourBuilder) InfraVolume(value *AWSVolumeBuilder) *AWSFlavourBuilder {
 	b.infraVolume = value
+	if value != nil {
+		b.bitmap_ |= 4
+	} else {
+		b.bitmap_ &^= 4
+	}
 	return b
 }
 
@@ -64,7 +72,8 @@ func (b *AWSFlavourBuilder) InfraVolume(value *AWSVolumeBuilder) *AWSFlavourBuil
 //
 //
 func (b *AWSFlavourBuilder) MasterInstanceType(value string) *AWSFlavourBuilder {
-	b.masterInstanceType = &value
+	b.masterInstanceType = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -73,6 +82,11 @@ func (b *AWSFlavourBuilder) MasterInstanceType(value string) *AWSFlavourBuilder 
 // Holds settings for an AWS storage volume.
 func (b *AWSFlavourBuilder) MasterVolume(value *AWSVolumeBuilder) *AWSFlavourBuilder {
 	b.masterVolume = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -81,6 +95,11 @@ func (b *AWSFlavourBuilder) MasterVolume(value *AWSVolumeBuilder) *AWSFlavourBui
 // Holds settings for an AWS storage volume.
 func (b *AWSFlavourBuilder) WorkerVolume(value *AWSVolumeBuilder) *AWSFlavourBuilder {
 	b.workerVolume = value
+	if value != nil {
+		b.bitmap_ |= 32
+	} else {
+		b.bitmap_ &^= 32
+	}
 	return b
 }
 
@@ -89,6 +108,7 @@ func (b *AWSFlavourBuilder) Copy(object *AWSFlavour) *AWSFlavourBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.computeInstanceType = object.computeInstanceType
 	b.infraInstanceType = object.infraInstanceType
 	if object.infraVolume != nil {
@@ -113,6 +133,7 @@ func (b *AWSFlavourBuilder) Copy(object *AWSFlavour) *AWSFlavourBuilder {
 // Build creates a 'AWS_flavour' object using the configuration stored in the builder.
 func (b *AWSFlavourBuilder) Build() (object *AWSFlavour, err error) {
 	object = new(AWSFlavour)
+	object.bitmap_ = b.bitmap_
 	object.computeInstanceType = b.computeInstanceType
 	object.infraInstanceType = b.infraInstanceType
 	if b.infraVolume != nil {

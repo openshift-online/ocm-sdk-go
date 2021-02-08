@@ -24,36 +24,38 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Set of predefined properties of a cluster. For example, a _huge_ flavour can be a cluster
 // with 10 infra nodes and 1000 compute nodes.
 type FlavourBuilder struct {
-	id      *string
-	href    *string
-	link    bool
+	bitmap_ uint32
+	id      string
+	href    string
 	aws     *AWSFlavourBuilder
 	gcp     *GCPFlavourBuilder
-	name    *string
+	name    string
 	network *NetworkBuilder
 	nodes   *FlavourNodesBuilder
 }
 
 // NewFlavour creates a new builder of 'flavour' objects.
 func NewFlavour() *FlavourBuilder {
-	return new(FlavourBuilder)
+	return &FlavourBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *FlavourBuilder) Link(value bool) *FlavourBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *FlavourBuilder) ID(value string) *FlavourBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *FlavourBuilder) HREF(value string) *FlavourBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *FlavourBuilder) Link(value bool) *FlavourBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,6 +64,11 @@ func (b *FlavourBuilder) Link(value bool) *FlavourBuilder {
 // Specification for different classes of nodes inside a flavour.
 func (b *FlavourBuilder) AWS(value *AWSFlavourBuilder) *FlavourBuilder {
 	b.aws = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -70,6 +77,11 @@ func (b *FlavourBuilder) AWS(value *AWSFlavourBuilder) *FlavourBuilder {
 // Specification for different classes of nodes inside a flavour.
 func (b *FlavourBuilder) GCP(value *GCPFlavourBuilder) *FlavourBuilder {
 	b.gcp = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -77,7 +89,8 @@ func (b *FlavourBuilder) GCP(value *GCPFlavourBuilder) *FlavourBuilder {
 //
 //
 func (b *FlavourBuilder) Name(value string) *FlavourBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -86,6 +99,11 @@ func (b *FlavourBuilder) Name(value string) *FlavourBuilder {
 // Network configuration of a cluster.
 func (b *FlavourBuilder) Network(value *NetworkBuilder) *FlavourBuilder {
 	b.network = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -94,6 +112,11 @@ func (b *FlavourBuilder) Network(value *NetworkBuilder) *FlavourBuilder {
 // Counts of different classes of nodes inside a flavour.
 func (b *FlavourBuilder) Nodes(value *FlavourNodesBuilder) *FlavourBuilder {
 	b.nodes = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
@@ -102,9 +125,9 @@ func (b *FlavourBuilder) Copy(object *Flavour) *FlavourBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.aws != nil {
 		b.aws = NewAWSFlavour().Copy(object.aws)
 	} else {
@@ -134,7 +157,7 @@ func (b *FlavourBuilder) Build() (object *Flavour, err error) {
 	object = new(Flavour)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.aws != nil {
 		object.aws, err = b.aws.Build()
 		if err != nil {

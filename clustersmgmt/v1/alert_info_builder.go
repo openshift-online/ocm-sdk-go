@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Provides information about a single alert firing on the cluster.
 type AlertInfoBuilder struct {
-	name     *string
-	severity *AlertSeverity
+	bitmap_  uint32
+	name     string
+	severity AlertSeverity
 }
 
 // NewAlertInfo creates a new builder of 'alert_info' objects.
 func NewAlertInfo() *AlertInfoBuilder {
-	return new(AlertInfoBuilder)
+	return &AlertInfoBuilder{}
 }
 
 // Name sets the value of the 'name' attribute to the given value.
 //
 //
 func (b *AlertInfoBuilder) Name(value string) *AlertInfoBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *AlertInfoBuilder) Name(value string) *AlertInfoBuilder {
 //
 // Severity of a cluster alert received via telemetry.
 func (b *AlertInfoBuilder) Severity(value AlertSeverity) *AlertInfoBuilder {
-	b.severity = &value
+	b.severity = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *AlertInfoBuilder) Copy(object *AlertInfo) *AlertInfoBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.name = object.name
 	b.severity = object.severity
 	return b
@@ -61,6 +65,7 @@ func (b *AlertInfoBuilder) Copy(object *AlertInfo) *AlertInfoBuilder {
 // Build creates a 'alert_info' object using the configuration stored in the builder.
 func (b *AlertInfoBuilder) Build() (object *AlertInfo, err error) {
 	object = new(AlertInfo)
+	object.bitmap_ = b.bitmap_
 	object.name = b.name
 	object.severity = b.severity
 	return

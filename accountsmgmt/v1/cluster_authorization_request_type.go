@@ -23,39 +23,26 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationRequest struct {
-	byoc              *bool
-	accountUsername   *string
-	availabilityZone  *string
-	cloudAccountID    *string
-	cloudProviderID   *string
-	clusterID         *string
-	disconnected      *bool
-	displayName       *string
-	externalClusterID *string
-	managed           *bool
-	productID         *string
-	productCategory   *string
-	reserve           *bool
+	bitmap_           uint32
+	accountUsername   string
+	availabilityZone  string
+	cloudAccountID    string
+	cloudProviderID   string
+	clusterID         string
+	displayName       string
+	externalClusterID string
+	productID         string
+	productCategory   string
 	resources         []*ReservedResource
+	byoc              bool
+	disconnected      bool
+	managed           bool
+	reserve           bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterAuthorizationRequest) Empty() bool {
-	return o == nil || (o.byoc == nil &&
-		o.accountUsername == nil &&
-		o.availabilityZone == nil &&
-		o.cloudAccountID == nil &&
-		o.cloudProviderID == nil &&
-		o.clusterID == nil &&
-		o.disconnected == nil &&
-		o.displayName == nil &&
-		o.externalClusterID == nil &&
-		o.managed == nil &&
-		o.productID == nil &&
-		o.productCategory == nil &&
-		o.reserve == nil &&
-		len(o.resources) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // BYOC returns the value of the 'BYOC' attribute, or
@@ -63,8 +50,8 @@ func (o *ClusterAuthorizationRequest) Empty() bool {
 //
 //
 func (o *ClusterAuthorizationRequest) BYOC() bool {
-	if o != nil && o.byoc != nil {
-		return *o.byoc
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.byoc
 	}
 	return false
 }
@@ -74,9 +61,9 @@ func (o *ClusterAuthorizationRequest) BYOC() bool {
 //
 //
 func (o *ClusterAuthorizationRequest) GetBYOC() (value bool, ok bool) {
-	ok = o != nil && o.byoc != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.byoc
+		value = o.byoc
 	}
 	return
 }
@@ -86,8 +73,8 @@ func (o *ClusterAuthorizationRequest) GetBYOC() (value bool, ok bool) {
 //
 //
 func (o *ClusterAuthorizationRequest) AccountUsername() string {
-	if o != nil && o.accountUsername != nil {
-		return *o.accountUsername
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.accountUsername
 	}
 	return ""
 }
@@ -97,9 +84,9 @@ func (o *ClusterAuthorizationRequest) AccountUsername() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetAccountUsername() (value string, ok bool) {
-	ok = o != nil && o.accountUsername != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.accountUsername
+		value = o.accountUsername
 	}
 	return
 }
@@ -109,8 +96,8 @@ func (o *ClusterAuthorizationRequest) GetAccountUsername() (value string, ok boo
 //
 //
 func (o *ClusterAuthorizationRequest) AvailabilityZone() string {
-	if o != nil && o.availabilityZone != nil {
-		return *o.availabilityZone
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.availabilityZone
 	}
 	return ""
 }
@@ -120,9 +107,9 @@ func (o *ClusterAuthorizationRequest) AvailabilityZone() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetAvailabilityZone() (value string, ok bool) {
-	ok = o != nil && o.availabilityZone != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.availabilityZone
+		value = o.availabilityZone
 	}
 	return
 }
@@ -132,8 +119,8 @@ func (o *ClusterAuthorizationRequest) GetAvailabilityZone() (value string, ok bo
 //
 //
 func (o *ClusterAuthorizationRequest) CloudAccountID() string {
-	if o != nil && o.cloudAccountID != nil {
-		return *o.cloudAccountID
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.cloudAccountID
 	}
 	return ""
 }
@@ -143,9 +130,9 @@ func (o *ClusterAuthorizationRequest) CloudAccountID() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetCloudAccountID() (value string, ok bool) {
-	ok = o != nil && o.cloudAccountID != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.cloudAccountID
+		value = o.cloudAccountID
 	}
 	return
 }
@@ -155,8 +142,8 @@ func (o *ClusterAuthorizationRequest) GetCloudAccountID() (value string, ok bool
 //
 //
 func (o *ClusterAuthorizationRequest) CloudProviderID() string {
-	if o != nil && o.cloudProviderID != nil {
-		return *o.cloudProviderID
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.cloudProviderID
 	}
 	return ""
 }
@@ -166,9 +153,9 @@ func (o *ClusterAuthorizationRequest) CloudProviderID() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetCloudProviderID() (value string, ok bool) {
-	ok = o != nil && o.cloudProviderID != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.cloudProviderID
+		value = o.cloudProviderID
 	}
 	return
 }
@@ -178,8 +165,8 @@ func (o *ClusterAuthorizationRequest) GetCloudProviderID() (value string, ok boo
 //
 //
 func (o *ClusterAuthorizationRequest) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.clusterID
 	}
 	return ""
 }
@@ -189,9 +176,9 @@ func (o *ClusterAuthorizationRequest) ClusterID() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.clusterID
+		value = o.clusterID
 	}
 	return
 }
@@ -201,8 +188,8 @@ func (o *ClusterAuthorizationRequest) GetClusterID() (value string, ok bool) {
 //
 //
 func (o *ClusterAuthorizationRequest) Disconnected() bool {
-	if o != nil && o.disconnected != nil {
-		return *o.disconnected
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.disconnected
 	}
 	return false
 }
@@ -212,9 +199,9 @@ func (o *ClusterAuthorizationRequest) Disconnected() bool {
 //
 //
 func (o *ClusterAuthorizationRequest) GetDisconnected() (value bool, ok bool) {
-	ok = o != nil && o.disconnected != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.disconnected
+		value = o.disconnected
 	}
 	return
 }
@@ -224,8 +211,8 @@ func (o *ClusterAuthorizationRequest) GetDisconnected() (value bool, ok bool) {
 //
 //
 func (o *ClusterAuthorizationRequest) DisplayName() string {
-	if o != nil && o.displayName != nil {
-		return *o.displayName
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.displayName
 	}
 	return ""
 }
@@ -235,9 +222,9 @@ func (o *ClusterAuthorizationRequest) DisplayName() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetDisplayName() (value string, ok bool) {
-	ok = o != nil && o.displayName != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.displayName
+		value = o.displayName
 	}
 	return
 }
@@ -247,8 +234,8 @@ func (o *ClusterAuthorizationRequest) GetDisplayName() (value string, ok bool) {
 //
 //
 func (o *ClusterAuthorizationRequest) ExternalClusterID() string {
-	if o != nil && o.externalClusterID != nil {
-		return *o.externalClusterID
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.externalClusterID
 	}
 	return ""
 }
@@ -258,9 +245,9 @@ func (o *ClusterAuthorizationRequest) ExternalClusterID() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetExternalClusterID() (value string, ok bool) {
-	ok = o != nil && o.externalClusterID != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.externalClusterID
+		value = o.externalClusterID
 	}
 	return
 }
@@ -270,8 +257,8 @@ func (o *ClusterAuthorizationRequest) GetExternalClusterID() (value string, ok b
 //
 //
 func (o *ClusterAuthorizationRequest) Managed() bool {
-	if o != nil && o.managed != nil {
-		return *o.managed
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.managed
 	}
 	return false
 }
@@ -281,9 +268,9 @@ func (o *ClusterAuthorizationRequest) Managed() bool {
 //
 //
 func (o *ClusterAuthorizationRequest) GetManaged() (value bool, ok bool) {
-	ok = o != nil && o.managed != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
-		value = *o.managed
+		value = o.managed
 	}
 	return
 }
@@ -293,8 +280,8 @@ func (o *ClusterAuthorizationRequest) GetManaged() (value bool, ok bool) {
 //
 //
 func (o *ClusterAuthorizationRequest) ProductID() string {
-	if o != nil && o.productID != nil {
-		return *o.productID
+	if o != nil && o.bitmap_&1024 != 0 {
+		return o.productID
 	}
 	return ""
 }
@@ -304,9 +291,9 @@ func (o *ClusterAuthorizationRequest) ProductID() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetProductID() (value string, ok bool) {
-	ok = o != nil && o.productID != nil
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
-		value = *o.productID
+		value = o.productID
 	}
 	return
 }
@@ -316,8 +303,8 @@ func (o *ClusterAuthorizationRequest) GetProductID() (value string, ok bool) {
 //
 //
 func (o *ClusterAuthorizationRequest) ProductCategory() string {
-	if o != nil && o.productCategory != nil {
-		return *o.productCategory
+	if o != nil && o.bitmap_&2048 != 0 {
+		return o.productCategory
 	}
 	return ""
 }
@@ -327,9 +314,9 @@ func (o *ClusterAuthorizationRequest) ProductCategory() string {
 //
 //
 func (o *ClusterAuthorizationRequest) GetProductCategory() (value string, ok bool) {
-	ok = o != nil && o.productCategory != nil
+	ok = o != nil && o.bitmap_&2048 != 0
 	if ok {
-		value = *o.productCategory
+		value = o.productCategory
 	}
 	return
 }
@@ -339,8 +326,8 @@ func (o *ClusterAuthorizationRequest) GetProductCategory() (value string, ok boo
 //
 //
 func (o *ClusterAuthorizationRequest) Reserve() bool {
-	if o != nil && o.reserve != nil {
-		return *o.reserve
+	if o != nil && o.bitmap_&4096 != 0 {
+		return o.reserve
 	}
 	return false
 }
@@ -350,9 +337,9 @@ func (o *ClusterAuthorizationRequest) Reserve() bool {
 //
 //
 func (o *ClusterAuthorizationRequest) GetReserve() (value bool, ok bool) {
-	ok = o != nil && o.reserve != nil
+	ok = o != nil && o.bitmap_&4096 != 0
 	if ok {
-		value = *o.reserve
+		value = o.reserve
 	}
 	return
 }
@@ -362,10 +349,10 @@ func (o *ClusterAuthorizationRequest) GetReserve() (value bool, ok bool) {
 //
 //
 func (o *ClusterAuthorizationRequest) Resources() []*ReservedResource {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8192 != 0 {
+		return o.resources
 	}
-	return o.resources
+	return nil
 }
 
 // GetResources returns the value of the 'resources' attribute and
@@ -373,7 +360,7 @@ func (o *ClusterAuthorizationRequest) Resources() []*ReservedResource {
 //
 //
 func (o *ClusterAuthorizationRequest) GetResources() (value []*ReservedResource, ok bool) {
-	ok = o != nil && o.resources != nil
+	ok = o != nil && o.bitmap_&8192 != 0
 	if ok {
 		value = o.resources
 	}
@@ -394,7 +381,7 @@ const ClusterAuthorizationRequestListNilKind = "ClusterAuthorizationRequestListN
 
 // ClusterAuthorizationRequestList is a list of values of the 'cluster_authorization_request' type.
 type ClusterAuthorizationRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterAuthorizationRequest
 }

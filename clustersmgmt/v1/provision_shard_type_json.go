@@ -39,33 +39,32 @@ func MarshalProvisionShard(object *ProvisionShard, writer io.Writer) error {
 func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(ProvisionShardLinkKind)
 	} else {
 		stream.WriteString(ProvisionShardKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.awsAccountOperatorConfig != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.awsAccountOperatorConfig != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -73,23 +72,26 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		writeServerConfig(object.awsAccountOperatorConfig, stream)
 		count++
 	}
-	if object.awsBaseDomain != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("aws_base_domain")
-		stream.WriteString(*object.awsBaseDomain)
+		stream.WriteString(object.awsBaseDomain)
 		count++
 	}
-	if object.gcpBaseDomain != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("gcp_base_domain")
-		stream.WriteString(*object.gcpBaseDomain)
+		stream.WriteString(object.gcpBaseDomain)
 		count++
 	}
-	if object.gcpProjectOperator != nil {
+	present_ = object.bitmap_&64 != 0 && object.gcpProjectOperator != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -97,7 +99,8 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		writeServerConfig(object.gcpProjectOperator, stream)
 		count++
 	}
-	if object.hiveConfig != nil {
+	present_ = object.bitmap_&128 != 0 && object.hiveConfig != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -134,28 +137,35 @@ func readProvisionShard(iterator *jsoniter.Iterator) *ProvisionShard {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == ProvisionShardLinkKind
+			if value == ProvisionShardLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "aws_account_operator_config":
 			value := readServerConfig(iterator)
 			object.awsAccountOperatorConfig = value
+			object.bitmap_ |= 8
 		case "aws_base_domain":
 			value := iterator.ReadString()
-			object.awsBaseDomain = &value
+			object.awsBaseDomain = value
+			object.bitmap_ |= 16
 		case "gcp_base_domain":
 			value := iterator.ReadString()
-			object.gcpBaseDomain = &value
+			object.gcpBaseDomain = value
+			object.bitmap_ |= 32
 		case "gcp_project_operator":
 			value := readServerConfig(iterator)
 			object.gcpProjectOperator = value
+			object.bitmap_ |= 64
 		case "hive_config":
 			value := readServerConfig(iterator)
 			object.hiveConfig = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

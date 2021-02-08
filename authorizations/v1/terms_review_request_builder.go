@@ -24,19 +24,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 // Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]
 // review requests.
 type TermsReviewRequestBuilder struct {
-	accountUsername *string
+	bitmap_         uint32
+	accountUsername string
 }
 
 // NewTermsReviewRequest creates a new builder of 'terms_review_request' objects.
 func NewTermsReviewRequest() *TermsReviewRequestBuilder {
-	return new(TermsReviewRequestBuilder)
+	return &TermsReviewRequestBuilder{}
 }
 
 // AccountUsername sets the value of the 'account_username' attribute to the given value.
 //
 //
 func (b *TermsReviewRequestBuilder) AccountUsername(value string) *TermsReviewRequestBuilder {
-	b.accountUsername = &value
+	b.accountUsername = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,6 +47,7 @@ func (b *TermsReviewRequestBuilder) Copy(object *TermsReviewRequest) *TermsRevie
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountUsername = object.accountUsername
 	return b
 }
@@ -52,6 +55,7 @@ func (b *TermsReviewRequestBuilder) Copy(object *TermsReviewRequest) *TermsRevie
 // Build creates a 'terms_review_request' object using the configuration stored in the builder.
 func (b *TermsReviewRequestBuilder) Build() (object *TermsReviewRequest, err error) {
 	object = new(TermsReviewRequest)
+	object.bitmap_ = b.bitmap_
 	object.accountUsername = b.accountUsername
 	return
 }

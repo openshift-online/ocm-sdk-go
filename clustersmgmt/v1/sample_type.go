@@ -27,15 +27,14 @@ import (
 //
 // Sample of a metric.
 type Sample struct {
-	time  *time.Time
-	value *float64
+	bitmap_ uint32
+	time    time.Time
+	value   float64
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Sample) Empty() bool {
-	return o == nil || (o.time == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Time returns the value of the 'time' attribute, or
@@ -43,8 +42,8 @@ func (o *Sample) Empty() bool {
 //
 // Time when the sample was obtained.
 func (o *Sample) Time() time.Time {
-	if o != nil && o.time != nil {
-		return *o.time
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.time
 	}
 	return time.Time{}
 }
@@ -54,9 +53,9 @@ func (o *Sample) Time() time.Time {
 //
 // Time when the sample was obtained.
 func (o *Sample) GetTime() (value time.Time, ok bool) {
-	ok = o != nil && o.time != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.time
+		value = o.time
 	}
 	return
 }
@@ -66,8 +65,8 @@ func (o *Sample) GetTime() (value time.Time, ok bool) {
 //
 // Numeric value of the sample.
 func (o *Sample) Value() float64 {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.value
 	}
 	return 0.0
 }
@@ -77,9 +76,9 @@ func (o *Sample) Value() float64 {
 //
 // Numeric value of the sample.
 func (o *Sample) GetValue() (value float64, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -98,7 +97,7 @@ const SampleListNilKind = "SampleListNil"
 
 // SampleList is a list of values of the 'sample' type.
 type SampleList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Sample
 }

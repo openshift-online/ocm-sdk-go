@@ -39,20 +39,23 @@ func MarshalHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, writer io
 func writeHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.password != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("password")
-		stream.WriteString(*object.password)
+		stream.WriteString(object.password)
 		count++
 	}
-	if object.username != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("username")
-		stream.WriteString(*object.username)
+		stream.WriteString(object.username)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,10 +87,12 @@ func readHTPasswdIdentityProvider(iterator *jsoniter.Iterator) *HTPasswdIdentity
 		switch field {
 		case "password":
 			value := iterator.ReadString()
-			object.password = &value
+			object.password = value
+			object.bitmap_ |= 1
 		case "username":
 			value := iterator.ReadString()
-			object.username = &value
+			object.username = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

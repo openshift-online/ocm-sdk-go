@@ -39,28 +39,32 @@ func MarshalTaint(object *Taint, writer io.Writer) error {
 func writeTaint(object *Taint, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.effect != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("effect")
-		stream.WriteString(*object.effect)
+		stream.WriteString(object.effect)
 		count++
 	}
-	if object.key != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("key")
-		stream.WriteString(*object.key)
+		stream.WriteString(object.key)
 		count++
 	}
-	if object.value != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("value")
-		stream.WriteString(*object.value)
+		stream.WriteString(object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -92,13 +96,16 @@ func readTaint(iterator *jsoniter.Iterator) *Taint {
 		switch field {
 		case "effect":
 			value := iterator.ReadString()
-			object.effect = &value
+			object.effect = value
+			object.bitmap_ |= 1
 		case "key":
 			value := iterator.ReadString()
-			object.key = &value
+			object.key = value
+			object.bitmap_ |= 2
 		case "value":
 			value := iterator.ReadString()
-			object.value = &value
+			object.value = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

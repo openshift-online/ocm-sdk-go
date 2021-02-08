@@ -35,14 +35,14 @@ const IngressNilKind = "IngressNil"
 //
 // Representation of an ingress.
 type Ingress struct {
-	id             *string
-	href           *string
-	link           bool
-	dnsName        *string
+	bitmap_        uint32
+	id             string
+	href           string
+	dnsName        string
 	cluster        *Cluster
-	default_       *bool
-	listening      *ListeningMethod
+	listening      ListeningMethod
 	routeSelectors map[string]string
+	default_       bool
 }
 
 // Kind returns the name of the type of the object.
@@ -50,16 +50,21 @@ func (o *Ingress) Kind() string {
 	if o == nil {
 		return IngressNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return IngressLinkKind
 	}
 	return IngressKind
 }
 
+// Link returns true iif this is a link.
+func (o *Ingress) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Ingress) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -67,22 +72,17 @@ func (o *Ingress) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Ingress) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Ingress) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Ingress) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -90,21 +90,16 @@ func (o *Ingress) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Ingress) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Ingress) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.dnsName == nil &&
-		o.default_ == nil &&
-		o.listening == nil &&
-		len(o.routeSelectors) == 0 &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // DNSName returns the value of the 'DNS_name' attribute, or
@@ -112,8 +107,8 @@ func (o *Ingress) Empty() bool {
 //
 // DNS Name of the ingress.
 func (o *Ingress) DNSName() string {
-	if o != nil && o.dnsName != nil {
-		return *o.dnsName
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.dnsName
 	}
 	return ""
 }
@@ -123,9 +118,9 @@ func (o *Ingress) DNSName() string {
 //
 // DNS Name of the ingress.
 func (o *Ingress) GetDNSName() (value string, ok bool) {
-	ok = o != nil && o.dnsName != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.dnsName
+		value = o.dnsName
 	}
 	return
 }
@@ -135,10 +130,10 @@ func (o *Ingress) GetDNSName() (value string, ok bool) {
 //
 // ID used to identify the cluster that this ingress is attached to.
 func (o *Ingress) Cluster() *Cluster {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.cluster
 	}
-	return o.cluster
+	return nil
 }
 
 // GetCluster returns the value of the 'cluster' attribute and
@@ -146,7 +141,7 @@ func (o *Ingress) Cluster() *Cluster {
 //
 // ID used to identify the cluster that this ingress is attached to.
 func (o *Ingress) GetCluster() (value *Cluster, ok bool) {
-	ok = o != nil && o.cluster != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.cluster
 	}
@@ -158,8 +153,8 @@ func (o *Ingress) GetCluster() (value *Cluster, ok bool) {
 //
 // Indicates if this is the default ingress.
 func (o *Ingress) Default() bool {
-	if o != nil && o.default_ != nil {
-		return *o.default_
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.default_
 	}
 	return false
 }
@@ -169,9 +164,9 @@ func (o *Ingress) Default() bool {
 //
 // Indicates if this is the default ingress.
 func (o *Ingress) GetDefault() (value bool, ok bool) {
-	ok = o != nil && o.default_ != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.default_
+		value = o.default_
 	}
 	return
 }
@@ -181,8 +176,8 @@ func (o *Ingress) GetDefault() (value bool, ok bool) {
 //
 // Listening method of the ingress
 func (o *Ingress) Listening() ListeningMethod {
-	if o != nil && o.listening != nil {
-		return *o.listening
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.listening
 	}
 	return ListeningMethod("")
 }
@@ -192,9 +187,9 @@ func (o *Ingress) Listening() ListeningMethod {
 //
 // Listening method of the ingress
 func (o *Ingress) GetListening() (value ListeningMethod, ok bool) {
-	ok = o != nil && o.listening != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.listening
+		value = o.listening
 	}
 	return
 }
@@ -204,10 +199,10 @@ func (o *Ingress) GetListening() (value ListeningMethod, ok bool) {
 //
 // A set of labels for the ingress.
 func (o *Ingress) RouteSelectors() map[string]string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.routeSelectors
 	}
-	return o.routeSelectors
+	return nil
 }
 
 // GetRouteSelectors returns the value of the 'route_selectors' attribute and
@@ -215,7 +210,7 @@ func (o *Ingress) RouteSelectors() map[string]string {
 //
 // A set of labels for the ingress.
 func (o *Ingress) GetRouteSelectors() (value map[string]string, ok bool) {
-	ok = o != nil && o.routeSelectors != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.routeSelectors
 	}
@@ -236,7 +231,7 @@ const IngressListNilKind = "IngressListNil"
 
 // IngressList is a list of values of the 'ingress' type.
 type IngressList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Ingress
 }
@@ -259,8 +254,8 @@ func (l *IngressList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *IngressList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -268,9 +263,9 @@ func (l *IngressList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *IngressList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

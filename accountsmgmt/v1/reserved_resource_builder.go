@@ -27,25 +27,27 @@ import (
 //
 //
 type ReservedResourceBuilder struct {
-	byoc                 *bool
-	availabilityZoneType *string
-	count                *int
-	createdAt            *time.Time
-	resourceName         *string
-	resourceType         *string
-	updatedAt            *time.Time
+	bitmap_              uint32
+	availabilityZoneType string
+	count                int
+	createdAt            time.Time
+	resourceName         string
+	resourceType         string
+	updatedAt            time.Time
+	byoc                 bool
 }
 
 // NewReservedResource creates a new builder of 'reserved_resource' objects.
 func NewReservedResource() *ReservedResourceBuilder {
-	return new(ReservedResourceBuilder)
+	return &ReservedResourceBuilder{}
 }
 
 // BYOC sets the value of the 'BYOC' attribute to the given value.
 //
 //
 func (b *ReservedResourceBuilder) BYOC(value bool) *ReservedResourceBuilder {
-	b.byoc = &value
+	b.byoc = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -53,7 +55,8 @@ func (b *ReservedResourceBuilder) BYOC(value bool) *ReservedResourceBuilder {
 //
 //
 func (b *ReservedResourceBuilder) AvailabilityZoneType(value string) *ReservedResourceBuilder {
-	b.availabilityZoneType = &value
+	b.availabilityZoneType = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -61,7 +64,8 @@ func (b *ReservedResourceBuilder) AvailabilityZoneType(value string) *ReservedRe
 //
 //
 func (b *ReservedResourceBuilder) Count(value int) *ReservedResourceBuilder {
-	b.count = &value
+	b.count = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -69,7 +73,8 @@ func (b *ReservedResourceBuilder) Count(value int) *ReservedResourceBuilder {
 //
 //
 func (b *ReservedResourceBuilder) CreatedAt(value time.Time) *ReservedResourceBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -77,7 +82,8 @@ func (b *ReservedResourceBuilder) CreatedAt(value time.Time) *ReservedResourceBu
 //
 //
 func (b *ReservedResourceBuilder) ResourceName(value string) *ReservedResourceBuilder {
-	b.resourceName = &value
+	b.resourceName = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -85,7 +91,8 @@ func (b *ReservedResourceBuilder) ResourceName(value string) *ReservedResourceBu
 //
 //
 func (b *ReservedResourceBuilder) ResourceType(value string) *ReservedResourceBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -93,7 +100,8 @@ func (b *ReservedResourceBuilder) ResourceType(value string) *ReservedResourceBu
 //
 //
 func (b *ReservedResourceBuilder) UpdatedAt(value time.Time) *ReservedResourceBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -102,6 +110,7 @@ func (b *ReservedResourceBuilder) Copy(object *ReservedResource) *ReservedResour
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.byoc = object.byoc
 	b.availabilityZoneType = object.availabilityZoneType
 	b.count = object.count
@@ -115,6 +124,7 @@ func (b *ReservedResourceBuilder) Copy(object *ReservedResource) *ReservedResour
 // Build creates a 'reserved_resource' object using the configuration stored in the builder.
 func (b *ReservedResourceBuilder) Build() (object *ReservedResource, err error) {
 	object = new(ReservedResource)
+	object.bitmap_ = b.bitmap_
 	object.byoc = b.byoc
 	object.availabilityZoneType = b.availabilityZoneType
 	object.count = b.count

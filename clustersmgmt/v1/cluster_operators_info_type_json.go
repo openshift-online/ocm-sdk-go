@@ -39,7 +39,9 @@ func MarshalClusterOperatorsInfo(object *ClusterOperatorsInfo, writer io.Writer)
 func writeClusterOperatorsInfo(object *ClusterOperatorsInfo, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.operators != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.operators != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -77,6 +79,7 @@ func readClusterOperatorsInfo(iterator *jsoniter.Iterator) *ClusterOperatorsInfo
 		case "operators":
 			value := readClusterOperatorInfoList(iterator)
 			object.operators = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

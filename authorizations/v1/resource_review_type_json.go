@@ -39,23 +39,27 @@ func MarshalResourceReview(object *ResourceReview, writer io.Writer) error {
 func writeResourceReview(object *ResourceReview, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.accountUsername != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_username")
-		stream.WriteString(*object.accountUsername)
+		stream.WriteString(object.accountUsername)
 		count++
 	}
-	if object.action != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("action")
-		stream.WriteString(*object.action)
+		stream.WriteString(object.action)
 		count++
 	}
-	if object.clusterIDs != nil {
+	present_ = object.bitmap_&4 != 0 && object.clusterIDs != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -63,7 +67,8 @@ func writeResourceReview(object *ResourceReview, stream *jsoniter.Stream) {
 		writeStringList(object.clusterIDs, stream)
 		count++
 	}
-	if object.clusterUUIDs != nil {
+	present_ = object.bitmap_&8 != 0 && object.clusterUUIDs != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -71,7 +76,8 @@ func writeResourceReview(object *ResourceReview, stream *jsoniter.Stream) {
 		writeStringList(object.clusterUUIDs, stream)
 		count++
 	}
-	if object.organizationIDs != nil {
+	present_ = object.bitmap_&16 != 0 && object.organizationIDs != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -79,15 +85,17 @@ func writeResourceReview(object *ResourceReview, stream *jsoniter.Stream) {
 		writeStringList(object.organizationIDs, stream)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
-	if object.subscriptionIDs != nil {
+	present_ = object.bitmap_&64 != 0 && object.subscriptionIDs != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -124,25 +132,32 @@ func readResourceReview(iterator *jsoniter.Iterator) *ResourceReview {
 		switch field {
 		case "account_username":
 			value := iterator.ReadString()
-			object.accountUsername = &value
+			object.accountUsername = value
+			object.bitmap_ |= 1
 		case "action":
 			value := iterator.ReadString()
-			object.action = &value
+			object.action = value
+			object.bitmap_ |= 2
 		case "cluster_ids":
 			value := readStringList(iterator)
 			object.clusterIDs = value
+			object.bitmap_ |= 4
 		case "cluster_uuids":
 			value := readStringList(iterator)
 			object.clusterUUIDs = value
+			object.bitmap_ |= 8
 		case "organization_ids":
 			value := readStringList(iterator)
 			object.organizationIDs = value
+			object.bitmap_ |= 16
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 32
 		case "subscription_ids":
 			value := readStringList(iterator)
 			object.subscriptionIDs = value
+			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}

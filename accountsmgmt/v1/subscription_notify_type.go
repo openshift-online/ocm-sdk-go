@@ -24,27 +24,20 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 // This struct is a request to send a templated email to a user related to this
 // subscription.
 type SubscriptionNotify struct {
-	bccAddress              *string
-	clusterID               *string
-	clusterUUID             *string
-	includeRedHatAssociates *bool
-	subject                 *string
-	subscriptionID          *string
-	templateName            *string
+	bitmap_                 uint32
+	bccAddress              string
+	clusterID               string
+	clusterUUID             string
+	subject                 string
+	subscriptionID          string
+	templateName            string
 	templateParameters      []*TemplateParameter
+	includeRedHatAssociates bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SubscriptionNotify) Empty() bool {
-	return o == nil || (o.bccAddress == nil &&
-		o.clusterID == nil &&
-		o.clusterUUID == nil &&
-		o.includeRedHatAssociates == nil &&
-		o.subject == nil &&
-		o.subscriptionID == nil &&
-		o.templateName == nil &&
-		len(o.templateParameters) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // BccAddress returns the value of the 'bcc_address' attribute, or
@@ -52,8 +45,8 @@ func (o *SubscriptionNotify) Empty() bool {
 //
 // The BCC address to be included on the email that is sent
 func (o *SubscriptionNotify) BccAddress() string {
-	if o != nil && o.bccAddress != nil {
-		return *o.bccAddress
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.bccAddress
 	}
 	return ""
 }
@@ -63,9 +56,9 @@ func (o *SubscriptionNotify) BccAddress() string {
 //
 // The BCC address to be included on the email that is sent
 func (o *SubscriptionNotify) GetBccAddress() (value string, ok bool) {
-	ok = o != nil && o.bccAddress != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.bccAddress
+		value = o.bccAddress
 	}
 	return
 }
@@ -75,8 +68,8 @@ func (o *SubscriptionNotify) GetBccAddress() (value string, ok bool) {
 //
 // Indicates which Cluster (internal id) the resource type belongs to
 func (o *SubscriptionNotify) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.clusterID
 	}
 	return ""
 }
@@ -86,9 +79,9 @@ func (o *SubscriptionNotify) ClusterID() string {
 //
 // Indicates which Cluster (internal id) the resource type belongs to
 func (o *SubscriptionNotify) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.clusterID
+		value = o.clusterID
 	}
 	return
 }
@@ -98,8 +91,8 @@ func (o *SubscriptionNotify) GetClusterID() (value string, ok bool) {
 //
 // Indicates which Cluster (external id) the resource type belongs to
 func (o *SubscriptionNotify) ClusterUUID() string {
-	if o != nil && o.clusterUUID != nil {
-		return *o.clusterUUID
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clusterUUID
 	}
 	return ""
 }
@@ -109,9 +102,9 @@ func (o *SubscriptionNotify) ClusterUUID() string {
 //
 // Indicates which Cluster (external id) the resource type belongs to
 func (o *SubscriptionNotify) GetClusterUUID() (value string, ok bool) {
-	ok = o != nil && o.clusterUUID != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.clusterUUID
+		value = o.clusterUUID
 	}
 	return
 }
@@ -121,8 +114,8 @@ func (o *SubscriptionNotify) GetClusterUUID() (value string, ok bool) {
 //
 // Indicates whether to include red hat associates in the email notification
 func (o *SubscriptionNotify) IncludeRedHatAssociates() bool {
-	if o != nil && o.includeRedHatAssociates != nil {
-		return *o.includeRedHatAssociates
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.includeRedHatAssociates
 	}
 	return false
 }
@@ -132,9 +125,9 @@ func (o *SubscriptionNotify) IncludeRedHatAssociates() bool {
 //
 // Indicates whether to include red hat associates in the email notification
 func (o *SubscriptionNotify) GetIncludeRedHatAssociates() (value bool, ok bool) {
-	ok = o != nil && o.includeRedHatAssociates != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.includeRedHatAssociates
+		value = o.includeRedHatAssociates
 	}
 	return
 }
@@ -144,8 +137,8 @@ func (o *SubscriptionNotify) GetIncludeRedHatAssociates() (value bool, ok bool) 
 //
 // The email subject
 func (o *SubscriptionNotify) Subject() string {
-	if o != nil && o.subject != nil {
-		return *o.subject
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.subject
 	}
 	return ""
 }
@@ -155,9 +148,9 @@ func (o *SubscriptionNotify) Subject() string {
 //
 // The email subject
 func (o *SubscriptionNotify) GetSubject() (value string, ok bool) {
-	ok = o != nil && o.subject != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.subject
+		value = o.subject
 	}
 	return
 }
@@ -167,8 +160,8 @@ func (o *SubscriptionNotify) GetSubject() (value string, ok bool) {
 //
 // Indicates which Subscription the resource type belongs to
 func (o *SubscriptionNotify) SubscriptionID() string {
-	if o != nil && o.subscriptionID != nil {
-		return *o.subscriptionID
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.subscriptionID
 	}
 	return ""
 }
@@ -178,9 +171,9 @@ func (o *SubscriptionNotify) SubscriptionID() string {
 //
 // Indicates which Subscription the resource type belongs to
 func (o *SubscriptionNotify) GetSubscriptionID() (value string, ok bool) {
-	ok = o != nil && o.subscriptionID != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.subscriptionID
+		value = o.subscriptionID
 	}
 	return
 }
@@ -190,8 +183,8 @@ func (o *SubscriptionNotify) GetSubscriptionID() (value string, ok bool) {
 //
 // The name of the template used to construct the email contents
 func (o *SubscriptionNotify) TemplateName() string {
-	if o != nil && o.templateName != nil {
-		return *o.templateName
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.templateName
 	}
 	return ""
 }
@@ -201,9 +194,9 @@ func (o *SubscriptionNotify) TemplateName() string {
 //
 // The name of the template used to construct the email contents
 func (o *SubscriptionNotify) GetTemplateName() (value string, ok bool) {
-	ok = o != nil && o.templateName != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.templateName
+		value = o.templateName
 	}
 	return
 }
@@ -213,10 +206,10 @@ func (o *SubscriptionNotify) GetTemplateName() (value string, ok bool) {
 //
 // The values which will be substituted into the templated email
 func (o *SubscriptionNotify) TemplateParameters() []*TemplateParameter {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.templateParameters
 	}
-	return o.templateParameters
+	return nil
 }
 
 // GetTemplateParameters returns the value of the 'template_parameters' attribute and
@@ -224,7 +217,7 @@ func (o *SubscriptionNotify) TemplateParameters() []*TemplateParameter {
 //
 // The values which will be substituted into the templated email
 func (o *SubscriptionNotify) GetTemplateParameters() (value []*TemplateParameter, ok bool) {
-	ok = o != nil && o.templateParameters != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.templateParameters
 	}
@@ -245,7 +238,7 @@ const SubscriptionNotifyListNilKind = "SubscriptionNotifyListNil"
 
 // SubscriptionNotifyList is a list of values of the 'subscription_notify' type.
 type SubscriptionNotifyList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SubscriptionNotify
 }

@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Information about the console of a cluster.
 type ClusterConsoleBuilder struct {
-	url *string
+	bitmap_ uint32
+	url     string
 }
 
 // NewClusterConsole creates a new builder of 'cluster_console' objects.
 func NewClusterConsole() *ClusterConsoleBuilder {
-	return new(ClusterConsoleBuilder)
+	return &ClusterConsoleBuilder{}
 }
 
 // URL sets the value of the 'URL' attribute to the given value.
 //
 //
 func (b *ClusterConsoleBuilder) URL(value string) *ClusterConsoleBuilder {
-	b.url = &value
+	b.url = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *ClusterConsoleBuilder) Copy(object *ClusterConsole) *ClusterConsoleBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.url = object.url
 	return b
 }
@@ -51,6 +54,7 @@ func (b *ClusterConsoleBuilder) Copy(object *ClusterConsole) *ClusterConsoleBuil
 // Build creates a 'cluster_console' object using the configuration stored in the builder.
 func (b *ClusterConsoleBuilder) Build() (object *ClusterConsole, err error) {
 	object = new(ClusterConsole)
+	object.bitmap_ = b.bitmap_
 	object.url = b.url
 	return
 }

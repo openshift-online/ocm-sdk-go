@@ -23,22 +23,24 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Network configuration of a cluster.
 type NetworkBuilder struct {
-	hostPrefix  *int
-	machineCIDR *string
-	podCIDR     *string
-	serviceCIDR *string
+	bitmap_     uint32
+	hostPrefix  int
+	machineCIDR string
+	podCIDR     string
+	serviceCIDR string
 }
 
 // NewNetwork creates a new builder of 'network' objects.
 func NewNetwork() *NetworkBuilder {
-	return new(NetworkBuilder)
+	return &NetworkBuilder{}
 }
 
 // HostPrefix sets the value of the 'host_prefix' attribute to the given value.
 //
 //
 func (b *NetworkBuilder) HostPrefix(value int) *NetworkBuilder {
-	b.hostPrefix = &value
+	b.hostPrefix = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,7 +48,8 @@ func (b *NetworkBuilder) HostPrefix(value int) *NetworkBuilder {
 //
 //
 func (b *NetworkBuilder) MachineCIDR(value string) *NetworkBuilder {
-	b.machineCIDR = &value
+	b.machineCIDR = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,7 +57,8 @@ func (b *NetworkBuilder) MachineCIDR(value string) *NetworkBuilder {
 //
 //
 func (b *NetworkBuilder) PodCIDR(value string) *NetworkBuilder {
-	b.podCIDR = &value
+	b.podCIDR = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,7 +66,8 @@ func (b *NetworkBuilder) PodCIDR(value string) *NetworkBuilder {
 //
 //
 func (b *NetworkBuilder) ServiceCIDR(value string) *NetworkBuilder {
-	b.serviceCIDR = &value
+	b.serviceCIDR = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -71,6 +76,7 @@ func (b *NetworkBuilder) Copy(object *Network) *NetworkBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.hostPrefix = object.hostPrefix
 	b.machineCIDR = object.machineCIDR
 	b.podCIDR = object.podCIDR
@@ -81,6 +87,7 @@ func (b *NetworkBuilder) Copy(object *Network) *NetworkBuilder {
 // Build creates a 'network' object using the configuration stored in the builder.
 func (b *NetworkBuilder) Build() (object *Network, err error) {
 	object = new(Network)
+	object.bitmap_ = b.bitmap_
 	object.hostPrefix = b.hostPrefix
 	object.machineCIDR = b.machineCIDR
 	object.podCIDR = b.podCIDR

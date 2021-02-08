@@ -39,28 +39,32 @@ func MarshalResourceReviewRequest(object *ResourceReviewRequest, writer io.Write
 func writeResourceReviewRequest(object *ResourceReviewRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.accountUsername != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_username")
-		stream.WriteString(*object.accountUsername)
+		stream.WriteString(object.accountUsername)
 		count++
 	}
-	if object.action != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("action")
-		stream.WriteString(*object.action)
+		stream.WriteString(object.action)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -92,13 +96,16 @@ func readResourceReviewRequest(iterator *jsoniter.Iterator) *ResourceReviewReque
 		switch field {
 		case "account_username":
 			value := iterator.ReadString()
-			object.accountUsername = &value
+			object.accountUsername = value
+			object.bitmap_ |= 1
 		case "action":
 			value := iterator.ReadString()
-			object.action = &value
+			object.action = value
+			object.bitmap_ |= 2
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

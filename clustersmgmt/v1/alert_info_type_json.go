@@ -39,20 +39,23 @@ func MarshalAlertInfo(object *AlertInfo, writer io.Writer) error {
 func writeAlertInfo(object *AlertInfo, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.name != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.severity != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("severity")
-		stream.WriteString(string(*object.severity))
+		stream.WriteString(string(object.severity))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,11 +87,13 @@ func readAlertInfo(iterator *jsoniter.Iterator) *AlertInfo {
 		switch field {
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 1
 		case "severity":
 			text := iterator.ReadString()
 			value := AlertSeverity(text)
-			object.severity = &value
+			object.severity = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

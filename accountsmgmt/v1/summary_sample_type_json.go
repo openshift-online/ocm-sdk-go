@@ -39,20 +39,23 @@ func MarshalSummarySample(object *SummarySample, writer io.Writer) error {
 func writeSummarySample(object *SummarySample, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.time != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("time")
-		stream.WriteString(*object.time)
+		stream.WriteString(object.time)
 		count++
 	}
-	if object.value != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("value")
-		stream.WriteFloat64(*object.value)
+		stream.WriteFloat64(object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,10 +87,12 @@ func readSummarySample(iterator *jsoniter.Iterator) *SummarySample {
 		switch field {
 		case "time":
 			value := iterator.ReadString()
-			object.time = &value
+			object.time = value
+			object.bitmap_ |= 1
 		case "value":
 			value := iterator.ReadFloat64()
-			object.value = &value
+			object.value = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

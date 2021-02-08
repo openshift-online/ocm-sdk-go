@@ -39,41 +39,41 @@ func MarshalRole(object *Role, writer io.Writer) error {
 func writeRole(object *Role, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(RoleLinkKind)
 	} else {
 		stream.WriteString(RoleKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.name != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.permissions != nil {
+	present_ = object.bitmap_&16 != 0 && object.permissions != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -110,19 +110,23 @@ func readRole(iterator *jsoniter.Iterator) *Role {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == RoleLinkKind
+			if value == RoleLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 8
 		case "permissions":
 			value := readPermissionList(iterator)
 			object.permissions = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

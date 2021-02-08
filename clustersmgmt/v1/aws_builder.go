@@ -23,22 +23,24 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // _Amazon Web Services_ specific settings of a cluster.
 type AWSBuilder struct {
-	accessKeyID     *string
-	accountID       *string
-	secretAccessKey *string
+	bitmap_         uint32
+	accessKeyID     string
+	accountID       string
+	secretAccessKey string
 	subnetIDs       []string
 }
 
 // NewAWS creates a new builder of 'AWS' objects.
 func NewAWS() *AWSBuilder {
-	return new(AWSBuilder)
+	return &AWSBuilder{}
 }
 
 // AccessKeyID sets the value of the 'access_key_ID' attribute to the given value.
 //
 //
 func (b *AWSBuilder) AccessKeyID(value string) *AWSBuilder {
-	b.accessKeyID = &value
+	b.accessKeyID = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,7 +48,8 @@ func (b *AWSBuilder) AccessKeyID(value string) *AWSBuilder {
 //
 //
 func (b *AWSBuilder) AccountID(value string) *AWSBuilder {
-	b.accountID = &value
+	b.accountID = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,7 +57,8 @@ func (b *AWSBuilder) AccountID(value string) *AWSBuilder {
 //
 //
 func (b *AWSBuilder) SecretAccessKey(value string) *AWSBuilder {
-	b.secretAccessKey = &value
+	b.secretAccessKey = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -64,6 +68,7 @@ func (b *AWSBuilder) SecretAccessKey(value string) *AWSBuilder {
 func (b *AWSBuilder) SubnetIDs(values ...string) *AWSBuilder {
 	b.subnetIDs = make([]string, len(values))
 	copy(b.subnetIDs, values)
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -72,6 +77,7 @@ func (b *AWSBuilder) Copy(object *AWS) *AWSBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accessKeyID = object.accessKeyID
 	b.accountID = object.accountID
 	b.secretAccessKey = object.secretAccessKey
@@ -87,6 +93,7 @@ func (b *AWSBuilder) Copy(object *AWS) *AWSBuilder {
 // Build creates a 'AWS' object using the configuration stored in the builder.
 func (b *AWSBuilder) Build() (object *AWS, err error) {
 	object = new(AWS)
+	object.bitmap_ = b.bitmap_
 	object.accessKeyID = b.accessKeyID
 	object.accountID = b.accountID
 	object.secretAccessKey = b.secretAccessKey

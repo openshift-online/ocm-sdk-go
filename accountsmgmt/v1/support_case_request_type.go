@@ -35,16 +35,16 @@ const SupportCaseRequestNilKind = "SupportCaseRequestNil"
 //
 //
 type SupportCaseRequest struct {
-	id             *string
-	href           *string
-	link           bool
-	clusterId      *string
-	clusterUuid    *string
-	description    *string
-	eventStreamId  *string
-	severity       *string
-	subscriptionId *string
-	summary        *string
+	bitmap_        uint32
+	id             string
+	href           string
+	clusterId      string
+	clusterUuid    string
+	description    string
+	eventStreamId  string
+	severity       string
+	subscriptionId string
+	summary        string
 }
 
 // Kind returns the name of the type of the object.
@@ -52,16 +52,21 @@ func (o *SupportCaseRequest) Kind() string {
 	if o == nil {
 		return SupportCaseRequestNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return SupportCaseRequestLinkKind
 	}
 	return SupportCaseRequestKind
 }
 
+// Link returns true iif this is a link.
+func (o *SupportCaseRequest) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *SupportCaseRequest) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -69,22 +74,17 @@ func (o *SupportCaseRequest) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *SupportCaseRequest) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *SupportCaseRequest) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *SupportCaseRequest) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -92,24 +92,16 @@ func (o *SupportCaseRequest) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *SupportCaseRequest) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SupportCaseRequest) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.clusterId == nil &&
-		o.clusterUuid == nil &&
-		o.description == nil &&
-		o.eventStreamId == nil &&
-		o.severity == nil &&
-		o.subscriptionId == nil &&
-		o.summary == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // ClusterId returns the value of the 'cluster_id' attribute, or
@@ -117,8 +109,8 @@ func (o *SupportCaseRequest) Empty() bool {
 //
 // (optional) cluster id of the cluster on which we create the support case for.
 func (o *SupportCaseRequest) ClusterId() string {
-	if o != nil && o.clusterId != nil {
-		return *o.clusterId
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.clusterId
 	}
 	return ""
 }
@@ -128,9 +120,9 @@ func (o *SupportCaseRequest) ClusterId() string {
 //
 // (optional) cluster id of the cluster on which we create the support case for.
 func (o *SupportCaseRequest) GetClusterId() (value string, ok bool) {
-	ok = o != nil && o.clusterId != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.clusterId
+		value = o.clusterId
 	}
 	return
 }
@@ -140,8 +132,8 @@ func (o *SupportCaseRequest) GetClusterId() (value string, ok bool) {
 //
 // (optional) cluster uuid of the cluster on which we create the support case for.
 func (o *SupportCaseRequest) ClusterUuid() string {
-	if o != nil && o.clusterUuid != nil {
-		return *o.clusterUuid
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.clusterUuid
 	}
 	return ""
 }
@@ -151,9 +143,9 @@ func (o *SupportCaseRequest) ClusterUuid() string {
 //
 // (optional) cluster uuid of the cluster on which we create the support case for.
 func (o *SupportCaseRequest) GetClusterUuid() (value string, ok bool) {
-	ok = o != nil && o.clusterUuid != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.clusterUuid
+		value = o.clusterUuid
 	}
 	return
 }
@@ -163,8 +155,8 @@ func (o *SupportCaseRequest) GetClusterUuid() (value string, ok bool) {
 //
 // Support case desciption.
 func (o *SupportCaseRequest) Description() string {
-	if o != nil && o.description != nil {
-		return *o.description
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.description
 	}
 	return ""
 }
@@ -174,9 +166,9 @@ func (o *SupportCaseRequest) Description() string {
 //
 // Support case desciption.
 func (o *SupportCaseRequest) GetDescription() (value string, ok bool) {
-	ok = o != nil && o.description != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.description
+		value = o.description
 	}
 	return
 }
@@ -186,8 +178,8 @@ func (o *SupportCaseRequest) GetDescription() (value string, ok bool) {
 //
 // (optional) event stream id for the support case so we could track it.
 func (o *SupportCaseRequest) EventStreamId() string {
-	if o != nil && o.eventStreamId != nil {
-		return *o.eventStreamId
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.eventStreamId
 	}
 	return ""
 }
@@ -197,9 +189,9 @@ func (o *SupportCaseRequest) EventStreamId() string {
 //
 // (optional) event stream id for the support case so we could track it.
 func (o *SupportCaseRequest) GetEventStreamId() (value string, ok bool) {
-	ok = o != nil && o.eventStreamId != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.eventStreamId
+		value = o.eventStreamId
 	}
 	return
 }
@@ -209,8 +201,8 @@ func (o *SupportCaseRequest) GetEventStreamId() (value string, ok bool) {
 //
 // Support case severity.
 func (o *SupportCaseRequest) Severity() string {
-	if o != nil && o.severity != nil {
-		return *o.severity
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.severity
 	}
 	return ""
 }
@@ -220,9 +212,9 @@ func (o *SupportCaseRequest) Severity() string {
 //
 // Support case severity.
 func (o *SupportCaseRequest) GetSeverity() (value string, ok bool) {
-	ok = o != nil && o.severity != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.severity
+		value = o.severity
 	}
 	return
 }
@@ -232,8 +224,8 @@ func (o *SupportCaseRequest) GetSeverity() (value string, ok bool) {
 //
 // (optional) subscription id of the subscription on which we create the support case for.
 func (o *SupportCaseRequest) SubscriptionId() string {
-	if o != nil && o.subscriptionId != nil {
-		return *o.subscriptionId
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.subscriptionId
 	}
 	return ""
 }
@@ -243,9 +235,9 @@ func (o *SupportCaseRequest) SubscriptionId() string {
 //
 // (optional) subscription id of the subscription on which we create the support case for.
 func (o *SupportCaseRequest) GetSubscriptionId() (value string, ok bool) {
-	ok = o != nil && o.subscriptionId != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.subscriptionId
+		value = o.subscriptionId
 	}
 	return
 }
@@ -255,8 +247,8 @@ func (o *SupportCaseRequest) GetSubscriptionId() (value string, ok bool) {
 //
 // Support case title.
 func (o *SupportCaseRequest) Summary() string {
-	if o != nil && o.summary != nil {
-		return *o.summary
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.summary
 	}
 	return ""
 }
@@ -266,9 +258,9 @@ func (o *SupportCaseRequest) Summary() string {
 //
 // Support case title.
 func (o *SupportCaseRequest) GetSummary() (value string, ok bool) {
-	ok = o != nil && o.summary != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
-		value = *o.summary
+		value = o.summary
 	}
 	return
 }
@@ -287,7 +279,7 @@ const SupportCaseRequestListNilKind = "SupportCaseRequestListNil"
 
 // SupportCaseRequestList is a list of values of the 'support_case_request' type.
 type SupportCaseRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SupportCaseRequest
 }
@@ -310,8 +302,8 @@ func (l *SupportCaseRequestList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *SupportCaseRequestList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -319,9 +311,9 @@ func (l *SupportCaseRequestList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *SupportCaseRequestList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

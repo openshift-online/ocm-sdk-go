@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type FeatureToggleQueryRequestBuilder struct {
-	organizationID *string
+	bitmap_        uint32
+	organizationID string
 }
 
 // NewFeatureToggleQueryRequest creates a new builder of 'feature_toggle_query_request' objects.
 func NewFeatureToggleQueryRequest() *FeatureToggleQueryRequestBuilder {
-	return new(FeatureToggleQueryRequestBuilder)
+	return &FeatureToggleQueryRequestBuilder{}
 }
 
 // OrganizationID sets the value of the 'organization_ID' attribute to the given value.
 //
 //
 func (b *FeatureToggleQueryRequestBuilder) OrganizationID(value string) *FeatureToggleQueryRequestBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *FeatureToggleQueryRequestBuilder) Copy(object *FeatureToggleQueryReques
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.organizationID = object.organizationID
 	return b
 }
@@ -51,6 +54,7 @@ func (b *FeatureToggleQueryRequestBuilder) Copy(object *FeatureToggleQueryReques
 // Build creates a 'feature_toggle_query_request' object using the configuration stored in the builder.
 func (b *FeatureToggleQueryRequestBuilder) Build() (object *FeatureToggleQueryRequest, err error) {
 	object = new(FeatureToggleQueryRequest)
+	object.bitmap_ = b.bitmap_
 	object.organizationID = b.organizationID
 	return
 }

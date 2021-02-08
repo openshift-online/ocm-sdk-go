@@ -40,28 +40,34 @@ func MarshalAccessToken(object *AccessToken, writer io.Writer) error {
 func writeAccessToken(object *AccessToken, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.auths != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.auths != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("auths")
-		stream.WriteObjectStart()
-		keys := make([]string, len(object.auths))
-		i := 0
-		for key := range object.auths {
-			keys[i] = key
-			i++
-		}
-		sort.Strings(keys)
-		for i, key := range keys {
-			if i > 0 {
-				stream.WriteMore()
+		if object.auths != nil {
+			stream.WriteObjectStart()
+			keys := make([]string, len(object.auths))
+			i := 0
+			for key := range object.auths {
+				keys[i] = key
+				i++
 			}
-			item := object.auths[key]
-			stream.WriteObjectField(key)
-			writeAccessTokenAuth(item, stream)
+			sort.Strings(keys)
+			for i, key := range keys {
+				if i > 0 {
+					stream.WriteMore()
+				}
+				item := object.auths[key]
+				stream.WriteObjectField(key)
+				writeAccessTokenAuth(item, stream)
+			}
+			stream.WriteObjectEnd()
+		} else {
+			stream.WriteNil()
 		}
-		stream.WriteObjectEnd()
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -102,6 +108,7 @@ func readAccessToken(iterator *jsoniter.Iterator) *AccessToken {
 				value[key] = item
 			}
 			object.auths = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

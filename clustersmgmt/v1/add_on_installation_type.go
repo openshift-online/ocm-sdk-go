@@ -39,17 +39,17 @@ const AddOnInstallationNilKind = "AddOnInstallationNil"
 //
 // Representation of an add-on installation in a cluster.
 type AddOnInstallation struct {
-	id                *string
-	href              *string
-	link              bool
+	bitmap_           uint32
+	id                string
+	href              string
 	addon             *AddOn
 	cluster           *Cluster
-	creationTimestamp *time.Time
-	operatorVersion   *string
+	creationTimestamp time.Time
+	operatorVersion   string
 	parameters        *AddOnInstallationParameterList
-	state             *AddOnInstallationState
-	stateDescription  *string
-	updatedTimestamp  *time.Time
+	state             AddOnInstallationState
+	stateDescription  string
+	updatedTimestamp  time.Time
 }
 
 // Kind returns the name of the type of the object.
@@ -57,16 +57,21 @@ func (o *AddOnInstallation) Kind() string {
 	if o == nil {
 		return AddOnInstallationNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return AddOnInstallationLinkKind
 	}
 	return AddOnInstallationKind
 }
 
+// Link returns true iif this is a link.
+func (o *AddOnInstallation) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *AddOnInstallation) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -74,22 +79,17 @@ func (o *AddOnInstallation) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *AddOnInstallation) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *AddOnInstallation) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *AddOnInstallation) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -97,23 +97,16 @@ func (o *AddOnInstallation) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *AddOnInstallation) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AddOnInstallation) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.creationTimestamp == nil &&
-		o.operatorVersion == nil &&
-		o.parameters.Len() == 0 &&
-		o.state == nil &&
-		o.stateDescription == nil &&
-		o.updatedTimestamp == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Addon returns the value of the 'addon' attribute, or
@@ -121,10 +114,10 @@ func (o *AddOnInstallation) Empty() bool {
 //
 // Link to add-on attached to this cluster.
 func (o *AddOnInstallation) Addon() *AddOn {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.addon
 	}
-	return o.addon
+	return nil
 }
 
 // GetAddon returns the value of the 'addon' attribute and
@@ -132,7 +125,7 @@ func (o *AddOnInstallation) Addon() *AddOn {
 //
 // Link to add-on attached to this cluster.
 func (o *AddOnInstallation) GetAddon() (value *AddOn, ok bool) {
-	ok = o != nil && o.addon != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.addon
 	}
@@ -144,10 +137,10 @@ func (o *AddOnInstallation) GetAddon() (value *AddOn, ok bool) {
 //
 // ID used to identify the cluster that this add-on is attached to.
 func (o *AddOnInstallation) Cluster() *Cluster {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.cluster
 	}
-	return o.cluster
+	return nil
 }
 
 // GetCluster returns the value of the 'cluster' attribute and
@@ -155,7 +148,7 @@ func (o *AddOnInstallation) Cluster() *Cluster {
 //
 // ID used to identify the cluster that this add-on is attached to.
 func (o *AddOnInstallation) GetCluster() (value *Cluster, ok bool) {
-	ok = o != nil && o.cluster != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.cluster
 	}
@@ -167,8 +160,8 @@ func (o *AddOnInstallation) GetCluster() (value *Cluster, ok bool) {
 //
 // Date and time when the add-on was initially installed in the cluster.
 func (o *AddOnInstallation) CreationTimestamp() time.Time {
-	if o != nil && o.creationTimestamp != nil {
-		return *o.creationTimestamp
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.creationTimestamp
 	}
 	return time.Time{}
 }
@@ -178,9 +171,9 @@ func (o *AddOnInstallation) CreationTimestamp() time.Time {
 //
 // Date and time when the add-on was initially installed in the cluster.
 func (o *AddOnInstallation) GetCreationTimestamp() (value time.Time, ok bool) {
-	ok = o != nil && o.creationTimestamp != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.creationTimestamp
+		value = o.creationTimestamp
 	}
 	return
 }
@@ -190,8 +183,8 @@ func (o *AddOnInstallation) GetCreationTimestamp() (value time.Time, ok bool) {
 //
 // Version of the operator installed by the add-on.
 func (o *AddOnInstallation) OperatorVersion() string {
-	if o != nil && o.operatorVersion != nil {
-		return *o.operatorVersion
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.operatorVersion
 	}
 	return ""
 }
@@ -201,9 +194,9 @@ func (o *AddOnInstallation) OperatorVersion() string {
 //
 // Version of the operator installed by the add-on.
 func (o *AddOnInstallation) GetOperatorVersion() (value string, ok bool) {
-	ok = o != nil && o.operatorVersion != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.operatorVersion
+		value = o.operatorVersion
 	}
 	return
 }
@@ -213,10 +206,10 @@ func (o *AddOnInstallation) GetOperatorVersion() (value string, ok bool) {
 //
 // List of add-on parameters for this add-on installation.
 func (o *AddOnInstallation) Parameters() *AddOnInstallationParameterList {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.parameters
 	}
-	return o.parameters
+	return nil
 }
 
 // GetParameters returns the value of the 'parameters' attribute and
@@ -224,7 +217,7 @@ func (o *AddOnInstallation) Parameters() *AddOnInstallationParameterList {
 //
 // List of add-on parameters for this add-on installation.
 func (o *AddOnInstallation) GetParameters() (value *AddOnInstallationParameterList, ok bool) {
-	ok = o != nil && o.parameters != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.parameters
 	}
@@ -236,8 +229,8 @@ func (o *AddOnInstallation) GetParameters() (value *AddOnInstallationParameterLi
 //
 // Overall state of the add-on installation.
 func (o *AddOnInstallation) State() AddOnInstallationState {
-	if o != nil && o.state != nil {
-		return *o.state
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.state
 	}
 	return AddOnInstallationState("")
 }
@@ -247,9 +240,9 @@ func (o *AddOnInstallation) State() AddOnInstallationState {
 //
 // Overall state of the add-on installation.
 func (o *AddOnInstallation) GetState() (value AddOnInstallationState, ok bool) {
-	ok = o != nil && o.state != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.state
+		value = o.state
 	}
 	return
 }
@@ -259,8 +252,8 @@ func (o *AddOnInstallation) GetState() (value AddOnInstallationState, ok bool) {
 //
 // Reason for the current State.
 func (o *AddOnInstallation) StateDescription() string {
-	if o != nil && o.stateDescription != nil {
-		return *o.stateDescription
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.stateDescription
 	}
 	return ""
 }
@@ -270,9 +263,9 @@ func (o *AddOnInstallation) StateDescription() string {
 //
 // Reason for the current State.
 func (o *AddOnInstallation) GetStateDescription() (value string, ok bool) {
-	ok = o != nil && o.stateDescription != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
-		value = *o.stateDescription
+		value = o.stateDescription
 	}
 	return
 }
@@ -282,8 +275,8 @@ func (o *AddOnInstallation) GetStateDescription() (value string, ok bool) {
 //
 // Date and time when the add-on installation information was last updated.
 func (o *AddOnInstallation) UpdatedTimestamp() time.Time {
-	if o != nil && o.updatedTimestamp != nil {
-		return *o.updatedTimestamp
+	if o != nil && o.bitmap_&1024 != 0 {
+		return o.updatedTimestamp
 	}
 	return time.Time{}
 }
@@ -293,9 +286,9 @@ func (o *AddOnInstallation) UpdatedTimestamp() time.Time {
 //
 // Date and time when the add-on installation information was last updated.
 func (o *AddOnInstallation) GetUpdatedTimestamp() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedTimestamp != nil
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
-		value = *o.updatedTimestamp
+		value = o.updatedTimestamp
 	}
 	return
 }
@@ -314,7 +307,7 @@ const AddOnInstallationListNilKind = "AddOnInstallationListNil"
 
 // AddOnInstallationList is a list of values of the 'add_on_installation' type.
 type AddOnInstallationList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AddOnInstallation
 }
@@ -337,8 +330,8 @@ func (l *AddOnInstallationList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *AddOnInstallationList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -346,9 +339,9 @@ func (l *AddOnInstallationList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *AddOnInstallationList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

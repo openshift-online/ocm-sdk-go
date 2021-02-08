@@ -23,23 +23,18 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `github` identity providers.
 type GithubIdentityProvider struct {
-	ca            *string
-	clientID      *string
-	clientSecret  *string
-	hostname      *string
+	bitmap_       uint32
+	ca            string
+	clientID      string
+	clientSecret  string
+	hostname      string
 	organizations []string
 	teams         []string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *GithubIdentityProvider) Empty() bool {
-	return o == nil || (o.ca == nil &&
-		o.clientID == nil &&
-		o.clientSecret == nil &&
-		o.hostname == nil &&
-		len(o.organizations) == 0 &&
-		len(o.teams) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // CA returns the value of the 'CA' attribute, or
@@ -47,8 +42,8 @@ func (o *GithubIdentityProvider) Empty() bool {
 //
 // Optional trusted certificate authority bundle to use when making requests tot he server.
 func (o *GithubIdentityProvider) CA() string {
-	if o != nil && o.ca != nil {
-		return *o.ca
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.ca
 	}
 	return ""
 }
@@ -58,9 +53,9 @@ func (o *GithubIdentityProvider) CA() string {
 //
 // Optional trusted certificate authority bundle to use when making requests tot he server.
 func (o *GithubIdentityProvider) GetCA() (value string, ok bool) {
-	ok = o != nil && o.ca != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.ca
+		value = o.ca
 	}
 	return
 }
@@ -70,8 +65,8 @@ func (o *GithubIdentityProvider) GetCA() (value string, ok bool) {
 //
 // Client identifier of a registered _GitHub_ OAuth application.
 func (o *GithubIdentityProvider) ClientID() string {
-	if o != nil && o.clientID != nil {
-		return *o.clientID
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.clientID
 	}
 	return ""
 }
@@ -81,9 +76,9 @@ func (o *GithubIdentityProvider) ClientID() string {
 //
 // Client identifier of a registered _GitHub_ OAuth application.
 func (o *GithubIdentityProvider) GetClientID() (value string, ok bool) {
-	ok = o != nil && o.clientID != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.clientID
+		value = o.clientID
 	}
 	return
 }
@@ -93,8 +88,8 @@ func (o *GithubIdentityProvider) GetClientID() (value string, ok bool) {
 //
 // Client secret of a registered _GitHub_ OAuth application.
 func (o *GithubIdentityProvider) ClientSecret() string {
-	if o != nil && o.clientSecret != nil {
-		return *o.clientSecret
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clientSecret
 	}
 	return ""
 }
@@ -104,9 +99,9 @@ func (o *GithubIdentityProvider) ClientSecret() string {
 //
 // Client secret of a registered _GitHub_ OAuth application.
 func (o *GithubIdentityProvider) GetClientSecret() (value string, ok bool) {
-	ok = o != nil && o.clientSecret != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.clientSecret
+		value = o.clientSecret
 	}
 	return
 }
@@ -120,8 +115,8 @@ func (o *GithubIdentityProvider) GetClientSecret() (value string, ok bool) {
 //
 // For plain _GitHub_ omit this parameter.
 func (o *GithubIdentityProvider) Hostname() string {
-	if o != nil && o.hostname != nil {
-		return *o.hostname
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.hostname
 	}
 	return ""
 }
@@ -135,9 +130,9 @@ func (o *GithubIdentityProvider) Hostname() string {
 //
 // For plain _GitHub_ omit this parameter.
 func (o *GithubIdentityProvider) GetHostname() (value string, ok bool) {
-	ok = o != nil && o.hostname != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.hostname
+		value = o.hostname
 	}
 	return
 }
@@ -147,10 +142,10 @@ func (o *GithubIdentityProvider) GetHostname() (value string, ok bool) {
 //
 // Optional list of organizations. Cannot be used in combination with the Teams field.
 func (o *GithubIdentityProvider) Organizations() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.organizations
 	}
-	return o.organizations
+	return nil
 }
 
 // GetOrganizations returns the value of the 'organizations' attribute and
@@ -158,7 +153,7 @@ func (o *GithubIdentityProvider) Organizations() []string {
 //
 // Optional list of organizations. Cannot be used in combination with the Teams field.
 func (o *GithubIdentityProvider) GetOrganizations() (value []string, ok bool) {
-	ok = o != nil && o.organizations != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.organizations
 	}
@@ -170,10 +165,10 @@ func (o *GithubIdentityProvider) GetOrganizations() (value []string, ok bool) {
 //
 // Optional list of teams. Cannot be used in combination with the Organizations field.
 func (o *GithubIdentityProvider) Teams() []string {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.teams
 	}
-	return o.teams
+	return nil
 }
 
 // GetTeams returns the value of the 'teams' attribute and
@@ -181,7 +176,7 @@ func (o *GithubIdentityProvider) Teams() []string {
 //
 // Optional list of teams. Cannot be used in combination with the Organizations field.
 func (o *GithubIdentityProvider) GetTeams() (value []string, ok bool) {
-	ok = o != nil && o.teams != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.teams
 	}
@@ -202,7 +197,7 @@ const GithubIdentityProviderListNilKind = "GithubIdentityProviderListNil"
 
 // GithubIdentityProviderList is a list of values of the 'github_identity_provider' type.
 type GithubIdentityProviderList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*GithubIdentityProvider
 }

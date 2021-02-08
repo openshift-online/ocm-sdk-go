@@ -39,60 +39,68 @@ func MarshalCapabilityReviewRequest(object *CapabilityReviewRequest, writer io.W
 func writeCapabilityReviewRequest(object *CapabilityReviewRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.accountUsername != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_username")
-		stream.WriteString(*object.accountUsername)
+		stream.WriteString(object.accountUsername)
 		count++
 	}
-	if object.capability != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("capability")
-		stream.WriteString(*object.capability)
+		stream.WriteString(object.capability)
 		count++
 	}
-	if object.clusterID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_id")
-		stream.WriteString(*object.clusterID)
+		stream.WriteString(object.clusterID)
 		count++
 	}
-	if object.organizationID != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
-	if object.resourceType != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_type")
-		stream.WriteString(*object.resourceType)
+		stream.WriteString(object.resourceType)
 		count++
 	}
-	if object.subscriptionID != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subscription_id")
-		stream.WriteString(*object.subscriptionID)
+		stream.WriteString(object.subscriptionID)
 		count++
 	}
-	if object.type_ != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("type")
-		stream.WriteString(*object.type_)
+		stream.WriteString(object.type_)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -124,25 +132,32 @@ func readCapabilityReviewRequest(iterator *jsoniter.Iterator) *CapabilityReviewR
 		switch field {
 		case "account_username":
 			value := iterator.ReadString()
-			object.accountUsername = &value
+			object.accountUsername = value
+			object.bitmap_ |= 1
 		case "capability":
 			value := iterator.ReadString()
-			object.capability = &value
+			object.capability = value
+			object.bitmap_ |= 2
 		case "cluster_id":
 			value := iterator.ReadString()
-			object.clusterID = &value
+			object.clusterID = value
+			object.bitmap_ |= 4
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 8
 		case "resource_type":
 			value := iterator.ReadString()
-			object.resourceType = &value
+			object.resourceType = value
+			object.bitmap_ |= 16
 		case "subscription_id":
 			value := iterator.ReadString()
-			object.subscriptionID = &value
+			object.subscriptionID = value
+			object.bitmap_ |= 32
 		case "type":
 			value := iterator.ReadString()
-			object.type_ = &value
+			object.type_ = value
+			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}

@@ -39,54 +39,55 @@ func MarshalSkuRule(object *SkuRule, writer io.Writer) error {
 func writeSkuRule(object *SkuRule, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(SkuRuleLinkKind)
 	} else {
 		stream.WriteString(SkuRuleKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.allowed != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("allowed")
-		stream.WriteInt(*object.allowed)
+		stream.WriteInt(object.allowed)
 		count++
 	}
-	if object.quotaId != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("quota_id")
-		stream.WriteString(*object.quotaId)
+		stream.WriteString(object.quotaId)
 		count++
 	}
-	if object.sku != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("sku")
-		stream.WriteString(*object.sku)
+		stream.WriteString(object.sku)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -118,22 +119,27 @@ func readSkuRule(iterator *jsoniter.Iterator) *SkuRule {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == SkuRuleLinkKind
+			if value == SkuRuleLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "allowed":
 			value := iterator.ReadInt()
-			object.allowed = &value
+			object.allowed = value
+			object.bitmap_ |= 8
 		case "quota_id":
 			value := iterator.ReadString()
-			object.quotaId = &value
+			object.quotaId = value
+			object.bitmap_ |= 16
 		case "sku":
 			value := iterator.ReadString()
-			object.sku = &value
+			object.sku = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}

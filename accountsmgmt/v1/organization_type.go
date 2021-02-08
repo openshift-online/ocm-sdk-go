@@ -39,15 +39,15 @@ const OrganizationNilKind = "OrganizationNil"
 //
 //
 type Organization struct {
-	id           *string
-	href         *string
-	link         bool
-	createdAt    *time.Time
-	ebsAccountID *string
-	externalID   *string
+	bitmap_      uint32
+	id           string
+	href         string
+	createdAt    time.Time
+	ebsAccountID string
+	externalID   string
 	labels       []*Label
-	name         *string
-	updatedAt    *time.Time
+	name         string
+	updatedAt    time.Time
 }
 
 // Kind returns the name of the type of the object.
@@ -55,16 +55,21 @@ func (o *Organization) Kind() string {
 	if o == nil {
 		return OrganizationNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return OrganizationLinkKind
 	}
 	return OrganizationKind
 }
 
+// Link returns true iif this is a link.
+func (o *Organization) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Organization) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -72,22 +77,17 @@ func (o *Organization) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Organization) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Organization) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Organization) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -95,23 +95,16 @@ func (o *Organization) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Organization) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Organization) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.createdAt == nil &&
-		o.ebsAccountID == nil &&
-		o.externalID == nil &&
-		len(o.labels) == 0 &&
-		o.name == nil &&
-		o.updatedAt == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // CreatedAt returns the value of the 'created_at' attribute, or
@@ -119,8 +112,8 @@ func (o *Organization) Empty() bool {
 //
 //
 func (o *Organization) CreatedAt() time.Time {
-	if o != nil && o.createdAt != nil {
-		return *o.createdAt
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.createdAt
 	}
 	return time.Time{}
 }
@@ -130,9 +123,9 @@ func (o *Organization) CreatedAt() time.Time {
 //
 //
 func (o *Organization) GetCreatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.createdAt != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.createdAt
+		value = o.createdAt
 	}
 	return
 }
@@ -142,8 +135,8 @@ func (o *Organization) GetCreatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *Organization) EbsAccountID() string {
-	if o != nil && o.ebsAccountID != nil {
-		return *o.ebsAccountID
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.ebsAccountID
 	}
 	return ""
 }
@@ -153,9 +146,9 @@ func (o *Organization) EbsAccountID() string {
 //
 //
 func (o *Organization) GetEbsAccountID() (value string, ok bool) {
-	ok = o != nil && o.ebsAccountID != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.ebsAccountID
+		value = o.ebsAccountID
 	}
 	return
 }
@@ -165,8 +158,8 @@ func (o *Organization) GetEbsAccountID() (value string, ok bool) {
 //
 //
 func (o *Organization) ExternalID() string {
-	if o != nil && o.externalID != nil {
-		return *o.externalID
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.externalID
 	}
 	return ""
 }
@@ -176,9 +169,9 @@ func (o *Organization) ExternalID() string {
 //
 //
 func (o *Organization) GetExternalID() (value string, ok bool) {
-	ok = o != nil && o.externalID != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.externalID
+		value = o.externalID
 	}
 	return
 }
@@ -188,10 +181,10 @@ func (o *Organization) GetExternalID() (value string, ok bool) {
 //
 //
 func (o *Organization) Labels() []*Label {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.labels
 	}
-	return o.labels
+	return nil
 }
 
 // GetLabels returns the value of the 'labels' attribute and
@@ -199,7 +192,7 @@ func (o *Organization) Labels() []*Label {
 //
 //
 func (o *Organization) GetLabels() (value []*Label, ok bool) {
-	ok = o != nil && o.labels != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.labels
 	}
@@ -211,8 +204,8 @@ func (o *Organization) GetLabels() (value []*Label, ok bool) {
 //
 //
 func (o *Organization) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -222,9 +215,9 @@ func (o *Organization) Name() string {
 //
 //
 func (o *Organization) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -234,8 +227,8 @@ func (o *Organization) GetName() (value string, ok bool) {
 //
 //
 func (o *Organization) UpdatedAt() time.Time {
-	if o != nil && o.updatedAt != nil {
-		return *o.updatedAt
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.updatedAt
 	}
 	return time.Time{}
 }
@@ -245,9 +238,9 @@ func (o *Organization) UpdatedAt() time.Time {
 //
 //
 func (o *Organization) GetUpdatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedAt != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.updatedAt
+		value = o.updatedAt
 	}
 	return
 }
@@ -266,7 +259,7 @@ const OrganizationListNilKind = "OrganizationListNil"
 
 // OrganizationList is a list of values of the 'organization' type.
 type OrganizationList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Organization
 }
@@ -289,8 +282,8 @@ func (l *OrganizationList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *OrganizationList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -298,9 +291,9 @@ func (l *OrganizationList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *OrganizationList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

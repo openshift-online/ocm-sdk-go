@@ -23,24 +23,26 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `ldap` identity providers.
 type LDAPIdentityProviderBuilder struct {
-	ca           *string
-	url          *string
+	bitmap_      uint32
+	ca           string
+	url          string
 	attributes   *LDAPAttributesBuilder
-	bindDN       *string
-	bindPassword *string
-	insecure     *bool
+	bindDN       string
+	bindPassword string
+	insecure     bool
 }
 
 // NewLDAPIdentityProvider creates a new builder of 'LDAP_identity_provider' objects.
 func NewLDAPIdentityProvider() *LDAPIdentityProviderBuilder {
-	return new(LDAPIdentityProviderBuilder)
+	return &LDAPIdentityProviderBuilder{}
 }
 
 // CA sets the value of the 'CA' attribute to the given value.
 //
 //
 func (b *LDAPIdentityProviderBuilder) CA(value string) *LDAPIdentityProviderBuilder {
-	b.ca = &value
+	b.ca = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -48,7 +50,8 @@ func (b *LDAPIdentityProviderBuilder) CA(value string) *LDAPIdentityProviderBuil
 //
 //
 func (b *LDAPIdentityProviderBuilder) URL(value string) *LDAPIdentityProviderBuilder {
-	b.url = &value
+	b.url = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -57,6 +60,11 @@ func (b *LDAPIdentityProviderBuilder) URL(value string) *LDAPIdentityProviderBui
 // LDAP attributes used to configure the LDAP identity provider.
 func (b *LDAPIdentityProviderBuilder) Attributes(value *LDAPAttributesBuilder) *LDAPIdentityProviderBuilder {
 	b.attributes = value
+	if value != nil {
+		b.bitmap_ |= 4
+	} else {
+		b.bitmap_ &^= 4
+	}
 	return b
 }
 
@@ -64,7 +72,8 @@ func (b *LDAPIdentityProviderBuilder) Attributes(value *LDAPAttributesBuilder) *
 //
 //
 func (b *LDAPIdentityProviderBuilder) BindDN(value string) *LDAPIdentityProviderBuilder {
-	b.bindDN = &value
+	b.bindDN = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -72,7 +81,8 @@ func (b *LDAPIdentityProviderBuilder) BindDN(value string) *LDAPIdentityProvider
 //
 //
 func (b *LDAPIdentityProviderBuilder) BindPassword(value string) *LDAPIdentityProviderBuilder {
-	b.bindPassword = &value
+	b.bindPassword = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -80,7 +90,8 @@ func (b *LDAPIdentityProviderBuilder) BindPassword(value string) *LDAPIdentityPr
 //
 //
 func (b *LDAPIdentityProviderBuilder) Insecure(value bool) *LDAPIdentityProviderBuilder {
-	b.insecure = &value
+	b.insecure = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -89,6 +100,7 @@ func (b *LDAPIdentityProviderBuilder) Copy(object *LDAPIdentityProvider) *LDAPId
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.ca = object.ca
 	b.url = object.url
 	if object.attributes != nil {
@@ -105,6 +117,7 @@ func (b *LDAPIdentityProviderBuilder) Copy(object *LDAPIdentityProvider) *LDAPId
 // Build creates a 'LDAP_identity_provider' object using the configuration stored in the builder.
 func (b *LDAPIdentityProviderBuilder) Build() (object *LDAPIdentityProvider, err error) {
 	object = new(LDAPIdentityProvider)
+	object.bitmap_ = b.bitmap_
 	object.ca = b.ca
 	object.url = b.url
 	if b.attributes != nil {

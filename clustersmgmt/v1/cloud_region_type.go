@@ -35,14 +35,14 @@ const CloudRegionNilKind = "CloudRegionNil"
 //
 // Description of a region of a cloud provider.
 type CloudRegion struct {
-	id              *string
-	href            *string
-	link            bool
+	bitmap_         uint32
+	id              string
+	href            string
 	cloudProvider   *CloudProvider
-	displayName     *string
-	enabled         *bool
-	name            *string
-	supportsMultiAZ *bool
+	displayName     string
+	name            string
+	enabled         bool
+	supportsMultiAZ bool
 }
 
 // Kind returns the name of the type of the object.
@@ -50,16 +50,21 @@ func (o *CloudRegion) Kind() string {
 	if o == nil {
 		return CloudRegionNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return CloudRegionLinkKind
 	}
 	return CloudRegionKind
 }
 
+// Link returns true iif this is a link.
+func (o *CloudRegion) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *CloudRegion) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -67,22 +72,17 @@ func (o *CloudRegion) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *CloudRegion) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *CloudRegion) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *CloudRegion) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -90,21 +90,16 @@ func (o *CloudRegion) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *CloudRegion) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CloudRegion) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.displayName == nil &&
-		o.enabled == nil &&
-		o.name == nil &&
-		o.supportsMultiAZ == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // CloudProvider returns the value of the 'cloud_provider' attribute, or
@@ -112,10 +107,10 @@ func (o *CloudRegion) Empty() bool {
 //
 // Link to the cloud provider that the region belongs to.
 func (o *CloudRegion) CloudProvider() *CloudProvider {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.cloudProvider
 	}
-	return o.cloudProvider
+	return nil
 }
 
 // GetCloudProvider returns the value of the 'cloud_provider' attribute and
@@ -123,7 +118,7 @@ func (o *CloudRegion) CloudProvider() *CloudProvider {
 //
 // Link to the cloud provider that the region belongs to.
 func (o *CloudRegion) GetCloudProvider() (value *CloudProvider, ok bool) {
-	ok = o != nil && o.cloudProvider != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.cloudProvider
 	}
@@ -135,8 +130,8 @@ func (o *CloudRegion) GetCloudProvider() (value *CloudProvider, ok bool) {
 //
 // Name of the region for display purposes, for example `N. Virginia`.
 func (o *CloudRegion) DisplayName() string {
-	if o != nil && o.displayName != nil {
-		return *o.displayName
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.displayName
 	}
 	return ""
 }
@@ -146,9 +141,9 @@ func (o *CloudRegion) DisplayName() string {
 //
 // Name of the region for display purposes, for example `N. Virginia`.
 func (o *CloudRegion) GetDisplayName() (value string, ok bool) {
-	ok = o != nil && o.displayName != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.displayName
+		value = o.displayName
 	}
 	return
 }
@@ -158,8 +153,8 @@ func (o *CloudRegion) GetDisplayName() (value string, ok bool) {
 //
 // Whether the region is enabled for deploying an OSD cluster.
 func (o *CloudRegion) Enabled() bool {
-	if o != nil && o.enabled != nil {
-		return *o.enabled
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.enabled
 	}
 	return false
 }
@@ -169,9 +164,9 @@ func (o *CloudRegion) Enabled() bool {
 //
 // Whether the region is enabled for deploying an OSD cluster.
 func (o *CloudRegion) GetEnabled() (value bool, ok bool) {
-	ok = o != nil && o.enabled != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.enabled
+		value = o.enabled
 	}
 	return
 }
@@ -184,8 +179,8 @@ func (o *CloudRegion) GetEnabled() (value bool, ok bool) {
 // NOTE: Currently for all cloud providers and all regions `id` and `name` have exactly
 // the same values.
 func (o *CloudRegion) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -198,9 +193,9 @@ func (o *CloudRegion) Name() string {
 // NOTE: Currently for all cloud providers and all regions `id` and `name` have exactly
 // the same values.
 func (o *CloudRegion) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -210,8 +205,8 @@ func (o *CloudRegion) GetName() (value string, ok bool) {
 //
 // Whether the region supports multiple availability zones.
 func (o *CloudRegion) SupportsMultiAZ() bool {
-	if o != nil && o.supportsMultiAZ != nil {
-		return *o.supportsMultiAZ
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.supportsMultiAZ
 	}
 	return false
 }
@@ -221,9 +216,9 @@ func (o *CloudRegion) SupportsMultiAZ() bool {
 //
 // Whether the region supports multiple availability zones.
 func (o *CloudRegion) GetSupportsMultiAZ() (value bool, ok bool) {
-	ok = o != nil && o.supportsMultiAZ != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.supportsMultiAZ
+		value = o.supportsMultiAZ
 	}
 	return
 }
@@ -242,7 +237,7 @@ const CloudRegionListNilKind = "CloudRegionListNil"
 
 // CloudRegionList is a list of values of the 'cloud_region' type.
 type CloudRegionList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*CloudRegion
 }
@@ -265,8 +260,8 @@ func (l *CloudRegionList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *CloudRegionList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -274,9 +269,9 @@ func (l *CloudRegionList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *CloudRegionList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

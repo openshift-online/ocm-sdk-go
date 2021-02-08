@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type SummaryMetricsBuilder struct {
-	name   *string
-	vector []*SummarySampleBuilder
+	bitmap_ uint32
+	name    string
+	vector  []*SummarySampleBuilder
 }
 
 // NewSummaryMetrics creates a new builder of 'summary_metrics' objects.
 func NewSummaryMetrics() *SummaryMetricsBuilder {
-	return new(SummaryMetricsBuilder)
+	return &SummaryMetricsBuilder{}
 }
 
 // Name sets the value of the 'name' attribute to the given value.
 //
 //
 func (b *SummaryMetricsBuilder) Name(value string) *SummaryMetricsBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,6 +48,7 @@ func (b *SummaryMetricsBuilder) Name(value string) *SummaryMetricsBuilder {
 func (b *SummaryMetricsBuilder) Vector(values ...*SummarySampleBuilder) *SummaryMetricsBuilder {
 	b.vector = make([]*SummarySampleBuilder, len(values))
 	copy(b.vector, values)
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,6 +57,7 @@ func (b *SummaryMetricsBuilder) Copy(object *SummaryMetrics) *SummaryMetricsBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.name = object.name
 	if object.vector != nil {
 		b.vector = make([]*SummarySampleBuilder, len(object.vector))
@@ -69,6 +73,7 @@ func (b *SummaryMetricsBuilder) Copy(object *SummaryMetrics) *SummaryMetricsBuil
 // Build creates a 'summary_metrics' object using the configuration stored in the builder.
 func (b *SummaryMetricsBuilder) Build() (object *SummaryMetrics, err error) {
 	object = new(SummaryMetrics)
+	object.bitmap_ = b.bitmap_
 	object.name = b.name
 	if b.vector != nil {
 		object.vector = make([]*SummarySample, len(b.vector))

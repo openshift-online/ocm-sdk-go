@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 //
 type ExportControlReviewResponseBuilder struct {
-	restricted *bool
+	bitmap_    uint32
+	restricted bool
 }
 
 // NewExportControlReviewResponse creates a new builder of 'export_control_review_response' objects.
 func NewExportControlReviewResponse() *ExportControlReviewResponseBuilder {
-	return new(ExportControlReviewResponseBuilder)
+	return &ExportControlReviewResponseBuilder{}
 }
 
 // Restricted sets the value of the 'restricted' attribute to the given value.
 //
 //
 func (b *ExportControlReviewResponseBuilder) Restricted(value bool) *ExportControlReviewResponseBuilder {
-	b.restricted = &value
+	b.restricted = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *ExportControlReviewResponseBuilder) Copy(object *ExportControlReviewRes
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.restricted = object.restricted
 	return b
 }
@@ -51,6 +54,7 @@ func (b *ExportControlReviewResponseBuilder) Copy(object *ExportControlReviewRes
 // Build creates a 'export_control_review_response' object using the configuration stored in the builder.
 func (b *ExportControlReviewResponseBuilder) Build() (object *ExportControlReviewResponse, err error) {
 	object = new(ExportControlReviewResponse)
+	object.bitmap_ = b.bitmap_
 	object.restricted = b.restricted
 	return
 }

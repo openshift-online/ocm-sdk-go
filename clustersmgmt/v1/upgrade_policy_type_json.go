@@ -40,78 +40,82 @@ func MarshalUpgradePolicy(object *UpgradePolicy, writer io.Writer) error {
 func writeUpgradePolicy(object *UpgradePolicy, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(UpgradePolicyLinkKind)
 	} else {
 		stream.WriteString(UpgradePolicyKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.clusterID != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_id")
-		stream.WriteString(*object.clusterID)
+		stream.WriteString(object.clusterID)
 		count++
 	}
-	if object.nextRun != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("next_run")
-		stream.WriteString((*object.nextRun).Format(time.RFC3339))
+		stream.WriteString((object.nextRun).Format(time.RFC3339))
 		count++
 	}
-	if object.schedule != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("schedule")
-		stream.WriteString(*object.schedule)
+		stream.WriteString(object.schedule)
 		count++
 	}
-	if object.scheduleType != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("schedule_type")
-		stream.WriteString(*object.scheduleType)
+		stream.WriteString(object.scheduleType)
 		count++
 	}
-	if object.upgradeType != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("upgrade_type")
-		stream.WriteString(*object.upgradeType)
+		stream.WriteString(object.upgradeType)
 		count++
 	}
-	if object.version != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("version")
-		stream.WriteString(*object.version)
+		stream.WriteString(object.version)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -143,35 +147,43 @@ func readUpgradePolicy(iterator *jsoniter.Iterator) *UpgradePolicy {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == UpgradePolicyLinkKind
+			if value == UpgradePolicyLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "cluster_id":
 			value := iterator.ReadString()
-			object.clusterID = &value
+			object.clusterID = value
+			object.bitmap_ |= 8
 		case "next_run":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.nextRun = &value
+			object.nextRun = value
+			object.bitmap_ |= 16
 		case "schedule":
 			value := iterator.ReadString()
-			object.schedule = &value
+			object.schedule = value
+			object.bitmap_ |= 32
 		case "schedule_type":
 			value := iterator.ReadString()
-			object.scheduleType = &value
+			object.scheduleType = value
+			object.bitmap_ |= 64
 		case "upgrade_type":
 			value := iterator.ReadString()
-			object.upgradeType = &value
+			object.upgradeType = value
+			object.bitmap_ |= 128
 		case "version":
 			value := iterator.ReadString()
-			object.version = &value
+			object.version = value
+			object.bitmap_ |= 256
 		default:
 			iterator.ReadAny()
 		}

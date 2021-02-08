@@ -23,12 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type TokenAuthorizationResponse struct {
+	bitmap_ uint32
 	account *Account
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *TokenAuthorizationResponse) Empty() bool {
-	return o == nil || (true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Account returns the value of the 'account' attribute, or
@@ -36,10 +37,10 @@ func (o *TokenAuthorizationResponse) Empty() bool {
 //
 //
 func (o *TokenAuthorizationResponse) Account() *Account {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.account
 	}
-	return o.account
+	return nil
 }
 
 // GetAccount returns the value of the 'account' attribute and
@@ -47,7 +48,7 @@ func (o *TokenAuthorizationResponse) Account() *Account {
 //
 //
 func (o *TokenAuthorizationResponse) GetAccount() (value *Account, ok bool) {
-	ok = o != nil && o.account != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.account
 	}
@@ -68,7 +69,7 @@ const TokenAuthorizationResponseListNilKind = "TokenAuthorizationResponseListNil
 
 // TokenAuthorizationResponseList is a list of values of the 'token_authorization_response' type.
 type TokenAuthorizationResponseList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*TokenAuthorizationResponse
 }

@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type SummarySampleBuilder struct {
-	time  *string
-	value *float64
+	bitmap_ uint32
+	time    string
+	value   float64
 }
 
 // NewSummarySample creates a new builder of 'summary_sample' objects.
 func NewSummarySample() *SummarySampleBuilder {
-	return new(SummarySampleBuilder)
+	return &SummarySampleBuilder{}
 }
 
 // Time sets the value of the 'time' attribute to the given value.
 //
 //
 func (b *SummarySampleBuilder) Time(value string) *SummarySampleBuilder {
-	b.time = &value
+	b.time = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *SummarySampleBuilder) Time(value string) *SummarySampleBuilder {
 //
 //
 func (b *SummarySampleBuilder) Value(value float64) *SummarySampleBuilder {
-	b.value = &value
+	b.value = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *SummarySampleBuilder) Copy(object *SummarySample) *SummarySampleBuilder
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.time = object.time
 	b.value = object.value
 	return b
@@ -61,6 +65,7 @@ func (b *SummarySampleBuilder) Copy(object *SummarySample) *SummarySampleBuilder
 // Build creates a 'summary_sample' object using the configuration stored in the builder.
 func (b *SummarySampleBuilder) Build() (object *SummarySample, err error) {
 	object = new(SummarySample)
+	object.bitmap_ = b.bitmap_
 	object.time = b.time
 	object.value = b.value
 	return

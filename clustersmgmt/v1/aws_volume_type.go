@@ -23,17 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Holds settings for an AWS storage volume.
 type AWSVolume struct {
-	iops  *int
-	size  *int
-	type_ *string
+	bitmap_ uint32
+	iops    int
+	size    int
+	type_   string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AWSVolume) Empty() bool {
-	return o == nil || (o.iops == nil &&
-		o.size == nil &&
-		o.type_ == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // IOPS returns the value of the 'IOPS' attribute, or
@@ -41,8 +39,8 @@ func (o *AWSVolume) Empty() bool {
 //
 // Volume provisioned IOPS.
 func (o *AWSVolume) IOPS() int {
-	if o != nil && o.iops != nil {
-		return *o.iops
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.iops
 	}
 	return 0
 }
@@ -52,9 +50,9 @@ func (o *AWSVolume) IOPS() int {
 //
 // Volume provisioned IOPS.
 func (o *AWSVolume) GetIOPS() (value int, ok bool) {
-	ok = o != nil && o.iops != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.iops
+		value = o.iops
 	}
 	return
 }
@@ -64,8 +62,8 @@ func (o *AWSVolume) GetIOPS() (value int, ok bool) {
 //
 // Volume size in Gib.
 func (o *AWSVolume) Size() int {
-	if o != nil && o.size != nil {
-		return *o.size
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.size
 	}
 	return 0
 }
@@ -75,9 +73,9 @@ func (o *AWSVolume) Size() int {
 //
 // Volume size in Gib.
 func (o *AWSVolume) GetSize() (value int, ok bool) {
-	ok = o != nil && o.size != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.size
+		value = o.size
 	}
 	return
 }
@@ -89,8 +87,8 @@ func (o *AWSVolume) GetSize() (value int, ok bool) {
 //
 // Possible values are: 'io1', 'gp2', 'st1', 'sc1', 'standard'
 func (o *AWSVolume) Type() string {
-	if o != nil && o.type_ != nil {
-		return *o.type_
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.type_
 	}
 	return ""
 }
@@ -102,9 +100,9 @@ func (o *AWSVolume) Type() string {
 //
 // Possible values are: 'io1', 'gp2', 'st1', 'sc1', 'standard'
 func (o *AWSVolume) GetType() (value string, ok bool) {
-	ok = o != nil && o.type_ != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.type_
+		value = o.type_
 	}
 	return
 }
@@ -123,7 +121,7 @@ const AWSVolumeListNilKind = "AWSVolumeListNil"
 
 // AWSVolumeList is a list of values of the 'AWS_volume' type.
 type AWSVolumeList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AWSVolume
 }

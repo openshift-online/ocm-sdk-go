@@ -40,70 +40,73 @@ func MarshalLabel(object *Label, writer io.Writer) error {
 func writeLabel(object *Label, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(LabelLinkKind)
 	} else {
 		stream.WriteString(LabelKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.createdAt != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("created_at")
-		stream.WriteString((*object.createdAt).Format(time.RFC3339))
+		stream.WriteString((object.createdAt).Format(time.RFC3339))
 		count++
 	}
-	if object.internal != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("internal")
-		stream.WriteBool(*object.internal)
+		stream.WriteBool(object.internal)
 		count++
 	}
-	if object.key != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("key")
-		stream.WriteString(*object.key)
+		stream.WriteString(object.key)
 		count++
 	}
-	if object.updatedAt != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("updated_at")
-		stream.WriteString((*object.updatedAt).Format(time.RFC3339))
+		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
-	if object.value != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("value")
-		stream.WriteString(*object.value)
+		stream.WriteString(object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -135,36 +138,43 @@ func readLabel(iterator *jsoniter.Iterator) *Label {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == LabelLinkKind
+			if value == LabelLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "created_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.createdAt = &value
+			object.createdAt = value
+			object.bitmap_ |= 8
 		case "internal":
 			value := iterator.ReadBool()
-			object.internal = &value
+			object.internal = value
+			object.bitmap_ |= 16
 		case "key":
 			value := iterator.ReadString()
-			object.key = &value
+			object.key = value
+			object.bitmap_ |= 32
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.updatedAt = &value
+			object.updatedAt = value
+			object.bitmap_ |= 64
 		case "value":
 			value := iterator.ReadString()
-			object.value = &value
+			object.value = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

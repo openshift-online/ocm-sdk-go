@@ -23,25 +23,27 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Representation of an access review response, performed against oneself
 type SelfAccessReviewResponseBuilder struct {
-	action         *string
-	allowed        *bool
-	clusterID      *string
-	clusterUUID    *string
-	organizationID *string
-	resourceType   *string
-	subscriptionID *string
+	bitmap_        uint32
+	action         string
+	clusterID      string
+	clusterUUID    string
+	organizationID string
+	resourceType   string
+	subscriptionID string
+	allowed        bool
 }
 
 // NewSelfAccessReviewResponse creates a new builder of 'self_access_review_response' objects.
 func NewSelfAccessReviewResponse() *SelfAccessReviewResponseBuilder {
-	return new(SelfAccessReviewResponseBuilder)
+	return &SelfAccessReviewResponseBuilder{}
 }
 
 // Action sets the value of the 'action' attribute to the given value.
 //
 //
 func (b *SelfAccessReviewResponseBuilder) Action(value string) *SelfAccessReviewResponseBuilder {
-	b.action = &value
+	b.action = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -49,7 +51,8 @@ func (b *SelfAccessReviewResponseBuilder) Action(value string) *SelfAccessReview
 //
 //
 func (b *SelfAccessReviewResponseBuilder) Allowed(value bool) *SelfAccessReviewResponseBuilder {
-	b.allowed = &value
+	b.allowed = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -57,7 +60,8 @@ func (b *SelfAccessReviewResponseBuilder) Allowed(value bool) *SelfAccessReviewR
 //
 //
 func (b *SelfAccessReviewResponseBuilder) ClusterID(value string) *SelfAccessReviewResponseBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,7 +69,8 @@ func (b *SelfAccessReviewResponseBuilder) ClusterID(value string) *SelfAccessRev
 //
 //
 func (b *SelfAccessReviewResponseBuilder) ClusterUUID(value string) *SelfAccessReviewResponseBuilder {
-	b.clusterUUID = &value
+	b.clusterUUID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -73,7 +78,8 @@ func (b *SelfAccessReviewResponseBuilder) ClusterUUID(value string) *SelfAccessR
 //
 //
 func (b *SelfAccessReviewResponseBuilder) OrganizationID(value string) *SelfAccessReviewResponseBuilder {
-	b.organizationID = &value
+	b.organizationID = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -81,7 +87,8 @@ func (b *SelfAccessReviewResponseBuilder) OrganizationID(value string) *SelfAcce
 //
 //
 func (b *SelfAccessReviewResponseBuilder) ResourceType(value string) *SelfAccessReviewResponseBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -89,7 +96,8 @@ func (b *SelfAccessReviewResponseBuilder) ResourceType(value string) *SelfAccess
 //
 //
 func (b *SelfAccessReviewResponseBuilder) SubscriptionID(value string) *SelfAccessReviewResponseBuilder {
-	b.subscriptionID = &value
+	b.subscriptionID = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -98,6 +106,7 @@ func (b *SelfAccessReviewResponseBuilder) Copy(object *SelfAccessReviewResponse)
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.action = object.action
 	b.allowed = object.allowed
 	b.clusterID = object.clusterID
@@ -111,6 +120,7 @@ func (b *SelfAccessReviewResponseBuilder) Copy(object *SelfAccessReviewResponse)
 // Build creates a 'self_access_review_response' object using the configuration stored in the builder.
 func (b *SelfAccessReviewResponseBuilder) Build() (object *SelfAccessReviewResponse, err error) {
 	object = new(SelfAccessReviewResponse)
+	object.bitmap_ = b.bitmap_
 	object.action = b.action
 	object.allowed = b.allowed
 	object.clusterID = b.clusterID

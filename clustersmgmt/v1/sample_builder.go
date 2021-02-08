@@ -27,20 +27,22 @@ import (
 //
 // Sample of a metric.
 type SampleBuilder struct {
-	time  *time.Time
-	value *float64
+	bitmap_ uint32
+	time    time.Time
+	value   float64
 }
 
 // NewSample creates a new builder of 'sample' objects.
 func NewSample() *SampleBuilder {
-	return new(SampleBuilder)
+	return &SampleBuilder{}
 }
 
 // Time sets the value of the 'time' attribute to the given value.
 //
 //
 func (b *SampleBuilder) Time(value time.Time) *SampleBuilder {
-	b.time = &value
+	b.time = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -48,7 +50,8 @@ func (b *SampleBuilder) Time(value time.Time) *SampleBuilder {
 //
 //
 func (b *SampleBuilder) Value(value float64) *SampleBuilder {
-	b.value = &value
+	b.value = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -57,6 +60,7 @@ func (b *SampleBuilder) Copy(object *Sample) *SampleBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.time = object.time
 	b.value = object.value
 	return b
@@ -65,6 +69,7 @@ func (b *SampleBuilder) Copy(object *Sample) *SampleBuilder {
 // Build creates a 'sample' object using the configuration stored in the builder.
 func (b *SampleBuilder) Build() (object *Sample, err error) {
 	object = new(Sample)
+	object.bitmap_ = b.bitmap_
 	object.time = b.time
 	object.value = b.value
 	return

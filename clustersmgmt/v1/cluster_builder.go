@@ -63,9 +63,9 @@ import (
 // attributes are mandatory when creation a cluster with your own Amazon Web
 // Services account.
 type ClusterBuilder struct {
-	id                                *string
-	href                              *string
-	link                              bool
+	bitmap_                           uint64
+	id                                string
+	href                              string
 	api                               *ClusterAPIBuilder
 	aws                               *AWSBuilder
 	awsInfrastructureAccessRoleGrants *AWSInfrastructureAccessRoleGrantListBuilder
@@ -73,61 +73,64 @@ type ClusterBuilder struct {
 	dns                               *DNSBuilder
 	gcp                               *GCPBuilder
 	addons                            *AddOnInstallationListBuilder
+	billingModel                      BillingModel
 	cloudProvider                     *CloudProviderBuilder
 	console                           *ClusterConsoleBuilder
-	creationTimestamp                 *time.Time
-	displayName                       *string
-	etcdEncryption                    *bool
-	expirationTimestamp               *time.Time
-	externalID                        *string
+	creationTimestamp                 time.Time
+	displayName                       string
+	expirationTimestamp               time.Time
+	externalID                        string
 	externalConfiguration             *ExternalConfigurationBuilder
 	flavour                           *FlavourBuilder
 	groups                            *GroupListBuilder
-	healthState                       *ClusterHealthState
+	healthState                       ClusterHealthState
 	identityProviders                 *IdentityProviderListBuilder
 	ingresses                         *IngressListBuilder
-	loadBalancerQuota                 *int
+	loadBalancerQuota                 int
 	machinePools                      *MachinePoolListBuilder
-	managed                           *bool
 	metrics                           *ClusterMetricsBuilder
-	multiAZ                           *bool
-	name                              *string
+	name                              string
 	network                           *NetworkBuilder
 	nodeDrainGracePeriod              *ValueBuilder
 	nodes                             *ClusterNodesBuilder
-	openshiftVersion                  *string
+	openshiftVersion                  string
 	product                           *ProductBuilder
 	properties                        map[string]string
 	provisionShard                    *ProvisionShardBuilder
 	region                            *CloudRegionBuilder
-	state                             *ClusterState
+	state                             ClusterState
 	status                            *ClusterStatusBuilder
 	storageQuota                      *ValueBuilder
 	subscription                      *SubscriptionBuilder
-	upgradeChannelGroup               *string
+	upgradeChannelGroup               string
 	version                           *VersionBuilder
+	etcdEncryption                    bool
+	managed                           bool
+	multiAZ                           bool
 }
 
 // NewCluster creates a new builder of 'cluster' objects.
 func NewCluster() *ClusterBuilder {
-	return new(ClusterBuilder)
+	return &ClusterBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *ClusterBuilder) Link(value bool) *ClusterBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *ClusterBuilder) ID(value string) *ClusterBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *ClusterBuilder) HREF(value string) *ClusterBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *ClusterBuilder) Link(value bool) *ClusterBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -136,6 +139,11 @@ func (b *ClusterBuilder) Link(value bool) *ClusterBuilder {
 // Information about the API of a cluster.
 func (b *ClusterBuilder) API(value *ClusterAPIBuilder) *ClusterBuilder {
 	b.api = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -144,6 +152,11 @@ func (b *ClusterBuilder) API(value *ClusterAPIBuilder) *ClusterBuilder {
 // _Amazon Web Services_ specific settings of a cluster.
 func (b *ClusterBuilder) AWS(value *AWSBuilder) *ClusterBuilder {
 	b.aws = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -152,6 +165,7 @@ func (b *ClusterBuilder) AWS(value *AWSBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) AWSInfrastructureAccessRoleGrants(value *AWSInfrastructureAccessRoleGrantListBuilder) *ClusterBuilder {
 	b.awsInfrastructureAccessRoleGrants = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -160,6 +174,11 @@ func (b *ClusterBuilder) AWSInfrastructureAccessRoleGrants(value *AWSInfrastruct
 //
 func (b *ClusterBuilder) CCS(value *CCSBuilder) *ClusterBuilder {
 	b.ccs = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -168,6 +187,11 @@ func (b *ClusterBuilder) CCS(value *CCSBuilder) *ClusterBuilder {
 // DNS settings of the cluster.
 func (b *ClusterBuilder) DNS(value *DNSBuilder) *ClusterBuilder {
 	b.dns = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
@@ -176,6 +200,11 @@ func (b *ClusterBuilder) DNS(value *DNSBuilder) *ClusterBuilder {
 // Google cloud platform settings of a cluster.
 func (b *ClusterBuilder) GCP(value *GCPBuilder) *ClusterBuilder {
 	b.gcp = value
+	if value != nil {
+		b.bitmap_ |= 256
+	} else {
+		b.bitmap_ &^= 256
+	}
 	return b
 }
 
@@ -184,6 +213,16 @@ func (b *ClusterBuilder) GCP(value *GCPBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) Addons(value *AddOnInstallationListBuilder) *ClusterBuilder {
 	b.addons = value
+	b.bitmap_ |= 512
+	return b
+}
+
+// BillingModel sets the value of the 'billing_model' attribute to the given value.
+//
+// Billing model for cluster resources.
+func (b *ClusterBuilder) BillingModel(value BillingModel) *ClusterBuilder {
+	b.billingModel = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -192,6 +231,11 @@ func (b *ClusterBuilder) Addons(value *AddOnInstallationListBuilder) *ClusterBui
 // Cloud provider.
 func (b *ClusterBuilder) CloudProvider(value *CloudProviderBuilder) *ClusterBuilder {
 	b.cloudProvider = value
+	if value != nil {
+		b.bitmap_ |= 2048
+	} else {
+		b.bitmap_ &^= 2048
+	}
 	return b
 }
 
@@ -200,6 +244,11 @@ func (b *ClusterBuilder) CloudProvider(value *CloudProviderBuilder) *ClusterBuil
 // Information about the console of a cluster.
 func (b *ClusterBuilder) Console(value *ClusterConsoleBuilder) *ClusterBuilder {
 	b.console = value
+	if value != nil {
+		b.bitmap_ |= 4096
+	} else {
+		b.bitmap_ &^= 4096
+	}
 	return b
 }
 
@@ -207,7 +256,8 @@ func (b *ClusterBuilder) Console(value *ClusterConsoleBuilder) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) CreationTimestamp(value time.Time) *ClusterBuilder {
-	b.creationTimestamp = &value
+	b.creationTimestamp = value
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -215,7 +265,8 @@ func (b *ClusterBuilder) CreationTimestamp(value time.Time) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) DisplayName(value string) *ClusterBuilder {
-	b.displayName = &value
+	b.displayName = value
+	b.bitmap_ |= 16384
 	return b
 }
 
@@ -223,7 +274,8 @@ func (b *ClusterBuilder) DisplayName(value string) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) EtcdEncryption(value bool) *ClusterBuilder {
-	b.etcdEncryption = &value
+	b.etcdEncryption = value
+	b.bitmap_ |= 32768
 	return b
 }
 
@@ -231,7 +283,8 @@ func (b *ClusterBuilder) EtcdEncryption(value bool) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) ExpirationTimestamp(value time.Time) *ClusterBuilder {
-	b.expirationTimestamp = &value
+	b.expirationTimestamp = value
+	b.bitmap_ |= 65536
 	return b
 }
 
@@ -239,7 +292,8 @@ func (b *ClusterBuilder) ExpirationTimestamp(value time.Time) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) ExternalID(value string) *ClusterBuilder {
-	b.externalID = &value
+	b.externalID = value
+	b.bitmap_ |= 131072
 	return b
 }
 
@@ -248,6 +302,11 @@ func (b *ClusterBuilder) ExternalID(value string) *ClusterBuilder {
 // Representation of cluster external configuration.
 func (b *ClusterBuilder) ExternalConfiguration(value *ExternalConfigurationBuilder) *ClusterBuilder {
 	b.externalConfiguration = value
+	if value != nil {
+		b.bitmap_ |= 262144
+	} else {
+		b.bitmap_ &^= 262144
+	}
 	return b
 }
 
@@ -257,6 +316,11 @@ func (b *ClusterBuilder) ExternalConfiguration(value *ExternalConfigurationBuild
 // with 10 infra nodes and 1000 compute nodes.
 func (b *ClusterBuilder) Flavour(value *FlavourBuilder) *ClusterBuilder {
 	b.flavour = value
+	if value != nil {
+		b.bitmap_ |= 524288
+	} else {
+		b.bitmap_ &^= 524288
+	}
 	return b
 }
 
@@ -265,6 +329,7 @@ func (b *ClusterBuilder) Flavour(value *FlavourBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) Groups(value *GroupListBuilder) *ClusterBuilder {
 	b.groups = value
+	b.bitmap_ |= 1048576
 	return b
 }
 
@@ -272,7 +337,8 @@ func (b *ClusterBuilder) Groups(value *GroupListBuilder) *ClusterBuilder {
 //
 // ClusterHealthState indicates the health of a cluster.
 func (b *ClusterBuilder) HealthState(value ClusterHealthState) *ClusterBuilder {
-	b.healthState = &value
+	b.healthState = value
+	b.bitmap_ |= 2097152
 	return b
 }
 
@@ -281,6 +347,7 @@ func (b *ClusterBuilder) HealthState(value ClusterHealthState) *ClusterBuilder {
 //
 func (b *ClusterBuilder) IdentityProviders(value *IdentityProviderListBuilder) *ClusterBuilder {
 	b.identityProviders = value
+	b.bitmap_ |= 4194304
 	return b
 }
 
@@ -289,6 +356,7 @@ func (b *ClusterBuilder) IdentityProviders(value *IdentityProviderListBuilder) *
 //
 func (b *ClusterBuilder) Ingresses(value *IngressListBuilder) *ClusterBuilder {
 	b.ingresses = value
+	b.bitmap_ |= 8388608
 	return b
 }
 
@@ -296,7 +364,8 @@ func (b *ClusterBuilder) Ingresses(value *IngressListBuilder) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) LoadBalancerQuota(value int) *ClusterBuilder {
-	b.loadBalancerQuota = &value
+	b.loadBalancerQuota = value
+	b.bitmap_ |= 16777216
 	return b
 }
 
@@ -305,6 +374,7 @@ func (b *ClusterBuilder) LoadBalancerQuota(value int) *ClusterBuilder {
 //
 func (b *ClusterBuilder) MachinePools(value *MachinePoolListBuilder) *ClusterBuilder {
 	b.machinePools = value
+	b.bitmap_ |= 33554432
 	return b
 }
 
@@ -312,7 +382,8 @@ func (b *ClusterBuilder) MachinePools(value *MachinePoolListBuilder) *ClusterBui
 //
 //
 func (b *ClusterBuilder) Managed(value bool) *ClusterBuilder {
-	b.managed = &value
+	b.managed = value
+	b.bitmap_ |= 67108864
 	return b
 }
 
@@ -321,6 +392,11 @@ func (b *ClusterBuilder) Managed(value bool) *ClusterBuilder {
 // Cluster metrics received via telemetry.
 func (b *ClusterBuilder) Metrics(value *ClusterMetricsBuilder) *ClusterBuilder {
 	b.metrics = value
+	if value != nil {
+		b.bitmap_ |= 134217728
+	} else {
+		b.bitmap_ &^= 134217728
+	}
 	return b
 }
 
@@ -328,7 +404,8 @@ func (b *ClusterBuilder) Metrics(value *ClusterMetricsBuilder) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) MultiAZ(value bool) *ClusterBuilder {
-	b.multiAZ = &value
+	b.multiAZ = value
+	b.bitmap_ |= 268435456
 	return b
 }
 
@@ -336,7 +413,8 @@ func (b *ClusterBuilder) MultiAZ(value bool) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) Name(value string) *ClusterBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 536870912
 	return b
 }
 
@@ -345,6 +423,11 @@ func (b *ClusterBuilder) Name(value string) *ClusterBuilder {
 // Network configuration of a cluster.
 func (b *ClusterBuilder) Network(value *NetworkBuilder) *ClusterBuilder {
 	b.network = value
+	if value != nil {
+		b.bitmap_ |= 1073741824
+	} else {
+		b.bitmap_ &^= 1073741824
+	}
 	return b
 }
 
@@ -370,6 +453,11 @@ func (b *ClusterBuilder) Network(value *NetworkBuilder) *ClusterBuilder {
 // - 1 PiB = 2^50 bytes
 func (b *ClusterBuilder) NodeDrainGracePeriod(value *ValueBuilder) *ClusterBuilder {
 	b.nodeDrainGracePeriod = value
+	if value != nil {
+		b.bitmap_ |= 2147483648
+	} else {
+		b.bitmap_ &^= 2147483648
+	}
 	return b
 }
 
@@ -378,6 +466,11 @@ func (b *ClusterBuilder) NodeDrainGracePeriod(value *ValueBuilder) *ClusterBuild
 // Counts of different classes of nodes inside a cluster.
 func (b *ClusterBuilder) Nodes(value *ClusterNodesBuilder) *ClusterBuilder {
 	b.nodes = value
+	if value != nil {
+		b.bitmap_ |= 4294967296
+	} else {
+		b.bitmap_ &^= 4294967296
+	}
 	return b
 }
 
@@ -385,7 +478,8 @@ func (b *ClusterBuilder) Nodes(value *ClusterNodesBuilder) *ClusterBuilder {
 //
 //
 func (b *ClusterBuilder) OpenshiftVersion(value string) *ClusterBuilder {
-	b.openshiftVersion = &value
+	b.openshiftVersion = value
+	b.bitmap_ |= 8589934592
 	return b
 }
 
@@ -394,6 +488,11 @@ func (b *ClusterBuilder) OpenshiftVersion(value string) *ClusterBuilder {
 // Representation of an product that can be selected as a cluster type.
 func (b *ClusterBuilder) Product(value *ProductBuilder) *ClusterBuilder {
 	b.product = value
+	if value != nil {
+		b.bitmap_ |= 17179869184
+	} else {
+		b.bitmap_ &^= 17179869184
+	}
 	return b
 }
 
@@ -402,6 +501,11 @@ func (b *ClusterBuilder) Product(value *ProductBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) Properties(value map[string]string) *ClusterBuilder {
 	b.properties = value
+	if value != nil {
+		b.bitmap_ |= 34359738368
+	} else {
+		b.bitmap_ &^= 34359738368
+	}
 	return b
 }
 
@@ -410,6 +514,11 @@ func (b *ClusterBuilder) Properties(value map[string]string) *ClusterBuilder {
 // Contains the properties of the provision shard, including AWS and GCP related configurations
 func (b *ClusterBuilder) ProvisionShard(value *ProvisionShardBuilder) *ClusterBuilder {
 	b.provisionShard = value
+	if value != nil {
+		b.bitmap_ |= 68719476736
+	} else {
+		b.bitmap_ &^= 68719476736
+	}
 	return b
 }
 
@@ -418,6 +527,11 @@ func (b *ClusterBuilder) ProvisionShard(value *ProvisionShardBuilder) *ClusterBu
 // Description of a region of a cloud provider.
 func (b *ClusterBuilder) Region(value *CloudRegionBuilder) *ClusterBuilder {
 	b.region = value
+	if value != nil {
+		b.bitmap_ |= 137438953472
+	} else {
+		b.bitmap_ &^= 137438953472
+	}
 	return b
 }
 
@@ -425,7 +539,8 @@ func (b *ClusterBuilder) Region(value *CloudRegionBuilder) *ClusterBuilder {
 //
 // Overall state of a cluster.
 func (b *ClusterBuilder) State(value ClusterState) *ClusterBuilder {
-	b.state = &value
+	b.state = value
+	b.bitmap_ |= 274877906944
 	return b
 }
 
@@ -434,6 +549,11 @@ func (b *ClusterBuilder) State(value ClusterState) *ClusterBuilder {
 // Detailed status of a cluster.
 func (b *ClusterBuilder) Status(value *ClusterStatusBuilder) *ClusterBuilder {
 	b.status = value
+	if value != nil {
+		b.bitmap_ |= 549755813888
+	} else {
+		b.bitmap_ &^= 549755813888
+	}
 	return b
 }
 
@@ -459,6 +579,11 @@ func (b *ClusterBuilder) Status(value *ClusterStatusBuilder) *ClusterBuilder {
 // - 1 PiB = 2^50 bytes
 func (b *ClusterBuilder) StorageQuota(value *ValueBuilder) *ClusterBuilder {
 	b.storageQuota = value
+	if value != nil {
+		b.bitmap_ |= 1099511627776
+	} else {
+		b.bitmap_ &^= 1099511627776
+	}
 	return b
 }
 
@@ -467,6 +592,11 @@ func (b *ClusterBuilder) StorageQuota(value *ValueBuilder) *ClusterBuilder {
 // Definition of a subscription.
 func (b *ClusterBuilder) Subscription(value *SubscriptionBuilder) *ClusterBuilder {
 	b.subscription = value
+	if value != nil {
+		b.bitmap_ |= 2199023255552
+	} else {
+		b.bitmap_ &^= 2199023255552
+	}
 	return b
 }
 
@@ -474,7 +604,8 @@ func (b *ClusterBuilder) Subscription(value *SubscriptionBuilder) *ClusterBuilde
 //
 //
 func (b *ClusterBuilder) UpgradeChannelGroup(value string) *ClusterBuilder {
-	b.upgradeChannelGroup = &value
+	b.upgradeChannelGroup = value
+	b.bitmap_ |= 4398046511104
 	return b
 }
 
@@ -483,6 +614,11 @@ func (b *ClusterBuilder) UpgradeChannelGroup(value string) *ClusterBuilder {
 // Representation of an _OpenShift_ version.
 func (b *ClusterBuilder) Version(value *VersionBuilder) *ClusterBuilder {
 	b.version = value
+	if value != nil {
+		b.bitmap_ |= 8796093022208
+	} else {
+		b.bitmap_ &^= 8796093022208
+	}
 	return b
 }
 
@@ -491,9 +627,9 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.api != nil {
 		b.api = NewClusterAPI().Copy(object.api)
 	} else {
@@ -529,6 +665,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 	} else {
 		b.addons = nil
 	}
+	b.billingModel = object.billingModel
 	if object.cloudProvider != nil {
 		b.cloudProvider = NewCloudProvider().Copy(object.cloudProvider)
 	} else {
@@ -606,7 +743,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.product = nil
 	}
 	if len(object.properties) > 0 {
-		b.properties = make(map[string]string)
+		b.properties = map[string]string{}
 		for k, v := range object.properties {
 			b.properties[k] = v
 		}
@@ -653,7 +790,7 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 	object = new(Cluster)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.api != nil {
 		object.api, err = b.api.Build()
 		if err != nil {
@@ -696,6 +833,7 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 			return
 		}
 	}
+	object.billingModel = b.billingModel
 	if b.cloudProvider != nil {
 		object.cloudProvider, err = b.cloudProvider.Build()
 		if err != nil {

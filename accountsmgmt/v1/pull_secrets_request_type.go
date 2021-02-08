@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type PullSecretsRequest struct {
-	externalResourceId *string
+	bitmap_            uint32
+	externalResourceId string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *PullSecretsRequest) Empty() bool {
-	return o == nil || (o.externalResourceId == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // ExternalResourceId returns the value of the 'external_resource_id' attribute, or
@@ -37,8 +37,8 @@ func (o *PullSecretsRequest) Empty() bool {
 //
 //
 func (o *PullSecretsRequest) ExternalResourceId() string {
-	if o != nil && o.externalResourceId != nil {
-		return *o.externalResourceId
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.externalResourceId
 	}
 	return ""
 }
@@ -48,9 +48,9 @@ func (o *PullSecretsRequest) ExternalResourceId() string {
 //
 //
 func (o *PullSecretsRequest) GetExternalResourceId() (value string, ok bool) {
-	ok = o != nil && o.externalResourceId != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.externalResourceId
+		value = o.externalResourceId
 	}
 	return
 }
@@ -69,7 +69,7 @@ const PullSecretsRequestListNilKind = "PullSecretsRequestListNil"
 
 // PullSecretsRequestList is a list of values of the 'pull_secrets_request' type.
 type PullSecretsRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*PullSecretsRequest
 }

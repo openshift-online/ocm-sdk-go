@@ -23,33 +23,35 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type PermissionBuilder struct {
-	id           *string
-	href         *string
-	link         bool
-	action       *Action
-	resourceType *string
+	bitmap_      uint32
+	id           string
+	href         string
+	action       Action
+	resourceType string
 }
 
 // NewPermission creates a new builder of 'permission' objects.
 func NewPermission() *PermissionBuilder {
-	return new(PermissionBuilder)
+	return &PermissionBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *PermissionBuilder) Link(value bool) *PermissionBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *PermissionBuilder) ID(value string) *PermissionBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *PermissionBuilder) HREF(value string) *PermissionBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *PermissionBuilder) Link(value bool) *PermissionBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -57,7 +59,8 @@ func (b *PermissionBuilder) Link(value bool) *PermissionBuilder {
 //
 // Possible actions for a permission.
 func (b *PermissionBuilder) Action(value Action) *PermissionBuilder {
-	b.action = &value
+	b.action = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,7 +68,8 @@ func (b *PermissionBuilder) Action(value Action) *PermissionBuilder {
 //
 //
 func (b *PermissionBuilder) ResourceType(value string) *PermissionBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,9 +78,9 @@ func (b *PermissionBuilder) Copy(object *Permission) *PermissionBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.action = object.action
 	b.resourceType = object.resourceType
 	return b
@@ -87,7 +91,7 @@ func (b *PermissionBuilder) Build() (object *Permission, err error) {
 	object = new(Permission)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.action = b.action
 	object.resourceType = b.resourceType
 	return

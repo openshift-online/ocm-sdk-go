@@ -23,38 +23,40 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type SupportCaseRequestBuilder struct {
-	id             *string
-	href           *string
-	link           bool
-	clusterId      *string
-	clusterUuid    *string
-	description    *string
-	eventStreamId  *string
-	severity       *string
-	subscriptionId *string
-	summary        *string
+	bitmap_        uint32
+	id             string
+	href           string
+	clusterId      string
+	clusterUuid    string
+	description    string
+	eventStreamId  string
+	severity       string
+	subscriptionId string
+	summary        string
 }
 
 // NewSupportCaseRequest creates a new builder of 'support_case_request' objects.
 func NewSupportCaseRequest() *SupportCaseRequestBuilder {
-	return new(SupportCaseRequestBuilder)
+	return &SupportCaseRequestBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *SupportCaseRequestBuilder) Link(value bool) *SupportCaseRequestBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *SupportCaseRequestBuilder) ID(value string) *SupportCaseRequestBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *SupportCaseRequestBuilder) HREF(value string) *SupportCaseRequestBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *SupportCaseRequestBuilder) Link(value bool) *SupportCaseRequestBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,7 +64,8 @@ func (b *SupportCaseRequestBuilder) Link(value bool) *SupportCaseRequestBuilder 
 //
 //
 func (b *SupportCaseRequestBuilder) ClusterId(value string) *SupportCaseRequestBuilder {
-	b.clusterId = &value
+	b.clusterId = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -70,7 +73,8 @@ func (b *SupportCaseRequestBuilder) ClusterId(value string) *SupportCaseRequestB
 //
 //
 func (b *SupportCaseRequestBuilder) ClusterUuid(value string) *SupportCaseRequestBuilder {
-	b.clusterUuid = &value
+	b.clusterUuid = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -78,7 +82,8 @@ func (b *SupportCaseRequestBuilder) ClusterUuid(value string) *SupportCaseReques
 //
 //
 func (b *SupportCaseRequestBuilder) Description(value string) *SupportCaseRequestBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -86,7 +91,8 @@ func (b *SupportCaseRequestBuilder) Description(value string) *SupportCaseReques
 //
 //
 func (b *SupportCaseRequestBuilder) EventStreamId(value string) *SupportCaseRequestBuilder {
-	b.eventStreamId = &value
+	b.eventStreamId = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -94,7 +100,8 @@ func (b *SupportCaseRequestBuilder) EventStreamId(value string) *SupportCaseRequ
 //
 //
 func (b *SupportCaseRequestBuilder) Severity(value string) *SupportCaseRequestBuilder {
-	b.severity = &value
+	b.severity = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -102,7 +109,8 @@ func (b *SupportCaseRequestBuilder) Severity(value string) *SupportCaseRequestBu
 //
 //
 func (b *SupportCaseRequestBuilder) SubscriptionId(value string) *SupportCaseRequestBuilder {
-	b.subscriptionId = &value
+	b.subscriptionId = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -110,7 +118,8 @@ func (b *SupportCaseRequestBuilder) SubscriptionId(value string) *SupportCaseReq
 //
 //
 func (b *SupportCaseRequestBuilder) Summary(value string) *SupportCaseRequestBuilder {
-	b.summary = &value
+	b.summary = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -119,9 +128,9 @@ func (b *SupportCaseRequestBuilder) Copy(object *SupportCaseRequest) *SupportCas
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.clusterId = object.clusterId
 	b.clusterUuid = object.clusterUuid
 	b.description = object.description
@@ -137,7 +146,7 @@ func (b *SupportCaseRequestBuilder) Build() (object *SupportCaseRequest, err err
 	object = new(SupportCaseRequest)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.clusterId = b.clusterId
 	object.clusterUuid = b.clusterUuid
 	object.description = b.description

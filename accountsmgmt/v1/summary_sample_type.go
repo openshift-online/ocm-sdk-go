@@ -23,15 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type SummarySample struct {
-	time  *string
-	value *float64
+	bitmap_ uint32
+	time    string
+	value   float64
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SummarySample) Empty() bool {
-	return o == nil || (o.time == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Time returns the value of the 'time' attribute, or
@@ -39,8 +38,8 @@ func (o *SummarySample) Empty() bool {
 //
 //
 func (o *SummarySample) Time() string {
-	if o != nil && o.time != nil {
-		return *o.time
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.time
 	}
 	return ""
 }
@@ -50,9 +49,9 @@ func (o *SummarySample) Time() string {
 //
 //
 func (o *SummarySample) GetTime() (value string, ok bool) {
-	ok = o != nil && o.time != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.time
+		value = o.time
 	}
 	return
 }
@@ -62,8 +61,8 @@ func (o *SummarySample) GetTime() (value string, ok bool) {
 //
 //
 func (o *SummarySample) Value() float64 {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.value
 	}
 	return 0.0
 }
@@ -73,9 +72,9 @@ func (o *SummarySample) Value() float64 {
 //
 //
 func (o *SummarySample) GetValue() (value float64, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -94,7 +93,7 @@ const SummarySampleListNilKind = "SummarySampleListNil"
 
 // SummarySampleList is a list of values of the 'summary_sample' type.
 type SummarySampleList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SummarySample
 }

@@ -27,43 +27,45 @@ import (
 //
 //
 type AccountBuilder struct {
-	id             *string
-	href           *string
-	link           bool
-	banCode        *string
-	banDescription *string
-	banned         *bool
-	createdAt      *time.Time
-	email          *string
-	firstName      *string
+	bitmap_        uint32
+	id             string
+	href           string
+	banCode        string
+	banDescription string
+	createdAt      time.Time
+	email          string
+	firstName      string
 	labels         []*LabelBuilder
-	lastName       *string
+	lastName       string
 	organization   *OrganizationBuilder
-	serviceAccount *bool
-	updatedAt      *time.Time
-	username       *string
+	updatedAt      time.Time
+	username       string
+	banned         bool
+	serviceAccount bool
 }
 
 // NewAccount creates a new builder of 'account' objects.
 func NewAccount() *AccountBuilder {
-	return new(AccountBuilder)
+	return &AccountBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *AccountBuilder) Link(value bool) *AccountBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *AccountBuilder) ID(value string) *AccountBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *AccountBuilder) HREF(value string) *AccountBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *AccountBuilder) Link(value bool) *AccountBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -71,7 +73,8 @@ func (b *AccountBuilder) Link(value bool) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) BanCode(value string) *AccountBuilder {
-	b.banCode = &value
+	b.banCode = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -79,7 +82,8 @@ func (b *AccountBuilder) BanCode(value string) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) BanDescription(value string) *AccountBuilder {
-	b.banDescription = &value
+	b.banDescription = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -87,7 +91,8 @@ func (b *AccountBuilder) BanDescription(value string) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) Banned(value bool) *AccountBuilder {
-	b.banned = &value
+	b.banned = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -95,7 +100,8 @@ func (b *AccountBuilder) Banned(value bool) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) CreatedAt(value time.Time) *AccountBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -103,7 +109,8 @@ func (b *AccountBuilder) CreatedAt(value time.Time) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) Email(value string) *AccountBuilder {
-	b.email = &value
+	b.email = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -111,7 +118,8 @@ func (b *AccountBuilder) Email(value string) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) FirstName(value string) *AccountBuilder {
-	b.firstName = &value
+	b.firstName = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -121,6 +129,7 @@ func (b *AccountBuilder) FirstName(value string) *AccountBuilder {
 func (b *AccountBuilder) Labels(values ...*LabelBuilder) *AccountBuilder {
 	b.labels = make([]*LabelBuilder, len(values))
 	copy(b.labels, values)
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -128,7 +137,8 @@ func (b *AccountBuilder) Labels(values ...*LabelBuilder) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) LastName(value string) *AccountBuilder {
-	b.lastName = &value
+	b.lastName = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -137,6 +147,11 @@ func (b *AccountBuilder) LastName(value string) *AccountBuilder {
 //
 func (b *AccountBuilder) Organization(value *OrganizationBuilder) *AccountBuilder {
 	b.organization = value
+	if value != nil {
+		b.bitmap_ |= 2048
+	} else {
+		b.bitmap_ &^= 2048
+	}
 	return b
 }
 
@@ -144,7 +159,8 @@ func (b *AccountBuilder) Organization(value *OrganizationBuilder) *AccountBuilde
 //
 //
 func (b *AccountBuilder) ServiceAccount(value bool) *AccountBuilder {
-	b.serviceAccount = &value
+	b.serviceAccount = value
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -152,7 +168,8 @@ func (b *AccountBuilder) ServiceAccount(value bool) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) UpdatedAt(value time.Time) *AccountBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 8192
 	return b
 }
 
@@ -160,7 +177,8 @@ func (b *AccountBuilder) UpdatedAt(value time.Time) *AccountBuilder {
 //
 //
 func (b *AccountBuilder) Username(value string) *AccountBuilder {
-	b.username = &value
+	b.username = value
+	b.bitmap_ |= 16384
 	return b
 }
 
@@ -169,9 +187,9 @@ func (b *AccountBuilder) Copy(object *Account) *AccountBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.banCode = object.banCode
 	b.banDescription = object.banDescription
 	b.banned = object.banned
@@ -203,7 +221,7 @@ func (b *AccountBuilder) Build() (object *Account, err error) {
 	object = new(Account)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.banCode = b.banCode
 	object.banDescription = b.banDescription
 	object.banned = b.banned

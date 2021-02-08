@@ -39,21 +39,21 @@ const AccountNilKind = "AccountNil"
 //
 //
 type Account struct {
-	id             *string
-	href           *string
-	link           bool
-	banCode        *string
-	banDescription *string
-	banned         *bool
-	createdAt      *time.Time
-	email          *string
-	firstName      *string
+	bitmap_        uint32
+	id             string
+	href           string
+	banCode        string
+	banDescription string
+	createdAt      time.Time
+	email          string
+	firstName      string
 	labels         []*Label
-	lastName       *string
+	lastName       string
 	organization   *Organization
-	serviceAccount *bool
-	updatedAt      *time.Time
-	username       *string
+	updatedAt      time.Time
+	username       string
+	banned         bool
+	serviceAccount bool
 }
 
 // Kind returns the name of the type of the object.
@@ -61,16 +61,21 @@ func (o *Account) Kind() string {
 	if o == nil {
 		return AccountNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return AccountLinkKind
 	}
 	return AccountKind
 }
 
+// Link returns true iif this is a link.
+func (o *Account) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Account) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -78,22 +83,17 @@ func (o *Account) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Account) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Account) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Account) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -101,28 +101,16 @@ func (o *Account) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Account) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Account) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.banCode == nil &&
-		o.banDescription == nil &&
-		o.banned == nil &&
-		o.createdAt == nil &&
-		o.email == nil &&
-		o.firstName == nil &&
-		len(o.labels) == 0 &&
-		o.lastName == nil &&
-		o.serviceAccount == nil &&
-		o.updatedAt == nil &&
-		o.username == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // BanCode returns the value of the 'ban_code' attribute, or
@@ -130,8 +118,8 @@ func (o *Account) Empty() bool {
 //
 //
 func (o *Account) BanCode() string {
-	if o != nil && o.banCode != nil {
-		return *o.banCode
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.banCode
 	}
 	return ""
 }
@@ -141,9 +129,9 @@ func (o *Account) BanCode() string {
 //
 //
 func (o *Account) GetBanCode() (value string, ok bool) {
-	ok = o != nil && o.banCode != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.banCode
+		value = o.banCode
 	}
 	return
 }
@@ -153,8 +141,8 @@ func (o *Account) GetBanCode() (value string, ok bool) {
 //
 //
 func (o *Account) BanDescription() string {
-	if o != nil && o.banDescription != nil {
-		return *o.banDescription
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.banDescription
 	}
 	return ""
 }
@@ -164,9 +152,9 @@ func (o *Account) BanDescription() string {
 //
 //
 func (o *Account) GetBanDescription() (value string, ok bool) {
-	ok = o != nil && o.banDescription != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.banDescription
+		value = o.banDescription
 	}
 	return
 }
@@ -176,8 +164,8 @@ func (o *Account) GetBanDescription() (value string, ok bool) {
 //
 //
 func (o *Account) Banned() bool {
-	if o != nil && o.banned != nil {
-		return *o.banned
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.banned
 	}
 	return false
 }
@@ -187,9 +175,9 @@ func (o *Account) Banned() bool {
 //
 //
 func (o *Account) GetBanned() (value bool, ok bool) {
-	ok = o != nil && o.banned != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.banned
+		value = o.banned
 	}
 	return
 }
@@ -199,8 +187,8 @@ func (o *Account) GetBanned() (value bool, ok bool) {
 //
 //
 func (o *Account) CreatedAt() time.Time {
-	if o != nil && o.createdAt != nil {
-		return *o.createdAt
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.createdAt
 	}
 	return time.Time{}
 }
@@ -210,9 +198,9 @@ func (o *Account) CreatedAt() time.Time {
 //
 //
 func (o *Account) GetCreatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.createdAt != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.createdAt
+		value = o.createdAt
 	}
 	return
 }
@@ -222,8 +210,8 @@ func (o *Account) GetCreatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *Account) Email() string {
-	if o != nil && o.email != nil {
-		return *o.email
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.email
 	}
 	return ""
 }
@@ -233,9 +221,9 @@ func (o *Account) Email() string {
 //
 //
 func (o *Account) GetEmail() (value string, ok bool) {
-	ok = o != nil && o.email != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.email
+		value = o.email
 	}
 	return
 }
@@ -245,8 +233,8 @@ func (o *Account) GetEmail() (value string, ok bool) {
 //
 //
 func (o *Account) FirstName() string {
-	if o != nil && o.firstName != nil {
-		return *o.firstName
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.firstName
 	}
 	return ""
 }
@@ -256,9 +244,9 @@ func (o *Account) FirstName() string {
 //
 //
 func (o *Account) GetFirstName() (value string, ok bool) {
-	ok = o != nil && o.firstName != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.firstName
+		value = o.firstName
 	}
 	return
 }
@@ -268,10 +256,10 @@ func (o *Account) GetFirstName() (value string, ok bool) {
 //
 //
 func (o *Account) Labels() []*Label {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.labels
 	}
-	return o.labels
+	return nil
 }
 
 // GetLabels returns the value of the 'labels' attribute and
@@ -279,7 +267,7 @@ func (o *Account) Labels() []*Label {
 //
 //
 func (o *Account) GetLabels() (value []*Label, ok bool) {
-	ok = o != nil && o.labels != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.labels
 	}
@@ -291,8 +279,8 @@ func (o *Account) GetLabels() (value []*Label, ok bool) {
 //
 //
 func (o *Account) LastName() string {
-	if o != nil && o.lastName != nil {
-		return *o.lastName
+	if o != nil && o.bitmap_&1024 != 0 {
+		return o.lastName
 	}
 	return ""
 }
@@ -302,9 +290,9 @@ func (o *Account) LastName() string {
 //
 //
 func (o *Account) GetLastName() (value string, ok bool) {
-	ok = o != nil && o.lastName != nil
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
-		value = *o.lastName
+		value = o.lastName
 	}
 	return
 }
@@ -314,10 +302,10 @@ func (o *Account) GetLastName() (value string, ok bool) {
 //
 //
 func (o *Account) Organization() *Organization {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2048 != 0 {
+		return o.organization
 	}
-	return o.organization
+	return nil
 }
 
 // GetOrganization returns the value of the 'organization' attribute and
@@ -325,7 +313,7 @@ func (o *Account) Organization() *Organization {
 //
 //
 func (o *Account) GetOrganization() (value *Organization, ok bool) {
-	ok = o != nil && o.organization != nil
+	ok = o != nil && o.bitmap_&2048 != 0
 	if ok {
 		value = o.organization
 	}
@@ -337,8 +325,8 @@ func (o *Account) GetOrganization() (value *Organization, ok bool) {
 //
 //
 func (o *Account) ServiceAccount() bool {
-	if o != nil && o.serviceAccount != nil {
-		return *o.serviceAccount
+	if o != nil && o.bitmap_&4096 != 0 {
+		return o.serviceAccount
 	}
 	return false
 }
@@ -348,9 +336,9 @@ func (o *Account) ServiceAccount() bool {
 //
 //
 func (o *Account) GetServiceAccount() (value bool, ok bool) {
-	ok = o != nil && o.serviceAccount != nil
+	ok = o != nil && o.bitmap_&4096 != 0
 	if ok {
-		value = *o.serviceAccount
+		value = o.serviceAccount
 	}
 	return
 }
@@ -360,8 +348,8 @@ func (o *Account) GetServiceAccount() (value bool, ok bool) {
 //
 //
 func (o *Account) UpdatedAt() time.Time {
-	if o != nil && o.updatedAt != nil {
-		return *o.updatedAt
+	if o != nil && o.bitmap_&8192 != 0 {
+		return o.updatedAt
 	}
 	return time.Time{}
 }
@@ -371,9 +359,9 @@ func (o *Account) UpdatedAt() time.Time {
 //
 //
 func (o *Account) GetUpdatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedAt != nil
+	ok = o != nil && o.bitmap_&8192 != 0
 	if ok {
-		value = *o.updatedAt
+		value = o.updatedAt
 	}
 	return
 }
@@ -383,8 +371,8 @@ func (o *Account) GetUpdatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *Account) Username() string {
-	if o != nil && o.username != nil {
-		return *o.username
+	if o != nil && o.bitmap_&16384 != 0 {
+		return o.username
 	}
 	return ""
 }
@@ -394,9 +382,9 @@ func (o *Account) Username() string {
 //
 //
 func (o *Account) GetUsername() (value string, ok bool) {
-	ok = o != nil && o.username != nil
+	ok = o != nil && o.bitmap_&16384 != 0
 	if ok {
-		value = *o.username
+		value = o.username
 	}
 	return
 }
@@ -415,7 +403,7 @@ const AccountListNilKind = "AccountListNil"
 
 // AccountList is a list of values of the 'account' type.
 type AccountList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Account
 }
@@ -438,8 +426,8 @@ func (l *AccountList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *AccountList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -447,9 +435,9 @@ func (l *AccountList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *AccountList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

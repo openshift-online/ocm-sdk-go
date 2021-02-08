@@ -39,16 +39,16 @@ const RegistryCredentialNilKind = "RegistryCredentialNil"
 //
 //
 type RegistryCredential struct {
-	id                 *string
-	href               *string
-	link               bool
+	bitmap_            uint32
+	id                 string
+	href               string
 	account            *Account
-	createdAt          *time.Time
-	externalResourceID *string
+	createdAt          time.Time
+	externalResourceID string
 	registry           *Registry
-	token              *string
-	updatedAt          *time.Time
-	username           *string
+	token              string
+	updatedAt          time.Time
+	username           string
 }
 
 // Kind returns the name of the type of the object.
@@ -56,16 +56,21 @@ func (o *RegistryCredential) Kind() string {
 	if o == nil {
 		return RegistryCredentialNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return RegistryCredentialLinkKind
 	}
 	return RegistryCredentialKind
 }
 
+// Link returns true iif this is a link.
+func (o *RegistryCredential) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *RegistryCredential) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -73,22 +78,17 @@ func (o *RegistryCredential) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *RegistryCredential) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *RegistryCredential) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *RegistryCredential) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -96,22 +96,16 @@ func (o *RegistryCredential) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *RegistryCredential) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *RegistryCredential) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.createdAt == nil &&
-		o.externalResourceID == nil &&
-		o.token == nil &&
-		o.updatedAt == nil &&
-		o.username == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Account returns the value of the 'account' attribute, or
@@ -119,10 +113,10 @@ func (o *RegistryCredential) Empty() bool {
 //
 //
 func (o *RegistryCredential) Account() *Account {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.account
 	}
-	return o.account
+	return nil
 }
 
 // GetAccount returns the value of the 'account' attribute and
@@ -130,7 +124,7 @@ func (o *RegistryCredential) Account() *Account {
 //
 //
 func (o *RegistryCredential) GetAccount() (value *Account, ok bool) {
-	ok = o != nil && o.account != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.account
 	}
@@ -142,8 +136,8 @@ func (o *RegistryCredential) GetAccount() (value *Account, ok bool) {
 //
 //
 func (o *RegistryCredential) CreatedAt() time.Time {
-	if o != nil && o.createdAt != nil {
-		return *o.createdAt
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.createdAt
 	}
 	return time.Time{}
 }
@@ -153,9 +147,9 @@ func (o *RegistryCredential) CreatedAt() time.Time {
 //
 //
 func (o *RegistryCredential) GetCreatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.createdAt != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.createdAt
+		value = o.createdAt
 	}
 	return
 }
@@ -165,8 +159,8 @@ func (o *RegistryCredential) GetCreatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *RegistryCredential) ExternalResourceID() string {
-	if o != nil && o.externalResourceID != nil {
-		return *o.externalResourceID
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.externalResourceID
 	}
 	return ""
 }
@@ -176,9 +170,9 @@ func (o *RegistryCredential) ExternalResourceID() string {
 //
 //
 func (o *RegistryCredential) GetExternalResourceID() (value string, ok bool) {
-	ok = o != nil && o.externalResourceID != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.externalResourceID
+		value = o.externalResourceID
 	}
 	return
 }
@@ -188,10 +182,10 @@ func (o *RegistryCredential) GetExternalResourceID() (value string, ok bool) {
 //
 //
 func (o *RegistryCredential) Registry() *Registry {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.registry
 	}
-	return o.registry
+	return nil
 }
 
 // GetRegistry returns the value of the 'registry' attribute and
@@ -199,7 +193,7 @@ func (o *RegistryCredential) Registry() *Registry {
 //
 //
 func (o *RegistryCredential) GetRegistry() (value *Registry, ok bool) {
-	ok = o != nil && o.registry != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.registry
 	}
@@ -211,8 +205,8 @@ func (o *RegistryCredential) GetRegistry() (value *Registry, ok bool) {
 //
 //
 func (o *RegistryCredential) Token() string {
-	if o != nil && o.token != nil {
-		return *o.token
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.token
 	}
 	return ""
 }
@@ -222,9 +216,9 @@ func (o *RegistryCredential) Token() string {
 //
 //
 func (o *RegistryCredential) GetToken() (value string, ok bool) {
-	ok = o != nil && o.token != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
-		value = *o.token
+		value = o.token
 	}
 	return
 }
@@ -234,8 +228,8 @@ func (o *RegistryCredential) GetToken() (value string, ok bool) {
 //
 //
 func (o *RegistryCredential) UpdatedAt() time.Time {
-	if o != nil && o.updatedAt != nil {
-		return *o.updatedAt
+	if o != nil && o.bitmap_&256 != 0 {
+		return o.updatedAt
 	}
 	return time.Time{}
 }
@@ -245,9 +239,9 @@ func (o *RegistryCredential) UpdatedAt() time.Time {
 //
 //
 func (o *RegistryCredential) GetUpdatedAt() (value time.Time, ok bool) {
-	ok = o != nil && o.updatedAt != nil
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
-		value = *o.updatedAt
+		value = o.updatedAt
 	}
 	return
 }
@@ -257,8 +251,8 @@ func (o *RegistryCredential) GetUpdatedAt() (value time.Time, ok bool) {
 //
 //
 func (o *RegistryCredential) Username() string {
-	if o != nil && o.username != nil {
-		return *o.username
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.username
 	}
 	return ""
 }
@@ -268,9 +262,9 @@ func (o *RegistryCredential) Username() string {
 //
 //
 func (o *RegistryCredential) GetUsername() (value string, ok bool) {
-	ok = o != nil && o.username != nil
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
-		value = *o.username
+		value = o.username
 	}
 	return
 }
@@ -289,7 +283,7 @@ const RegistryCredentialListNilKind = "RegistryCredentialListNil"
 
 // RegistryCredentialList is a list of values of the 'registry_credential' type.
 type RegistryCredentialList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*RegistryCredential
 }
@@ -312,8 +306,8 @@ func (l *RegistryCredentialList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *RegistryCredentialList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -321,9 +315,9 @@ func (l *RegistryCredentialList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *RegistryCredentialList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

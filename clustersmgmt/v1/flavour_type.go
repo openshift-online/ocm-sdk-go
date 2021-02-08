@@ -36,12 +36,12 @@ const FlavourNilKind = "FlavourNil"
 // Set of predefined properties of a cluster. For example, a _huge_ flavour can be a cluster
 // with 10 infra nodes and 1000 compute nodes.
 type Flavour struct {
-	id      *string
-	href    *string
-	link    bool
+	bitmap_ uint32
+	id      string
+	href    string
 	aws     *AWSFlavour
 	gcp     *GCPFlavour
-	name    *string
+	name    string
 	network *Network
 	nodes   *FlavourNodes
 }
@@ -51,16 +51,21 @@ func (o *Flavour) Kind() string {
 	if o == nil {
 		return FlavourNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return FlavourLinkKind
 	}
 	return FlavourKind
 }
 
+// Link returns true iif this is a link.
+func (o *Flavour) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *Flavour) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -68,22 +73,17 @@ func (o *Flavour) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *Flavour) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *Flavour) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *Flavour) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -91,18 +91,16 @@ func (o *Flavour) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *Flavour) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Flavour) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.name == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // AWS returns the value of the 'AWS' attribute, or
@@ -110,10 +108,10 @@ func (o *Flavour) Empty() bool {
 //
 // Default _Amazon Web Services_ settings of the cluster.
 func (o *Flavour) AWS() *AWSFlavour {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.aws
 	}
-	return o.aws
+	return nil
 }
 
 // GetAWS returns the value of the 'AWS' attribute and
@@ -121,7 +119,7 @@ func (o *Flavour) AWS() *AWSFlavour {
 //
 // Default _Amazon Web Services_ settings of the cluster.
 func (o *Flavour) GetAWS() (value *AWSFlavour, ok bool) {
-	ok = o != nil && o.aws != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.aws
 	}
@@ -133,10 +131,10 @@ func (o *Flavour) GetAWS() (value *AWSFlavour, ok bool) {
 //
 // Default _Google Cloud Platform_ settings of the cluster.
 func (o *Flavour) GCP() *GCPFlavour {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.gcp
 	}
-	return o.gcp
+	return nil
 }
 
 // GetGCP returns the value of the 'GCP' attribute and
@@ -144,7 +142,7 @@ func (o *Flavour) GCP() *GCPFlavour {
 //
 // Default _Google Cloud Platform_ settings of the cluster.
 func (o *Flavour) GetGCP() (value *GCPFlavour, ok bool) {
-	ok = o != nil && o.gcp != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.gcp
 	}
@@ -159,8 +157,8 @@ func (o *Flavour) GetGCP() (value *GCPFlavour, ok bool) {
 // NOTE: Currently for all flavours the `id` and `name` attributes have exactly the
 // same values.
 func (o *Flavour) Name() string {
-	if o != nil && o.name != nil {
-		return *o.name
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.name
 	}
 	return ""
 }
@@ -173,9 +171,9 @@ func (o *Flavour) Name() string {
 // NOTE: Currently for all flavours the `id` and `name` attributes have exactly the
 // same values.
 func (o *Flavour) GetName() (value string, ok bool) {
-	ok = o != nil && o.name != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.name
+		value = o.name
 	}
 	return
 }
@@ -187,10 +185,10 @@ func (o *Flavour) GetName() (value string, ok bool) {
 //
 // These can be overridden specifying in the cluster itself a different set of settings.
 func (o *Flavour) Network() *Network {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.network
 	}
-	return o.network
+	return nil
 }
 
 // GetNetwork returns the value of the 'network' attribute and
@@ -200,7 +198,7 @@ func (o *Flavour) Network() *Network {
 //
 // These can be overridden specifying in the cluster itself a different set of settings.
 func (o *Flavour) GetNetwork() (value *Network, ok bool) {
-	ok = o != nil && o.network != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.network
 	}
@@ -215,10 +213,10 @@ func (o *Flavour) GetNetwork() (value *Network, ok bool) {
 //
 // These can be overridden specifying in the cluster itself a different number of nodes.
 func (o *Flavour) Nodes() *FlavourNodes {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&128 != 0 {
+		return o.nodes
 	}
-	return o.nodes
+	return nil
 }
 
 // GetNodes returns the value of the 'nodes' attribute and
@@ -229,7 +227,7 @@ func (o *Flavour) Nodes() *FlavourNodes {
 //
 // These can be overridden specifying in the cluster itself a different number of nodes.
 func (o *Flavour) GetNodes() (value *FlavourNodes, ok bool) {
-	ok = o != nil && o.nodes != nil
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.nodes
 	}
@@ -250,7 +248,7 @@ const FlavourListNilKind = "FlavourListNil"
 
 // FlavourList is a list of values of the 'flavour' type.
 type FlavourList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Flavour
 }
@@ -273,8 +271,8 @@ func (l *FlavourList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *FlavourList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -282,9 +280,9 @@ func (l *FlavourList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *FlavourList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

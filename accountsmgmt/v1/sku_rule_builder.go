@@ -23,34 +23,36 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 // Identifies sku rule
 type SkuRuleBuilder struct {
-	id      *string
-	href    *string
-	link    bool
-	allowed *int
-	quotaId *string
-	sku     *string
+	bitmap_ uint32
+	id      string
+	href    string
+	allowed int
+	quotaId string
+	sku     string
 }
 
 // NewSkuRule creates a new builder of 'sku_rule' objects.
 func NewSkuRule() *SkuRuleBuilder {
-	return new(SkuRuleBuilder)
+	return &SkuRuleBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *SkuRuleBuilder) Link(value bool) *SkuRuleBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *SkuRuleBuilder) ID(value string) *SkuRuleBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *SkuRuleBuilder) HREF(value string) *SkuRuleBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *SkuRuleBuilder) Link(value bool) *SkuRuleBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -58,7 +60,8 @@ func (b *SkuRuleBuilder) Link(value bool) *SkuRuleBuilder {
 //
 //
 func (b *SkuRuleBuilder) Allowed(value int) *SkuRuleBuilder {
-	b.allowed = &value
+	b.allowed = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -66,7 +69,8 @@ func (b *SkuRuleBuilder) Allowed(value int) *SkuRuleBuilder {
 //
 //
 func (b *SkuRuleBuilder) QuotaId(value string) *SkuRuleBuilder {
-	b.quotaId = &value
+	b.quotaId = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,7 +78,8 @@ func (b *SkuRuleBuilder) QuotaId(value string) *SkuRuleBuilder {
 //
 //
 func (b *SkuRuleBuilder) Sku(value string) *SkuRuleBuilder {
-	b.sku = &value
+	b.sku = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -83,9 +88,9 @@ func (b *SkuRuleBuilder) Copy(object *SkuRule) *SkuRuleBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.allowed = object.allowed
 	b.quotaId = object.quotaId
 	b.sku = object.sku
@@ -97,7 +102,7 @@ func (b *SkuRuleBuilder) Build() (object *SkuRule, err error) {
 	object = new(SkuRule)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.allowed = b.allowed
 	object.quotaId = b.quotaId
 	object.sku = b.sku

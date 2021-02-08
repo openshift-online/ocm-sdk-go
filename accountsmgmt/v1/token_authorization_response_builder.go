@@ -23,12 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type TokenAuthorizationResponseBuilder struct {
+	bitmap_ uint32
 	account *AccountBuilder
 }
 
 // NewTokenAuthorizationResponse creates a new builder of 'token_authorization_response' objects.
 func NewTokenAuthorizationResponse() *TokenAuthorizationResponseBuilder {
-	return new(TokenAuthorizationResponseBuilder)
+	return &TokenAuthorizationResponseBuilder{}
 }
 
 // Account sets the value of the 'account' attribute to the given value.
@@ -36,6 +37,11 @@ func NewTokenAuthorizationResponse() *TokenAuthorizationResponseBuilder {
 //
 func (b *TokenAuthorizationResponseBuilder) Account(value *AccountBuilder) *TokenAuthorizationResponseBuilder {
 	b.account = value
+	if value != nil {
+		b.bitmap_ |= 1
+	} else {
+		b.bitmap_ &^= 1
+	}
 	return b
 }
 
@@ -44,6 +50,7 @@ func (b *TokenAuthorizationResponseBuilder) Copy(object *TokenAuthorizationRespo
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.account != nil {
 		b.account = NewAccount().Copy(object.account)
 	} else {
@@ -55,6 +62,7 @@ func (b *TokenAuthorizationResponseBuilder) Copy(object *TokenAuthorizationRespo
 // Build creates a 'token_authorization_response' object using the configuration stored in the builder.
 func (b *TokenAuthorizationResponseBuilder) Build() (object *TokenAuthorizationResponse, err error) {
 	object = new(TokenAuthorizationResponse)
+	object.bitmap_ = b.bitmap_
 	if b.account != nil {
 		object.account, err = b.account.Build()
 		if err != nil {

@@ -27,36 +27,38 @@ import (
 //
 //
 type LabelBuilder struct {
-	id        *string
-	href      *string
-	link      bool
-	createdAt *time.Time
-	internal  *bool
-	key       *string
-	updatedAt *time.Time
-	value     *string
+	bitmap_   uint32
+	id        string
+	href      string
+	createdAt time.Time
+	key       string
+	updatedAt time.Time
+	value     string
+	internal  bool
 }
 
 // NewLabel creates a new builder of 'label' objects.
 func NewLabel() *LabelBuilder {
-	return new(LabelBuilder)
+	return &LabelBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *LabelBuilder) Link(value bool) *LabelBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *LabelBuilder) ID(value string) *LabelBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *LabelBuilder) HREF(value string) *LabelBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *LabelBuilder) Link(value bool) *LabelBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -64,7 +66,8 @@ func (b *LabelBuilder) Link(value bool) *LabelBuilder {
 //
 //
 func (b *LabelBuilder) CreatedAt(value time.Time) *LabelBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -72,7 +75,8 @@ func (b *LabelBuilder) CreatedAt(value time.Time) *LabelBuilder {
 //
 //
 func (b *LabelBuilder) Internal(value bool) *LabelBuilder {
-	b.internal = &value
+	b.internal = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -80,7 +84,8 @@ func (b *LabelBuilder) Internal(value bool) *LabelBuilder {
 //
 //
 func (b *LabelBuilder) Key(value string) *LabelBuilder {
-	b.key = &value
+	b.key = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -88,7 +93,8 @@ func (b *LabelBuilder) Key(value string) *LabelBuilder {
 //
 //
 func (b *LabelBuilder) UpdatedAt(value time.Time) *LabelBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -96,7 +102,8 @@ func (b *LabelBuilder) UpdatedAt(value time.Time) *LabelBuilder {
 //
 //
 func (b *LabelBuilder) Value(value string) *LabelBuilder {
-	b.value = &value
+	b.value = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -105,9 +112,9 @@ func (b *LabelBuilder) Copy(object *Label) *LabelBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.createdAt = object.createdAt
 	b.internal = object.internal
 	b.key = object.key
@@ -121,7 +128,7 @@ func (b *LabelBuilder) Build() (object *Label, err error) {
 	object = new(Label)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.createdAt = b.createdAt
 	object.internal = b.internal
 	object.key = b.key

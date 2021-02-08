@@ -23,37 +23,39 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 // Identifies computing resources
 type ResourceBuilder struct {
-	id                   *string
-	href                 *string
-	link                 bool
-	byoc                 *bool
-	sku                  *string
-	allowed              *int
-	availabilityZoneType *string
-	resourceName         *string
-	resourceType         *string
+	bitmap_              uint32
+	id                   string
+	href                 string
+	sku                  string
+	allowed              int
+	availabilityZoneType string
+	resourceName         string
+	resourceType         string
+	byoc                 bool
 }
 
 // NewResource creates a new builder of 'resource' objects.
 func NewResource() *ResourceBuilder {
-	return new(ResourceBuilder)
+	return &ResourceBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *ResourceBuilder) Link(value bool) *ResourceBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *ResourceBuilder) ID(value string) *ResourceBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *ResourceBuilder) HREF(value string) *ResourceBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *ResourceBuilder) Link(value bool) *ResourceBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -61,7 +63,8 @@ func (b *ResourceBuilder) Link(value bool) *ResourceBuilder {
 //
 //
 func (b *ResourceBuilder) BYOC(value bool) *ResourceBuilder {
-	b.byoc = &value
+	b.byoc = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -69,7 +72,8 @@ func (b *ResourceBuilder) BYOC(value bool) *ResourceBuilder {
 //
 //
 func (b *ResourceBuilder) SKU(value string) *ResourceBuilder {
-	b.sku = &value
+	b.sku = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -77,7 +81,8 @@ func (b *ResourceBuilder) SKU(value string) *ResourceBuilder {
 //
 //
 func (b *ResourceBuilder) Allowed(value int) *ResourceBuilder {
-	b.allowed = &value
+	b.allowed = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -85,7 +90,8 @@ func (b *ResourceBuilder) Allowed(value int) *ResourceBuilder {
 //
 //
 func (b *ResourceBuilder) AvailabilityZoneType(value string) *ResourceBuilder {
-	b.availabilityZoneType = &value
+	b.availabilityZoneType = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -93,7 +99,8 @@ func (b *ResourceBuilder) AvailabilityZoneType(value string) *ResourceBuilder {
 //
 //
 func (b *ResourceBuilder) ResourceName(value string) *ResourceBuilder {
-	b.resourceName = &value
+	b.resourceName = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -101,7 +108,8 @@ func (b *ResourceBuilder) ResourceName(value string) *ResourceBuilder {
 //
 //
 func (b *ResourceBuilder) ResourceType(value string) *ResourceBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -110,9 +118,9 @@ func (b *ResourceBuilder) Copy(object *Resource) *ResourceBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.byoc = object.byoc
 	b.sku = object.sku
 	b.allowed = object.allowed
@@ -127,7 +135,7 @@ func (b *ResourceBuilder) Build() (object *Resource, err error) {
 	object = new(Resource)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.byoc = b.byoc
 	object.sku = b.sku
 	object.allowed = b.allowed

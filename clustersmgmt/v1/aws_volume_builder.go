@@ -23,21 +23,23 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Holds settings for an AWS storage volume.
 type AWSVolumeBuilder struct {
-	iops  *int
-	size  *int
-	type_ *string
+	bitmap_ uint32
+	iops    int
+	size    int
+	type_   string
 }
 
 // NewAWSVolume creates a new builder of 'AWS_volume' objects.
 func NewAWSVolume() *AWSVolumeBuilder {
-	return new(AWSVolumeBuilder)
+	return &AWSVolumeBuilder{}
 }
 
 // IOPS sets the value of the 'IOPS' attribute to the given value.
 //
 //
 func (b *AWSVolumeBuilder) IOPS(value int) *AWSVolumeBuilder {
-	b.iops = &value
+	b.iops = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,7 +47,8 @@ func (b *AWSVolumeBuilder) IOPS(value int) *AWSVolumeBuilder {
 //
 //
 func (b *AWSVolumeBuilder) Size(value int) *AWSVolumeBuilder {
-	b.size = &value
+	b.size = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,7 +56,8 @@ func (b *AWSVolumeBuilder) Size(value int) *AWSVolumeBuilder {
 //
 //
 func (b *AWSVolumeBuilder) Type(value string) *AWSVolumeBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,6 +66,7 @@ func (b *AWSVolumeBuilder) Copy(object *AWSVolume) *AWSVolumeBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.iops = object.iops
 	b.size = object.size
 	b.type_ = object.type_
@@ -71,6 +76,7 @@ func (b *AWSVolumeBuilder) Copy(object *AWSVolume) *AWSVolumeBuilder {
 // Build creates a 'AWS_volume' object using the configuration stored in the builder.
 func (b *AWSVolumeBuilder) Build() (object *AWSVolume, err error) {
 	object = new(AWSVolume)
+	object.bitmap_ = b.bitmap_
 	object.iops = b.iops
 	object.size = b.size
 	object.type_ = b.type_

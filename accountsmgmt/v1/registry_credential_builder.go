@@ -27,38 +27,40 @@ import (
 //
 //
 type RegistryCredentialBuilder struct {
-	id                 *string
-	href               *string
-	link               bool
+	bitmap_            uint32
+	id                 string
+	href               string
 	account            *AccountBuilder
-	createdAt          *time.Time
-	externalResourceID *string
+	createdAt          time.Time
+	externalResourceID string
 	registry           *RegistryBuilder
-	token              *string
-	updatedAt          *time.Time
-	username           *string
+	token              string
+	updatedAt          time.Time
+	username           string
 }
 
 // NewRegistryCredential creates a new builder of 'registry_credential' objects.
 func NewRegistryCredential() *RegistryCredentialBuilder {
-	return new(RegistryCredentialBuilder)
+	return &RegistryCredentialBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *RegistryCredentialBuilder) Link(value bool) *RegistryCredentialBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *RegistryCredentialBuilder) ID(value string) *RegistryCredentialBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *RegistryCredentialBuilder) HREF(value string) *RegistryCredentialBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *RegistryCredentialBuilder) Link(value bool) *RegistryCredentialBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -67,6 +69,11 @@ func (b *RegistryCredentialBuilder) Link(value bool) *RegistryCredentialBuilder 
 //
 func (b *RegistryCredentialBuilder) Account(value *AccountBuilder) *RegistryCredentialBuilder {
 	b.account = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -74,7 +81,8 @@ func (b *RegistryCredentialBuilder) Account(value *AccountBuilder) *RegistryCred
 //
 //
 func (b *RegistryCredentialBuilder) CreatedAt(value time.Time) *RegistryCredentialBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -82,7 +90,8 @@ func (b *RegistryCredentialBuilder) CreatedAt(value time.Time) *RegistryCredenti
 //
 //
 func (b *RegistryCredentialBuilder) ExternalResourceID(value string) *RegistryCredentialBuilder {
-	b.externalResourceID = &value
+	b.externalResourceID = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -91,6 +100,11 @@ func (b *RegistryCredentialBuilder) ExternalResourceID(value string) *RegistryCr
 //
 func (b *RegistryCredentialBuilder) Registry(value *RegistryBuilder) *RegistryCredentialBuilder {
 	b.registry = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -98,7 +112,8 @@ func (b *RegistryCredentialBuilder) Registry(value *RegistryBuilder) *RegistryCr
 //
 //
 func (b *RegistryCredentialBuilder) Token(value string) *RegistryCredentialBuilder {
-	b.token = &value
+	b.token = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -106,7 +121,8 @@ func (b *RegistryCredentialBuilder) Token(value string) *RegistryCredentialBuild
 //
 //
 func (b *RegistryCredentialBuilder) UpdatedAt(value time.Time) *RegistryCredentialBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -114,7 +130,8 @@ func (b *RegistryCredentialBuilder) UpdatedAt(value time.Time) *RegistryCredenti
 //
 //
 func (b *RegistryCredentialBuilder) Username(value string) *RegistryCredentialBuilder {
-	b.username = &value
+	b.username = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -123,9 +140,9 @@ func (b *RegistryCredentialBuilder) Copy(object *RegistryCredential) *RegistryCr
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.account != nil {
 		b.account = NewAccount().Copy(object.account)
 	} else {
@@ -149,7 +166,7 @@ func (b *RegistryCredentialBuilder) Build() (object *RegistryCredential, err err
 	object = new(RegistryCredential)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.account != nil {
 		object.account, err = b.account.Build()
 		if err != nil {

@@ -39,36 +39,41 @@ func MarshalClusterRegistrationResponse(object *ClusterRegistrationResponse, wri
 func writeClusterRegistrationResponse(object *ClusterRegistrationResponse, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.accountID != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_id")
-		stream.WriteString(*object.accountID)
+		stream.WriteString(object.accountID)
 		count++
 	}
-	if object.authorizationToken != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("authorization_token")
-		stream.WriteString(*object.authorizationToken)
+		stream.WriteString(object.authorizationToken)
 		count++
 	}
-	if object.clusterID != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_id")
-		stream.WriteString(*object.clusterID)
+		stream.WriteString(object.clusterID)
 		count++
 	}
-	if object.expiresAt != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("expires_at")
-		stream.WriteString(*object.expiresAt)
+		stream.WriteString(object.expiresAt)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -100,16 +105,20 @@ func readClusterRegistrationResponse(iterator *jsoniter.Iterator) *ClusterRegist
 		switch field {
 		case "account_id":
 			value := iterator.ReadString()
-			object.accountID = &value
+			object.accountID = value
+			object.bitmap_ |= 1
 		case "authorization_token":
 			value := iterator.ReadString()
-			object.authorizationToken = &value
+			object.authorizationToken = value
+			object.bitmap_ |= 2
 		case "cluster_id":
 			value := iterator.ReadString()
-			object.clusterID = &value
+			object.clusterID = value
+			object.bitmap_ |= 4
 		case "expires_at":
 			value := iterator.ReadString()
-			object.expiresAt = &value
+			object.expiresAt = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

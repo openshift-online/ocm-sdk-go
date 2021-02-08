@@ -35,11 +35,11 @@ const CCSNilKind = "CCSNil"
 //
 //
 type CCS struct {
-	id               *string
-	href             *string
-	link             bool
-	disableSCPChecks *bool
-	enabled          *bool
+	bitmap_          uint32
+	id               string
+	href             string
+	disableSCPChecks bool
+	enabled          bool
 }
 
 // Kind returns the name of the type of the object.
@@ -47,16 +47,21 @@ func (o *CCS) Kind() string {
 	if o == nil {
 		return CCSNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return CCSLinkKind
 	}
 	return CCSKind
 }
 
+// Link returns true iif this is a link.
+func (o *CCS) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *CCS) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -64,22 +69,17 @@ func (o *CCS) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *CCS) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *CCS) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *CCS) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -87,19 +87,16 @@ func (o *CCS) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *CCS) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CCS) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.disableSCPChecks == nil &&
-		o.enabled == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // DisableSCPChecks returns the value of the 'disable_SCP_checks' attribute, or
@@ -108,8 +105,8 @@ func (o *CCS) Empty() bool {
 // Indicates if cloud permissions checks are disabled,
 // when attempting installation of the cluster.
 func (o *CCS) DisableSCPChecks() bool {
-	if o != nil && o.disableSCPChecks != nil {
-		return *o.disableSCPChecks
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.disableSCPChecks
 	}
 	return false
 }
@@ -120,9 +117,9 @@ func (o *CCS) DisableSCPChecks() bool {
 // Indicates if cloud permissions checks are disabled,
 // when attempting installation of the cluster.
 func (o *CCS) GetDisableSCPChecks() (value bool, ok bool) {
-	ok = o != nil && o.disableSCPChecks != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.disableSCPChecks
+		value = o.disableSCPChecks
 	}
 	return
 }
@@ -132,8 +129,8 @@ func (o *CCS) GetDisableSCPChecks() (value bool, ok bool) {
 //
 // Indicates if Customer Cloud Subscription is enabled on the cluster.
 func (o *CCS) Enabled() bool {
-	if o != nil && o.enabled != nil {
-		return *o.enabled
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.enabled
 	}
 	return false
 }
@@ -143,9 +140,9 @@ func (o *CCS) Enabled() bool {
 //
 // Indicates if Customer Cloud Subscription is enabled on the cluster.
 func (o *CCS) GetEnabled() (value bool, ok bool) {
-	ok = o != nil && o.enabled != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.enabled
+		value = o.enabled
 	}
 	return
 }
@@ -164,7 +161,7 @@ const CCSListNilKind = "CCSListNil"
 
 // CCSList is a list of values of the 'CCS' type.
 type CCSList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*CCS
 }
@@ -187,8 +184,8 @@ func (l *CCSList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *CCSList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -196,9 +193,9 @@ func (l *CCSList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *CCSList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

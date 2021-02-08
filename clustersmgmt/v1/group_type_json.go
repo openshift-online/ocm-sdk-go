@@ -39,33 +39,32 @@ func MarshalGroup(object *Group, writer io.Writer) error {
 func writeGroup(object *Group, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(GroupLinkKind)
 	} else {
 		stream.WriteString(GroupKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.users != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.users != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -105,13 +104,15 @@ func readGroup(iterator *jsoniter.Iterator) *Group {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == GroupLinkKind
+			if value == GroupLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "users":
 			value := &UserList{}
 			for {
@@ -124,8 +125,7 @@ func readGroup(iterator *jsoniter.Iterator) *Group {
 					text := iterator.ReadString()
 					value.link = text == UserListLinkKind
 				case "href":
-					text := iterator.ReadString()
-					value.href = &text
+					value.href = iterator.ReadString()
 				case "items":
 					value.items = readUserList(iterator)
 				default:
@@ -133,6 +133,7 @@ func readGroup(iterator *jsoniter.Iterator) *Group {
 				}
 			}
 			object.users = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

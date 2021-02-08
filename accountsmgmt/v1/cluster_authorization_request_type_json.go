@@ -39,111 +39,126 @@ func MarshalClusterAuthorizationRequest(object *ClusterAuthorizationRequest, wri
 func writeClusterAuthorizationRequest(object *ClusterAuthorizationRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.byoc != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("byoc")
-		stream.WriteBool(*object.byoc)
+		stream.WriteBool(object.byoc)
 		count++
 	}
-	if object.accountUsername != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("account_username")
-		stream.WriteString(*object.accountUsername)
+		stream.WriteString(object.accountUsername)
 		count++
 	}
-	if object.availabilityZone != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("availability_zone")
-		stream.WriteString(*object.availabilityZone)
+		stream.WriteString(object.availabilityZone)
 		count++
 	}
-	if object.cloudAccountID != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cloud_account_id")
-		stream.WriteString(*object.cloudAccountID)
+		stream.WriteString(object.cloudAccountID)
 		count++
 	}
-	if object.cloudProviderID != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cloud_provider_id")
-		stream.WriteString(*object.cloudProviderID)
+		stream.WriteString(object.cloudProviderID)
 		count++
 	}
-	if object.clusterID != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("cluster_id")
-		stream.WriteString(*object.clusterID)
+		stream.WriteString(object.clusterID)
 		count++
 	}
-	if object.disconnected != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("disconnected")
-		stream.WriteBool(*object.disconnected)
+		stream.WriteBool(object.disconnected)
 		count++
 	}
-	if object.displayName != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("display_name")
-		stream.WriteString(*object.displayName)
+		stream.WriteString(object.displayName)
 		count++
 	}
-	if object.externalClusterID != nil {
+	present_ = object.bitmap_&256 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("external_cluster_id")
-		stream.WriteString(*object.externalClusterID)
+		stream.WriteString(object.externalClusterID)
 		count++
 	}
-	if object.managed != nil {
+	present_ = object.bitmap_&512 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("managed")
-		stream.WriteBool(*object.managed)
+		stream.WriteBool(object.managed)
 		count++
 	}
-	if object.productID != nil {
+	present_ = object.bitmap_&1024 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("product_id")
-		stream.WriteString(*object.productID)
+		stream.WriteString(object.productID)
 		count++
 	}
-	if object.productCategory != nil {
+	present_ = object.bitmap_&2048 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("product_category")
-		stream.WriteString(*object.productCategory)
+		stream.WriteString(object.productCategory)
 		count++
 	}
-	if object.reserve != nil {
+	present_ = object.bitmap_&4096 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("reserve")
-		stream.WriteBool(*object.reserve)
+		stream.WriteBool(object.reserve)
 		count++
 	}
-	if object.resources != nil {
+	present_ = object.bitmap_&8192 != 0 && object.resources != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -180,46 +195,60 @@ func readClusterAuthorizationRequest(iterator *jsoniter.Iterator) *ClusterAuthor
 		switch field {
 		case "byoc":
 			value := iterator.ReadBool()
-			object.byoc = &value
+			object.byoc = value
+			object.bitmap_ |= 1
 		case "account_username":
 			value := iterator.ReadString()
-			object.accountUsername = &value
+			object.accountUsername = value
+			object.bitmap_ |= 2
 		case "availability_zone":
 			value := iterator.ReadString()
-			object.availabilityZone = &value
+			object.availabilityZone = value
+			object.bitmap_ |= 4
 		case "cloud_account_id":
 			value := iterator.ReadString()
-			object.cloudAccountID = &value
+			object.cloudAccountID = value
+			object.bitmap_ |= 8
 		case "cloud_provider_id":
 			value := iterator.ReadString()
-			object.cloudProviderID = &value
+			object.cloudProviderID = value
+			object.bitmap_ |= 16
 		case "cluster_id":
 			value := iterator.ReadString()
-			object.clusterID = &value
+			object.clusterID = value
+			object.bitmap_ |= 32
 		case "disconnected":
 			value := iterator.ReadBool()
-			object.disconnected = &value
+			object.disconnected = value
+			object.bitmap_ |= 64
 		case "display_name":
 			value := iterator.ReadString()
-			object.displayName = &value
+			object.displayName = value
+			object.bitmap_ |= 128
 		case "external_cluster_id":
 			value := iterator.ReadString()
-			object.externalClusterID = &value
+			object.externalClusterID = value
+			object.bitmap_ |= 256
 		case "managed":
 			value := iterator.ReadBool()
-			object.managed = &value
+			object.managed = value
+			object.bitmap_ |= 512
 		case "product_id":
 			value := iterator.ReadString()
-			object.productID = &value
+			object.productID = value
+			object.bitmap_ |= 1024
 		case "product_category":
 			value := iterator.ReadString()
-			object.productCategory = &value
+			object.productCategory = value
+			object.bitmap_ |= 2048
 		case "reserve":
 			value := iterator.ReadBool()
-			object.reserve = &value
+			object.reserve = value
+			object.bitmap_ |= 4096
 		case "resources":
 			value := readReservedResourceList(iterator)
 			object.resources = value
+			object.bitmap_ |= 8192
 		default:
 			iterator.ReadAny()
 		}

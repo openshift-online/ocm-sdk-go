@@ -39,20 +39,23 @@ func MarshalSSHCredentials(object *SSHCredentials, writer io.Writer) error {
 func writeSSHCredentials(object *SSHCredentials, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.privateKey != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("private_key")
-		stream.WriteString(*object.privateKey)
+		stream.WriteString(object.privateKey)
 		count++
 	}
-	if object.publicKey != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("public_key")
-		stream.WriteString(*object.publicKey)
+		stream.WriteString(object.publicKey)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,10 +87,12 @@ func readSSHCredentials(iterator *jsoniter.Iterator) *SSHCredentials {
 		switch field {
 		case "private_key":
 			value := iterator.ReadString()
-			object.privateKey = &value
+			object.privateKey = value
+			object.bitmap_ |= 1
 		case "public_key":
 			value := iterator.ReadString()
-			object.publicKey = &value
+			object.publicKey = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

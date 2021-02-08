@@ -23,19 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an add-on requirement.
 type AddOnRequirement struct {
-	id       *string
+	bitmap_  uint32
+	id       string
 	data     map[string]interface{}
-	enabled  *bool
-	resource *string
+	resource string
+	enabled  bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AddOnRequirement) Empty() bool {
-	return o == nil || (o.id == nil &&
-		len(o.data) == 0 &&
-		o.enabled == nil &&
-		o.resource == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // ID returns the value of the 'ID' attribute, or
@@ -43,8 +40,8 @@ func (o *AddOnRequirement) Empty() bool {
 //
 // ID of the add-on requirement.
 func (o *AddOnRequirement) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -54,9 +51,9 @@ func (o *AddOnRequirement) ID() string {
 //
 // ID of the add-on requirement.
 func (o *AddOnRequirement) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
@@ -66,10 +63,10 @@ func (o *AddOnRequirement) GetID() (value string, ok bool) {
 //
 // Data for the add-on requirement.
 func (o *AddOnRequirement) Data() map[string]interface{} {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.data
 	}
-	return o.data
+	return nil
 }
 
 // GetData returns the value of the 'data' attribute and
@@ -77,7 +74,7 @@ func (o *AddOnRequirement) Data() map[string]interface{} {
 //
 // Data for the add-on requirement.
 func (o *AddOnRequirement) GetData() (value map[string]interface{}, ok bool) {
-	ok = o != nil && o.data != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.data
 	}
@@ -89,8 +86,8 @@ func (o *AddOnRequirement) GetData() (value map[string]interface{}, ok bool) {
 //
 // Indicates if this requirement is enabled for the add-on.
 func (o *AddOnRequirement) Enabled() bool {
-	if o != nil && o.enabled != nil {
-		return *o.enabled
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.enabled
 	}
 	return false
 }
@@ -100,9 +97,9 @@ func (o *AddOnRequirement) Enabled() bool {
 //
 // Indicates if this requirement is enabled for the add-on.
 func (o *AddOnRequirement) GetEnabled() (value bool, ok bool) {
-	ok = o != nil && o.enabled != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.enabled
+		value = o.enabled
 	}
 	return
 }
@@ -112,8 +109,8 @@ func (o *AddOnRequirement) GetEnabled() (value bool, ok bool) {
 //
 // Type of resource of the add-on requirement.
 func (o *AddOnRequirement) Resource() string {
-	if o != nil && o.resource != nil {
-		return *o.resource
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.resource
 	}
 	return ""
 }
@@ -123,9 +120,9 @@ func (o *AddOnRequirement) Resource() string {
 //
 // Type of resource of the add-on requirement.
 func (o *AddOnRequirement) GetResource() (value string, ok bool) {
-	ok = o != nil && o.resource != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.resource
+		value = o.resource
 	}
 	return
 }
@@ -144,7 +141,7 @@ const AddOnRequirementListNilKind = "AddOnRequirementListNil"
 
 // AddOnRequirementList is a list of values of the 'add_on_requirement' type.
 type AddOnRequirementList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AddOnRequirement
 }

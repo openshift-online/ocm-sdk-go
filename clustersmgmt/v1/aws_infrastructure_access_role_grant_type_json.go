@@ -39,41 +39,41 @@ func MarshalAWSInfrastructureAccessRoleGrant(object *AWSInfrastructureAccessRole
 func writeAWSInfrastructureAccessRoleGrant(object *AWSInfrastructureAccessRoleGrant, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(AWSInfrastructureAccessRoleGrantLinkKind)
 	} else {
 		stream.WriteString(AWSInfrastructureAccessRoleGrantKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.consoleURL != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("console_url")
-		stream.WriteString(*object.consoleURL)
+		stream.WriteString(object.consoleURL)
 		count++
 	}
-	if object.role != nil {
+	present_ = object.bitmap_&16 != 0 && object.role != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -81,28 +81,31 @@ func writeAWSInfrastructureAccessRoleGrant(object *AWSInfrastructureAccessRoleGr
 		writeAWSInfrastructureAccessRole(object.role, stream)
 		count++
 	}
-	if object.state != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("state")
-		stream.WriteString(string(*object.state))
+		stream.WriteString(string(object.state))
 		count++
 	}
-	if object.stateDescription != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("state_description")
-		stream.WriteString(*object.stateDescription)
+		stream.WriteString(object.stateDescription)
 		count++
 	}
-	if object.userARN != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("user_arn")
-		stream.WriteString(*object.userARN)
+		stream.WriteString(object.userARN)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -134,29 +137,36 @@ func readAWSInfrastructureAccessRoleGrant(iterator *jsoniter.Iterator) *AWSInfra
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == AWSInfrastructureAccessRoleGrantLinkKind
+			if value == AWSInfrastructureAccessRoleGrantLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "console_url":
 			value := iterator.ReadString()
-			object.consoleURL = &value
+			object.consoleURL = value
+			object.bitmap_ |= 8
 		case "role":
 			value := readAWSInfrastructureAccessRole(iterator)
 			object.role = value
+			object.bitmap_ |= 16
 		case "state":
 			text := iterator.ReadString()
 			value := AWSInfrastructureAccessRoleGrantState(text)
-			object.state = &value
+			object.state = value
+			object.bitmap_ |= 32
 		case "state_description":
 			value := iterator.ReadString()
-			object.stateDescription = &value
+			object.stateDescription = value
+			object.bitmap_ |= 64
 		case "user_arn":
 			value := iterator.ReadString()
-			object.userARN = &value
+			object.userARN = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

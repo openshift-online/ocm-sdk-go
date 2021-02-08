@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Provides detailed information about the operators installed on the cluster.
 type ClusterOperatorsInfo struct {
+	bitmap_   uint32
 	operators []*ClusterOperatorInfo
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterOperatorsInfo) Empty() bool {
-	return o == nil || (len(o.operators) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Operators returns the value of the 'operators' attribute, or
@@ -37,10 +37,10 @@ func (o *ClusterOperatorsInfo) Empty() bool {
 //
 //
 func (o *ClusterOperatorsInfo) Operators() []*ClusterOperatorInfo {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.operators
 	}
-	return o.operators
+	return nil
 }
 
 // GetOperators returns the value of the 'operators' attribute and
@@ -48,7 +48,7 @@ func (o *ClusterOperatorsInfo) Operators() []*ClusterOperatorInfo {
 //
 //
 func (o *ClusterOperatorsInfo) GetOperators() (value []*ClusterOperatorInfo, ok bool) {
-	ok = o != nil && o.operators != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.operators
 	}
@@ -69,7 +69,7 @@ const ClusterOperatorsInfoListNilKind = "ClusterOperatorsInfoListNil"
 
 // ClusterOperatorsInfoList is a list of values of the 'cluster_operators_info' type.
 type ClusterOperatorsInfoList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterOperatorsInfo
 }

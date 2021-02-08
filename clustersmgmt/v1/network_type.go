@@ -23,19 +23,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Network configuration of a cluster.
 type Network struct {
-	hostPrefix  *int
-	machineCIDR *string
-	podCIDR     *string
-	serviceCIDR *string
+	bitmap_     uint32
+	hostPrefix  int
+	machineCIDR string
+	podCIDR     string
+	serviceCIDR string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Network) Empty() bool {
-	return o == nil || (o.hostPrefix == nil &&
-		o.machineCIDR == nil &&
-		o.podCIDR == nil &&
-		o.serviceCIDR == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // HostPrefix returns the value of the 'host_prefix' attribute, or
@@ -43,8 +40,8 @@ func (o *Network) Empty() bool {
 //
 // Network host prefix which is defaulted to `23` if not specified.
 func (o *Network) HostPrefix() int {
-	if o != nil && o.hostPrefix != nil {
-		return *o.hostPrefix
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.hostPrefix
 	}
 	return 0
 }
@@ -54,9 +51,9 @@ func (o *Network) HostPrefix() int {
 //
 // Network host prefix which is defaulted to `23` if not specified.
 func (o *Network) GetHostPrefix() (value int, ok bool) {
-	ok = o != nil && o.hostPrefix != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.hostPrefix
+		value = o.hostPrefix
 	}
 	return
 }
@@ -66,8 +63,8 @@ func (o *Network) GetHostPrefix() (value int, ok bool) {
 //
 // IP address block from which to assign machine IP addresses, for example `10.0.0.0/16`.
 func (o *Network) MachineCIDR() string {
-	if o != nil && o.machineCIDR != nil {
-		return *o.machineCIDR
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.machineCIDR
 	}
 	return ""
 }
@@ -77,9 +74,9 @@ func (o *Network) MachineCIDR() string {
 //
 // IP address block from which to assign machine IP addresses, for example `10.0.0.0/16`.
 func (o *Network) GetMachineCIDR() (value string, ok bool) {
-	ok = o != nil && o.machineCIDR != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.machineCIDR
+		value = o.machineCIDR
 	}
 	return
 }
@@ -89,8 +86,8 @@ func (o *Network) GetMachineCIDR() (value string, ok bool) {
 //
 // IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.
 func (o *Network) PodCIDR() string {
-	if o != nil && o.podCIDR != nil {
-		return *o.podCIDR
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.podCIDR
 	}
 	return ""
 }
@@ -100,9 +97,9 @@ func (o *Network) PodCIDR() string {
 //
 // IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.
 func (o *Network) GetPodCIDR() (value string, ok bool) {
-	ok = o != nil && o.podCIDR != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.podCIDR
+		value = o.podCIDR
 	}
 	return
 }
@@ -112,8 +109,8 @@ func (o *Network) GetPodCIDR() (value string, ok bool) {
 //
 // IP address block from which to assign service IP addresses, for example `172.30.0.0/16`.
 func (o *Network) ServiceCIDR() string {
-	if o != nil && o.serviceCIDR != nil {
-		return *o.serviceCIDR
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.serviceCIDR
 	}
 	return ""
 }
@@ -123,9 +120,9 @@ func (o *Network) ServiceCIDR() string {
 //
 // IP address block from which to assign service IP addresses, for example `172.30.0.0/16`.
 func (o *Network) GetServiceCIDR() (value string, ok bool) {
-	ok = o != nil && o.serviceCIDR != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.serviceCIDR
+		value = o.serviceCIDR
 	}
 	return
 }
@@ -144,7 +141,7 @@ const NetworkListNilKind = "NetworkListNil"
 
 // NetworkList is a list of values of the 'network' type.
 type NetworkList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Network
 }

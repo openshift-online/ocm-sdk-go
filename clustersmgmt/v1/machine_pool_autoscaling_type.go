@@ -35,11 +35,11 @@ const MachinePoolAutoscalingNilKind = "MachinePoolAutoscalingNil"
 //
 // Representation of a autoscaling in a machine pool.
 type MachinePoolAutoscaling struct {
-	id          *string
-	href        *string
-	link        bool
-	maxReplicas *int
-	minReplicas *int
+	bitmap_     uint32
+	id          string
+	href        string
+	maxReplicas int
+	minReplicas int
 }
 
 // Kind returns the name of the type of the object.
@@ -47,16 +47,21 @@ func (o *MachinePoolAutoscaling) Kind() string {
 	if o == nil {
 		return MachinePoolAutoscalingNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return MachinePoolAutoscalingLinkKind
 	}
 	return MachinePoolAutoscalingKind
 }
 
+// Link returns true iif this is a link.
+func (o *MachinePoolAutoscaling) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *MachinePoolAutoscaling) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -64,22 +69,17 @@ func (o *MachinePoolAutoscaling) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *MachinePoolAutoscaling) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *MachinePoolAutoscaling) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *MachinePoolAutoscaling) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -87,19 +87,16 @@ func (o *MachinePoolAutoscaling) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *MachinePoolAutoscaling) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *MachinePoolAutoscaling) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.maxReplicas == nil &&
-		o.minReplicas == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // MaxReplicas returns the value of the 'max_replicas' attribute, or
@@ -107,8 +104,8 @@ func (o *MachinePoolAutoscaling) Empty() bool {
 //
 // The maximum number of replicas for the machine pool.
 func (o *MachinePoolAutoscaling) MaxReplicas() int {
-	if o != nil && o.maxReplicas != nil {
-		return *o.maxReplicas
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.maxReplicas
 	}
 	return 0
 }
@@ -118,9 +115,9 @@ func (o *MachinePoolAutoscaling) MaxReplicas() int {
 //
 // The maximum number of replicas for the machine pool.
 func (o *MachinePoolAutoscaling) GetMaxReplicas() (value int, ok bool) {
-	ok = o != nil && o.maxReplicas != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.maxReplicas
+		value = o.maxReplicas
 	}
 	return
 }
@@ -130,8 +127,8 @@ func (o *MachinePoolAutoscaling) GetMaxReplicas() (value int, ok bool) {
 //
 // The minimum number of replicas for the machine pool.
 func (o *MachinePoolAutoscaling) MinReplicas() int {
-	if o != nil && o.minReplicas != nil {
-		return *o.minReplicas
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.minReplicas
 	}
 	return 0
 }
@@ -141,9 +138,9 @@ func (o *MachinePoolAutoscaling) MinReplicas() int {
 //
 // The minimum number of replicas for the machine pool.
 func (o *MachinePoolAutoscaling) GetMinReplicas() (value int, ok bool) {
-	ok = o != nil && o.minReplicas != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.minReplicas
+		value = o.minReplicas
 	}
 	return
 }
@@ -162,7 +159,7 @@ const MachinePoolAutoscalingListNilKind = "MachinePoolAutoscalingListNil"
 
 // MachinePoolAutoscalingList is a list of values of the 'machine_pool_autoscaling' type.
 type MachinePoolAutoscalingList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*MachinePoolAutoscaling
 }
@@ -185,8 +182,8 @@ func (l *MachinePoolAutoscalingList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *MachinePoolAutoscalingList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -194,9 +191,9 @@ func (l *MachinePoolAutoscalingList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *MachinePoolAutoscalingList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

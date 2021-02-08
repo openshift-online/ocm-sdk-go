@@ -23,17 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of a Taint set on a MachinePool in a cluster.
 type Taint struct {
-	effect *string
-	key    *string
-	value  *string
+	bitmap_ uint32
+	effect  string
+	key     string
+	value   string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Taint) Empty() bool {
-	return o == nil || (o.effect == nil &&
-		o.key == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Effect returns the value of the 'effect' attribute, or
@@ -41,8 +39,8 @@ func (o *Taint) Empty() bool {
 //
 // The effect on the node for the pods matching the taint, i.e: NoSchedule, NoExecute, PreferNoSchedule.
 func (o *Taint) Effect() string {
-	if o != nil && o.effect != nil {
-		return *o.effect
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.effect
 	}
 	return ""
 }
@@ -52,9 +50,9 @@ func (o *Taint) Effect() string {
 //
 // The effect on the node for the pods matching the taint, i.e: NoSchedule, NoExecute, PreferNoSchedule.
 func (o *Taint) GetEffect() (value string, ok bool) {
-	ok = o != nil && o.effect != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.effect
+		value = o.effect
 	}
 	return
 }
@@ -64,8 +62,8 @@ func (o *Taint) GetEffect() (value string, ok bool) {
 //
 // The key for the taint
 func (o *Taint) Key() string {
-	if o != nil && o.key != nil {
-		return *o.key
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.key
 	}
 	return ""
 }
@@ -75,9 +73,9 @@ func (o *Taint) Key() string {
 //
 // The key for the taint
 func (o *Taint) GetKey() (value string, ok bool) {
-	ok = o != nil && o.key != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.key
+		value = o.key
 	}
 	return
 }
@@ -87,8 +85,8 @@ func (o *Taint) GetKey() (value string, ok bool) {
 //
 // The value for the taint.
 func (o *Taint) Value() string {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.value
 	}
 	return ""
 }
@@ -98,9 +96,9 @@ func (o *Taint) Value() string {
 //
 // The value for the taint.
 func (o *Taint) GetValue() (value string, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -119,7 +117,7 @@ const TaintListNilKind = "TaintListNil"
 
 // TaintList is a list of values of the 'taint' type.
 type TaintList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Taint
 }

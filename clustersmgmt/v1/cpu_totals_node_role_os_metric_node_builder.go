@@ -24,12 +24,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Representation of information from telemetry about the CPU capacity by node
 // role and OS of a cluster.
 type CPUTotalsNodeRoleOSMetricNodeBuilder struct {
+	bitmap_   uint32
 	cpuTotals []*CPUTotalNodeRoleOSMetricNodeBuilder
 }
 
 // NewCPUTotalsNodeRoleOSMetricNode creates a new builder of 'CPU_totals_node_role_OS_metric_node' objects.
 func NewCPUTotalsNodeRoleOSMetricNode() *CPUTotalsNodeRoleOSMetricNodeBuilder {
-	return new(CPUTotalsNodeRoleOSMetricNodeBuilder)
+	return &CPUTotalsNodeRoleOSMetricNodeBuilder{}
 }
 
 // CPUTotals sets the value of the 'CPU_totals' attribute to the given values.
@@ -38,6 +39,7 @@ func NewCPUTotalsNodeRoleOSMetricNode() *CPUTotalsNodeRoleOSMetricNodeBuilder {
 func (b *CPUTotalsNodeRoleOSMetricNodeBuilder) CPUTotals(values ...*CPUTotalNodeRoleOSMetricNodeBuilder) *CPUTotalsNodeRoleOSMetricNodeBuilder {
 	b.cpuTotals = make([]*CPUTotalNodeRoleOSMetricNodeBuilder, len(values))
 	copy(b.cpuTotals, values)
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,6 +48,7 @@ func (b *CPUTotalsNodeRoleOSMetricNodeBuilder) Copy(object *CPUTotalsNodeRoleOSM
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.cpuTotals != nil {
 		b.cpuTotals = make([]*CPUTotalNodeRoleOSMetricNodeBuilder, len(object.cpuTotals))
 		for i, v := range object.cpuTotals {
@@ -60,6 +63,7 @@ func (b *CPUTotalsNodeRoleOSMetricNodeBuilder) Copy(object *CPUTotalsNodeRoleOSM
 // Build creates a 'CPU_totals_node_role_OS_metric_node' object using the configuration stored in the builder.
 func (b *CPUTotalsNodeRoleOSMetricNodeBuilder) Build() (object *CPUTotalsNodeRoleOSMetricNode, err error) {
 	object = new(CPUTotalsNodeRoleOSMetricNode)
+	object.bitmap_ = b.bitmap_
 	if b.cpuTotals != nil {
 		object.cpuTotals = make([]*CPUTotalNodeRoleOSMetricNode, len(b.cpuTotals))
 		for i, v := range b.cpuTotals {

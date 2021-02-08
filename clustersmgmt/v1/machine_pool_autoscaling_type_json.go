@@ -39,46 +39,46 @@ func MarshalMachinePoolAutoscaling(object *MachinePoolAutoscaling, writer io.Wri
 func writeMachinePoolAutoscaling(object *MachinePoolAutoscaling, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(MachinePoolAutoscalingLinkKind)
 	} else {
 		stream.WriteString(MachinePoolAutoscalingKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.maxReplicas != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("max_replicas")
-		stream.WriteInt(*object.maxReplicas)
+		stream.WriteInt(object.maxReplicas)
 		count++
 	}
-	if object.minReplicas != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("min_replicas")
-		stream.WriteInt(*object.minReplicas)
+		stream.WriteInt(object.minReplicas)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -110,19 +110,23 @@ func readMachinePoolAutoscaling(iterator *jsoniter.Iterator) *MachinePoolAutosca
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == MachinePoolAutoscalingLinkKind
+			if value == MachinePoolAutoscalingLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "max_replicas":
 			value := iterator.ReadInt()
-			object.maxReplicas = &value
+			object.maxReplicas = value
+			object.bitmap_ |= 8
 		case "min_replicas":
 			value := iterator.ReadInt()
-			object.minReplicas = &value
+			object.minReplicas = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

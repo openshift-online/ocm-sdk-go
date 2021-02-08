@@ -39,20 +39,23 @@ func MarshalAccessTokenAuth(object *AccessTokenAuth, writer io.Writer) error {
 func writeAccessTokenAuth(object *AccessTokenAuth, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.auth != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("auth")
-		stream.WriteString(*object.auth)
+		stream.WriteString(object.auth)
 		count++
 	}
-	if object.email != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("email")
-		stream.WriteString(*object.email)
+		stream.WriteString(object.email)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -84,10 +87,12 @@ func readAccessTokenAuth(iterator *jsoniter.Iterator) *AccessTokenAuth {
 		switch field {
 		case "auth":
 			value := iterator.ReadString()
-			object.auth = &value
+			object.auth = value
+			object.bitmap_ |= 1
 		case "email":
 			value := iterator.ReadString()
-			object.email = &value
+			object.email = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

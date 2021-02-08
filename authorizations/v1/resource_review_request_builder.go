@@ -23,21 +23,23 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Request to perform a resource access review.
 type ResourceReviewRequestBuilder struct {
-	accountUsername *string
-	action          *string
-	resourceType    *string
+	bitmap_         uint32
+	accountUsername string
+	action          string
+	resourceType    string
 }
 
 // NewResourceReviewRequest creates a new builder of 'resource_review_request' objects.
 func NewResourceReviewRequest() *ResourceReviewRequestBuilder {
-	return new(ResourceReviewRequestBuilder)
+	return &ResourceReviewRequestBuilder{}
 }
 
 // AccountUsername sets the value of the 'account_username' attribute to the given value.
 //
 //
 func (b *ResourceReviewRequestBuilder) AccountUsername(value string) *ResourceReviewRequestBuilder {
-	b.accountUsername = &value
+	b.accountUsername = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,7 +47,8 @@ func (b *ResourceReviewRequestBuilder) AccountUsername(value string) *ResourceRe
 //
 //
 func (b *ResourceReviewRequestBuilder) Action(value string) *ResourceReviewRequestBuilder {
-	b.action = &value
+	b.action = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,7 +56,8 @@ func (b *ResourceReviewRequestBuilder) Action(value string) *ResourceReviewReque
 //
 //
 func (b *ResourceReviewRequestBuilder) ResourceType(value string) *ResourceReviewRequestBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,6 +66,7 @@ func (b *ResourceReviewRequestBuilder) Copy(object *ResourceReviewRequest) *Reso
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountUsername = object.accountUsername
 	b.action = object.action
 	b.resourceType = object.resourceType
@@ -71,6 +76,7 @@ func (b *ResourceReviewRequestBuilder) Copy(object *ResourceReviewRequest) *Reso
 // Build creates a 'resource_review_request' object using the configuration stored in the builder.
 func (b *ResourceReviewRequestBuilder) Build() (object *ResourceReviewRequest, err error) {
 	object = new(ResourceReviewRequest)
+	object.bitmap_ = b.bitmap_
 	object.accountUsername = b.accountUsername
 	object.action = b.action
 	object.resourceType = b.resourceType

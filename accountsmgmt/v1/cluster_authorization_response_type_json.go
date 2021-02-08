@@ -39,15 +39,18 @@ func MarshalClusterAuthorizationResponse(object *ClusterAuthorizationResponse, w
 func writeClusterAuthorizationResponse(object *ClusterAuthorizationResponse, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.allowed != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("allowed")
-		stream.WriteBool(*object.allowed)
+		stream.WriteBool(object.allowed)
 		count++
 	}
-	if object.excessResources != nil {
+	present_ = object.bitmap_&2 != 0 && object.excessResources != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -55,7 +58,8 @@ func writeClusterAuthorizationResponse(object *ClusterAuthorizationResponse, str
 		writeReservedResourceList(object.excessResources, stream)
 		count++
 	}
-	if object.subscription != nil {
+	present_ = object.bitmap_&4 != 0 && object.subscription != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -92,13 +96,16 @@ func readClusterAuthorizationResponse(iterator *jsoniter.Iterator) *ClusterAutho
 		switch field {
 		case "allowed":
 			value := iterator.ReadBool()
-			object.allowed = &value
+			object.allowed = value
+			object.bitmap_ |= 1
 		case "excess_resources":
 			value := readReservedResourceList(iterator)
 			object.excessResources = value
+			object.bitmap_ |= 2
 		case "subscription":
 			value := readSubscription(iterator)
 			object.subscription = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

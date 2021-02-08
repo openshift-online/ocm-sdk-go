@@ -23,36 +23,38 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an ingress.
 type IngressBuilder struct {
-	id             *string
-	href           *string
-	link           bool
-	dnsName        *string
+	bitmap_        uint32
+	id             string
+	href           string
+	dnsName        string
 	cluster        *ClusterBuilder
-	default_       *bool
-	listening      *ListeningMethod
+	listening      ListeningMethod
 	routeSelectors map[string]string
+	default_       bool
 }
 
 // NewIngress creates a new builder of 'ingress' objects.
 func NewIngress() *IngressBuilder {
-	return new(IngressBuilder)
+	return &IngressBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *IngressBuilder) Link(value bool) *IngressBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *IngressBuilder) ID(value string) *IngressBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *IngressBuilder) HREF(value string) *IngressBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *IngressBuilder) Link(value bool) *IngressBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -60,7 +62,8 @@ func (b *IngressBuilder) Link(value bool) *IngressBuilder {
 //
 //
 func (b *IngressBuilder) DNSName(value string) *IngressBuilder {
-	b.dnsName = &value
+	b.dnsName = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -105,6 +108,11 @@ func (b *IngressBuilder) DNSName(value string) *IngressBuilder {
 // Services account.
 func (b *IngressBuilder) Cluster(value *ClusterBuilder) *IngressBuilder {
 	b.cluster = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -112,7 +120,8 @@ func (b *IngressBuilder) Cluster(value *ClusterBuilder) *IngressBuilder {
 //
 //
 func (b *IngressBuilder) Default(value bool) *IngressBuilder {
-	b.default_ = &value
+	b.default_ = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -120,7 +129,8 @@ func (b *IngressBuilder) Default(value bool) *IngressBuilder {
 //
 // Cluster components listening method.
 func (b *IngressBuilder) Listening(value ListeningMethod) *IngressBuilder {
-	b.listening = &value
+	b.listening = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -129,6 +139,11 @@ func (b *IngressBuilder) Listening(value ListeningMethod) *IngressBuilder {
 //
 func (b *IngressBuilder) RouteSelectors(value map[string]string) *IngressBuilder {
 	b.routeSelectors = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
@@ -137,9 +152,9 @@ func (b *IngressBuilder) Copy(object *Ingress) *IngressBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.dnsName = object.dnsName
 	if object.cluster != nil {
 		b.cluster = NewCluster().Copy(object.cluster)
@@ -149,7 +164,7 @@ func (b *IngressBuilder) Copy(object *Ingress) *IngressBuilder {
 	b.default_ = object.default_
 	b.listening = object.listening
 	if len(object.routeSelectors) > 0 {
-		b.routeSelectors = make(map[string]string)
+		b.routeSelectors = map[string]string{}
 		for k, v := range object.routeSelectors {
 			b.routeSelectors[k] = v
 		}
@@ -164,7 +179,7 @@ func (b *IngressBuilder) Build() (object *Ingress, err error) {
 	object = new(Ingress)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.dnsName = b.dnsName
 	if b.cluster != nil {
 		object.cluster, err = b.cluster.Build()

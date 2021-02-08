@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Provides information about the alerts firing on the cluster.
 type AlertsInfo struct {
-	alerts []*AlertInfo
+	bitmap_ uint32
+	alerts  []*AlertInfo
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AlertsInfo) Empty() bool {
-	return o == nil || (len(o.alerts) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Alerts returns the value of the 'alerts' attribute, or
@@ -37,10 +37,10 @@ func (o *AlertsInfo) Empty() bool {
 //
 //
 func (o *AlertsInfo) Alerts() []*AlertInfo {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.alerts
 	}
-	return o.alerts
+	return nil
 }
 
 // GetAlerts returns the value of the 'alerts' attribute and
@@ -48,7 +48,7 @@ func (o *AlertsInfo) Alerts() []*AlertInfo {
 //
 //
 func (o *AlertsInfo) GetAlerts() (value []*AlertInfo, ok bool) {
-	ok = o != nil && o.alerts != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.alerts
 	}
@@ -69,7 +69,7 @@ const AlertsInfoListNilKind = "AlertsInfoListNil"
 
 // AlertsInfoList is a list of values of the 'alerts_info' type.
 type AlertsInfoList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AlertsInfo
 }

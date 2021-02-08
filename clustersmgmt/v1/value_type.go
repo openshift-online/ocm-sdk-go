@@ -40,15 +40,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // - 1 TiB = 2^40 bytes
 // - 1 PiB = 2^50 bytes
 type Value struct {
-	unit  *string
-	value *float64
+	bitmap_ uint32
+	unit    string
+	value   float64
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *Value) Empty() bool {
-	return o == nil || (o.unit == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Unit returns the value of the 'unit' attribute, or
@@ -56,8 +55,8 @@ func (o *Value) Empty() bool {
 //
 // Name of the unit used to measure the value.
 func (o *Value) Unit() string {
-	if o != nil && o.unit != nil {
-		return *o.unit
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.unit
 	}
 	return ""
 }
@@ -67,9 +66,9 @@ func (o *Value) Unit() string {
 //
 // Name of the unit used to measure the value.
 func (o *Value) GetUnit() (value string, ok bool) {
-	ok = o != nil && o.unit != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.unit
+		value = o.unit
 	}
 	return
 }
@@ -79,8 +78,8 @@ func (o *Value) GetUnit() (value string, ok bool) {
 //
 // Numeric value.
 func (o *Value) Value() float64 {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.value
 	}
 	return 0.0
 }
@@ -90,9 +89,9 @@ func (o *Value) Value() float64 {
 //
 // Numeric value.
 func (o *Value) GetValue() (value float64, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -111,7 +110,7 @@ const ValueListNilKind = "ValueListNil"
 
 // ValueList is a list of values of the 'value' type.
 type ValueList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*Value
 }

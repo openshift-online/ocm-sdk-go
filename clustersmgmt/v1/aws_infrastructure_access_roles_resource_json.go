@@ -95,10 +95,10 @@ func writeAWSInfrastructureAccessRolesListResponse(response *AWSInfrastructureAc
 	stream.WriteObjectField("kind")
 	count := 1
 	stream.WriteString(AWSInfrastructureAccessRoleListKind)
-	if response.items != nil && response.items.href != nil {
+	if response.items != nil && response.items.href != "" {
 		stream.WriteMore()
 		stream.WriteObjectField("href")
-		stream.WriteString(*response.items.href)
+		stream.WriteString(response.items.href)
 		count++
 	}
 	if response.page != nil {

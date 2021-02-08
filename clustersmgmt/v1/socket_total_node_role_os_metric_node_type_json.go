@@ -40,7 +40,9 @@ func MarshalSocketTotalNodeRoleOSMetricNode(object *SocketTotalNodeRoleOSMetricN
 func writeSocketTotalNodeRoleOSMetricNode(object *SocketTotalNodeRoleOSMetricNode, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.nodeRoles != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.nodeRoles != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -48,28 +50,31 @@ func writeSocketTotalNodeRoleOSMetricNode(object *SocketTotalNodeRoleOSMetricNod
 		writeStringList(object.nodeRoles, stream)
 		count++
 	}
-	if object.operatingSystem != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("operating_system")
-		stream.WriteString(*object.operatingSystem)
+		stream.WriteString(object.operatingSystem)
 		count++
 	}
-	if object.socketTotal != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("socket_total")
-		stream.WriteFloat64(*object.socketTotal)
+		stream.WriteFloat64(object.socketTotal)
 		count++
 	}
-	if object.time != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("time")
-		stream.WriteString((*object.time).Format(time.RFC3339))
+		stream.WriteString((object.time).Format(time.RFC3339))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -102,19 +107,23 @@ func readSocketTotalNodeRoleOSMetricNode(iterator *jsoniter.Iterator) *SocketTot
 		case "node_roles":
 			value := readStringList(iterator)
 			object.nodeRoles = value
+			object.bitmap_ |= 1
 		case "operating_system":
 			value := iterator.ReadString()
-			object.operatingSystem = &value
+			object.operatingSystem = value
+			object.bitmap_ |= 2
 		case "socket_total":
 			value := iterator.ReadFloat64()
-			object.socketTotal = &value
+			object.socketTotal = value
+			object.bitmap_ |= 4
 		case "time":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
 			if err != nil {
 				iterator.ReportError("", err.Error())
 			}
-			object.time = &value
+			object.time = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

@@ -23,33 +23,35 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of an upgrade policy state that that is set for a cluster.
 type UpgradePolicyStateBuilder struct {
-	id          *string
-	href        *string
-	link        bool
-	description *string
-	value       *string
+	bitmap_     uint32
+	id          string
+	href        string
+	description string
+	value       string
 }
 
 // NewUpgradePolicyState creates a new builder of 'upgrade_policy_state' objects.
 func NewUpgradePolicyState() *UpgradePolicyStateBuilder {
-	return new(UpgradePolicyStateBuilder)
+	return &UpgradePolicyStateBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *UpgradePolicyStateBuilder) Link(value bool) *UpgradePolicyStateBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *UpgradePolicyStateBuilder) ID(value string) *UpgradePolicyStateBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *UpgradePolicyStateBuilder) HREF(value string) *UpgradePolicyStateBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *UpgradePolicyStateBuilder) Link(value bool) *UpgradePolicyStateBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -57,7 +59,8 @@ func (b *UpgradePolicyStateBuilder) Link(value bool) *UpgradePolicyStateBuilder 
 //
 //
 func (b *UpgradePolicyStateBuilder) Description(value string) *UpgradePolicyStateBuilder {
-	b.description = &value
+	b.description = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,7 +68,8 @@ func (b *UpgradePolicyStateBuilder) Description(value string) *UpgradePolicyStat
 //
 //
 func (b *UpgradePolicyStateBuilder) Value(value string) *UpgradePolicyStateBuilder {
-	b.value = &value
+	b.value = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,9 +78,9 @@ func (b *UpgradePolicyStateBuilder) Copy(object *UpgradePolicyState) *UpgradePol
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.description = object.description
 	b.value = object.value
 	return b
@@ -87,7 +91,7 @@ func (b *UpgradePolicyStateBuilder) Build() (object *UpgradePolicyState, err err
 	object = new(UpgradePolicyState)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.description = b.description
 	object.value = b.value
 	return

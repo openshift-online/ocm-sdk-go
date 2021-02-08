@@ -39,7 +39,9 @@ func MarshalOpenIDClaims(object *OpenIDClaims, writer io.Writer) error {
 func writeOpenIDClaims(object *OpenIDClaims, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.email != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0 && object.email != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -47,7 +49,8 @@ func writeOpenIDClaims(object *OpenIDClaims, stream *jsoniter.Stream) {
 		writeStringList(object.email, stream)
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&2 != 0 && object.name != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -55,7 +58,8 @@ func writeOpenIDClaims(object *OpenIDClaims, stream *jsoniter.Stream) {
 		writeStringList(object.name, stream)
 		count++
 	}
-	if object.preferredUsername != nil {
+	present_ = object.bitmap_&4 != 0 && object.preferredUsername != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -93,12 +97,15 @@ func readOpenIDClaims(iterator *jsoniter.Iterator) *OpenIDClaims {
 		case "email":
 			value := readStringList(iterator)
 			object.email = value
+			object.bitmap_ |= 1
 		case "name":
 			value := readStringList(iterator)
 			object.name = value
+			object.bitmap_ |= 2
 		case "preferred_username":
 			value := readStringList(iterator)
 			object.preferredUsername = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}

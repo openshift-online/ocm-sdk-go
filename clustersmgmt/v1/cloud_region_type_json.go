@@ -39,33 +39,32 @@ func MarshalCloudRegion(object *CloudRegion, writer io.Writer) error {
 func writeCloudRegion(object *CloudRegion, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(CloudRegionLinkKind)
 	} else {
 		stream.WriteString(CloudRegionKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.cloudProvider != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.cloudProvider != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -73,36 +72,40 @@ func writeCloudRegion(object *CloudRegion, stream *jsoniter.Stream) {
 		writeCloudProvider(object.cloudProvider, stream)
 		count++
 	}
-	if object.displayName != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("display_name")
-		stream.WriteString(*object.displayName)
+		stream.WriteString(object.displayName)
 		count++
 	}
-	if object.enabled != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("enabled")
-		stream.WriteBool(*object.enabled)
+		stream.WriteBool(object.enabled)
 		count++
 	}
-	if object.name != nil {
+	present_ = object.bitmap_&64 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.supportsMultiAZ != nil {
+	present_ = object.bitmap_&128 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("supports_multi_az")
-		stream.WriteBool(*object.supportsMultiAZ)
+		stream.WriteBool(object.supportsMultiAZ)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -134,28 +137,35 @@ func readCloudRegion(iterator *jsoniter.Iterator) *CloudRegion {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == CloudRegionLinkKind
+			if value == CloudRegionLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "cloud_provider":
 			value := readCloudProvider(iterator)
 			object.cloudProvider = value
+			object.bitmap_ |= 8
 		case "display_name":
 			value := iterator.ReadString()
-			object.displayName = &value
+			object.displayName = value
+			object.bitmap_ |= 16
 		case "enabled":
 			value := iterator.ReadBool()
-			object.enabled = &value
+			object.enabled = value
+			object.bitmap_ |= 32
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 64
 		case "supports_multi_az":
 			value := iterator.ReadBool()
-			object.supportsMultiAZ = &value
+			object.supportsMultiAZ = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

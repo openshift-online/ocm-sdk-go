@@ -35,10 +35,10 @@ const ServerConfigNilKind = "ServerConfigNil"
 //
 // Representation of a server config
 type ServerConfig struct {
-	id     *string
-	href   *string
-	link   bool
-	server *string
+	bitmap_ uint32
+	id      string
+	href    string
+	server  string
 }
 
 // Kind returns the name of the type of the object.
@@ -46,16 +46,21 @@ func (o *ServerConfig) Kind() string {
 	if o == nil {
 		return ServerConfigNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return ServerConfigLinkKind
 	}
 	return ServerConfigKind
 }
 
+// Link returns true iif this is a link.
+func (o *ServerConfig) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *ServerConfig) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -63,22 +68,17 @@ func (o *ServerConfig) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *ServerConfig) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *ServerConfig) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *ServerConfig) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -86,18 +86,16 @@ func (o *ServerConfig) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *ServerConfig) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ServerConfig) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.server == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Server returns the value of the 'server' attribute, or
@@ -105,8 +103,8 @@ func (o *ServerConfig) Empty() bool {
 //
 // The URL of the server
 func (o *ServerConfig) Server() string {
-	if o != nil && o.server != nil {
-		return *o.server
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.server
 	}
 	return ""
 }
@@ -116,9 +114,9 @@ func (o *ServerConfig) Server() string {
 //
 // The URL of the server
 func (o *ServerConfig) GetServer() (value string, ok bool) {
-	ok = o != nil && o.server != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.server
+		value = o.server
 	}
 	return
 }
@@ -137,7 +135,7 @@ const ServerConfigListNilKind = "ServerConfigListNil"
 
 // ServerConfigList is a list of values of the 'server_config' type.
 type ServerConfigList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ServerConfig
 }
@@ -160,8 +158,8 @@ func (l *ServerConfigList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *ServerConfigList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -169,9 +167,9 @@ func (l *ServerConfigList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *ServerConfigList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

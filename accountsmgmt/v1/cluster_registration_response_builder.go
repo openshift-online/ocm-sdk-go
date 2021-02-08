@@ -23,22 +23,24 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterRegistrationResponseBuilder struct {
-	accountID          *string
-	authorizationToken *string
-	clusterID          *string
-	expiresAt          *string
+	bitmap_            uint32
+	accountID          string
+	authorizationToken string
+	clusterID          string
+	expiresAt          string
 }
 
 // NewClusterRegistrationResponse creates a new builder of 'cluster_registration_response' objects.
 func NewClusterRegistrationResponse() *ClusterRegistrationResponseBuilder {
-	return new(ClusterRegistrationResponseBuilder)
+	return &ClusterRegistrationResponseBuilder{}
 }
 
 // AccountID sets the value of the 'account_ID' attribute to the given value.
 //
 //
 func (b *ClusterRegistrationResponseBuilder) AccountID(value string) *ClusterRegistrationResponseBuilder {
-	b.accountID = &value
+	b.accountID = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -46,7 +48,8 @@ func (b *ClusterRegistrationResponseBuilder) AccountID(value string) *ClusterReg
 //
 //
 func (b *ClusterRegistrationResponseBuilder) AuthorizationToken(value string) *ClusterRegistrationResponseBuilder {
-	b.authorizationToken = &value
+	b.authorizationToken = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -54,7 +57,8 @@ func (b *ClusterRegistrationResponseBuilder) AuthorizationToken(value string) *C
 //
 //
 func (b *ClusterRegistrationResponseBuilder) ClusterID(value string) *ClusterRegistrationResponseBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -62,7 +66,8 @@ func (b *ClusterRegistrationResponseBuilder) ClusterID(value string) *ClusterReg
 //
 //
 func (b *ClusterRegistrationResponseBuilder) ExpiresAt(value string) *ClusterRegistrationResponseBuilder {
-	b.expiresAt = &value
+	b.expiresAt = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -71,6 +76,7 @@ func (b *ClusterRegistrationResponseBuilder) Copy(object *ClusterRegistrationRes
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountID = object.accountID
 	b.authorizationToken = object.authorizationToken
 	b.clusterID = object.clusterID
@@ -81,6 +87,7 @@ func (b *ClusterRegistrationResponseBuilder) Copy(object *ClusterRegistrationRes
 // Build creates a 'cluster_registration_response' object using the configuration stored in the builder.
 func (b *ClusterRegistrationResponseBuilder) Build() (object *ClusterRegistrationResponse, err error) {
 	object = new(ClusterRegistrationResponse)
+	object.bitmap_ = b.bitmap_
 	object.accountID = b.accountID
 	object.authorizationToken = b.authorizationToken
 	object.clusterID = b.clusterID

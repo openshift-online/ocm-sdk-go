@@ -23,25 +23,27 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `openid` identity providers.
 type OpenIDIdentityProviderBuilder struct {
-	ca                       *string
+	bitmap_                  uint32
+	ca                       string
 	claims                   *OpenIDClaimsBuilder
-	clientID                 *string
-	clientSecret             *string
+	clientID                 string
+	clientSecret             string
 	extraAuthorizeParameters map[string]string
 	extraScopes              []string
-	issuer                   *string
+	issuer                   string
 }
 
 // NewOpenIDIdentityProvider creates a new builder of 'open_ID_identity_provider' objects.
 func NewOpenIDIdentityProvider() *OpenIDIdentityProviderBuilder {
-	return new(OpenIDIdentityProviderBuilder)
+	return &OpenIDIdentityProviderBuilder{}
 }
 
 // CA sets the value of the 'CA' attribute to the given value.
 //
 //
 func (b *OpenIDIdentityProviderBuilder) CA(value string) *OpenIDIdentityProviderBuilder {
-	b.ca = &value
+	b.ca = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -50,6 +52,11 @@ func (b *OpenIDIdentityProviderBuilder) CA(value string) *OpenIDIdentityProvider
 // _OpenID_ identity provider claims.
 func (b *OpenIDIdentityProviderBuilder) Claims(value *OpenIDClaimsBuilder) *OpenIDIdentityProviderBuilder {
 	b.claims = value
+	if value != nil {
+		b.bitmap_ |= 2
+	} else {
+		b.bitmap_ &^= 2
+	}
 	return b
 }
 
@@ -57,7 +64,8 @@ func (b *OpenIDIdentityProviderBuilder) Claims(value *OpenIDClaimsBuilder) *Open
 //
 //
 func (b *OpenIDIdentityProviderBuilder) ClientID(value string) *OpenIDIdentityProviderBuilder {
-	b.clientID = &value
+	b.clientID = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,7 +73,8 @@ func (b *OpenIDIdentityProviderBuilder) ClientID(value string) *OpenIDIdentityPr
 //
 //
 func (b *OpenIDIdentityProviderBuilder) ClientSecret(value string) *OpenIDIdentityProviderBuilder {
-	b.clientSecret = &value
+	b.clientSecret = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -74,6 +83,11 @@ func (b *OpenIDIdentityProviderBuilder) ClientSecret(value string) *OpenIDIdenti
 //
 func (b *OpenIDIdentityProviderBuilder) ExtraAuthorizeParameters(value map[string]string) *OpenIDIdentityProviderBuilder {
 	b.extraAuthorizeParameters = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -83,6 +97,7 @@ func (b *OpenIDIdentityProviderBuilder) ExtraAuthorizeParameters(value map[strin
 func (b *OpenIDIdentityProviderBuilder) ExtraScopes(values ...string) *OpenIDIdentityProviderBuilder {
 	b.extraScopes = make([]string, len(values))
 	copy(b.extraScopes, values)
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -90,7 +105,8 @@ func (b *OpenIDIdentityProviderBuilder) ExtraScopes(values ...string) *OpenIDIde
 //
 //
 func (b *OpenIDIdentityProviderBuilder) Issuer(value string) *OpenIDIdentityProviderBuilder {
-	b.issuer = &value
+	b.issuer = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -99,6 +115,7 @@ func (b *OpenIDIdentityProviderBuilder) Copy(object *OpenIDIdentityProvider) *Op
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.ca = object.ca
 	if object.claims != nil {
 		b.claims = NewOpenIDClaims().Copy(object.claims)
@@ -108,7 +125,7 @@ func (b *OpenIDIdentityProviderBuilder) Copy(object *OpenIDIdentityProvider) *Op
 	b.clientID = object.clientID
 	b.clientSecret = object.clientSecret
 	if len(object.extraAuthorizeParameters) > 0 {
-		b.extraAuthorizeParameters = make(map[string]string)
+		b.extraAuthorizeParameters = map[string]string{}
 		for k, v := range object.extraAuthorizeParameters {
 			b.extraAuthorizeParameters[k] = v
 		}
@@ -128,6 +145,7 @@ func (b *OpenIDIdentityProviderBuilder) Copy(object *OpenIDIdentityProvider) *Op
 // Build creates a 'open_ID_identity_provider' object using the configuration stored in the builder.
 func (b *OpenIDIdentityProviderBuilder) Build() (object *OpenIDIdentityProvider, err error) {
 	object = new(OpenIDIdentityProvider)
+	object.bitmap_ = b.bitmap_
 	object.ca = b.ca
 	if b.claims != nil {
 		object.claims, err = b.claims.Build()

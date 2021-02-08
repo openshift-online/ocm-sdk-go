@@ -39,54 +39,55 @@ func MarshalAWSInfrastructureAccessRole(object *AWSInfrastructureAccessRole, wri
 func writeAWSInfrastructureAccessRole(object *AWSInfrastructureAccessRole, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(AWSInfrastructureAccessRoleLinkKind)
 	} else {
 		stream.WriteString(AWSInfrastructureAccessRoleKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.description != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("description")
-		stream.WriteString(*object.description)
+		stream.WriteString(object.description)
 		count++
 	}
-	if object.displayName != nil {
+	present_ = object.bitmap_&16 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("display_name")
-		stream.WriteString(*object.displayName)
+		stream.WriteString(object.displayName)
 		count++
 	}
-	if object.state != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("state")
-		stream.WriteString(string(*object.state))
+		stream.WriteString(string(object.state))
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -118,23 +119,28 @@ func readAWSInfrastructureAccessRole(iterator *jsoniter.Iterator) *AWSInfrastruc
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == AWSInfrastructureAccessRoleLinkKind
+			if value == AWSInfrastructureAccessRoleLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "description":
 			value := iterator.ReadString()
-			object.description = &value
+			object.description = value
+			object.bitmap_ |= 8
 		case "display_name":
 			value := iterator.ReadString()
-			object.displayName = &value
+			object.displayName = value
+			object.bitmap_ |= 16
 		case "state":
 			text := iterator.ReadString()
 			value := AWSInfrastructureAccessRoleState(text)
-			object.state = &value
+			object.state = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}

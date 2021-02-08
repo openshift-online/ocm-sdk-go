@@ -39,12 +39,14 @@ func MarshalFeatureToggleQueryRequest(object *FeatureToggleQueryRequest, writer 
 func writeFeatureToggleQueryRequest(object *FeatureToggleQueryRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.organizationID != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("organization_id")
-		stream.WriteString(*object.organizationID)
+		stream.WriteString(object.organizationID)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -76,7 +78,8 @@ func readFeatureToggleQueryRequest(iterator *jsoniter.Iterator) *FeatureToggleQu
 		switch field {
 		case "organization_id":
 			value := iterator.ReadString()
-			object.organizationID = &value
+			object.organizationID = value
+			object.bitmap_ |= 1
 		default:
 			iterator.ReadAny()
 		}

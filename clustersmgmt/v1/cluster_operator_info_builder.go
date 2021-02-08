@@ -27,23 +27,25 @@ import (
 //
 //
 type ClusterOperatorInfoBuilder struct {
-	condition *ClusterOperatorState
-	name      *string
-	reason    *string
-	time      *time.Time
-	version   *string
+	bitmap_   uint32
+	condition ClusterOperatorState
+	name      string
+	reason    string
+	time      time.Time
+	version   string
 }
 
 // NewClusterOperatorInfo creates a new builder of 'cluster_operator_info' objects.
 func NewClusterOperatorInfo() *ClusterOperatorInfoBuilder {
-	return new(ClusterOperatorInfoBuilder)
+	return &ClusterOperatorInfoBuilder{}
 }
 
 // Condition sets the value of the 'condition' attribute to the given value.
 //
 // Overall state of a cluster operator.
 func (b *ClusterOperatorInfoBuilder) Condition(value ClusterOperatorState) *ClusterOperatorInfoBuilder {
-	b.condition = &value
+	b.condition = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -51,7 +53,8 @@ func (b *ClusterOperatorInfoBuilder) Condition(value ClusterOperatorState) *Clus
 //
 //
 func (b *ClusterOperatorInfoBuilder) Name(value string) *ClusterOperatorInfoBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -59,7 +62,8 @@ func (b *ClusterOperatorInfoBuilder) Name(value string) *ClusterOperatorInfoBuil
 //
 //
 func (b *ClusterOperatorInfoBuilder) Reason(value string) *ClusterOperatorInfoBuilder {
-	b.reason = &value
+	b.reason = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -67,7 +71,8 @@ func (b *ClusterOperatorInfoBuilder) Reason(value string) *ClusterOperatorInfoBu
 //
 //
 func (b *ClusterOperatorInfoBuilder) Time(value time.Time) *ClusterOperatorInfoBuilder {
-	b.time = &value
+	b.time = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -75,7 +80,8 @@ func (b *ClusterOperatorInfoBuilder) Time(value time.Time) *ClusterOperatorInfoB
 //
 //
 func (b *ClusterOperatorInfoBuilder) Version(value string) *ClusterOperatorInfoBuilder {
-	b.version = &value
+	b.version = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -84,6 +90,7 @@ func (b *ClusterOperatorInfoBuilder) Copy(object *ClusterOperatorInfo) *ClusterO
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.condition = object.condition
 	b.name = object.name
 	b.reason = object.reason
@@ -95,6 +102,7 @@ func (b *ClusterOperatorInfoBuilder) Copy(object *ClusterOperatorInfo) *ClusterO
 // Build creates a 'cluster_operator_info' object using the configuration stored in the builder.
 func (b *ClusterOperatorInfoBuilder) Build() (object *ClusterOperatorInfo, err error) {
 	object = new(ClusterOperatorInfo)
+	object.bitmap_ = b.bitmap_
 	object.condition = b.condition
 	object.name = b.name
 	object.reason = b.reason

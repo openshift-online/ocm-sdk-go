@@ -23,13 +23,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of cluster external configuration.
 type ExternalConfigurationBuilder struct {
+	bitmap_  uint32
 	labels   *LabelListBuilder
 	syncsets *SyncsetListBuilder
 }
 
 // NewExternalConfiguration creates a new builder of 'external_configuration' objects.
 func NewExternalConfiguration() *ExternalConfigurationBuilder {
-	return new(ExternalConfigurationBuilder)
+	return &ExternalConfigurationBuilder{}
 }
 
 // Labels sets the value of the 'labels' attribute to the given values.
@@ -37,6 +38,7 @@ func NewExternalConfiguration() *ExternalConfigurationBuilder {
 //
 func (b *ExternalConfigurationBuilder) Labels(value *LabelListBuilder) *ExternalConfigurationBuilder {
 	b.labels = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -45,6 +47,7 @@ func (b *ExternalConfigurationBuilder) Labels(value *LabelListBuilder) *External
 //
 func (b *ExternalConfigurationBuilder) Syncsets(value *SyncsetListBuilder) *ExternalConfigurationBuilder {
 	b.syncsets = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *ExternalConfigurationBuilder) Copy(object *ExternalConfiguration) *Exte
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	if object.labels != nil {
 		b.labels = NewLabelList().Copy(object.labels)
 	} else {
@@ -69,6 +73,7 @@ func (b *ExternalConfigurationBuilder) Copy(object *ExternalConfiguration) *Exte
 // Build creates a 'external_configuration' object using the configuration stored in the builder.
 func (b *ExternalConfigurationBuilder) Build() (object *ExternalConfiguration, err error) {
 	object = new(ExternalConfiguration)
+	object.bitmap_ = b.bitmap_
 	if b.labels != nil {
 		object.labels, err = b.labels.Build()
 		if err != nil {

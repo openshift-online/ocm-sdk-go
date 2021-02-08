@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type FeatureToggleQueryRequest struct {
-	organizationID *string
+	bitmap_        uint32
+	organizationID string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *FeatureToggleQueryRequest) Empty() bool {
-	return o == nil || (o.organizationID == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // OrganizationID returns the value of the 'organization_ID' attribute, or
@@ -37,8 +37,8 @@ func (o *FeatureToggleQueryRequest) Empty() bool {
 //
 //
 func (o *FeatureToggleQueryRequest) OrganizationID() string {
-	if o != nil && o.organizationID != nil {
-		return *o.organizationID
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.organizationID
 	}
 	return ""
 }
@@ -48,9 +48,9 @@ func (o *FeatureToggleQueryRequest) OrganizationID() string {
 //
 //
 func (o *FeatureToggleQueryRequest) GetOrganizationID() (value string, ok bool) {
-	ok = o != nil && o.organizationID != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.organizationID
+		value = o.organizationID
 	}
 	return
 }
@@ -69,7 +69,7 @@ const FeatureToggleQueryRequestListNilKind = "FeatureToggleQueryRequestListNil"
 
 // FeatureToggleQueryRequestList is a list of values of the 'feature_toggle_query_request' type.
 type FeatureToggleQueryRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*FeatureToggleQueryRequest
 }

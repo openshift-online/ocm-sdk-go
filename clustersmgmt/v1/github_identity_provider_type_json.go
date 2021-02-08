@@ -39,39 +39,45 @@ func MarshalGithubIdentityProvider(object *GithubIdentityProvider, writer io.Wri
 func writeGithubIdentityProvider(object *GithubIdentityProvider, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.ca != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("ca")
-		stream.WriteString(*object.ca)
+		stream.WriteString(object.ca)
 		count++
 	}
-	if object.clientID != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_id")
-		stream.WriteString(*object.clientID)
+		stream.WriteString(object.clientID)
 		count++
 	}
-	if object.clientSecret != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("client_secret")
-		stream.WriteString(*object.clientSecret)
+		stream.WriteString(object.clientSecret)
 		count++
 	}
-	if object.hostname != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("hostname")
-		stream.WriteString(*object.hostname)
+		stream.WriteString(object.hostname)
 		count++
 	}
-	if object.organizations != nil {
+	present_ = object.bitmap_&16 != 0 && object.organizations != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -79,7 +85,8 @@ func writeGithubIdentityProvider(object *GithubIdentityProvider, stream *jsonite
 		writeStringList(object.organizations, stream)
 		count++
 	}
-	if object.teams != nil {
+	present_ = object.bitmap_&32 != 0 && object.teams != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -116,22 +123,28 @@ func readGithubIdentityProvider(iterator *jsoniter.Iterator) *GithubIdentityProv
 		switch field {
 		case "ca":
 			value := iterator.ReadString()
-			object.ca = &value
+			object.ca = value
+			object.bitmap_ |= 1
 		case "client_id":
 			value := iterator.ReadString()
-			object.clientID = &value
+			object.clientID = value
+			object.bitmap_ |= 2
 		case "client_secret":
 			value := iterator.ReadString()
-			object.clientSecret = &value
+			object.clientSecret = value
+			object.bitmap_ |= 4
 		case "hostname":
 			value := iterator.ReadString()
-			object.hostname = &value
+			object.hostname = value
+			object.bitmap_ |= 8
 		case "organizations":
 			value := readStringList(iterator)
 			object.organizations = value
+			object.bitmap_ |= 16
 		case "teams":
 			value := readStringList(iterator)
 			object.teams = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}

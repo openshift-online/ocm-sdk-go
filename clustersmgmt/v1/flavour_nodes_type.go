@@ -23,13 +23,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Counts of different classes of nodes inside a flavour.
 type FlavourNodes struct {
-	master *int
+	bitmap_ uint32
+	master  int
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *FlavourNodes) Empty() bool {
-	return o == nil || (o.master == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Master returns the value of the 'master' attribute, or
@@ -37,8 +37,8 @@ func (o *FlavourNodes) Empty() bool {
 //
 // Number of master nodes of the cluster.
 func (o *FlavourNodes) Master() int {
-	if o != nil && o.master != nil {
-		return *o.master
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.master
 	}
 	return 0
 }
@@ -48,9 +48,9 @@ func (o *FlavourNodes) Master() int {
 //
 // Number of master nodes of the cluster.
 func (o *FlavourNodes) GetMaster() (value int, ok bool) {
-	ok = o != nil && o.master != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.master
+		value = o.master
 	}
 	return
 }
@@ -69,7 +69,7 @@ const FlavourNodesListNilKind = "FlavourNodesListNil"
 
 // FlavourNodesList is a list of values of the 'flavour_nodes' type.
 type FlavourNodesList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*FlavourNodes
 }

@@ -23,25 +23,19 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Representation of a capability review.
 type SelfCapabilityReviewRequest struct {
-	accountUsername *string
-	capability      *string
-	clusterID       *string
-	organizationID  *string
-	resourceType    *string
-	subscriptionID  *string
-	type_           *string
+	bitmap_         uint32
+	accountUsername string
+	capability      string
+	clusterID       string
+	organizationID  string
+	resourceType    string
+	subscriptionID  string
+	type_           string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *SelfCapabilityReviewRequest) Empty() bool {
-	return o == nil || (o.accountUsername == nil &&
-		o.capability == nil &&
-		o.clusterID == nil &&
-		o.organizationID == nil &&
-		o.resourceType == nil &&
-		o.subscriptionID == nil &&
-		o.type_ == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // AccountUsername returns the value of the 'account_username' attribute, or
@@ -49,8 +43,8 @@ func (o *SelfCapabilityReviewRequest) Empty() bool {
 //
 // Defines the username of the account of which capability is being reviewed.
 func (o *SelfCapabilityReviewRequest) AccountUsername() string {
-	if o != nil && o.accountUsername != nil {
-		return *o.accountUsername
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.accountUsername
 	}
 	return ""
 }
@@ -60,9 +54,9 @@ func (o *SelfCapabilityReviewRequest) AccountUsername() string {
 //
 // Defines the username of the account of which capability is being reviewed.
 func (o *SelfCapabilityReviewRequest) GetAccountUsername() (value string, ok bool) {
-	ok = o != nil && o.accountUsername != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.accountUsername
+		value = o.accountUsername
 	}
 	return
 }
@@ -72,8 +66,8 @@ func (o *SelfCapabilityReviewRequest) GetAccountUsername() (value string, ok boo
 //
 // Capability to review [manage_cluster_admin].
 func (o *SelfCapabilityReviewRequest) Capability() string {
-	if o != nil && o.capability != nil {
-		return *o.capability
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.capability
 	}
 	return ""
 }
@@ -83,9 +77,9 @@ func (o *SelfCapabilityReviewRequest) Capability() string {
 //
 // Capability to review [manage_cluster_admin].
 func (o *SelfCapabilityReviewRequest) GetCapability() (value string, ok bool) {
-	ok = o != nil && o.capability != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.capability
+		value = o.capability
 	}
 	return
 }
@@ -95,8 +89,8 @@ func (o *SelfCapabilityReviewRequest) GetCapability() (value string, ok bool) {
 //
 // Indicates which Cluster (internal id) the resource type belongs to.
 func (o *SelfCapabilityReviewRequest) ClusterID() string {
-	if o != nil && o.clusterID != nil {
-		return *o.clusterID
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.clusterID
 	}
 	return ""
 }
@@ -106,9 +100,9 @@ func (o *SelfCapabilityReviewRequest) ClusterID() string {
 //
 // Indicates which Cluster (internal id) the resource type belongs to.
 func (o *SelfCapabilityReviewRequest) GetClusterID() (value string, ok bool) {
-	ok = o != nil && o.clusterID != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.clusterID
+		value = o.clusterID
 	}
 	return
 }
@@ -118,8 +112,8 @@ func (o *SelfCapabilityReviewRequest) GetClusterID() (value string, ok bool) {
 //
 // Indicates which Organization the resource type belongs to.
 func (o *SelfCapabilityReviewRequest) OrganizationID() string {
-	if o != nil && o.organizationID != nil {
-		return *o.organizationID
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.organizationID
 	}
 	return ""
 }
@@ -129,9 +123,9 @@ func (o *SelfCapabilityReviewRequest) OrganizationID() string {
 //
 // Indicates which Organization the resource type belongs to.
 func (o *SelfCapabilityReviewRequest) GetOrganizationID() (value string, ok bool) {
-	ok = o != nil && o.organizationID != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.organizationID
+		value = o.organizationID
 	}
 	return
 }
@@ -142,8 +136,8 @@ func (o *SelfCapabilityReviewRequest) GetOrganizationID() (value string, ok bool
 // Indicates the type of the resource.
 // See uhc-account-manager/openapi/openapi.yaml for a list of possible values.
 func (o *SelfCapabilityReviewRequest) ResourceType() string {
-	if o != nil && o.resourceType != nil {
-		return *o.resourceType
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.resourceType
 	}
 	return ""
 }
@@ -154,9 +148,9 @@ func (o *SelfCapabilityReviewRequest) ResourceType() string {
 // Indicates the type of the resource.
 // See uhc-account-manager/openapi/openapi.yaml for a list of possible values.
 func (o *SelfCapabilityReviewRequest) GetResourceType() (value string, ok bool) {
-	ok = o != nil && o.resourceType != nil
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = *o.resourceType
+		value = o.resourceType
 	}
 	return
 }
@@ -166,8 +160,8 @@ func (o *SelfCapabilityReviewRequest) GetResourceType() (value string, ok bool) 
 //
 // Indicates which Subscription the resource type belongs to.
 func (o *SelfCapabilityReviewRequest) SubscriptionID() string {
-	if o != nil && o.subscriptionID != nil {
-		return *o.subscriptionID
+	if o != nil && o.bitmap_&32 != 0 {
+		return o.subscriptionID
 	}
 	return ""
 }
@@ -177,9 +171,9 @@ func (o *SelfCapabilityReviewRequest) SubscriptionID() string {
 //
 // Indicates which Subscription the resource type belongs to.
 func (o *SelfCapabilityReviewRequest) GetSubscriptionID() (value string, ok bool) {
-	ok = o != nil && o.subscriptionID != nil
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
-		value = *o.subscriptionID
+		value = o.subscriptionID
 	}
 	return
 }
@@ -189,8 +183,8 @@ func (o *SelfCapabilityReviewRequest) GetSubscriptionID() (value string, ok bool
 //
 // Type of capability [Cluster].
 func (o *SelfCapabilityReviewRequest) Type() string {
-	if o != nil && o.type_ != nil {
-		return *o.type_
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.type_
 	}
 	return ""
 }
@@ -200,9 +194,9 @@ func (o *SelfCapabilityReviewRequest) Type() string {
 //
 // Type of capability [Cluster].
 func (o *SelfCapabilityReviewRequest) GetType() (value string, ok bool) {
-	ok = o != nil && o.type_ != nil
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = *o.type_
+		value = o.type_
 	}
 	return
 }
@@ -221,7 +215,7 @@ const SelfCapabilityReviewRequestListNilKind = "SelfCapabilityReviewRequestListN
 
 // SelfCapabilityReviewRequestList is a list of values of the 'self_capability_review_request' type.
 type SelfCapabilityReviewRequestList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*SelfCapabilityReviewRequest
 }

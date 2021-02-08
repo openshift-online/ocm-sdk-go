@@ -39,36 +39,41 @@ func MarshalNetwork(object *Network, writer io.Writer) error {
 func writeNetwork(object *Network, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.hostPrefix != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("host_prefix")
-		stream.WriteInt(*object.hostPrefix)
+		stream.WriteInt(object.hostPrefix)
 		count++
 	}
-	if object.machineCIDR != nil {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("machine_cidr")
-		stream.WriteString(*object.machineCIDR)
+		stream.WriteString(object.machineCIDR)
 		count++
 	}
-	if object.podCIDR != nil {
+	present_ = object.bitmap_&4 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("pod_cidr")
-		stream.WriteString(*object.podCIDR)
+		stream.WriteString(object.podCIDR)
 		count++
 	}
-	if object.serviceCIDR != nil {
+	present_ = object.bitmap_&8 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("service_cidr")
-		stream.WriteString(*object.serviceCIDR)
+		stream.WriteString(object.serviceCIDR)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -100,16 +105,20 @@ func readNetwork(iterator *jsoniter.Iterator) *Network {
 		switch field {
 		case "host_prefix":
 			value := iterator.ReadInt()
-			object.hostPrefix = &value
+			object.hostPrefix = value
+			object.bitmap_ |= 1
 		case "machine_cidr":
 			value := iterator.ReadString()
-			object.machineCIDR = &value
+			object.machineCIDR = value
+			object.bitmap_ |= 2
 		case "pod_cidr":
 			value := iterator.ReadString()
-			object.podCIDR = &value
+			object.podCIDR = value
+			object.bitmap_ |= 4
 		case "service_cidr":
 			value := iterator.ReadString()
-			object.serviceCIDR = &value
+			object.serviceCIDR = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

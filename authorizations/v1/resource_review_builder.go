@@ -23,25 +23,27 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 // Contains the result of performing a resource access review.
 type ResourceReviewBuilder struct {
-	accountUsername *string
-	action          *string
+	bitmap_         uint32
+	accountUsername string
+	action          string
 	clusterIDs      []string
 	clusterUUIDs    []string
 	organizationIDs []string
-	resourceType    *string
+	resourceType    string
 	subscriptionIDs []string
 }
 
 // NewResourceReview creates a new builder of 'resource_review' objects.
 func NewResourceReview() *ResourceReviewBuilder {
-	return new(ResourceReviewBuilder)
+	return &ResourceReviewBuilder{}
 }
 
 // AccountUsername sets the value of the 'account_username' attribute to the given value.
 //
 //
 func (b *ResourceReviewBuilder) AccountUsername(value string) *ResourceReviewBuilder {
-	b.accountUsername = &value
+	b.accountUsername = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -49,7 +51,8 @@ func (b *ResourceReviewBuilder) AccountUsername(value string) *ResourceReviewBui
 //
 //
 func (b *ResourceReviewBuilder) Action(value string) *ResourceReviewBuilder {
-	b.action = &value
+	b.action = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -59,6 +62,7 @@ func (b *ResourceReviewBuilder) Action(value string) *ResourceReviewBuilder {
 func (b *ResourceReviewBuilder) ClusterIDs(values ...string) *ResourceReviewBuilder {
 	b.clusterIDs = make([]string, len(values))
 	copy(b.clusterIDs, values)
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -68,6 +72,7 @@ func (b *ResourceReviewBuilder) ClusterIDs(values ...string) *ResourceReviewBuil
 func (b *ResourceReviewBuilder) ClusterUUIDs(values ...string) *ResourceReviewBuilder {
 	b.clusterUUIDs = make([]string, len(values))
 	copy(b.clusterUUIDs, values)
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -77,6 +82,7 @@ func (b *ResourceReviewBuilder) ClusterUUIDs(values ...string) *ResourceReviewBu
 func (b *ResourceReviewBuilder) OrganizationIDs(values ...string) *ResourceReviewBuilder {
 	b.organizationIDs = make([]string, len(values))
 	copy(b.organizationIDs, values)
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -84,7 +90,8 @@ func (b *ResourceReviewBuilder) OrganizationIDs(values ...string) *ResourceRevie
 //
 //
 func (b *ResourceReviewBuilder) ResourceType(value string) *ResourceReviewBuilder {
-	b.resourceType = &value
+	b.resourceType = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -94,6 +101,7 @@ func (b *ResourceReviewBuilder) ResourceType(value string) *ResourceReviewBuilde
 func (b *ResourceReviewBuilder) SubscriptionIDs(values ...string) *ResourceReviewBuilder {
 	b.subscriptionIDs = make([]string, len(values))
 	copy(b.subscriptionIDs, values)
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -102,6 +110,7 @@ func (b *ResourceReviewBuilder) Copy(object *ResourceReview) *ResourceReviewBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountUsername = object.accountUsername
 	b.action = object.action
 	if object.clusterIDs != nil {
@@ -135,6 +144,7 @@ func (b *ResourceReviewBuilder) Copy(object *ResourceReview) *ResourceReviewBuil
 // Build creates a 'resource_review' object using the configuration stored in the builder.
 func (b *ResourceReviewBuilder) Build() (object *ResourceReview, err error) {
 	object = new(ResourceReview)
+	object.bitmap_ = b.bitmap_
 	object.accountUsername = b.accountUsername
 	object.action = b.action
 	if b.clusterIDs != nil {

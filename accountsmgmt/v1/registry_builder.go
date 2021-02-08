@@ -27,39 +27,41 @@ import (
 //
 //
 type RegistryBuilder struct {
-	id         *string
-	href       *string
-	link       bool
-	url        *string
-	cloudAlias *bool
-	createdAt  *time.Time
-	name       *string
-	orgName    *string
-	teamName   *string
-	type_      *string
-	updatedAt  *time.Time
+	bitmap_    uint32
+	id         string
+	href       string
+	url        string
+	createdAt  time.Time
+	name       string
+	orgName    string
+	teamName   string
+	type_      string
+	updatedAt  time.Time
+	cloudAlias bool
 }
 
 // NewRegistry creates a new builder of 'registry' objects.
 func NewRegistry() *RegistryBuilder {
-	return new(RegistryBuilder)
+	return &RegistryBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *RegistryBuilder) Link(value bool) *RegistryBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *RegistryBuilder) ID(value string) *RegistryBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *RegistryBuilder) HREF(value string) *RegistryBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *RegistryBuilder) Link(value bool) *RegistryBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -67,7 +69,8 @@ func (b *RegistryBuilder) Link(value bool) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) URL(value string) *RegistryBuilder {
-	b.url = &value
+	b.url = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -75,7 +78,8 @@ func (b *RegistryBuilder) URL(value string) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) CloudAlias(value bool) *RegistryBuilder {
-	b.cloudAlias = &value
+	b.cloudAlias = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -83,7 +87,8 @@ func (b *RegistryBuilder) CloudAlias(value bool) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) CreatedAt(value time.Time) *RegistryBuilder {
-	b.createdAt = &value
+	b.createdAt = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -91,7 +96,8 @@ func (b *RegistryBuilder) CreatedAt(value time.Time) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) Name(value string) *RegistryBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -99,7 +105,8 @@ func (b *RegistryBuilder) Name(value string) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) OrgName(value string) *RegistryBuilder {
-	b.orgName = &value
+	b.orgName = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -107,7 +114,8 @@ func (b *RegistryBuilder) OrgName(value string) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) TeamName(value string) *RegistryBuilder {
-	b.teamName = &value
+	b.teamName = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -115,7 +123,8 @@ func (b *RegistryBuilder) TeamName(value string) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) Type(value string) *RegistryBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -123,7 +132,8 @@ func (b *RegistryBuilder) Type(value string) *RegistryBuilder {
 //
 //
 func (b *RegistryBuilder) UpdatedAt(value time.Time) *RegistryBuilder {
-	b.updatedAt = &value
+	b.updatedAt = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -132,9 +142,9 @@ func (b *RegistryBuilder) Copy(object *Registry) *RegistryBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.url = object.url
 	b.cloudAlias = object.cloudAlias
 	b.createdAt = object.createdAt
@@ -151,7 +161,7 @@ func (b *RegistryBuilder) Build() (object *Registry, err error) {
 	object = new(Registry)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.url = b.url
 	object.cloudAlias = b.cloudAlias
 	object.createdAt = b.createdAt

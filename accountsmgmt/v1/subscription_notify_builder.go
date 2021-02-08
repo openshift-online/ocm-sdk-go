@@ -24,26 +24,28 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 // This struct is a request to send a templated email to a user related to this
 // subscription.
 type SubscriptionNotifyBuilder struct {
-	bccAddress              *string
-	clusterID               *string
-	clusterUUID             *string
-	includeRedHatAssociates *bool
-	subject                 *string
-	subscriptionID          *string
-	templateName            *string
+	bitmap_                 uint32
+	bccAddress              string
+	clusterID               string
+	clusterUUID             string
+	subject                 string
+	subscriptionID          string
+	templateName            string
 	templateParameters      []*TemplateParameterBuilder
+	includeRedHatAssociates bool
 }
 
 // NewSubscriptionNotify creates a new builder of 'subscription_notify' objects.
 func NewSubscriptionNotify() *SubscriptionNotifyBuilder {
-	return new(SubscriptionNotifyBuilder)
+	return &SubscriptionNotifyBuilder{}
 }
 
 // BccAddress sets the value of the 'bcc_address' attribute to the given value.
 //
 //
 func (b *SubscriptionNotifyBuilder) BccAddress(value string) *SubscriptionNotifyBuilder {
-	b.bccAddress = &value
+	b.bccAddress = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -51,7 +53,8 @@ func (b *SubscriptionNotifyBuilder) BccAddress(value string) *SubscriptionNotify
 //
 //
 func (b *SubscriptionNotifyBuilder) ClusterID(value string) *SubscriptionNotifyBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -59,7 +62,8 @@ func (b *SubscriptionNotifyBuilder) ClusterID(value string) *SubscriptionNotifyB
 //
 //
 func (b *SubscriptionNotifyBuilder) ClusterUUID(value string) *SubscriptionNotifyBuilder {
-	b.clusterUUID = &value
+	b.clusterUUID = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -67,7 +71,8 @@ func (b *SubscriptionNotifyBuilder) ClusterUUID(value string) *SubscriptionNotif
 //
 //
 func (b *SubscriptionNotifyBuilder) IncludeRedHatAssociates(value bool) *SubscriptionNotifyBuilder {
-	b.includeRedHatAssociates = &value
+	b.includeRedHatAssociates = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -75,7 +80,8 @@ func (b *SubscriptionNotifyBuilder) IncludeRedHatAssociates(value bool) *Subscri
 //
 //
 func (b *SubscriptionNotifyBuilder) Subject(value string) *SubscriptionNotifyBuilder {
-	b.subject = &value
+	b.subject = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -83,7 +89,8 @@ func (b *SubscriptionNotifyBuilder) Subject(value string) *SubscriptionNotifyBui
 //
 //
 func (b *SubscriptionNotifyBuilder) SubscriptionID(value string) *SubscriptionNotifyBuilder {
-	b.subscriptionID = &value
+	b.subscriptionID = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -91,7 +98,8 @@ func (b *SubscriptionNotifyBuilder) SubscriptionID(value string) *SubscriptionNo
 //
 //
 func (b *SubscriptionNotifyBuilder) TemplateName(value string) *SubscriptionNotifyBuilder {
-	b.templateName = &value
+	b.templateName = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -101,6 +109,7 @@ func (b *SubscriptionNotifyBuilder) TemplateName(value string) *SubscriptionNoti
 func (b *SubscriptionNotifyBuilder) TemplateParameters(values ...*TemplateParameterBuilder) *SubscriptionNotifyBuilder {
 	b.templateParameters = make([]*TemplateParameterBuilder, len(values))
 	copy(b.templateParameters, values)
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -109,6 +118,7 @@ func (b *SubscriptionNotifyBuilder) Copy(object *SubscriptionNotify) *Subscripti
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.bccAddress = object.bccAddress
 	b.clusterID = object.clusterID
 	b.clusterUUID = object.clusterUUID
@@ -130,6 +140,7 @@ func (b *SubscriptionNotifyBuilder) Copy(object *SubscriptionNotify) *Subscripti
 // Build creates a 'subscription_notify' object using the configuration stored in the builder.
 func (b *SubscriptionNotifyBuilder) Build() (object *SubscriptionNotify, err error) {
 	object = new(SubscriptionNotify)
+	object.bitmap_ = b.bitmap_
 	object.bccAddress = b.bccAddress
 	object.clusterID = b.clusterID
 	object.clusterUUID = b.clusterUUID

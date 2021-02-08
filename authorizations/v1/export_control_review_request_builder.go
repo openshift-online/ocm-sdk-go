@@ -23,19 +23,21 @@ package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 //
 //
 type ExportControlReviewRequestBuilder struct {
-	accountUsername *string
+	bitmap_         uint32
+	accountUsername string
 }
 
 // NewExportControlReviewRequest creates a new builder of 'export_control_review_request' objects.
 func NewExportControlReviewRequest() *ExportControlReviewRequestBuilder {
-	return new(ExportControlReviewRequestBuilder)
+	return &ExportControlReviewRequestBuilder{}
 }
 
 // AccountUsername sets the value of the 'account_username' attribute to the given value.
 //
 //
 func (b *ExportControlReviewRequestBuilder) AccountUsername(value string) *ExportControlReviewRequestBuilder {
-	b.accountUsername = &value
+	b.accountUsername = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,6 +46,7 @@ func (b *ExportControlReviewRequestBuilder) Copy(object *ExportControlReviewRequ
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.accountUsername = object.accountUsername
 	return b
 }
@@ -51,6 +54,7 @@ func (b *ExportControlReviewRequestBuilder) Copy(object *ExportControlReviewRequ
 // Build creates a 'export_control_review_request' object using the configuration stored in the builder.
 func (b *ExportControlReviewRequestBuilder) Build() (object *ExportControlReviewRequest, err error) {
 	object = new(ExportControlReviewRequest)
+	object.bitmap_ = b.bitmap_
 	object.accountUsername = b.accountUsername
 	return
 }

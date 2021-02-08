@@ -24,13 +24,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Representation of information from telemetry about the CPU capacity by node
 // role and OS of a cluster.
 type CPUTotalsNodeRoleOSMetricNode struct {
+	bitmap_   uint32
 	cpuTotals []*CPUTotalNodeRoleOSMetricNode
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *CPUTotalsNodeRoleOSMetricNode) Empty() bool {
-	return o == nil || (len(o.cpuTotals) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // CPUTotals returns the value of the 'CPU_totals' attribute, or
@@ -38,10 +38,10 @@ func (o *CPUTotalsNodeRoleOSMetricNode) Empty() bool {
 //
 //
 func (o *CPUTotalsNodeRoleOSMetricNode) CPUTotals() []*CPUTotalNodeRoleOSMetricNode {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.cpuTotals
 	}
-	return o.cpuTotals
+	return nil
 }
 
 // GetCPUTotals returns the value of the 'CPU_totals' attribute and
@@ -49,7 +49,7 @@ func (o *CPUTotalsNodeRoleOSMetricNode) CPUTotals() []*CPUTotalNodeRoleOSMetricN
 //
 //
 func (o *CPUTotalsNodeRoleOSMetricNode) GetCPUTotals() (value []*CPUTotalNodeRoleOSMetricNode, ok bool) {
-	ok = o != nil && o.cpuTotals != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.cpuTotals
 	}
@@ -70,7 +70,7 @@ const CPUTotalsNodeRoleOSMetricNodeListNilKind = "CPUTotalsNodeRoleOSMetricNodeL
 
 // CPUTotalsNodeRoleOSMetricNodeList is a list of values of the 'CPU_totals_node_role_OS_metric_node' type.
 type CPUTotalsNodeRoleOSMetricNodeList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*CPUTotalsNodeRoleOSMetricNode
 }

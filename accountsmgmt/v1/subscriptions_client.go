@@ -75,6 +75,17 @@ func (c *SubscriptionsClient) Post() *SubscriptionsPostRequest {
 	}
 }
 
+// Labels returns the target 'generic_labels' resource.
+//
+// Reference to the list of labels of a specific subscription.
+func (c *SubscriptionsClient) Labels() *GenericLabelsClient {
+	return NewGenericLabelsClient(
+		c.transport,
+		path.Join(c.path, "labels"),
+		path.Join(c.metric, "labels"),
+	)
+}
+
 // Subscription returns the target 'subscription' resource for the given identifier.
 //
 // Reference to the service that manages a specific subscription.

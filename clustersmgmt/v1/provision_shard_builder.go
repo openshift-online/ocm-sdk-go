@@ -23,36 +23,38 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Contains the properties of the provision shard, including AWS and GCP related configurations
 type ProvisionShardBuilder struct {
-	id                       *string
-	href                     *string
-	link                     bool
+	bitmap_                  uint32
+	id                       string
+	href                     string
 	awsAccountOperatorConfig *ServerConfigBuilder
-	awsBaseDomain            *string
-	gcpBaseDomain            *string
+	awsBaseDomain            string
+	gcpBaseDomain            string
 	gcpProjectOperator       *ServerConfigBuilder
 	hiveConfig               *ServerConfigBuilder
 }
 
 // NewProvisionShard creates a new builder of 'provision_shard' objects.
 func NewProvisionShard() *ProvisionShardBuilder {
-	return new(ProvisionShardBuilder)
+	return &ProvisionShardBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *ProvisionShardBuilder) Link(value bool) *ProvisionShardBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *ProvisionShardBuilder) ID(value string) *ProvisionShardBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *ProvisionShardBuilder) HREF(value string) *ProvisionShardBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *ProvisionShardBuilder) Link(value bool) *ProvisionShardBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -61,6 +63,11 @@ func (b *ProvisionShardBuilder) Link(value bool) *ProvisionShardBuilder {
 // Representation of a server config
 func (b *ProvisionShardBuilder) AWSAccountOperatorConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.awsAccountOperatorConfig = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -68,7 +75,8 @@ func (b *ProvisionShardBuilder) AWSAccountOperatorConfig(value *ServerConfigBuil
 //
 //
 func (b *ProvisionShardBuilder) AWSBaseDomain(value string) *ProvisionShardBuilder {
-	b.awsBaseDomain = &value
+	b.awsBaseDomain = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -76,7 +84,8 @@ func (b *ProvisionShardBuilder) AWSBaseDomain(value string) *ProvisionShardBuild
 //
 //
 func (b *ProvisionShardBuilder) GCPBaseDomain(value string) *ProvisionShardBuilder {
-	b.gcpBaseDomain = &value
+	b.gcpBaseDomain = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -85,6 +94,11 @@ func (b *ProvisionShardBuilder) GCPBaseDomain(value string) *ProvisionShardBuild
 // Representation of a server config
 func (b *ProvisionShardBuilder) GCPProjectOperator(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.gcpProjectOperator = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -93,6 +107,11 @@ func (b *ProvisionShardBuilder) GCPProjectOperator(value *ServerConfigBuilder) *
 // Representation of a server config
 func (b *ProvisionShardBuilder) HiveConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.hiveConfig = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
 	return b
 }
 
@@ -101,9 +120,9 @@ func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuil
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.awsAccountOperatorConfig != nil {
 		b.awsAccountOperatorConfig = NewServerConfig().Copy(object.awsAccountOperatorConfig)
 	} else {
@@ -129,7 +148,7 @@ func (b *ProvisionShardBuilder) Build() (object *ProvisionShard, err error) {
 	object = new(ProvisionShard)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.awsAccountOperatorConfig != nil {
 		object.awsAccountOperatorConfig, err = b.awsAccountOperatorConfig.Build()
 		if err != nil {

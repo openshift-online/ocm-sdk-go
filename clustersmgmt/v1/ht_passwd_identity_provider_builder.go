@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Details for `htpasswd` identity providers.
 type HTPasswdIdentityProviderBuilder struct {
-	password *string
-	username *string
+	bitmap_  uint32
+	password string
+	username string
 }
 
 // NewHTPasswdIdentityProvider creates a new builder of 'HT_passwd_identity_provider' objects.
 func NewHTPasswdIdentityProvider() *HTPasswdIdentityProviderBuilder {
-	return new(HTPasswdIdentityProviderBuilder)
+	return &HTPasswdIdentityProviderBuilder{}
 }
 
 // Password sets the value of the 'password' attribute to the given value.
 //
 //
 func (b *HTPasswdIdentityProviderBuilder) Password(value string) *HTPasswdIdentityProviderBuilder {
-	b.password = &value
+	b.password = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *HTPasswdIdentityProviderBuilder) Password(value string) *HTPasswdIdenti
 //
 //
 func (b *HTPasswdIdentityProviderBuilder) Username(value string) *HTPasswdIdentityProviderBuilder {
-	b.username = &value
+	b.username = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *HTPasswdIdentityProviderBuilder) Copy(object *HTPasswdIdentityProvider)
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.password = object.password
 	b.username = object.username
 	return b
@@ -61,6 +65,7 @@ func (b *HTPasswdIdentityProviderBuilder) Copy(object *HTPasswdIdentityProvider)
 // Build creates a 'HT_passwd_identity_provider' object using the configuration stored in the builder.
 func (b *HTPasswdIdentityProviderBuilder) Build() (object *HTPasswdIdentityProvider, err error) {
 	object = new(HTPasswdIdentityProvider)
+	object.bitmap_ = b.bitmap_
 	object.password = b.password
 	object.username = b.username
 	return

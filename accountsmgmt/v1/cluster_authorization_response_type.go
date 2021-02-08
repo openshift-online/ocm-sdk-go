@@ -23,16 +23,15 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterAuthorizationResponse struct {
-	allowed         *bool
+	bitmap_         uint32
 	excessResources []*ReservedResource
 	subscription    *Subscription
+	allowed         bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterAuthorizationResponse) Empty() bool {
-	return o == nil || (o.allowed == nil &&
-		len(o.excessResources) == 0 &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Allowed returns the value of the 'allowed' attribute, or
@@ -40,8 +39,8 @@ func (o *ClusterAuthorizationResponse) Empty() bool {
 //
 //
 func (o *ClusterAuthorizationResponse) Allowed() bool {
-	if o != nil && o.allowed != nil {
-		return *o.allowed
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.allowed
 	}
 	return false
 }
@@ -51,9 +50,9 @@ func (o *ClusterAuthorizationResponse) Allowed() bool {
 //
 //
 func (o *ClusterAuthorizationResponse) GetAllowed() (value bool, ok bool) {
-	ok = o != nil && o.allowed != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.allowed
+		value = o.allowed
 	}
 	return
 }
@@ -63,10 +62,10 @@ func (o *ClusterAuthorizationResponse) GetAllowed() (value bool, ok bool) {
 //
 //
 func (o *ClusterAuthorizationResponse) ExcessResources() []*ReservedResource {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.excessResources
 	}
-	return o.excessResources
+	return nil
 }
 
 // GetExcessResources returns the value of the 'excess_resources' attribute and
@@ -74,7 +73,7 @@ func (o *ClusterAuthorizationResponse) ExcessResources() []*ReservedResource {
 //
 //
 func (o *ClusterAuthorizationResponse) GetExcessResources() (value []*ReservedResource, ok bool) {
-	ok = o != nil && o.excessResources != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.excessResources
 	}
@@ -86,10 +85,10 @@ func (o *ClusterAuthorizationResponse) GetExcessResources() (value []*ReservedRe
 //
 //
 func (o *ClusterAuthorizationResponse) Subscription() *Subscription {
-	if o == nil {
-		return nil
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.subscription
 	}
-	return o.subscription
+	return nil
 }
 
 // GetSubscription returns the value of the 'subscription' attribute and
@@ -97,7 +96,7 @@ func (o *ClusterAuthorizationResponse) Subscription() *Subscription {
 //
 //
 func (o *ClusterAuthorizationResponse) GetSubscription() (value *Subscription, ok bool) {
-	ok = o != nil && o.subscription != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.subscription
 	}
@@ -118,7 +117,7 @@ const ClusterAuthorizationResponseListNilKind = "ClusterAuthorizationResponseLis
 
 // ClusterAuthorizationResponseList is a list of values of the 'cluster_authorization_response' type.
 type ClusterAuthorizationResponseList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*ClusterAuthorizationResponse
 }

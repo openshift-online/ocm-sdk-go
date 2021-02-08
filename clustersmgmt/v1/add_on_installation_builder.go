@@ -27,39 +27,41 @@ import (
 //
 // Representation of an add-on installation in a cluster.
 type AddOnInstallationBuilder struct {
-	id                *string
-	href              *string
-	link              bool
+	bitmap_           uint32
+	id                string
+	href              string
 	addon             *AddOnBuilder
 	cluster           *ClusterBuilder
-	creationTimestamp *time.Time
-	operatorVersion   *string
+	creationTimestamp time.Time
+	operatorVersion   string
 	parameters        *AddOnInstallationParameterListBuilder
-	state             *AddOnInstallationState
-	stateDescription  *string
-	updatedTimestamp  *time.Time
+	state             AddOnInstallationState
+	stateDescription  string
+	updatedTimestamp  time.Time
 }
 
 // NewAddOnInstallation creates a new builder of 'add_on_installation' objects.
 func NewAddOnInstallation() *AddOnInstallationBuilder {
-	return new(AddOnInstallationBuilder)
+	return &AddOnInstallationBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *AddOnInstallationBuilder) Link(value bool) *AddOnInstallationBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *AddOnInstallationBuilder) ID(value string) *AddOnInstallationBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *AddOnInstallationBuilder) HREF(value string) *AddOnInstallationBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *AddOnInstallationBuilder) Link(value bool) *AddOnInstallationBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -68,6 +70,11 @@ func (b *AddOnInstallationBuilder) Link(value bool) *AddOnInstallationBuilder {
 // Representation of an add-on that can be installed in a cluster.
 func (b *AddOnInstallationBuilder) Addon(value *AddOnBuilder) *AddOnInstallationBuilder {
 	b.addon = value
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -112,6 +119,11 @@ func (b *AddOnInstallationBuilder) Addon(value *AddOnBuilder) *AddOnInstallation
 // Services account.
 func (b *AddOnInstallationBuilder) Cluster(value *ClusterBuilder) *AddOnInstallationBuilder {
 	b.cluster = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
+	}
 	return b
 }
 
@@ -119,7 +131,8 @@ func (b *AddOnInstallationBuilder) Cluster(value *ClusterBuilder) *AddOnInstalla
 //
 //
 func (b *AddOnInstallationBuilder) CreationTimestamp(value time.Time) *AddOnInstallationBuilder {
-	b.creationTimestamp = &value
+	b.creationTimestamp = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -127,7 +140,8 @@ func (b *AddOnInstallationBuilder) CreationTimestamp(value time.Time) *AddOnInst
 //
 //
 func (b *AddOnInstallationBuilder) OperatorVersion(value string) *AddOnInstallationBuilder {
-	b.operatorVersion = &value
+	b.operatorVersion = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -136,6 +150,7 @@ func (b *AddOnInstallationBuilder) OperatorVersion(value string) *AddOnInstallat
 //
 func (b *AddOnInstallationBuilder) Parameters(value *AddOnInstallationParameterListBuilder) *AddOnInstallationBuilder {
 	b.parameters = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -143,7 +158,8 @@ func (b *AddOnInstallationBuilder) Parameters(value *AddOnInstallationParameterL
 //
 // Representation of an add-on installation State field.
 func (b *AddOnInstallationBuilder) State(value AddOnInstallationState) *AddOnInstallationBuilder {
-	b.state = &value
+	b.state = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -151,7 +167,8 @@ func (b *AddOnInstallationBuilder) State(value AddOnInstallationState) *AddOnIns
 //
 //
 func (b *AddOnInstallationBuilder) StateDescription(value string) *AddOnInstallationBuilder {
-	b.stateDescription = &value
+	b.stateDescription = value
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -159,7 +176,8 @@ func (b *AddOnInstallationBuilder) StateDescription(value string) *AddOnInstalla
 //
 //
 func (b *AddOnInstallationBuilder) UpdatedTimestamp(value time.Time) *AddOnInstallationBuilder {
-	b.updatedTimestamp = &value
+	b.updatedTimestamp = value
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -168,9 +186,9 @@ func (b *AddOnInstallationBuilder) Copy(object *AddOnInstallation) *AddOnInstall
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	if object.addon != nil {
 		b.addon = NewAddOn().Copy(object.addon)
 	} else {
@@ -199,7 +217,7 @@ func (b *AddOnInstallationBuilder) Build() (object *AddOnInstallation, err error
 	object = new(AddOnInstallation)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	if b.addon != nil {
 		object.addon, err = b.addon.Build()
 		if err != nil {

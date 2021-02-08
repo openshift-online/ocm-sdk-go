@@ -23,33 +23,35 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of a label in clusterdeployment.
 type LabelBuilder struct {
-	id    *string
-	href  *string
-	link  bool
-	key   *string
-	value *string
+	bitmap_ uint32
+	id      string
+	href    string
+	key     string
+	value   string
 }
 
 // NewLabel creates a new builder of 'label' objects.
 func NewLabel() *LabelBuilder {
-	return new(LabelBuilder)
+	return &LabelBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *LabelBuilder) Link(value bool) *LabelBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *LabelBuilder) ID(value string) *LabelBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *LabelBuilder) HREF(value string) *LabelBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *LabelBuilder) Link(value bool) *LabelBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -57,7 +59,8 @@ func (b *LabelBuilder) Link(value bool) *LabelBuilder {
 //
 //
 func (b *LabelBuilder) Key(value string) *LabelBuilder {
-	b.key = &value
+	b.key = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -65,7 +68,8 @@ func (b *LabelBuilder) Key(value string) *LabelBuilder {
 //
 //
 func (b *LabelBuilder) Value(value string) *LabelBuilder {
-	b.value = &value
+	b.value = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,9 +78,9 @@ func (b *LabelBuilder) Copy(object *Label) *LabelBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.key = object.key
 	b.value = object.value
 	return b
@@ -87,7 +91,7 @@ func (b *LabelBuilder) Build() (object *Label, err error) {
 	object = new(Label)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.key = b.key
 	object.value = b.value
 	return

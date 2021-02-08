@@ -23,20 +23,22 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type ClusterRegistrationRequestBuilder struct {
-	authorizationToken *string
-	clusterID          *string
+	bitmap_            uint32
+	authorizationToken string
+	clusterID          string
 }
 
 // NewClusterRegistrationRequest creates a new builder of 'cluster_registration_request' objects.
 func NewClusterRegistrationRequest() *ClusterRegistrationRequestBuilder {
-	return new(ClusterRegistrationRequestBuilder)
+	return &ClusterRegistrationRequestBuilder{}
 }
 
 // AuthorizationToken sets the value of the 'authorization_token' attribute to the given value.
 //
 //
 func (b *ClusterRegistrationRequestBuilder) AuthorizationToken(value string) *ClusterRegistrationRequestBuilder {
-	b.authorizationToken = &value
+	b.authorizationToken = value
+	b.bitmap_ |= 1
 	return b
 }
 
@@ -44,7 +46,8 @@ func (b *ClusterRegistrationRequestBuilder) AuthorizationToken(value string) *Cl
 //
 //
 func (b *ClusterRegistrationRequestBuilder) ClusterID(value string) *ClusterRegistrationRequestBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -53,6 +56,7 @@ func (b *ClusterRegistrationRequestBuilder) Copy(object *ClusterRegistrationRequ
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.authorizationToken = object.authorizationToken
 	b.clusterID = object.clusterID
 	return b
@@ -61,6 +65,7 @@ func (b *ClusterRegistrationRequestBuilder) Copy(object *ClusterRegistrationRequ
 // Build creates a 'cluster_registration_request' object using the configuration stored in the builder.
 func (b *ClusterRegistrationRequestBuilder) Build() (object *ClusterRegistrationRequest, err error) {
 	object = new(ClusterRegistrationRequest)
+	object.bitmap_ = b.bitmap_
 	object.authorizationToken = b.authorizationToken
 	object.clusterID = b.clusterID
 	return

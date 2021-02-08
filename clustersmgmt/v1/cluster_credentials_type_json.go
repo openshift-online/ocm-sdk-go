@@ -39,33 +39,32 @@ func MarshalClusterCredentials(object *ClusterCredentials, writer io.Writer) err
 func writeClusterCredentials(object *ClusterCredentials, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if count > 0 {
-		stream.WriteMore()
-	}
 	stream.WriteObjectField("kind")
-	if object.link {
+	if object.bitmap_&1 != 0 {
 		stream.WriteString(ClusterCredentialsLinkKind)
 	} else {
 		stream.WriteString(ClusterCredentialsKind)
 	}
 	count++
-	if object.id != nil {
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("id")
-		stream.WriteString(*object.id)
+		stream.WriteString(object.id)
 		count++
 	}
-	if object.href != nil {
+	if object.bitmap_&4 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
-		stream.WriteString(*object.href)
+		stream.WriteString(object.href)
 		count++
 	}
-	if object.ssh != nil {
+	var present_ bool
+	present_ = object.bitmap_&8 != 0 && object.ssh != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -73,7 +72,8 @@ func writeClusterCredentials(object *ClusterCredentials, stream *jsoniter.Stream
 		writeSSHCredentials(object.ssh, stream)
 		count++
 	}
-	if object.admin != nil {
+	present_ = object.bitmap_&16 != 0 && object.admin != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -81,12 +81,13 @@ func writeClusterCredentials(object *ClusterCredentials, stream *jsoniter.Stream
 		writeAdminCredentials(object.admin, stream)
 		count++
 	}
-	if object.kubeconfig != nil {
+	present_ = object.bitmap_&32 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("kubeconfig")
-		stream.WriteString(*object.kubeconfig)
+		stream.WriteString(object.kubeconfig)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -118,22 +119,27 @@ func readClusterCredentials(iterator *jsoniter.Iterator) *ClusterCredentials {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			object.link = value == ClusterCredentialsLinkKind
+			if value == ClusterCredentialsLinkKind {
+				object.bitmap_ |= 1
+			}
 		case "id":
-			value := iterator.ReadString()
-			object.id = &value
+			object.id = iterator.ReadString()
+			object.bitmap_ |= 2
 		case "href":
-			value := iterator.ReadString()
-			object.href = &value
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "ssh":
 			value := readSSHCredentials(iterator)
 			object.ssh = value
+			object.bitmap_ |= 8
 		case "admin":
 			value := readAdminCredentials(iterator)
 			object.admin = value
+			object.bitmap_ |= 16
 		case "kubeconfig":
 			value := iterator.ReadString()
-			object.kubeconfig = &value
+			object.kubeconfig = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}

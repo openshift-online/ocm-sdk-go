@@ -23,34 +23,36 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 //
 //
 type PlanBuilder struct {
-	id       *string
-	href     *string
-	link     bool
-	category *string
-	name     *string
-	type_    *string
+	bitmap_  uint32
+	id       string
+	href     string
+	category string
+	name     string
+	type_    string
 }
 
 // NewPlan creates a new builder of 'plan' objects.
 func NewPlan() *PlanBuilder {
-	return new(PlanBuilder)
+	return &PlanBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *PlanBuilder) Link(value bool) *PlanBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *PlanBuilder) ID(value string) *PlanBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *PlanBuilder) HREF(value string) *PlanBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *PlanBuilder) Link(value bool) *PlanBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -58,7 +60,8 @@ func (b *PlanBuilder) Link(value bool) *PlanBuilder {
 //
 //
 func (b *PlanBuilder) Category(value string) *PlanBuilder {
-	b.category = &value
+	b.category = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -66,7 +69,8 @@ func (b *PlanBuilder) Category(value string) *PlanBuilder {
 //
 //
 func (b *PlanBuilder) Name(value string) *PlanBuilder {
-	b.name = &value
+	b.name = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -74,7 +78,8 @@ func (b *PlanBuilder) Name(value string) *PlanBuilder {
 //
 //
 func (b *PlanBuilder) Type(value string) *PlanBuilder {
-	b.type_ = &value
+	b.type_ = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -83,9 +88,9 @@ func (b *PlanBuilder) Copy(object *Plan) *PlanBuilder {
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.category = object.category
 	b.name = object.name
 	b.type_ = object.type_
@@ -97,7 +102,7 @@ func (b *PlanBuilder) Build() (object *Plan, err error) {
 	object = new(Plan)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.category = b.category
 	object.name = b.name
 	object.type_ = b.type_

@@ -27,37 +27,39 @@ import (
 //
 // Representation of an upgrade policy that can be set for a cluster.
 type UpgradePolicyBuilder struct {
-	id           *string
-	href         *string
-	link         bool
-	clusterID    *string
-	nextRun      *time.Time
-	schedule     *string
-	scheduleType *string
-	upgradeType  *string
-	version      *string
+	bitmap_      uint32
+	id           string
+	href         string
+	clusterID    string
+	nextRun      time.Time
+	schedule     string
+	scheduleType string
+	upgradeType  string
+	version      string
 }
 
 // NewUpgradePolicy creates a new builder of 'upgrade_policy' objects.
 func NewUpgradePolicy() *UpgradePolicyBuilder {
-	return new(UpgradePolicyBuilder)
+	return &UpgradePolicyBuilder{}
+}
+
+// Link sets the flag that indicates if this is a link.
+func (b *UpgradePolicyBuilder) Link(value bool) *UpgradePolicyBuilder {
+	b.bitmap_ |= 1
+	return b
 }
 
 // ID sets the identifier of the object.
 func (b *UpgradePolicyBuilder) ID(value string) *UpgradePolicyBuilder {
-	b.id = &value
+	b.id = value
+	b.bitmap_ |= 2
 	return b
 }
 
 // HREF sets the link to the object.
 func (b *UpgradePolicyBuilder) HREF(value string) *UpgradePolicyBuilder {
-	b.href = &value
-	return b
-}
-
-// Link sets the flag that indicates if this is a link.
-func (b *UpgradePolicyBuilder) Link(value bool) *UpgradePolicyBuilder {
-	b.link = value
+	b.href = value
+	b.bitmap_ |= 4
 	return b
 }
 
@@ -65,7 +67,8 @@ func (b *UpgradePolicyBuilder) Link(value bool) *UpgradePolicyBuilder {
 //
 //
 func (b *UpgradePolicyBuilder) ClusterID(value string) *UpgradePolicyBuilder {
-	b.clusterID = &value
+	b.clusterID = value
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -73,7 +76,8 @@ func (b *UpgradePolicyBuilder) ClusterID(value string) *UpgradePolicyBuilder {
 //
 //
 func (b *UpgradePolicyBuilder) NextRun(value time.Time) *UpgradePolicyBuilder {
-	b.nextRun = &value
+	b.nextRun = value
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -81,7 +85,8 @@ func (b *UpgradePolicyBuilder) NextRun(value time.Time) *UpgradePolicyBuilder {
 //
 //
 func (b *UpgradePolicyBuilder) Schedule(value string) *UpgradePolicyBuilder {
-	b.schedule = &value
+	b.schedule = value
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -89,7 +94,8 @@ func (b *UpgradePolicyBuilder) Schedule(value string) *UpgradePolicyBuilder {
 //
 //
 func (b *UpgradePolicyBuilder) ScheduleType(value string) *UpgradePolicyBuilder {
-	b.scheduleType = &value
+	b.scheduleType = value
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -97,7 +103,8 @@ func (b *UpgradePolicyBuilder) ScheduleType(value string) *UpgradePolicyBuilder 
 //
 //
 func (b *UpgradePolicyBuilder) UpgradeType(value string) *UpgradePolicyBuilder {
-	b.upgradeType = &value
+	b.upgradeType = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -105,7 +112,8 @@ func (b *UpgradePolicyBuilder) UpgradeType(value string) *UpgradePolicyBuilder {
 //
 //
 func (b *UpgradePolicyBuilder) Version(value string) *UpgradePolicyBuilder {
-	b.version = &value
+	b.version = value
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -114,9 +122,9 @@ func (b *UpgradePolicyBuilder) Copy(object *UpgradePolicy) *UpgradePolicyBuilder
 	if object == nil {
 		return b
 	}
+	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.link = object.link
 	b.clusterID = object.clusterID
 	b.nextRun = object.nextRun
 	b.schedule = object.schedule
@@ -131,7 +139,7 @@ func (b *UpgradePolicyBuilder) Build() (object *UpgradePolicy, err error) {
 	object = new(UpgradePolicy)
 	object.id = b.id
 	object.href = b.href
-	object.link = b.link
+	object.bitmap_ = b.bitmap_
 	object.clusterID = b.clusterID
 	object.nextRun = b.nextRun
 	object.schedule = b.schedule

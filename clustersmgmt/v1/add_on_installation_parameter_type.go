@@ -35,10 +35,10 @@ const AddOnInstallationParameterNilKind = "AddOnInstallationParameterNil"
 //
 // Representation of an add-on installation parameter.
 type AddOnInstallationParameter struct {
-	id    *string
-	href  *string
-	link  bool
-	value *string
+	bitmap_ uint32
+	id      string
+	href    string
+	value   string
 }
 
 // Kind returns the name of the type of the object.
@@ -46,16 +46,21 @@ func (o *AddOnInstallationParameter) Kind() string {
 	if o == nil {
 		return AddOnInstallationParameterNilKind
 	}
-	if o.link {
+	if o.bitmap_&1 != 0 {
 		return AddOnInstallationParameterLinkKind
 	}
 	return AddOnInstallationParameterKind
 }
 
+// Link returns true iif this is a link.
+func (o *AddOnInstallationParameter) Link() bool {
+	return o != nil && o.bitmap_&1 != 0
+}
+
 // ID returns the identifier of the object.
 func (o *AddOnInstallationParameter) ID() string {
-	if o != nil && o.id != nil {
-		return *o.id
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
 	}
 	return ""
 }
@@ -63,22 +68,17 @@ func (o *AddOnInstallationParameter) ID() string {
 // GetID returns the identifier of the object and a flag indicating if the
 // identifier has a value.
 func (o *AddOnInstallationParameter) GetID() (value string, ok bool) {
-	ok = o != nil && o.id != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.id
+		value = o.id
 	}
 	return
 }
 
-// Link returns true iif this is a link.
-func (o *AddOnInstallationParameter) Link() bool {
-	return o != nil && o.link
-}
-
 // HREF returns the link to the object.
 func (o *AddOnInstallationParameter) HREF() string {
-	if o != nil && o.href != nil {
-		return *o.href
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.href
 	}
 	return ""
 }
@@ -86,18 +86,16 @@ func (o *AddOnInstallationParameter) HREF() string {
 // GetHREF returns the link of the object and a flag indicating if the
 // link has a value.
 func (o *AddOnInstallationParameter) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.href != nil
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
-		value = *o.href
+		value = o.href
 	}
 	return
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AddOnInstallationParameter) Empty() bool {
-	return o == nil || (o.id == nil &&
-		o.value == nil &&
-		true)
+	return o == nil || o.bitmap_&^1 == 0
 }
 
 // Value returns the value of the 'value' attribute, or
@@ -105,8 +103,8 @@ func (o *AddOnInstallationParameter) Empty() bool {
 //
 // Value of the parameter.
 func (o *AddOnInstallationParameter) Value() string {
-	if o != nil && o.value != nil {
-		return *o.value
+	if o != nil && o.bitmap_&8 != 0 {
+		return o.value
 	}
 	return ""
 }
@@ -116,9 +114,9 @@ func (o *AddOnInstallationParameter) Value() string {
 //
 // Value of the parameter.
 func (o *AddOnInstallationParameter) GetValue() (value string, ok bool) {
-	ok = o != nil && o.value != nil
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = *o.value
+		value = o.value
 	}
 	return
 }
@@ -137,7 +135,7 @@ const AddOnInstallationParameterListNilKind = "AddOnInstallationParameterListNil
 
 // AddOnInstallationParameterList is a list of values of the 'add_on_installation_parameter' type.
 type AddOnInstallationParameterList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AddOnInstallationParameter
 }
@@ -160,8 +158,8 @@ func (l *AddOnInstallationParameterList) Link() bool {
 
 // HREF returns the link to the list.
 func (l *AddOnInstallationParameterList) HREF() string {
-	if l != nil && l.href != nil {
-		return *l.href
+	if l != nil {
+		return l.href
 	}
 	return ""
 }
@@ -169,9 +167,9 @@ func (l *AddOnInstallationParameterList) HREF() string {
 // GetHREF returns the link of the list and a flag indicating if the
 // link has a value.
 func (l *AddOnInstallationParameterList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != nil
+	ok = l != nil && l.href != ""
 	if ok {
-		value = *l.href
+		value = l.href
 	}
 	return
 }

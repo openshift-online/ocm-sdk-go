@@ -39,15 +39,18 @@ func MarshalSummaryMetrics(object *SummaryMetrics, writer io.Writer) error {
 func writeSummaryMetrics(object *SummaryMetrics, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	if object.name != nil {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("name")
-		stream.WriteString(*object.name)
+		stream.WriteString(object.name)
 		count++
 	}
-	if object.vector != nil {
+	present_ = object.bitmap_&2 != 0 && object.vector != nil
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -84,10 +87,12 @@ func readSummaryMetrics(iterator *jsoniter.Iterator) *SummaryMetrics {
 		switch field {
 		case "name":
 			value := iterator.ReadString()
-			object.name = &value
+			object.name = value
+			object.bitmap_ |= 1
 		case "vector":
 			value := readSummarySampleList(iterator)
 			object.vector = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

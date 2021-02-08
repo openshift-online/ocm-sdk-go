@@ -24,15 +24,14 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Temporary administrator credentials generated during the installation of the
 // cluster.
 type AdminCredentials struct {
-	password *string
-	user     *string
+	bitmap_  uint32
+	password string
+	user     string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *AdminCredentials) Empty() bool {
-	return o == nil || (o.password == nil &&
-		o.user == nil &&
-		true)
+	return o == nil || o.bitmap_ == 0
 }
 
 // Password returns the value of the 'password' attribute, or
@@ -40,8 +39,8 @@ func (o *AdminCredentials) Empty() bool {
 //
 // Cluster administrator password.
 func (o *AdminCredentials) Password() string {
-	if o != nil && o.password != nil {
-		return *o.password
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.password
 	}
 	return ""
 }
@@ -51,9 +50,9 @@ func (o *AdminCredentials) Password() string {
 //
 // Cluster administrator password.
 func (o *AdminCredentials) GetPassword() (value string, ok bool) {
-	ok = o != nil && o.password != nil
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = *o.password
+		value = o.password
 	}
 	return
 }
@@ -63,8 +62,8 @@ func (o *AdminCredentials) GetPassword() (value string, ok bool) {
 //
 // Cluster administrator user name.
 func (o *AdminCredentials) User() string {
-	if o != nil && o.user != nil {
-		return *o.user
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.user
 	}
 	return ""
 }
@@ -74,9 +73,9 @@ func (o *AdminCredentials) User() string {
 //
 // Cluster administrator user name.
 func (o *AdminCredentials) GetUser() (value string, ok bool) {
-	ok = o != nil && o.user != nil
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = *o.user
+		value = o.user
 	}
 	return
 }
@@ -95,7 +94,7 @@ const AdminCredentialsListNilKind = "AdminCredentialsListNil"
 
 // AdminCredentialsList is a list of values of the 'admin_credentials' type.
 type AdminCredentialsList struct {
-	href  *string
+	href  string
 	link  bool
 	items []*AdminCredentials
 }
