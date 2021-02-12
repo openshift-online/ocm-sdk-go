@@ -39,17 +39,15 @@ import (
 type FlavourClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewFlavourClient creates a new client for the 'flavour'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewFlavourClient(transport http.RoundTripper, path string, metric string) *FlavourClient {
+func NewFlavourClient(transport http.RoundTripper, path string) *FlavourClient {
 	return &FlavourClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *FlavourClient) Get() *FlavourGetRequest {
 	return &FlavourGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -77,7 +74,6 @@ func (c *FlavourClient) Update() *FlavourUpdateRequest {
 	return &FlavourUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -206,7 +202,6 @@ func (c *FlavourClient) Poll() *FlavourPollRequest {
 type FlavourGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -234,7 +229,7 @@ func (r *FlavourGetRequest) Send() (result *FlavourGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *FlavourGetRequest) SendContext(ctx context.Context) (result *FlavourGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -328,7 +323,6 @@ func (r *FlavourGetResponse) GetBody() (value *Flavour, ok bool) {
 type FlavourUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Flavour
@@ -365,7 +359,7 @@ func (r *FlavourUpdateRequest) Send() (result *FlavourUpdateResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *FlavourUpdateRequest) SendContext(ctx context.Context) (result *FlavourUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeFlavourUpdateRequest(r, buffer)
 	if err != nil {

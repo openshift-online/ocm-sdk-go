@@ -39,17 +39,15 @@ import (
 type SyncsetsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSyncsetsClient creates a new client for the 'syncsets'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSyncsetsClient(transport http.RoundTripper, path string, metric string) *SyncsetsClient {
+func NewSyncsetsClient(transport http.RoundTripper, path string) *SyncsetsClient {
 	return &SyncsetsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *SyncsetsClient) Add() *SyncsetsAddRequest {
 	return &SyncsetsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *SyncsetsClient) List() *SyncsetsListRequest {
 	return &SyncsetsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *SyncsetsClient) Syncset(id string) *SyncsetClient {
 	return NewSyncsetClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *SyncsetsClient) Syncset(id string) *SyncsetClient {
 type SyncsetsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Syncset
@@ -127,7 +121,7 @@ func (r *SyncsetsAddRequest) Send() (result *SyncsetsAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SyncsetsAddRequest) SendContext(ctx context.Context) (result *SyncsetsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeSyncsetsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *SyncsetsAddResponse) GetBody() (value *Syncset, ok bool) {
 type SyncsetsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -289,7 +282,7 @@ func (r *SyncsetsListRequest) SendContext(ctx context.Context) (result *Syncsets
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

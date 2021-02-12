@@ -35,17 +35,15 @@ import (
 type CurrentAccountClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewCurrentAccountClient creates a new client for the 'current_account'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewCurrentAccountClient(transport http.RoundTripper, path string, metric string) *CurrentAccountClient {
+func NewCurrentAccountClient(transport http.RoundTripper, path string) *CurrentAccountClient {
 	return &CurrentAccountClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *CurrentAccountClient) Get() *CurrentAccountGetRequest {
 	return &CurrentAccountGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *CurrentAccountClient) Poll() *CurrentAccountPollRequest {
 type CurrentAccountGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *CurrentAccountGetRequest) Send() (result *CurrentAccountGetResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CurrentAccountGetRequest) SendContext(ctx context.Context) (result *CurrentAccountGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

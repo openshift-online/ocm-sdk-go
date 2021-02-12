@@ -34,17 +34,15 @@ import (
 type QuotaSummaryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewQuotaSummaryClient creates a new client for the 'quota_summary'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewQuotaSummaryClient(transport http.RoundTripper, path string, metric string) *QuotaSummaryClient {
+func NewQuotaSummaryClient(transport http.RoundTripper, path string) *QuotaSummaryClient {
 	return &QuotaSummaryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -55,7 +53,6 @@ func (c *QuotaSummaryClient) List() *QuotaSummaryListRequest {
 	return &QuotaSummaryListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -63,7 +60,6 @@ func (c *QuotaSummaryClient) List() *QuotaSummaryListRequest {
 type QuotaSummaryListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -141,7 +137,7 @@ func (r *QuotaSummaryListRequest) SendContext(ctx context.Context) (result *Quot
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

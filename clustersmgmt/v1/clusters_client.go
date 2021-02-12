@@ -39,17 +39,15 @@ import (
 type ClustersClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClustersClient creates a new client for the 'clusters'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClustersClient(transport http.RoundTripper, path string, metric string) *ClustersClient {
+func NewClustersClient(transport http.RoundTripper, path string) *ClustersClient {
 	return &ClustersClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -62,7 +60,6 @@ func (c *ClustersClient) Add() *ClustersAddRequest {
 	return &ClustersAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -73,7 +70,6 @@ func (c *ClustersClient) List() *ClustersListRequest {
 	return &ClustersListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -84,7 +80,6 @@ func (c *ClustersClient) Cluster(id string) *ClusterClient {
 	return NewClusterClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -92,7 +87,6 @@ func (c *ClustersClient) Cluster(id string) *ClusterClient {
 type ClustersAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Cluster
@@ -129,7 +123,7 @@ func (r *ClustersAddRequest) Send() (result *ClustersAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClustersAddRequest) SendContext(ctx context.Context) (result *ClustersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeClustersAddRequest(r, buffer)
 	if err != nil {
@@ -239,7 +233,6 @@ func (r *ClustersAddResponse) GetBody() (value *Cluster, ok bool) {
 type ClustersListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	order     *string
@@ -342,7 +335,7 @@ func (r *ClustersListRequest) SendContext(ctx context.Context) (result *Clusters
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

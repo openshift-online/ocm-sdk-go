@@ -35,17 +35,15 @@ import (
 type SKUClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSKUClient creates a new client for the 'SKU'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSKUClient(transport http.RoundTripper, path string, metric string) *SKUClient {
+func NewSKUClient(transport http.RoundTripper, path string) *SKUClient {
 	return &SKUClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *SKUClient) Get() *SKUGetRequest {
 	return &SKUGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *SKUClient) Poll() *SKUPollRequest {
 type SKUGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *SKUGetRequest) Send() (result *SKUGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SKUGetRequest) SendContext(ctx context.Context) (result *SKUGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

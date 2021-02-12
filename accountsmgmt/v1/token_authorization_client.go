@@ -38,17 +38,15 @@ import (
 type TokenAuthorizationClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewTokenAuthorizationClient creates a new client for the 'token_authorization'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewTokenAuthorizationClient(transport http.RoundTripper, path string, metric string) *TokenAuthorizationClient {
+func NewTokenAuthorizationClient(transport http.RoundTripper, path string) *TokenAuthorizationClient {
 	return &TokenAuthorizationClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -59,7 +57,6 @@ func (c *TokenAuthorizationClient) Post() *TokenAuthorizationPostRequest {
 	return &TokenAuthorizationPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *TokenAuthorizationClient) Post() *TokenAuthorizationPostRequest {
 type TokenAuthorizationPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *TokenAuthorizationRequest
@@ -104,7 +100,7 @@ func (r *TokenAuthorizationPostRequest) Send() (result *TokenAuthorizationPostRe
 // SendContext sends this request, waits for the response, and returns it.
 func (r *TokenAuthorizationPostRequest) SendContext(ctx context.Context) (result *TokenAuthorizationPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeTokenAuthorizationPostRequest(r, buffer)
 	if err != nil {

@@ -30,17 +30,15 @@ import (
 type Client struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClient creates a new client for the 'root'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClient(transport http.RoundTripper, path string, metric string) *Client {
+func NewClient(transport http.RoundTripper, path string) *Client {
 	return &Client{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -49,7 +47,6 @@ func (c *Client) Get() *MetadataRequest {
 	return &MetadataRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -61,7 +58,6 @@ func (c *Client) AWSInfrastructureAccessRoles() *AWSInfrastructureAccessRolesCli
 	return NewAWSInfrastructureAccessRolesClient(
 		c.transport,
 		path.Join(c.path, "aws_infrastructure_access_roles"),
-		path.Join(c.metric, "aws_infrastructure_access_roles"),
 	)
 }
 
@@ -72,7 +68,6 @@ func (c *Client) Addons() *AddOnsClient {
 	return NewAddOnsClient(
 		c.transport,
 		path.Join(c.path, "addons"),
-		path.Join(c.metric, "addons"),
 	)
 }
 
@@ -83,7 +78,6 @@ func (c *Client) CloudProviders() *CloudProvidersClient {
 	return NewCloudProvidersClient(
 		c.transport,
 		path.Join(c.path, "cloud_providers"),
-		path.Join(c.metric, "cloud_providers"),
 	)
 }
 
@@ -94,7 +88,6 @@ func (c *Client) Clusters() *ClustersClient {
 	return NewClustersClient(
 		c.transport,
 		path.Join(c.path, "clusters"),
-		path.Join(c.metric, "clusters"),
 	)
 }
 
@@ -105,7 +98,6 @@ func (c *Client) Dashboards() *DashboardsClient {
 	return NewDashboardsClient(
 		c.transport,
 		path.Join(c.path, "dashboards"),
-		path.Join(c.metric, "dashboards"),
 	)
 }
 
@@ -116,7 +108,6 @@ func (c *Client) Flavours() *FlavoursClient {
 	return NewFlavoursClient(
 		c.transport,
 		path.Join(c.path, "flavours"),
-		path.Join(c.metric, "flavours"),
 	)
 }
 
@@ -127,7 +118,6 @@ func (c *Client) MachineTypes() *MachineTypesClient {
 	return NewMachineTypesClient(
 		c.transport,
 		path.Join(c.path, "machine_types"),
-		path.Join(c.metric, "machine_types"),
 	)
 }
 
@@ -138,7 +128,6 @@ func (c *Client) Products() *ProductsClient {
 	return NewProductsClient(
 		c.transport,
 		path.Join(c.path, "products"),
-		path.Join(c.metric, "products"),
 	)
 }
 
@@ -149,7 +138,6 @@ func (c *Client) ProvisionShards() *ProvisionShardsClient {
 	return NewProvisionShardsClient(
 		c.transport,
 		path.Join(c.path, "provision_shards"),
-		path.Join(c.metric, "provision_shards"),
 	)
 }
 
@@ -160,6 +148,5 @@ func (c *Client) Versions() *VersionsClient {
 	return NewVersionsClient(
 		c.transport,
 		path.Join(c.path, "versions"),
-		path.Join(c.metric, "versions"),
 	)
 }

@@ -35,17 +35,15 @@ import (
 type ClusterOperatorsMetricQueryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClusterOperatorsMetricQueryClient creates a new client for the 'cluster_operators_metric_query'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClusterOperatorsMetricQueryClient(transport http.RoundTripper, path string, metric string) *ClusterOperatorsMetricQueryClient {
+func NewClusterOperatorsMetricQueryClient(transport http.RoundTripper, path string) *ClusterOperatorsMetricQueryClient {
 	return &ClusterOperatorsMetricQueryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *ClusterOperatorsMetricQueryClient) Get() *ClusterOperatorsMetricQueryGe
 	return &ClusterOperatorsMetricQueryGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *ClusterOperatorsMetricQueryClient) Poll() *ClusterOperatorsMetricQueryP
 type ClusterOperatorsMetricQueryGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *ClusterOperatorsMetricQueryGetRequest) Send() (result *ClusterOperators
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterOperatorsMetricQueryGetRequest) SendContext(ctx context.Context) (result *ClusterOperatorsMetricQueryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

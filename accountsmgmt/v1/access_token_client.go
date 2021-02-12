@@ -34,17 +34,15 @@ import (
 type AccessTokenClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAccessTokenClient creates a new client for the 'access_token'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAccessTokenClient(transport http.RoundTripper, path string, metric string) *AccessTokenClient {
+func NewAccessTokenClient(transport http.RoundTripper, path string) *AccessTokenClient {
 	return &AccessTokenClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -55,7 +53,6 @@ func (c *AccessTokenClient) Post() *AccessTokenPostRequest {
 	return &AccessTokenPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -63,7 +60,6 @@ func (c *AccessTokenClient) Post() *AccessTokenPostRequest {
 type AccessTokenPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -91,7 +87,7 @@ func (r *AccessTokenPostRequest) Send() (result *AccessTokenPostResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccessTokenPostRequest) SendContext(ctx context.Context) (result *AccessTokenPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

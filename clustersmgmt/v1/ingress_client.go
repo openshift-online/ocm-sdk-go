@@ -39,17 +39,15 @@ import (
 type IngressClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewIngressClient creates a new client for the 'ingress'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewIngressClient(transport http.RoundTripper, path string, metric string) *IngressClient {
+func NewIngressClient(transport http.RoundTripper, path string) *IngressClient {
 	return &IngressClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *IngressClient) Delete() *IngressDeleteRequest {
 	return &IngressDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *IngressClient) Get() *IngressGetRequest {
 	return &IngressGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *IngressClient) Update() *IngressUpdateRequest {
 	return &IngressUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *IngressClient) Poll() *IngressPollRequest {
 type IngressDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *IngressDeleteRequest) Send() (result *IngressDeleteResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IngressDeleteRequest) SendContext(ctx context.Context) (result *IngressDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *IngressDeleteResponse) Error() *errors.Error {
 type IngressGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *IngressGetRequest) Send() (result *IngressGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IngressGetRequest) SendContext(ctx context.Context) (result *IngressGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *IngressGetResponse) GetBody() (value *Ingress, ok bool) {
 type IngressUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Ingress
@@ -465,7 +457,7 @@ func (r *IngressUpdateRequest) Send() (result *IngressUpdateResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IngressUpdateRequest) SendContext(ctx context.Context) (result *IngressUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeIngressUpdateRequest(r, buffer)
 	if err != nil {

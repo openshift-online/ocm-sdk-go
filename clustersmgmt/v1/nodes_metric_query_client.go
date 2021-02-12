@@ -35,17 +35,15 @@ import (
 type NodesMetricQueryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewNodesMetricQueryClient creates a new client for the 'nodes_metric_query'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewNodesMetricQueryClient(transport http.RoundTripper, path string, metric string) *NodesMetricQueryClient {
+func NewNodesMetricQueryClient(transport http.RoundTripper, path string) *NodesMetricQueryClient {
 	return &NodesMetricQueryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *NodesMetricQueryClient) Get() *NodesMetricQueryGetRequest {
 	return &NodesMetricQueryGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *NodesMetricQueryClient) Poll() *NodesMetricQueryPollRequest {
 type NodesMetricQueryGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *NodesMetricQueryGetRequest) Send() (result *NodesMetricQueryGetResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *NodesMetricQueryGetRequest) SendContext(ctx context.Context) (result *NodesMetricQueryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

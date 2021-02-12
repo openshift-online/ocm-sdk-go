@@ -39,17 +39,15 @@ import (
 type IdentityProvidersClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewIdentityProvidersClient creates a new client for the 'identity_providers'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewIdentityProvidersClient(transport http.RoundTripper, path string, metric string) *IdentityProvidersClient {
+func NewIdentityProvidersClient(transport http.RoundTripper, path string) *IdentityProvidersClient {
 	return &IdentityProvidersClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *IdentityProvidersClient) Add() *IdentityProvidersAddRequest {
 	return &IdentityProvidersAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *IdentityProvidersClient) List() *IdentityProvidersListRequest {
 	return &IdentityProvidersListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *IdentityProvidersClient) IdentityProvider(id string) *IdentityProviderC
 	return NewIdentityProviderClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *IdentityProvidersClient) IdentityProvider(id string) *IdentityProviderC
 type IdentityProvidersAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *IdentityProvider
@@ -127,7 +121,7 @@ func (r *IdentityProvidersAddRequest) Send() (result *IdentityProvidersAddRespon
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IdentityProvidersAddRequest) SendContext(ctx context.Context) (result *IdentityProvidersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeIdentityProvidersAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *IdentityProvidersAddResponse) GetBody() (value *IdentityProvider, ok bo
 type IdentityProvidersListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -289,7 +282,7 @@ func (r *IdentityProvidersListRequest) SendContext(ctx context.Context) (result 
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

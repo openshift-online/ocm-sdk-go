@@ -39,17 +39,15 @@ import (
 type OrganizationsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewOrganizationsClient creates a new client for the 'organizations'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewOrganizationsClient(transport http.RoundTripper, path string, metric string) *OrganizationsClient {
+func NewOrganizationsClient(transport http.RoundTripper, path string) *OrganizationsClient {
 	return &OrganizationsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *OrganizationsClient) Add() *OrganizationsAddRequest {
 	return &OrganizationsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *OrganizationsClient) List() *OrganizationsListRequest {
 	return &OrganizationsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *OrganizationsClient) Organization(id string) *OrganizationClient {
 	return NewOrganizationClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *OrganizationsClient) Organization(id string) *OrganizationClient {
 type OrganizationsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Organization
@@ -127,7 +121,7 @@ func (r *OrganizationsAddRequest) Send() (result *OrganizationsAddResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *OrganizationsAddRequest) SendContext(ctx context.Context) (result *OrganizationsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeOrganizationsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *OrganizationsAddResponse) GetBody() (value *Organization, ok bool) {
 type OrganizationsListRequest struct {
 	transport         http.RoundTripper
 	path              string
-	metric            string
 	query             url.Values
 	header            http.Header
 	fetchlabelsLabels *bool
@@ -343,7 +336,7 @@ func (r *OrganizationsListRequest) SendContext(ctx context.Context) (result *Org
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

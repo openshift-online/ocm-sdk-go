@@ -30,17 +30,15 @@ import (
 type FeatureTogglesClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewFeatureTogglesClient creates a new client for the 'feature_toggles'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewFeatureTogglesClient(transport http.RoundTripper, path string, metric string) *FeatureTogglesClient {
+func NewFeatureTogglesClient(transport http.RoundTripper, path string) *FeatureTogglesClient {
 	return &FeatureTogglesClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -51,6 +49,5 @@ func (c *FeatureTogglesClient) FeatureToggle(id string) *FeatureToggleClient {
 	return NewFeatureToggleClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }

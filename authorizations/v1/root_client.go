@@ -30,17 +30,15 @@ import (
 type Client struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClient creates a new client for the 'root'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClient(transport http.RoundTripper, path string, metric string) *Client {
+func NewClient(transport http.RoundTripper, path string) *Client {
 	return &Client{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -49,7 +47,6 @@ func (c *Client) Get() *MetadataRequest {
 	return &MetadataRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -60,7 +57,6 @@ func (c *Client) AccessReview() *AccessReviewClient {
 	return NewAccessReviewClient(
 		c.transport,
 		path.Join(c.path, "access_review"),
-		path.Join(c.metric, "access_review"),
 	)
 }
 
@@ -71,7 +67,6 @@ func (c *Client) CapabilityReview() *CapabilityReviewClient {
 	return NewCapabilityReviewClient(
 		c.transport,
 		path.Join(c.path, "capability_review"),
-		path.Join(c.metric, "capability_review"),
 	)
 }
 
@@ -82,7 +77,6 @@ func (c *Client) ExportControlReview() *ExportControlReviewClient {
 	return NewExportControlReviewClient(
 		c.transport,
 		path.Join(c.path, "export_control_review"),
-		path.Join(c.metric, "export_control_review"),
 	)
 }
 
@@ -93,7 +87,6 @@ func (c *Client) ResourceReview() *ResourceReviewClient {
 	return NewResourceReviewClient(
 		c.transport,
 		path.Join(c.path, "resource_review"),
-		path.Join(c.metric, "resource_review"),
 	)
 }
 
@@ -104,7 +97,6 @@ func (c *Client) SelfAccessReview() *SelfAccessReviewClient {
 	return NewSelfAccessReviewClient(
 		c.transport,
 		path.Join(c.path, "self_access_review"),
-		path.Join(c.metric, "self_access_review"),
 	)
 }
 
@@ -115,7 +107,6 @@ func (c *Client) SelfCapabilityReview() *SelfCapabilityReviewClient {
 	return NewSelfCapabilityReviewClient(
 		c.transport,
 		path.Join(c.path, "self_capability_review"),
-		path.Join(c.metric, "self_capability_review"),
 	)
 }
 
@@ -127,7 +118,6 @@ func (c *Client) SelfTermsReview() *SelfTermsReviewClient {
 	return NewSelfTermsReviewClient(
 		c.transport,
 		path.Join(c.path, "self_terms_review"),
-		path.Join(c.metric, "self_terms_review"),
 	)
 }
 
@@ -139,6 +129,5 @@ func (c *Client) TermsReview() *TermsReviewClient {
 	return NewTermsReviewClient(
 		c.transport,
 		path.Join(c.path, "terms_review"),
-		path.Join(c.metric, "terms_review"),
 	)
 }

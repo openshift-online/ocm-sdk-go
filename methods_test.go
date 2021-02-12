@@ -29,8 +29,6 @@ import (
 	. "github.com/onsi/gomega" // nolint
 
 	"github.com/onsi/gomega/ghttp"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/testutil"
 )
 
 var _ = Describe("Methods", func() {
@@ -337,30 +335,6 @@ var _ = Describe("Methods", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
-		})
-
-		It("Increments outbound prometheus counter", func() {
-			// Configure the server:
-			apiServer.AppendHandlers(
-				RespondWithJSON(http.StatusTeapot, ""),
-			)
-
-			// Send the request:
-			response, err := connection.Post().
-				Path("/api/teapot/brew/coffee").
-				Send()
-			Expect(err).ToNot(HaveOccurred())
-			Expect(response).ToNot(BeNil())
-			Expect(response.Status()).To(Equal(http.StatusTeapot))
-
-			expectedLabels := prometheus.Labels{
-				"apiservice": "ocm-/api/teapot",
-				"method":     "POST",
-				"path":       "/-",
-				"code":       "418",
-			}
-			counter := connection.callCountMetric.With(expectedLabels)
-			Expect(testutil.ToFloat64(counter)).To(Equal(1.0))
 		})
 	})
 

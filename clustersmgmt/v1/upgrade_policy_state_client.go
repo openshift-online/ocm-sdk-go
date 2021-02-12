@@ -39,17 +39,15 @@ import (
 type UpgradePolicyStateClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewUpgradePolicyStateClient creates a new client for the 'upgrade_policy_state'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewUpgradePolicyStateClient(transport http.RoundTripper, path string, metric string) *UpgradePolicyStateClient {
+func NewUpgradePolicyStateClient(transport http.RoundTripper, path string) *UpgradePolicyStateClient {
 	return &UpgradePolicyStateClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *UpgradePolicyStateClient) Get() *UpgradePolicyStateGetRequest {
 	return &UpgradePolicyStateGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *UpgradePolicyStateClient) Update() *UpgradePolicyStateUpdateRequest {
 	return &UpgradePolicyStateUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -200,7 +196,6 @@ func (c *UpgradePolicyStateClient) Poll() *UpgradePolicyStatePollRequest {
 type UpgradePolicyStateGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -228,7 +223,7 @@ func (r *UpgradePolicyStateGetRequest) Send() (result *UpgradePolicyStateGetResp
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UpgradePolicyStateGetRequest) SendContext(ctx context.Context) (result *UpgradePolicyStateGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -322,7 +317,6 @@ func (r *UpgradePolicyStateGetResponse) GetBody() (value *UpgradePolicyState, ok
 type UpgradePolicyStateUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *UpgradePolicyState
@@ -359,7 +353,7 @@ func (r *UpgradePolicyStateUpdateRequest) Send() (result *UpgradePolicyStateUpda
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UpgradePolicyStateUpdateRequest) SendContext(ctx context.Context) (result *UpgradePolicyStateUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeUpgradePolicyStateUpdateRequest(r, buffer)
 	if err != nil {

@@ -39,17 +39,15 @@ import (
 type RoleClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRoleClient creates a new client for the 'role'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRoleClient(transport http.RoundTripper, path string, metric string) *RoleClient {
+func NewRoleClient(transport http.RoundTripper, path string) *RoleClient {
 	return &RoleClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *RoleClient) Delete() *RoleDeleteRequest {
 	return &RoleDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *RoleClient) Get() *RoleGetRequest {
 	return &RoleGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *RoleClient) Update() *RoleUpdateRequest {
 	return &RoleUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *RoleClient) Poll() *RolePollRequest {
 type RoleDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleDeleteRequest) SendContext(ctx context.Context) (result *RoleDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *RoleDeleteResponse) Error() *errors.Error {
 type RoleGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *RoleGetRequest) Send() (result *RoleGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleGetRequest) SendContext(ctx context.Context) (result *RoleGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *RoleGetResponse) GetBody() (value *Role, ok bool) {
 type RoleUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Role
@@ -465,7 +457,7 @@ func (r *RoleUpdateRequest) Send() (result *RoleUpdateResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleUpdateRequest) SendContext(ctx context.Context) (result *RoleUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeRoleUpdateRequest(r, buffer)
 	if err != nil {

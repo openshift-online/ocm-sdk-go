@@ -39,17 +39,15 @@ import (
 type SupportCasesClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSupportCasesClient creates a new client for the 'support_cases'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSupportCasesClient(transport http.RoundTripper, path string, metric string) *SupportCasesClient {
+func NewSupportCasesClient(transport http.RoundTripper, path string) *SupportCasesClient {
 	return &SupportCasesClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *SupportCasesClient) Post() *SupportCasesPostRequest {
 	return &SupportCasesPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *SupportCasesClient) SupportCase(id string) *SupportCaseClient {
 	return NewSupportCaseClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -79,7 +75,6 @@ func (c *SupportCasesClient) SupportCase(id string) *SupportCaseClient {
 type SupportCasesPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *SupportCaseRequest
@@ -116,7 +111,7 @@ func (r *SupportCasesPostRequest) Send() (result *SupportCasesPostResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SupportCasesPostRequest) SendContext(ctx context.Context) (result *SupportCasesPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeSupportCasesPostRequest(r, buffer)
 	if err != nil {

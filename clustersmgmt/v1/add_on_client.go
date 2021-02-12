@@ -39,17 +39,15 @@ import (
 type AddOnClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAddOnClient creates a new client for the 'add_on'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAddOnClient(transport http.RoundTripper, path string, metric string) *AddOnClient {
+func NewAddOnClient(transport http.RoundTripper, path string) *AddOnClient {
 	return &AddOnClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *AddOnClient) Delete() *AddOnDeleteRequest {
 	return &AddOnDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *AddOnClient) Get() *AddOnGetRequest {
 	return &AddOnGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *AddOnClient) Update() *AddOnUpdateRequest {
 	return &AddOnUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *AddOnClient) Poll() *AddOnPollRequest {
 type AddOnDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *AddOnDeleteRequest) Send() (result *AddOnDeleteResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AddOnDeleteRequest) SendContext(ctx context.Context) (result *AddOnDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *AddOnDeleteResponse) Error() *errors.Error {
 type AddOnGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *AddOnGetRequest) Send() (result *AddOnGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AddOnGetRequest) SendContext(ctx context.Context) (result *AddOnGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *AddOnGetResponse) GetBody() (value *AddOn, ok bool) {
 type AddOnUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *AddOn
@@ -465,7 +457,7 @@ func (r *AddOnUpdateRequest) Send() (result *AddOnUpdateResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AddOnUpdateRequest) SendContext(ctx context.Context) (result *AddOnUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeAddOnUpdateRequest(r, buffer)
 	if err != nil {

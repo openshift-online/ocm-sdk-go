@@ -39,17 +39,15 @@ import (
 type AddOnInstallationClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAddOnInstallationClient creates a new client for the 'add_on_installation'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAddOnInstallationClient(transport http.RoundTripper, path string, metric string) *AddOnInstallationClient {
+func NewAddOnInstallationClient(transport http.RoundTripper, path string) *AddOnInstallationClient {
 	return &AddOnInstallationClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *AddOnInstallationClient) Delete() *AddOnInstallationDeleteRequest {
 	return &AddOnInstallationDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *AddOnInstallationClient) Get() *AddOnInstallationGetRequest {
 	return &AddOnInstallationGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *AddOnInstallationClient) Update() *AddOnInstallationUpdateRequest {
 	return &AddOnInstallationUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *AddOnInstallationClient) Poll() *AddOnInstallationPollRequest {
 type AddOnInstallationDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *AddOnInstallationDeleteRequest) Send() (result *AddOnInstallationDelete
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AddOnInstallationDeleteRequest) SendContext(ctx context.Context) (result *AddOnInstallationDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *AddOnInstallationDeleteResponse) Error() *errors.Error {
 type AddOnInstallationGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *AddOnInstallationGetRequest) Send() (result *AddOnInstallationGetRespon
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AddOnInstallationGetRequest) SendContext(ctx context.Context) (result *AddOnInstallationGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *AddOnInstallationGetResponse) GetBody() (value *AddOnInstallation, ok b
 type AddOnInstallationUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *AddOnInstallation
@@ -465,7 +457,7 @@ func (r *AddOnInstallationUpdateRequest) Send() (result *AddOnInstallationUpdate
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AddOnInstallationUpdateRequest) SendContext(ctx context.Context) (result *AddOnInstallationUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeAddOnInstallationUpdateRequest(r, buffer)
 	if err != nil {

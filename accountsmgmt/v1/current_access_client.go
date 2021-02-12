@@ -34,17 +34,15 @@ import (
 type CurrentAccessClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewCurrentAccessClient creates a new client for the 'current_access'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewCurrentAccessClient(transport http.RoundTripper, path string, metric string) *CurrentAccessClient {
+func NewCurrentAccessClient(transport http.RoundTripper, path string) *CurrentAccessClient {
 	return &CurrentAccessClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -55,7 +53,6 @@ func (c *CurrentAccessClient) List() *CurrentAccessListRequest {
 	return &CurrentAccessListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -63,7 +60,6 @@ func (c *CurrentAccessClient) List() *CurrentAccessListRequest {
 type CurrentAccessListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -115,7 +111,7 @@ func (r *CurrentAccessListRequest) SendContext(ctx context.Context) (result *Cur
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

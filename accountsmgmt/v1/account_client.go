@@ -40,17 +40,15 @@ import (
 type AccountClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAccountClient creates a new client for the 'account'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAccountClient(transport http.RoundTripper, path string, metric string) *AccountClient {
+func NewAccountClient(transport http.RoundTripper, path string) *AccountClient {
 	return &AccountClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -61,7 +59,6 @@ func (c *AccountClient) Get() *AccountGetRequest {
 	return &AccountGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -72,7 +69,6 @@ func (c *AccountClient) Update() *AccountUpdateRequest {
 	return &AccountUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -83,7 +79,6 @@ func (c *AccountClient) Labels() *GenericLabelsClient {
 	return NewGenericLabelsClient(
 		c.transport,
 		path.Join(c.path, "labels"),
-		path.Join(c.metric, "labels"),
 	)
 }
 
@@ -212,7 +207,6 @@ func (c *AccountClient) Poll() *AccountPollRequest {
 type AccountGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -240,7 +234,7 @@ func (r *AccountGetRequest) Send() (result *AccountGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccountGetRequest) SendContext(ctx context.Context) (result *AccountGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -334,7 +328,6 @@ func (r *AccountGetResponse) GetBody() (value *Account, ok bool) {
 type AccountUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Account
@@ -371,7 +364,7 @@ func (r *AccountUpdateRequest) Send() (result *AccountUpdateResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccountUpdateRequest) SendContext(ctx context.Context) (result *AccountUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeAccountUpdateRequest(r, buffer)
 	if err != nil {

@@ -39,17 +39,15 @@ import (
 type IngressesClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewIngressesClient creates a new client for the 'ingresses'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewIngressesClient(transport http.RoundTripper, path string, metric string) *IngressesClient {
+func NewIngressesClient(transport http.RoundTripper, path string) *IngressesClient {
 	return &IngressesClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *IngressesClient) Add() *IngressesAddRequest {
 	return &IngressesAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *IngressesClient) List() *IngressesListRequest {
 	return &IngressesListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *IngressesClient) Update() *IngressesUpdateRequest {
 	return &IngressesUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -93,7 +88,6 @@ func (c *IngressesClient) Ingress(id string) *IngressClient {
 	return NewIngressClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -101,7 +95,6 @@ func (c *IngressesClient) Ingress(id string) *IngressClient {
 type IngressesAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Ingress
@@ -138,7 +131,7 @@ func (r *IngressesAddRequest) Send() (result *IngressesAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IngressesAddRequest) SendContext(ctx context.Context) (result *IngressesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeIngressesAddRequest(r, buffer)
 	if err != nil {
@@ -248,7 +241,6 @@ func (r *IngressesAddResponse) GetBody() (value *Ingress, ok bool) {
 type IngressesListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -300,7 +292,7 @@ func (r *IngressesListRequest) SendContext(ctx context.Context) (result *Ingress
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -463,7 +455,6 @@ func (r *IngressesListResponse) GetTotal() (value int, ok bool) {
 type IngressesUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      []*Ingress
@@ -500,7 +491,7 @@ func (r *IngressesUpdateRequest) Send() (result *IngressesUpdateResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IngressesUpdateRequest) SendContext(ctx context.Context) (result *IngressesUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeIngressesUpdateRequest(r, buffer)
 	if err != nil {

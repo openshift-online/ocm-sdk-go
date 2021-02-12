@@ -40,17 +40,15 @@ import (
 type UpgradePolicyClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewUpgradePolicyClient creates a new client for the 'upgrade_policy'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewUpgradePolicyClient(transport http.RoundTripper, path string, metric string) *UpgradePolicyClient {
+func NewUpgradePolicyClient(transport http.RoundTripper, path string) *UpgradePolicyClient {
 	return &UpgradePolicyClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -61,7 +59,6 @@ func (c *UpgradePolicyClient) Delete() *UpgradePolicyDeleteRequest {
 	return &UpgradePolicyDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -72,7 +69,6 @@ func (c *UpgradePolicyClient) Get() *UpgradePolicyGetRequest {
 	return &UpgradePolicyGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -83,7 +79,6 @@ func (c *UpgradePolicyClient) Update() *UpgradePolicyUpdateRequest {
 	return &UpgradePolicyUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -94,7 +89,6 @@ func (c *UpgradePolicyClient) State() *UpgradePolicyStateClient {
 	return NewUpgradePolicyStateClient(
 		c.transport,
 		path.Join(c.path, "state"),
-		path.Join(c.metric, "state"),
 	)
 }
 
@@ -223,7 +217,6 @@ func (c *UpgradePolicyClient) Poll() *UpgradePolicyPollRequest {
 type UpgradePolicyDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -251,7 +244,7 @@ func (r *UpgradePolicyDeleteRequest) Send() (result *UpgradePolicyDeleteResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UpgradePolicyDeleteRequest) SendContext(ctx context.Context) (result *UpgradePolicyDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -318,7 +311,6 @@ func (r *UpgradePolicyDeleteResponse) Error() *errors.Error {
 type UpgradePolicyGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -346,7 +338,7 @@ func (r *UpgradePolicyGetRequest) Send() (result *UpgradePolicyGetResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UpgradePolicyGetRequest) SendContext(ctx context.Context) (result *UpgradePolicyGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -440,7 +432,6 @@ func (r *UpgradePolicyGetResponse) GetBody() (value *UpgradePolicy, ok bool) {
 type UpgradePolicyUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *UpgradePolicy
@@ -477,7 +468,7 @@ func (r *UpgradePolicyUpdateRequest) Send() (result *UpgradePolicyUpdateResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UpgradePolicyUpdateRequest) SendContext(ctx context.Context) (result *UpgradePolicyUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeUpgradePolicyUpdateRequest(r, buffer)
 	if err != nil {

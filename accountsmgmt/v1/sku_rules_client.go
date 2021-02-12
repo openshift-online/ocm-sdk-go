@@ -35,17 +35,15 @@ import (
 type SkuRulesClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSkuRulesClient creates a new client for the 'sku_rules'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSkuRulesClient(transport http.RoundTripper, path string, metric string) *SkuRulesClient {
+func NewSkuRulesClient(transport http.RoundTripper, path string) *SkuRulesClient {
 	return &SkuRulesClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *SkuRulesClient) List() *SkuRulesListRequest {
 	return &SkuRulesListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *SkuRulesClient) SkuRule(id string) *SkuRuleClient {
 	return NewSkuRuleClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -75,7 +71,6 @@ func (c *SkuRulesClient) SkuRule(id string) *SkuRuleClient {
 type SkuRulesListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -152,7 +147,7 @@ func (r *SkuRulesListRequest) SendContext(ctx context.Context) (result *SkuRules
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

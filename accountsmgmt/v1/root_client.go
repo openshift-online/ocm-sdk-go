@@ -30,17 +30,15 @@ import (
 type Client struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClient creates a new client for the 'root'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClient(transport http.RoundTripper, path string, metric string) *Client {
+func NewClient(transport http.RoundTripper, path string) *Client {
 	return &Client{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -49,7 +47,6 @@ func (c *Client) Get() *MetadataRequest {
 	return &MetadataRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -61,7 +58,6 @@ func (c *Client) SKUS() *SKUSClient {
 	return NewSKUSClient(
 		c.transport,
 		path.Join(c.path, "skus"),
-		path.Join(c.metric, "skus"),
 	)
 }
 
@@ -72,7 +68,6 @@ func (c *Client) AccessToken() *AccessTokenClient {
 	return NewAccessTokenClient(
 		c.transport,
 		path.Join(c.path, "access_token"),
-		path.Join(c.metric, "access_token"),
 	)
 }
 
@@ -83,7 +78,6 @@ func (c *Client) Accounts() *AccountsClient {
 	return NewAccountsClient(
 		c.transport,
 		path.Join(c.path, "accounts"),
-		path.Join(c.metric, "accounts"),
 	)
 }
 
@@ -94,7 +88,6 @@ func (c *Client) ClusterAuthorizations() *ClusterAuthorizationsClient {
 	return NewClusterAuthorizationsClient(
 		c.transport,
 		path.Join(c.path, "cluster_authorizations"),
-		path.Join(c.metric, "cluster_authorizations"),
 	)
 }
 
@@ -105,7 +98,6 @@ func (c *Client) ClusterRegistrations() *ClusterRegistrationsClient {
 	return NewClusterRegistrationsClient(
 		c.transport,
 		path.Join(c.path, "cluster_registrations"),
-		path.Join(c.metric, "cluster_registrations"),
 	)
 }
 
@@ -117,7 +109,6 @@ func (c *Client) CurrentAccess() *RolesClient {
 	return NewRolesClient(
 		c.transport,
 		path.Join(c.path, "current_access"),
-		path.Join(c.metric, "current_access"),
 	)
 }
 
@@ -129,7 +120,6 @@ func (c *Client) CurrentAccount() *CurrentAccountClient {
 	return NewCurrentAccountClient(
 		c.transport,
 		path.Join(c.path, "current_account"),
-		path.Join(c.metric, "current_account"),
 	)
 }
 
@@ -140,7 +130,6 @@ func (c *Client) FeatureToggles() *FeatureTogglesClient {
 	return NewFeatureTogglesClient(
 		c.transport,
 		path.Join(c.path, "feature_toggles"),
-		path.Join(c.metric, "feature_toggles"),
 	)
 }
 
@@ -151,7 +140,6 @@ func (c *Client) Labels() *LabelsClient {
 	return NewLabelsClient(
 		c.transport,
 		path.Join(c.path, "labels"),
-		path.Join(c.metric, "labels"),
 	)
 }
 
@@ -162,7 +150,6 @@ func (c *Client) Notify() *NotifyClient {
 	return NewNotifyClient(
 		c.transport,
 		path.Join(c.path, "notify"),
-		path.Join(c.metric, "notify"),
 	)
 }
 
@@ -174,7 +161,6 @@ func (c *Client) Organizations() *OrganizationsClient {
 	return NewOrganizationsClient(
 		c.transport,
 		path.Join(c.path, "organizations"),
-		path.Join(c.metric, "organizations"),
 	)
 }
 
@@ -185,7 +171,6 @@ func (c *Client) Permissions() *PermissionsClient {
 	return NewPermissionsClient(
 		c.transport,
 		path.Join(c.path, "permissions"),
-		path.Join(c.metric, "permissions"),
 	)
 }
 
@@ -196,7 +181,6 @@ func (c *Client) PullSecrets() *PullSecretsClient {
 	return NewPullSecretsClient(
 		c.transport,
 		path.Join(c.path, "pull_secrets"),
-		path.Join(c.metric, "pull_secrets"),
 	)
 }
 
@@ -207,7 +191,6 @@ func (c *Client) Registries() *RegistriesClient {
 	return NewRegistriesClient(
 		c.transport,
 		path.Join(c.path, "registries"),
-		path.Join(c.metric, "registries"),
 	)
 }
 
@@ -219,7 +202,6 @@ func (c *Client) RegistryCredentials() *RegistryCredentialsClient {
 	return NewRegistryCredentialsClient(
 		c.transport,
 		path.Join(c.path, "registry_credentials"),
-		path.Join(c.metric, "registry_credentials"),
 	)
 }
 
@@ -231,7 +213,6 @@ func (c *Client) ResourceQuota() *ResourceQuotasClient {
 	return NewResourceQuotasClient(
 		c.transport,
 		path.Join(c.path, "resource_quota"),
-		path.Join(c.metric, "resource_quota"),
 	)
 }
 
@@ -243,7 +224,6 @@ func (c *Client) RoleBindings() *RoleBindingsClient {
 	return NewRoleBindingsClient(
 		c.transport,
 		path.Join(c.path, "role_bindings"),
-		path.Join(c.metric, "role_bindings"),
 	)
 }
 
@@ -254,7 +234,6 @@ func (c *Client) Roles() *RolesClient {
 	return NewRolesClient(
 		c.transport,
 		path.Join(c.path, "roles"),
-		path.Join(c.metric, "roles"),
 	)
 }
 
@@ -266,7 +245,6 @@ func (c *Client) SkuRules() *SkuRulesClient {
 	return NewSkuRulesClient(
 		c.transport,
 		path.Join(c.path, "sku_rules"),
-		path.Join(c.metric, "sku_rules"),
 	)
 }
 
@@ -278,7 +256,6 @@ func (c *Client) Subscriptions() *SubscriptionsClient {
 	return NewSubscriptionsClient(
 		c.transport,
 		path.Join(c.path, "subscriptions"),
-		path.Join(c.metric, "subscriptions"),
 	)
 }
 
@@ -289,7 +266,6 @@ func (c *Client) SupportCases() *SupportCasesClient {
 	return NewSupportCasesClient(
 		c.transport,
 		path.Join(c.path, "support_cases"),
-		path.Join(c.metric, "support_cases"),
 	)
 }
 
@@ -300,6 +276,5 @@ func (c *Client) TokenAuthorization() *TokenAuthorizationClient {
 	return NewTokenAuthorizationClient(
 		c.transport,
 		path.Join(c.path, "token_authorization"),
-		path.Join(c.metric, "token_authorization"),
 	)
 }

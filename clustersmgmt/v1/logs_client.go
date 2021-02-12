@@ -35,17 +35,15 @@ import (
 type LogsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewLogsClient creates a new client for the 'logs'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewLogsClient(transport http.RoundTripper, path string, metric string) *LogsClient {
+func NewLogsClient(transport http.RoundTripper, path string) *LogsClient {
 	return &LogsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *LogsClient) List() *LogsListRequest {
 	return &LogsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *LogsClient) Install() *LogClient {
 	return NewLogClient(
 		c.transport,
 		path.Join(c.path, "install"),
-		path.Join(c.metric, "install"),
 	)
 }
 
@@ -78,7 +74,6 @@ func (c *LogsClient) Uninstall() *LogClient {
 	return NewLogClient(
 		c.transport,
 		path.Join(c.path, "uninstall"),
-		path.Join(c.metric, "uninstall"),
 	)
 }
 
@@ -86,7 +81,6 @@ func (c *LogsClient) Uninstall() *LogClient {
 type LogsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -138,7 +132,7 @@ func (r *LogsListRequest) SendContext(ctx context.Context) (result *LogsListResp
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

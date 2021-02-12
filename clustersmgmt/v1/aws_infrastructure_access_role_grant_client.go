@@ -35,17 +35,15 @@ import (
 type AWSInfrastructureAccessRoleGrantClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAWSInfrastructureAccessRoleGrantClient creates a new client for the 'AWS_infrastructure_access_role_grant'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAWSInfrastructureAccessRoleGrantClient(transport http.RoundTripper, path string, metric string) *AWSInfrastructureAccessRoleGrantClient {
+func NewAWSInfrastructureAccessRoleGrantClient(transport http.RoundTripper, path string) *AWSInfrastructureAccessRoleGrantClient {
 	return &AWSInfrastructureAccessRoleGrantClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *AWSInfrastructureAccessRoleGrantClient) Delete() *AWSInfrastructureAcce
 	return &AWSInfrastructureAccessRoleGrantDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *AWSInfrastructureAccessRoleGrantClient) Get() *AWSInfrastructureAccessR
 	return &AWSInfrastructureAccessRoleGrantGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -196,7 +192,6 @@ func (c *AWSInfrastructureAccessRoleGrantClient) Poll() *AWSInfrastructureAccess
 type AWSInfrastructureAccessRoleGrantDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -224,7 +219,7 @@ func (r *AWSInfrastructureAccessRoleGrantDeleteRequest) Send() (result *AWSInfra
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AWSInfrastructureAccessRoleGrantDeleteRequest) SendContext(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -291,7 +286,6 @@ func (r *AWSInfrastructureAccessRoleGrantDeleteResponse) Error() *errors.Error {
 type AWSInfrastructureAccessRoleGrantGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -319,7 +313,7 @@ func (r *AWSInfrastructureAccessRoleGrantGetRequest) Send() (result *AWSInfrastr
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AWSInfrastructureAccessRoleGrantGetRequest) SendContext(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

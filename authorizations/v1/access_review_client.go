@@ -38,17 +38,15 @@ import (
 type AccessReviewClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAccessReviewClient creates a new client for the 'access_review'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAccessReviewClient(transport http.RoundTripper, path string, metric string) *AccessReviewClient {
+func NewAccessReviewClient(transport http.RoundTripper, path string) *AccessReviewClient {
 	return &AccessReviewClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -59,7 +57,6 @@ func (c *AccessReviewClient) Post() *AccessReviewPostRequest {
 	return &AccessReviewPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *AccessReviewClient) Post() *AccessReviewPostRequest {
 type AccessReviewPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *AccessReviewRequest
@@ -104,7 +100,7 @@ func (r *AccessReviewPostRequest) Send() (result *AccessReviewPostResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccessReviewPostRequest) SendContext(ctx context.Context) (result *AccessReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeAccessReviewPostRequest(r, buffer)
 	if err != nil {

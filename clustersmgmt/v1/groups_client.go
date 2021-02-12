@@ -35,17 +35,15 @@ import (
 type GroupsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewGroupsClient creates a new client for the 'groups'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewGroupsClient(transport http.RoundTripper, path string, metric string) *GroupsClient {
+func NewGroupsClient(transport http.RoundTripper, path string) *GroupsClient {
 	return &GroupsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *GroupsClient) List() *GroupsListRequest {
 	return &GroupsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *GroupsClient) Group(id string) *GroupClient {
 	return NewGroupClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -75,7 +71,6 @@ func (c *GroupsClient) Group(id string) *GroupClient {
 type GroupsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -127,7 +122,7 @@ func (r *GroupsListRequest) SendContext(ctx context.Context) (result *GroupsList
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

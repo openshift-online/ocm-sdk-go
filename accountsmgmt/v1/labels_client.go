@@ -34,17 +34,15 @@ import (
 type LabelsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewLabelsClient creates a new client for the 'labels'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewLabelsClient(transport http.RoundTripper, path string, metric string) *LabelsClient {
+func NewLabelsClient(transport http.RoundTripper, path string) *LabelsClient {
 	return &LabelsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -55,7 +53,6 @@ func (c *LabelsClient) List() *LabelsListRequest {
 	return &LabelsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -63,7 +60,6 @@ func (c *LabelsClient) List() *LabelsListRequest {
 type LabelsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -140,7 +136,7 @@ func (r *LabelsListRequest) SendContext(ctx context.Context) (result *LabelsList
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

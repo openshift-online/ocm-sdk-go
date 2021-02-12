@@ -38,17 +38,15 @@ import (
 type AvailableRegionsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAvailableRegionsClient creates a new client for the 'available_regions'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAvailableRegionsClient(transport http.RoundTripper, path string, metric string) *AvailableRegionsClient {
+func NewAvailableRegionsClient(transport http.RoundTripper, path string) *AvailableRegionsClient {
 	return &AvailableRegionsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -63,7 +61,6 @@ func (c *AvailableRegionsClient) Search() *AvailableRegionsSearchRequest {
 	return &AvailableRegionsSearchRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *AvailableRegionsClient) Search() *AvailableRegionsSearchRequest {
 type AvailableRegionsSearchRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *AWS
@@ -135,7 +131,7 @@ func (r *AvailableRegionsSearchRequest) SendContext(ctx context.Context) (result
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeAvailableRegionsSearchRequest(r, buffer)
 	if err != nil {

@@ -35,17 +35,15 @@ import (
 type RegistriesClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRegistriesClient creates a new client for the 'registries'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRegistriesClient(transport http.RoundTripper, path string, metric string) *RegistriesClient {
+func NewRegistriesClient(transport http.RoundTripper, path string) *RegistriesClient {
 	return &RegistriesClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *RegistriesClient) List() *RegistriesListRequest {
 	return &RegistriesListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *RegistriesClient) Registry(id string) *RegistryClient {
 	return NewRegistryClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -75,7 +71,6 @@ func (c *RegistriesClient) Registry(id string) *RegistryClient {
 type RegistriesListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -127,7 +122,7 @@ func (r *RegistriesListRequest) SendContext(ctx context.Context) (result *Regist
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -32,7 +32,6 @@ import (
 type MetadataRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -68,7 +67,7 @@ func (r *MetadataRequest) Send() (result *MetadataResponse, err error) {
 // SendContext sends the metadata request, waits for the response, and returns it.
 func (r *MetadataRequest) SendContext(ctx context.Context) (result *MetadataResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

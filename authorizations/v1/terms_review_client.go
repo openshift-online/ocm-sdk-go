@@ -39,17 +39,15 @@ import (
 type TermsReviewClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewTermsReviewClient creates a new client for the 'terms_review'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewTermsReviewClient(transport http.RoundTripper, path string, metric string) *TermsReviewClient {
+func NewTermsReviewClient(transport http.RoundTripper, path string) *TermsReviewClient {
 	return &TermsReviewClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *TermsReviewClient) Post() *TermsReviewPostRequest {
 	return &TermsReviewPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -68,7 +65,6 @@ func (c *TermsReviewClient) Post() *TermsReviewPostRequest {
 type TermsReviewPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *TermsReviewRequest
@@ -105,7 +101,7 @@ func (r *TermsReviewPostRequest) Send() (result *TermsReviewPostResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *TermsReviewPostRequest) SendContext(ctx context.Context) (result *TermsReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeTermsReviewPostRequest(r, buffer)
 	if err != nil {

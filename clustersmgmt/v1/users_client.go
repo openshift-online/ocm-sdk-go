@@ -39,17 +39,15 @@ import (
 type UsersClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewUsersClient creates a new client for the 'users'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewUsersClient(transport http.RoundTripper, path string, metric string) *UsersClient {
+func NewUsersClient(transport http.RoundTripper, path string) *UsersClient {
 	return &UsersClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *UsersClient) Add() *UsersAddRequest {
 	return &UsersAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *UsersClient) List() *UsersListRequest {
 	return &UsersListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *UsersClient) User(id string) *UserClient {
 	return NewUserClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *UsersClient) User(id string) *UserClient {
 type UsersAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *User
@@ -127,7 +121,7 @@ func (r *UsersAddRequest) Send() (result *UsersAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UsersAddRequest) SendContext(ctx context.Context) (result *UsersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeUsersAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *UsersAddResponse) GetBody() (value *User, ok bool) {
 type UsersListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -289,7 +282,7 @@ func (r *UsersListRequest) SendContext(ctx context.Context) (result *UsersListRe
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

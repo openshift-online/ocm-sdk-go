@@ -35,17 +35,15 @@ import (
 type RegistryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRegistryClient creates a new client for the 'registry'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRegistryClient(transport http.RoundTripper, path string, metric string) *RegistryClient {
+func NewRegistryClient(transport http.RoundTripper, path string) *RegistryClient {
 	return &RegistryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *RegistryClient) Get() *RegistryGetRequest {
 	return &RegistryGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *RegistryClient) Poll() *RegistryPollRequest {
 type RegistryGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *RegistryGetRequest) Send() (result *RegistryGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RegistryGetRequest) SendContext(ctx context.Context) (result *RegistryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

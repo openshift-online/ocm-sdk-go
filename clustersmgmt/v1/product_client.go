@@ -35,17 +35,15 @@ import (
 type ProductClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewProductClient creates a new client for the 'product'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewProductClient(transport http.RoundTripper, path string, metric string) *ProductClient {
+func NewProductClient(transport http.RoundTripper, path string) *ProductClient {
 	return &ProductClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *ProductClient) Get() *ProductGetRequest {
 	return &ProductGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *ProductClient) Poll() *ProductPollRequest {
 type ProductGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *ProductGetRequest) Send() (result *ProductGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ProductGetRequest) SendContext(ctx context.Context) (result *ProductGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -35,17 +35,15 @@ import (
 type MachineTypeClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewMachineTypeClient creates a new client for the 'machine_type'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewMachineTypeClient(transport http.RoundTripper, path string, metric string) *MachineTypeClient {
+func NewMachineTypeClient(transport http.RoundTripper, path string) *MachineTypeClient {
 	return &MachineTypeClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *MachineTypeClient) Get() *MachineTypeGetRequest {
 	return &MachineTypeGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *MachineTypeClient) Poll() *MachineTypePollRequest {
 type MachineTypeGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *MachineTypeGetRequest) Send() (result *MachineTypeGetResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *MachineTypeGetRequest) SendContext(ctx context.Context) (result *MachineTypeGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

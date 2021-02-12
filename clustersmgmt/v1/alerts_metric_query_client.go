@@ -35,17 +35,15 @@ import (
 type AlertsMetricQueryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAlertsMetricQueryClient creates a new client for the 'alerts_metric_query'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAlertsMetricQueryClient(transport http.RoundTripper, path string, metric string) *AlertsMetricQueryClient {
+func NewAlertsMetricQueryClient(transport http.RoundTripper, path string) *AlertsMetricQueryClient {
 	return &AlertsMetricQueryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *AlertsMetricQueryClient) Get() *AlertsMetricQueryGetRequest {
 	return &AlertsMetricQueryGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *AlertsMetricQueryClient) Poll() *AlertsMetricQueryPollRequest {
 type AlertsMetricQueryGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *AlertsMetricQueryGetRequest) Send() (result *AlertsMetricQueryGetRespon
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AlertsMetricQueryGetRequest) SendContext(ctx context.Context) (result *AlertsMetricQueryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

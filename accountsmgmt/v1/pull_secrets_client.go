@@ -39,17 +39,15 @@ import (
 type PullSecretsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewPullSecretsClient creates a new client for the 'pull_secrets'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewPullSecretsClient(transport http.RoundTripper, path string, metric string) *PullSecretsClient {
+func NewPullSecretsClient(transport http.RoundTripper, path string) *PullSecretsClient {
 	return &PullSecretsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *PullSecretsClient) Post() *PullSecretsPostRequest {
 	return &PullSecretsPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *PullSecretsClient) PullSecret(id string) *PullSecretClient {
 	return NewPullSecretClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -79,7 +75,6 @@ func (c *PullSecretsClient) PullSecret(id string) *PullSecretClient {
 type PullSecretsPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *PullSecretsRequest
@@ -116,7 +111,7 @@ func (r *PullSecretsPostRequest) Send() (result *PullSecretsPostResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *PullSecretsPostRequest) SendContext(ctx context.Context) (result *PullSecretsPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writePullSecretsPostRequest(r, buffer)
 	if err != nil {

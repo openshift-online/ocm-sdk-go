@@ -36,17 +36,15 @@ import (
 type CloudProviderClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewCloudProviderClient creates a new client for the 'cloud_provider'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewCloudProviderClient(transport http.RoundTripper, path string, metric string) *CloudProviderClient {
+func NewCloudProviderClient(transport http.RoundTripper, path string) *CloudProviderClient {
 	return &CloudProviderClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -57,7 +55,6 @@ func (c *CloudProviderClient) Get() *CloudProviderGetRequest {
 	return &CloudProviderGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -69,7 +66,6 @@ func (c *CloudProviderClient) AvailableRegions() *AvailableRegionsClient {
 	return NewAvailableRegionsClient(
 		c.transport,
 		path.Join(c.path, "available_regions"),
-		path.Join(c.metric, "available_regions"),
 	)
 }
 
@@ -81,7 +77,6 @@ func (c *CloudProviderClient) Regions() *CloudRegionsClient {
 	return NewCloudRegionsClient(
 		c.transport,
 		path.Join(c.path, "regions"),
-		path.Join(c.metric, "regions"),
 	)
 }
 
@@ -210,7 +205,6 @@ func (c *CloudProviderClient) Poll() *CloudProviderPollRequest {
 type CloudProviderGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -238,7 +232,7 @@ func (r *CloudProviderGetRequest) Send() (result *CloudProviderGetResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CloudProviderGetRequest) SendContext(ctx context.Context) (result *CloudProviderGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

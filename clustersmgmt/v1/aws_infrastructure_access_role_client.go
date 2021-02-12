@@ -35,17 +35,15 @@ import (
 type AWSInfrastructureAccessRoleClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAWSInfrastructureAccessRoleClient creates a new client for the 'AWS_infrastructure_access_role'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAWSInfrastructureAccessRoleClient(transport http.RoundTripper, path string, metric string) *AWSInfrastructureAccessRoleClient {
+func NewAWSInfrastructureAccessRoleClient(transport http.RoundTripper, path string) *AWSInfrastructureAccessRoleClient {
 	return &AWSInfrastructureAccessRoleClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *AWSInfrastructureAccessRoleClient) Get() *AWSInfrastructureAccessRoleGe
 	return &AWSInfrastructureAccessRoleGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *AWSInfrastructureAccessRoleClient) Poll() *AWSInfrastructureAccessRoleP
 type AWSInfrastructureAccessRoleGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *AWSInfrastructureAccessRoleGetRequest) Send() (result *AWSInfrastructur
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AWSInfrastructureAccessRoleGetRequest) SendContext(ctx context.Context) (result *AWSInfrastructureAccessRoleGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

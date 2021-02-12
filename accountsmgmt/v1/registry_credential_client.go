@@ -35,17 +35,15 @@ import (
 type RegistryCredentialClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRegistryCredentialClient creates a new client for the 'registry_credential'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRegistryCredentialClient(transport http.RoundTripper, path string, metric string) *RegistryCredentialClient {
+func NewRegistryCredentialClient(transport http.RoundTripper, path string) *RegistryCredentialClient {
 	return &RegistryCredentialClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *RegistryCredentialClient) Get() *RegistryCredentialGetRequest {
 	return &RegistryCredentialGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *RegistryCredentialClient) Poll() *RegistryCredentialPollRequest {
 type RegistryCredentialGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *RegistryCredentialGetRequest) Send() (result *RegistryCredentialGetResp
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RegistryCredentialGetRequest) SendContext(ctx context.Context) (result *RegistryCredentialGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
