@@ -3,6 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.158 Feb 12 2021
+
+- Downgrade from Go 1.15 to Go 1.14. This has been requested by users of the SDK
+  that can't upgrade to Go 1.15 because it isn't available in RHEL 8 and because
+  of the issues that Go 1.15 introduces related to the obsolete `CN` attribute
+  of X.509 certificates. The only negative effect of this downgrade is that
+  timeouts or deadlines set for requests sent using TLS over Unix sockets
+  will be ignored.
+
 == 0.1.157 Feb 8 2021
 
 - Accept Empty Reader as non-nil req body
