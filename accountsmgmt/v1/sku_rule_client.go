@@ -35,17 +35,15 @@ import (
 type SkuRuleClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSkuRuleClient creates a new client for the 'sku_rule'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSkuRuleClient(transport http.RoundTripper, path string, metric string) *SkuRuleClient {
+func NewSkuRuleClient(transport http.RoundTripper, path string) *SkuRuleClient {
 	return &SkuRuleClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *SkuRuleClient) Get() *SkuRuleGetRequest {
 	return &SkuRuleGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *SkuRuleClient) Poll() *SkuRulePollRequest {
 type SkuRuleGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *SkuRuleGetRequest) Send() (result *SkuRuleGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SkuRuleGetRequest) SendContext(ctx context.Context) (result *SkuRuleGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

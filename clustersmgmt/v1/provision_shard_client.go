@@ -35,17 +35,15 @@ import (
 type ProvisionShardClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewProvisionShardClient creates a new client for the 'provision_shard'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewProvisionShardClient(transport http.RoundTripper, path string, metric string) *ProvisionShardClient {
+func NewProvisionShardClient(transport http.RoundTripper, path string) *ProvisionShardClient {
 	return &ProvisionShardClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *ProvisionShardClient) Get() *ProvisionShardGetRequest {
 	return &ProvisionShardGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *ProvisionShardClient) Poll() *ProvisionShardPollRequest {
 type ProvisionShardGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *ProvisionShardGetRequest) Send() (result *ProvisionShardGetResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ProvisionShardGetRequest) SendContext(ctx context.Context) (result *ProvisionShardGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

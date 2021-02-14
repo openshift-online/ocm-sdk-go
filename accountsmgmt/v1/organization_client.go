@@ -40,17 +40,15 @@ import (
 type OrganizationClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewOrganizationClient creates a new client for the 'organization'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewOrganizationClient(transport http.RoundTripper, path string, metric string) *OrganizationClient {
+func NewOrganizationClient(transport http.RoundTripper, path string) *OrganizationClient {
 	return &OrganizationClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -61,7 +59,6 @@ func (c *OrganizationClient) Get() *OrganizationGetRequest {
 	return &OrganizationGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -72,7 +69,6 @@ func (c *OrganizationClient) Update() *OrganizationUpdateRequest {
 	return &OrganizationUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -83,7 +79,6 @@ func (c *OrganizationClient) Labels() *GenericLabelsClient {
 	return NewGenericLabelsClient(
 		c.transport,
 		path.Join(c.path, "labels"),
-		path.Join(c.metric, "labels"),
 	)
 }
 
@@ -95,7 +90,6 @@ func (c *OrganizationClient) QuotaSummary() *QuotaSummaryClient {
 	return NewQuotaSummaryClient(
 		c.transport,
 		path.Join(c.path, "quota_summary"),
-		path.Join(c.metric, "quota_summary"),
 	)
 }
 
@@ -107,7 +101,6 @@ func (c *OrganizationClient) ResourceQuota() *ResourceQuotasClient {
 	return NewResourceQuotasClient(
 		c.transport,
 		path.Join(c.path, "resource_quota"),
-		path.Join(c.metric, "resource_quota"),
 	)
 }
 
@@ -119,7 +112,6 @@ func (c *OrganizationClient) SummaryDashboard() *SummaryDashboardClient {
 	return NewSummaryDashboardClient(
 		c.transport,
 		path.Join(c.path, "summary_dashboard"),
-		path.Join(c.metric, "summary_dashboard"),
 	)
 }
 
@@ -248,7 +240,6 @@ func (c *OrganizationClient) Poll() *OrganizationPollRequest {
 type OrganizationGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -276,7 +267,7 @@ func (r *OrganizationGetRequest) Send() (result *OrganizationGetResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *OrganizationGetRequest) SendContext(ctx context.Context) (result *OrganizationGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -370,7 +361,6 @@ func (r *OrganizationGetResponse) GetBody() (value *Organization, ok bool) {
 type OrganizationUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Organization
@@ -407,7 +397,7 @@ func (r *OrganizationUpdateRequest) Send() (result *OrganizationUpdateResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *OrganizationUpdateRequest) SendContext(ctx context.Context) (result *OrganizationUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeOrganizationUpdateRequest(r, buffer)
 	if err != nil {

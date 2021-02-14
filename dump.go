@@ -35,6 +35,21 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
+// dumpTransportWrapper is a transport wrapper that creates round trippers that dump the details of
+// the request and the responses to the log.
+type dumpTransportWrapper struct {
+	logger logging.Logger
+}
+
+// Wrap creates a round tripper on top of the given one that sends to the log the details of
+// requests and responses.
+func (w *dumpTransportWrapper) Wrap(transport http.RoundTripper) http.RoundTripper {
+	return &dumpRoundTripper{
+		logger: w.logger,
+		next:   transport,
+	}
+}
+
 // dumpRoundTripper is a round tripper that dumps the details of the requests and the responses to
 // the log.
 type dumpRoundTripper struct {

@@ -30,17 +30,15 @@ import (
 type Client struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClient creates a new client for the 'root'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClient(transport http.RoundTripper, path string, metric string) *Client {
+func NewClient(transport http.RoundTripper, path string) *Client {
 	return &Client{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -49,7 +47,6 @@ func (c *Client) Get() *MetadataRequest {
 	return &MetadataRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -60,6 +57,5 @@ func (c *Client) ClusterLogs() *ClusterLogsClient {
 	return NewClusterLogsClient(
 		c.transport,
 		path.Join(c.path, "cluster_logs"),
-		path.Join(c.metric, "cluster_logs"),
 	)
 }

@@ -38,17 +38,15 @@ import (
 type FeatureToggleQueryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewFeatureToggleQueryClient creates a new client for the 'feature_toggle_query'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewFeatureToggleQueryClient(transport http.RoundTripper, path string, metric string) *FeatureToggleQueryClient {
+func NewFeatureToggleQueryClient(transport http.RoundTripper, path string) *FeatureToggleQueryClient {
 	return &FeatureToggleQueryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -59,7 +57,6 @@ func (c *FeatureToggleQueryClient) Post() *FeatureToggleQueryPostRequest {
 	return &FeatureToggleQueryPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *FeatureToggleQueryClient) Post() *FeatureToggleQueryPostRequest {
 type FeatureToggleQueryPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *FeatureToggleQueryRequest
@@ -104,7 +100,7 @@ func (r *FeatureToggleQueryPostRequest) Send() (result *FeatureToggleQueryPostRe
 // SendContext sends this request, waits for the response, and returns it.
 func (r *FeatureToggleQueryPostRequest) SendContext(ctx context.Context) (result *FeatureToggleQueryPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeFeatureToggleQueryPostRequest(r, buffer)
 	if err != nil {

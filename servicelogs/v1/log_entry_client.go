@@ -35,17 +35,15 @@ import (
 type LogEntryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewLogEntryClient creates a new client for the 'log_entry'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewLogEntryClient(transport http.RoundTripper, path string, metric string) *LogEntryClient {
+func NewLogEntryClient(transport http.RoundTripper, path string) *LogEntryClient {
 	return &LogEntryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *LogEntryClient) Delete() *LogEntryDeleteRequest {
 	return &LogEntryDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *LogEntryClient) Get() *LogEntryGetRequest {
 	return &LogEntryGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -196,7 +192,6 @@ func (c *LogEntryClient) Poll() *LogEntryPollRequest {
 type LogEntryDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -224,7 +219,7 @@ func (r *LogEntryDeleteRequest) Send() (result *LogEntryDeleteResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *LogEntryDeleteRequest) SendContext(ctx context.Context) (result *LogEntryDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -291,7 +286,6 @@ func (r *LogEntryDeleteResponse) Error() *errors.Error {
 type LogEntryGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -319,7 +313,7 @@ func (r *LogEntryGetRequest) Send() (result *LogEntryGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *LogEntryGetRequest) SendContext(ctx context.Context) (result *LogEntryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

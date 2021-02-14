@@ -36,17 +36,15 @@ import (
 type GroupClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewGroupClient creates a new client for the 'group'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewGroupClient(transport http.RoundTripper, path string, metric string) *GroupClient {
+func NewGroupClient(transport http.RoundTripper, path string) *GroupClient {
 	return &GroupClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -57,7 +55,6 @@ func (c *GroupClient) Get() *GroupGetRequest {
 	return &GroupGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -68,7 +65,6 @@ func (c *GroupClient) Users() *UsersClient {
 	return NewUsersClient(
 		c.transport,
 		path.Join(c.path, "users"),
-		path.Join(c.metric, "users"),
 	)
 }
 
@@ -197,7 +193,6 @@ func (c *GroupClient) Poll() *GroupPollRequest {
 type GroupGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -225,7 +220,7 @@ func (r *GroupGetRequest) Send() (result *GroupGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *GroupGetRequest) SendContext(ctx context.Context) (result *GroupGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

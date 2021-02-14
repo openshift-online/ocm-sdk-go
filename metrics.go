@@ -19,8 +19,6 @@ limitations under the License.
 package sdk
 
 import (
-	"strings"
-
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -72,78 +70,13 @@ func (c *Connection) registerMetrics(subsystem string) error {
 		}
 	}
 
-	// Register the call count metric:
-	c.callCountMetric = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Subsystem: subsystem,
-			Name:      "request_count",
-			Help:      "Number of requests sent.",
-		},
-		callMetricsLabels,
-	)
-	err = prometheus.Register(c.callCountMetric)
-	if err != nil {
-		registered, ok := err.(prometheus.AlreadyRegisteredError)
-		if ok {
-			c.callCountMetric = registered.ExistingCollector.(*prometheus.CounterVec)
-		} else {
-			return err
-		}
-	}
-
-	// Description of the call duration metric:
-	c.callDurationMetric = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{
-			Subsystem: subsystem,
-			Name:      "request_duration",
-			Help:      "Request duration in seconds.",
-			Buckets: []float64{
-				0.1,
-				1.0,
-				10.0,
-				30.0,
-			},
-		},
-		callMetricsLabels,
-	)
-	err = prometheus.Register(c.callDurationMetric)
-	if err != nil {
-		registered, ok := err.(prometheus.AlreadyRegisteredError)
-		if ok {
-			c.callDurationMetric = registered.ExistingCollector.(*prometheus.HistogramVec)
-		} else {
-			return err
-		}
-	}
-
 	return nil
-}
-
-func (c *Connection) GetAPIServiceLabelFromPath(path string) string {
-	if strings.HasPrefix(path, "/api/accounts_mgmt") {
-		return "ocm-accounts-service"
-	} else if strings.HasPrefix(path, "/api/clusters_mgmt") {
-		return "ocm-clusters-service"
-	} else if strings.HasPrefix(path, "/api/authorizations") {
-		return "ocm-authorizations-service"
-	} else if strings.HasPrefix(path, "/api/service_logs") {
-		return "ocm-logs-service"
-	} else {
-		pathParts := strings.Split(path, "/")
-		if len(pathParts) > 3 {
-			pathParts = pathParts[:3]
-		}
-		return "ocm-" + strings.Join(pathParts, "/")
-	}
 }
 
 // Names of the labels added to metrics:
 const (
-	metricsAPIServiceLabel = "apiservice"
-	metricsAttemptLabel    = "attempt"
-	metricsCodeLabel       = "code"
-	metricsMethodLabel     = "method"
-	metricsPathLabel       = "path"
+	metricsAttemptLabel = "attempt"
+	metricsCodeLabel    = "code"
 )
 
 // Array of labels added to token metrics:
@@ -151,14 +84,3 @@ var tokenMetricsLabels = []string{
 	metricsAttemptLabel,
 	metricsCodeLabel,
 }
-
-// Array of labels added to call metrics:
-var callMetricsLabels = []string{
-	metricsAPIServiceLabel,
-	metricsCodeLabel,
-	metricsMethodLabel,
-	metricsPathLabel,
-}
-
-// Name of the header that contains the metrics path:
-const metricHeader = "X-Metric"

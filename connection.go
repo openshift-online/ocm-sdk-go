@@ -39,6 +39,7 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
 	"github.com/openshift-online/ocm-sdk-go/configuration"
 	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/openshift-online/ocm-sdk-go/metrics"
 	"github.com/openshift-online/ocm-sdk-go/servicelogs"
 )
 
@@ -76,7 +77,7 @@ type ConnectionBuilder struct {
 	password          string
 	tokens            []string
 	scopes            []string
-	transportWrapper  TransportWrapper
+	transportWrappers []TransportWrapper
 
 	// Metrics:
 	metricsSubsystem string
@@ -87,9 +88,8 @@ type ConnectionBuilder struct {
 	err error
 }
 
-// TransportWrapper is a wrapper for a transport of type http.RoundTripper.
-// Creating a transport wrapper, enables to preform actions and manipulations on the transport
-// request and response.
+// TransportWrapper is a wrapper for a transport of type http.RoundTripper. Creating a transport
+// wrapper, enables to preform actions and manipulations on the transport request and response.
 type TransportWrapper func(http.RoundTripper) http.RoundTripper
 
 // Connection contains the data needed to connect to the `api.openshift.com`. Don't create instances
@@ -116,14 +116,14 @@ type Connection struct {
 	accessToken       *jwt.Token
 	refreshToken      *jwt.Token
 	scopes            []string
-	transportWrapper  TransportWrapper
+	userWrapers       []TransportWrapper
+	loggingWrapper    TransportWrapper
 
 	// Metrics:
 	metricsSubsystem    string
+	metricsWrapper      TransportWrapper
 	tokenCountMetric    *prometheus.CounterVec
 	tokenDurationMetric *prometheus.HistogramVec
-	callCountMetric     *prometheus.CounterVec
-	callDurationMetric  *prometheus.HistogramVec
 }
 
 // urlInfo contains a parsed URL and additional information extracted from the parameters, like the
@@ -406,13 +406,13 @@ func (b *ConnectionBuilder) DisableKeepAlives(flag bool) *ConnectionBuilder {
 	return b
 }
 
-// TransportWrapper allows setting a transportWrapper layer into the connection for capturing and
+// TransportWrapper allows setting a transport layer into the connection for capturing and
 // manipulating the request or response.
-func (b *ConnectionBuilder) TransportWrapper(transportWrapper TransportWrapper) *ConnectionBuilder {
+func (b *ConnectionBuilder) TransportWrapper(value TransportWrapper) *ConnectionBuilder {
 	if b.err != nil {
 		return b
 	}
-	b.transportWrapper = transportWrapper
+	b.transportWrappers = append(b.transportWrappers, value)
 	return b
 }
 
@@ -770,6 +770,33 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
+	// Make a copy of the user specified transport wrappers:
+	userWrappers := make([]TransportWrapper, len(b.transportWrappers))
+	copy(userWrappers, b.transportWrappers)
+
+	// Create the logging transport wrapper:
+	var loggingWrapper TransportWrapper
+	if b.logger.DebugEnabled() {
+		wrapper := &dumpTransportWrapper{
+			logger: b.logger,
+		}
+		loggingWrapper = wrapper.Wrap
+	}
+
+	// Create the metrics transport wrapper:
+	var metricsWrapper TransportWrapper
+	if b.metricsSubsystem != "" {
+		var wrapper *metrics.TransportWrapper
+		wrapper, err = metrics.NewTransportWrapper().
+			Logger(b.logger).
+			Subsystem(b.metricsSubsystem).
+			Build()
+		if err != nil {
+			return
+		}
+		metricsWrapper = wrapper.Wrap
+	}
+
 	// Allocate and populate the connection object:
 	connection = &Connection{
 		logger:            b.logger,
@@ -792,14 +819,15 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		refreshToken:      refreshToken,
 		scopes:            scopes,
 		metricsSubsystem:  b.metricsSubsystem,
-		transportWrapper:  b.transportWrapper,
+		userWrapers:       userWrappers,
+		loggingWrapper:    loggingWrapper,
+		metricsWrapper:    metricsWrapper,
 	}
 
 	// Register metrics:
 	if b.metricsSubsystem != "" {
 		err = connection.registerMetrics(b.metricsSubsystem)
 		if err != nil {
-			err = fmt.Errorf("can't register metrics: %w", err)
 			return
 		}
 	}
@@ -1094,22 +1122,22 @@ func (c *Connection) AlternativeURLs() map[string]string {
 
 // AccountsMgmt returns the client for the accounts management service.
 func (c *Connection) AccountsMgmt() *accountsmgmt.Client {
-	return accountsmgmt.NewClient(c, "/api/accounts_mgmt", "/api/accounts_mgmt")
+	return accountsmgmt.NewClient(c, "/api/accounts_mgmt")
 }
 
 // ClustersMgmt returns the client for the clusters management service.
 func (c *Connection) ClustersMgmt() *clustersmgmt.Client {
-	return clustersmgmt.NewClient(c, "/api/clusters_mgmt", "/api/clusters_mgmt")
+	return clustersmgmt.NewClient(c, "/api/clusters_mgmt")
 }
 
 // Authorizations returns the client for the authorizations service.
 func (c *Connection) Authorizations() *authorizations.Client {
-	return authorizations.NewClient(c, "/api/authorizations", "/api/authorizations")
+	return authorizations.NewClient(c, "/api/authorizations")
 }
 
 // ServiceLogs returns the client for the logs service.
 func (c *Connection) ServiceLogs() *servicelogs.Client {
-	return servicelogs.NewClient(c, "/api/service_logs", "/api/service_logs")
+	return servicelogs.NewClient(c, "/api/service_logs")
 }
 
 // Close releases all the resources used by the connection. It is very important to always close it

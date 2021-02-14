@@ -38,17 +38,15 @@ import (
 type SubscriptionNotifyClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSubscriptionNotifyClient creates a new client for the 'subscription_notify'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSubscriptionNotifyClient(transport http.RoundTripper, path string, metric string) *SubscriptionNotifyClient {
+func NewSubscriptionNotifyClient(transport http.RoundTripper, path string) *SubscriptionNotifyClient {
 	return &SubscriptionNotifyClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -59,7 +57,6 @@ func (c *SubscriptionNotifyClient) Add() *SubscriptionNotifyAddRequest {
 	return &SubscriptionNotifyAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *SubscriptionNotifyClient) Add() *SubscriptionNotifyAddRequest {
 type SubscriptionNotifyAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *SubscriptionNotify
@@ -104,7 +100,7 @@ func (r *SubscriptionNotifyAddRequest) Send() (result *SubscriptionNotifyAddResp
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionNotifyAddRequest) SendContext(ctx context.Context) (result *SubscriptionNotifyAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeSubscriptionNotifyAddRequest(r, buffer)
 	if err != nil {

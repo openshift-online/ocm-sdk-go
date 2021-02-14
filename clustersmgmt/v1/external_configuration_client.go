@@ -36,17 +36,15 @@ import (
 type ExternalConfigurationClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewExternalConfigurationClient creates a new client for the 'external_configuration'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewExternalConfigurationClient(transport http.RoundTripper, path string, metric string) *ExternalConfigurationClient {
+func NewExternalConfigurationClient(transport http.RoundTripper, path string) *ExternalConfigurationClient {
 	return &ExternalConfigurationClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -57,7 +55,6 @@ func (c *ExternalConfigurationClient) Get() *ExternalConfigurationGetRequest {
 	return &ExternalConfigurationGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -68,7 +65,6 @@ func (c *ExternalConfigurationClient) Labels() *LabelsClient {
 	return NewLabelsClient(
 		c.transport,
 		path.Join(c.path, "labels"),
-		path.Join(c.metric, "labels"),
 	)
 }
 
@@ -79,7 +75,6 @@ func (c *ExternalConfigurationClient) Syncsets() *SyncsetsClient {
 	return NewSyncsetsClient(
 		c.transport,
 		path.Join(c.path, "syncsets"),
-		path.Join(c.metric, "syncsets"),
 	)
 }
 
@@ -208,7 +203,6 @@ func (c *ExternalConfigurationClient) Poll() *ExternalConfigurationPollRequest {
 type ExternalConfigurationGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -236,7 +230,7 @@ func (r *ExternalConfigurationGetRequest) Send() (result *ExternalConfigurationG
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ExternalConfigurationGetRequest) SendContext(ctx context.Context) (result *ExternalConfigurationGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

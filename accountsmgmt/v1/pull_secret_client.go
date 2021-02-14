@@ -34,17 +34,15 @@ import (
 type PullSecretClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewPullSecretClient creates a new client for the 'pull_secret'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewPullSecretClient(transport http.RoundTripper, path string, metric string) *PullSecretClient {
+func NewPullSecretClient(transport http.RoundTripper, path string) *PullSecretClient {
 	return &PullSecretClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -55,7 +53,6 @@ func (c *PullSecretClient) Delete() *PullSecretDeleteRequest {
 	return &PullSecretDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -63,7 +60,6 @@ func (c *PullSecretClient) Delete() *PullSecretDeleteRequest {
 type PullSecretDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -91,7 +87,7 @@ func (r *PullSecretDeleteRequest) Send() (result *PullSecretDeleteResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *PullSecretDeleteRequest) SendContext(ctx context.Context) (result *PullSecretDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -39,17 +39,15 @@ import (
 type AddOnsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAddOnsClient creates a new client for the 'add_ons'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAddOnsClient(transport http.RoundTripper, path string, metric string) *AddOnsClient {
+func NewAddOnsClient(transport http.RoundTripper, path string) *AddOnsClient {
 	return &AddOnsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *AddOnsClient) Add() *AddOnsAddRequest {
 	return &AddOnsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *AddOnsClient) List() *AddOnsListRequest {
 	return &AddOnsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *AddOnsClient) Addon(id string) *AddOnClient {
 	return NewAddOnClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *AddOnsClient) Addon(id string) *AddOnClient {
 type AddOnsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *AddOn
@@ -127,7 +121,7 @@ func (r *AddOnsAddRequest) Send() (result *AddOnsAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AddOnsAddRequest) SendContext(ctx context.Context) (result *AddOnsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeAddOnsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *AddOnsAddResponse) GetBody() (value *AddOn, ok bool) {
 type AddOnsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	order     *string
@@ -339,7 +332,7 @@ func (r *AddOnsListRequest) SendContext(ctx context.Context) (result *AddOnsList
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

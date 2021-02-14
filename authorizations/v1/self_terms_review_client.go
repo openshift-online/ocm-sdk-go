@@ -35,17 +35,15 @@ import (
 type SelfTermsReviewClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSelfTermsReviewClient creates a new client for the 'self_terms_review'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSelfTermsReviewClient(transport http.RoundTripper, path string, metric string) *SelfTermsReviewClient {
+func NewSelfTermsReviewClient(transport http.RoundTripper, path string) *SelfTermsReviewClient {
 	return &SelfTermsReviewClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *SelfTermsReviewClient) Post() *SelfTermsReviewPostRequest {
 	return &SelfTermsReviewPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -64,7 +61,6 @@ func (c *SelfTermsReviewClient) Post() *SelfTermsReviewPostRequest {
 type SelfTermsReviewPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -92,7 +88,7 @@ func (r *SelfTermsReviewPostRequest) Send() (result *SelfTermsReviewPostResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SelfTermsReviewPostRequest) SendContext(ctx context.Context) (result *SelfTermsReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

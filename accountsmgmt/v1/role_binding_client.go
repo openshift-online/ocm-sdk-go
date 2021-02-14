@@ -39,17 +39,15 @@ import (
 type RoleBindingClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRoleBindingClient creates a new client for the 'role_binding'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRoleBindingClient(transport http.RoundTripper, path string, metric string) *RoleBindingClient {
+func NewRoleBindingClient(transport http.RoundTripper, path string) *RoleBindingClient {
 	return &RoleBindingClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *RoleBindingClient) Delete() *RoleBindingDeleteRequest {
 	return &RoleBindingDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *RoleBindingClient) Get() *RoleBindingGetRequest {
 	return &RoleBindingGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *RoleBindingClient) Update() *RoleBindingUpdateRequest {
 	return &RoleBindingUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *RoleBindingClient) Poll() *RoleBindingPollRequest {
 type RoleBindingDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *RoleBindingDeleteRequest) Send() (result *RoleBindingDeleteResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleBindingDeleteRequest) SendContext(ctx context.Context) (result *RoleBindingDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *RoleBindingDeleteResponse) Error() *errors.Error {
 type RoleBindingGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *RoleBindingGetRequest) Send() (result *RoleBindingGetResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleBindingGetRequest) SendContext(ctx context.Context) (result *RoleBindingGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *RoleBindingGetResponse) GetBody() (value *RoleBinding, ok bool) {
 type RoleBindingUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *RoleBinding
@@ -465,7 +457,7 @@ func (r *RoleBindingUpdateRequest) Send() (result *RoleBindingUpdateResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleBindingUpdateRequest) SendContext(ctx context.Context) (result *RoleBindingUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeRoleBindingUpdateRequest(r, buffer)
 	if err != nil {

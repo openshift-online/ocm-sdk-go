@@ -35,17 +35,15 @@ import (
 type DashboardsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewDashboardsClient creates a new client for the 'dashboards'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewDashboardsClient(transport http.RoundTripper, path string, metric string) *DashboardsClient {
+func NewDashboardsClient(transport http.RoundTripper, path string) *DashboardsClient {
 	return &DashboardsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *DashboardsClient) List() *DashboardsListRequest {
 	return &DashboardsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *DashboardsClient) Dashboard(id string) *DashboardClient {
 	return NewDashboardClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -75,7 +71,6 @@ func (c *DashboardsClient) Dashboard(id string) *DashboardClient {
 type DashboardsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	order     *string
@@ -177,7 +172,7 @@ func (r *DashboardsListRequest) SendContext(ctx context.Context) (result *Dashbo
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

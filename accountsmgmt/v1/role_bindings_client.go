@@ -39,17 +39,15 @@ import (
 type RoleBindingsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRoleBindingsClient creates a new client for the 'role_bindings'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRoleBindingsClient(transport http.RoundTripper, path string, metric string) *RoleBindingsClient {
+func NewRoleBindingsClient(transport http.RoundTripper, path string) *RoleBindingsClient {
 	return &RoleBindingsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *RoleBindingsClient) Add() *RoleBindingsAddRequest {
 	return &RoleBindingsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *RoleBindingsClient) List() *RoleBindingsListRequest {
 	return &RoleBindingsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *RoleBindingsClient) RoleBinding(id string) *RoleBindingClient {
 	return NewRoleBindingClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *RoleBindingsClient) RoleBinding(id string) *RoleBindingClient {
 type RoleBindingsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *RoleBinding
@@ -127,7 +121,7 @@ func (r *RoleBindingsAddRequest) Send() (result *RoleBindingsAddResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RoleBindingsAddRequest) SendContext(ctx context.Context) (result *RoleBindingsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeRoleBindingsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *RoleBindingsAddResponse) GetBody() (value *RoleBinding, ok bool) {
 type RoleBindingsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -314,7 +307,7 @@ func (r *RoleBindingsListRequest) SendContext(ctx context.Context) (result *Role
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

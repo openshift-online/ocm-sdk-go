@@ -39,17 +39,15 @@ import (
 type PermissionsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewPermissionsClient creates a new client for the 'permissions'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewPermissionsClient(transport http.RoundTripper, path string, metric string) *PermissionsClient {
+func NewPermissionsClient(transport http.RoundTripper, path string) *PermissionsClient {
 	return &PermissionsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *PermissionsClient) Add() *PermissionsAddRequest {
 	return &PermissionsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *PermissionsClient) List() *PermissionsListRequest {
 	return &PermissionsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *PermissionsClient) Permission(id string) *PermissionClient {
 	return NewPermissionClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *PermissionsClient) Permission(id string) *PermissionClient {
 type PermissionsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Permission
@@ -127,7 +121,7 @@ func (r *PermissionsAddRequest) Send() (result *PermissionsAddResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *PermissionsAddRequest) SendContext(ctx context.Context) (result *PermissionsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writePermissionsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *PermissionsAddResponse) GetBody() (value *Permission, ok bool) {
 type PermissionsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -289,7 +282,7 @@ func (r *PermissionsListRequest) SendContext(ctx context.Context) (result *Permi
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

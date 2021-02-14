@@ -39,17 +39,15 @@ import (
 type SyncsetClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSyncsetClient creates a new client for the 'syncset'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSyncsetClient(transport http.RoundTripper, path string, metric string) *SyncsetClient {
+func NewSyncsetClient(transport http.RoundTripper, path string) *SyncsetClient {
 	return &SyncsetClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *SyncsetClient) Delete() *SyncsetDeleteRequest {
 	return &SyncsetDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *SyncsetClient) Get() *SyncsetGetRequest {
 	return &SyncsetGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *SyncsetClient) Update() *SyncsetUpdateRequest {
 	return &SyncsetUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *SyncsetClient) Poll() *SyncsetPollRequest {
 type SyncsetDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *SyncsetDeleteRequest) Send() (result *SyncsetDeleteResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SyncsetDeleteRequest) SendContext(ctx context.Context) (result *SyncsetDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *SyncsetDeleteResponse) Error() *errors.Error {
 type SyncsetGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *SyncsetGetRequest) Send() (result *SyncsetGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SyncsetGetRequest) SendContext(ctx context.Context) (result *SyncsetGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *SyncsetGetResponse) GetBody() (value *Syncset, ok bool) {
 type SyncsetUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Syncset
@@ -465,7 +457,7 @@ func (r *SyncsetUpdateRequest) Send() (result *SyncsetUpdateResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SyncsetUpdateRequest) SendContext(ctx context.Context) (result *SyncsetUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeSyncsetUpdateRequest(r, buffer)
 	if err != nil {

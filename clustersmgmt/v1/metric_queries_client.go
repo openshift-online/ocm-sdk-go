@@ -30,17 +30,15 @@ import (
 type MetricQueriesClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewMetricQueriesClient creates a new client for the 'metric_queries'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewMetricQueriesClient(transport http.RoundTripper, path string, metric string) *MetricQueriesClient {
+func NewMetricQueriesClient(transport http.RoundTripper, path string) *MetricQueriesClient {
 	return &MetricQueriesClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -52,7 +50,6 @@ func (c *MetricQueriesClient) CPUTotalByNodeRolesOS() *CPUTotalByNodeRolesOSMetr
 	return NewCPUTotalByNodeRolesOSMetricQueryClient(
 		c.transport,
 		path.Join(c.path, "cpu_total_by_node_roles_os"),
-		path.Join(c.metric, "cpu_total_by_node_roles_os"),
 	)
 }
 
@@ -63,7 +60,6 @@ func (c *MetricQueriesClient) Alerts() *AlertsMetricQueryClient {
 	return NewAlertsMetricQueryClient(
 		c.transport,
 		path.Join(c.path, "alerts"),
-		path.Join(c.metric, "alerts"),
 	)
 }
 
@@ -74,7 +70,6 @@ func (c *MetricQueriesClient) ClusterOperators() *ClusterOperatorsMetricQueryCli
 	return NewClusterOperatorsMetricQueryClient(
 		c.transport,
 		path.Join(c.path, "cluster_operators"),
-		path.Join(c.metric, "cluster_operators"),
 	)
 }
 
@@ -85,7 +80,6 @@ func (c *MetricQueriesClient) Nodes() *NodesMetricQueryClient {
 	return NewNodesMetricQueryClient(
 		c.transport,
 		path.Join(c.path, "nodes"),
-		path.Join(c.metric, "nodes"),
 	)
 }
 
@@ -97,6 +91,5 @@ func (c *MetricQueriesClient) SocketTotalByNodeRolesOS() *SocketTotalByNodeRoles
 	return NewSocketTotalByNodeRolesOSMetricQueryClient(
 		c.transport,
 		path.Join(c.path, "socket_total_by_node_roles_os"),
-		path.Join(c.metric, "socket_total_by_node_roles_os"),
 	)
 }

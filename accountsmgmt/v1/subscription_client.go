@@ -40,17 +40,15 @@ import (
 type SubscriptionClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSubscriptionClient creates a new client for the 'subscription'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSubscriptionClient(transport http.RoundTripper, path string, metric string) *SubscriptionClient {
+func NewSubscriptionClient(transport http.RoundTripper, path string) *SubscriptionClient {
 	return &SubscriptionClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -61,7 +59,6 @@ func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
 	return &SubscriptionDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -72,7 +69,6 @@ func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
 	return &SubscriptionGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -83,7 +79,6 @@ func (c *SubscriptionClient) Update() *SubscriptionUpdateRequest {
 	return &SubscriptionUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -94,7 +89,6 @@ func (c *SubscriptionClient) Labels() *GenericLabelsClient {
 	return NewGenericLabelsClient(
 		c.transport,
 		path.Join(c.path, "labels"),
-		path.Join(c.metric, "labels"),
 	)
 }
 
@@ -105,7 +99,6 @@ func (c *SubscriptionClient) Notify() *SubscriptionNotifyClient {
 	return NewSubscriptionNotifyClient(
 		c.transport,
 		path.Join(c.path, "notify"),
-		path.Join(c.metric, "notify"),
 	)
 }
 
@@ -117,7 +110,6 @@ func (c *SubscriptionClient) ReservedResources() *SubscriptionReservedResourcesC
 	return NewSubscriptionReservedResourcesClient(
 		c.transport,
 		path.Join(c.path, "reserved_resources"),
-		path.Join(c.metric, "reserved_resources"),
 	)
 }
 
@@ -246,7 +238,6 @@ func (c *SubscriptionClient) Poll() *SubscriptionPollRequest {
 type SubscriptionDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -274,7 +265,7 @@ func (r *SubscriptionDeleteRequest) Send() (result *SubscriptionDeleteResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *SubscriptionDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -341,7 +332,6 @@ func (r *SubscriptionDeleteResponse) Error() *errors.Error {
 type SubscriptionGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -369,7 +359,7 @@ func (r *SubscriptionGetRequest) Send() (result *SubscriptionGetResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *SubscriptionGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -463,7 +453,6 @@ func (r *SubscriptionGetResponse) GetBody() (value *Subscription, ok bool) {
 type SubscriptionUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Subscription
@@ -500,7 +489,7 @@ func (r *SubscriptionUpdateRequest) Send() (result *SubscriptionUpdateResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *SubscriptionUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeSubscriptionUpdateRequest(r, buffer)
 	if err != nil {

@@ -35,17 +35,15 @@ import (
 type ProvisionShardsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewProvisionShardsClient creates a new client for the 'provision_shards'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewProvisionShardsClient(transport http.RoundTripper, path string, metric string) *ProvisionShardsClient {
+func NewProvisionShardsClient(transport http.RoundTripper, path string) *ProvisionShardsClient {
 	return &ProvisionShardsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *ProvisionShardsClient) List() *ProvisionShardsListRequest {
 	return &ProvisionShardsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *ProvisionShardsClient) ProvisionShard(id string) *ProvisionShardClient 
 	return NewProvisionShardClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -75,7 +71,6 @@ func (c *ProvisionShardsClient) ProvisionShard(id string) *ProvisionShardClient 
 type ProvisionShardsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -127,7 +122,7 @@ func (r *ProvisionShardsListRequest) SendContext(ctx context.Context) (result *P
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

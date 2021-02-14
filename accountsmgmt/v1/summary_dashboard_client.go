@@ -35,17 +35,15 @@ import (
 type SummaryDashboardClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSummaryDashboardClient creates a new client for the 'summary_dashboard'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSummaryDashboardClient(transport http.RoundTripper, path string, metric string) *SummaryDashboardClient {
+func NewSummaryDashboardClient(transport http.RoundTripper, path string) *SummaryDashboardClient {
 	return &SummaryDashboardClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *SummaryDashboardClient) Get() *SummaryDashboardGetRequest {
 	return &SummaryDashboardGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *SummaryDashboardClient) Poll() *SummaryDashboardPollRequest {
 type SummaryDashboardGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *SummaryDashboardGetRequest) Send() (result *SummaryDashboardGetResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SummaryDashboardGetRequest) SendContext(ctx context.Context) (result *SummaryDashboardGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -38,17 +38,15 @@ import (
 type CapabilityReviewClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewCapabilityReviewClient creates a new client for the 'capability_review'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewCapabilityReviewClient(transport http.RoundTripper, path string, metric string) *CapabilityReviewClient {
+func NewCapabilityReviewClient(transport http.RoundTripper, path string) *CapabilityReviewClient {
 	return &CapabilityReviewClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -59,7 +57,6 @@ func (c *CapabilityReviewClient) Post() *CapabilityReviewPostRequest {
 	return &CapabilityReviewPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *CapabilityReviewClient) Post() *CapabilityReviewPostRequest {
 type CapabilityReviewPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *CapabilityReviewRequest
@@ -104,7 +100,7 @@ func (r *CapabilityReviewPostRequest) Send() (result *CapabilityReviewPostRespon
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CapabilityReviewPostRequest) SendContext(ctx context.Context) (result *CapabilityReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeCapabilityReviewPostRequest(r, buffer)
 	if err != nil {

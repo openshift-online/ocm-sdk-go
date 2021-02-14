@@ -39,17 +39,15 @@ import (
 type RegistryCredentialsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRegistryCredentialsClient creates a new client for the 'registry_credentials'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRegistryCredentialsClient(transport http.RoundTripper, path string, metric string) *RegistryCredentialsClient {
+func NewRegistryCredentialsClient(transport http.RoundTripper, path string) *RegistryCredentialsClient {
 	return &RegistryCredentialsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *RegistryCredentialsClient) Add() *RegistryCredentialsAddRequest {
 	return &RegistryCredentialsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *RegistryCredentialsClient) List() *RegistryCredentialsListRequest {
 	return &RegistryCredentialsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *RegistryCredentialsClient) RegistryCredential(id string) *RegistryCrede
 	return NewRegistryCredentialClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *RegistryCredentialsClient) RegistryCredential(id string) *RegistryCrede
 type RegistryCredentialsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *RegistryCredential
@@ -127,7 +121,7 @@ func (r *RegistryCredentialsAddRequest) Send() (result *RegistryCredentialsAddRe
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result *RegistryCredentialsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeRegistryCredentialsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *RegistryCredentialsAddResponse) GetBody() (value *RegistryCredential, o
 type RegistryCredentialsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	order     *string
@@ -338,7 +331,7 @@ func (r *RegistryCredentialsListRequest) SendContext(ctx context.Context) (resul
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

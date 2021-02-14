@@ -39,17 +39,15 @@ import (
 type LabelsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewLabelsClient creates a new client for the 'labels'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewLabelsClient(transport http.RoundTripper, path string, metric string) *LabelsClient {
+func NewLabelsClient(transport http.RoundTripper, path string) *LabelsClient {
 	return &LabelsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *LabelsClient) Add() *LabelsAddRequest {
 	return &LabelsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *LabelsClient) List() *LabelsListRequest {
 	return &LabelsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *LabelsClient) Label(id string) *LabelClient {
 	return NewLabelClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *LabelsClient) Label(id string) *LabelClient {
 type LabelsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Label
@@ -127,7 +121,7 @@ func (r *LabelsAddRequest) Send() (result *LabelsAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *LabelsAddRequest) SendContext(ctx context.Context) (result *LabelsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeLabelsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *LabelsAddResponse) GetBody() (value *Label, ok bool) {
 type LabelsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -289,7 +282,7 @@ func (r *LabelsListRequest) SendContext(ctx context.Context) (result *LabelsList
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

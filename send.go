@@ -30,15 +30,14 @@ import (
 	"net/http"
 	"path"
 	"regexp"
-	"strconv"
 	"strings"
-	"time"
 
 	strip "github.com/grokify/html-strip-tags-go"
 )
 
 var wsRegex = regexp.MustCompile(`\s+`)
 
+// RoundTrip is the implementation of the http.RoundTripper interface.
 func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, err error) {
 	// Check if the connection is closed:
 	err = c.checkClosed()
@@ -49,50 +48,6 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	// Get the context from the request:
 	ctx := request.Context()
 
-	// Get and delete the header that contains the anonymized path that should be used to
-	// report metrics:
-	var metric string
-	header := request.Header
-	if header != nil {
-		metric = header.Get(metricHeader)
-		header.Del(metricHeader)
-	}
-	if metric == "" {
-		metric = "/-"
-	}
-
-	// Measure the time that it takes to send the request and receive the response:
-	// it in the log:
-	before := time.Now()
-	response, err = c.send(ctx, request)
-	after := time.Now()
-	elapsed := after.Sub(before)
-
-	// Update the metrics:
-	if c.callCountMetric != nil || c.callDurationMetric != nil {
-		code := 0
-		if response != nil {
-			code = response.StatusCode
-		}
-		labels := map[string]string{
-			metricsAPIServiceLabel: c.GetAPIServiceLabelFromPath(request.URL.Path),
-			metricsMethodLabel:     request.Method,
-			metricsPathLabel:       metric,
-			metricsCodeLabel:       strconv.Itoa(code),
-		}
-		if c.callCountMetric != nil {
-			c.callCountMetric.With(labels).Inc()
-		}
-		if c.callDurationMetric != nil {
-			c.callDurationMetric.With(labels).Observe(elapsed.Seconds())
-		}
-	}
-
-	return
-}
-
-func (c *Connection) send(ctx context.Context, request *http.Request) (response *http.Response,
-	err error) {
 	// Check the request URL:
 	if request.URL.Path == "" {
 		err = fmt.Errorf("request path is mandatory")
@@ -267,7 +222,6 @@ func (c *Connection) selectClient(ctx context.Context, base *urlInfo) (client *h
 	// Get an existing client, or create a new one if it doesn't exist yet:
 	client, ok := c.clientsTable[key]
 	if ok {
-		c.logger.Debug(ctx, "Client for key '%s' already exists", key)
 		return
 	}
 	c.logger.Debug(ctx, "Client for key '%s' doesn't exist, will create it", key)
@@ -353,18 +307,25 @@ func (c *Connection) createTransport(ctx context.Context, base *urlInfo) (
 	// Prepare the result:
 	result = transport
 
-	// If debug is enabled then wrap the raw transport with the round tripper that sends the
-	// details of requests and responses to the log:
-	if c.logger.DebugEnabled() {
-		result = &dumpRoundTripper{
-			logger: c.logger,
-			next:   result,
-		}
+	// The metrics wrapper should be called the first because we want the corresponding round
+	// tripper to be called the last so that metrics aren't affected by users specified round
+	// trippers and don't include the logging overhead. Also, we don't want to add this wrapper
+	// for transports used for token requests because there are specific metrics for that.
+	if c.metricsWrapper != nil && base != c.tokenURL {
+		result = c.metricsWrapper(result)
 	}
 
-	// Wrap the transport with the round trippers provided by the user:
-	if c.transportWrapper != nil {
-		result = c.transportWrapper(result)
+	// The logging wrapper should be next, because we want the corresponding round tripper
+	// called after the user specified round trippers so that the information in the log
+	// reflects the modifications made by those suer specified round trippers.
+	if c.loggingWrapper != nil {
+		result = c.loggingWrapper(result)
+	}
+
+	// User transport wrappers are stored in the order that the round trippers that they create
+	// should be called. That means that we need to call them in reverse order.
+	for i := len(c.userWrapers) - 1; i >= 0; i-- {
+		result = c.userWrapers[i](result)
 	}
 
 	return

@@ -38,17 +38,15 @@ import (
 type SelfCapabilityReviewClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSelfCapabilityReviewClient creates a new client for the 'self_capability_review'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSelfCapabilityReviewClient(transport http.RoundTripper, path string, metric string) *SelfCapabilityReviewClient {
+func NewSelfCapabilityReviewClient(transport http.RoundTripper, path string) *SelfCapabilityReviewClient {
 	return &SelfCapabilityReviewClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -59,7 +57,6 @@ func (c *SelfCapabilityReviewClient) Post() *SelfCapabilityReviewPostRequest {
 	return &SelfCapabilityReviewPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *SelfCapabilityReviewClient) Post() *SelfCapabilityReviewPostRequest {
 type SelfCapabilityReviewPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *SelfCapabilityReviewRequest
@@ -104,7 +100,7 @@ func (r *SelfCapabilityReviewPostRequest) Send() (result *SelfCapabilityReviewPo
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SelfCapabilityReviewPostRequest) SendContext(ctx context.Context) (result *SelfCapabilityReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeSelfCapabilityReviewPostRequest(r, buffer)
 	if err != nil {

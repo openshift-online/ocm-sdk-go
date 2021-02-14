@@ -39,17 +39,15 @@ import (
 type IdentityProviderClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewIdentityProviderClient creates a new client for the 'identity_provider'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewIdentityProviderClient(transport http.RoundTripper, path string, metric string) *IdentityProviderClient {
+func NewIdentityProviderClient(transport http.RoundTripper, path string) *IdentityProviderClient {
 	return &IdentityProviderClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *IdentityProviderClient) Delete() *IdentityProviderDeleteRequest {
 	return &IdentityProviderDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *IdentityProviderClient) Get() *IdentityProviderGetRequest {
 	return &IdentityProviderGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *IdentityProviderClient) Update() *IdentityProviderUpdateRequest {
 	return &IdentityProviderUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *IdentityProviderClient) Poll() *IdentityProviderPollRequest {
 type IdentityProviderDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *IdentityProviderDeleteRequest) Send() (result *IdentityProviderDeleteRe
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IdentityProviderDeleteRequest) SendContext(ctx context.Context) (result *IdentityProviderDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *IdentityProviderDeleteResponse) Error() *errors.Error {
 type IdentityProviderGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *IdentityProviderGetRequest) Send() (result *IdentityProviderGetResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IdentityProviderGetRequest) SendContext(ctx context.Context) (result *IdentityProviderGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *IdentityProviderGetResponse) GetBody() (value *IdentityProvider, ok boo
 type IdentityProviderUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *IdentityProvider
@@ -465,7 +457,7 @@ func (r *IdentityProviderUpdateRequest) Send() (result *IdentityProviderUpdateRe
 // SendContext sends this request, waits for the response, and returns it.
 func (r *IdentityProviderUpdateRequest) SendContext(ctx context.Context) (result *IdentityProviderUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeIdentityProviderUpdateRequest(r, buffer)
 	if err != nil {

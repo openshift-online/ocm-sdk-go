@@ -39,17 +39,15 @@ import (
 type RolesClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewRolesClient creates a new client for the 'roles'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewRolesClient(transport http.RoundTripper, path string, metric string) *RolesClient {
+func NewRolesClient(transport http.RoundTripper, path string) *RolesClient {
 	return &RolesClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *RolesClient) Add() *RolesAddRequest {
 	return &RolesAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *RolesClient) List() *RolesListRequest {
 	return &RolesListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *RolesClient) Role(id string) *RoleClient {
 	return NewRoleClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *RolesClient) Role(id string) *RoleClient {
 type RolesAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Role
@@ -127,7 +121,7 @@ func (r *RolesAddRequest) Send() (result *RolesAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *RolesAddRequest) SendContext(ctx context.Context) (result *RolesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeRolesAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *RolesAddResponse) GetBody() (value *Role, ok bool) {
 type RolesListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -314,7 +307,7 @@ func (r *RolesListRequest) SendContext(ctx context.Context) (result *RolesListRe
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

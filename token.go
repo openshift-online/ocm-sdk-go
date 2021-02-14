@@ -304,10 +304,9 @@ func (c *Connection) sendTokenForm(
 	attempt int,
 ) (code int, result *internal.TokenResponse, err error) {
 	// Measure the time that it takes to send the request and receive the response:
-	before := time.Now()
+	start := time.Now()
 	code, result, err = c.sendTokenFormTimed(ctx, form)
-	after := time.Now()
-	elapsed := after.Sub(before)
+	elapsed := time.Since(start)
 
 	// Update the metrics:
 	if c.tokenCountMetric != nil || c.tokenDurationMetric != nil {

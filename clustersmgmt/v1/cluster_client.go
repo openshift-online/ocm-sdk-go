@@ -40,17 +40,15 @@ import (
 type ClusterClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClusterClient creates a new client for the 'cluster'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClusterClient(transport http.RoundTripper, path string, metric string) *ClusterClient {
+func NewClusterClient(transport http.RoundTripper, path string) *ClusterClient {
 	return &ClusterClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -61,7 +59,6 @@ func (c *ClusterClient) Delete() *ClusterDeleteRequest {
 	return &ClusterDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -72,7 +69,6 @@ func (c *ClusterClient) Get() *ClusterGetRequest {
 	return &ClusterGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -84,7 +80,6 @@ func (c *ClusterClient) Hibernate() *ClusterHibernateRequest {
 	return &ClusterHibernateRequest{
 		transport: c.transport,
 		path:      path.Join(c.path, "hibernate"),
-		metric:    path.Join(c.metric, "hibernate"),
 	}
 }
 
@@ -95,7 +90,6 @@ func (c *ClusterClient) Resume() *ClusterResumeRequest {
 	return &ClusterResumeRequest{
 		transport: c.transport,
 		path:      path.Join(c.path, "resume"),
-		metric:    path.Join(c.metric, "resume"),
 	}
 }
 
@@ -106,7 +100,6 @@ func (c *ClusterClient) Update() *ClusterUpdateRequest {
 	return &ClusterUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -118,7 +111,6 @@ func (c *ClusterClient) AWSInfrastructureAccessRoleGrants() *AWSInfrastructureAc
 	return NewAWSInfrastructureAccessRoleGrantsClient(
 		c.transport,
 		path.Join(c.path, "aws_infrastructure_access_role_grants"),
-		path.Join(c.metric, "aws_infrastructure_access_role_grants"),
 	)
 }
 
@@ -129,7 +121,6 @@ func (c *ClusterClient) Addons() *AddOnInstallationsClient {
 	return NewAddOnInstallationsClient(
 		c.transport,
 		path.Join(c.path, "addons"),
-		path.Join(c.metric, "addons"),
 	)
 }
 
@@ -140,7 +131,6 @@ func (c *ClusterClient) Credentials() *CredentialsClient {
 	return NewCredentialsClient(
 		c.transport,
 		path.Join(c.path, "credentials"),
-		path.Join(c.metric, "credentials"),
 	)
 }
 
@@ -151,7 +141,6 @@ func (c *ClusterClient) ExternalConfiguration() *ExternalConfigurationClient {
 	return NewExternalConfigurationClient(
 		c.transport,
 		path.Join(c.path, "external_configuration"),
-		path.Join(c.metric, "external_configuration"),
 	)
 }
 
@@ -162,7 +151,6 @@ func (c *ClusterClient) Groups() *GroupsClient {
 	return NewGroupsClient(
 		c.transport,
 		path.Join(c.path, "groups"),
-		path.Join(c.metric, "groups"),
 	)
 }
 
@@ -173,7 +161,6 @@ func (c *ClusterClient) IdentityProviders() *IdentityProvidersClient {
 	return NewIdentityProvidersClient(
 		c.transport,
 		path.Join(c.path, "identity_providers"),
-		path.Join(c.metric, "identity_providers"),
 	)
 }
 
@@ -184,7 +171,6 @@ func (c *ClusterClient) Ingresses() *IngressesClient {
 	return NewIngressesClient(
 		c.transport,
 		path.Join(c.path, "ingresses"),
-		path.Join(c.metric, "ingresses"),
 	)
 }
 
@@ -195,7 +181,6 @@ func (c *ClusterClient) Logs() *LogsClient {
 	return NewLogsClient(
 		c.transport,
 		path.Join(c.path, "logs"),
-		path.Join(c.metric, "logs"),
 	)
 }
 
@@ -206,7 +191,6 @@ func (c *ClusterClient) MachinePools() *MachinePoolsClient {
 	return NewMachinePoolsClient(
 		c.transport,
 		path.Join(c.path, "machine_pools"),
-		path.Join(c.metric, "machine_pools"),
 	)
 }
 
@@ -217,7 +201,6 @@ func (c *ClusterClient) MetricQueries() *MetricQueriesClient {
 	return NewMetricQueriesClient(
 		c.transport,
 		path.Join(c.path, "metric_queries"),
-		path.Join(c.metric, "metric_queries"),
 	)
 }
 
@@ -228,7 +211,6 @@ func (c *ClusterClient) Product() *ProductClient {
 	return NewProductClient(
 		c.transport,
 		path.Join(c.path, "product"),
-		path.Join(c.metric, "product"),
 	)
 }
 
@@ -239,7 +221,6 @@ func (c *ClusterClient) ProvisionShard() *ProvisionShardClient {
 	return NewProvisionShardClient(
 		c.transport,
 		path.Join(c.path, "provision_shard"),
-		path.Join(c.metric, "provision_shard"),
 	)
 }
 
@@ -250,7 +231,6 @@ func (c *ClusterClient) Status() *ClusterStatusClient {
 	return NewClusterStatusClient(
 		c.transport,
 		path.Join(c.path, "status"),
-		path.Join(c.metric, "status"),
 	)
 }
 
@@ -261,7 +241,6 @@ func (c *ClusterClient) UpgradePolicies() *UpgradePoliciesClient {
 	return NewUpgradePoliciesClient(
 		c.transport,
 		path.Join(c.path, "upgrade_policies"),
-		path.Join(c.metric, "upgrade_policies"),
 	)
 }
 
@@ -390,7 +369,6 @@ func (c *ClusterClient) Poll() *ClusterPollRequest {
 type ClusterDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -418,7 +396,7 @@ func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -485,7 +463,6 @@ func (r *ClusterDeleteResponse) Error() *errors.Error {
 type ClusterGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -513,7 +490,7 @@ func (r *ClusterGetRequest) Send() (result *ClusterGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -607,7 +584,6 @@ func (r *ClusterGetResponse) GetBody() (value *Cluster, ok bool) {
 type ClusterHibernateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -635,7 +611,7 @@ func (r *ClusterHibernateRequest) Send() (result *ClusterHibernateResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterHibernateRequest) SendContext(ctx context.Context) (result *ClusterHibernateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -702,7 +678,6 @@ func (r *ClusterHibernateResponse) Error() *errors.Error {
 type ClusterResumeRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -730,7 +705,7 @@ func (r *ClusterResumeRequest) Send() (result *ClusterResumeResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterResumeRequest) SendContext(ctx context.Context) (result *ClusterResumeResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -797,7 +772,6 @@ func (r *ClusterResumeResponse) Error() *errors.Error {
 type ClusterUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Cluster
@@ -834,7 +808,7 @@ func (r *ClusterUpdateRequest) Send() (result *ClusterUpdateResponse, err error)
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *ClusterUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeClusterUpdateRequest(r, buffer)
 	if err != nil {

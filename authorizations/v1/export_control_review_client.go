@@ -38,17 +38,15 @@ import (
 type ExportControlReviewClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewExportControlReviewClient creates a new client for the 'export_control_review'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewExportControlReviewClient(transport http.RoundTripper, path string, metric string) *ExportControlReviewClient {
+func NewExportControlReviewClient(transport http.RoundTripper, path string) *ExportControlReviewClient {
 	return &ExportControlReviewClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -59,7 +57,6 @@ func (c *ExportControlReviewClient) Post() *ExportControlReviewPostRequest {
 	return &ExportControlReviewPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *ExportControlReviewClient) Post() *ExportControlReviewPostRequest {
 type ExportControlReviewPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *ExportControlReviewRequest
@@ -104,7 +100,7 @@ func (r *ExportControlReviewPostRequest) Send() (result *ExportControlReviewPost
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ExportControlReviewPostRequest) SendContext(ctx context.Context) (result *ExportControlReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeExportControlReviewPostRequest(r, buffer)
 	if err != nil {

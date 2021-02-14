@@ -35,17 +35,15 @@ import (
 type SocketTotalByNodeRolesOSMetricQueryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSocketTotalByNodeRolesOSMetricQueryClient creates a new client for the 'socket_total_by_node_roles_OS_metric_query'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSocketTotalByNodeRolesOSMetricQueryClient(transport http.RoundTripper, path string, metric string) *SocketTotalByNodeRolesOSMetricQueryClient {
+func NewSocketTotalByNodeRolesOSMetricQueryClient(transport http.RoundTripper, path string) *SocketTotalByNodeRolesOSMetricQueryClient {
 	return &SocketTotalByNodeRolesOSMetricQueryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *SocketTotalByNodeRolesOSMetricQueryClient) Get() *SocketTotalByNodeRole
 	return &SocketTotalByNodeRolesOSMetricQueryGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *SocketTotalByNodeRolesOSMetricQueryClient) Poll() *SocketTotalByNodeRol
 type SocketTotalByNodeRolesOSMetricQueryGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *SocketTotalByNodeRolesOSMetricQueryGetRequest) Send() (result *SocketTo
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SocketTotalByNodeRolesOSMetricQueryGetRequest) SendContext(ctx context.Context) (result *SocketTotalByNodeRolesOSMetricQueryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -35,17 +35,15 @@ import (
 type UserClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewUserClient creates a new client for the 'user'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewUserClient(transport http.RoundTripper, path string, metric string) *UserClient {
+func NewUserClient(transport http.RoundTripper, path string) *UserClient {
 	return &UserClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *UserClient) Delete() *UserDeleteRequest {
 	return &UserDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -67,7 +64,6 @@ func (c *UserClient) Get() *UserGetRequest {
 	return &UserGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -196,7 +192,6 @@ func (c *UserClient) Poll() *UserPollRequest {
 type UserDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -224,7 +219,7 @@ func (r *UserDeleteRequest) Send() (result *UserDeleteResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UserDeleteRequest) SendContext(ctx context.Context) (result *UserDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -291,7 +286,6 @@ func (r *UserDeleteResponse) Error() *errors.Error {
 type UserGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -319,7 +313,7 @@ func (r *UserGetRequest) Send() (result *UserGetResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *UserGetRequest) SendContext(ctx context.Context) (result *UserGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

@@ -38,17 +38,15 @@ import (
 type ClusterRegistrationsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClusterRegistrationsClient creates a new client for the 'cluster_registrations'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClusterRegistrationsClient(transport http.RoundTripper, path string, metric string) *ClusterRegistrationsClient {
+func NewClusterRegistrationsClient(transport http.RoundTripper, path string) *ClusterRegistrationsClient {
 	return &ClusterRegistrationsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *ClusterRegistrationsClient) Post() *ClusterRegistrationsPostRequest {
 	return &ClusterRegistrationsPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -68,7 +65,6 @@ func (c *ClusterRegistrationsClient) Post() *ClusterRegistrationsPostRequest {
 type ClusterRegistrationsPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *ClusterRegistrationRequest
@@ -105,7 +101,7 @@ func (r *ClusterRegistrationsPostRequest) Send() (result *ClusterRegistrationsPo
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterRegistrationsPostRequest) SendContext(ctx context.Context) (result *ClusterRegistrationsPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeClusterRegistrationsPostRequest(r, buffer)
 	if err != nil {

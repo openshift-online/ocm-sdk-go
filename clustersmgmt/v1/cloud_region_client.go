@@ -35,17 +35,15 @@ import (
 type CloudRegionClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewCloudRegionClient creates a new client for the 'cloud_region'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewCloudRegionClient(transport http.RoundTripper, path string, metric string) *CloudRegionClient {
+func NewCloudRegionClient(transport http.RoundTripper, path string) *CloudRegionClient {
 	return &CloudRegionClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *CloudRegionClient) Get() *CloudRegionGetRequest {
 	return &CloudRegionGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *CloudRegionClient) Poll() *CloudRegionPollRequest {
 type CloudRegionGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *CloudRegionGetRequest) Send() (result *CloudRegionGetResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CloudRegionGetRequest) SendContext(ctx context.Context) (result *CloudRegionGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

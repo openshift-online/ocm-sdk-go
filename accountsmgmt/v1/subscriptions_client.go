@@ -39,17 +39,15 @@ import (
 type SubscriptionsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewSubscriptionsClient creates a new client for the 'subscriptions'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSubscriptionsClient(transport http.RoundTripper, path string, metric string) *SubscriptionsClient {
+func NewSubscriptionsClient(transport http.RoundTripper, path string) *SubscriptionsClient {
 	return &SubscriptionsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *SubscriptionsClient) List() *SubscriptionsListRequest {
 	return &SubscriptionsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *SubscriptionsClient) Post() *SubscriptionsPostRequest {
 	return &SubscriptionsPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *SubscriptionsClient) Labels() *GenericLabelsClient {
 	return NewGenericLabelsClient(
 		c.transport,
 		path.Join(c.path, "labels"),
-		path.Join(c.metric, "labels"),
 	)
 }
 
@@ -93,7 +88,6 @@ func (c *SubscriptionsClient) Subscription(id string) *SubscriptionClient {
 	return NewSubscriptionClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -101,7 +95,6 @@ func (c *SubscriptionsClient) Subscription(id string) *SubscriptionClient {
 type SubscriptionsListRequest struct {
 	transport             http.RoundTripper
 	path                  string
-	metric                string
 	query                 url.Values
 	header                http.Header
 	fetchaccountsAccounts *bool
@@ -261,7 +254,7 @@ func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *Sub
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -426,7 +419,6 @@ func (r *SubscriptionsListResponse) GetTotal() (value int, ok bool) {
 type SubscriptionsPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *SubscriptionRegistration
@@ -463,7 +455,7 @@ func (r *SubscriptionsPostRequest) Send() (result *SubscriptionsPostResponse, er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *SubscriptionsPostRequest) SendContext(ctx context.Context) (result *SubscriptionsPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeSubscriptionsPostRequest(r, buffer)
 	if err != nil {

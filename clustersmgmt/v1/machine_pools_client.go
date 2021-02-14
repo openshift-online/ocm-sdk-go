@@ -39,17 +39,15 @@ import (
 type MachinePoolsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewMachinePoolsClient creates a new client for the 'machine_pools'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewMachinePoolsClient(transport http.RoundTripper, path string, metric string) *MachinePoolsClient {
+func NewMachinePoolsClient(transport http.RoundTripper, path string) *MachinePoolsClient {
 	return &MachinePoolsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *MachinePoolsClient) Add() *MachinePoolsAddRequest {
 	return &MachinePoolsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *MachinePoolsClient) List() *MachinePoolsListRequest {
 	return &MachinePoolsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *MachinePoolsClient) MachinePool(id string) *MachinePoolClient {
 	return NewMachinePoolClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *MachinePoolsClient) MachinePool(id string) *MachinePoolClient {
 type MachinePoolsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *MachinePool
@@ -127,7 +121,7 @@ func (r *MachinePoolsAddRequest) Send() (result *MachinePoolsAddResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *MachinePoolsAddRequest) SendContext(ctx context.Context) (result *MachinePoolsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeMachinePoolsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *MachinePoolsAddResponse) GetBody() (value *MachinePool, ok bool) {
 type MachinePoolsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	page      *int
@@ -289,7 +282,7 @@ func (r *MachinePoolsListRequest) SendContext(ctx context.Context) (result *Mach
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

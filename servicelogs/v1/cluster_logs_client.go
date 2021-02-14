@@ -39,17 +39,15 @@ import (
 type ClusterLogsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewClusterLogsClient creates a new client for the 'cluster_logs'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClusterLogsClient(transport http.RoundTripper, path string, metric string) *ClusterLogsClient {
+func NewClusterLogsClient(transport http.RoundTripper, path string) *ClusterLogsClient {
 	return &ClusterLogsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *ClusterLogsClient) Add() *ClusterLogsAddRequest {
 	return &ClusterLogsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *ClusterLogsClient) List() *ClusterLogsListRequest {
 	return &ClusterLogsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *ClusterLogsClient) LogEntry(id string) *LogEntryClient {
 	return NewLogEntryClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *ClusterLogsClient) LogEntry(id string) *LogEntryClient {
 type ClusterLogsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *LogEntry
@@ -127,7 +121,7 @@ func (r *ClusterLogsAddRequest) Send() (result *ClusterLogsAddResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ClusterLogsAddRequest) SendContext(ctx context.Context) (result *ClusterLogsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeClusterLogsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *ClusterLogsAddResponse) GetBody() (value *LogEntry, ok bool) {
 type ClusterLogsListRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	order     *string
@@ -338,7 +331,7 @@ func (r *ClusterLogsListRequest) SendContext(ctx context.Context) (result *Clust
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

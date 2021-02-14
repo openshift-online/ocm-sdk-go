@@ -35,17 +35,15 @@ import (
 type CPUTotalByNodeRolesOSMetricQueryClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewCPUTotalByNodeRolesOSMetricQueryClient creates a new client for the 'CPU_total_by_node_roles_OS_metric_query'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewCPUTotalByNodeRolesOSMetricQueryClient(transport http.RoundTripper, path string, metric string) *CPUTotalByNodeRolesOSMetricQueryClient {
+func NewCPUTotalByNodeRolesOSMetricQueryClient(transport http.RoundTripper, path string) *CPUTotalByNodeRolesOSMetricQueryClient {
 	return &CPUTotalByNodeRolesOSMetricQueryClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *CPUTotalByNodeRolesOSMetricQueryClient) Get() *CPUTotalByNodeRolesOSMet
 	return &CPUTotalByNodeRolesOSMetricQueryGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *CPUTotalByNodeRolesOSMetricQueryClient) Poll() *CPUTotalByNodeRolesOSMe
 type CPUTotalByNodeRolesOSMetricQueryGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) Send() (result *CPUTotalByN
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CPUTotalByNodeRolesOSMetricQueryGetRequest) SendContext(ctx context.Context) (result *CPUTotalByNodeRolesOSMetricQueryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

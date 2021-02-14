@@ -39,17 +39,15 @@ import (
 type ResourceQuotaClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewResourceQuotaClient creates a new client for the 'resource_quota'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewResourceQuotaClient(transport http.RoundTripper, path string, metric string) *ResourceQuotaClient {
+func NewResourceQuotaClient(transport http.RoundTripper, path string) *ResourceQuotaClient {
 	return &ResourceQuotaClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *ResourceQuotaClient) Delete() *ResourceQuotaDeleteRequest {
 	return &ResourceQuotaDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *ResourceQuotaClient) Get() *ResourceQuotaGetRequest {
 	return &ResourceQuotaGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *ResourceQuotaClient) Update() *ResourceQuotaUpdateRequest {
 	return &ResourceQuotaUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *ResourceQuotaClient) Poll() *ResourceQuotaPollRequest {
 type ResourceQuotaDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *ResourceQuotaDeleteRequest) Send() (result *ResourceQuotaDeleteResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ResourceQuotaDeleteRequest) SendContext(ctx context.Context) (result *ResourceQuotaDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *ResourceQuotaDeleteResponse) Error() *errors.Error {
 type ResourceQuotaGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *ResourceQuotaGetRequest) Send() (result *ResourceQuotaGetResponse, err 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ResourceQuotaGetRequest) SendContext(ctx context.Context) (result *ResourceQuotaGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *ResourceQuotaGetResponse) GetBody() (value *ResourceQuota, ok bool) {
 type ResourceQuotaUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *ResourceQuota
@@ -465,7 +457,7 @@ func (r *ResourceQuotaUpdateRequest) Send() (result *ResourceQuotaUpdateResponse
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ResourceQuotaUpdateRequest) SendContext(ctx context.Context) (result *ResourceQuotaUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeResourceQuotaUpdateRequest(r, buffer)
 	if err != nil {

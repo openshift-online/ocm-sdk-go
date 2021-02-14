@@ -39,17 +39,15 @@ import (
 type GenericLabelClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewGenericLabelClient creates a new client for the 'generic_label'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewGenericLabelClient(transport http.RoundTripper, path string, metric string) *GenericLabelClient {
+func NewGenericLabelClient(transport http.RoundTripper, path string) *GenericLabelClient {
 	return &GenericLabelClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *GenericLabelClient) Delete() *GenericLabelDeleteRequest {
 	return &GenericLabelDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *GenericLabelClient) Get() *GenericLabelGetRequest {
 	return &GenericLabelGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *GenericLabelClient) Update() *GenericLabelUpdateRequest {
 	return &GenericLabelUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -211,7 +206,6 @@ func (c *GenericLabelClient) Poll() *GenericLabelPollRequest {
 type GenericLabelDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -239,7 +233,7 @@ func (r *GenericLabelDeleteRequest) Send() (result *GenericLabelDeleteResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *GenericLabelDeleteRequest) SendContext(ctx context.Context) (result *GenericLabelDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -306,7 +300,6 @@ func (r *GenericLabelDeleteResponse) Error() *errors.Error {
 type GenericLabelGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -334,7 +327,7 @@ func (r *GenericLabelGetRequest) Send() (result *GenericLabelGetResponse, err er
 // SendContext sends this request, waits for the response, and returns it.
 func (r *GenericLabelGetRequest) SendContext(ctx context.Context) (result *GenericLabelGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
@@ -428,7 +421,6 @@ func (r *GenericLabelGetResponse) GetBody() (value *Label, ok bool) {
 type GenericLabelUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Label
@@ -465,7 +457,7 @@ func (r *GenericLabelUpdateRequest) Send() (result *GenericLabelUpdateResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *GenericLabelUpdateRequest) SendContext(ctx context.Context) (result *GenericLabelUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeGenericLabelUpdateRequest(r, buffer)
 	if err != nil {

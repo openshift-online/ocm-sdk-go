@@ -38,17 +38,15 @@ import (
 type ResourceReviewClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewResourceReviewClient creates a new client for the 'resource_review'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewResourceReviewClient(transport http.RoundTripper, path string, metric string) *ResourceReviewClient {
+func NewResourceReviewClient(transport http.RoundTripper, path string) *ResourceReviewClient {
 	return &ResourceReviewClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *ResourceReviewClient) Post() *ResourceReviewPostRequest {
 	return &ResourceReviewPostRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -68,7 +65,6 @@ func (c *ResourceReviewClient) Post() *ResourceReviewPostRequest {
 type ResourceReviewPostRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	request   *ResourceReviewRequest
@@ -105,7 +101,7 @@ func (r *ResourceReviewPostRequest) Send() (result *ResourceReviewPostResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *ResourceReviewPostRequest) SendContext(ctx context.Context) (result *ResourceReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeResourceReviewPostRequest(r, buffer)
 	if err != nil {

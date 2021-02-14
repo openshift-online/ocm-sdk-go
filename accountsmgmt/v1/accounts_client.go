@@ -39,17 +39,15 @@ import (
 type AccountsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewAccountsClient creates a new client for the 'accounts'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAccountsClient(transport http.RoundTripper, path string, metric string) *AccountsClient {
+func NewAccountsClient(transport http.RoundTripper, path string) *AccountsClient {
 	return &AccountsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -60,7 +58,6 @@ func (c *AccountsClient) Add() *AccountsAddRequest {
 	return &AccountsAddRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -71,7 +68,6 @@ func (c *AccountsClient) List() *AccountsListRequest {
 	return &AccountsListRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -82,7 +78,6 @@ func (c *AccountsClient) Account(id string) *AccountClient {
 	return NewAccountClient(
 		c.transport,
 		path.Join(c.path, id),
-		path.Join(c.metric, "-"),
 	)
 }
 
@@ -90,7 +85,6 @@ func (c *AccountsClient) Account(id string) *AccountClient {
 type AccountsAddRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 	body      *Account
@@ -127,7 +121,7 @@ func (r *AccountsAddRequest) Send() (result *AccountsAddResponse, err error) {
 // SendContext sends this request, waits for the response, and returns it.
 func (r *AccountsAddRequest) SendContext(ctx context.Context) (result *AccountsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
 	err = writeAccountsAddRequest(r, buffer)
 	if err != nil {
@@ -237,7 +231,6 @@ func (r *AccountsAddResponse) GetBody() (value *Account, ok bool) {
 type AccountsListRequest struct {
 	transport         http.RoundTripper
 	path              string
-	metric            string
 	query             url.Values
 	header            http.Header
 	fetchlabelsLabels *bool
@@ -367,7 +360,7 @@ func (r *AccountsListRequest) SendContext(ctx context.Context) (result *Accounts
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
 	}
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),

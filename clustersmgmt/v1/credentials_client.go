@@ -35,17 +35,15 @@ import (
 type CredentialsClient struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 }
 
 // NewCredentialsClient creates a new client for the 'credentials'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewCredentialsClient(transport http.RoundTripper, path string, metric string) *CredentialsClient {
+func NewCredentialsClient(transport http.RoundTripper, path string) *CredentialsClient {
 	return &CredentialsClient{
 		transport: transport,
 		path:      path,
-		metric:    metric,
 	}
 }
 
@@ -56,7 +54,6 @@ func (c *CredentialsClient) Get() *CredentialsGetRequest {
 	return &CredentialsGetRequest{
 		transport: c.transport,
 		path:      c.path,
-		metric:    c.metric,
 	}
 }
 
@@ -185,7 +182,6 @@ func (c *CredentialsClient) Poll() *CredentialsPollRequest {
 type CredentialsGetRequest struct {
 	transport http.RoundTripper
 	path      string
-	metric    string
 	query     url.Values
 	header    http.Header
 }
@@ -213,7 +209,7 @@ func (r *CredentialsGetRequest) Send() (result *CredentialsGetResponse, err erro
 // SendContext sends this request, waits for the response, and returns it.
 func (r *CredentialsGetRequest) SendContext(ctx context.Context) (result *CredentialsGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	header := helpers.SetHeader(r.header, r.metric)
+	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
 		RawQuery: query.Encode(),
