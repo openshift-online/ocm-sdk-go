@@ -22,15 +22,13 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"strings"
-
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	. "github.com/onsi/ginkgo"                  // nolint
 	. "github.com/onsi/ginkgo/extensions/table" // nolint
 	. "github.com/onsi/gomega"                  // nolint
 	. "github.com/onsi/gomega/ghttp"            // nolint
+
+	. "github.com/openshift-online/ocm-sdk-go/testing"
 )
 
 var _ = Describe("Create", func() {
@@ -60,29 +58,21 @@ var _ = Describe("Create", func() {
 var _ = Describe("Metrics", func() {
 	var (
 		apiServer     *Server
+		metricsServer *MetricsServer
 		apiClient     *http.Client
-		metricsServer *Server
-		metricsClient *http.Client
 	)
 
 	BeforeEach(func() {
-		// Start the metrics server:
-		metricsRegistry := prometheus.NewPedanticRegistry()
-		metricsHandler := promhttp.HandlerFor(metricsRegistry, promhttp.HandlerOpts{})
-		metricsServer = NewServer()
-		metricsServer.AppendHandlers(metricsHandler.ServeHTTP)
-
-		// Create the metrics client:
-		metricsClient = &http.Client{}
-
-		// Start the API server:
+		// Start the servers:
 		apiServer = NewServer()
+		metricsServer = NewMetricsServer()
 
 		// Create the API client:
 		apiWrapper, err := NewTransportWrapper().
 			Logger(logger).
+			Path("/my/path").
 			Subsystem("my").
-			Registerer(metricsRegistry).
+			Registerer(metricsServer.Registry()).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 		apiTransport := apiWrapper.Wrap(http.DefaultTransport)
@@ -99,7 +89,6 @@ var _ = Describe("Metrics", func() {
 
 		// Close connections:
 		apiClient.CloseIdleConnections()
-		metricsClient.CloseIdleConnections()
 	})
 
 	// Get sends a GET request to the API server.
@@ -116,26 +105,6 @@ var _ = Describe("Metrics", func() {
 		Expect(err).ToNot(HaveOccurred())
 	}
 
-	// Metrics retrieves the raw metrics from the metrics server in the Prometheus exposition
-	// format.
-	var Metrics = func() []string {
-		response, err := metricsClient.Get(metricsServer.URL() + "/metrics")
-		Expect(err).ToNot(HaveOccurred())
-		defer func() {
-			err = response.Body.Close()
-			Expect(err).ToNot(HaveOccurred())
-		}()
-		data, err := ioutil.ReadAll(response.Body)
-		Expect(err).ToNot(HaveOccurred())
-		return strings.Split(string(data), "\n")
-	}
-
-	// MatchLine succeeds if actual is an slice of strings that contains at least one line that
-	// matches the passed regular expression.
-	var MatchLine = func(regexp string, args ...interface{}) OmegaMatcher {
-		return ContainElement(MatchRegexp(regexp, args...))
-	}
-
 	Describe("Request count", func() {
 		It("Honours subsystem", func() {
 			// Prepare the server:
@@ -147,7 +116,7 @@ var _ = Describe("Metrics", func() {
 			Send(http.MethodGet, "/api")
 
 			// Verify the metrics:
-			metrics := Metrics()
+			metrics := metricsServer.Metrics()
 			Expect(metrics).To(MatchLine(`^my_request_count\{.*\} .*$`))
 		})
 
@@ -167,7 +136,7 @@ var _ = Describe("Metrics", func() {
 				}
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_count\{.*\} %d$`, count))
 			},
 			Entry("One", 1),
@@ -187,7 +156,7 @@ var _ = Describe("Metrics", func() {
 				Send(method, "/api")
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_count\{.*method="%s".*\} .*$`, method))
 			},
 			Entry("GET", http.MethodGet),
@@ -208,7 +177,7 @@ var _ = Describe("Metrics", func() {
 				Send(http.MethodGet, path)
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_count\{.*path="%s".*\} .*$`, label))
 			},
 			Entry(
@@ -311,6 +280,16 @@ var _ = Describe("Metrics", func() {
 				"/api/clusters_mgmt/v1/clusters/123/groups/456/junk",
 				"/-",
 			),
+			Entry(
+				"Explicitly specified path",
+				"/my/path",
+				"/my/path",
+			),
+			Entry(
+				"Unknown path",
+				"/your/path",
+				"/-",
+			),
 		)
 
 		DescribeTable(
@@ -325,7 +304,7 @@ var _ = Describe("Metrics", func() {
 				Send(http.MethodGet, "/api")
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_count\{.*code="%d".*\} .*$`, code))
 			},
 			Entry("200", http.StatusOK),
@@ -348,7 +327,7 @@ var _ = Describe("Metrics", func() {
 				Send(http.MethodGet, path)
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_count\{.*apiservice="%s".*\} .*$`, label))
 			},
 			Entry(
@@ -435,7 +414,7 @@ var _ = Describe("Metrics", func() {
 			Send(http.MethodGet, "/api")
 
 			// Verify the metrics:
-			metrics := Metrics()
+			metrics := metricsServer.Metrics()
 			Expect(metrics).To(MatchLine(`^my_request_duration_bucket\{.*\} .*$`))
 			Expect(metrics).To(MatchLine(`^my_request_duration_sum\{.*\} .*$`))
 			Expect(metrics).To(MatchLine(`^my_request_duration_count\{.*\} .*$`))
@@ -451,7 +430,7 @@ var _ = Describe("Metrics", func() {
 			Send(http.MethodGet, "/api")
 
 			// Verify the metrics:
-			metrics := Metrics()
+			metrics := metricsServer.Metrics()
 			Expect(metrics).To(MatchLine(`^\w+_request_duration_bucket\{.*,le="0.1"\} .*$`))
 			Expect(metrics).To(MatchLine(`^\w+_request_duration_bucket\{.*,le="1"\} .*$`))
 			Expect(metrics).To(MatchLine(`^\w+_request_duration_bucket\{.*,le="10"\} .*$`))
@@ -475,7 +454,7 @@ var _ = Describe("Metrics", func() {
 				}
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_count\{.*\} %d$`, count))
 			},
 			Entry("One", 1),
@@ -495,7 +474,7 @@ var _ = Describe("Metrics", func() {
 				Send(method, "/api")
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_bucket\{.*method="%s".*\} .*$`, method))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_sum\{.*method="%s".*\} .*$`, method))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_count\{.*method="%s".*\} .*$`, method))
@@ -518,7 +497,7 @@ var _ = Describe("Metrics", func() {
 				Send(http.MethodGet, path)
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_bucket\{.*path="%s".*\} .*$`, label))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_sum\{.*path="%s".*\} .*$`, label))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_count\{.*path="%s".*\} .*$`, label))
@@ -623,6 +602,16 @@ var _ = Describe("Metrics", func() {
 				"/api/clusters_mgmt/v1/clusters/123/groups/456/junk",
 				"/-",
 			),
+			Entry(
+				"Explicitly specified path",
+				"/my/path",
+				"/my/path",
+			),
+			Entry(
+				"Unknown path",
+				"/your/path",
+				"/-",
+			),
 		)
 
 		DescribeTable(
@@ -637,7 +626,7 @@ var _ = Describe("Metrics", func() {
 				Send(http.MethodGet, "/api")
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_bucket\{.*code="%d".*\} .*$`, code))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_sum\{.*code="%d".*\} .*$`, code))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_count\{.*code="%d".*\} .*$`, code))
@@ -662,7 +651,7 @@ var _ = Describe("Metrics", func() {
 				Send(http.MethodGet, path)
 
 				// Verify the metrics:
-				metrics := Metrics()
+				metrics := metricsServer.Metrics()
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_bucket\{.*apiservice="%s".*\} .*$`, label))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_sum\{.*apiservice="%s".*\} .*$`, label))
 				Expect(metrics).To(MatchLine(`^\w+_request_duration_count\{.*apiservice="%s".*\} .*$`, label))
