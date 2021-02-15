@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.159 Feb 15 2021
+
+- Add metrics package
+- Update API model to v0.0.107:
+** add addon sub operator type
+
 == 0.1.158 Feb 12 2021
 
 - Downgrade from Go 1.15 to Go 1.14. This has been requested by users of the SDK
