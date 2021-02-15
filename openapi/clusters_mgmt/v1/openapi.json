@@ -5240,6 +5240,13 @@
             "description": "Used to determine from where to reserve quota for this add-on.\n",
             "type": "string"
           },
+          "sub_operators": {
+            "description": "List of sub operators for this add-on.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnSubOperator"
+            }
+          },
           "target_namespace": {
             "description": "The namespace in which the addon CRD exists.\n",
             "type": "string"
@@ -5413,6 +5420,23 @@
           },
           "resource": {
             "description": "Type of resource of the add-on requirement.\n",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnSubOperator": {
+        "description": "Representation of an add-on sub operator. A sub operator is an operator\nwho's life cycle is controlled by the add-on umbrella operator. \n",
+        "properties": {
+          "enabled": {
+            "description": "Indicates if the sub operator is enabled for the add-on\n",
+            "type": "boolean"
+          },
+          "operator_name": {
+            "description": "Name of the add-on sub operator\n",
+            "type": "string"
+          },
+          "operator_namespace": {
+            "description": "Namespace of the add-on sub operator\n",
             "type": "string"
           }
         }

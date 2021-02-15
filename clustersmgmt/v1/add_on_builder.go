@@ -37,6 +37,7 @@ type AddOnBuilder struct {
 	requirements         []*AddOnRequirementBuilder
 	resourceCost         float64
 	resourceName         string
+	subOperators         []*AddOnSubOperatorBuilder
 	targetNamespace      string
 	enabled              bool
 	hasExternalResources bool
@@ -195,12 +196,22 @@ func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
 	return b
 }
 
+// SubOperators sets the value of the 'sub_operators' attribute to the given values.
+//
+//
+func (b *AddOnBuilder) SubOperators(values ...*AddOnSubOperatorBuilder) *AddOnBuilder {
+	b.subOperators = make([]*AddOnSubOperatorBuilder, len(values))
+	copy(b.subOperators, values)
+	b.bitmap_ |= 131072
+	return b
+}
+
 // TargetNamespace sets the value of the 'target_namespace' attribute to the given value.
 //
 //
 func (b *AddOnBuilder) TargetNamespace(value string) *AddOnBuilder {
 	b.targetNamespace = value
-	b.bitmap_ |= 131072
+	b.bitmap_ |= 262144
 	return b
 }
 
@@ -237,6 +248,14 @@ func (b *AddOnBuilder) Copy(object *AddOn) *AddOnBuilder {
 	}
 	b.resourceCost = object.resourceCost
 	b.resourceName = object.resourceName
+	if object.subOperators != nil {
+		b.subOperators = make([]*AddOnSubOperatorBuilder, len(object.subOperators))
+		for i, v := range object.subOperators {
+			b.subOperators[i] = NewAddOnSubOperator().Copy(v)
+		}
+	} else {
+		b.subOperators = nil
+	}
 	b.targetNamespace = object.targetNamespace
 	return b
 }
@@ -274,6 +293,15 @@ func (b *AddOnBuilder) Build() (object *AddOn, err error) {
 	}
 	object.resourceCost = b.resourceCost
 	object.resourceName = b.resourceName
+	if b.subOperators != nil {
+		object.subOperators = make([]*AddOnSubOperator, len(b.subOperators))
+		for i, v := range b.subOperators {
+			object.subOperators[i], err = v.Build()
+			if err != nil {
+				return
+			}
+		}
+	}
 	object.targetNamespace = b.targetNamespace
 	return
 }

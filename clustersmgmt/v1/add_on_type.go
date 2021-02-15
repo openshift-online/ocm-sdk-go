@@ -49,6 +49,7 @@ type AddOn struct {
 	requirements         []*AddOnRequirement
 	resourceCost         float64
 	resourceName         string
+	subOperators         []*AddOnSubOperator
 	targetNamespace      string
 	enabled              bool
 	hasExternalResources bool
@@ -434,12 +435,35 @@ func (o *AddOn) GetResourceName() (value string, ok bool) {
 	return
 }
 
+// SubOperators returns the value of the 'sub_operators' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// List of sub operators for this add-on.
+func (o *AddOn) SubOperators() []*AddOnSubOperator {
+	if o != nil && o.bitmap_&131072 != 0 {
+		return o.subOperators
+	}
+	return nil
+}
+
+// GetSubOperators returns the value of the 'sub_operators' attribute and
+// a flag indicating if the attribute has a value.
+//
+// List of sub operators for this add-on.
+func (o *AddOn) GetSubOperators() (value []*AddOnSubOperator, ok bool) {
+	ok = o != nil && o.bitmap_&131072 != 0
+	if ok {
+		value = o.subOperators
+	}
+	return
+}
+
 // TargetNamespace returns the value of the 'target_namespace' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // The namespace in which the addon CRD exists.
 func (o *AddOn) TargetNamespace() string {
-	if o != nil && o.bitmap_&131072 != 0 {
+	if o != nil && o.bitmap_&262144 != 0 {
 		return o.targetNamespace
 	}
 	return ""
@@ -450,7 +474,7 @@ func (o *AddOn) TargetNamespace() string {
 //
 // The namespace in which the addon CRD exists.
 func (o *AddOn) GetTargetNamespace() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&131072 != 0
+	ok = o != nil && o.bitmap_&262144 != 0
 	if ok {
 		value = o.targetNamespace
 	}
