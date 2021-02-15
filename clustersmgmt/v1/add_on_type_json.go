@@ -192,7 +192,16 @@ func writeAddOn(object *AddOn, stream *jsoniter.Stream) {
 		stream.WriteString(object.resourceName)
 		count++
 	}
-	present_ = object.bitmap_&131072 != 0
+	present_ = object.bitmap_&131072 != 0 && object.subOperators != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("sub_operators")
+		writeAddOnSubOperatorList(object.subOperators, stream)
+		count++
+	}
+	present_ = object.bitmap_&262144 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -313,10 +322,14 @@ func readAddOn(iterator *jsoniter.Iterator) *AddOn {
 			value := iterator.ReadString()
 			object.resourceName = value
 			object.bitmap_ |= 65536
+		case "sub_operators":
+			value := readAddOnSubOperatorList(iterator)
+			object.subOperators = value
+			object.bitmap_ |= 131072
 		case "target_namespace":
 			value := iterator.ReadString()
 			object.targetNamespace = value
-			object.bitmap_ |= 131072
+			object.bitmap_ |= 262144
 		default:
 			iterator.ReadAny()
 		}
