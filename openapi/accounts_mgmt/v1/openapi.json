@@ -4358,6 +4358,14 @@
           "update"
         ]
       },
+      "BillingModel": {
+        "description": "Billing model for subscripiton and reserved_resource resources.\n",
+        "type": "string",
+        "enum": [
+          "marketplace",
+          "standard"
+        ]
+      },
       "ClusterAuthorizationRequest": {
         "properties": {
           "byoc": {
@@ -4732,6 +4740,9 @@
           "availability_zone_type": {
             "type": "string"
           },
+          "billing_model": {
+            "$ref": "#/components/schemas/BillingModel"
+          },
           "count": {
             "type": "integer",
             "format": "int32"
@@ -4981,6 +4992,9 @@
           },
           "cluster_id": {
             "type": "string"
+          },
+          "cluster_billing_model": {
+            "$ref": "#/components/schemas/BillingModel"
           },
           "consumer_uuid": {
             "type": "string"
