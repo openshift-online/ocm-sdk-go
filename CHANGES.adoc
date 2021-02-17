@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.160 Feb 17 2021
+
+- Improve testing of metrics.
+- Update to model 0.0.108:
+** Add `billing_model` attribute to the `ReservedResource` type.
+** Add `cluster_billing_model` attribute to the `Subscriptioin` type.
+
 == 0.1.159 Feb 15 2021
 
 - Add metrics package
