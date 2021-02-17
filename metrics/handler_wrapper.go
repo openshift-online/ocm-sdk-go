@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This file contains the implementations of a transport wrapper that generates Prometheus metrics.
+// This file contains the implementations of a handler wrapper that generates Prometheus metrics.
 
 package metrics
 
@@ -26,8 +26,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// TransportWrapperBuilder contains the data and logic needed to build a new metrics transport
-// wrapper that creates HTTP round trippers that generate the following Prometheus metrics:
+// HandlerWrapperBuilder contains the data and logic needed to build a new metrics handler wrapper
+// that creates HTTP handlers that generate the following Prometheus metrics:
 //
 //	<subsystem>_request_count - Number of API requests sent.
 //	<subsystem>_request_duration_sum - Total time to send API requests, in seconds.
@@ -70,34 +70,43 @@ import (
 // Note that setting this attribute is not enough to have metrics published, you also need to
 // create and start a metrics server, as described in the documentation of the Prometheus library.
 //
-// Don't create objects of this type directly; use the NewTransportWrapper function instead.
-type TransportWrapperBuilder struct {
+// Don't create objects of this type directly; use the NewHandlerWrapper function instead.
+type HandlerWrapperBuilder struct {
 	paths      []string
 	subsystem  string
 	registerer prometheus.Registerer
 }
 
-// TransportWrapper contains the data and logic needed to wrap an HTTP round tripper with another
-// one that generates Prometheus metrics.
-type TransportWrapper struct {
+// HandlerWrapper contains the data and logic needed to wrap an HTTP handler with another one that
+// generates Prometheus metrics.
+type HandlerWrapper struct {
 	paths           pathTree
 	requestCount    *prometheus.CounterVec
 	requestDuration *prometheus.HistogramVec
 }
 
-// roundTripper is a round tripper that generates Prometheus metrics.
-type roundTripper struct {
-	owner     *TransportWrapper
-	transport http.RoundTripper
+// handler is an HTTP handler that generates Prometheus metrics.
+type handler struct {
+	owner   *HandlerWrapper
+	handler http.Handler
 }
 
 // Make sure that we implement the interface:
-var _ http.RoundTripper = (*roundTripper)(nil)
+var _ http.Handler = (*handler)(nil)
 
-// NewTransportWrapper creates a new builder that can then be used to configure and create a new metrics
-// round tripper.
-func NewTransportWrapper() *TransportWrapperBuilder {
-	return &TransportWrapperBuilder{
+// responseWriter is the HTTP response writer used to obtain the response code.
+type responseWriter struct {
+	code   int
+	writer http.ResponseWriter
+}
+
+// Make sure that we implement the interface:
+var _ http.ResponseWriter = (*responseWriter)(nil)
+
+// NewHandlerWrapper creates a new builder that can then be used to configure and create a new
+// metrics handler wrapper.
+func NewHandlerWrapper() *HandlerWrapperBuilder {
+	return &HandlerWrapperBuilder{
 		registerer: prometheus.DefaultRegisterer,
 	}
 }
@@ -106,22 +115,22 @@ func NewTransportWrapper() *TransportWrapperBuilder {
 // of the API are already added. This is intended for additional pads, for example the path for
 // token requests. If those paths aren't explicitly specified here then their metrics will be
 // accumulated in the `/-` path.
-func (b *TransportWrapperBuilder) Path(value string) *TransportWrapperBuilder {
+func (b *HandlerWrapperBuilder) Path(value string) *HandlerWrapperBuilder {
 	b.paths = append(b.paths, value)
 	return b
 }
 
 // Subsystem sets the name of the subsystem that will be used by to register the metrics with
-// Prometheus. For example, if the value is `api_outbound` then the following metrics will be
+// Prometheus. For example, if the value is `api_inbound` then the following metrics will be
 // registered:
 //
-//	api_outbound_request_count - Number of API requests sent.
-//	api_outbound_request_duration_sum - Total time to send API requests, in seconds.
-//	api_outbound_request_duration_count - Total number of API requests measured.
-//	api_outbound_request_duration_bucket - Number of API requests organized in buckets.
+//	api_inbound_request_count - Number of API requests sent.
+//	api_inbound_request_duration_sum - Total time to send API requests, in seconds.
+//	api_inbound_request_duration_count - Total number of API requests measured.
+//	api_inbound_request_duration_bucket - Number of API requests organized in buckets.
 //
 // This is mandatory.
-func (b *TransportWrapperBuilder) Subsystem(value string) *TransportWrapperBuilder {
+func (b *HandlerWrapperBuilder) Subsystem(value string) *HandlerWrapperBuilder {
 	b.subsystem = value
 	return b
 }
@@ -130,7 +139,7 @@ func (b *TransportWrapperBuilder) Subsystem(value string) *TransportWrapperBuild
 // is to use the default Prometheus registerer and there is usually no need to change that. This is
 // intended for unit tests, where it is convenient to have a registerer that doesn't interfere with
 // the rest of the system.
-func (b *TransportWrapperBuilder) Registerer(value prometheus.Registerer) *TransportWrapperBuilder {
+func (b *HandlerWrapperBuilder) Registerer(value prometheus.Registerer) *HandlerWrapperBuilder {
 	if value == nil {
 		value = prometheus.DefaultRegisterer
 	}
@@ -138,8 +147,8 @@ func (b *TransportWrapperBuilder) Registerer(value prometheus.Registerer) *Trans
 	return b
 }
 
-// Build uses the information stored in the builder to create a new transport wrapper.
-func (b *TransportWrapperBuilder) Build() (result *TransportWrapper, err error) {
+// Build uses the information stored in the builder to create a new handler wrapper.
+func (b *HandlerWrapperBuilder) Build() (result *HandlerWrapper, err error) {
 	// Check parameters:
 	if b.subsystem == "" {
 		err = fmt.Errorf("subsystem is mandatory")
@@ -199,7 +208,7 @@ func (b *TransportWrapperBuilder) Build() (result *TransportWrapper, err error) 
 	}
 
 	// Create and populate the object:
-	result = &TransportWrapper{
+	result = &HandlerWrapper{
 		paths:           paths,
 		requestCount:    requestCount,
 		requestDuration: requestDuration,
@@ -208,36 +217,56 @@ func (b *TransportWrapperBuilder) Build() (result *TransportWrapper, err error) 
 	return
 }
 
-// Wrap creates a new round tripper that wraps the given one and generates the Prometheus metrics.
-func (w *TransportWrapper) Wrap(transport http.RoundTripper) http.RoundTripper {
-	return &roundTripper{
-		owner:     w,
-		transport: transport,
+// Wrap creates a new handler that wraps the given one and generates the Prometheus metrics.
+func (w *HandlerWrapper) Wrap(h http.Handler) http.Handler {
+	return &handler{
+		owner:   w,
+		handler: h,
 	}
 }
 
-// RoundTrip is the implementation of the round tripper interface.
-func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response, err error) {
-	// Measure the time that it takes to send the request and receive the response:
+// ServeHTTP is the implementation of the HTTP handler interface.
+func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// We need to replace the response writer with a custom one that captures the response code
+	// generated by the next handler:
+	writer := responseWriter{
+		code:   http.StatusOK,
+		writer: w,
+	}
+
+	// Measure the time that it takes to process the request and send the response:
 	start := time.Now()
-	response, err = t.transport.RoundTrip(request)
+	h.handler.ServeHTTP(&writer, r)
 	elapsed := time.Since(start)
 
 	// Update the metrics:
-	path := request.URL.Path
-	method := request.Method
-	var code int
-	if response != nil {
-		code = response.StatusCode
-	}
+	path := r.URL.Path
+	method := r.Method
 	labels := prometheus.Labels{
 		serviceLabelName: serviceLabel(path),
 		methodLabelName:  methodLabel(method),
-		pathLabelName:    pathLabel(t.owner.paths, path),
-		codeLabelName:    codeLabel(code),
+		pathLabelName:    pathLabel(h.owner.paths, path),
+		codeLabelName:    codeLabel(writer.code),
 	}
-	t.owner.requestCount.With(labels).Inc()
-	t.owner.requestDuration.With(labels).Observe(elapsed.Seconds())
+	h.owner.requestCount.With(labels).Inc()
+	h.owner.requestDuration.With(labels).Observe(elapsed.Seconds())
 
 	return
+}
+
+// Header is part of the implementation of the http.ResponseWriter interface.
+func (w *responseWriter) Header() http.Header {
+	return w.writer.Header()
+}
+
+// Write is part of the implementation of the http.ResponseWriter interface.
+func (w *responseWriter) Write(b []byte) (n int, err error) {
+	n, err = w.writer.Write(b)
+	return
+}
+
+// WriteHeader is part of the implementation of the http.ResponseWriter interface.
+func (w *responseWriter) WriteHeader(code int) {
+	w.code = code
+	w.writer.WriteHeader(code)
 }
