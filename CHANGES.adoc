@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.161 Feb 22 2021
+
+- Update to model 0.0.109:
+** Remove deprecated 'upgrade_channel_group' field.
+- Run tests in parallel.
+- Add documentation of upgrade policy states.
+
 == 0.1.160 Feb 17 2021
 
 - Improve testing of metrics.
@@ -43,7 +50,7 @@ SDK.
 == 0.1.156 Feb 4 2021
 
 - Update to model 0.0.105:
-** Add cluster hibernation support 
+** Add cluster hibernation support
 - Declare go 1.15 in go.mod
 - connection: Skip loading SystemCertPool on Windows
 

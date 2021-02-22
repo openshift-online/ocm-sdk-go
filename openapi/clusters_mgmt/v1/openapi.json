@@ -5752,10 +5752,6 @@
             "description": "Link to the subscription that comes from the account management service when the cluster\nis registered.\n",
             "$ref": "#/components/schemas/Subscription"
           },
-          "upgrade_channel_group": {
-            "description": "Channel group to be used for upgrading the cluster. Valid values: stable (default), fast, candidate, nightly.\n",
-            "type": "string"
-          },
           "version": {
             "description": "Link to the version of _OpenShift_ that will be used to install the cluster.\n",
             "$ref": "#/components/schemas/Version"
@@ -6942,10 +6938,23 @@
             "type": "string"
           },
           "value": {
-            "description": "State value, can be 'pending', 'started', 'delayed', 'failed' or 'completed'.\n",
-            "type": "string"
+            "description": "State value can be 'pending', 'scheduled', 'cancelled', 'started', 'delayed', \n'failed' or 'completed'.\n",
+            "$ref": "#/components/schemas/UpgradePolicyStateValue"
           }
         }
+      },
+      "UpgradePolicyStateValue": {
+        "description": "Overall state of a cluster upgrade policy.\n",
+        "type": "string",
+        "enum": [
+          "cancelled",
+          "completed",
+          "delayed",
+          "failed",
+          "pending",
+          "scheduled",
+          "started"
+        ]
       },
       "User": {
         "description": "Representation of a user.\n",
