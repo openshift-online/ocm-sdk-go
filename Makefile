@@ -38,7 +38,7 @@ examples:
 
 .PHONY: test
 test:
-	ginkgo -r .
+	ginkgo -p -r .
 
 .PHONY: fmt
 fmt:
