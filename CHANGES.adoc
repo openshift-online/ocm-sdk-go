@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.162 Feb 22 2021
+
+- Update to model 0.0.110:
+** organization: Add quota_cost endpoint resources
+
 == 0.1.161 Feb 22 2021
 
 - Update to model 0.0.109:
