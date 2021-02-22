@@ -276,9 +276,10 @@ func (c *Connection) createTransport(ctx context.Context, base *urlInfo) (
 
 	// Create the transport:
 	transport := &http.Transport{
-		TLSClientConfig:   config,
-		Proxy:             http.ProxyFromEnvironment,
-		DisableKeepAlives: c.disableKeepAlives,
+		TLSClientConfig:    config,
+		Proxy:              http.ProxyFromEnvironment,
+		DisableKeepAlives:  c.disableKeepAlives,
+		DisableCompression: false,
 	}
 
 	// In order to use Unix sockets we need to explicitly set dialers that use `unix` as network
