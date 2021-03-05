@@ -74,6 +74,7 @@ func MakeTCPServer() *ghttp.Server {
 	server := ghttp.NewUnstartedServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.EnableHTTP2 = true
 	server.HTTPTestServer.Start()
 	return server
 }
@@ -96,6 +97,7 @@ func MakeUnixServer() (server *ghttp.Server, socket string) {
 	server = ghttp.NewUnstartedServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.EnableHTTP2 = true
 	server.HTTPTestServer.Listener = listener
 	server.HTTPTestServer.Start()
 
@@ -111,6 +113,7 @@ func MakeTCPTLSServer() (server *ghttp.Server, ca string) {
 	server = ghttp.NewUnstartedServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.EnableHTTP2 = true
 	server.HTTPTestServer.StartTLS()
 
 	// Fetch the CA certificate:
@@ -141,6 +144,7 @@ func MakeUnixTLSServer() (server *ghttp.Server, ca, socket string) {
 	server = ghttp.NewUnstartedServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.EnableHTTP2 = true
 	server.HTTPTestServer.Listener = listener
 	server.HTTPTestServer.StartTLS()
 
@@ -160,6 +164,7 @@ func MakeTCPH2CServer() *ghttp.Server {
 	server := ghttp.NewUnstartedServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.EnableHTTP2 = true
 
 	// Wrap the handler of the regular server with the handler that detects HTTP/2 requests
 	// without TLS and delegates them to the HTTP/2 server that supports that:
@@ -192,6 +197,7 @@ func MakeUnixH2CServer() (server *ghttp.Server, socket string) {
 	server = ghttp.NewUnstartedServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.EnableHTTP2 = true
 	server.HTTPTestServer.Listener = listener
 
 	// Wrap the handler of the regular server with the handler that detects HTTP/2 requests

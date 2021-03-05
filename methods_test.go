@@ -319,6 +319,24 @@ var _ = Describe("Methods", func() {
 			Expect(err).To(HaveOccurred())
 			Expect(errors.Is(err, context.DeadlineExceeded)).To(BeTrue())
 		})
+
+		It("Uses HTTP/2", func() {
+			// Configure the server:
+			apiServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						Expect(r.Proto).To(Equal("HTTP/2.0"))
+					}),
+					RespondWithJSON(http.StatusOK, ""),
+				),
+			)
+
+			// Send the request:
+			_, err := connection.Get().
+				Path("/mypath").
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+		})
 	})
 
 	Describe("Post", func() {
