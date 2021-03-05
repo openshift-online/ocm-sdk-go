@@ -36,8 +36,8 @@ examples:
 		go build $${i} || exit 1; \
 	done
 
-.PHONY: test
-test:
+.PHONY: test tests
+test tests:
 	ginkgo -p -r .
 
 .PHONY: fmt
