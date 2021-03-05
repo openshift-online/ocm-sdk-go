@@ -32,20 +32,8 @@ import (
 )
 
 var _ = Describe("Create", func() {
-	It("Can't be created without a logger", func() {
-		wrapper, err := NewTransportWrapper().
-			Subsystem("my").
-			Build()
-		Expect(err).To(HaveOccurred())
-		Expect(wrapper).To(BeNil())
-		message := err.Error()
-		Expect(message).To(ContainSubstring("logger"))
-		Expect(message).To(ContainSubstring("mandatory"))
-	})
-
 	It("Can't be created without a subsystem", func() {
 		wrapper, err := NewTransportWrapper().
-			Logger(logger).
 			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(wrapper).To(BeNil())
@@ -69,7 +57,6 @@ var _ = Describe("Metrics", func() {
 
 		// Create the API client:
 		apiWrapper, err := NewTransportWrapper().
-			Logger(logger).
 			Path("/my/path").
 			Subsystem("my").
 			Registerer(metricsServer.Registry()).
