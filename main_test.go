@@ -34,6 +34,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/onsi/gomega/ghttp"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 
 	"github.com/openshift-online/ocm-sdk-go/logging"
 
@@ -144,6 +146,60 @@ func MakeUnixTLSServer() (server *ghttp.Server, ca, socket string) {
 
 	// Fetch the CA certificate:
 	ca = fetchCACertificate("unix", socket)
+
+	return
+}
+
+// MakeTCPH2CServer creates a test server that supports HTTP/2 without TLS, configured so that it
+// sends log messages to the Ginkgo writer.
+func MakeTCPH2CServer() *ghttp.Server {
+	// Create the server that supports HTTP/2 without TLS:
+	h2s := &http2.Server{}
+
+	// Create the regular server:
+	server := ghttp.NewUnstartedServer()
+	server.Writer = GinkgoWriter
+	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+
+	// Wrap the handler of the regular server with the handler that detects HTTP/2 requests
+	// without TLS and delegates them to the HTTP/2 server that supports that:
+	server.HTTPTestServer.Config.Handler = h2c.NewHandler(server.HTTPTestServer.Config.Handler, h2s)
+
+	// Start the server:
+	server.Start()
+
+	return server
+}
+
+// MakeUnixH2cServer creates a test server that listens in a Unix socket and supports HTTP/2 without
+// TLS, configured so that it sends log messages to the Ginkgo writer. It returns the created server
+// and name of a temporary file containing the Unix socket. This file will be in a temporary
+// directory, and the caller is resposible for removing the directory once it is no longer needed.
+func MakeUnixH2CServer() (server *ghttp.Server, socket string) {
+	// Create a temporary directory for the Unix sockets:
+	sockets, err := ioutil.TempDir("", "sockets")
+	Expect(err).ToNot(HaveOccurred())
+	socket = filepath.Join(sockets, "server.socket")
+
+	// Create the listener:
+	listener, err := net.Listen("unix", socket)
+	Expect(err).ToNot(HaveOccurred())
+
+	// Create the server that supports HTTP/2 without TLS:
+	h2s := &http2.Server{}
+
+	// Create the regular server:
+	server = ghttp.NewUnstartedServer()
+	server.Writer = GinkgoWriter
+	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.Listener = listener
+
+	// Wrap the handler of the regular server with the handler that detects HTTP/2 requests
+	// without TLS and delegates them to the HTTP/2 server that supports that:
+	server.HTTPTestServer.Config.Handler = h2c.NewHandler(server.HTTPTestServer.Config.Handler, h2s)
+
+	// Start the server:
+	server.Start()
 
 	return
 }

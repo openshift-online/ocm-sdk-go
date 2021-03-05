@@ -33,6 +33,7 @@ import (
 	"strings"
 
 	strip "github.com/grokify/html-strip-tags-go"
+	"golang.org/x/net/http2"
 )
 
 var wsRegex = regexp.MustCompile(`\s+`)
@@ -212,7 +213,10 @@ func (c *Connection) selectClient(ctx context.Context, base *urlInfo) (client *h
 	err error) {
 	// We need a client for TCP and another client for each combination of Unix and socket name,
 	// so we need to calculate the key for the clients table accordingly:
-	key := fmt.Sprintf("%s:%s", base.network, base.socket)
+	key := base.network
+	if base.network == unixNetwork {
+		key = fmt.Sprintf("%s:%s", key, base.socket)
+	}
 
 	// We will be modifiying the table of clients so we need to acquire the lock before
 	// proceeding:
@@ -275,38 +279,69 @@ func (c *Connection) createTransport(ctx context.Context, base *urlInfo) (
 	}
 
 	// Create the transport:
-	transport := &http.Transport{
-		TLSClientConfig:    config,
-		Proxy:              http.ProxyFromEnvironment,
-		DisableKeepAlives:  c.disableKeepAlives,
-		DisableCompression: false,
-	}
-
-	// In order to use Unix sockets we need to explicitly set dialers that use `unix` as network
-	// and the socket file as address, otherwise the HTTP client will always use `tcp` as the
-	// network and the host name from the request as the address:
-	if base.network == unixNetwork {
-		transport.DialContext = func(ctx context.Context, _, _ string) (net.Conn, error) {
-			dialer := net.Dialer{}
-			return dialer.DialContext(ctx, base.network, base.socket)
+	if base.protocol != h2cProtocol {
+		// Create a regular transport. Note that this does support HTTP/2 with TLS, but
+		// not h2c:
+		transport := &http.Transport{
+			TLSClientConfig:    config,
+			Proxy:              http.ProxyFromEnvironment,
+			DisableKeepAlives:  c.disableKeepAlives,
+			DisableCompression: false,
 		}
-		transport.DialTLSContext = func(ctx context.Context, _, _ string) (net.Conn, error) {
-			// TODO: This ignores the passed context because it isn't currently
-			// supported. Once we migrate to Go 1.15 it should be done like this:
-			//
-			//	dialer := tls.Dialer{
-			//		Config: config,
-			//	}
-			//	return dialer.DialContext(ctx, base.network, base.socket)
-			//
-			// This will only have a negative impact in applications that specify a
-			// deadline or timeout in the passed context, as it will be ignored.
-			return tls.Dial(base.network, base.socket, config)
-		}
-	}
 
-	// Prepare the result:
-	result = transport
+		// In order to use Unix sockets we need to explicitly set dialers that use `unix` as
+		// network and the socket file as address, otherwise the HTTP client will always use
+		// `tcp` as the network and the host name from the request as the address:
+		if base.network == unixNetwork {
+			transport.DialContext = func(ctx context.Context,
+				_, _ string) (net.Conn, error) {
+				dialer := net.Dialer{}
+				return dialer.DialContext(ctx, base.network, base.socket)
+			}
+			transport.DialTLSContext = func(ctx context.Context,
+				_, _ string) (net.Conn, error) {
+				// TODO: This ignores the passed context because it isn't currently
+				// supported. Once we migrate to Go 1.15 it should be done like
+				// this:
+				//
+				//	dialer := tls.Dialer{
+				//		Config: config,
+				//	}
+				//	return dialer.DialContext(ctx, base.network, base.socket)
+				//
+				// This will only have a negative impact in applications that
+				// specify a deadline or timeout in the passed context, as it
+				// will be ignored.
+				return tls.Dial(base.network, base.socket, config)
+			}
+		}
+
+		// Prepare the result:
+		result = transport
+	} else {
+		// In order to use h2c we need to tell the transport to allow the `http` scheme:
+		transport := &http2.Transport{
+			AllowHTTP:          true,
+			DisableCompression: false,
+		}
+
+		// We also need to ignore TLS configuration when dialing, and explicitly set the
+		// network and socket when using Unix sockets:
+		if base.network == unixNetwork {
+			transport.DialTLS = func(network, addr string, cfg *tls.Config) (net.Conn,
+				error) {
+				return net.Dial(base.network, base.socket)
+			}
+		} else {
+			transport.DialTLS = func(network, addr string, cfg *tls.Config) (net.Conn,
+				error) {
+				return net.Dial(network, addr)
+			}
+		}
+
+		// Prepare the result:
+		result = transport
+	}
 
 	// The metrics wrapper should be called the first because we want the corresponding round
 	// tripper to be called the last so that metrics aren't affected by users specified round
