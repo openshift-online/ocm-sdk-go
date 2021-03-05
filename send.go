@@ -287,6 +287,7 @@ func (c *Connection) createTransport(ctx context.Context, base *urlInfo) (
 			Proxy:              http.ProxyFromEnvironment,
 			DisableKeepAlives:  c.disableKeepAlives,
 			DisableCompression: false,
+			ForceAttemptHTTP2:  true,
 		}
 
 		// In order to use Unix sockets we need to explicitly set dialers that use `unix` as

@@ -104,6 +104,7 @@ func MakeTLSServer() *ghttp.Server {
 	server := ghttp.NewTLSServer()
 	server.Writer = GinkgoWriter
 	server.HTTPTestServer.Config.ErrorLog = log.New(GinkgoWriter, "", log.LstdFlags)
+	server.HTTPTestServer.EnableHTTP2 = true
 	return server
 }
 
