@@ -50,7 +50,7 @@ const (
 	DefaultClientID     = "cloud-services"
 	DefaultClientSecret = ""
 	DefaultURL          = "https://api.openshift.com"
-	DefaultAgent        = "OCM/" + Version
+	DefaultAgent        = "OCM-SDK/" + Version
 )
 
 // DefaultScopes is the ser of scopes used by default:
