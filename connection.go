@@ -132,8 +132,9 @@ type Connection struct {
 // network (tcp or unix) and the socket name (for Unix sockets).
 type urlInfo struct {
 	*url.URL
-	network string
-	socket  string
+	network  string
+	socket   string
+	protocol string
 }
 
 // urlTableEntry is used to store one entry of the table that contains the correspondence between
@@ -235,6 +236,9 @@ func (b *ConnectionBuilder) Client(id string, secret string) *ConnectionBuilder 
 //		Build()
 //
 // To connect using Unix sockets and HTTPS use `unix+https://my.server.com/tmp/api.socket`.
+//
+// To force use of HTTP/2 without TLS use `h2c://...`. This can also be combined with Unix sockets,
+// for example `unix+h2c://...`.
 //
 // Note that the host name is mandatory even when using Unix sockets because it is used to populate
 // the `Host` header sent to the server.
@@ -860,8 +864,8 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 	for prefix, base := range b.urlTable {
 		if !validPrefixRE.MatchString(prefix) {
 			err = fmt.Errorf(
-				"prefix '%s' for alternative URL '%s' isn't valid; it must start "+
-					"with a slash and be composed of slash separated segments "+
+				"prefix '%s' for URL '%s' isn't valid; it must start with a "+
+					"slash and be composed of slash separated segments "+
 					"containing only digits, letters, dashes and undercores",
 				prefix, base,
 			)
@@ -882,7 +886,7 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 		entry.re, err = regexp.Compile(pattern)
 		if err != nil {
 			err = fmt.Errorf(
-				"can't compile regular expression '%s' for alternative URL with "+
+				"can't compile regular expression '%s' for URL with "+
 					"prefix '%s' and URL '%s': %v",
 				pattern, prefix, base, err,
 			)
@@ -891,7 +895,7 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 		entry.url, err = b.parseURL(ctx, base)
 		if err != nil {
 			err = fmt.Errorf(
-				"can't parse alternative URL '%s' for prefix '%s': %w",
+				"can't parse URL '%s' for prefix '%s': %w",
 				base, prefix, err,
 			)
 			return
@@ -912,7 +916,7 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 		for _, entry := range table {
 			b.logger.Debug(
 				ctx,
-				"Added alternative URL with prefix '%s', regular expression "+
+				"Added URL with prefix '%s', regular expression "+
 					"'%s' and URL '%s'",
 				entry.prefix, entry.re, entry.url,
 			)
@@ -996,7 +1000,7 @@ func (b *ConnectionBuilder) parseURL(ctx context.Context, text string) (result *
 		return
 	}
 
-	// Get the socket path is acceptable (only for Unix network):
+	// Check if the socket path is acceptable (only for Unix network):
 	socket := parsed.Path
 	if network == unixNetwork && socket == "" {
 		socket = parsed.Path
@@ -1011,14 +1015,18 @@ func (b *ConnectionBuilder) parseURL(ctx context.Context, text string) (result *
 	}
 
 	// The parsed URL will be used by the HTTP client, and this expects the scheme to be `http`
-	// or `https`, so we need to update it as it may be `unix` at this point:
+	// or `https`, so we need to update it as it may be `unix` or `h2c` at this point:
 	parsed.Scheme = protocol
+	if protocol == h2cProtocol {
+		parsed.Scheme = httpProtocol
+	}
 
 	// Create and populate the result:
 	result = &urlInfo{
-		URL:     parsed,
-		network: network,
-		socket:  socket,
+		URL:      parsed,
+		network:  network,
+		socket:   socket,
+		protocol: protocol,
 	}
 
 	return
@@ -1047,10 +1055,10 @@ func (b *ConnectionBuilder) parseScheme(ctx context.Context, scheme string) (net
 		)
 		return
 	}
-	if protocol != httpProtocol && protocol != httpsProtocol {
+	if protocol != httpProtocol && protocol != httpsProtocol && protocol != h2cProtocol {
 		err = fmt.Errorf(
-			"protocol in scheme '%s' should should be 'http' or 'https', but it "+
-				"is '%s'",
+			"protocol in scheme '%s' should should be 'http', 'https' or 'h2c', "+
+				"but it is '%s'",
 			scheme, protocol,
 		)
 		return
@@ -1192,4 +1200,5 @@ const (
 const (
 	httpProtocol  = "http"
 	httpsProtocol = "https"
+	h2cProtocol   = "h2c"
 )
