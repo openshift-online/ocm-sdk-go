@@ -29,17 +29,3 @@ func TestMetrics(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Metrics")
 }
-
-// Logger used during the tests:
-var logger logging.Logger
-
-var _ = BeforeSuite(func() {
-	var err error
-
-	// Create thelogger:
-	logger, err = logging.NewStdLoggerBuilder().
-		Streams(GinkgoWriter, GinkgoWriter).
-		Debug(true).
-		Build()
-	Expect(err).ToNot(HaveOccurred())
-})

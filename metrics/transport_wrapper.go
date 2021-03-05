@@ -23,7 +23,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/logging"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -71,7 +70,6 @@ import (
 //
 // Don't create objects of this type directly; use the NewTransportWrapper function instead.
 type TransportWrapperBuilder struct {
-	logger     logging.Logger
 	paths      []string
 	subsystem  string
 	registerer prometheus.Registerer
@@ -80,7 +78,6 @@ type TransportWrapperBuilder struct {
 // TransportWrapper contains the data and logic needed to wrap an HTTP round tripper with another
 // one that generates Prometheus metrics.
 type TransportWrapper struct {
-	logger          logging.Logger
 	paths           pathTree
 	requestCount    *prometheus.CounterVec
 	requestDuration *prometheus.HistogramVec
@@ -109,12 +106,6 @@ func NewTransportWrapper() *TransportWrapperBuilder {
 // accumulated in the `/-` path.
 func (b *TransportWrapperBuilder) Path(value string) *TransportWrapperBuilder {
 	b.paths = append(b.paths, value)
-	return b
-}
-
-// Logger sets the logger that will be used by the round tripper. This is mandatory.
-func (b *TransportWrapperBuilder) Logger(value logging.Logger) *TransportWrapperBuilder {
-	b.logger = value
 	return b
 }
 
@@ -148,10 +139,6 @@ func (b *TransportWrapperBuilder) Registerer(value prometheus.Registerer) *Trans
 // Build uses the information stored in the builder to create a new transport wrapper.
 func (b *TransportWrapperBuilder) Build() (result *TransportWrapper, err error) {
 	// Check parameters:
-	if b.logger == nil {
-		err = fmt.Errorf("logger is mandatory")
-		return
-	}
 	if b.subsystem == "" {
 		err = fmt.Errorf("subsystem is mandatory")
 		return
@@ -211,7 +198,6 @@ func (b *TransportWrapperBuilder) Build() (result *TransportWrapper, err error) 
 
 	// Create and populate the object:
 	result = &TransportWrapper{
-		logger:          b.logger,
 		paths:           paths,
 		requestCount:    requestCount,
 		requestDuration: requestDuration,

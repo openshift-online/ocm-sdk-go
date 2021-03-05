@@ -806,7 +806,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	if b.metricsSubsystem != "" {
 		var wrapper *metrics.TransportWrapper
 		wrapper, err = metrics.NewTransportWrapper().
-			Logger(b.logger).
 			Path(tokenURL.Path).
 			Subsystem(b.metricsSubsystem).
 			Registerer(b.metricsRegisterer).
