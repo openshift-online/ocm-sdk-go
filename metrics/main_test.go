@@ -19,8 +19,6 @@ package metrics
 import (
 	"testing"
 
-	"github.com/openshift-online/ocm-sdk-go/logging"
-
 	. "github.com/onsi/ginkgo" // nolint
 	. "github.com/onsi/gomega" // nolint
 )
