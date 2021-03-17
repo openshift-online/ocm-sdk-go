@@ -4452,6 +4452,23 @@
           "standard"
         ]
       },
+      "Capability": {
+        "description": "Capability model that represents internal labels with a key that matches a set list defined in AMS (defined in pkg/api/capability_types.go).\n",
+        "properties": {
+          "inherited": {
+            "description": "Dynamic attribute of the capability that tells us that this capability was inherited from the subscription's organization. \n",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the capability label.\n",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value that can be assigned to the capability (eg. \"true\", \"false\" etc).\n",
+            "type": "string"
+          }
+        }
+      },
       "ClusterAuthorizationRequest": {
         "properties": {
           "byoc": {
@@ -4517,6 +4534,26 @@
           }
         }
       },
+      "ClusterMetricsNodes": {
+        "properties": {
+          "compute": {
+            "type": "number",
+            "format": "float"
+          },
+          "infra": {
+            "type": "number",
+            "format": "float"
+          },
+          "master": {
+            "type": "number",
+            "format": "float"
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
       "ClusterRegistrationRequest": {
         "properties": {
           "authorization_token": {
@@ -4540,6 +4577,37 @@
           },
           "expires_at": {
             "description": "Cluster registration expiration.\n",
+            "type": "string"
+          }
+        }
+      },
+      "ClusterResource": {
+        "properties": {
+          "total": {
+            "$ref": "#/components/schemas/ValueUnit"
+          },
+          "updated_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "used": {
+            "$ref": "#/components/schemas/ValueUnit"
+          }
+        }
+      },
+      "ClusterUpgrade": {
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "state": {
+            "type": "string"
+          },
+          "updated_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
             "type": "string"
           }
         }
@@ -4694,13 +4762,6 @@
         "type": "string",
         "enum": [
           "ocp"
-        ]
-      },
-      "ProductBundleEnum": {
-        "description": "Usage of Subscription.\n",
-        "type": "string",
-        "enum": [
-          
         ]
       },
       "PullSecretsRequest": {
@@ -5043,13 +5104,6 @@
           }
         }
       },
-      "ServiceLevelEnum": {
-        "description": "Service Level of Subscription.\n",
-        "type": "string",
-        "enum": [
-          
-        ]
-      },
       "SkuRule": {
         "description": "Identifies sku rule\n",
         "properties": {
@@ -5094,6 +5148,12 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            }
+          },
           "cloud_account_id": {
             "type": "string"
           },
@@ -5105,6 +5165,9 @@
           },
           "cluster_billing_model": {
             "$ref": "#/components/schemas/BillingModel"
+          },
+          "console_url": {
+            "type": "string"
           },
           "consumer_uuid": {
             "type": "string"
@@ -5134,7 +5197,12 @@
             }
           },
           "last_reconcile_date": {
-            "description": "Last time this subscription were reconciled about cluster usage\n",
+            "description": "Last time this subscription were reconciled about cluster usage.\n",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_released_at": {
+            "description": "Last time status was set to Released for this cluster/subscription.\n",
             "type": "string",
             "format": "date-time"
           },
@@ -5146,6 +5214,19 @@
           "managed": {
             "type": "boolean"
           },
+          "metrics": {
+            "description": "Metrics array. One or zero elements will present.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionMetrics"
+            }
+          },
+          "notification_contacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Account"
+            }
+          },
           "organization_id": {
             "type": "string"
           },
@@ -5153,16 +5234,21 @@
             "$ref": "#/components/schemas/Plan"
           },
           "product_bundle": {
-            "$ref": "#/components/schemas/ProductBundleEnum"
+            "type": "string"
           },
           "provenance": {
+            "description": "The origin of cluster registration (values are defined in AMS at pkg/api/subscription_types.go).\n",
             "type": "string"
           },
           "region_id": {
             "type": "string"
           },
+          "released": {
+            "description": "Flag used to denote whether or not the owner of the cluster has released the ownership and ready to be transferred to a different user.\n",
+            "type": "boolean"
+          },
           "service_level": {
-            "$ref": "#/components/schemas/ServiceLevelEnum"
+            "type": "string"
           },
           "socket_total": {
             "type": "integer",
@@ -5172,17 +5258,98 @@
             "type": "string"
           },
           "support_level": {
-            "$ref": "#/components/schemas/SupportLevelEnum"
+            "type": "string"
           },
           "system_units": {
-            "$ref": "#/components/schemas/SystemUnitsEnum"
+            "type": "string"
+          },
+          "trial_end_date": {
+            "description": "If the subscription is a trial, date the trial ends.\n",
+            "type": "string",
+            "format": "date-time"
           },
           "updated_at": {
             "type": "string",
             "format": "date-time"
           },
           "usage": {
-            "$ref": "#/components/schemas/UsageEnum"
+            "type": "string"
+          }
+        }
+      },
+      "SubscriptionMetrics": {
+        "description": "Each field is a metric fetched for a specific Subscription's cluster.\n",
+        "properties": {
+          "cloud_provider": {
+            "type": "string"
+          },
+          "compute_nodes_cpu": {
+            "$ref": "#/components/schemas/ClusterResource"
+          },
+          "compute_nodes_memory": {
+            "$ref": "#/components/schemas/ClusterResource"
+          },
+          "compute_nodes_sockets": {
+            "$ref": "#/components/schemas/ClusterResource"
+          },
+          "console_url": {
+            "type": "string"
+          },
+          "cpu": {
+            "$ref": "#/components/schemas/ClusterResource"
+          },
+          "critical_alerts_firing": {
+            "type": "number",
+            "format": "float"
+          },
+          "health_state": {
+            "type": "string"
+          },
+          "memory": {
+            "$ref": "#/components/schemas/ClusterResource"
+          },
+          "nodes": {
+            "$ref": "#/components/schemas/ClusterMetricsNodes"
+          },
+          "openshift_version": {
+            "type": "string"
+          },
+          "operating_system": {
+            "type": "string"
+          },
+          "operators_condition_failing": {
+            "type": "number",
+            "format": "float"
+          },
+          "region": {
+            "type": "string"
+          },
+          "sockets": {
+            "$ref": "#/components/schemas/ClusterResource"
+          },
+          "state": {
+            "type": "string"
+          },
+          "state_description": {
+            "type": "string"
+          },
+          "storage": {
+            "$ref": "#/components/schemas/ClusterResource"
+          },
+          "subscription_cpu_total": {
+            "type": "number",
+            "format": "float"
+          },
+          "subscription_obligation_exists": {
+            "type": "number",
+            "format": "float"
+          },
+          "subscription_socket_total": {
+            "type": "number",
+            "format": "float"
+          },
+          "upgrade": {
+            "$ref": "#/components/schemas/ClusterUpgrade"
           }
         }
       },
@@ -5393,20 +5560,6 @@
           }
         }
       },
-      "SupportLevelEnum": {
-        "description": "Support Level of Subscription.\n",
-        "type": "string",
-        "enum": [
-          
-        ]
-      },
-      "SystemUnitsEnum": {
-        "description": "Usage of Subscription.\n",
-        "type": "string",
-        "enum": [
-          
-        ]
-      },
       "TemplateParameter": {
         "description": "A template parameter is used in an email to replace placeholder content with\nvalues specific to the email recipient.\n",
         "properties": {
@@ -5435,12 +5588,16 @@
           }
         }
       },
-      "UsageEnum": {
-        "description": "Usage of Subscription.\n",
-        "type": "string",
-        "enum": [
-          
-        ]
+      "ValueUnit": {
+        "properties": {
+          "unit": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "format": "float"
+          }
+        }
       },
       "Error": {
         "type": "object",

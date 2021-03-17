@@ -861,6 +861,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "deprovision",
+            "description": "If false it will only delete from OCM but not the actual cluster resources.\nfalse is only allowed for OCP clusters. true by default.\n",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "force",
+            "description": "If true it will force delete the cluster even if external dependecies\ncleanup was not finalized. Should be used with extreme caution, after manual cleanup\nof external dependencies. OSD only. false by default. \n",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {

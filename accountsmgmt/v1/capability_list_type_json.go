@@ -26,47 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalUsageEnumList writes a list of values of the 'usage_enum' type to
+// MarshalCapabilityList writes a list of values of the 'capability' type to
 // the given writer.
-func MarshalUsageEnumList(list []UsageEnum, writer io.Writer) error {
+func MarshalCapabilityList(list []*Capability, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeUsageEnumList(list, stream)
+	writeCapabilityList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeUsageEnumList writes a list of value of the 'usage_enum' type to
+// writeCapabilityList writes a list of value of the 'capability' type to
 // the given stream.
-func writeUsageEnumList(list []UsageEnum, stream *jsoniter.Stream) {
+func writeCapabilityList(list []*Capability, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteString(string(value))
+		writeCapability(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalUsageEnumList reads a list of values of the 'usage_enum' type
+// UnmarshalCapabilityList reads a list of values of the 'capability' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalUsageEnumList(source interface{}) (items []UsageEnum, err error) {
+func UnmarshalCapabilityList(source interface{}) (items []*Capability, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readUsageEnumList(iterator)
+	items = readCapabilityList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readUsageEnumList reads list of values of the ''usage_enum' type from
+// readCapabilityList reads list of values of the ''capability' type from
 // the given iterator.
-func readUsageEnumList(iterator *jsoniter.Iterator) []UsageEnum {
-	list := []UsageEnum{}
+func readCapabilityList(iterator *jsoniter.Iterator) []*Capability {
+	list := []*Capability{}
 	for iterator.ReadArray() {
-		text := iterator.ReadString()
-		item := UsageEnum(text)
+		item := readCapability(iterator)
 		list = append(list, item)
 	}
 	return list

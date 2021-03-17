@@ -26,47 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalSystemUnitsEnumList writes a list of values of the 'system_units_enum' type to
+// MarshalClusterMetricsNodesList writes a list of values of the 'cluster_metrics_nodes' type to
 // the given writer.
-func MarshalSystemUnitsEnumList(list []SystemUnitsEnum, writer io.Writer) error {
+func MarshalClusterMetricsNodesList(list []*ClusterMetricsNodes, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeSystemUnitsEnumList(list, stream)
+	writeClusterMetricsNodesList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeSystemUnitsEnumList writes a list of value of the 'system_units_enum' type to
+// writeClusterMetricsNodesList writes a list of value of the 'cluster_metrics_nodes' type to
 // the given stream.
-func writeSystemUnitsEnumList(list []SystemUnitsEnum, stream *jsoniter.Stream) {
+func writeClusterMetricsNodesList(list []*ClusterMetricsNodes, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteString(string(value))
+		writeClusterMetricsNodes(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalSystemUnitsEnumList reads a list of values of the 'system_units_enum' type
+// UnmarshalClusterMetricsNodesList reads a list of values of the 'cluster_metrics_nodes' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalSystemUnitsEnumList(source interface{}) (items []SystemUnitsEnum, err error) {
+func UnmarshalClusterMetricsNodesList(source interface{}) (items []*ClusterMetricsNodes, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readSystemUnitsEnumList(iterator)
+	items = readClusterMetricsNodesList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readSystemUnitsEnumList reads list of values of the ''system_units_enum' type from
+// readClusterMetricsNodesList reads list of values of the ''cluster_metrics_nodes' type from
 // the given iterator.
-func readSystemUnitsEnumList(iterator *jsoniter.Iterator) []SystemUnitsEnum {
-	list := []SystemUnitsEnum{}
+func readClusterMetricsNodesList(iterator *jsoniter.Iterator) []*ClusterMetricsNodes {
+	list := []*ClusterMetricsNodes{}
 	for iterator.ReadArray() {
-		text := iterator.ReadString()
-		item := SystemUnitsEnum(text)
+		item := readClusterMetricsNodes(iterator)
 		list = append(list, item)
 	}
 	return list
