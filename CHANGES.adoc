@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.164 Mar 17 2021
+
+- Change default user agent to `OCM-SDK`.
+- Update to model 0.0.111:
+** Add subscription metrics.
+** Add `deprovision` and `force` parameters to delete cluster method.
+** Ensure all subscription fields are available.
+
 == 0.1.163 Mar 5 2021
 
 - Enable compression.
