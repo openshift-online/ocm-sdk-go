@@ -26,47 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalSupportLevelEnumList writes a list of values of the 'support_level_enum' type to
+// MarshalClusterResourceList writes a list of values of the 'cluster_resource' type to
 // the given writer.
-func MarshalSupportLevelEnumList(list []SupportLevelEnum, writer io.Writer) error {
+func MarshalClusterResourceList(list []*ClusterResource, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeSupportLevelEnumList(list, stream)
+	writeClusterResourceList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeSupportLevelEnumList writes a list of value of the 'support_level_enum' type to
+// writeClusterResourceList writes a list of value of the 'cluster_resource' type to
 // the given stream.
-func writeSupportLevelEnumList(list []SupportLevelEnum, stream *jsoniter.Stream) {
+func writeClusterResourceList(list []*ClusterResource, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteString(string(value))
+		writeClusterResource(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalSupportLevelEnumList reads a list of values of the 'support_level_enum' type
+// UnmarshalClusterResourceList reads a list of values of the 'cluster_resource' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalSupportLevelEnumList(source interface{}) (items []SupportLevelEnum, err error) {
+func UnmarshalClusterResourceList(source interface{}) (items []*ClusterResource, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readSupportLevelEnumList(iterator)
+	items = readClusterResourceList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readSupportLevelEnumList reads list of values of the ''support_level_enum' type from
+// readClusterResourceList reads list of values of the ''cluster_resource' type from
 // the given iterator.
-func readSupportLevelEnumList(iterator *jsoniter.Iterator) []SupportLevelEnum {
-	list := []SupportLevelEnum{}
+func readClusterResourceList(iterator *jsoniter.Iterator) []*ClusterResource {
+	list := []*ClusterResource{}
 	for iterator.ReadArray() {
-		text := iterator.ReadString()
-		item := SupportLevelEnum(text)
+		item := readClusterResource(iterator)
 		list = append(list, item)
 	}
 	return list

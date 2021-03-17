@@ -26,47 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalProductBundleEnumList writes a list of values of the 'product_bundle_enum' type to
+// MarshalClusterUpgradeList writes a list of values of the 'cluster_upgrade' type to
 // the given writer.
-func MarshalProductBundleEnumList(list []ProductBundleEnum, writer io.Writer) error {
+func MarshalClusterUpgradeList(list []*ClusterUpgrade, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeProductBundleEnumList(list, stream)
+	writeClusterUpgradeList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeProductBundleEnumList writes a list of value of the 'product_bundle_enum' type to
+// writeClusterUpgradeList writes a list of value of the 'cluster_upgrade' type to
 // the given stream.
-func writeProductBundleEnumList(list []ProductBundleEnum, stream *jsoniter.Stream) {
+func writeClusterUpgradeList(list []*ClusterUpgrade, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteString(string(value))
+		writeClusterUpgrade(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalProductBundleEnumList reads a list of values of the 'product_bundle_enum' type
+// UnmarshalClusterUpgradeList reads a list of values of the 'cluster_upgrade' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalProductBundleEnumList(source interface{}) (items []ProductBundleEnum, err error) {
+func UnmarshalClusterUpgradeList(source interface{}) (items []*ClusterUpgrade, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readProductBundleEnumList(iterator)
+	items = readClusterUpgradeList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readProductBundleEnumList reads list of values of the ''product_bundle_enum' type from
+// readClusterUpgradeList reads list of values of the ''cluster_upgrade' type from
 // the given iterator.
-func readProductBundleEnumList(iterator *jsoniter.Iterator) []ProductBundleEnum {
-	list := []ProductBundleEnum{}
+func readClusterUpgradeList(iterator *jsoniter.Iterator) []*ClusterUpgrade {
+	list := []*ClusterUpgrade{}
 	for iterator.ReadArray() {
-		text := iterator.ReadString()
-		item := ProductBundleEnum(text)
+		item := readClusterUpgrade(iterator)
 		list = append(list, item)
 	}
 	return list

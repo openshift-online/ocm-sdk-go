@@ -26,47 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalServiceLevelEnumList writes a list of values of the 'service_level_enum' type to
+// MarshalSubscriptionMetricsList writes a list of values of the 'subscription_metrics' type to
 // the given writer.
-func MarshalServiceLevelEnumList(list []ServiceLevelEnum, writer io.Writer) error {
+func MarshalSubscriptionMetricsList(list []*SubscriptionMetrics, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeServiceLevelEnumList(list, stream)
+	writeSubscriptionMetricsList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeServiceLevelEnumList writes a list of value of the 'service_level_enum' type to
+// writeSubscriptionMetricsList writes a list of value of the 'subscription_metrics' type to
 // the given stream.
-func writeServiceLevelEnumList(list []ServiceLevelEnum, stream *jsoniter.Stream) {
+func writeSubscriptionMetricsList(list []*SubscriptionMetrics, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteString(string(value))
+		writeSubscriptionMetrics(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalServiceLevelEnumList reads a list of values of the 'service_level_enum' type
+// UnmarshalSubscriptionMetricsList reads a list of values of the 'subscription_metrics' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalServiceLevelEnumList(source interface{}) (items []ServiceLevelEnum, err error) {
+func UnmarshalSubscriptionMetricsList(source interface{}) (items []*SubscriptionMetrics, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readServiceLevelEnumList(iterator)
+	items = readSubscriptionMetricsList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readServiceLevelEnumList reads list of values of the ''service_level_enum' type from
+// readSubscriptionMetricsList reads list of values of the ''subscription_metrics' type from
 // the given iterator.
-func readServiceLevelEnumList(iterator *jsoniter.Iterator) []ServiceLevelEnum {
-	list := []ServiceLevelEnum{}
+func readSubscriptionMetricsList(iterator *jsoniter.Iterator) []*SubscriptionMetrics {
+	list := []*SubscriptionMetrics{}
 	for iterator.ReadArray() {
-		text := iterator.ReadString()
-		item := ServiceLevelEnum(text)
+		item := readSubscriptionMetrics(iterator)
 		list = append(list, item)
 	}
 	return list
