@@ -23,7 +23,7 @@ limitations under the License.
 //	https://github.com/golang/go/issues/16736
 //	https://github.com/golang/go/issues/18609
 
-package sdk
+package internal
 
 import (
 	"crypto/x509"
@@ -32,7 +32,7 @@ import (
 // loadSystemCAs loads the certificates of the CAs that we will trust. Currently this uses a fixed
 // set of CA certificates, which is obviusly going to break in the future, but there is not much we
 // can do (or know to do) till Go learns to read the Windows CA trust store.
-func (b *ConnectionBuilder) loadSystemCAs() (pool *x509.CertPool, err error) {
+func loadSystemCAs() (pool *x509.CertPool, err error) {
 	pool = x509.NewCertPool()
 	pool.AppendCertsFromPEM(ssoCA)
 	pool.AppendCertsFromPEM(apiCA)

@@ -19,14 +19,14 @@ limitations under the License.
 // This file contains the function that returns the trusted CA certificates for operating systems
 // other than Windows, where Go knows how to load the system trusted CA store.
 
-package sdk
+package internal
 
 import (
 	"crypto/x509"
 )
 
 // loadSystemCAs loads the trusted CA certifites from the system trusted CA store.
-func (b *ConnectionBuilder) loadSystemCAs() (pool *x509.CertPool, err error) {
+func loadSystemCAs() (pool *x509.CertPool, err error) {
 	pool, err = x509.SystemCertPool()
 	return
 }

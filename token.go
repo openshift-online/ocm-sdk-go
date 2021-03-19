@@ -330,7 +330,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	result *internal.TokenResponse, err error) {
 	// Create the HTTP request:
 	body := []byte(form.Encode())
-	request, err := http.NewRequest(http.MethodPost, c.tokenURL.String(), bytes.NewReader(body))
+	request, err := http.NewRequest(http.MethodPost, c.tokenURL, bytes.NewReader(body))
 	request.Close = true
 	header := request.Header
 	if c.agent != "" {
@@ -349,7 +349,7 @@ func (c *Connection) sendTokenFormTimed(ctx context.Context, form url.Values) (c
 	}
 
 	// Select the HTTP client:
-	client, err := c.selectClient(ctx, c.tokenURL)
+	client, err := c.clientSelector.Select(ctx, c.tokenAddress)
 	if err != nil {
 		return
 	}
@@ -461,7 +461,7 @@ func GetTokenExpiry(token *jwt.Token, now time.Time) (expires bool,
 	left time.Duration, err error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		err = fmt.Errorf("expected map claims bug got %T", claims)
+		err = fmt.Errorf("expected map claims but got %T", claims)
 		return
 	}
 	var exp float64
