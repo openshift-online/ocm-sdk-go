@@ -22,19 +22,11 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"html"
-	"io/ioutil"
-	"mime"
 	"net/http"
 	"path"
-	"regexp"
-	"strings"
 
-	strip "github.com/grokify/html-strip-tags-go"
 	"github.com/openshift-online/ocm-sdk-go/internal"
 )
-
-var wsRegex = regexp.MustCompile(`\s+`)
 
 // RoundTrip is the implementation of the http.RoundTripper interface.
 func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, err error) {
@@ -58,7 +50,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	}
 
 	// Add the base URL to the request URL:
-	base, err := c.selectBaseURL(ctx, request)
+	base, err := c.selectServer(ctx, request)
 	if err != nil {
 		return
 	}
@@ -81,22 +73,12 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 		return
 	}
 
-	// Get the access token:
-	token, _, err := c.TokensContext(ctx)
-	if err != nil {
-		err = fmt.Errorf("can't get access token: %w", err)
-		return
-	}
-
 	// Add the default headers:
 	if request.Header == nil {
 		request.Header = make(http.Header)
 	}
 	if c.agent != "" {
 		request.Header.Set("User-Agent", c.agent)
-	}
-	if token != "" {
-		request.Header.Set("Authorization", "Bearer "+token)
 	}
 	switch request.Method {
 	case http.MethodPost, http.MethodPatch, http.MethodPut:
@@ -118,7 +100,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	}
 
 	// Check that the response content type is JSON:
-	err = c.checkContentType(response)
+	err = internal.CheckContentType(response)
 	if err != nil {
 		return
 	}
@@ -126,71 +108,13 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	return
 }
 
-// checkContentType checks that the content type of the given response is JSON. Note that if the
-// content type isn't JSON this method will consume the complete body in order to generate an error
-// message containing a summary of the content.
-func (c *Connection) checkContentType(response *http.Response) error {
-	var err error
-	var mediaType string
-	contentType := response.Header.Get("Content-Type")
-	if contentType != "" {
-		mediaType, _, err = mime.ParseMediaType(contentType)
-		if err != nil {
-			return err
-		}
-	} else {
-		mediaType = contentType
-	}
-	if !strings.EqualFold(mediaType, "application/json") {
-		var summary string
-		summary, err = c.contentSummary(mediaType, response)
-		if err != nil {
-			return fmt.Errorf(
-				"expected response content type 'application/json' but received "+
-					"'%s' and couldn't obtain content summary: %w",
-				mediaType, err,
-			)
-		}
-		return fmt.Errorf(
-			"expected response content type 'application/json' but received '%s' and "+
-				"content '%s'",
-			mediaType, summary,
-		)
-	}
-	return nil
-}
-
-// contentSummary reads the body of the given response and returns a summary it. The summary will
-// be the complete body if it isn't too log. If it is too long then the summary will be the
-// beginning of the content followed by ellipsis.
-func (c *Connection) contentSummary(mediaType string, response *http.Response) (summary string, err error) {
-	var body []byte
-	body, err = ioutil.ReadAll(response.Body)
-	if err != nil {
-		return
-	}
-	limit := 250
-	runes := []rune(string(body))
-	if strings.EqualFold(mediaType, "text/html") && len(runes) > limit {
-		content := html.UnescapeString(strip.StripTags(string(body)))
-		content = wsRegex.ReplaceAllString(strings.TrimSpace(content), " ")
-		runes = []rune(content)
-	}
-	if len(runes) > limit {
-		summary = fmt.Sprintf("%s...", string(runes[:limit]))
-	} else {
-		summary = string(runes)
-	}
-	return
-}
-
-// selectBaseURL selects the base URL that should be used for the given request, according its path
-// and the alternative URLs configured when the connection was created.
-func (c *Connection) selectBaseURL(ctx context.Context,
+// selectServer selects the server that should be used for the given request, according its path and
+// the alternative URLs configured when the connection was created.
+func (c *Connection) selectServer(ctx context.Context,
 	request *http.Request) (base *internal.ServerAddress, err error) {
-	// Select the base URL that has the longest matching prefix. Note that it is enough to pick
-	// the first match because the entries have already been sorted by descending prefix length
-	// when the connection was created.
+	// Select the server corresponding to the longest matching prefix. Note that it is enough to
+	// pick the first match because the entries have already been sorted by descending prefix
+	// length when the connection was created.
 	for _, entry := range c.urlTable {
 		if entry.re.MatchString(request.URL.Path) {
 			base = entry.url

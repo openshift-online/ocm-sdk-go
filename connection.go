@@ -26,13 +26,11 @@ import (
 	"net/url"
 	"regexp"
 	"sort"
-	"strings"
-	"sync"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/openshift-online/ocm-sdk-go/accountsmgmt"
+	"github.com/openshift-online/ocm-sdk-go/authentication"
 	"github.com/openshift-online/ocm-sdk-go/authorizations"
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
 	"github.com/openshift-online/ocm-sdk-go/configuration"
@@ -63,7 +61,7 @@ var DefaultScopes = []string{
 type ConnectionBuilder struct {
 	// Basic attributes:
 	logger            logging.Logger
-	trustedCASources  []interface{}
+	trustedCAs        []interface{}
 	insecure          bool
 	disableKeepAlives bool
 	tokenURL          string
@@ -75,7 +73,7 @@ type ConnectionBuilder struct {
 	password          string
 	tokens            []string
 	scopes            []string
-	transportWrappers []TransportWrapper
+	transportWrappers []func(http.RoundTripper) http.RoundTripper
 
 	// Metrics:
 	metricsSubsystem  string
@@ -97,26 +95,14 @@ type Connection struct {
 	// Basic attributes:
 	closed         bool
 	logger         logging.Logger
+	authnWrapper   *authentication.TransportWrapper
 	clientSelector *internal.ClientSelector
-	tokenURL       string
-	tokenAddress   *internal.ServerAddress
-	clientID       string
-	clientSecret   string
 	urlTable       []urlTableEntry
 	agent          string
-	user           string
-	password       string
-	tokenMutex     *sync.Mutex
-	tokenParser    *jwt.Parser
-	accessToken    *jwt.Token
-	refreshToken   *jwt.Token
-	scopes         []string
 
 	// Metrics:
-	metricsSubsystem    string
-	metricsRegisterer   prometheus.Registerer
-	tokenCountMetric    *prometheus.CounterVec
-	tokenDurationMetric *prometheus.HistogramVec
+	metricsSubsystem  string
+	metricsRegisterer prometheus.Registerer
 }
 
 // urlTableEntry is used to store one entry of the table that contains the correspondence between
@@ -291,7 +277,7 @@ func (b *ConnectionBuilder) Agent(agent string) *ConnectionBuilder {
 // obtain the token. For example:
 //
 //	// Use the resource owner password grant:
-//	connection, err := client.NewConnectionBuilder().
+//	connection, err := sdk.NewConnectionBuilder().
 //		User("myuser", "mypassword").
 //		Build()
 //
@@ -300,7 +286,7 @@ func (b *ConnectionBuilder) Agent(agent string) *ConnectionBuilder {
 // secret blank. For example:
 //
 //	// Use the resource owner password grant:
-//	connection, err := client.NewConnectionBuilder().
+//	connection, err := sdk.NewConnectionBuilder().
 //		User("myuser", "mypassword").
 //		Client("myclientid", "").
 //		Build()
@@ -321,7 +307,7 @@ func (b *ConnectionBuilder) User(name string, password string) *ConnectionBuilde
 // scope 'myscope' without loosing the default you will have to do something like this:
 //
 //	// Create a connection with the default 'openid' scope and some additional scopes:
-//	connection, err := client.NewConnectionBuilder().
+//	connection, err := sdk.NewConnectionBuilder().
 //		User("myuser", "mypassword").
 //		Scopes("openid", "myscope", "yourscope").
 //		Build()
@@ -360,7 +346,7 @@ func (b *ConnectionBuilder) TrustedCAs(value *x509.CertPool) *ConnectionBuilder 
 	if b.err != nil {
 		return b
 	}
-	b.trustedCASources = append(b.trustedCASources, value)
+	b.trustedCAs = append(b.trustedCAs, value)
 	return b
 }
 
@@ -371,7 +357,7 @@ func (b *ConnectionBuilder) TrustedCAFile(value string) *ConnectionBuilder {
 	if b.err != nil {
 		return b
 	}
-	b.trustedCASources = append(b.trustedCASources, value)
+	b.trustedCAs = append(b.trustedCAs, value)
 	return b
 }
 
@@ -639,57 +625,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
-	// Check that we have some kind of credentials or a token:
-	haveTokens := len(b.tokens) > 0
-	havePassword := b.user != "" && b.password != ""
-	haveSecret := b.clientID != "" && b.clientSecret != ""
-	if !haveTokens && !havePassword && !haveSecret {
-		err = fmt.Errorf(
-			"either a token, and user name and password or a client identifier and secret are " +
-				"necessary, but none has been provided",
-		)
-		return
-	}
-
-	// Parse the tokens:
-	tokenParser := new(jwt.Parser)
-	var accessToken *jwt.Token
-	var refreshToken *jwt.Token
-	for i, text := range b.tokens {
-		var token *jwt.Token
-		token, _, err = tokenParser.ParseUnverified(text, jwt.MapClaims{})
-		if err != nil {
-			err = fmt.Errorf("can't parse token %d: %w", i, err)
-			return
-		}
-		claims, ok := token.Claims.(jwt.MapClaims)
-		if !ok {
-			err = fmt.Errorf("claims of token %d are of type '%T'", i, claims)
-			return
-		}
-		claim, ok := claims["typ"]
-		if !ok {
-			err = fmt.Errorf("token %d doesn't contain the 'typ' claim", i)
-			return
-		}
-		typ, ok := claim.(string)
-		if !ok {
-			err = fmt.Errorf("claim 'type' of token %d is of type '%T'", i, claim)
-			return
-		}
-		switch {
-		case strings.EqualFold(typ, "Bearer"):
-			accessToken = token
-		case strings.EqualFold(typ, "Refresh"):
-			refreshToken = token
-		case strings.EqualFold(typ, "Offline"):
-			refreshToken = token
-		default:
-			err = fmt.Errorf("type '%s' of token %d is unknown", typ, i)
-			return
-		}
-	}
-
 	// Create the default logger, if needed:
 	if b.logger == nil {
 		b.logger, err = logging.NewGoLoggerBuilder().
@@ -705,53 +640,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		b.logger.Debug(ctx, "Logger wasn't provided, will use Go log")
 	}
 
-	// Parse the token URL:
-	tokenURL := b.tokenURL
-	if tokenURL == "" {
-		tokenURL = DefaultTokenURL
-		b.logger.Debug(
-			ctx,
-			"OpenID token URL wasn't provided, will use '%s'",
-			tokenURL,
-		)
-	}
-	tokenPath, tokenServer, err := b.parseTokenURL(ctx, tokenURL)
-	if err != nil {
-		err = fmt.Errorf("can't parse token URL '%s': %w", tokenURL, err)
-		return
-	}
-
-	// Set the default authentication details, if needed:
-	clientID := b.clientID
-	if clientID == "" {
-		clientID = DefaultClientID
-		b.logger.Debug(
-			ctx,
-			"OpenID client identifier wasn't provided, will use '%s'",
-			clientID,
-		)
-	}
-	clientSecret := b.clientSecret
-	if clientSecret == "" {
-		clientSecret = DefaultClientSecret
-		b.logger.Debug(
-			ctx,
-			"OpenID client secret wasn't provided, will use '%s'",
-			clientSecret,
-		)
-	}
-
-	// Set the default authentication scopes, if needed:
-	scopes := b.scopes
-	if len(scopes) == 0 {
-		scopes = DefaultScopes
-	} else {
-		scopes = make([]string, len(b.scopes))
-		for i := range b.scopes {
-			scopes[i] = b.scopes[i]
-		}
-	}
-
 	// Create the URL table:
 	urlTable, err := b.createURLTable(ctx)
 	if err != nil {
@@ -764,59 +652,65 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		agent = DefaultAgent
 	}
 
-	// Prepare the builder that will be used to create the client selector:
-	clientSelectorBuilder := internal.NewClientSelector().
-		Logger(b.logger).
-		Insecure(b.insecure).
-		DisableKeepAlives(b.disableKeepAlives)
-	for _, trustedCASource := range b.trustedCASources {
-		switch typed := trustedCASource.(type) {
-		case *x509.CertPool:
-			clientSelectorBuilder.TrustedCAs(typed)
-		case string:
-			clientSelectorBuilder.TrustedCAFile(typed)
-		default:
-			err = fmt.Errorf(
-				"don't know how to load trusted CA from source of type '%T'",
-				trustedCASource,
-			)
+	// Create the metrics wrapper:
+	var metricsWrapper func(http.RoundTripper) http.RoundTripper
+	if b.metricsSubsystem != "" {
+		var parsed *url.URL
+		parsed, err = url.Parse(b.tokenURL)
+		if err != nil {
 			return
 		}
-	}
-
-	// The metrics wrapper should be called the first because we want the corresponding round
-	// tripper to be called the last so that metrics aren't affected by users specified round
-	// trippers and don't include the logging overhead.
-	if b.metricsSubsystem != "" {
 		var wrapper *metrics.TransportWrapper
 		wrapper, err = metrics.NewTransportWrapper().
-			Path(tokenPath).
+			Path(parsed.Path).
 			Subsystem(b.metricsSubsystem).
 			Registerer(b.metricsRegisterer).
 			Build()
 		if err != nil {
 			return
 		}
-		clientSelectorBuilder.TransportWrapper(wrapper.Wrap)
+		metricsWrapper = wrapper.Wrap
 	}
 
-	// The logging wrapper should be next, because we want the corresponding round tripper
-	// called after the user specified round trippers so that the information in the log
-	// reflects the modifications made by those suer specified round trippers.
+	// Create the logging wrapper:
+	var loggingWrapper func(http.RoundTripper) http.RoundTripper
 	if b.logger.DebugEnabled() {
 		wrapper := &dumpTransportWrapper{
 			logger: b.logger,
 		}
-		clientSelectorBuilder.TransportWrapper(wrapper.Wrap)
+		loggingWrapper = wrapper.Wrap
 	}
 
-	// User specified wrappres go after the built-in ones:
-	for _, userWrapper := range b.transportWrappers {
-		clientSelectorBuilder.TransportWrapper(userWrapper)
+	// Create the authentication wrapper:
+	authnWrapper, err := authentication.NewTransportWrapper().
+		Logger(b.logger).
+		TokenURL(b.tokenURL).
+		User(b.user, b.password).
+		Client(b.clientID, b.clientSecret).
+		Tokens(b.tokens...).
+		Scopes(b.scopes...).
+		TrustedCAs(b.trustedCAs...).
+		Insecure(b.insecure).
+		TransportWrappers(b.transportWrappers...).
+		TransportWrapper(loggingWrapper).
+		TransportWrapper(metricsWrapper).
+		MetricsSubsystem(b.metricsSubsystem).
+		MetricsRegisterer(b.metricsRegisterer).
+		Build(ctx)
+	if err != nil {
+		return
 	}
 
-	// Create the client factory:
-	clientSelector, err := clientSelectorBuilder.Build(ctx)
+	// Create the client selector:
+	clientSelector, err := internal.NewClientSelector().
+		Logger(b.logger).
+		TrustedCAs(b.trustedCAs...).
+		Insecure(b.insecure).
+		TransportWrapper(authnWrapper.Wrap).
+		TransportWrappers(b.transportWrappers...).
+		TransportWrapper(loggingWrapper).
+		TransportWrapper(metricsWrapper).
+		Build(ctx)
 	if err != nil {
 		return
 	}
@@ -824,47 +718,14 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	// Allocate and populate the connection object:
 	connection = &Connection{
 		logger:            b.logger,
-		tokenURL:          tokenURL,
-		tokenAddress:      tokenServer,
-		clientID:          clientID,
-		clientSecret:      clientSecret,
+		authnWrapper:      authnWrapper,
 		clientSelector:    clientSelector,
 		urlTable:          urlTable,
 		agent:             agent,
-		user:              b.user,
-		password:          b.password,
-		tokenMutex:        &sync.Mutex{},
-		tokenParser:       tokenParser,
-		accessToken:       accessToken,
-		refreshToken:      refreshToken,
-		scopes:            scopes,
 		metricsSubsystem:  b.metricsSubsystem,
 		metricsRegisterer: b.metricsRegisterer,
 	}
 
-	// Register metrics:
-	if b.metricsSubsystem != "" {
-		err = connection.registerMetrics(b.metricsSubsystem)
-		if err != nil {
-			return
-		}
-	}
-
-	return
-}
-
-func (b *ConnectionBuilder) parseTokenURL(ctx context.Context, text string) (path string,
-	server *internal.ServerAddress, err error) {
-	parsedURL, err := url.Parse(text)
-	if err != nil {
-		return
-	}
-	parsedAddress, err := internal.ParseServerAddress(ctx, text)
-	if err != nil {
-		return
-	}
-	path = parsedURL.Path
-	server = parsedAddress
 	return
 }
 
@@ -942,13 +803,25 @@ func (c *Connection) Logger() logging.Logger {
 
 // TokenURL returns the URL that the connection is using request OpenID access tokens.
 func (c *Connection) TokenURL() string {
-	return c.tokenURL
+	return c.authnWrapper.TokenURL()
 }
 
 // Client returns OpenID client identifier and secret that the connection is using to request OpenID
 // access tokens.
 func (c *Connection) Client() (id, secret string) {
-	return c.clientID, c.clientSecret
+	id, secret = c.authnWrapper.Client()
+	return
+}
+
+// User returns the user name and password that the is using to request OpenID access tokens.
+func (c *Connection) User() (user, password string) {
+	user, password = c.authnWrapper.User()
+	return
+}
+
+// Scopes returns the OpenID scopes that the connection is using to request OpenID access tokens.
+func (c *Connection) Scopes() []string {
+	return c.authnWrapper.Scopes()
 }
 
 // URL returns the base URL of the API gateway.
@@ -968,18 +841,6 @@ func (c *Connection) URL() string {
 // Agent returns the `User-Agent` header that the client is using for all HTTP requests.
 func (c *Connection) Agent() string {
 	return c.agent
-}
-
-// User returns the user name and password that the is using to request OpenID access tokens.
-func (c *Connection) User() (user, password string) {
-	return c.user, c.password
-}
-
-// Scopes returns the OpenID scopes that the connection is using to request OpenID access tokens.
-func (c *Connection) Scopes() []string {
-	result := make([]string, len(c.scopes))
-	copy(result, c.scopes)
-	return result
 }
 
 // TrustedCAs sets returns the certificate pool that contains the certificate authorities that are
@@ -1042,10 +903,21 @@ func (c *Connection) ServiceLogs() *servicelogs.Client {
 // once it is no longer needed, as otherwise those resources may be leaked. Trying to use a
 // connection that has been closed will result in a error.
 func (c *Connection) Close() error {
-	err := c.clientSelector.Close()
+	var err error
+
+	// Close the HTTP clients:
+	err = c.clientSelector.Close()
 	if err != nil {
 		return err
 	}
+
+	// Close the authentication wrapper:
+	err = c.authnWrapper.Close()
+	if err != nil {
+		return err
+	}
+
+	// Makr the connection as closed, so that further attempts to use it will fail:
 	c.closed = true
 	return nil
 }

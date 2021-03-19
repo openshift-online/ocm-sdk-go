@@ -39,7 +39,7 @@ import (
 // selector. Don't create instances of this type directly, use the NewClientSelector function.
 type ClientSelectorBuilder struct {
 	logger            logging.Logger
-	trustedCASources  []interface{}
+	trustedCAs        []interface{}
 	insecure          bool
 	disableKeepAlives bool
 	transportWrappers []func(http.RoundTripper) http.RoundTripper
@@ -71,19 +71,26 @@ func (b *ClientSelectorBuilder) Logger(value logging.Logger) *ClientSelectorBuil
 	return b
 }
 
-// TrustedCAs sets the certificate pool that contains the certificate authorities that will be
-// trusted by the HTTP clients. If this isn't explicitly specified then the clients will trust the
-// certificate authorities trusted by default by the system.
-func (b *ClientSelectorBuilder) TrustedCAs(value *x509.CertPool) *ClientSelectorBuilder {
-	b.trustedCASources = append(b.trustedCASources, value)
+// TrustedCA sets a source that contains he certificate authorities that will be trusted by the HTTP
+// clients. If this isn't explicitly specified then the clients will trust the certificate
+// authorities trusted by default by the system. The value can be a *x509.CertPool or a string,
+// anything else will cause an error when Build method is called. If it is a *x509.CertPool then the
+// value will replace any other source given before. If it is a string then it should be the name of
+// a PEM file. The contents of that file will be added to the previously given sources.
+func (b *ClientSelectorBuilder) TrustedCA(value interface{}) *ClientSelectorBuilder {
+	if value != nil {
+		b.trustedCAs = append(b.trustedCAs, value)
+	}
 	return b
 }
 
-// TrustedCAFile sets the name of a file that contains the certificate authorities that will be
-// trusted by the HTTP clients. If this isn't explicitly specified then the clients will trust the
-// certificate authorities trusted by default by the system.
-func (b *ClientSelectorBuilder) TrustedCAFile(value string) *ClientSelectorBuilder {
-	b.trustedCASources = append(b.trustedCASources, value)
+// TrustedCAs sets a list of sources that contains he certificate authorities that will be trusted
+// by the HTTP clients. See the documentation of the TrustedCA method for more information about the
+// accepted values.
+func (b *ClientSelectorBuilder) TrustedCAs(values ...interface{}) *ClientSelectorBuilder {
+	for _, value := range values {
+		b.TrustedCA(value)
+	}
 	return b
 }
 
@@ -105,7 +112,18 @@ func (b *ClientSelectorBuilder) DisableKeepAlives(flag bool) *ClientSelectorBuil
 // used multiple times the transport wrappers will be called in the same order that they are added.
 func (b *ClientSelectorBuilder) TransportWrapper(
 	value func(http.RoundTripper) http.RoundTripper) *ClientSelectorBuilder {
-	b.transportWrappers = append(b.transportWrappers, value)
+	if value != nil {
+		b.transportWrappers = append(b.transportWrappers, value)
+	}
+	return b
+}
+
+// TransportWrappers adds a list of functions that will be used to wrap the transports of the HTTP clients.
+func (b *ClientSelectorBuilder) TransportWrappers(
+	values ...func(http.RoundTripper) http.RoundTripper) *ClientSelectorBuilder {
+	for _, value := range values {
+		b.TransportWrapper(value)
+	}
 	return b
 }
 
@@ -150,7 +168,7 @@ func (b *ClientSelectorBuilder) loadTrustedCAs(ctx context.Context) (result *x50
 	if err != nil {
 		return
 	}
-	for _, ca := range b.trustedCASources {
+	for _, ca := range b.trustedCAs {
 		switch source := ca.(type) {
 		case *x509.CertPool:
 			b.logger.Debug(

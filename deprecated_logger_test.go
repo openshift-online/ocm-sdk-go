@@ -25,8 +25,9 @@ import (
 	// Never import the logging package here, as that will defeat the purpuse of
 	// these tests.
 
-	. "github.com/onsi/ginkgo" // nolint
-	. "github.com/onsi/gomega" // nolint
+	. "github.com/onsi/ginkgo"                         // nolint
+	. "github.com/onsi/gomega"                         // nolint
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Deprecated logging", func() {
@@ -73,7 +74,7 @@ var _ = Describe("Deprecated logging", func() {
 			Expect(logger).ToNot(BeNil())
 
 			// Create the connection:
-			token := DefaultToken("Bearer", 5*time.Minute)
+			token := MakeTokenString("Bearer", 5*time.Minute)
 			connection, err := NewConnectionBuilder().
 				Logger(logger).
 				Tokens(token).

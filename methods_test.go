@@ -25,10 +25,11 @@ import (
 	"os"
 	"time"
 
-	. "github.com/onsi/ginkgo" // nolint
-	. "github.com/onsi/gomega" // nolint
-
 	"github.com/onsi/gomega/ghttp"
+
+	. "github.com/onsi/ginkgo"                         // nolint
+	. "github.com/onsi/gomega"                         // nolint
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Methods", func() {
@@ -47,8 +48,8 @@ var _ = Describe("Methods", func() {
 		var err error
 
 		// Create the tokens:
-		accessToken := DefaultToken("Bearer", 5*time.Minute)
-		refreshToken := DefaultToken("Refresh", 10*time.Hour)
+		accessToken := MakeTokenString("Bearer", 5*time.Minute)
+		refreshToken := MakeTokenString("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
 		oidServer, oidCA = MakeTCPTLSServer()
