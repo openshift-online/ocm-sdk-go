@@ -211,11 +211,26 @@ func (c *Connection) selectBaseURL(ctx context.Context, request *http.Request) (
 // selectClient selects an HTTP client to use to connect to the given base URL.
 func (c *Connection) selectClient(ctx context.Context, base *urlInfo) (client *http.Client,
 	err error) {
-	// We need a client for TCP and another client for each combination of Unix and socket name,
-	// so we need to calculate the key for the clients table accordingly:
+	// We need to use a different client for each TCP host name and each Unix socket because we
+	// explicitly set the TLS server name to the host name. For example, if the first request is
+	// for the SSO service (it will usually be) then we would set the TLS server name to
+	// `sso.redhat.com`. The next API request would then use the same client and therefore it
+	// will use `sso.redhat.com` as the TLS server name. If the server uses SNI to select the
+	// certificates it will then fail because the API server doesn't have any certificate for
+	// `sso.redhat.com`, it will return the default certificates, and then the validation would
+	// fail with an error message like this:
+	//
+	//	x509: certificate is valid for *.apps.app-sre-prod-04.i5h0.p1.openshiftapps.com,
+	//	api.app-sre-prod-04.i5h0.p1.openshiftapps.com,
+	//	rh-api.app-sre-prod-04.i5h0.p1.openshiftapps.com, not sso.redhat.com
+	//
+	// To avoid this we add the host name or socket path as a suffix to the key.
 	key := base.network
-	if base.network == unixNetwork {
+	switch base.network {
+	case unixNetwork:
 		key = fmt.Sprintf("%s:%s", key, base.socket)
+	case tcpNetwork:
+		key = fmt.Sprintf("%s:%s", key, base.URL.Hostname())
 	}
 
 	// We will be modifiying the table of clients so we need to acquire the lock before
