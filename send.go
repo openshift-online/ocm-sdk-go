@@ -21,19 +21,17 @@ package sdk
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"html"
 	"io/ioutil"
 	"mime"
-	"net"
 	"net/http"
 	"path"
 	"regexp"
 	"strings"
 
 	strip "github.com/grokify/html-strip-tags-go"
-	"golang.org/x/net/http2"
+	"github.com/openshift-online/ocm-sdk-go/internal"
 )
 
 var wsRegex = regexp.MustCompile(`\s+`)
@@ -64,7 +62,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	if err != nil {
 		return
 	}
-	request.URL = base.ResolveReference(request.URL)
+	request.URL = base.URL.ResolveReference(request.URL)
 
 	// Check the request method and body:
 	switch request.Method {
@@ -107,7 +105,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	request.Header.Set("Accept", "application/json")
 
 	// Select the client:
-	client, err := c.selectClient(ctx, base)
+	client, err := c.clientSelector.Select(ctx, base)
 	if err != nil {
 		return
 	}
@@ -188,8 +186,8 @@ func (c *Connection) contentSummary(mediaType string, response *http.Response) (
 
 // selectBaseURL selects the base URL that should be used for the given request, according its path
 // and the alternative URLs configured when the connection was created.
-func (c *Connection) selectBaseURL(ctx context.Context, request *http.Request) (base *urlInfo,
-	err error) {
+func (c *Connection) selectBaseURL(ctx context.Context,
+	request *http.Request) (base *internal.ServerAddress, err error) {
 	// Select the base URL that has the longest matching prefix. Note that it is enough to pick
 	// the first match because the entries have already been sorted by descending prefix length
 	// when the connection was created.
@@ -205,179 +203,5 @@ func (c *Connection) selectBaseURL(ctx context.Context, request *http.Request) (
 			request.URL.Path,
 		)
 	}
-	return
-}
-
-// selectClient selects an HTTP client to use to connect to the given base URL.
-func (c *Connection) selectClient(ctx context.Context, base *urlInfo) (client *http.Client,
-	err error) {
-	// We need to use a different client for each TCP host name and each Unix socket because we
-	// explicitly set the TLS server name to the host name. For example, if the first request is
-	// for the SSO service (it will usually be) then we would set the TLS server name to
-	// `sso.redhat.com`. The next API request would then use the same client and therefore it
-	// will use `sso.redhat.com` as the TLS server name. If the server uses SNI to select the
-	// certificates it will then fail because the API server doesn't have any certificate for
-	// `sso.redhat.com`, it will return the default certificates, and then the validation would
-	// fail with an error message like this:
-	//
-	//	x509: certificate is valid for *.apps.app-sre-prod-04.i5h0.p1.openshiftapps.com,
-	//	api.app-sre-prod-04.i5h0.p1.openshiftapps.com,
-	//	rh-api.app-sre-prod-04.i5h0.p1.openshiftapps.com, not sso.redhat.com
-	//
-	// To avoid this we add the host name or socket path as a suffix to the key.
-	key := base.network
-	switch base.network {
-	case unixNetwork:
-		key = fmt.Sprintf("%s:%s", key, base.socket)
-	case tcpNetwork:
-		key = fmt.Sprintf("%s:%s", key, base.URL.Hostname())
-	}
-
-	// We will be modifiying the table of clients so we need to acquire the lock before
-	// proceeding:
-	c.clientsMutex.Lock()
-	defer c.clientsMutex.Unlock()
-
-	// Get an existing client, or create a new one if it doesn't exist yet:
-	client, ok := c.clientsTable[key]
-	if ok {
-		return
-	}
-	c.logger.Debug(ctx, "Client for key '%s' doesn't exist, will create it", key)
-	client, err = c.createClient(ctx, base)
-	if err != nil {
-		return
-	}
-	c.clientsTable[key] = client
-
-	return
-}
-
-// createClient creates a new HTTP client to use to connect to the given base URL.
-func (c *Connection) createClient(ctx context.Context, base *urlInfo) (client *http.Client,
-	err error) {
-	// Create the transport:
-	transport, err := c.createTransport(ctx, base)
-	if err != nil {
-		return
-	}
-
-	// Create the client:
-	client = &http.Client{
-		Jar:       c.cookieJar,
-		Transport: transport,
-	}
-	if c.logger.DebugEnabled() {
-		client.CheckRedirect = func(request *http.Request, via []*http.Request) error {
-			c.logger.Info(
-				request.Context(),
-				"Following redirect from '%s' to '%s'",
-				via[0].URL,
-				request.URL,
-			)
-			return nil
-		}
-	}
-
-	return
-}
-
-// createTransport creates a new HTTP transport to use to connect to the given base URL.
-func (c *Connection) createTransport(ctx context.Context, base *urlInfo) (
-	result http.RoundTripper, err error) {
-	// Prepare the TLS configuration:
-	// #nosec 402
-	config := &tls.Config{
-		ServerName:         base.Hostname(),
-		InsecureSkipVerify: c.insecure,
-		RootCAs:            c.trustedCAs,
-	}
-
-	// Create the transport:
-	if base.protocol != h2cProtocol {
-		// Create a regular transport. Note that this does support HTTP/2 with TLS, but
-		// not h2c:
-		transport := &http.Transport{
-			TLSClientConfig:    config,
-			Proxy:              http.ProxyFromEnvironment,
-			DisableKeepAlives:  c.disableKeepAlives,
-			DisableCompression: false,
-			ForceAttemptHTTP2:  true,
-		}
-
-		// In order to use Unix sockets we need to explicitly set dialers that use `unix` as
-		// network and the socket file as address, otherwise the HTTP client will always use
-		// `tcp` as the network and the host name from the request as the address:
-		if base.network == unixNetwork {
-			transport.DialContext = func(ctx context.Context,
-				_, _ string) (net.Conn, error) {
-				dialer := net.Dialer{}
-				return dialer.DialContext(ctx, base.network, base.socket)
-			}
-			transport.DialTLSContext = func(ctx context.Context,
-				_, _ string) (net.Conn, error) {
-				// TODO: This ignores the passed context because it isn't currently
-				// supported. Once we migrate to Go 1.15 it should be done like
-				// this:
-				//
-				//	dialer := tls.Dialer{
-				//		Config: config,
-				//	}
-				//	return dialer.DialContext(ctx, base.network, base.socket)
-				//
-				// This will only have a negative impact in applications that
-				// specify a deadline or timeout in the passed context, as it
-				// will be ignored.
-				return tls.Dial(base.network, base.socket, config)
-			}
-		}
-
-		// Prepare the result:
-		result = transport
-	} else {
-		// In order to use h2c we need to tell the transport to allow the `http` scheme:
-		transport := &http2.Transport{
-			AllowHTTP:          true,
-			DisableCompression: false,
-		}
-
-		// We also need to ignore TLS configuration when dialing, and explicitly set the
-		// network and socket when using Unix sockets:
-		if base.network == unixNetwork {
-			transport.DialTLS = func(network, addr string, cfg *tls.Config) (net.Conn,
-				error) {
-				return net.Dial(base.network, base.socket)
-			}
-		} else {
-			transport.DialTLS = func(network, addr string, cfg *tls.Config) (net.Conn,
-				error) {
-				return net.Dial(network, addr)
-			}
-		}
-
-		// Prepare the result:
-		result = transport
-	}
-
-	// The metrics wrapper should be called the first because we want the corresponding round
-	// tripper to be called the last so that metrics aren't affected by users specified round
-	// trippers and don't include the logging overhead.
-	if c.metricsWrapper != nil {
-		result = c.metricsWrapper(result)
-	}
-
-	// The logging wrapper should be next, because we want the corresponding round tripper
-	// called after the user specified round trippers so that the information in the log
-	// reflects the modifications made by those suer specified round trippers.
-	if c.loggingWrapper != nil {
-		result = c.loggingWrapper(result)
-	}
-
-	// User transport wrappers are stored in the order that the round trippers that they create
-	// should be called. That means that we need to call them in reverse order.
-	for i := len(c.userWrapers) - 1; i >= 0; i-- {
-		result = c.userWrapers[i](result)
-	}
-
 	return
 }
