@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.165 Mar 22 2021
+
+- Fix wrong TLS server name (issue
+  https://github.com/openshift-online/ocm-sdk-go/issues/356[356]).
+
 == 0.1.164 Mar 17 2021
 
 - Change default user agent to `OCM-SDK`.
