@@ -45,6 +45,7 @@ type ErrorBuilder struct {
 	code        string
 	reason      string
 	operationID string
+	details     []interface{}
 }
 
 // Error represents errors.
@@ -55,6 +56,7 @@ type Error struct {
 	code        string
 	reason      string
 	operationID string
+	details     []interface{}
 }
 
 // NewError creates a new builder that can then be used to create error objects.
@@ -97,6 +99,13 @@ func (b *ErrorBuilder) OperationID(value string) *ErrorBuilder {
 	return b
 }
 
+// Details sets the additional details reported on the error.
+func (b *ErrorBuilder) Details(value []interface{}) *ErrorBuilder {
+	b.details = value
+	b.bitmap_ |= 24
+	return b
+}
+
 // Build uses the information stored in the builder to create a new error object.
 func (b *ErrorBuilder) Build() (result *Error, err error) {
 	result = &Error{
@@ -105,6 +114,7 @@ func (b *ErrorBuilder) Build() (result *Error, err error) {
 		code:        b.code,
 		reason:      b.reason,
 		operationID: b.operationID,
+		details:     b.details,
 		bitmap_:     b.bitmap_,
 	}
 	return
@@ -208,6 +218,24 @@ func (e *Error) GetOperationID() (value string, ok bool) {
 	return
 }
 
+// Detials returns the additional details reported on the error.
+func (e *Error) Details() []interface{} {
+	if e != nil && e.bitmap_&24 != 0 {
+		return e.details
+	}
+	return nil
+}
+
+// GetDetails returns the additional errors reported on the error and
+// a flag indicating if the details does have a value.
+func (e *Error) GetDetails() (value []interface{}, ok bool) {
+	ok = e != nil && e.bitmap_&24 != 0
+	if ok {
+		value = e.details
+	}
+	return
+}
+
 // Error is the implementation of the error interface.
 func (e *Error) Error() string {
 	chunks := make([]string, 0, 3)
@@ -278,6 +306,14 @@ func readError(iterator *jsoniter.Iterator) *Error {
 		case "operation_id":
 			object.operationID = iterator.ReadString()
 			object.bitmap_ |= 16
+		case "details":
+			details := []interface{}{}
+			for iterator.ReadArray() {
+				detail := iterator.Read()
+				details = append(details, detail)
+			}
+			object.details = details
+			object.bitmap_ |= 24
 		default:
 			iterator.ReadAny()
 		}
@@ -320,6 +356,14 @@ func writeError(e *Error, stream *jsoniter.Stream) {
 		stream.WriteMore()
 		stream.WriteObjectField("operation_id")
 		stream.WriteString(e.operationID)
+	}
+	if e.bitmap_&24 != 0 {
+		details, err := jsoniter.Marshal(e.details)
+		if err != nil {
+			stream.WriteMore()
+			stream.WriteObjectField("details")
+			stream.Write(details)
+		}
 	}
 	stream.WriteObjectEnd()
 }
