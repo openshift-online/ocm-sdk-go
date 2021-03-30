@@ -27,16 +27,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalAWS writes a value of the 'AWS' type to the given writer.
-func MarshalAWS(object *AWS, writer io.Writer) error {
+// MarshalAddOnParameterOption writes a value of the 'add_on_parameter_option' type to the given writer.
+func MarshalAddOnParameterOption(object *AddOnParameterOption, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAWS(object, stream)
+	writeAddOnParameterOption(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeAWS writes a value of the 'AWS' type to the given stream.
-func writeAWS(object *AWS, stream *jsoniter.Stream) {
+// writeAddOnParameterOption writes a value of the 'add_on_parameter_option' type to the given stream.
+func writeAddOnParameterOption(object *AddOnParameterOption, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -45,8 +45,8 @@ func writeAWS(object *AWS, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("access_key_id")
-		stream.WriteString(object.accessKeyID)
+		stream.WriteObjectField("name")
+		stream.WriteString(object.name)
 		count++
 	}
 	present_ = object.bitmap_&2 != 0
@@ -54,43 +54,16 @@ func writeAWS(object *AWS, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("account_id")
-		stream.WriteString(object.accountID)
-		count++
-	}
-	present_ = object.bitmap_&4 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("private_link")
-		stream.WriteBool(object.privateLink)
-		count++
-	}
-	present_ = object.bitmap_&8 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("secret_access_key")
-		stream.WriteString(object.secretAccessKey)
-		count++
-	}
-	present_ = object.bitmap_&16 != 0 && object.subnetIDs != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("subnet_ids")
-		writeStringList(object.subnetIDs, stream)
+		stream.WriteObjectField("value")
+		stream.WriteString(object.value)
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalAWS reads a value of the 'AWS' type from the given
+// UnmarshalAddOnParameterOption reads a value of the 'add_on_parameter_option' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalAWS(source interface{}) (object *AWS, err error) {
+func UnmarshalAddOnParameterOption(source interface{}) (object *AddOnParameterOption, err error) {
 	if source == http.NoBody {
 		return
 	}
@@ -98,40 +71,28 @@ func UnmarshalAWS(source interface{}) (object *AWS, err error) {
 	if err != nil {
 		return
 	}
-	object = readAWS(iterator)
+	object = readAddOnParameterOption(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAWS reads a value of the 'AWS' type from the given iterator.
-func readAWS(iterator *jsoniter.Iterator) *AWS {
-	object := &AWS{}
+// readAddOnParameterOption reads a value of the 'add_on_parameter_option' type from the given iterator.
+func readAddOnParameterOption(iterator *jsoniter.Iterator) *AddOnParameterOption {
+	object := &AddOnParameterOption{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "access_key_id":
+		case "name":
 			value := iterator.ReadString()
-			object.accessKeyID = value
+			object.name = value
 			object.bitmap_ |= 1
-		case "account_id":
+		case "value":
 			value := iterator.ReadString()
-			object.accountID = value
+			object.value = value
 			object.bitmap_ |= 2
-		case "private_link":
-			value := iterator.ReadBool()
-			object.privateLink = value
-			object.bitmap_ |= 4
-		case "secret_access_key":
-			value := iterator.ReadString()
-			object.secretAccessKey = value
-			object.bitmap_ |= 8
-		case "subnet_ids":
-			value := readStringList(iterator)
-			object.subnetIDs = value
-			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

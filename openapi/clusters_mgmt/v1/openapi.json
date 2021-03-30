@@ -4812,12 +4812,16 @@
             "description": "AWS account identifier.\n",
             "type": "string"
           },
+          "private_link": {
+            "description": "Sets cluster to be inaccessible externally.\n",
+            "type": "boolean"
+          },
           "secret_access_key": {
             "description": "AWS secret access key.\n",
             "type": "string"
           },
           "subnet_ids": {
-            "description": "SubnetIDs are the subnet ids to be used when installing the cluster.\n",
+            "description": "The subnet ids to be used when installing the cluster.\n",
             "type": "array",
             "items": {
               "type": "string"
@@ -5383,7 +5387,7 @@
             "$ref": "#/components/schemas/AddOn"
           },
           "default_value": {
-            "description": "Indicates the value default for the add-on parameter\n",
+            "description": "Indicates the value default for the add-on parameter.\n",
             "type": "string"
           },
           "description": {
@@ -5402,6 +5406,13 @@
             "description": "Name of the add-on parameter.\n",
             "type": "string"
           },
+          "options": {
+            "description": "List of options for the add-on parameter value.\n",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnParameterOption"
+            }
+          },
           "required": {
             "description": "Indicates if this parameter is required by the add-on.\n",
             "type": "boolean"
@@ -5412,6 +5423,19 @@
           },
           "value_type": {
             "description": "Type of value of the add-on parameter.\n",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnParameterOption": {
+        "description": "Representation of an add-on parameter option.\n",
+        "properties": {
+          "name": {
+            "description": "Name of the add-on parameter option.\n",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the add-on parameter option.\n",
             "type": "string"
           }
         }
