@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.166 Mar 30 2021
+
+- Move client selection logic to separate type
+- Update ocm-api-model to v0.0.112
+** Add Options to AddOnParameter type.
+** aws: Support PrivateLink for fully-private clusters
+
 == 0.1.165 Mar 22 2021
 
 - Fix wrong TLS server name (issue
