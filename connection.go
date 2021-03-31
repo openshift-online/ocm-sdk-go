@@ -43,9 +43,9 @@ import (
 // Default values:
 const (
 	// #nosec G101
-	DefaultTokenURL     = "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token"
-	DefaultClientID     = "cloud-services"
-	DefaultClientSecret = ""
+	DefaultTokenURL     = authentication.DefaultTokenURL
+	DefaultClientID     = authentication.DefaultClientID
+	DefaultClientSecret = authentication.DefaultClientSecret
 	DefaultURL          = "https://api.openshift.com"
 	DefaultAgent        = "OCM-SDK/" + Version
 )
