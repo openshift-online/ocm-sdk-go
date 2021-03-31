@@ -27,6 +27,8 @@ import (
 	. "github.com/onsi/gomega" // nolint
 
 	"github.com/onsi/gomega/ghttp"
+
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Alternative URLs", func() {
@@ -51,8 +53,8 @@ var _ = Describe("Alternative URLs", func() {
 
 	BeforeEach(func() {
 		// Create the tokens:
-		accessToken = DefaultToken("Bearer", 5*time.Minute)
-		refreshToken = DefaultToken("Refresh", 10*time.Hour)
+		accessToken = MakeTokenString("Bearer", 5*time.Minute)
+		refreshToken = MakeTokenString("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
 		oidServer, oidCA = MakeTCPTLSServer()
@@ -108,7 +110,10 @@ var _ = Describe("Alternative URLs", func() {
 				AlternativeURL("/api/clusters_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
-			defer connection.Close()
+			defer func() {
+				err = connection.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
 
 			// Send the request:
 			_, err = connection.Get().
@@ -139,7 +144,10 @@ var _ = Describe("Alternative URLs", func() {
 				AlternativeURL("/api/accounts_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
-			defer connection.Close()
+			defer func() {
+				err = connection.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
 
 			// Send the request:
 			_, err = connection.Get().
@@ -171,7 +179,10 @@ var _ = Describe("Alternative URLs", func() {
 				AlternativeURL("/api/clusters_mgmt/v1", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
-			defer connection.Close()
+			defer func() {
+				err = connection.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
 
 			// Send the request:
 			_, err = connection.Get().
@@ -204,7 +215,10 @@ var _ = Describe("Alternative URLs", func() {
 				AlternativeURL("/api/clusters_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
-			defer connection.Close()
+			defer func() {
+				err = connection.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
 
 			// Send the request:
 			_, err = connection.ClustersMgmt().V1().Get().Send()
@@ -233,7 +247,10 @@ var _ = Describe("Alternative URLs", func() {
 				AlternativeURL("/api/accounts_mgmt", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
-			defer connection.Close()
+			defer func() {
+				err = connection.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
 
 			// Send the request:
 			_, err = connection.ClustersMgmt().V1().Get().Send()
@@ -263,7 +280,10 @@ var _ = Describe("Alternative URLs", func() {
 				AlternativeURL("/api/clusters_mgmt/v1", alternativeURL).
 				Build()
 			Expect(err).ToNot(HaveOccurred())
-			defer connection.Close()
+			defer func() {
+				err = connection.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
 
 			// Send the request:
 			_, err = connection.ClustersMgmt().V1().Get().Send()

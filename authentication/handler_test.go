@@ -25,11 +25,12 @@ import (
 	"os"
 	"time"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	. "github.com/onsi/gomega/ghttp"
-
 	"github.com/dgrijalva/jwt-go"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"                         // nolint
+	. "github.com/onsi/gomega/ghttp"                   // nolint
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Handler", func() {
@@ -189,7 +190,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -256,9 +257,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the expired token:
-		bearer := IssueBearer(jwt.MapClaims{
-			"exp": time.Now().Add(-1 * time.Hour).Unix(),
-		})
+		bearer := MakeTokenString("Bearer", -1*time.Hour)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -293,9 +292,10 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare a token without the 'typ' claim:
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
 			"typ": nil,
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -330,9 +330,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare a refresh token:
-		bearer := IssueBearer(jwt.MapClaims{
-			"typ": "Refresh",
-		})
+		bearer := MakeTokenString("Refresh", 1*time.Hour)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -367,9 +365,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare an offline access token:
-		bearer := IssueBearer(jwt.MapClaims{
-			"typ": "Offline",
-		})
+		bearer := MakeTokenString("Offline", 0)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -404,9 +400,11 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token without the 'iat' claim:
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ": "Bearer",
 			"iat": nil,
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -441,9 +439,11 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token without the 'exp' claim:
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ": "Bearer",
 			"exp": nil,
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -481,10 +481,12 @@ var _ = Describe("Handler", func() {
 		now := time.Now()
 		iat := now.Add(1 * time.Minute)
 		exp := iat.Add(1 * time.Minute)
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ": "Bearer",
 			"iat": iat.Unix(),
 			"exp": exp.Unix(),
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -522,11 +524,13 @@ var _ = Describe("Handler", func() {
 		iat := time.Now()
 		nbf := iat.Add(1 * time.Minute)
 		exp := nbf.Add(1 * time.Minute)
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ": "Bearer",
 			"iat": iat.Unix(),
 			"nbf": nbf.Unix(),
 			"exp": exp.Unix(),
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -584,7 +588,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -606,7 +610,7 @@ var _ = Describe("Handler", func() {
 
 	It("Adds token to the request context", func() {
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -688,9 +692,7 @@ var _ = Describe("Handler", func() {
 
 	It("Ignores expired token for public URL", func() {
 		// Prepare the expired token:
-		bearer := IssueBearer(jwt.MapClaims{
-			"exp": time.Now().Add(-1 * time.Minute).Unix(),
-		})
+		bearer := MakeTokenString("Bearer", -1*time.Minute)
 
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -718,7 +720,7 @@ var _ = Describe("Handler", func() {
 
 	It("Combines multiple public URLs", func() {
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -755,7 +757,7 @@ var _ = Describe("Handler", func() {
 
 	It("Doesn't pass ignored token to next handler for public URL", func() {
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -785,13 +787,19 @@ var _ = Describe("Handler", func() {
 	})
 
 	It("Doesn't load insecure keys by default", func() {
+		var err error
+
 		// Prepare the server:
-		server := MakeTLSServer()
+		server, ca := MakeTCPTLSServer()
+		defer func() {
+			server.Close()
+			err = os.Remove(ca)
+			Expect(err).ToNot(HaveOccurred())
+		}()
 		server.AppendHandlers(
 			RespondWith(http.StatusOK, keysBytes),
 		)
 		server.SetAllowUnhandledRequests(true)
-		defer server.Close()
 
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -799,7 +807,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -820,12 +828,18 @@ var _ = Describe("Handler", func() {
 	})
 
 	It("Loads insecure keys in insecure mode", func() {
+		var err error
+
 		// Prepare the server that will return the keys:
-		server := MakeTLSServer()
+		server, ca := MakeTCPTLSServer()
+		defer func() {
+			server.Close()
+			err = os.Remove(ca)
+			Expect(err).ToNot(HaveOccurred())
+		}()
 		server.AppendHandlers(
 			RespondWith(http.StatusOK, keysBytes),
 		)
-		defer server.Close()
 
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -833,7 +847,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -856,7 +870,7 @@ var _ = Describe("Handler", func() {
 
 	It("Returns the response of the next handler", func() {
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -909,7 +923,7 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(nil)
+		bearer := MakeTokenString("Bearer", 1*time.Minute)
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -954,9 +968,11 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ":   "Bearer",
 			"email": "jdoe@example.com",
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -1001,9 +1017,11 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ": "Bearer",
 			"sub": "f:b3f7b485-7184-43c8-8169-37bd6d1fe4aa:myuser",
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -1061,9 +1079,11 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ": "Bearer",
 			"sub": "f:b3f7b485-7184-43c8-8169-37bd6d1fe4aa:myuser",
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -1110,9 +1130,11 @@ var _ = Describe("Handler", func() {
 		})
 
 		// Prepare the token:
-		bearer := IssueBearer(jwt.MapClaims{
+		token := MakeTokenObject(jwt.MapClaims{
+			"typ":   "Bearer",
 			"email": "jdoe@hacker.com",
 		})
+		bearer := token.Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().

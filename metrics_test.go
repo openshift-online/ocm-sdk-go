@@ -22,11 +22,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/onsi/gomega/ghttp"
+
 	. "github.com/onsi/ginkgo"                         // nolint
 	. "github.com/onsi/gomega"                         // nolint
 	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
-
-	"github.com/onsi/gomega/ghttp"
 )
 
 var _ = Describe("Metrics enabled", func() {
@@ -42,8 +42,8 @@ var _ = Describe("Metrics enabled", func() {
 		var err error
 
 		// Create the tokens:
-		accessToken := DefaultToken("Bearer", 5*time.Minute)
-		refreshToken := DefaultToken("Refresh", 10*time.Hour)
+		accessToken := MakeTokenString("Bearer", 5*time.Minute)
+		refreshToken := MakeTokenString("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
 		oidServer = MakeTCPServer()
@@ -158,8 +158,8 @@ var _ = Describe("Metrics disabled", func() {
 		var err error
 
 		// Create the tokens:
-		accessToken := DefaultToken("Bearer", 5*time.Minute)
-		refreshToken := DefaultToken("Refresh", 10*time.Hour)
+		accessToken := MakeTokenString("Bearer", 5*time.Minute)
+		refreshToken := MakeTokenString("Refresh", 10*time.Hour)
 
 		// Create the OpenID server:
 		oidServer = MakeTCPServer()

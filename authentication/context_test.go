@@ -22,13 +22,14 @@ package authentication
 import (
 	"context"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo"                         // nolint
+	. "github.com/onsi/gomega"                         // nolint
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Add token to context", func() {
 	It("Adds the token", func() {
-		token := IssueToken(nil)
+		token := MakeTokenObject(nil)
 		ctx := ContextWithToken(context.TODO(), token)
 		extracted := ctx.Value(tokenKeyValue)
 		Expect(extracted).To(BeIdenticalTo(token))
@@ -37,7 +38,7 @@ var _ = Describe("Add token to context", func() {
 
 var _ = Describe("Get token from context", func() {
 	It("Succeeds if there is a token", func() {
-		token := IssueToken(nil)
+		token := MakeTokenObject(nil)
 		ctx := context.WithValue(context.TODO(), tokenKeyValue, token)
 		extracted, err := TokenFromContext(ctx)
 		Expect(err).ToNot(HaveOccurred())
@@ -55,7 +56,7 @@ var _ = Describe("Get token from context", func() {
 
 var _ = Describe("Get bearer from context", func() {
 	It("Succeeds if there is a token", func() {
-		token := IssueToken(nil)
+		token := MakeTokenObject(nil)
 		ctx := context.WithValue(context.TODO(), tokenKeyValue, token)
 		extracted, err := BearerFromContext(ctx)
 		Expect(err).ToNot(HaveOccurred())

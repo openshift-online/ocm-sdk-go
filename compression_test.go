@@ -27,6 +27,8 @@ import (
 	. "github.com/onsi/gomega" // nolint
 
 	"github.com/onsi/gomega/ghttp"
+
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Compression", func() {
@@ -39,7 +41,7 @@ var _ = Describe("Compression", func() {
 		var err error
 
 		// Create the tokens:
-		token := DefaultToken("Bearer", 5*time.Minute)
+		token := MakeTokenString("Bearer", 5*time.Minute)
 
 		// Create the server:
 		server = MakeTCPServer()
