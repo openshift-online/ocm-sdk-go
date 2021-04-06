@@ -27,16 +27,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalQuotaCost writes a value of the 'quota_cost' type to the given writer.
-func MarshalQuotaCost(object *QuotaCost, writer io.Writer) error {
+// MarshalRelatedResource writes a value of the 'related_resource' type to the given writer.
+func MarshalRelatedResource(object *RelatedResource, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeQuotaCost(object, stream)
+	writeRelatedResource(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeQuotaCost writes a value of the 'quota_cost' type to the given stream.
-func writeQuotaCost(object *QuotaCost, stream *jsoniter.Stream) {
+// writeRelatedResource writes a value of the 'related_resource' type to the given stream.
+func writeRelatedResource(object *RelatedResource, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -45,8 +45,8 @@ func writeQuotaCost(object *QuotaCost, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("allowed")
-		stream.WriteInt(object.allowed)
+		stream.WriteObjectField("byoc")
+		stream.WriteString(object.byoc)
 		count++
 	}
 	present_ = object.bitmap_&2 != 0
@@ -54,8 +54,8 @@ func writeQuotaCost(object *QuotaCost, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("consumed")
-		stream.WriteInt(object.consumed)
+		stream.WriteObjectField("availability_zone_type")
+		stream.WriteString(object.availabilityZoneType)
 		count++
 	}
 	present_ = object.bitmap_&4 != 0
@@ -63,8 +63,8 @@ func writeQuotaCost(object *QuotaCost, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("organization_id")
-		stream.WriteString(object.organizationID)
+		stream.WriteObjectField("billing_model")
+		stream.WriteString(object.billingModel)
 		count++
 	}
 	present_ = object.bitmap_&8 != 0
@@ -72,25 +72,34 @@ func writeQuotaCost(object *QuotaCost, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("quota_id")
-		stream.WriteString(object.quotaID)
+		stream.WriteObjectField("cost")
+		stream.WriteInt(object.cost)
 		count++
 	}
-	present_ = object.bitmap_&16 != 0 && object.relatedResources != nil
+	present_ = object.bitmap_&16 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("related_resources")
-		writeRelatedResourceList(object.relatedResources, stream)
+		stream.WriteObjectField("product")
+		stream.WriteString(object.product)
+		count++
+	}
+	present_ = object.bitmap_&32 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("resource_name")
+		stream.WriteString(object.resourceName)
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalQuotaCost reads a value of the 'quota_cost' type from the given
+// UnmarshalRelatedResource reads a value of the 'related_resource' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalQuotaCost(source interface{}) (object *QuotaCost, err error) {
+func UnmarshalRelatedResource(source interface{}) (object *RelatedResource, err error) {
 	if source == http.NoBody {
 		return
 	}
@@ -98,40 +107,44 @@ func UnmarshalQuotaCost(source interface{}) (object *QuotaCost, err error) {
 	if err != nil {
 		return
 	}
-	object = readQuotaCost(iterator)
+	object = readRelatedResource(iterator)
 	err = iterator.Error
 	return
 }
 
-// readQuotaCost reads a value of the 'quota_cost' type from the given iterator.
-func readQuotaCost(iterator *jsoniter.Iterator) *QuotaCost {
-	object := &QuotaCost{}
+// readRelatedResource reads a value of the 'related_resource' type from the given iterator.
+func readRelatedResource(iterator *jsoniter.Iterator) *RelatedResource {
+	object := &RelatedResource{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "allowed":
-			value := iterator.ReadInt()
-			object.allowed = value
+		case "byoc":
+			value := iterator.ReadString()
+			object.byoc = value
 			object.bitmap_ |= 1
-		case "consumed":
-			value := iterator.ReadInt()
-			object.consumed = value
+		case "availability_zone_type":
+			value := iterator.ReadString()
+			object.availabilityZoneType = value
 			object.bitmap_ |= 2
-		case "organization_id":
+		case "billing_model":
 			value := iterator.ReadString()
-			object.organizationID = value
+			object.billingModel = value
 			object.bitmap_ |= 4
-		case "quota_id":
-			value := iterator.ReadString()
-			object.quotaID = value
+		case "cost":
+			value := iterator.ReadInt()
+			object.cost = value
 			object.bitmap_ |= 8
-		case "related_resources":
-			value := readRelatedResourceList(iterator)
-			object.relatedResources = value
+		case "product":
+			value := iterator.ReadString()
+			object.product = value
 			object.bitmap_ |= 16
+		case "resource_name":
+			value := iterator.ReadString()
+			object.resourceName = value
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}
