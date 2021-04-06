@@ -4151,6 +4151,42 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/events": {
+      "post": {
+        "description": "Adds a new event to be tracked. When sending a new event request,\nit gets tracked in Prometheus, Pendo, CloudWatch, or whichever\nanalytics client is configured as part of clusters service. This\nallows for reporting on events that happen outside of a regular API\nrequest, but are found to be useful for understanding customer\nneeds and possible blockers.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/flavours": {
       "post": {
         "description": "Adds a new cluster flavour.\n",
@@ -6106,6 +6142,15 @@
           },
           "name": {
             "description": "Name of the dashboard.\n",
+            "type": "string"
+          }
+        }
+      },
+      "Event": {
+        "description": "Representation of a trackable event.\n",
+        "properties": {
+          "key": {
+            "description": "Key of the event to be tracked. This key should start with an\nuppercase letter followed by alphanumeric characters or\nunderscores. The entire key needs to be smaller than 64 characters.\n",
             "type": "string"
           }
         }

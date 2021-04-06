@@ -4915,6 +4915,9 @@
           "billing_model": {
             "type": "string"
           },
+          "cloud_provider": {
+            "type": "string"
+          },
           "cost": {
             "type": "integer",
             "format": "int32"
@@ -4923,6 +4926,9 @@
             "type": "string"
           },
           "resource_name": {
+            "type": "string"
+          },
+          "resource_type": {
             "type": "string"
           }
         }
