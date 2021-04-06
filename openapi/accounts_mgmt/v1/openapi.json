@@ -4790,7 +4790,7 @@
           "related_resources": {
             "type": "array",
             "items": {
-              "type": "object"
+              "$ref": "#/components/schemas/RelatedResource"
             }
           }
         }
@@ -4899,6 +4899,30 @@
             "format": "date-time"
           },
           "username": {
+            "type": "string"
+          }
+        }
+      },
+      "RelatedResource": {
+        "description": "Resource which can be provisioned using the allowed quota.\n",
+        "properties": {
+          "byoc": {
+            "type": "string"
+          },
+          "availability_zone_type": {
+            "type": "string"
+          },
+          "billing_model": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "product": {
+            "type": "string"
+          },
+          "resource_name": {
             "type": "string"
           }
         }
