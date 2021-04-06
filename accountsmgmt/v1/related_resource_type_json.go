@@ -72,11 +72,20 @@ func writeRelatedResource(object *RelatedResource, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("cloud_provider")
+		stream.WriteString(object.cloudProvider)
+		count++
+	}
+	present_ = object.bitmap_&16 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("cost")
 		stream.WriteInt(object.cost)
 		count++
 	}
-	present_ = object.bitmap_&16 != 0
+	present_ = object.bitmap_&32 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -85,13 +94,22 @@ func writeRelatedResource(object *RelatedResource, stream *jsoniter.Stream) {
 		stream.WriteString(object.product)
 		count++
 	}
-	present_ = object.bitmap_&32 != 0
+	present_ = object.bitmap_&64 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("resource_name")
 		stream.WriteString(object.resourceName)
+		count++
+	}
+	present_ = object.bitmap_&128 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("resource_type")
+		stream.WriteString(object.resourceType)
 		count++
 	}
 	stream.WriteObjectEnd()
@@ -133,18 +151,26 @@ func readRelatedResource(iterator *jsoniter.Iterator) *RelatedResource {
 			value := iterator.ReadString()
 			object.billingModel = value
 			object.bitmap_ |= 4
+		case "cloud_provider":
+			value := iterator.ReadString()
+			object.cloudProvider = value
+			object.bitmap_ |= 8
 		case "cost":
 			value := iterator.ReadInt()
 			object.cost = value
-			object.bitmap_ |= 8
+			object.bitmap_ |= 16
 		case "product":
 			value := iterator.ReadString()
 			object.product = value
-			object.bitmap_ |= 16
+			object.bitmap_ |= 32
 		case "resource_name":
 			value := iterator.ReadString()
 			object.resourceName = value
-			object.bitmap_ |= 32
+			object.bitmap_ |= 64
+		case "resource_type":
+			value := iterator.ReadString()
+			object.resourceType = value
+			object.bitmap_ |= 128
 		default:
 			iterator.ReadAny()
 		}

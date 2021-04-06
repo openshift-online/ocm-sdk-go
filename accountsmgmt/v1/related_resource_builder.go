@@ -27,9 +27,11 @@ type RelatedResourceBuilder struct {
 	byoc                 string
 	availabilityZoneType string
 	billingModel         string
+	cloudProvider        string
 	cost                 int
 	product              string
 	resourceName         string
+	resourceType         string
 }
 
 // NewRelatedResource creates a new builder of 'related_resource' objects.
@@ -64,12 +66,21 @@ func (b *RelatedResourceBuilder) BillingModel(value string) *RelatedResourceBuil
 	return b
 }
 
+// CloudProvider sets the value of the 'cloud_provider' attribute to the given value.
+//
+//
+func (b *RelatedResourceBuilder) CloudProvider(value string) *RelatedResourceBuilder {
+	b.cloudProvider = value
+	b.bitmap_ |= 8
+	return b
+}
+
 // Cost sets the value of the 'cost' attribute to the given value.
 //
 //
 func (b *RelatedResourceBuilder) Cost(value int) *RelatedResourceBuilder {
 	b.cost = value
-	b.bitmap_ |= 8
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -78,7 +89,7 @@ func (b *RelatedResourceBuilder) Cost(value int) *RelatedResourceBuilder {
 //
 func (b *RelatedResourceBuilder) Product(value string) *RelatedResourceBuilder {
 	b.product = value
-	b.bitmap_ |= 16
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -87,7 +98,16 @@ func (b *RelatedResourceBuilder) Product(value string) *RelatedResourceBuilder {
 //
 func (b *RelatedResourceBuilder) ResourceName(value string) *RelatedResourceBuilder {
 	b.resourceName = value
-	b.bitmap_ |= 32
+	b.bitmap_ |= 64
+	return b
+}
+
+// ResourceType sets the value of the 'resource_type' attribute to the given value.
+//
+//
+func (b *RelatedResourceBuilder) ResourceType(value string) *RelatedResourceBuilder {
+	b.resourceType = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -100,9 +120,11 @@ func (b *RelatedResourceBuilder) Copy(object *RelatedResource) *RelatedResourceB
 	b.byoc = object.byoc
 	b.availabilityZoneType = object.availabilityZoneType
 	b.billingModel = object.billingModel
+	b.cloudProvider = object.cloudProvider
 	b.cost = object.cost
 	b.product = object.product
 	b.resourceName = object.resourceName
+	b.resourceType = object.resourceType
 	return b
 }
 
@@ -113,8 +135,10 @@ func (b *RelatedResourceBuilder) Build() (object *RelatedResource, err error) {
 	object.byoc = b.byoc
 	object.availabilityZoneType = b.availabilityZoneType
 	object.billingModel = b.billingModel
+	object.cloudProvider = b.cloudProvider
 	object.cost = b.cost
 	object.product = b.product
 	object.resourceName = b.resourceName
+	object.resourceType = b.resourceType
 	return
 }
