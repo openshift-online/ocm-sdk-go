@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.167 Apr 6 2021
+
+- Move token logic to separate transport wrapper.
+- Use defaults from authentication package.
+- Update to model 0.0.113:
+** Add RelatedResources struct to QuotaCost.
+
 == 0.1.166 Mar 30 2021
 
 - Move client selection logic to separate type
