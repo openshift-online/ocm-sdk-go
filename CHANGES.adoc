@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.168 Apr 6 2021
+
+- Bump ocm-api-model to v0.0.114
+** related-resources: Add resource type and cloud provider
+** event: Track ad-hoc authenticated events
+
 == 0.1.167 Apr 6 2021
 
 - Move token logic to separate transport wrapper.
