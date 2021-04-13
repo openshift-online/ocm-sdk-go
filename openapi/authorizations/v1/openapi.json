@@ -269,6 +269,15 @@
     "/api/authorizations/v1/self_terms_review": {
       "post": {
         "description": "Reviews a user's status of Terms.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelfTermsReviewRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "Success.\n",
@@ -631,11 +640,32 @@
           }
         }
       },
+      "SelfTermsReviewRequest": {
+        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.\n",
+        "properties": {
+          "event_code": {
+            "description": "Defines the event code of the terms being checked\n",
+            "type": "string"
+          },
+          "site_code": {
+            "description": "Defines the site code of the terms being checked\n",
+            "type": "string"
+          }
+        }
+      },
       "TermsReviewRequest": {
         "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.\n",
         "properties": {
           "account_username": {
             "description": "Defines the username of the account of which Terms is being reviewed.\n",
+            "type": "string"
+          },
+          "event_code": {
+            "description": "Defines the event code of the terms being checked\n",
+            "type": "string"
+          },
+          "site_code": {
+            "description": "Defines the site code of the terms being checked\n",
             "type": "string"
           }
         }

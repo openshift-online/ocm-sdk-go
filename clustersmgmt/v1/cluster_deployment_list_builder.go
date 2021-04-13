@@ -19,48 +19,48 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// ClusterMetricsListBuilder contains the data and logic needed to build
-// 'cluster_metrics' objects.
-type ClusterMetricsListBuilder struct {
-	items []*ClusterMetricsBuilder
+// ClusterDeploymentListBuilder contains the data and logic needed to build
+// 'cluster_deployment' objects.
+type ClusterDeploymentListBuilder struct {
+	items []*ClusterDeploymentBuilder
 }
 
-// NewClusterMetricsList creates a new builder of 'cluster_metrics' objects.
-func NewClusterMetricsList() *ClusterMetricsListBuilder {
-	return new(ClusterMetricsListBuilder)
+// NewClusterDeploymentList creates a new builder of 'cluster_deployment' objects.
+func NewClusterDeploymentList() *ClusterDeploymentListBuilder {
+	return new(ClusterDeploymentListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *ClusterMetricsListBuilder) Items(values ...*ClusterMetricsBuilder) *ClusterMetricsListBuilder {
-	b.items = make([]*ClusterMetricsBuilder, len(values))
+func (b *ClusterDeploymentListBuilder) Items(values ...*ClusterDeploymentBuilder) *ClusterDeploymentListBuilder {
+	b.items = make([]*ClusterDeploymentBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
 // Copy copies the items of the given list into this builder, discarding any previous items.
-func (b *ClusterMetricsListBuilder) Copy(list *ClusterMetricsList) *ClusterMetricsListBuilder {
+func (b *ClusterDeploymentListBuilder) Copy(list *ClusterDeploymentList) *ClusterDeploymentListBuilder {
 	if list == nil || list.items == nil {
 		b.items = nil
 	} else {
-		b.items = make([]*ClusterMetricsBuilder, len(list.items))
+		b.items = make([]*ClusterDeploymentBuilder, len(list.items))
 		for i, v := range list.items {
-			b.items[i] = NewClusterMetrics().Copy(v)
+			b.items[i] = NewClusterDeployment().Copy(v)
 		}
 	}
 	return b
 }
 
-// Build creates a list of 'cluster_metrics' objects using the
+// Build creates a list of 'cluster_deployment' objects using the
 // configuration stored in the builder.
-func (b *ClusterMetricsListBuilder) Build() (list *ClusterMetricsList, err error) {
-	items := make([]*ClusterMetrics, len(b.items))
+func (b *ClusterDeploymentListBuilder) Build() (list *ClusterDeploymentList, err error) {
+	items := make([]*ClusterDeployment, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(ClusterMetricsList)
+	list = new(ClusterDeploymentList)
 	list.items = items
 	return
 }

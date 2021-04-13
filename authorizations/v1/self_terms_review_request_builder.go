@@ -19,66 +19,54 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 
-// TermsReviewRequestBuilder contains the data and logic needed to build 'terms_review_request' objects.
+// SelfTermsReviewRequestBuilder contains the data and logic needed to build 'self_terms_review_request' objects.
 //
 // Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]
 // review requests.
-type TermsReviewRequestBuilder struct {
-	bitmap_         uint32
-	accountUsername string
-	eventCode       string
-	siteCode        string
+type SelfTermsReviewRequestBuilder struct {
+	bitmap_   uint32
+	eventCode string
+	siteCode  string
 }
 
-// NewTermsReviewRequest creates a new builder of 'terms_review_request' objects.
-func NewTermsReviewRequest() *TermsReviewRequestBuilder {
-	return &TermsReviewRequestBuilder{}
-}
-
-// AccountUsername sets the value of the 'account_username' attribute to the given value.
-//
-//
-func (b *TermsReviewRequestBuilder) AccountUsername(value string) *TermsReviewRequestBuilder {
-	b.accountUsername = value
-	b.bitmap_ |= 1
-	return b
+// NewSelfTermsReviewRequest creates a new builder of 'self_terms_review_request' objects.
+func NewSelfTermsReviewRequest() *SelfTermsReviewRequestBuilder {
+	return &SelfTermsReviewRequestBuilder{}
 }
 
 // EventCode sets the value of the 'event_code' attribute to the given value.
 //
 //
-func (b *TermsReviewRequestBuilder) EventCode(value string) *TermsReviewRequestBuilder {
+func (b *SelfTermsReviewRequestBuilder) EventCode(value string) *SelfTermsReviewRequestBuilder {
 	b.eventCode = value
-	b.bitmap_ |= 2
+	b.bitmap_ |= 1
 	return b
 }
 
 // SiteCode sets the value of the 'site_code' attribute to the given value.
 //
 //
-func (b *TermsReviewRequestBuilder) SiteCode(value string) *TermsReviewRequestBuilder {
+func (b *SelfTermsReviewRequestBuilder) SiteCode(value string) *SelfTermsReviewRequestBuilder {
 	b.siteCode = value
-	b.bitmap_ |= 4
+	b.bitmap_ |= 2
 	return b
 }
 
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
-func (b *TermsReviewRequestBuilder) Copy(object *TermsReviewRequest) *TermsReviewRequestBuilder {
+func (b *SelfTermsReviewRequestBuilder) Copy(object *SelfTermsReviewRequest) *SelfTermsReviewRequestBuilder {
 	if object == nil {
 		return b
 	}
 	b.bitmap_ = object.bitmap_
-	b.accountUsername = object.accountUsername
 	b.eventCode = object.eventCode
 	b.siteCode = object.siteCode
 	return b
 }
 
-// Build creates a 'terms_review_request' object using the configuration stored in the builder.
-func (b *TermsReviewRequestBuilder) Build() (object *TermsReviewRequest, err error) {
-	object = new(TermsReviewRequest)
+// Build creates a 'self_terms_review_request' object using the configuration stored in the builder.
+func (b *SelfTermsReviewRequestBuilder) Build() (object *SelfTermsReviewRequest, err error) {
+	object = new(SelfTermsReviewRequest)
 	object.bitmap_ = b.bitmap_
-	object.accountUsername = b.accountUsername
 	object.eventCode = b.eventCode
 	object.siteCode = b.siteCode
 	return

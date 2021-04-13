@@ -869,14 +869,6 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          {
-            "name": "force",
-            "description": "If true it will force delete the cluster even if external dependecies\ncleanup was not finalized. Should be used with extreme caution, after manual cleanup\nof external dependencies. OSD only. false by default. \n",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
         "responses": {
@@ -1492,6 +1484,69 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/clusterdeployment": {
+      "delete": {
+        "description": "Deletes the clusterdeployment.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success.\n"
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the clusterdeployment.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterDeployment"
                 }
               }
             }
@@ -5765,10 +5820,6 @@
             "description": "Flag indicating if the cluster is managed (by Red Hat) or\nself-managed by the user.\n",
             "type": "boolean"
           },
-          "metrics": {
-            "description": "Cluster metrics received from telemetry.\n\nWhen provisioning a cluster this will be ignored.\n",
-            "$ref": "#/components/schemas/ClusterMetrics"
-          },
           "multi_az": {
             "description": "Flag indicating if the cluster should be created with nodes in\ndifferent availability zones or all the nodes in a single one\nrandomly selected.\n",
             "type": "boolean"
@@ -5885,6 +5936,27 @@
           }
         }
       },
+      "ClusterDeployment": {
+        "description": "Representation of a clusterdeployment.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterDeployment' if this is a complete object or 'ClusterDeploymentLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "content": {
+            "description": "Content of the clusterdeployment.\n",
+            "type": "object"
+          }
+        }
+      },
       "ClusterHealthState": {
         "description": "ClusterHealthState indicates the health of a cluster.\n",
         "type": "string",
@@ -5893,71 +5965,6 @@
           "unhealthy",
           "unknown"
         ]
-      },
-      "ClusterMetric": {
-        "description": "Metric describing the total and used amount of some resource (like RAM, CPU and storage) in\na cluster.\n",
-        "properties": {
-          "total": {
-            "description": "Total amount of the resource that exists in the cluster. For example the total amount\nof RAM.\n",
-            "$ref": "#/components/schemas/Value"
-          },
-          "updated_timestamp": {
-            "description": "Collection timestamp of the metric.\n",
-            "type": "string",
-            "format": "date-time"
-          },
-          "used": {
-            "description": "Amount of the resource that is currently in use in the cluster. Fore example the amount\nof RAM in use.\n",
-            "$ref": "#/components/schemas/Value"
-          }
-        }
-      },
-      "ClusterMetrics": {
-        "description": "Cluster metrics received via telemetry.\n",
-        "properties": {
-          "cpu": {
-            "description": "The amount of CPU provisioned and used in the cluster.\n",
-            "$ref": "#/components/schemas/ClusterMetric"
-          },
-          "compute_nodes_cpu": {
-            "description": "The amount of CPU provisioned and used in the cluster by compute nodes.\n",
-            "$ref": "#/components/schemas/ClusterMetric"
-          },
-          "compute_nodes_memory": {
-            "description": "The amount of memory provisioned and used in the cluster by compute nodes.\n",
-            "$ref": "#/components/schemas/ClusterMetric"
-          },
-          "compute_nodes_sockets": {
-            "description": "The amount of sockets provisioned and used in the cluster by compute nodes.\n",
-            "$ref": "#/components/schemas/ClusterMetric"
-          },
-          "critical_alerts_firing": {
-            "description": "CriticalAlertsFiring contains information about critical alerts firing.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "memory": {
-            "description": "The amount of memory provisioned and used in the cluster.\n",
-            "$ref": "#/components/schemas/ClusterMetric"
-          },
-          "nodes": {
-            "description": "The number of nodes provisioned for the cluster.\n",
-            "$ref": "#/components/schemas/ClusterNodes"
-          },
-          "operators_condition_failing": {
-            "description": "OperatorsConditionFailing contains information about operator in failing condition in the cluster.\n",
-            "type": "integer",
-            "format": "int32"
-          },
-          "sockets": {
-            "description": "The amount of sockets provisioned and used in the cluster.\n",
-            "$ref": "#/components/schemas/ClusterMetric"
-          },
-          "storage": {
-            "description": "The amount of storage provisioned and used in the cluster.\n\nWARNING: This isn't currently populated.\n",
-            "$ref": "#/components/schemas/ClusterMetric"
-          }
-        }
       },
       "ClusterNodes": {
         "description": "Counts of different classes of nodes inside a cluster.\n",

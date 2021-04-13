@@ -19,51 +19,27 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 
-// TermsReviewRequest represents the values of the 'terms_review_request' type.
+// SelfTermsReviewRequest represents the values of the 'self_terms_review_request' type.
 //
 // Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]
 // review requests.
-type TermsReviewRequest struct {
-	bitmap_         uint32
-	accountUsername string
-	eventCode       string
-	siteCode        string
+type SelfTermsReviewRequest struct {
+	bitmap_   uint32
+	eventCode string
+	siteCode  string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *TermsReviewRequest) Empty() bool {
+func (o *SelfTermsReviewRequest) Empty() bool {
 	return o == nil || o.bitmap_ == 0
-}
-
-// AccountUsername returns the value of the 'account_username' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Defines the username of the account of which Terms is being reviewed.
-func (o *TermsReviewRequest) AccountUsername() string {
-	if o != nil && o.bitmap_&1 != 0 {
-		return o.accountUsername
-	}
-	return ""
-}
-
-// GetAccountUsername returns the value of the 'account_username' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Defines the username of the account of which Terms is being reviewed.
-func (o *TermsReviewRequest) GetAccountUsername() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&1 != 0
-	if ok {
-		value = o.accountUsername
-	}
-	return
 }
 
 // EventCode returns the value of the 'event_code' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Defines the event code of the terms being checked
-func (o *TermsReviewRequest) EventCode() string {
-	if o != nil && o.bitmap_&2 != 0 {
+func (o *SelfTermsReviewRequest) EventCode() string {
+	if o != nil && o.bitmap_&1 != 0 {
 		return o.eventCode
 	}
 	return ""
@@ -73,8 +49,8 @@ func (o *TermsReviewRequest) EventCode() string {
 // a flag indicating if the attribute has a value.
 //
 // Defines the event code of the terms being checked
-func (o *TermsReviewRequest) GetEventCode() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2 != 0
+func (o *SelfTermsReviewRequest) GetEventCode() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.eventCode
 	}
@@ -85,8 +61,8 @@ func (o *TermsReviewRequest) GetEventCode() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Defines the site code of the terms being checked
-func (o *TermsReviewRequest) SiteCode() string {
-	if o != nil && o.bitmap_&4 != 0 {
+func (o *SelfTermsReviewRequest) SiteCode() string {
+	if o != nil && o.bitmap_&2 != 0 {
 		return o.siteCode
 	}
 	return ""
@@ -96,35 +72,35 @@ func (o *TermsReviewRequest) SiteCode() string {
 // a flag indicating if the attribute has a value.
 //
 // Defines the site code of the terms being checked
-func (o *TermsReviewRequest) GetSiteCode() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&4 != 0
+func (o *SelfTermsReviewRequest) GetSiteCode() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.siteCode
 	}
 	return
 }
 
-// TermsReviewRequestListKind is the name of the type used to represent list of objects of
-// type 'terms_review_request'.
-const TermsReviewRequestListKind = "TermsReviewRequestList"
+// SelfTermsReviewRequestListKind is the name of the type used to represent list of objects of
+// type 'self_terms_review_request'.
+const SelfTermsReviewRequestListKind = "SelfTermsReviewRequestList"
 
-// TermsReviewRequestListLinkKind is the name of the type used to represent links to list
-// of objects of type 'terms_review_request'.
-const TermsReviewRequestListLinkKind = "TermsReviewRequestListLink"
+// SelfTermsReviewRequestListLinkKind is the name of the type used to represent links to list
+// of objects of type 'self_terms_review_request'.
+const SelfTermsReviewRequestListLinkKind = "SelfTermsReviewRequestListLink"
 
-// TermsReviewRequestNilKind is the name of the type used to nil lists of objects of
-// type 'terms_review_request'.
-const TermsReviewRequestListNilKind = "TermsReviewRequestListNil"
+// SelfTermsReviewRequestNilKind is the name of the type used to nil lists of objects of
+// type 'self_terms_review_request'.
+const SelfTermsReviewRequestListNilKind = "SelfTermsReviewRequestListNil"
 
-// TermsReviewRequestList is a list of values of the 'terms_review_request' type.
-type TermsReviewRequestList struct {
+// SelfTermsReviewRequestList is a list of values of the 'self_terms_review_request' type.
+type SelfTermsReviewRequestList struct {
 	href  string
 	link  bool
-	items []*TermsReviewRequest
+	items []*SelfTermsReviewRequest
 }
 
 // Len returns the length of the list.
-func (l *TermsReviewRequestList) Len() int {
+func (l *SelfTermsReviewRequestList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -132,13 +108,13 @@ func (l *TermsReviewRequestList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *TermsReviewRequestList) Empty() bool {
+func (l *SelfTermsReviewRequestList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *TermsReviewRequestList) Get(i int) *TermsReviewRequest {
+func (l *SelfTermsReviewRequestList) Get(i int) *SelfTermsReviewRequest {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -151,12 +127,12 @@ func (l *TermsReviewRequestList) Get(i int) *TermsReviewRequest {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *TermsReviewRequestList) Slice() []*TermsReviewRequest {
-	var slice []*TermsReviewRequest
+func (l *SelfTermsReviewRequestList) Slice() []*SelfTermsReviewRequest {
+	var slice []*SelfTermsReviewRequest
 	if l == nil {
-		slice = make([]*TermsReviewRequest, 0)
+		slice = make([]*SelfTermsReviewRequest, 0)
 	} else {
-		slice = make([]*TermsReviewRequest, len(l.items))
+		slice = make([]*SelfTermsReviewRequest, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -165,7 +141,7 @@ func (l *TermsReviewRequestList) Slice() []*TermsReviewRequest {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *TermsReviewRequestList) Each(f func(item *TermsReviewRequest) bool) {
+func (l *SelfTermsReviewRequestList) Each(f func(item *SelfTermsReviewRequest) bool) {
 	if l == nil {
 		return
 	}
@@ -179,7 +155,7 @@ func (l *TermsReviewRequestList) Each(f func(item *TermsReviewRequest) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *TermsReviewRequestList) Range(f func(index int, item *TermsReviewRequest) bool) {
+func (l *SelfTermsReviewRequestList) Range(f func(index int, item *SelfTermsReviewRequest) bool) {
 	if l == nil {
 		return
 	}

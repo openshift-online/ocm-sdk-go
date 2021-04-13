@@ -26,46 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalClusterMetricsList writes a list of values of the 'cluster_metrics' type to
+// MarshalClusterDeploymentList writes a list of values of the 'cluster_deployment' type to
 // the given writer.
-func MarshalClusterMetricsList(list []*ClusterMetrics, writer io.Writer) error {
+func MarshalClusterDeploymentList(list []*ClusterDeployment, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterMetricsList(list, stream)
+	writeClusterDeploymentList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeClusterMetricsList writes a list of value of the 'cluster_metrics' type to
+// writeClusterDeploymentList writes a list of value of the 'cluster_deployment' type to
 // the given stream.
-func writeClusterMetricsList(list []*ClusterMetrics, stream *jsoniter.Stream) {
+func writeClusterDeploymentList(list []*ClusterDeployment, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeClusterMetrics(value, stream)
+		writeClusterDeployment(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalClusterMetricsList reads a list of values of the 'cluster_metrics' type
+// UnmarshalClusterDeploymentList reads a list of values of the 'cluster_deployment' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalClusterMetricsList(source interface{}) (items []*ClusterMetrics, err error) {
+func UnmarshalClusterDeploymentList(source interface{}) (items []*ClusterDeployment, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readClusterMetricsList(iterator)
+	items = readClusterDeploymentList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterMetricsList reads list of values of the ''cluster_metrics' type from
+// readClusterDeploymentList reads list of values of the ''cluster_deployment' type from
 // the given iterator.
-func readClusterMetricsList(iterator *jsoniter.Iterator) []*ClusterMetrics {
-	list := []*ClusterMetrics{}
+func readClusterDeploymentList(iterator *jsoniter.Iterator) []*ClusterDeployment {
+	list := []*ClusterDeployment{}
 	for iterator.ReadArray() {
-		item := readClusterMetrics(iterator)
+		item := readClusterDeployment(iterator)
 		list = append(list, item)
 	}
 	return list
