@@ -27,16 +27,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalTermsReviewRequest writes a value of the 'terms_review_request' type to the given writer.
-func MarshalTermsReviewRequest(object *TermsReviewRequest, writer io.Writer) error {
+// MarshalSelfTermsReviewRequest writes a value of the 'self_terms_review_request' type to the given writer.
+func MarshalSelfTermsReviewRequest(object *SelfTermsReviewRequest, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeTermsReviewRequest(object, stream)
+	writeSelfTermsReviewRequest(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeTermsReviewRequest writes a value of the 'terms_review_request' type to the given stream.
-func writeTermsReviewRequest(object *TermsReviewRequest, stream *jsoniter.Stream) {
+// writeSelfTermsReviewRequest writes a value of the 'self_terms_review_request' type to the given stream.
+func writeSelfTermsReviewRequest(object *SelfTermsReviewRequest, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -45,20 +45,11 @@ func writeTermsReviewRequest(object *TermsReviewRequest, stream *jsoniter.Stream
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("account_username")
-		stream.WriteString(object.accountUsername)
-		count++
-	}
-	present_ = object.bitmap_&2 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
 		stream.WriteObjectField("event_code")
 		stream.WriteString(object.eventCode)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&2 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -70,9 +61,9 @@ func writeTermsReviewRequest(object *TermsReviewRequest, stream *jsoniter.Stream
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalTermsReviewRequest reads a value of the 'terms_review_request' type from the given
+// UnmarshalSelfTermsReviewRequest reads a value of the 'self_terms_review_request' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalTermsReviewRequest(source interface{}) (object *TermsReviewRequest, err error) {
+func UnmarshalSelfTermsReviewRequest(source interface{}) (object *SelfTermsReviewRequest, err error) {
 	if source == http.NoBody {
 		return
 	}
@@ -80,32 +71,28 @@ func UnmarshalTermsReviewRequest(source interface{}) (object *TermsReviewRequest
 	if err != nil {
 		return
 	}
-	object = readTermsReviewRequest(iterator)
+	object = readSelfTermsReviewRequest(iterator)
 	err = iterator.Error
 	return
 }
 
-// readTermsReviewRequest reads a value of the 'terms_review_request' type from the given iterator.
-func readTermsReviewRequest(iterator *jsoniter.Iterator) *TermsReviewRequest {
-	object := &TermsReviewRequest{}
+// readSelfTermsReviewRequest reads a value of the 'self_terms_review_request' type from the given iterator.
+func readSelfTermsReviewRequest(iterator *jsoniter.Iterator) *SelfTermsReviewRequest {
+	object := &SelfTermsReviewRequest{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "account_username":
-			value := iterator.ReadString()
-			object.accountUsername = value
-			object.bitmap_ |= 1
 		case "event_code":
 			value := iterator.ReadString()
 			object.eventCode = value
-			object.bitmap_ |= 2
+			object.bitmap_ |= 1
 		case "site_code":
 			value := iterator.ReadString()
 			object.siteCode = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

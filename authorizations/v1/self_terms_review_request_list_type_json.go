@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
 
 import (
 	"io"
@@ -26,46 +26,46 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalClusterMetricList writes a list of values of the 'cluster_metric' type to
+// MarshalSelfTermsReviewRequestList writes a list of values of the 'self_terms_review_request' type to
 // the given writer.
-func MarshalClusterMetricList(list []*ClusterMetric, writer io.Writer) error {
+func MarshalSelfTermsReviewRequestList(list []*SelfTermsReviewRequest, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterMetricList(list, stream)
+	writeSelfTermsReviewRequestList(list, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeClusterMetricList writes a list of value of the 'cluster_metric' type to
+// writeSelfTermsReviewRequestList writes a list of value of the 'self_terms_review_request' type to
 // the given stream.
-func writeClusterMetricList(list []*ClusterMetric, stream *jsoniter.Stream) {
+func writeSelfTermsReviewRequestList(list []*SelfTermsReviewRequest, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeClusterMetric(value, stream)
+		writeSelfTermsReviewRequest(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalClusterMetricList reads a list of values of the 'cluster_metric' type
+// UnmarshalSelfTermsReviewRequestList reads a list of values of the 'self_terms_review_request' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalClusterMetricList(source interface{}) (items []*ClusterMetric, err error) {
+func UnmarshalSelfTermsReviewRequestList(source interface{}) (items []*SelfTermsReviewRequest, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readClusterMetricList(iterator)
+	items = readSelfTermsReviewRequestList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterMetricList reads list of values of the ''cluster_metric' type from
+// readSelfTermsReviewRequestList reads list of values of the ''self_terms_review_request' type from
 // the given iterator.
-func readClusterMetricList(iterator *jsoniter.Iterator) []*ClusterMetric {
-	list := []*ClusterMetric{}
+func readSelfTermsReviewRequestList(iterator *jsoniter.Iterator) []*SelfTermsReviewRequest {
+	list := []*SelfTermsReviewRequest{}
 	for iterator.ReadArray() {
-		item := readClusterMetric(iterator)
+		item := readSelfTermsReviewRequest(iterator)
 		list = append(list, item)
 	}
 	return list
