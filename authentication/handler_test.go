@@ -1363,4 +1363,60 @@ var _ = Describe("Handler", func() {
 			"operation_id": "123"
 		}`))
 	})
+
+	It("Accepts token expired within the configured tolerance", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare a token that expired 5 minutes ago:
+		bearer := MakeTokenString("Bearer", -5*time.Minute)
+
+		// Prepare a handler that tolerates tokens that expired up to 10 minutes ago:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Tolerance(10 * time.Minute).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusOK))
+	})
+
+	It("Rejects token expired outside the configured tolerance", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare a token that expired 15 minutes ago:
+		bearer := MakeTokenString("Bearer", -15*time.Minute)
+
+		// Prepare a handler that tolerates tokens that have expired up to 10 minutes ago:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Tolerance(10 * time.Minute).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+	})
 })
