@@ -269,7 +269,7 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 		return
 	}
 	if b.tolerance < 0 {
-		err = fmt.Errorf("toleranze must be zero or positive")
+		err = fmt.Errorf("tolerance must be zero or positive")
 		return
 	}
 	if b.next == nil {
