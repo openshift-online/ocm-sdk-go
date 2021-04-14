@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.170 Apr 14 2021
+
+- Add `Tolerance` parameter to authentication handler.
+
 == 0.1.169 Apr 13 2021
 
 - Bump ocm-api-model to v0.0.115
