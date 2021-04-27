@@ -209,6 +209,22 @@ var pathTreeData = `{
         }
       }
     },
+    "job_queue": {
+      "v1": {
+        "queues": {
+          "-": {
+            "jobs": {
+              "-": {
+                "failure": null,
+                "success": null
+              }
+            },
+            "pop": null,
+            "push": null
+          }
+        }
+      }
+    },
     "service_logs": {
       "v1": {
         "cluster_logs": {
