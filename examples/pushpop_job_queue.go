@@ -24,7 +24,6 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
-	jqv1 "github.com/openshift-online/ocm-sdk-go/jobqueue/v1"
 	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
@@ -58,18 +57,13 @@ func main() {
 
 	// Retrieve the first page of Job Queues and print them:
 	queueID := "ocm-test-queue.fifo"
-	job, err := jqv1.NewJob().Arguments("foo bar").Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build job: %v\n", err)
-		os.Exit(1)
-	}
-	pushResponse, err := jobQueues.Queues().Queue(queueID).Push().Body(job).SendContext(ctx)
+	pushResponse, err := jobQueues.Queues().Queue(queueID).Push().Arguments("foo bar").SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't push: %v\n", err)
 		os.Exit(1)
 	}
-	pushID := pushResponse.Body().ID()
-	pushArguments := pushResponse.Body().Arguments()
+	pushID := pushResponse.ID()
+	pushArguments := pushResponse.Arguments()
 	fmt.Printf("Pushed:\nid: %s\narguments: %s\n\n", pushID, pushArguments)
 
 	popResponse, err := jobQueues.Queues().Queue(queueID).Pop().SendContext(ctx)
