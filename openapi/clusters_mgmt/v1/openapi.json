@@ -6081,9 +6081,12 @@
         "type": "string",
         "enum": [
           "error",
+          "hibernating",
           "installing",
           "pending",
+          "powering_down",
           "ready",
+          "resuming",
           "uninstalling",
           "unknown"
         ]

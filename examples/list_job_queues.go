@@ -21,10 +21,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+
 	sdk "github.com/openshift-online/ocm-sdk-go"
 	jqv1 "github.com/openshift-online/ocm-sdk-go/jobqueue/v1"
 	"github.com/openshift-online/ocm-sdk-go/logging"
-	"os"
 )
 
 func main() {
