@@ -4895,6 +4895,10 @@
       "AWS": {
         "description": "_Amazon Web Services_ specific settings of a cluster.\n",
         "properties": {
+          "sts": {
+            "description": "STS contains the necessary attributes to support role-based authentication on AWS.\n",
+            "$ref": "#/components/schemas/STS"
+          },
           "access_key_id": {
             "description": "AWS access key identifier.\n",
             "type": "string"
@@ -5269,6 +5273,26 @@
           },
           "public_key": {
             "description": "SSH public key of the cluster.\n",
+            "type": "string"
+          }
+        }
+      },
+      "STS": {
+        "description": "STS contains the necessary attributes to support role-based authentication on AWS.\n",
+        "properties": {
+          "oidc_endpoint_url": {
+            "type": "string"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "operator_iam_roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperatorIAMRole"
+            }
+          },
+          "role_arn": {
             "type": "string"
           }
         }
@@ -6779,6 +6803,20 @@
           },
           "issuer": {
             "description": "The URL that the OpenID Provider asserts as the Issuer Identifier\n",
+            "type": "string"
+          }
+        }
+      },
+      "OperatorIAMRole": {
+        "description": "OperatorIAMRole contains the necessary attributes to allow each operator to access the necessary AWS resources\n",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "role_arn": {
             "type": "string"
           }
         }
