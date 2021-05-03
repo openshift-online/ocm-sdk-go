@@ -27,26 +27,26 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalAWS writes a value of the 'AWS' type to the given writer.
-func MarshalAWS(object *AWS, writer io.Writer) error {
+// MarshalSTS writes a value of the 'STS' type to the given writer.
+func MarshalSTS(object *STS, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAWS(object, stream)
+	writeSTS(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeAWS writes a value of the 'AWS' type to the given stream.
-func writeAWS(object *AWS, stream *jsoniter.Stream) {
+// writeSTS writes a value of the 'STS' type to the given stream.
+func writeSTS(object *STS, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
-	present_ = object.bitmap_&1 != 0 && object.sts != nil
+	present_ = object.bitmap_&1 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("sts")
-		writeSTS(object.sts, stream)
+		stream.WriteObjectField("oidc_endpoint_url")
+		stream.WriteString(object.oidcEndpointURL)
 		count++
 	}
 	present_ = object.bitmap_&2 != 0
@@ -54,17 +54,17 @@ func writeAWS(object *AWS, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("access_key_id")
-		stream.WriteString(object.accessKeyID)
+		stream.WriteObjectField("external_id")
+		stream.WriteString(object.externalID)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&4 != 0 && object.operatorIAMRoles != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("account_id")
-		stream.WriteString(object.accountID)
+		stream.WriteObjectField("operator_iam_roles")
+		writeOperatorIAMRoleList(object.operatorIAMRoles, stream)
 		count++
 	}
 	present_ = object.bitmap_&8 != 0
@@ -72,34 +72,16 @@ func writeAWS(object *AWS, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("private_link")
-		stream.WriteBool(object.privateLink)
-		count++
-	}
-	present_ = object.bitmap_&16 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("secret_access_key")
-		stream.WriteString(object.secretAccessKey)
-		count++
-	}
-	present_ = object.bitmap_&32 != 0 && object.subnetIDs != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("subnet_ids")
-		writeStringList(object.subnetIDs, stream)
+		stream.WriteObjectField("role_arn")
+		stream.WriteString(object.roleARN)
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalAWS reads a value of the 'AWS' type from the given
+// UnmarshalSTS reads a value of the 'STS' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalAWS(source interface{}) (object *AWS, err error) {
+func UnmarshalSTS(source interface{}) (object *STS, err error) {
 	if source == http.NoBody {
 		return
 	}
@@ -107,44 +89,36 @@ func UnmarshalAWS(source interface{}) (object *AWS, err error) {
 	if err != nil {
 		return
 	}
-	object = readAWS(iterator)
+	object = readSTS(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAWS reads a value of the 'AWS' type from the given iterator.
-func readAWS(iterator *jsoniter.Iterator) *AWS {
-	object := &AWS{}
+// readSTS reads a value of the 'STS' type from the given iterator.
+func readSTS(iterator *jsoniter.Iterator) *STS {
+	object := &STS{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "sts":
-			value := readSTS(iterator)
-			object.sts = value
+		case "oidc_endpoint_url":
+			value := iterator.ReadString()
+			object.oidcEndpointURL = value
 			object.bitmap_ |= 1
-		case "access_key_id":
+		case "external_id":
 			value := iterator.ReadString()
-			object.accessKeyID = value
+			object.externalID = value
 			object.bitmap_ |= 2
-		case "account_id":
-			value := iterator.ReadString()
-			object.accountID = value
+		case "operator_iam_roles":
+			value := readOperatorIAMRoleList(iterator)
+			object.operatorIAMRoles = value
 			object.bitmap_ |= 4
-		case "private_link":
-			value := iterator.ReadBool()
-			object.privateLink = value
-			object.bitmap_ |= 8
-		case "secret_access_key":
+		case "role_arn":
 			value := iterator.ReadString()
-			object.secretAccessKey = value
-			object.bitmap_ |= 16
-		case "subnet_ids":
-			value := readStringList(iterator)
-			object.subnetIDs = value
-			object.bitmap_ |= 32
+			object.roleARN = value
+			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}
