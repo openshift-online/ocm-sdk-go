@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+
+== 0.1.172 May 03 2021
+
+- Bump ocm-api-model to v0.0.118
+
 == 0.1.171 Apr 14 2021
 
 - Add JobQueue service.
