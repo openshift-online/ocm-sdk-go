@@ -36,7 +36,7 @@ func main() {
 		Debug(true).
 		Build()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ERROR: Can't build logger: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -45,9 +45,11 @@ func main() {
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
+		// TODO: REMOVE!!!
+		URL("https://api.stage.openshift.com").
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ERROR: Can't build connection: %v\n", err)
 		os.Exit(1)
 	}
 	defer connection.Close()
@@ -55,27 +57,40 @@ func main() {
 	// Get the client for the resource that manages the Job Queues:
 	jobQueues := connection.JobQueue().V1()
 
-	// Retrieve the first page of Job Queues and print them:
-	queueID := "ocm-test-queue.fifo"
-	pushResponse, err := jobQueues.Queues().Queue(queueID).Push().Arguments("foo bar").SendContext(ctx)
+	// Client for the queue
+	queueID := "job-queue-service-heartbeat-staging.fifo"
+	client := jobQueues.Queues().Queue(queueID)
+
+	// Push a new job
+	pushResponse, err := client.Push().Arguments("foo bar").SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't push: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ERROR: Can't push: %v\n", err)
 		os.Exit(1)
 	}
 	pushID := pushResponse.ID()
 	pushArguments := pushResponse.Arguments()
-	fmt.Printf("Pushed:\nid: %s\narguments: %s\n\n", pushID, pushArguments)
+	fmt.Printf("Pushed:\n\tid: %s\n\targuments: %s\n\n", pushID, pushArguments)
 
-	popResponse, err := jobQueues.Queues().Queue(queueID).Pop().SendContext(ctx)
+	// Retrieve this job back
+	popResponse, err := client.Pop().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't pop: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ERROR: Can't pop: %v\n", err)
 		os.Exit(1)
 	}
-	popID := popResponse.Body().ID()
-	popArguments := popResponse.Body().Arguments()
-	popAttempts := popResponse.Body().Attempts()
-	abandonedAt := popResponse.Body().AbandonedAt()
-	receiptID := popResponse.Body().ReceiptId()
-	fmt.Printf("Popped:\nid: %s\narguments: %s\nattempts: %d\nabandoned_at: %s\nreceipt_id: %s\n",
-		popID, popArguments, popAttempts, abandonedAt, receiptID)
+	popID := popResponse.ID()
+	popAttempts := popResponse.Attempts()
+	abandonedAt := popResponse.AbandonedAt()
+	receiptID := popResponse.ReceiptId()
+	fmt.Printf("Popped:\n\tid: %s\n\tattempts: %d\n\tabandoned_at: %s\n\treceipt_id: %s\n",
+		popID, popAttempts, abandonedAt, receiptID)
+
+	// Mark it as success
+	_, err = client.Jobs().Job(popID).Success().ReceiptId(receiptID).SendContext(ctx)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: Can't success: %v\n", err)
+		os.Exit(1)
+	}
+
+	// To mark it as Failure use
+	// _, err = client.Jobs().Job(popID).Failure().FailureReason("Failure reason").ReceiptId(receiptID).SendContext(ctx)
 }
