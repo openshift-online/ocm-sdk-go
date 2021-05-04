@@ -22,6 +22,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/jobqueue/v1
 import (
 	"context"
 	"net/http"
+	time "time"
 
 	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -82,16 +83,79 @@ type QueuePopServerRequest struct {
 
 // QueuePopServerResponse is the response for the 'pop' method.
 type QueuePopServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *Job
+	status      int
+	err         *errors.Error
+	href        *string
+	id          *string
+	abandonedAt *time.Time
+	attempts    *int
+	createdAt   *time.Time
+	kind        *string
+	receiptId   *string
+	updatedAt   *time.Time
 }
 
-// Body sets the value of the 'body' parameter.
+// HREF sets the value of the 'HREF' parameter.
 //
 //
-func (r *QueuePopServerResponse) Body(value *Job) *QueuePopServerResponse {
-	r.body = value
+func (r *QueuePopServerResponse) HREF(value string) *QueuePopServerResponse {
+	r.href = &value
+	return r
+}
+
+// ID sets the value of the 'ID' parameter.
+//
+//
+func (r *QueuePopServerResponse) ID(value string) *QueuePopServerResponse {
+	r.id = &value
+	return r
+}
+
+// AbandonedAt sets the value of the 'abandoned_at' parameter.
+//
+//
+func (r *QueuePopServerResponse) AbandonedAt(value time.Time) *QueuePopServerResponse {
+	r.abandonedAt = &value
+	return r
+}
+
+// Attempts sets the value of the 'attempts' parameter.
+//
+//
+func (r *QueuePopServerResponse) Attempts(value int) *QueuePopServerResponse {
+	r.attempts = &value
+	return r
+}
+
+// CreatedAt sets the value of the 'created_at' parameter.
+//
+//
+func (r *QueuePopServerResponse) CreatedAt(value time.Time) *QueuePopServerResponse {
+	r.createdAt = &value
+	return r
+}
+
+// Kind sets the value of the 'kind' parameter.
+//
+//
+func (r *QueuePopServerResponse) Kind(value string) *QueuePopServerResponse {
+	r.kind = &value
+	return r
+}
+
+// ReceiptId sets the value of the 'receipt_id' parameter.
+//
+//
+func (r *QueuePopServerResponse) ReceiptId(value string) *QueuePopServerResponse {
+	r.receiptId = &value
+	return r
+}
+
+// UpdatedAt sets the value of the 'updated_at' parameter.
+//
+//
+func (r *QueuePopServerResponse) UpdatedAt(value time.Time) *QueuePopServerResponse {
+	r.updatedAt = &value
 	return r
 }
 
@@ -103,43 +167,115 @@ func (r *QueuePopServerResponse) Status(value int) *QueuePopServerResponse {
 
 // QueuePushServerRequest is the request for the 'push' method.
 type QueuePushServerRequest struct {
-	body *Job
+	arguments *string
 }
 
-// Body returns the value of the 'body' parameter.
+// Arguments returns the value of the 'arguments' parameter.
 //
 //
-func (r *QueuePushServerRequest) Body() *Job {
-	if r == nil {
-		return nil
+func (r *QueuePushServerRequest) Arguments() string {
+	if r != nil && r.arguments != nil {
+		return *r.arguments
 	}
-	return r.body
+	return ""
 }
 
-// GetBody returns the value of the 'body' parameter and
+// GetArguments returns the value of the 'arguments' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *QueuePushServerRequest) GetBody() (value *Job, ok bool) {
-	ok = r != nil && r.body != nil
+func (r *QueuePushServerRequest) GetArguments() (value string, ok bool) {
+	ok = r != nil && r.arguments != nil
 	if ok {
-		value = r.body
+		value = *r.arguments
 	}
 	return
 }
 
 // QueuePushServerResponse is the response for the 'push' method.
 type QueuePushServerResponse struct {
-	status int
-	err    *errors.Error
-	body   *Job
+	status      int
+	err         *errors.Error
+	href        *string
+	id          *string
+	abandonedAt *time.Time
+	arguments   *string
+	attempts    *int
+	createdAt   *time.Time
+	kind        *string
+	receiptId   *string
+	updatedAt   *time.Time
 }
 
-// Body sets the value of the 'body' parameter.
+// HREF sets the value of the 'HREF' parameter.
 //
 //
-func (r *QueuePushServerResponse) Body(value *Job) *QueuePushServerResponse {
-	r.body = value
+func (r *QueuePushServerResponse) HREF(value string) *QueuePushServerResponse {
+	r.href = &value
+	return r
+}
+
+// ID sets the value of the 'ID' parameter.
+//
+//
+func (r *QueuePushServerResponse) ID(value string) *QueuePushServerResponse {
+	r.id = &value
+	return r
+}
+
+// AbandonedAt sets the value of the 'abandoned_at' parameter.
+//
+//
+func (r *QueuePushServerResponse) AbandonedAt(value time.Time) *QueuePushServerResponse {
+	r.abandonedAt = &value
+	return r
+}
+
+// Arguments sets the value of the 'arguments' parameter.
+//
+//
+func (r *QueuePushServerResponse) Arguments(value string) *QueuePushServerResponse {
+	r.arguments = &value
+	return r
+}
+
+// Attempts sets the value of the 'attempts' parameter.
+//
+//
+func (r *QueuePushServerResponse) Attempts(value int) *QueuePushServerResponse {
+	r.attempts = &value
+	return r
+}
+
+// CreatedAt sets the value of the 'created_at' parameter.
+//
+//
+func (r *QueuePushServerResponse) CreatedAt(value time.Time) *QueuePushServerResponse {
+	r.createdAt = &value
+	return r
+}
+
+// Kind sets the value of the 'kind' parameter.
+//
+//
+func (r *QueuePushServerResponse) Kind(value string) *QueuePushServerResponse {
+	r.kind = &value
+	return r
+}
+
+// ReceiptId sets the value of the 'receipt_id' parameter.
+//
+//
+func (r *QueuePushServerResponse) ReceiptId(value string) *QueuePushServerResponse {
+	r.receiptId = &value
+	return r
+}
+
+// UpdatedAt sets the value of the 'updated_at' parameter.
+//
+//
+func (r *QueuePushServerResponse) UpdatedAt(value time.Time) *QueuePushServerResponse {
+	r.updatedAt = &value
 	return r
 }
 

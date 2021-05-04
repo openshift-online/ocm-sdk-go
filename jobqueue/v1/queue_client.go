@@ -27,7 +27,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	"time"
+	time "time"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -403,10 +403,17 @@ func (r *QueuePopRequest) SendContext(ctx context.Context) (result *QueuePopResp
 
 // QueuePopResponse is the response for the 'pop' method.
 type QueuePopResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-	body   *Job
+	status      int
+	header      http.Header
+	err         *errors.Error
+	href        *string
+	id          *string
+	abandonedAt *time.Time
+	attempts    *int
+	createdAt   *time.Time
+	kind        *string
+	receiptId   *string
+	updatedAt   *time.Time
 }
 
 // Status returns the response status code.
@@ -433,24 +440,178 @@ func (r *QueuePopResponse) Error() *errors.Error {
 	return r.err
 }
 
-// Body returns the value of the 'body' parameter.
+// HREF returns the value of the 'HREF' parameter.
 //
 //
-func (r *QueuePopResponse) Body() *Job {
-	if r == nil {
-		return nil
+func (r *QueuePopResponse) HREF() string {
+	if r != nil && r.href != nil {
+		return *r.href
 	}
-	return r.body
+	return ""
 }
 
-// GetBody returns the value of the 'body' parameter and
+// GetHREF returns the value of the 'HREF' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *QueuePopResponse) GetBody() (value *Job, ok bool) {
-	ok = r != nil && r.body != nil
+func (r *QueuePopResponse) GetHREF() (value string, ok bool) {
+	ok = r != nil && r.href != nil
 	if ok {
-		value = r.body
+		value = *r.href
+	}
+	return
+}
+
+// ID returns the value of the 'ID' parameter.
+//
+//
+func (r *QueuePopResponse) ID() string {
+	if r != nil && r.id != nil {
+		return *r.id
+	}
+	return ""
+}
+
+// GetID returns the value of the 'ID' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetID() (value string, ok bool) {
+	ok = r != nil && r.id != nil
+	if ok {
+		value = *r.id
+	}
+	return
+}
+
+// AbandonedAt returns the value of the 'abandoned_at' parameter.
+//
+//
+func (r *QueuePopResponse) AbandonedAt() time.Time {
+	if r != nil && r.abandonedAt != nil {
+		return *r.abandonedAt
+	}
+	return time.Time{}
+}
+
+// GetAbandonedAt returns the value of the 'abandoned_at' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetAbandonedAt() (value time.Time, ok bool) {
+	ok = r != nil && r.abandonedAt != nil
+	if ok {
+		value = *r.abandonedAt
+	}
+	return
+}
+
+// Attempts returns the value of the 'attempts' parameter.
+//
+//
+func (r *QueuePopResponse) Attempts() int {
+	if r != nil && r.attempts != nil {
+		return *r.attempts
+	}
+	return 0
+}
+
+// GetAttempts returns the value of the 'attempts' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetAttempts() (value int, ok bool) {
+	ok = r != nil && r.attempts != nil
+	if ok {
+		value = *r.attempts
+	}
+	return
+}
+
+// CreatedAt returns the value of the 'created_at' parameter.
+//
+//
+func (r *QueuePopResponse) CreatedAt() time.Time {
+	if r != nil && r.createdAt != nil {
+		return *r.createdAt
+	}
+	return time.Time{}
+}
+
+// GetCreatedAt returns the value of the 'created_at' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetCreatedAt() (value time.Time, ok bool) {
+	ok = r != nil && r.createdAt != nil
+	if ok {
+		value = *r.createdAt
+	}
+	return
+}
+
+// Kind returns the value of the 'kind' parameter.
+//
+//
+func (r *QueuePopResponse) Kind() string {
+	if r != nil && r.kind != nil {
+		return *r.kind
+	}
+	return ""
+}
+
+// GetKind returns the value of the 'kind' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetKind() (value string, ok bool) {
+	ok = r != nil && r.kind != nil
+	if ok {
+		value = *r.kind
+	}
+	return
+}
+
+// ReceiptId returns the value of the 'receipt_id' parameter.
+//
+//
+func (r *QueuePopResponse) ReceiptId() string {
+	if r != nil && r.receiptId != nil {
+		return *r.receiptId
+	}
+	return ""
+}
+
+// GetReceiptId returns the value of the 'receipt_id' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetReceiptId() (value string, ok bool) {
+	ok = r != nil && r.receiptId != nil
+	if ok {
+		value = *r.receiptId
+	}
+	return
+}
+
+// UpdatedAt returns the value of the 'updated_at' parameter.
+//
+//
+func (r *QueuePopResponse) UpdatedAt() time.Time {
+	if r != nil && r.updatedAt != nil {
+		return *r.updatedAt
+	}
+	return time.Time{}
+}
+
+// GetUpdatedAt returns the value of the 'updated_at' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetUpdatedAt() (value time.Time, ok bool) {
+	ok = r != nil && r.updatedAt != nil
+	if ok {
+		value = *r.updatedAt
 	}
 	return
 }
@@ -461,7 +622,7 @@ type QueuePushRequest struct {
 	path      string
 	query     url.Values
 	header    http.Header
-	body      *Job
+	arguments *string
 }
 
 // Parameter adds a query parameter.
@@ -476,11 +637,11 @@ func (r *QueuePushRequest) Header(name string, value interface{}) *QueuePushRequ
 	return r
 }
 
-// Body sets the value of the 'body' parameter.
+// Arguments sets the value of the 'arguments' parameter.
 //
 //
-func (r *QueuePushRequest) Body(value *Job) *QueuePushRequest {
-	r.body = value
+func (r *QueuePushRequest) Arguments(value string) *QueuePushRequest {
+	r.arguments = &value
 	return r
 }
 
@@ -549,10 +710,18 @@ func (r *QueuePushRequest) stream(stream *jsoniter.Stream) {
 
 // QueuePushResponse is the response for the 'push' method.
 type QueuePushResponse struct {
-	status int
-	header http.Header
-	err    *errors.Error
-	body   *Job
+	status      int
+	header      http.Header
+	err         *errors.Error
+	href        *string
+	id          *string
+	abandonedAt *time.Time
+	arguments   *string
+	attempts    *int
+	createdAt   *time.Time
+	kind        *string
+	receiptId   *string
+	updatedAt   *time.Time
 }
 
 // Status returns the response status code.
@@ -579,24 +748,200 @@ func (r *QueuePushResponse) Error() *errors.Error {
 	return r.err
 }
 
-// Body returns the value of the 'body' parameter.
+// HREF returns the value of the 'HREF' parameter.
 //
 //
-func (r *QueuePushResponse) Body() *Job {
-	if r == nil {
-		return nil
+func (r *QueuePushResponse) HREF() string {
+	if r != nil && r.href != nil {
+		return *r.href
 	}
-	return r.body
+	return ""
 }
 
-// GetBody returns the value of the 'body' parameter and
+// GetHREF returns the value of the 'HREF' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *QueuePushResponse) GetBody() (value *Job, ok bool) {
-	ok = r != nil && r.body != nil
+func (r *QueuePushResponse) GetHREF() (value string, ok bool) {
+	ok = r != nil && r.href != nil
 	if ok {
-		value = r.body
+		value = *r.href
+	}
+	return
+}
+
+// ID returns the value of the 'ID' parameter.
+//
+//
+func (r *QueuePushResponse) ID() string {
+	if r != nil && r.id != nil {
+		return *r.id
+	}
+	return ""
+}
+
+// GetID returns the value of the 'ID' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetID() (value string, ok bool) {
+	ok = r != nil && r.id != nil
+	if ok {
+		value = *r.id
+	}
+	return
+}
+
+// AbandonedAt returns the value of the 'abandoned_at' parameter.
+//
+//
+func (r *QueuePushResponse) AbandonedAt() time.Time {
+	if r != nil && r.abandonedAt != nil {
+		return *r.abandonedAt
+	}
+	return time.Time{}
+}
+
+// GetAbandonedAt returns the value of the 'abandoned_at' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetAbandonedAt() (value time.Time, ok bool) {
+	ok = r != nil && r.abandonedAt != nil
+	if ok {
+		value = *r.abandonedAt
+	}
+	return
+}
+
+// Arguments returns the value of the 'arguments' parameter.
+//
+//
+func (r *QueuePushResponse) Arguments() string {
+	if r != nil && r.arguments != nil {
+		return *r.arguments
+	}
+	return ""
+}
+
+// GetArguments returns the value of the 'arguments' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetArguments() (value string, ok bool) {
+	ok = r != nil && r.arguments != nil
+	if ok {
+		value = *r.arguments
+	}
+	return
+}
+
+// Attempts returns the value of the 'attempts' parameter.
+//
+//
+func (r *QueuePushResponse) Attempts() int {
+	if r != nil && r.attempts != nil {
+		return *r.attempts
+	}
+	return 0
+}
+
+// GetAttempts returns the value of the 'attempts' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetAttempts() (value int, ok bool) {
+	ok = r != nil && r.attempts != nil
+	if ok {
+		value = *r.attempts
+	}
+	return
+}
+
+// CreatedAt returns the value of the 'created_at' parameter.
+//
+//
+func (r *QueuePushResponse) CreatedAt() time.Time {
+	if r != nil && r.createdAt != nil {
+		return *r.createdAt
+	}
+	return time.Time{}
+}
+
+// GetCreatedAt returns the value of the 'created_at' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetCreatedAt() (value time.Time, ok bool) {
+	ok = r != nil && r.createdAt != nil
+	if ok {
+		value = *r.createdAt
+	}
+	return
+}
+
+// Kind returns the value of the 'kind' parameter.
+//
+//
+func (r *QueuePushResponse) Kind() string {
+	if r != nil && r.kind != nil {
+		return *r.kind
+	}
+	return ""
+}
+
+// GetKind returns the value of the 'kind' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetKind() (value string, ok bool) {
+	ok = r != nil && r.kind != nil
+	if ok {
+		value = *r.kind
+	}
+	return
+}
+
+// ReceiptId returns the value of the 'receipt_id' parameter.
+//
+//
+func (r *QueuePushResponse) ReceiptId() string {
+	if r != nil && r.receiptId != nil {
+		return *r.receiptId
+	}
+	return ""
+}
+
+// GetReceiptId returns the value of the 'receipt_id' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetReceiptId() (value string, ok bool) {
+	ok = r != nil && r.receiptId != nil
+	if ok {
+		value = *r.receiptId
+	}
+	return
+}
+
+// UpdatedAt returns the value of the 'updated_at' parameter.
+//
+//
+func (r *QueuePushResponse) UpdatedAt() time.Time {
+	if r != nil && r.updatedAt != nil {
+		return *r.updatedAt
+	}
+	return time.Time{}
+}
+
+// GetUpdatedAt returns the value of the 'updated_at' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePushResponse) GetUpdatedAt() (value time.Time, ok bool) {
+	ok = r != nil && r.updatedAt != nil
+	if ok {
+		value = *r.updatedAt
 	}
 	return
 }

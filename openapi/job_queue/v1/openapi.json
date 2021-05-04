@@ -177,8 +177,33 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "body": {
-                      "$ref": "#/components/schemas/Job"
+                    "href": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "abandoned_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "attempts": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "receipt_id": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
                     }
                   }
                 }
@@ -216,8 +241,8 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "body": {
-                    "$ref": "#/components/schemas/Job"
+                  "arguments": {
+                    "type": "string"
                   }
                 }
               }
@@ -232,8 +257,36 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "body": {
-                      "$ref": "#/components/schemas/Job"
+                    "href": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "abandoned_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "arguments": {
+                      "type": "string"
+                    },
+                    "attempts": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "receipt_id": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
                     }
                   }
                 }
