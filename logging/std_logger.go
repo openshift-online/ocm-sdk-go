@@ -138,6 +138,7 @@ func (l *StdLogger) ErrorEnabled() bool {
 // format and arguments.
 func (l *StdLogger) Debug(ctx context.Context, format string, args ...interface{}) {
 	if l.debugEnabled {
+		format = appendHeader(Debug, format)
 		fmt.Fprintf(l.outStream, format+"\n", args...)
 	}
 }
@@ -146,6 +147,7 @@ func (l *StdLogger) Debug(ctx context.Context, format string, args ...interface{
 // given format and arguments.
 func (l *StdLogger) Info(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
+		format = appendHeader(Info, format)
 		fmt.Fprintf(l.outStream, format+"\n", args...)
 	}
 }
@@ -154,6 +156,7 @@ func (l *StdLogger) Info(ctx context.Context, format string, args ...interface{}
 // format and arguments.
 func (l *StdLogger) Warn(ctx context.Context, format string, args ...interface{}) {
 	if l.warnEnabled {
+		format = appendHeader(Warning, format)
 		fmt.Fprintf(l.outStream, format+"\n", args...)
 	}
 }
@@ -162,6 +165,7 @@ func (l *StdLogger) Warn(ctx context.Context, format string, args ...interface{}
 // format and arguments.
 func (l *StdLogger) Error(ctx context.Context, format string, args ...interface{}) {
 	if l.errorEnabled {
+		format = appendHeader(Error, format)
 		fmt.Fprintf(l.errStream, format+"\n", args...)
 	}
 }
@@ -170,6 +174,7 @@ func (l *StdLogger) Error(ctx context.Context, format string, args ...interface{
 // format and arguments. After that it will os.Exit(1)
 // This level is always enabled
 func (l *StdLogger) Fatal(ctx context.Context, format string, args ...interface{}) {
+	format = appendHeader(Fatal, format)
 	fmt.Fprintf(l.errStream, format+"\n", args...)
 	os.Exit(1)
 }

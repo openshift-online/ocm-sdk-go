@@ -118,6 +118,7 @@ func (l *GoLogger) ErrorEnabled() bool {
 // format and arguments.
 func (l *GoLogger) Debug(ctx context.Context, format string, args ...interface{}) {
 	if l.debugEnabled {
+		format = appendHeader(Debug, format)
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104
 		log.Output(1, msg)
@@ -128,6 +129,7 @@ func (l *GoLogger) Debug(ctx context.Context, format string, args ...interface{}
 // given format and arguments.
 func (l *GoLogger) Info(ctx context.Context, format string, args ...interface{}) {
 	if l.infoEnabled {
+		format = appendHeader(Info, format)
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104
 		log.Output(1, msg)
@@ -138,6 +140,7 @@ func (l *GoLogger) Info(ctx context.Context, format string, args ...interface{})
 // format and arguments.
 func (l *GoLogger) Warn(ctx context.Context, format string, args ...interface{}) {
 	if l.warnEnabled {
+		format = appendHeader(Warning, format)
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104
 		log.Output(1, msg)
@@ -148,6 +151,7 @@ func (l *GoLogger) Warn(ctx context.Context, format string, args ...interface{})
 // format and arguments.
 func (l *GoLogger) Error(ctx context.Context, format string, args ...interface{}) {
 	if l.errorEnabled {
+		format = appendHeader(Error, format)
 		msg := fmt.Sprintf(format, args...)
 		// #nosec G104
 		log.Output(1, msg)
@@ -158,6 +162,7 @@ func (l *GoLogger) Error(ctx context.Context, format string, args ...interface{}
 // format and arguments. After that it will os.Exit(1)
 // This level is always enabled
 func (l *GoLogger) Fatal(ctx context.Context, format string, args ...interface{}) {
+	format = appendHeader(Fatal, format)
 	msg := fmt.Sprintf(format, args...)
 	// #nosec G104
 	log.Output(1, msg)
