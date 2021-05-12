@@ -21,7 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // OperatorIAMRoleBuilder contains the data and logic needed to build 'operator_IAM_role' objects.
 //
-// OperatorIAMRole contains the necessary attributes to allow each operator to access the necessary AWS resources
+// Contains the necessary attributes to allow each operator to access the necessary AWS resources
 type OperatorIAMRoleBuilder struct {
 	bitmap_   uint32
 	name      string

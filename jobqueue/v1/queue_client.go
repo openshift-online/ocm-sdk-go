@@ -409,6 +409,7 @@ type QueuePopResponse struct {
 	href        *string
 	id          *string
 	abandonedAt *time.Time
+	arguments   *string
 	attempts    *int
 	createdAt   *time.Time
 	kind        *string
@@ -502,6 +503,28 @@ func (r *QueuePopResponse) GetAbandonedAt() (value time.Time, ok bool) {
 	ok = r != nil && r.abandonedAt != nil
 	if ok {
 		value = *r.abandonedAt
+	}
+	return
+}
+
+// Arguments returns the value of the 'arguments' parameter.
+//
+//
+func (r *QueuePopResponse) Arguments() string {
+	if r != nil && r.arguments != nil {
+		return *r.arguments
+	}
+	return ""
+}
+
+// GetArguments returns the value of the 'arguments' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *QueuePopResponse) GetArguments() (value string, ok bool) {
+	ok = r != nil && r.arguments != nil
+	if ok {
+		value = *r.arguments
 	}
 	return
 }
