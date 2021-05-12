@@ -4,6 +4,10 @@ This document describes the relevant changes between releases of the OCM API
 SDK.
 
 
+== 0.1.176 May 12 2021
+
+- Added Arguments to JobQueue#Pop
+
 == 0.1.175 May 6 2021
 
 - Update `Logger` interface to include a `Fatal` log level.
