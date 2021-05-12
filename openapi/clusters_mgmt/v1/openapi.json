@@ -4896,7 +4896,7 @@
         "description": "_Amazon Web Services_ specific settings of a cluster.\n",
         "properties": {
           "sts": {
-            "description": "STS contains the necessary attributes to support role-based authentication on AWS.\n",
+            "description": "Contains the necessary attributes to support role-based authentication on AWS.\n",
             "$ref": "#/components/schemas/STS"
           },
           "access_key_id": {
@@ -4919,6 +4919,13 @@
             "description": "The subnet ids to be used when installing the cluster.\n",
             "type": "array",
             "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates\n",
+            "type": "object",
+            "additionalProperties": {
               "type": "string"
             }
           }
@@ -5278,21 +5285,25 @@
         }
       },
       "STS": {
-        "description": "STS contains the necessary attributes to support role-based authentication on AWS.\n",
+        "description": "Contains the necessary attributes to support role-based authentication on AWS.\n",
         "properties": {
           "oidc_endpoint_url": {
+            "description": "URL of the location where OIDC configuration and keys are available\n",
             "type": "string"
           },
           "external_id": {
+            "description": "Optional unique identifier when assuming role in another account\n",
             "type": "string"
           },
           "operator_iam_roles": {
+            "description": "List of roles necessary to access the AWS resources of the various operators used during installation\n",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/OperatorIAMRole"
             }
           },
           "role_arn": {
+            "description": "ARN of the AWS role to assume when installing the cluster\n",
             "type": "string"
           }
         }
@@ -6808,15 +6819,18 @@
         }
       },
       "OperatorIAMRole": {
-        "description": "OperatorIAMRole contains the necessary attributes to allow each operator to access the necessary AWS resources\n",
+        "description": "Contains the necessary attributes to allow each operator to access the necessary AWS resources\n",
         "properties": {
           "name": {
+            "description": "Name of the operator\n",
             "type": "string"
           },
           "namespace": {
+            "description": "Namespace where the operator lives in the cluster\n",
             "type": "string"
           },
           "role_arn": {
+            "description": "Role to assume when accessing AWS resources\n",
             "type": "string"
           }
         }

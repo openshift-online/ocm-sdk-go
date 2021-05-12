@@ -21,7 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // STS represents the values of the 'STS' type.
 //
-// STS contains the necessary attributes to support role-based authentication on AWS.
+// Contains the necessary attributes to support role-based authentication on AWS.
 type STS struct {
 	bitmap_          uint32
 	oidcEndpointURL  string
@@ -38,7 +38,7 @@ func (o *STS) Empty() bool {
 // OIDCEndpointURL returns the value of the 'OIDC_endpoint_URL' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// URL of the location where OIDC configuration and keys are available
 func (o *STS) OIDCEndpointURL() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.oidcEndpointURL
@@ -49,7 +49,7 @@ func (o *STS) OIDCEndpointURL() string {
 // GetOIDCEndpointURL returns the value of the 'OIDC_endpoint_URL' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// URL of the location where OIDC configuration and keys are available
 func (o *STS) GetOIDCEndpointURL() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -61,7 +61,7 @@ func (o *STS) GetOIDCEndpointURL() (value string, ok bool) {
 // ExternalID returns the value of the 'external_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// Optional unique identifier when assuming role in another account
 func (o *STS) ExternalID() string {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.externalID
@@ -72,7 +72,7 @@ func (o *STS) ExternalID() string {
 // GetExternalID returns the value of the 'external_ID' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// Optional unique identifier when assuming role in another account
 func (o *STS) GetExternalID() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
@@ -84,7 +84,7 @@ func (o *STS) GetExternalID() (value string, ok bool) {
 // OperatorIAMRoles returns the value of the 'operator_IAM_roles' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// List of roles necessary to access the AWS resources of the various operators used during installation
 func (o *STS) OperatorIAMRoles() []*OperatorIAMRole {
 	if o != nil && o.bitmap_&4 != 0 {
 		return o.operatorIAMRoles
@@ -95,7 +95,7 @@ func (o *STS) OperatorIAMRoles() []*OperatorIAMRole {
 // GetOperatorIAMRoles returns the value of the 'operator_IAM_roles' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// List of roles necessary to access the AWS resources of the various operators used during installation
 func (o *STS) GetOperatorIAMRoles() (value []*OperatorIAMRole, ok bool) {
 	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
@@ -107,7 +107,7 @@ func (o *STS) GetOperatorIAMRoles() (value []*OperatorIAMRole, ok bool) {
 // RoleARN returns the value of the 'role_ARN' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-//
+// ARN of the AWS role to assume when installing the cluster
 func (o *STS) RoleARN() string {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.roleARN
@@ -118,7 +118,7 @@ func (o *STS) RoleARN() string {
 // GetRoleARN returns the value of the 'role_ARN' attribute and
 // a flag indicating if the attribute has a value.
 //
-//
+// ARN of the AWS role to assume when installing the cluster
 func (o *STS) GetRoleARN() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {

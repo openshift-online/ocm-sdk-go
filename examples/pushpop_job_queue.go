@@ -36,7 +36,7 @@ func main() {
 		Debug(true).
 		Build()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: Can't build logger: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't build logger: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -45,14 +45,14 @@ func main() {
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
-		// TODO: REMOVE!!!
-		URL("https://api.stage.openshift.com").
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: Can't build connection: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't build connection: %v\n", err)
 		os.Exit(1)
 	}
-	defer connection.Close()
+	defer func(connection *sdk.Connection) {
+		_ = connection.Close()
+	}(connection)
 
 	// Get the client for the resource that manages the Job Queues:
 	jobQueues := connection.JobQueue().V1()
@@ -64,7 +64,7 @@ func main() {
 	// Push a new job
 	pushResponse, err := client.Push().Arguments("foo bar").SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: Can't push: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't push: %v\n", err)
 		os.Exit(1)
 	}
 	pushID := pushResponse.ID()
@@ -74,20 +74,21 @@ func main() {
 	// Retrieve this job back
 	popResponse, err := client.Pop().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: Can't pop: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't pop: %v\n", err)
 		os.Exit(1)
 	}
 	popID := popResponse.ID()
 	popAttempts := popResponse.Attempts()
 	abandonedAt := popResponse.AbandonedAt()
 	receiptID := popResponse.ReceiptId()
-	fmt.Printf("Popped:\n\tid: %s\n\tattempts: %d\n\tabandoned_at: %s\n\treceipt_id: %s\n",
-		popID, popAttempts, abandonedAt, receiptID)
+	popArguments := popResponse.Arguments()
+	fmt.Printf("Popped:\n\tid: %s\n\targuments: %s\n\tattempts: %d\n\tabandoned_at: %s\n\treceipt_id: %s\n",
+		popID, popArguments, popAttempts, abandonedAt, receiptID)
 
 	// Mark it as success
 	_, err = client.Jobs().Job(popID).Success().ReceiptId(receiptID).SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: Can't success: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't success: %v\n", err)
 		os.Exit(1)
 	}
 

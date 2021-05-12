@@ -88,6 +88,7 @@ type QueuePopServerResponse struct {
 	href        *string
 	id          *string
 	abandonedAt *time.Time
+	arguments   *string
 	attempts    *int
 	createdAt   *time.Time
 	kind        *string
@@ -116,6 +117,14 @@ func (r *QueuePopServerResponse) ID(value string) *QueuePopServerResponse {
 //
 func (r *QueuePopServerResponse) AbandonedAt(value time.Time) *QueuePopServerResponse {
 	r.abandonedAt = &value
+	return r
+}
+
+// Arguments sets the value of the 'arguments' parameter.
+//
+//
+func (r *QueuePopServerResponse) Arguments(value string) *QueuePopServerResponse {
+	r.arguments = &value
 	return r
 }
 

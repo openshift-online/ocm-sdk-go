@@ -71,6 +71,9 @@ func readQueuePopResponse(response *QueuePopResponse, reader io.Reader) error {
 				iterator.ReportError("", err.Error())
 			}
 			response.abandonedAt = &value
+		case "arguments":
+			value := iterator.ReadString()
+			response.arguments = &value
 		case "attempts":
 			value := iterator.ReadInt()
 			response.attempts = &value
@@ -126,6 +129,14 @@ func writeQueuePopResponse(response *QueuePopServerResponse, w http.ResponseWrit
 		}
 		stream.WriteObjectField("abandoned_at")
 		stream.WriteString((*response.abandonedAt).Format(time.RFC3339))
+		count++
+	}
+	if response.arguments != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("arguments")
+		stream.WriteString(*response.arguments)
 		count++
 	}
 	if response.attempts != nil {

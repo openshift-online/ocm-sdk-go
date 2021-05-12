@@ -21,7 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // STSBuilder contains the data and logic needed to build 'STS' objects.
 //
-// STS contains the necessary attributes to support role-based authentication on AWS.
+// Contains the necessary attributes to support role-based authentication on AWS.
 type STSBuilder struct {
 	bitmap_          uint32
 	oidcEndpointURL  string

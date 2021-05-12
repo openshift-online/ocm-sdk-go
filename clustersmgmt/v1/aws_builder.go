@@ -29,6 +29,7 @@ type AWSBuilder struct {
 	accountID       string
 	secretAccessKey string
 	subnetIDs       []string
+	tags            map[string]string
 	privateLink     bool
 }
 
@@ -39,7 +40,7 @@ func NewAWS() *AWSBuilder {
 
 // STS sets the value of the 'STS' attribute to the given value.
 //
-// STS contains the necessary attributes to support role-based authentication on AWS.
+// Contains the necessary attributes to support role-based authentication on AWS.
 func (b *AWSBuilder) STS(value *STSBuilder) *AWSBuilder {
 	b.sts = value
 	if value != nil {
@@ -96,6 +97,19 @@ func (b *AWSBuilder) SubnetIDs(values ...string) *AWSBuilder {
 	return b
 }
 
+// Tags sets the value of the 'tags' attribute to the given value.
+//
+//
+func (b *AWSBuilder) Tags(value map[string]string) *AWSBuilder {
+	b.tags = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *AWSBuilder) Copy(object *AWS) *AWSBuilder {
 	if object == nil {
@@ -117,6 +131,14 @@ func (b *AWSBuilder) Copy(object *AWS) *AWSBuilder {
 	} else {
 		b.subnetIDs = nil
 	}
+	if len(object.tags) > 0 {
+		b.tags = map[string]string{}
+		for k, v := range object.tags {
+			b.tags[k] = v
+		}
+	} else {
+		b.tags = nil
+	}
 	return b
 }
 
@@ -137,6 +159,12 @@ func (b *AWSBuilder) Build() (object *AWS, err error) {
 	if b.subnetIDs != nil {
 		object.subnetIDs = make([]string, len(b.subnetIDs))
 		copy(object.subnetIDs, b.subnetIDs)
+	}
+	if b.tags != nil {
+		object.tags = make(map[string]string)
+		for k, v := range b.tags {
+			object.tags[k] = v
+		}
 	}
 	return
 }
