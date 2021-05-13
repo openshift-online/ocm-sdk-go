@@ -5016,17 +5016,7 @@
             "description": "Self link.\n",
             "type": "string"
           },
-          "byoc": {
-            "type": "boolean"
-          },
           "sku": {
-            "type": "string"
-          },
-          "allowed": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "availability_zone_type": {
             "type": "string"
           },
           "created_at": {
@@ -5034,12 +5024,6 @@
             "format": "date-time"
           },
           "organization_id": {
-            "type": "string"
-          },
-          "resource_name": {
-            "type": "string"
-          },
-          "resource_type": {
             "type": "string"
           },
           "sku_count": {

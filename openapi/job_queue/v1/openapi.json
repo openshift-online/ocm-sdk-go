@@ -244,8 +244,20 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "abandoned_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
                   "arguments": {
                     "type": "string"
+                  },
+                  "attempts": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "created_at": {
+                    "type": "string",
+                    "format": "date-time"
                   }
                 }
               }
