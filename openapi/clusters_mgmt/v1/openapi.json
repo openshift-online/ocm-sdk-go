@@ -5291,6 +5291,10 @@
             "description": "URL of the location where OIDC configuration and keys are available\n",
             "type": "string"
           },
+          "custom_iam_roles": {
+            "description": "Custom IAM roles to use for the instance profiles of the master and worker instances\n",
+            "$ref": "#/components/schemas/CustomIAMRoles"
+          },
           "external_id": {
             "description": "Optional unique identifier when assuming role in another account\n",
             "type": "string"
@@ -6160,6 +6164,19 @@
           "state": {
             "description": "The overall state of the cluster.\n",
             "$ref": "#/components/schemas/ClusterState"
+          }
+        }
+      },
+      "CustomIAMRoles": {
+        "description": "Contains the necessary attributes to support role-based authentication on AWS.\n",
+        "properties": {
+          "master_iam_role": {
+            "description": "The name of the IAM role that will be attached to master instances\n",
+            "type": "string"
+          },
+          "worker_iam_role": {
+            "description": "The name of the IAM role that will be attached to worker instances\n",
+            "type": "string"
           }
         }
       },
