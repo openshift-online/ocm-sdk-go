@@ -557,30 +557,6 @@ var _ = Describe("Handler", func() {
 		}`))
 	})
 
-	It("Allows access token authorization", func() {
-		// Prepare the next handler, which should be called:
-		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-		})
-
-		// Prepare the handler:
-		handler, err := NewHandler().
-			Logger(logger).
-			KeysFile(keysFile).
-			Next(next).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
-
-		// Send the request with AccessToken authorization header
-		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
-		request.Header.Set("Authorization", "AccessToken 123")
-		recorder := httptest.NewRecorder()
-		handler.ServeHTTP(recorder, request)
-
-		// Verify that the request is accepted:
-		Expect(recorder.Code).To(Equal(http.StatusOK))
-	})
-
 	It("Loads keys from file", func() {
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
