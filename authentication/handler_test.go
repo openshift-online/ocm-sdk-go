@@ -151,7 +151,7 @@ var _ = Describe("Handler", func() {
 		Expect(err.Error()).To(ContainSubstring("mandatory"))
 	})
 
-	It("Rejects request without authorization header", func() {
+	It("Rejects request without authorization header or cookie", func() {
 		// Prepare the next handler, which should not be called:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			Expect(true).To(BeFalse())
@@ -178,7 +178,7 @@ var _ = Describe("Handler", func() {
 			"id": "401",
 			"href": "/api/clusters_mgmt/v1/errors/401",
 			"code": "CLUSTERS-MGMT-401",
-			"reason": "Request doesn't contain the 'Authorization' header"
+			"reason": "Request doesn't contain the 'Authorization' header or the 'cs_jwt' cookie"
 		}`))
 	})
 
@@ -1389,6 +1389,156 @@ var _ = Describe("Handler", func() {
 		// Send the request:
 		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
 		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+	})
+
+	It("Accepts good token from cookie", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare the token:
+		bearer := MakeTokenString("Bearer", 15*time.Minute)
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.AddCookie(&http.Cookie{
+			Name:  "cs_jwt",
+			Value: bearer,
+		})
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusOK))
+	})
+
+	It("Rejects bad token from cookie", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.AddCookie(&http.Cookie{
+			Name:  "cs_jwt",
+			Value: "junk",
+		})
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+	})
+
+	It("Ignores cookie when header present", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare the token:
+		bearer := MakeTokenString("Bearer", 15*time.Minute)
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		request.AddCookie(&http.Cookie{
+			Name:  "cs_jwt",
+			Value: "junk",
+		})
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusOK))
+	})
+
+	It("Honours custom cookie", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare the token:
+		bearer := MakeTokenString("Bearer", 15*time.Minute)
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Cookie("my_cookie").
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.AddCookie(&http.Cookie{
+			Name:  "my_cookie",
+			Value: bearer,
+		})
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusOK))
+	})
+
+	It("Ignores default cookie when custom cookie is specified", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare the token:
+		bearer := MakeTokenString("Bearer", 15*time.Minute)
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Cookie("my_cookie").
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.AddCookie(&http.Cookie{
+			Name:  "cs_jwt",
+			Value: bearer,
+		})
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, request)
 
