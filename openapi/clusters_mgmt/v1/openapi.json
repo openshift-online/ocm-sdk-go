@@ -5291,13 +5291,13 @@
             "description": "URL of the location where OIDC configuration and keys are available\n",
             "type": "string"
           },
-          "custom_iam_roles": {
-            "description": "Custom IAM roles to use for the instance profiles of the master and worker instances\n",
-            "$ref": "#/components/schemas/CustomIAMRoles"
-          },
           "external_id": {
             "description": "Optional unique identifier when assuming role in another account\n",
             "type": "string"
+          },
+          "instance_iam_roles": {
+            "description": "Instance IAM roles to use for the instance profiles of the master and worker instances\n",
+            "$ref": "#/components/schemas/InstanceIAMRoles"
           },
           "operator_iam_roles": {
             "description": "List of roles necessary to access the AWS resources of the various operators used during installation\n",
@@ -5937,6 +5937,14 @@
           }
         }
       },
+      "ClusterConfigurationMode": {
+        "description": "Configuration mode of a cluster.\n",
+        "type": "string",
+        "enum": [
+          "full",
+          "read_only"
+        ]
+      },
       "ClusterConsole": {
         "description": "Information about the console of a cluster.\n",
         "properties": {
@@ -6149,6 +6157,10 @@
             "description": "DNSReady from Provisioner\n",
             "type": "boolean"
           },
+          "configuration_mode": {
+            "description": "Configuration mode\n",
+            "$ref": "#/components/schemas/ClusterConfigurationMode"
+          },
           "description": {
             "description": "Detailed description of the cluster status.\n",
             "type": "string"
@@ -6164,19 +6176,6 @@
           "state": {
             "description": "The overall state of the cluster.\n",
             "$ref": "#/components/schemas/ClusterState"
-          }
-        }
-      },
-      "CustomIAMRoles": {
-        "description": "Contains the necessary attributes to support role-based authentication on AWS.\n",
-        "properties": {
-          "master_iam_role": {
-            "description": "The name of the IAM role that will be attached to master instances\n",
-            "type": "string"
-          },
-          "worker_iam_role": {
-            "description": "The name of the IAM role that will be attached to worker instances\n",
-            "type": "string"
           }
         }
       },
@@ -6500,6 +6499,19 @@
             "additionalProperties": {
               "type": "string"
             }
+          }
+        }
+      },
+      "InstanceIAMRoles": {
+        "description": "Contains the necessary attributes to support role-based authentication on AWS.\n",
+        "properties": {
+          "master_role_arn": {
+            "description": "The IAM role ARN that will be attached to master instances\n",
+            "type": "string"
+          },
+          "worker_role_arn": {
+            "description": "The IAM role ARN that will be attached to worker instances\n",
+            "type": "string"
           }
         }
       },
