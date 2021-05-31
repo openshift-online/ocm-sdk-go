@@ -4083,129 +4083,6 @@
         }
       }
     },
-    "/api/clusters_mgmt/v1/dashboards": {
-      "get": {
-        "description": "Retrieves a list of dashboards.\n",
-        "parameters": [
-          {
-            "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the dashboard instead of\nthe names of the columns of a table. For example, in order to sort the dashboards\ndescending by name the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the dashboard instead of\nthe names of the columns of a table. For example, in order to retrieve all the\ndashboards with a name starting with `my` the value should be:\n\n\n```\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\ndashboards that the user has permission to see will be returned.\n",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "description": "Retrieved list of dashboards.\n",
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Dashboard"
-                      }
-                    },
-                    "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/clusters_mgmt/v1/dashboards/{dashboard_id}": {
-      "get": {
-        "description": "Retrieves the details of the dashboard.\n",
-        "parameters": [
-          {
-            "name": "dashboard_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dashboard"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/clusters_mgmt/v1/events": {
       "post": {
         "description": "Adds a new event to be tracked. When sending a new event request,\nit gets tracked in Prometheus, Pendo, CloudWatch, or whichever\nanalytics client is configured as part of clusters service. This\nallows for reporting on events that happen outside of a regular API\nrequest, but are found to be useful for understanding customer\nneeds and possible blockers.\n",
@@ -6179,34 +6056,6 @@
           }
         }
       },
-      "Dashboard": {
-        "description": "Collection of metrics intended to render a graphical dashboard.\n",
-        "properties": {
-          "kind": {
-            "description": "Indicates the type of this object. Will be 'Dashboard' if this is a complete object or 'DashboardLink' if it is just a link.\n",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique identifier of the object.\n",
-            "type": "string"
-          },
-          "href": {
-            "description": "Self link.\n",
-            "type": "string"
-          },
-          "metrics": {
-            "description": "Metrics included in the dashboard.\n",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Metric"
-            }
-          },
-          "name": {
-            "description": "Name of the dashboard.\n",
-            "type": "string"
-          }
-        }
-      },
       "Event": {
         "description": "Representation of a trackable event.\n",
         "properties": {
@@ -6710,22 +6559,6 @@
           "small"
         ]
       },
-      "Metric": {
-        "description": "Metric included in a dashboard.\n",
-        "properties": {
-          "name": {
-            "description": "Name of the metric.\n",
-            "type": "string"
-          },
-          "vector": {
-            "description": "Samples of the metric.\n",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Sample"
-            }
-          }
-        }
-      },
       "Network": {
         "description": "Network configuration of a cluster.\n",
         "properties": {
@@ -6919,21 +6752,6 @@
           "hive_config": {
             "description": "Contains the configuration for Hive\n",
             "$ref": "#/components/schemas/ServerConfig"
-          }
-        }
-      },
-      "Sample": {
-        "description": "Sample of a metric.\n",
-        "properties": {
-          "time": {
-            "description": "Time when the sample was obtained.\n",
-            "type": "string",
-            "format": "date-time"
-          },
-          "value": {
-            "description": "Numeric value of the sample.\n",
-            "type": "number",
-            "format": "float"
           }
         }
       },

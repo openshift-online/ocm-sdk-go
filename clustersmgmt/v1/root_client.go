@@ -91,16 +91,6 @@ func (c *Client) Clusters() *ClustersClient {
 	)
 }
 
-// Dashboards returns the target 'dashboards' resource.
-//
-// Reference to the resource that manages the collection of dashboards.
-func (c *Client) Dashboards() *DashboardsClient {
-	return NewDashboardsClient(
-		c.transport,
-		path.Join(c.path, "dashboards"),
-	)
-}
-
 // Events returns the target 'events' resource.
 //
 // Reference to the resource that manages the collection of trackable events.
