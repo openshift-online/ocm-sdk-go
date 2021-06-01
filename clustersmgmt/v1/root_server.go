@@ -34,6 +34,16 @@ type Server interface {
 	// infrastructure access roles.
 	AWSInfrastructureAccessRoles() AWSInfrastructureAccessRolesServer
 
+	// AWSInquiries returns the target 'AWS_inquiries' resource.
+	//
+	// Reference to the resource that manages the collection of aws inquiries.
+	AWSInquiries() AWSInquiriesServer
+
+	// GCPInquiries returns the target 'GCP_inquiries' resource.
+	//
+	// Reference to the resource that manages the collection of gcp inquiries.
+	GCPInquiries() GCPInquiriesServer
+
 	// Addons returns the target 'add_ons' resource.
 	//
 	// Reference to the resource that manages the collection of add-ons.
@@ -99,6 +109,20 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchAWSInfrastructureAccessRoles(w, r, target, segments[1:])
+	case "aws_inquiries":
+		target := server.AWSInquiries()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchAWSInquiries(w, r, target, segments[1:])
+	case "gcp_inquiries":
+		target := server.GCPInquiries()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchGCPInquiries(w, r, target, segments[1:])
 	case "addons":
 		target := server.Addons()
 		if target == nil {
