@@ -6515,6 +6515,10 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "ccs_only": {
+            "description": "'true' if the instance type is supported only for CCS clusters, 'false' otherwise.\n",
+            "type": "boolean"
+          },
           "cpu": {
             "description": "The amount of cpu's of the machine type.\n",
             "$ref": "#/components/schemas/Value"
@@ -6526,6 +6530,10 @@
           "cloud_provider": {
             "description": "Link to the cloud provider that the machine type belongs to.\n",
             "$ref": "#/components/schemas/CloudProvider"
+          },
+          "generic_name": {
+            "description": "Generic name for quota purposes, for example `highmem-4`.\nCloud provider agnostic - many values are shared between \"similar\"\nmachine types on different providers.\nCorresponds to `resource_name` values in \"compute.node\"  quota cost data.\n",
+            "type": "string"
           },
           "memory": {
             "description": "The amount of memory of the machine type.\n",
@@ -6545,6 +6553,7 @@
         "description": "Machine type category.\n",
         "type": "string",
         "enum": [
+          "accelerated_computing",
           "compute_optimized",
           "general_purpose",
           "memory_optimized"
