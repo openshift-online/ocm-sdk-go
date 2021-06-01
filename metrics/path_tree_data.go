@@ -125,6 +125,10 @@ var pathTreeData = `{
         "aws_infrastructure_access_roles": {
           "-": null
         },
+        "aws_inquiries": {
+          "regions": null,
+          "vpcs": null
+        },
         "cloud_providers": {
           "-": {
             "available_regions": null,
@@ -193,6 +197,12 @@ var pathTreeData = `{
         "events": null,
         "flavours": {
           "-": null
+        },
+        "gcp_inquiries": {
+          "encryption_keys": null,
+          "key_rings": null,
+          "regions": null,
+          "vpcs": null
         },
         "machine_types": null,
         "products": {

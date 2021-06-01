@@ -399,6 +399,166 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/aws_inquiries/regions": {
+      "post": {
+        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This list doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudProviderData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of regions.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CloudRegion"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/aws_inquiries/vpcs": {
+      "post": {
+        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudProviderData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of cloud VPC.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CloudVPC"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/cloud_providers": {
       "get": {
         "description": "Retrieves the list of cloud providers.\n",
@@ -4318,6 +4478,326 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/gcp_inquiries/encryption_keys": {
+      "post": {
+        "description": "Retrieves the list of encryption keys.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudProviderData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of encryption keys.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/EncryptionKey"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/gcp_inquiries/key_rings": {
+      "post": {
+        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudProviderData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of key rings.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/KeyRing"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/gcp_inquiries/regions": {
+      "post": {
+        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This list doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudProviderData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of regions.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CloudRegion"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/gcp_inquiries/vpcs": {
+      "post": {
+        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudProviderData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of cloud VPC.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CloudVPC"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/machine_types": {
       "get": {
         "description": "Retrieves the list of machine types.\n",
@@ -5186,6 +5666,10 @@
           "role_arn": {
             "description": "ARN of the AWS role to assume when installing the cluster\n",
             "type": "string"
+          },
+          "support_role_arn": {
+            "description": "ARN of the AWS role used by SREs to access the cluster AWS account in order to provide support\n",
+            "type": "string"
           }
         }
       },
@@ -5542,6 +6026,22 @@
           "standard"
         ]
       },
+      "CloudVPC": {
+        "description": "Description of a cloud provider virtual private cloud.\n",
+        "properties": {
+          "name": {
+            "description": "Name of virtual private cloud\n",
+            "type": "string"
+          },
+          "subnets": {
+            "description": "List of subnets used by the virtual private cloud.\n",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "CloudProvider": {
         "description": "Cloud provider.\n",
         "properties": {
@@ -5564,6 +6064,31 @@
           "name": {
             "description": "Human friendly identifier of the cloud provider, for example `aws`.\n",
             "type": "string"
+          }
+        }
+      },
+      "CloudProviderData": {
+        "description": "Description of a cloud provider data used for cloud provider inquiries.\n",
+        "properties": {
+          "aws": {
+            "description": "Amazon Web Services settings.\n",
+            "$ref": "#/components/schemas/AWS"
+          },
+          "gcp": {
+            "description": "Google cloud platform settings.\n",
+            "$ref": "#/components/schemas/GCP"
+          },
+          "key_location": {
+            "description": "Key location\n",
+            "type": "string"
+          },
+          "key_ring_name": {
+            "description": "Key ring name\n",
+            "type": "string"
+          },
+          "region": {
+            "description": "Region\n",
+            "$ref": "#/components/schemas/CloudRegion"
           }
         }
       },
@@ -6056,6 +6581,27 @@
           }
         }
       },
+      "EncryptionKey": {
+        "description": "Description of a cloud provider encryption key.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'EncryptionKey' if this is a complete object or 'EncryptionKeyLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the encryption key.\n",
+            "type": "string"
+          }
+        }
+      },
       "Event": {
         "description": "Representation of a trackable event.\n",
         "properties": {
@@ -6360,6 +6906,27 @@
           },
           "worker_role_arn": {
             "description": "The IAM role ARN that will be attached to worker instances\n",
+            "type": "string"
+          }
+        }
+      },
+      "KeyRing": {
+        "description": "Description of a cloud provider key ring.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'KeyRing' if this is a complete object or 'KeyRingLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the key ring.\n",
             "type": "string"
           }
         }
