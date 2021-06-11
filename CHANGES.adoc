@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.186 Jun 11 2021
+
+- Update model to v0.0.132
+** Added Disable workload monitoring
+** add authorizations feature review and self feature review models.
+** add locators for feature review and self feature review
+** Add ccs_only flag for cloud regions
+
 == 0.1.185 Jun 10 2021
 
 - Add `All` and `Any` functions to the logging package.
