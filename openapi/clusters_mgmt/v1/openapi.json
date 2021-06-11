@@ -6107,6 +6107,10 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "ccs_only": {
+            "description": "'true' if the region is supported only for CCS clusters, 'false' otherwise.\n",
+            "type": "boolean"
+          },
           "cloud_provider": {
             "description": "Link to the cloud provider that the region belongs to.\n",
             "$ref": "#/components/schemas/CloudProvider"
@@ -6194,6 +6198,10 @@
             "description": "Date and time when the cluster was initially created, using the\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].\n",
             "type": "string",
             "format": "date-time"
+          },
+          "disable_user_workload_monitoring": {
+            "description": "Indicates whether the User workload monitoring is enabled or not\nIt is enabled by default\n",
+            "type": "boolean"
           },
           "display_name": {
             "description": "Name of the cluster for display purposes. It can contain any\ncharacters, including spaces.\n",

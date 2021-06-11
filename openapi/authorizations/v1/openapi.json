@@ -158,6 +158,42 @@
         }
       }
     },
+    "/api/authorizations/v1/feature_review": {
+      "post": {
+        "description": "Reviews a user's ability to toggle a feature\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureReviewResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/authorizations/v1/resource_review": {
       "post": {
         "description": "Returns the list of identifiers of the resources that an account can\nperform the specified action upon.\n",
@@ -249,6 +285,42 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SelfCapabilityReviewResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/authorizations/v1/self_feature_review": {
+      "post": {
+        "description": "Reviews ability to toggle a feature\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelfFeatureReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelfFeatureReviewResponse"
                 }
               }
             }
@@ -475,6 +547,32 @@
           }
         }
       },
+      "FeatureReviewRequest": {
+        "description": "Representation of a feature review\n",
+        "properties": {
+          "account_username": {
+            "description": "Defines the username of the account of which access is being reviewed \n",
+            "type": "string"
+          },
+          "feature": {
+            "description": "Indicates the feature which can be toggled\n",
+            "type": "string"
+          }
+        }
+      },
+      "FeatureReviewResponse": {
+        "description": "Representation of a feature review response\n",
+        "properties": {
+          "enabled": {
+            "description": "Defines whether the feature can be toggled\n",
+            "type": "boolean"
+          },
+          "feature_id": {
+            "description": "Defines the feature id which can be toggled\n",
+            "type": "string"
+          }
+        }
+      },
       "ResourceReview": {
         "description": "Contains the result of performing a resource access review.\n",
         "properties": {
@@ -636,6 +734,28 @@
         "description": "Representation of a capability review response.\n",
         "properties": {
           "result": {
+            "type": "string"
+          }
+        }
+      },
+      "SelfFeatureReviewRequest": {
+        "description": "Representation of a feature review performed against oneself\n",
+        "properties": {
+          "feature": {
+            "description": "Indicates the feature which can be toggled\n",
+            "type": "string"
+          }
+        }
+      },
+      "SelfFeatureReviewResponse": {
+        "description": "Representation of a feature review response, performed against oneself\n",
+        "properties": {
+          "enabled": {
+            "description": "Defines whether the feature can be toggled\n",
+            "type": "boolean"
+          },
+          "feature_id": {
+            "description": "Defines the feature id which can be toggled\n",
             "type": "string"
           }
         }
