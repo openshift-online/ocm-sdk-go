@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.186 Jun 11 2021
+
+- Update model to v0.0.131
+** Add Disable workload monitoring Field to Cluster Type 
+** Add Authorizations Feature Review and Self Feature Review
+
 == 0.1.185 Jun 10 2021
 
 - Add `All` and `Any` functions to the logging package.
