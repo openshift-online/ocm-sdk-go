@@ -6195,6 +6195,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "disable_user_workload_monitoring": {
+            "description": "Indicates whether the User workload monitoring is enabled or not\nIt is enabled by default\n",
+            "type": "boolean"
+          },
           "display_name": {
             "description": "Name of the cluster for display purposes. It can contain any\ncharacters, including spaces.\n",
             "type": "string"
