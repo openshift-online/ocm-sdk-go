@@ -4685,6 +4685,12 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            }
+          },
           "created_at": {
             "type": "string",
             "format": "date-time"
