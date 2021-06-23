@@ -60,7 +60,7 @@ var _ = Describe("Alternative URLs", func() {
 		oidServer, oidCA = MakeTCPTLSServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
-				RespondWithTokens(accessToken, refreshToken),
+				RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
 			),
 		)
 		oidURL = oidServer.URL()

@@ -49,7 +49,7 @@ var _ = Describe("Metrics enabled", func() {
 		oidServer = MakeTCPServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
-				RespondWithTokens(accessToken, refreshToken),
+				RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
 			),
 		)
 
@@ -165,7 +165,7 @@ var _ = Describe("Metrics disabled", func() {
 		oidServer = MakeTCPServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
-				RespondWithTokens(accessToken, refreshToken),
+				RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
 			),
 		)
 

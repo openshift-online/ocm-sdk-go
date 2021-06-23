@@ -55,7 +55,7 @@ var _ = Describe("Methods", func() {
 		oidServer, oidCA = MakeTCPTLSServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
-				RespondWithTokens(accessToken, refreshToken),
+				RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
 			),
 		)
 

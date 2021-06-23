@@ -65,7 +65,7 @@ var _ = Describe("Redirect", func() {
 		oidServer, oidCA = MakeTCPTLSServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
-				RespondWithTokens(accessToken, refreshToken),
+				RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
 			),
 		)
 		oidURL = oidServer.URL()

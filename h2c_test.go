@@ -48,7 +48,7 @@ var _ = Describe("H2C", func() {
 		oidServer = MakeTCPServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
-				RespondWithTokens(accessToken, refreshToken),
+				RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
 			),
 		)
 	})

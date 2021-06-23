@@ -75,7 +75,7 @@ func MakeTokenString(typ string, life time.Duration) string {
 	return token.Raw
 }
 
-func RespondWithTokens(accessToken, refreshToken string) http.HandlerFunc {
+func RespondWithAccessAndRefreshTokens(accessToken, refreshToken string) http.HandlerFunc {
 	return RespondWithJSONTemplate(
 		http.StatusOK,
 		`{
@@ -84,6 +84,16 @@ func RespondWithTokens(accessToken, refreshToken string) http.HandlerFunc {
 		}`,
 		"AccessToken", accessToken,
 		"RefreshToken", refreshToken,
+	)
+}
+
+func RespondWithAccessToken(accessToken string) http.HandlerFunc {
+	return RespondWithJSONTemplate(
+		http.StatusOK,
+		`{
+			"access_token": "{{ .AccessToken }}"
+		}`,
+		"AccessToken", accessToken,
 	)
 }
 

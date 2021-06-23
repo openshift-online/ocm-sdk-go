@@ -47,7 +47,7 @@ var _ = Describe("Unix sockets", func() {
 		oidServer, oidSocket = MakeUnixServer()
 		oidServer.AppendHandlers(
 			ghttp.CombineHandlers(
-				RespondWithTokens(accessToken, refreshToken),
+				RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
 			),
 		)
 		oidURL = "unix://127.0.0.1" + oidSocket
