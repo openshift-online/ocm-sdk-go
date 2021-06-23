@@ -5392,6 +5392,10 @@
             "description": "Indicates whether to include red hat associates in the email notification\n",
             "type": "boolean"
           },
+          "internal_only": {
+            "description": "Indicates whether the service log is internal only to RH\n",
+            "type": "boolean"
+          },
           "subject": {
             "description": "The email subject\n",
             "type": "string"
