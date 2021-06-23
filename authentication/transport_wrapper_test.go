@@ -896,6 +896,90 @@ var _ = Describe("Tokens", func() {
 			_, _, err = wrapper.Tokens(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
+
+		It("Doesn't fail if the server returns a refresh token", func() {
+			// Generate the tokens:
+			accessToken := MakeTokenString("Bearer", 5*time.Minute)
+			refreshToken := MakeTokenString("Refresh", 10*time.Hour)
+
+			// Configure the server:
+			server.AppendHandlers(
+				CombineHandlers(
+					VerifyClientCredentialsGrant("myclient", "mysecret"),
+					RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
+				),
+			)
+
+			// Create the wrapper:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				TokenURL(server.URL()).
+				TrustedCA(ca).
+				Client("myclient", "mysecret").
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Get the token:
+			returnedAccess, returnedRefresh, err := wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(accessToken))
+			Expect(returnedRefresh).To(Equal(refreshToken))
+		})
+
+		It("Uses client credentials grant even if it has refresh token", func() {
+			// Generate the tokens:
+			expiredAccess := MakeTokenString("Bearer", -5*time.Minute)
+			validAccess := MakeTokenString("Bearer", 5*time.Minute)
+			validRefresh := MakeTokenString("Refresh", 10*time.Hour)
+
+			// Configure the server so that it returns a expired access token and a
+			// valid refresh token for the first request, and then a valid access token
+			// for the second request. In both cases the client should be using the
+			// client credentials grant.
+			server.AppendHandlers(
+				CombineHandlers(
+					VerifyClientCredentialsGrant("myclient", "mysecret"),
+					RespondWithAccessAndRefreshTokens(expiredAccess, validRefresh),
+				),
+				CombineHandlers(
+					VerifyClientCredentialsGrant("myclient", "mysecret"),
+					RespondWithAccessAndRefreshTokens(validAccess, validRefresh),
+				),
+			)
+
+			// Create the wrapper:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				TokenURL(server.URL()).
+				TrustedCA(ca).
+				Client("myclient", "mysecret").
+				Tokens(expiredAccess, validRefresh).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Force the initial token request. This will return an expired access token
+			// and a valid refresh token, that way when we get the tokens again the
+			// wrapper should send another request, but using the client credentials
+			// grant and ignoring the refresh token.
+			returnedAccess, returnedRefresh, err := wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(expiredAccess))
+			Expect(returnedRefresh).To(Equal(validRefresh))
+
+			// Force another request:
+			returnedAccess, returnedRefresh, err = wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(validAccess))
+			Expect(returnedRefresh).To(Equal(validRefresh))
+		})
 	})
 
 	Describe("Retry for getting access token", func() {
