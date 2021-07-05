@@ -38,7 +38,9 @@ examples:
 
 .PHONY: test tests
 test tests:
-	ginkgo -p -r .
+	# Currently we need to skip the tests of the `leadership` package
+	# because the Jenkins environment isn't prepared to run `podman`.
+	ginkgo -p -r --skipPackage=leadership
 
 .PHONY: fmt
 fmt:
