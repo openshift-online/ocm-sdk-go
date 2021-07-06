@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.194 Jul 6 2021
+
+- Update to version 0.0.38 of the metamodel in order to fix a conflict between
+  `github.com/golang/glog` and `github.com/istio/glog` that prevents building
+  packages that use the SDK.
+
 == 0.1.193 Jul 6 2021
 
 - Update the version number in the `version.go` file.
