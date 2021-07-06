@@ -287,6 +287,10 @@
           "timestamp": {
             "type": "string",
             "format": "date-time"
+          },
+          "username": {
+            "description": "The username that triggered the event (if available).\n",
+            "type": "string"
           }
         }
       },
