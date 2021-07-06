@@ -70,8 +70,9 @@ type Flag struct {
 // NewFlag creates a builder that can then be used to configure and create a leadership flag.
 func NewFlag() *FlagBuilder {
 	return &FlagBuilder{
-		interval: defaultFlagInterval,
-		random:   defaultFlagRandomness,
+		interval:          defaultFlagInterval,
+		random:            defaultFlagRandomness,
+		metricsRegisterer: prometheus.DefaultRegisterer,
 	}
 }
 
@@ -201,7 +202,7 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 
 	// Register the metrics:
 	var stateMetric *prometheus.GaugeVec
-	if b.metricsSubsystem != "" {
+	if b.metricsSubsystem != "" && b.metricsRegisterer != nil {
 		stateMetric = prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Subsystem: b.metricsSubsystem,
