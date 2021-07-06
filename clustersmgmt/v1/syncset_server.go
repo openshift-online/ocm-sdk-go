@@ -23,7 +23,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/istio/glog"
+	"github.com/golang/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
