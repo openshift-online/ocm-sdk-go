@@ -24,7 +24,7 @@ import (
 	"net/http"
 	time "time"
 
-	"github.com/golang/glog"
+	"github.com/istio/glog"
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
