@@ -3,9 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.193 Jul 6 2021
+
+- Update the version number in the `version.go` file.
+
 == 0.1.192 Jul 6 2021
 
-- Update model to v0.0.135
+- Fix initialization of metrics registerer.
+- Update model to v0.0.135:
+** Add user name to service log `LogEntry`.
 
 == 0.1.191 Jul 5 2021
 
