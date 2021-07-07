@@ -307,7 +307,7 @@ func (f *Flag) check() {
 		return
 	}
 
-	// Try load the state:
+	// Try to load the state:
 	found, holder, version, timestamp, err := f.loadState()
 	if err != nil {
 		f.logger.Error(
@@ -428,7 +428,7 @@ func (f *Flag) check() {
 		}
 		f.logger.Debug(
 			ctx,
-			"Process '%s' sucessfully updated holder for flag '%s'",
+			"Process '%s' successfully updated holder for flag '%s'",
 			f.process, f.name,
 		)
 		f.raise(ctx)
@@ -452,7 +452,7 @@ func (f *Flag) check() {
 func (f *Flag) schedule(ctx context.Context, d time.Duration) {
 	// Adjust the given duration adding or subtracting a random amount. For example, if the
 	// random factor given in the configuration is 0.1 will add or sustract up to a 10% of the
-	// duration. This is convenient to avoid having all the process doning their checks
+	// duration. This is convenient to avoid having all the process doing their checks
 	// simultaneously when they have been started simultaneously.
 	factor := f.random * (1 - 2*rand.Float64())
 	delta := time.Duration(float64(d) * factor)
