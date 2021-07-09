@@ -17,7 +17,6 @@ limitations under the License.
 package testing
 
 import (
-	"bytes"
 	"crypto/tls"
 	"encoding/pem"
 	"io/ioutil"
@@ -26,8 +25,6 @@ import (
 	"net/http"
 	"net/url"
 	"path/filepath"
-	"regexp"
-	"text/template"
 
 	"github.com/onsi/gomega/ghttp"
 	"golang.org/x/net/http2"
@@ -254,7 +251,6 @@ func RespondWithCookie(name, value string) http.HandlerFunc {
 			Name:  name,
 			Value: value,
 		})
-		return
 	}
 }
 
@@ -265,88 +261,5 @@ func VerifyCookie(name, value string) http.HandlerFunc {
 		Expect(err).ToNot(HaveOccurred())
 		Expect(cookie).ToNot(BeNil())
 		Expect(cookie.Value).To(Equal(value))
-		return
 	}
 }
-
-// EvaluateTemplate generates a string from the given templlate source and name value pairs. For
-// example the following code:
-//
-//	EvaluateTemplate(
-//		`{
-//			"access_token": "{{ .AccessToken }}"
-//			"refresh_token": "{{ .RefreshToken }}"
-//		}`,
-//		"AccessToken", "myaccesstoken",
-//		"RefreshToken", "myrefreshtoken",
-//	)
-//
-// Will generate the following string:
-//
-//	{
-//		"access_token": "myaccesstoken"
-//		"access_token": "myrefreshtoken"
-//	}
-//
-// To simplify embeding of the templates in Go source the function also removes the leading tabs
-// from the generated text.
-func EvaluateTemplate(source string, args ...interface{}) string {
-	// Check that there is an even number of args, and that the first of each pair is a string:
-	count := len(args)
-	Expect(count%2).To(
-		Equal(0),
-		"Template '%s' should have an even number of arguments, but it has %d",
-		source, count,
-	)
-	for i := 0; i < count; i = i + 2 {
-		name := args[i]
-		_, ok := name.(string)
-		Expect(ok).To(
-			BeTrue(),
-			"Argument %d of template '%s' is a key, so it should be a string, "+
-				"but its type is %T",
-			i, source, name,
-		)
-	}
-
-	// Put the variables in the map that will be passed as the data object for the execution of
-	// the template:
-	data := make(map[string]interface{})
-	for i := 0; i < count; i = i + 2 {
-		name := args[i].(string)
-		value := args[i+1]
-		data[name] = value
-	}
-
-	// Parse the template:
-	tmpl, err := template.New("").Parse(source)
-	Expect(err).ToNot(
-		HaveOccurred(),
-		"Can't parse template '%s': %v",
-		source, err,
-	)
-
-	// Execute the template:
-	buffer := new(bytes.Buffer)
-	err = tmpl.Execute(buffer, data)
-	Expect(err).ToNot(
-		HaveOccurred(),
-		"Can't execute template '%s': %v",
-		source, err,
-	)
-	result := buffer.String()
-
-	// Remove the leading tabs:
-	result = RemoveLeadingTabs(result)
-
-	return result
-}
-
-// RemoveLeadingTabs removes the leading tabs from the lines of the given string.
-func RemoveLeadingTabs(s string) string {
-	return leadingTabsRE.ReplaceAllString(s, "")
-}
-
-// leadingTabsRE is the regular expression used to remove leading tabs from strings generated with
-// the EvaluateTemplate function.
-var leadingTabsRE = regexp.MustCompile(`(?m)^\t*`)
