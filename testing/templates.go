@@ -21,6 +21,8 @@ import (
 	"regexp"
 	"text/template"
 
+	"github.com/onsi/gomega/types"
+
 	. "github.com/onsi/gomega" // nolint
 )
 
@@ -95,6 +97,12 @@ func EvaluateTemplate(source string, args ...interface{}) string {
 	result = RemoveLeadingTabs(result)
 
 	return result
+}
+
+// MatchJSONTemplate succeeds if actual is a string or stringer of JSON that matches the result of
+// evaluating the given template with the given arguments.
+func MatchJSONTemplate(template string, args ...interface{}) types.GomegaMatcher {
+	return MatchJSON(EvaluateTemplate(template, args...))
 }
 
 // RemoveLeadingTabs removes the leading tabs from the lines of the given string.
