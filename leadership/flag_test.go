@@ -22,9 +22,8 @@ import (
 	"fmt"
 	"time"
 
-	. "github.com/onsi/ginkgo" // nolint
-	. "github.com/onsi/gomega" // nolint
-
+	. "github.com/onsi/ginkgo"                         // nolint
+	. "github.com/onsi/gomega"                         // nolint
 	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
 
@@ -215,7 +214,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("my_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
@@ -274,7 +273,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("my_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
@@ -322,7 +321,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("my_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
@@ -371,7 +370,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("my_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
@@ -402,7 +401,7 @@ var _ = Describe("Flag behaviour", func() {
 					Name("my_flag").
 					Process(fmt.Sprintf("my_process_%d", i)).
 					Interval(100 * time.Millisecond).
-					Random(0).
+					Jitter(0).
 					Build(ctx)
 				Expect(err).ToNot(HaveOccurred())
 			}
@@ -458,7 +457,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("first_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 
@@ -474,7 +473,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("second_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -511,7 +510,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("first_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -531,7 +530,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("second_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -566,7 +565,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("my_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -609,7 +608,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("my_process").
 				Interval(100 * time.Millisecond).
-				Random(0).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -682,7 +681,7 @@ var _ = Describe("Flag metrics enabled", func() {
 			Name("my_flag").
 			Process("first_process").
 			Interval(100 * time.Millisecond).
-			Random(0).
+			Jitter(0).
 			MetricsSubsystem("my").
 			MetricsRegisterer(metricsServer.Registry()).
 			Build(ctx)
@@ -703,7 +702,7 @@ var _ = Describe("Flag metrics enabled", func() {
 			Name("my_flag").
 			Process("second_process").
 			Interval(100 * time.Millisecond).
-			Random(0).
+			Jitter(0).
 			MetricsSubsystem("my").
 			MetricsRegisterer(metricsServer.Registry()).
 			Build(ctx)

@@ -27,7 +27,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/lib/pq"
+	"github.com/openshift-online/ocm-sdk-go/database"
 	"github.com/openshift-online/ocm-sdk-go/logging"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -40,7 +40,8 @@ type FlagBuilder struct {
 	name     string
 	process  string
 	interval time.Duration
-	random   float64
+	timeout  time.Duration
+	jitter   float64
 
 	// Fields used for metrics:
 	metricsSubsystem  string
@@ -58,7 +59,8 @@ type Flag struct {
 	renewInterval time.Duration
 	checkInterval time.Duration
 	retryInterval time.Duration
-	random        float64
+	timeout       time.Duration
+	jitter        float64
 	value         int32
 	timer         *time.Timer
 	stop          chan struct{}
@@ -71,7 +73,8 @@ type Flag struct {
 func NewFlag() *FlagBuilder {
 	return &FlagBuilder{
 		interval:          defaultFlagInterval,
-		random:            defaultFlagRandomness,
+		timeout:           defaultFlagTimeout,
+		jitter:            defaultFlagJitter,
 		metricsRegisterer: prometheus.DefaultRegisterer,
 	}
 }
@@ -111,12 +114,18 @@ func (b *FlagBuilder) Interval(value time.Duration) *FlagBuilder {
 	return b
 }
 
-// Random sets a factor that will be used to randomize the intervals. For example, if this is set to
+// Timeout sets the timeout for database operations. The default is on second.
+func (b *FlagBuilder) Timeout(value time.Duration) *FlagBuilder {
+	b.timeout = value
+	return b
+}
+
+// Jitter sets a factor that will be used to randomize the intervals. For example, if this is set to
 // 0.1 then a random adjustment of +10% or -10% will be done to the intervals each time they are
 // used. This is intended to reduce simultaneous database accesses by processes that have been
 // started simultaneously. The default value is 0.2.
-func (b *FlagBuilder) Random(value float64) *FlagBuilder {
-	b.random = value
+func (b *FlagBuilder) Jitter(value float64) *FlagBuilder {
+	b.jitter = value
 	return b
 }
 
@@ -177,8 +186,12 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 		err = errors.New("interval should be greater than zero")
 		return
 	}
-	if b.random < 0 || b.random > 1 {
-		err = errors.New("random should be between zero and one")
+	if b.timeout <= 0 {
+		err = errors.New("timeout should be greater than zero")
+		return
+	}
+	if b.jitter < 0 || b.jitter > 1 {
+		err = errors.New("jitter should be between zero and one")
 		return
 	}
 
@@ -230,10 +243,11 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 		handle:        b.handle,
 		name:          b.name,
 		process:       b.process,
+		timeout:       b.timeout,
 		renewInterval: renewInterval,
 		checkInterval: checkInterval,
 		retryInterval: retryInterval,
-		random:        b.random,
+		jitter:        b.jitter,
 		timer:         timer,
 		stop:          stop,
 		stateMetric:   stateMetric,
@@ -248,14 +262,17 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 // ensureTable creates the table if it doesn't already exist.
 func (b *FlagBuilder) ensureTable(ctx context.Context) error {
 	var err error
-	_, err = b.handle.Exec(`
+	_, err = b.handle.ExecContext(
+		ctx,
+		`
 		create table if not exists leadership_flags (
 			name text not null primary key,
 			holder text not null,
 			version bigint not null,
 			timestamp timestamp with time zone not null
 		)
-	`)
+		`,
+	)
 	return err
 }
 
@@ -295,7 +312,7 @@ func (f *Flag) check() {
 	// Get the global time from the database, so that we don't depend on synchronization of the
 	// machines that compete for the flag.
 	var now time.Time
-	now, err = f.now()
+	now, err = f.now(ctx)
 	if err != nil {
 		f.logger.Error(
 			ctx,
@@ -308,7 +325,7 @@ func (f *Flag) check() {
 	}
 
 	// Try to load the state:
-	found, holder, version, timestamp, err := f.loadState()
+	found, holder, version, timestamp, err := f.loadState(ctx)
 	if err != nil {
 		f.logger.Error(
 			ctx,
@@ -323,7 +340,7 @@ func (f *Flag) check() {
 	// If the state doesn't exist yet then try to create it:
 	if !found {
 		var created bool
-		created, err = f.createState(now)
+		created, err = f.createState(ctx, now)
 		if err != nil {
 			f.logger.Error(
 				ctx,
@@ -360,7 +377,7 @@ func (f *Flag) check() {
 	// raised.
 	if holder == f.process {
 		var updated bool
-		updated, err = f.updateTimestamp(version, now)
+		updated, err = f.updateTimestamp(ctx, version, now)
 		if err != nil {
 			f.logger.Error(
 				ctx,
@@ -404,7 +421,7 @@ func (f *Flag) check() {
 			f.process, f.name, holder, excess,
 		)
 		var updated bool
-		updated, err = f.updateHolder(version, now)
+		updated, err = f.updateHolder(ctx, version, now)
 		if err != nil {
 			f.logger.Error(
 				ctx,
@@ -454,7 +471,7 @@ func (f *Flag) schedule(ctx context.Context, d time.Duration) {
 	// random factor given in the configuration is 0.1 will add or sustract up to a 10% of the
 	// duration. This is convenient to avoid having all the process doing their checks
 	// simultaneously when they have been started simultaneously.
-	factor := f.random * (1 - 2*rand.Float64())
+	factor := f.jitter * (1 - 2*rand.Float64())
 	delta := time.Duration(float64(d) * factor)
 	d += delta
 
@@ -465,8 +482,10 @@ func (f *Flag) schedule(ctx context.Context, d time.Duration) {
 
 // now returns get the current time from the database, so that there is no need to synchornize the
 // clocks of the machines that compete for the flag.
-func (f *Flag) now() (result time.Time, err error) {
-	row := f.handle.QueryRow(`select now()`)
+func (f *Flag) now(ctx context.Context) (result time.Time, err error) {
+	ctx, cancel := context.WithTimeout(ctx, f.timeout)
+	defer cancel()
+	row := f.handle.QueryRowContext(ctx, `select now()`)
 	var tmp time.Time
 	err = row.Scan(&tmp)
 	if err != nil {
@@ -478,9 +497,13 @@ func (f *Flag) now() (result time.Time, err error) {
 
 // loadState tries to load the database state corresponding to this flag. It returns a flag
 // indicating if the state was found and the values.
-func (f *Flag) loadState() (found bool, holder string, version int64, timestamp time.Time,
-	err error) {
-	row := f.handle.QueryRow(`
+func (f *Flag) loadState(ctx context.Context) (found bool, holder string, version int64,
+	timestamp time.Time, err error) {
+	ctx, cancel := context.WithTimeout(ctx, f.timeout)
+	defer cancel()
+	row := f.handle.QueryRowContext(
+		ctx,
+		`
 		select
 			holder,
 			version,
@@ -518,8 +541,12 @@ func (f *Flag) loadState() (found bool, holder string, version int64, timestamp 
 
 // createState tries to save the initial state of the flag. It returns a boolean indicating if the
 // state was actually created.
-func (f *Flag) createState(timestamp time.Time) (created bool, err error) {
-	_, err = f.handle.Exec(`
+func (f *Flag) createState(ctx context.Context, timestamp time.Time) (created bool, err error) {
+	ctx, cancel := context.WithTimeout(ctx, f.timeout)
+	defer cancel()
+	_, err = f.handle.ExecContext(
+		ctx,
+		`
 		insert into leadership_flags (
 			name,
 			holder,
@@ -537,12 +564,9 @@ func (f *Flag) createState(timestamp time.Time) (created bool, err error) {
 		timestamp,
 	)
 	if err != nil {
-		pqe, ok := err.(*pq.Error)
-		if ok {
-			// 23505 is the code corresponding to `unique_violation` condition.
-			if pqe.Code == "23505" {
-				err = nil
-			}
+		// 23505 is the code corresponding to `unique_violation` condition.
+		if database.ErrorCode(err) == "23505" {
+			err = nil
 		}
 		return
 	}
@@ -551,8 +575,13 @@ func (f *Flag) createState(timestamp time.Time) (created bool, err error) {
 }
 
 // updateTimestamp tries to update the timestamp.
-func (f *Flag) updateTimestamp(version int64, timestamp time.Time) (updated bool, err error) {
-	result, err := f.handle.Exec(`
+func (f *Flag) updateTimestamp(ctx context.Context, version int64, timestamp time.Time) (updated bool,
+	err error) {
+	ctx, cancel := context.WithTimeout(ctx, f.timeout)
+	defer cancel()
+	result, err := f.handle.ExecContext(
+		ctx,
+		`
 		update
 			leadership_flags
 		set
@@ -581,8 +610,13 @@ func (f *Flag) updateTimestamp(version int64, timestamp time.Time) (updated bool
 }
 
 // updateHolder tries to update the holder.
-func (f *Flag) updateHolder(version int64, timestamp time.Time) (updated bool, err error) {
-	result, err := f.handle.Exec(`
+func (f *Flag) updateHolder(ctx context.Context, version int64, timestamp time.Time) (updated bool,
+	err error) {
+	ctx, cancel := context.WithTimeout(ctx, f.timeout)
+	defer cancel()
+	result, err := f.handle.ExecContext(
+		ctx,
+		`
 		update
 			leadership_flags
 		set
@@ -642,8 +676,9 @@ func (f *Flag) lower(ctx context.Context) {
 
 // Defaults for configuration settings:
 const (
-	defaultFlagInterval   = 30 * time.Second
-	defaultFlagRandomness = 0.2
+	defaultFlagInterval = 30 * time.Second
+	defaultFlagTimeout  = 1 * time.Second
+	defaultFlagJitter   = 0.2
 )
 
 // Names of the labels added to the metrics:
