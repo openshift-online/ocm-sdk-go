@@ -5403,6 +5403,49 @@
           "valid"
         ]
       },
+      "AWSMachinePool": {
+        "description": "Representation of aws machine pool specific parameters.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSMachinePool' if this is a complete object or 'AWSMachinePoolLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "spot_market_options": {
+            "description": "Use spot instances on this machine pool to reduce cost.\n",
+            "$ref": "#/components/schemas/AWSSpotMarketOptions"
+          }
+        }
+      },
+      "AWSSpotMarketOptions": {
+        "description": "Spot market options for AWS machine pool.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSSpotMarketOptions' if this is a complete object or 'AWSSpotMarketOptionsLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "max_price": {
+            "description": "The max price for spot instance. Optional.\nIf not set, use the on-demand price.\n",
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
       "AWSVolume": {
         "description": "Holds settings for an AWS storage volume.\n",
         "properties": {
@@ -7007,6 +7050,10 @@
           "href": {
             "description": "Self link.\n",
             "type": "string"
+          },
+          "aws": {
+            "description": "AWS specific parameters (Optional).\n",
+            "$ref": "#/components/schemas/AWSMachinePool"
           },
           "autoscaling": {
             "description": "Details for auto-scaling the machine pool.\nReplicas and autoscaling cannot be used together.    \n",
