@@ -27,39 +27,53 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
-// ClusterdeploymentServer represents the interface the manages the 'clusterdeployment' resource.
-type ClusterdeploymentServer interface {
+// ResourcesServer represents the interface the manages the 'resources' resource.
+type ResourcesServer interface {
 
-	// Delete handles a request for the 'delete' method.
+	// Get handles a request for the 'get' method.
 	//
-	// Deletes the clusterdeployment.
-	Delete(ctx context.Context, request *ClusterdeploymentDeleteServerRequest, response *ClusterdeploymentDeleteServerResponse) error
+	// Retrieves a list of resources for a cluster in error state
+	Get(ctx context.Context, request *ResourcesGetServerRequest, response *ResourcesGetServerResponse) error
+
+	// Live returns the target 'resource' resource.
+	//
+	// Retrieves a list of currently available resources for a cluster
+	Live() ResourceServer
 }
 
-// ClusterdeploymentDeleteServerRequest is the request for the 'delete' method.
-type ClusterdeploymentDeleteServerRequest struct {
+// ResourcesGetServerRequest is the request for the 'get' method.
+type ResourcesGetServerRequest struct {
 }
 
-// ClusterdeploymentDeleteServerResponse is the response for the 'delete' method.
-type ClusterdeploymentDeleteServerResponse struct {
+// ResourcesGetServerResponse is the response for the 'get' method.
+type ResourcesGetServerResponse struct {
 	status int
 	err    *errors.Error
+	body   *Resource
+}
+
+// Body sets the value of the 'body' parameter.
+//
+// List of cluster resources
+func (r *ResourcesGetServerResponse) Body(value *Resource) *ResourcesGetServerResponse {
+	r.body = value
+	return r
 }
 
 // Status sets the status code.
-func (r *ClusterdeploymentDeleteServerResponse) Status(value int) *ClusterdeploymentDeleteServerResponse {
+func (r *ResourcesGetServerResponse) Status(value int) *ResourcesGetServerResponse {
 	r.status = value
 	return r
 }
 
-// dispatchClusterdeployment navigates the servers tree rooted at the given server
+// dispatchResources navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchClusterdeployment(w http.ResponseWriter, r *http.Request, server ClusterdeploymentServer, segments []string) {
+func dispatchResources(w http.ResponseWriter, r *http.Request, server ResourcesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
-		case "DELETE":
-			adaptClusterdeploymentDeleteRequest(w, r, server)
+		case "GET":
+			adaptResourcesGetRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -67,18 +81,25 @@ func dispatchClusterdeployment(w http.ResponseWriter, r *http.Request, server Cl
 		}
 	}
 	switch segments[0] {
+	case "live":
+		target := server.Live()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchResource(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return
 	}
 }
 
-// adaptClusterdeploymentDeleteRequest translates the given HTTP request into a call to
+// adaptResourcesGetRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptClusterdeploymentDeleteRequest(w http.ResponseWriter, r *http.Request, server ClusterdeploymentServer) {
-	request := &ClusterdeploymentDeleteServerRequest{}
-	err := readClusterdeploymentDeleteRequest(request, r)
+func adaptResourcesGetRequest(w http.ResponseWriter, r *http.Request, server ResourcesServer) {
+	request := &ResourcesGetServerRequest{}
+	err := readResourcesGetRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -87,9 +108,9 @@ func adaptClusterdeploymentDeleteRequest(w http.ResponseWriter, r *http.Request,
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &ClusterdeploymentDeleteServerResponse{}
-	response.status = 204
-	err = server.Delete(r.Context(), request, response)
+	response := &ResourcesGetServerResponse{}
+	response.status = 200
+	err = server.Get(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
 			"Can't process request for method '%s' and path '%s': %v",
@@ -98,7 +119,7 @@ func adaptClusterdeploymentDeleteRequest(w http.ResponseWriter, r *http.Request,
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeClusterdeploymentDeleteResponse(response, w)
+	err = writeResourcesGetResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

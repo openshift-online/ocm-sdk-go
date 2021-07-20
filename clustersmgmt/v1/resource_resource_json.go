@@ -24,15 +24,17 @@ import (
 	"net/http"
 )
 
-func readClusterdeploymentDeleteRequest(request *ClusterdeploymentDeleteServerRequest, r *http.Request) error {
+func readResourceGetRequest(request *ResourceGetServerRequest, r *http.Request) error {
 	return nil
 }
-func writeClusterdeploymentDeleteRequest(request *ClusterdeploymentDeleteRequest, writer io.Writer) error {
+func writeResourceGetRequest(request *ResourceGetRequest, writer io.Writer) error {
 	return nil
 }
-func readClusterdeploymentDeleteResponse(response *ClusterdeploymentDeleteResponse, reader io.Reader) error {
-	return nil
+func readResourceGetResponse(response *ResourceGetResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalResource(reader)
+	return err
 }
-func writeClusterdeploymentDeleteResponse(response *ClusterdeploymentDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
+func writeResourceGetResponse(response *ResourceGetServerResponse, w http.ResponseWriter) error {
+	return MarshalResource(response.body, w)
 }
