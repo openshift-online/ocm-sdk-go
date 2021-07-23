@@ -3,9 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-== 0.1.196 Jul 20 2021
+== 0.1.197 Jul 22 2021
 
 - Update model to v0.0.138:
+** Add addon inquiries endpoints get and list
+
+== 0.1.196 Jul 20 2021
+
+- Update model to v0.0.137:
 ** Add Cluster Resource Type
 ** Remove Cluster Deployment GET
 
