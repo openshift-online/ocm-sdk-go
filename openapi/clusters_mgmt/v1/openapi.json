@@ -5425,6 +5425,10 @@
       "AWS": {
         "description": "_Amazon Web Services_ specific settings of a cluster.\n",
         "properties": {
+          "kms_key_arn": {
+            "description": "Customer Managed Key to encrypt EBS Volume\n",
+            "type": "string"
+          },
           "sts": {
             "description": "Contains the necessary attributes to support role-based authentication on AWS.\n",
             "$ref": "#/components/schemas/STS"
