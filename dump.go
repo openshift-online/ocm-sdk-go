@@ -283,7 +283,7 @@ func (d *dumpRoundTripper) dumpJSON(ctx context.Context, data []byte) {
 		if err != nil {
 			d.logger.Debug(ctx, "%s", data)
 		} else {
-			d.logger.Debug(ctx, "%s", buf)
+			d.logger.Debug(ctx, "%s", buf.String())
 		}
 	}
 }
