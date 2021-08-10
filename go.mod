@@ -4,8 +4,8 @@ go 1.14
 
 require (
 	github.com/cenkalti/backoff/v4 v4.0.0
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/ghodss/yaml v1.0.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/uuid v1.2.0
 	github.com/jackc/pgconn v1.9.0
