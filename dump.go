@@ -341,5 +341,7 @@ func (d *dumpRoundTripper) redactSensitive(it *jsoniter.Iterator, str *jsoniter.
 		str.WriteBool(it.ReadBool())
 	case jsoniter.NilValue:
 		str.WriteNil()
+		// Skip because no reading from it is involved
+		it.Skip()
 	}
 }
