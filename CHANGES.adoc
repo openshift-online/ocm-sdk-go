@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.200 Aug 11 2021
+
+- Update model to v0.0.140:
+** Add check_optional_terms to TermsReview and SelfTermsReview
+** Add reduceClusterList to ResourceReview and SelfResourceReview
+
 == 0.1.199 Aug 10 2021
 
 Changes in this release are mainly intended to simplify packaging of the SDK in
