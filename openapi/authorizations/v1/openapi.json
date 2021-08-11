@@ -629,6 +629,10 @@
             "description": "Action that will be performed on the resource.\n",
             "type": "string"
           },
+          "reduce_cluster_list": {
+            "description": "If true, in the case when all subscriptions in organization are permitted, response will *not* include\nthese subscriptions' ID, but organization only.\n",
+            "type": "boolean"
+          },
           "resource_type": {
             "description": "Type of resource.\n",
             "type": "string"
@@ -779,6 +783,10 @@
           "account_username": {
             "description": "Defines the username of the account of which Terms is being reviewed.\n",
             "type": "string"
+          },
+          "check_optional_terms": {
+            "description": "If false, only `terms_required` will be checked\n",
+            "type": "boolean"
           },
           "event_code": {
             "description": "Defines the event code of the terms being checked\n",
