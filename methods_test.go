@@ -62,15 +62,9 @@ var _ = Describe("Methods", func() {
 		// Create the API server:
 		apiServer, apiCA = MakeTCPTLSServer()
 
-		// Metrics subsystem - value doesn't matter but configuring it enables
-		// prometheus exporting, exercising the counter increment functionality
-		// (e.g. will catch inconsistent labels).
-		metricsSubsystem := "test_subsystem"
-
 		// Create the connection:
 		connection, err = NewConnectionBuilder().
 			Logger(logger).
-			MetricsSubsystem(metricsSubsystem).
 			TokenURL(oidServer.URL()).
 			URL(apiServer.URL()).
 			Tokens(refreshToken).
@@ -304,7 +298,7 @@ var _ = Describe("Methods", func() {
 			apiServer.AppendHandlers(
 				ghttp.CombineHandlers(
 					http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-						time.Sleep(10 * time.Millisecond)
+						time.Sleep(100 * time.Millisecond)
 					}),
 					RespondWithJSON(http.StatusOK, ""),
 				),
@@ -313,7 +307,7 @@ var _ = Describe("Methods", func() {
 			// Send the request with a timeout smaller than the artificial delay
 			// introduced by the server so that a deadline exceeded error will be
 			// created and returned:
-			ctx, _ := context.WithTimeout(context.Background(), 5*time.Millisecond)
+			ctx, _ := context.WithTimeout(context.Background(), 50*time.Millisecond)
 			_, err := connection.Get().
 				Path("/mypath").
 				SendContext(ctx)

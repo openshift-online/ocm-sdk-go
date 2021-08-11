@@ -376,6 +376,7 @@ var _ = Describe("Connection", func() {
 			- {{ .Tmp }}/myca.pem
 			- {{ .Tmp }}/yourca.pem
 			agent: myagent
+			retry_limit: 4
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
@@ -417,6 +418,7 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
 		Expect(connection.Insecure()).To(BeTrue())
 		Expect(connection.Agent()).To(Equal("myagent"))
+		Expect(connection.RetryLimit()).To(Equal(4))
 		Expect(connection.MetricsSubsystem()).To(Equal("mysubsystem"))
 	})
 
@@ -458,6 +460,7 @@ var _ = Describe("Connection", func() {
 			- {{ .Tmp }}/myca.pem
 			- {{ .Tmp }}/yourca.pem
 			agent: myagent
+			retry_limit: 4
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
@@ -510,6 +513,7 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
 		Expect(connection.Insecure()).To(BeTrue())
 		Expect(connection.Agent()).To(Equal("myagent"))
+		Expect(connection.RetryLimit()).To(Equal(4))
 		Expect(connection.MetricsSubsystem()).To(Equal("mysubsystem"))
 	})
 
@@ -551,6 +555,7 @@ var _ = Describe("Connection", func() {
 			- {{ .Tmp }}/myca.pem
 			- {{ .Tmp }}/yourca.pem
 			agent: myagent
+			retry_limit: 5
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
@@ -586,6 +591,7 @@ var _ = Describe("Connection", func() {
 			Scopes("openid", "overriden.myscope").
 			Insecure(false).
 			Agent("overriden.myagent").
+			RetryLimit(4).
 			MetricsSubsystem("overriden_mysubsystem").
 			Build()
 		Expect(err).ToNot(HaveOccurred())
@@ -618,6 +624,7 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "overriden.myscope"))
 		Expect(connection.Insecure()).To(BeFalse())
 		Expect(connection.Agent()).To(Equal("overriden.myagent"))
+		Expect(connection.RetryLimit()).To(Equal(4))
 		Expect(connection.MetricsSubsystem()).To(Equal("overriden_mysubsystem"))
 	})
 
@@ -659,6 +666,7 @@ var _ = Describe("Connection", func() {
 			- {{ .Tmp }}/myca.pem
 			- {{ .Tmp }}/yourca.pem
 			agent: myagent
+			retry_limit: 5
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
@@ -692,6 +700,7 @@ var _ = Describe("Connection", func() {
 			Scopes("openid", "overriden.myscope").
 			Insecure(false).
 			Agent("overriden.myagent").
+			RetryLimit(4).
 			MetricsSubsystem("overriden_mysubsystem").
 			Load(path).
 			Build()
@@ -725,6 +734,7 @@ var _ = Describe("Connection", func() {
 		Expect(connection.Scopes()).To(ConsistOf("openid", "myscope"))
 		Expect(connection.Insecure()).To(BeTrue())
 		Expect(connection.Agent()).To(Equal("myagent"))
+		Expect(connection.RetryLimit()).To(Equal(5))
 		Expect(connection.MetricsSubsystem()).To(Equal("mysubsystem"))
 	})
 

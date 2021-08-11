@@ -26,6 +26,7 @@ import (
 	"net/url"
 	"regexp"
 	"sort"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 
@@ -38,6 +39,7 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/jobqueue"
 	"github.com/openshift-online/ocm-sdk-go/logging"
 	"github.com/openshift-online/ocm-sdk-go/metrics"
+	"github.com/openshift-online/ocm-sdk-go/retry"
 	"github.com/openshift-online/ocm-sdk-go/servicelogs"
 )
 
@@ -74,6 +76,9 @@ type ConnectionBuilder struct {
 	password          string
 	tokens            []string
 	scopes            []string
+	retryLimit        int
+	retryInterval     time.Duration
+	retryJitter       float64
 	transportWrappers []func(http.RoundTripper) http.RoundTripper
 
 	// Metrics:
@@ -97,6 +102,7 @@ type Connection struct {
 	closed         bool
 	logger         logging.Logger
 	authnWrapper   *authentication.TransportWrapper
+	retryWrapper   *retry.TransportWrapper
 	clientSelector *internal.ClientSelector
 	urlTable       []urlTableEntry
 	agent          string
@@ -121,6 +127,9 @@ func NewConnectionBuilder() *ConnectionBuilder {
 		urlTable: map[string]string{
 			"": DefaultURL,
 		},
+		retryLimit:        retry.DefaultLimit,
+		retryInterval:     retry.DefaultInterval,
+		retryJitter:       retry.DefaultJitter,
 		metricsRegisterer: prometheus.DefaultRegisterer,
 	}
 }
@@ -382,6 +391,48 @@ func (b *ConnectionBuilder) DisableKeepAlives(flag bool) *ConnectionBuilder {
 	return b
 }
 
+// RetryLimit sets the maximum number of attempts to execute a request. When this is larger than
+// zero retriable requests will be retried after some time.
+//
+// Currently only requests without a request body are considered retriable. Thus usually means that
+// only GET and DELETE operations will be retried.
+//
+// The minimum value is one. Setting value smaller than that will produce an error when calling the
+// Build method.
+//
+// The default value is two, so by default failed requests will be retried once.
+func (b *ConnectionBuilder) RetryLimit(value int) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
+	b.retryLimit = value
+	return b
+}
+
+// RetryInterval sets the time to wait before the first retry. The interval time will be doubled for
+// each retry. For example, if this is set to one second then the first retry will happen
+// approximately one second after the failure of the initial request, the second retry will happen
+// affer four seconds, the third will happen after eitght seconds, so on.
+func (b *ConnectionBuilder) RetryInterval(value time.Duration) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
+	b.retryInterval = value
+	return b
+}
+
+// RetryJitter sets a factor that will be used to randomize the retry intervals. For example, if
+// this is set to 0.1 then a random adjustment between -10% and +10% will be done to the interval
+// for each retry.  This is intended to reduce simultaneous retries by clients when a server starts
+// failing.  The default value is 0.2.
+func (b *ConnectionBuilder) RetryJitter(value float64) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
+	b.retryJitter = value
+	return b
+}
+
 // TransportWrapper allows setting a transport layer into the connection for capturing and
 // manipulating the request or response.
 func (b *ConnectionBuilder) TransportWrapper(value TransportWrapper) *ConnectionBuilder {
@@ -494,6 +545,8 @@ func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
 //	- /my/ca.pem
 //	- /your/ca.pem
 //	agent: myagent
+//	retry: true
+//	retry_limit: 1
 //
 // Setting any of these fields in the file has the same effect that calling the corresponding method
 // of the builder.
@@ -525,6 +578,8 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 		TrustedCAs       []string          `yaml:"trusted_cas"`
 		Scopes           []string          `yaml:"scopes"`
 		Agent            *string           `yaml:"agent"`
+		Retry            *bool             `yaml:"retry"`
+		RetryLimit       *int              `yaml:"retry_limit"`
 		MetricsSubsystem *string           `yaml:"metrics_subsystem"`
 	}
 	b.err = config.Populate(&view)
@@ -598,6 +653,11 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 		b.Agent(*view.Agent)
 	}
 
+	// Retry:
+	if view.RetryLimit != nil {
+		b.RetryLimit(*view.RetryLimit)
+	}
+
 	// Metrics subsystem:
 	if view.MetricsSubsystem != nil {
 		b.MetricsSubsystem(*view.MetricsSubsystem)
@@ -623,6 +683,29 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	// If an error has been detected while populating the builder then return it and finish:
 	if b.err != nil {
 		err = b.err
+		return
+	}
+
+	// Check retry parameters:
+	if b.retryLimit < 1 {
+		err = fmt.Errorf(
+			"retry limit %d isn't valid, it should be one or larger",
+			b.retryLimit,
+		)
+		return
+	}
+	if b.retryInterval < 0 {
+		err = fmt.Errorf(
+			"retry interval %s isn't valid, it should be larger than zero",
+			b.retryInterval,
+		)
+		return
+	}
+	if b.retryJitter < 0 || b.retryJitter > 1 {
+		err = fmt.Errorf(
+			"retry jitter %f isn't valid, it should be between zero and one",
+			b.retryJitter,
+		)
 		return
 	}
 
@@ -702,15 +785,27 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
+	// Create the retry wrapper:
+	retryWrapper, err := retry.NewTransportWrapper().
+		Logger(b.logger).
+		Limit(b.retryLimit).
+		Interval(b.retryInterval).
+		Jitter(b.retryJitter).
+		Build(ctx)
+	if err != nil {
+		return
+	}
+
 	// Create the client selector:
 	clientSelector, err := internal.NewClientSelector().
 		Logger(b.logger).
 		TrustedCAs(b.trustedCAs...).
 		Insecure(b.insecure).
 		TransportWrapper(authnWrapper.Wrap).
-		TransportWrappers(b.transportWrappers...).
 		TransportWrapper(loggingWrapper).
 		TransportWrapper(metricsWrapper).
+		TransportWrapper(retryWrapper.Wrap).
+		TransportWrappers(b.transportWrappers...).
 		Build(ctx)
 	if err != nil {
 		return
@@ -720,6 +815,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	connection = &Connection{
 		logger:            b.logger,
 		authnWrapper:      authnWrapper,
+		retryWrapper:      retryWrapper,
 		clientSelector:    clientSelector,
 		urlTable:          urlTable,
 		agent:             agent,
@@ -858,6 +954,22 @@ func (c *Connection) Insecure() bool {
 // DisableKeepAlives returns the flag that indicates if HTTP keep alive is disabled.
 func (c *Connection) DisableKeepAlives() bool {
 	return c.clientSelector.DisableKeepAlives()
+}
+
+// Limit sets the maximum number of retries for a request. When this is zero no retries will be
+// performed. The default value is two.
+func (c *Connection) RetryLimit() int {
+	return c.retryWrapper.Limit()
+}
+
+// RetryInteval returns the initial retry interval.
+func (c *Connection) RetryInterval() time.Duration {
+	return c.retryWrapper.Interval()
+}
+
+// RetryJitter returns the retry interval jitter factor.
+func (c *Connection) RetryJitter() float64 {
+	return c.retryWrapper.Jitter()
 }
 
 // MetricsSubsystem returns the name of the subsystem that is used by the connection to register
