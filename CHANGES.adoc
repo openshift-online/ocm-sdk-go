@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.201 Aug 17 2021
+
+- Retry when server sends go away before settings.
+- Reject impersonation.
+
 == 0.1.200 Aug 11 2021
 
 - Update model to v0.0.140:
