@@ -1,0 +1,590 @@
+/*
+Copyright (c) 2021 Red Hat, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// This file contains tests for request retrying.
+
+package retry
+
+import (
+	"context"
+	"crypto/tls"
+	"io/ioutil"
+	"net"
+	"net/http"
+	"time"
+
+	"golang.org/x/net/http2"
+
+	. "github.com/onsi/ginkgo"                         // nolint
+	. "github.com/onsi/gomega"                         // nolint
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+)
+
+var _ = Describe("Creation", func() {
+	var ctx context.Context
+
+	BeforeEach(func() {
+		ctx = context.Background()
+	})
+
+	It("Can't be created without a logger", func() {
+		wrapper, err := NewTransportWrapper().
+			Build(ctx)
+		Expect(err).To(HaveOccurred())
+		Expect(wrapper).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("logger"))
+		Expect(message).To(ContainSubstring("mandatory"))
+	})
+
+	It("Can be created with positive retry limit", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Limit(10).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(wrapper).ToNot(BeNil())
+		err = wrapper.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	It("Can be created with zero retry limit", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Limit(0).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(wrapper).ToNot(BeNil())
+		err = wrapper.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	It("Can't be created with negative retry limit", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Limit(-1).
+			Build(ctx)
+		Expect(err).To(HaveOccurred())
+		Expect(wrapper).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("limit"))
+		Expect(message).To(ContainSubstring("-1"))
+		Expect(message).To(ContainSubstring("greater or equal than zero"))
+	})
+
+	It("Can be created with positive retry interval", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Interval(1 * time.Second).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(wrapper).ToNot(BeNil())
+		err = wrapper.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	It("Can't be created with zero retry interval", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Interval(0).
+			Build(ctx)
+		Expect(err).To(HaveOccurred())
+		Expect(wrapper).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("interval"))
+		Expect(message).To(ContainSubstring("0"))
+		Expect(message).To(ContainSubstring("greater than zero"))
+	})
+
+	It("Can't be created with negative retry interval", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Interval(0).
+			Build(ctx)
+		Expect(err).To(HaveOccurred())
+		Expect(wrapper).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("interval"))
+		Expect(message).To(ContainSubstring("0"))
+		Expect(message).To(ContainSubstring("greater than zero"))
+	})
+
+	It("Can be created with jitter between zero and one", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Jitter(0.3).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(wrapper).ToNot(BeNil())
+		err = wrapper.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	It("Can be created with zero jitter", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Jitter(0.0).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(wrapper).ToNot(BeNil())
+		err = wrapper.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	It("Can't be created with negative jitter", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Jitter(-1).
+			Build(ctx)
+		Expect(err).To(HaveOccurred())
+		Expect(wrapper).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("jitter"))
+		Expect(message).To(ContainSubstring("0"))
+		Expect(message).To(ContainSubstring("between zero and one"))
+	})
+
+	It("Can't be created with jitter greater than one", func() {
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			Jitter(2).
+			Build(ctx)
+		Expect(err).To(HaveOccurred())
+		Expect(wrapper).To(BeNil())
+		message := err.Error()
+		Expect(message).To(ContainSubstring("jitter"))
+		Expect(message).To(ContainSubstring("2"))
+		Expect(message).To(ContainSubstring("between zero and one"))
+	})
+})
+
+var _ = Describe("Server error", func() {
+	var ctx context.Context
+
+	BeforeEach(func() {
+		ctx = context.Background()
+	})
+
+	When("Retry enabled", func() {
+		It("Retries 503", func() {
+			// Create a transport that returns a 503 error for the first request and 200
+			// for the second:
+			transport := CombineTransports(
+				TextTransport(http.StatusServiceUnavailable, `ko`),
+				JSONTransport(http.StatusOK, `{ "ok": true }`),
+			)
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Create the client:
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get("http://api.example.com/mypath")
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
+			body, err := ioutil.ReadAll(response.Body)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(body).To(MatchJSON(`{ "ok": true }`))
+		})
+
+		It("Retries 429", func() {
+			// Create a transport that returns a 429 error for the first request and 200
+			// for the second:
+			transport := CombineTransports(
+				JSONTransport(http.StatusTooManyRequests, `{ "ok": false }`),
+				JSONTransport(http.StatusOK, `{ "ok": true }`),
+			)
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Create the client:
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get("http://api.example.com/mypath")
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
+			body, err := ioutil.ReadAll(response.Body)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(body).To(MatchJSON(`{ "ok": true }`))
+		})
+	})
+
+	When("Retry disabled", func() {
+		It("Doesn't retry 503", func() {
+			// Create a transport that returns a 503 error for the first request and 200
+			// for the second:
+			transport := CombineTransports(
+				TextTransport(http.StatusServiceUnavailable, `ko`),
+				JSONTransport(http.StatusOK, `{ "ok": true }`),
+			)
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Limit(0).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Create the client:
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get("http://api.example.com/mypath")
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.StatusCode).To(Equal(http.StatusServiceUnavailable))
+			body, err := ioutil.ReadAll(response.Body)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(string(body)).To(Equal(`ko`))
+		})
+
+		It("Doesn't retry 429", func() {
+			// Create a transport that returns a 429 error for the first request and 200
+			// for the second:
+			transport := CombineTransports(
+				JSONTransport(http.StatusTooManyRequests, `{ "ok": false }`),
+				JSONTransport(http.StatusOK, `{ "ok": true }`),
+			)
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Limit(0).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Create the client:
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get("http://api.example.com/mypath")
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.StatusCode).To(Equal(http.StatusTooManyRequests))
+			body, err := ioutil.ReadAll(response.Body)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(body).To(MatchJSON(`{ "ok": false }`))
+		})
+	})
+})
+
+var _ = Describe("Protocol error", func() {
+	var ctx context.Context
+	var listener net.Listener
+	var address string
+	var transport http.RoundTripper
+
+	// Accept accepts an HTTP/2 connection.
+	var Accept = func(listener net.Listener) net.Conn {
+		// Accept the connection and complete the TLS handshake.
+		conn, err := listener.Accept()
+		Expect(err).ToNot(HaveOccurred())
+		err = conn.(*tls.Conn).Handshake()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Return the connection:
+		return conn
+	}
+
+	// Reject sends an HTTP/2 go away frame to the given connection and then closes it.
+	var Reject = func(conn net.Conn) {
+		// Read the HTTP2 connection preface, otherwise the client won't reach the part of
+		// the code where the protocol error is detected:
+		buffer := make([]byte, len(http2.ClientPreface))
+		count, err := conn.Read(buffer)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(count).To(Equal(len(http2.ClientPreface)))
+		Expect(string(buffer)).To(Equal(http2.ClientPreface))
+
+		// Send the go away frame:
+		framer := http2.NewFramer(conn, conn)
+		err = framer.WriteGoAway(0, http2.ErrCodeStreamClosed, nil)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Close the connection:
+		err = conn.Close()
+		Expect(err).ToNot(HaveOccurred())
+	}
+
+	// Server handles request received from the given connection using a real HTTP/2 server.
+	var Serve = func(conn net.Conn) {
+		handler := func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, err := w.Write([]byte("{}"))
+			Expect(err).ToNot(HaveOccurred())
+		}
+		server := &http2.Server{}
+		server.ServeConn(conn, &http2.ServeConnOpts{
+			Handler: http.HandlerFunc(handler),
+		})
+	}
+
+	BeforeEach(func() {
+		var err error
+
+		// Create a context:
+		ctx = context.Background()
+
+		// Create a TLS listener that will be used to process incoming requests
+		// simulating an HTTP/2 server:
+		listener, err = tls.Listen("tcp", "127.0.0.1:0", &tls.Config{
+			Certificates: []tls.Certificate{
+				LocalhostKeyPair(),
+			},
+			NextProtos: []string{
+				http2.NextProtoTLS,
+			},
+		})
+		Expect(err).ToNot(HaveOccurred())
+
+		// Calculate the listener URL:
+		address = "https://" + listener.Addr().String()
+
+		// Create the basic transport:
+		transport = &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+			ForceAttemptHTTP2: true,
+		}
+	})
+
+	AfterEach(func() {
+		// Close the listener:
+		err := listener.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	When("Retry is enabled", func() {
+		It("Tolerates protocol error", func() {
+			var err error
+
+			// Run the HTTP/2 server:
+			go func() {
+				defer GinkgoRecover()
+
+				// Reject the first connection:
+				firstConn := Accept(listener)
+				Reject(firstConn)
+
+				// Accept the second connection:
+				secondConn := Accept(listener)
+				Serve(secondConn)
+			}()
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get(address)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
+			body, err := ioutil.ReadAll(response.Body)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(body).To(MatchJSON("{}"))
+		})
+
+		It("Honours retry limit", func() {
+			// Run the HTTP/2 server.
+			go func() {
+				defer GinkgoRecover()
+
+				// Reject the first four connections:
+				conn := Accept(listener)
+				Reject(conn)
+				conn = Accept(listener)
+				Reject(conn)
+				conn = Accept(listener)
+				Reject(conn)
+				conn = Accept(listener)
+				Reject(conn)
+			}()
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Limit(3).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get(address)
+			Expect(err).To(HaveOccurred())
+			Expect(response).To(BeNil())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("PROTOCOL_ERROR"))
+		})
+
+		It("Honours retry interval", func() {
+			// Run the HTTP/2 server.
+			go func() {
+				defer GinkgoRecover()
+
+				// Reject the first connection:
+				conn := Accept(listener)
+				Reject(conn)
+				start := time.Now()
+
+				// Reject the second connection an verify that it was sent after
+				// waiting the configured interval:
+				conn = Accept(listener)
+				Reject(conn)
+				elapsed := time.Since(start)
+				Expect(elapsed).To(BeNumerically(">=", 50*time.Millisecond))
+
+				// Reject the third connection and verify that it was sent after
+				// waiting the double of the configured interval:
+				conn = Accept(listener)
+				Reject(conn)
+				elapsed = time.Since(start)
+				Expect(elapsed).To(BeNumerically(">=", 100*time.Millisecond))
+
+				// Reject the fourth connection and verify that it was sent after
+				// waiting the four times the configured interval:
+				conn = Accept(listener)
+				Reject(conn)
+				elapsed = time.Since(start)
+				Expect(elapsed).To(BeNumerically(">=", 200*time.Millisecond))
+			}()
+
+			// Wrap the transport setting the jitter to zero so that we can reliably
+			// measure retry times:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Limit(3).
+				Interval(50 * time.Millisecond).
+				Jitter(0).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get(address)
+			Expect(err).To(HaveOccurred())
+			Expect(response).To(BeNil())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("PROTOCOL_ERROR"))
+		})
+	})
+
+	When("Retry is disabled", func() {
+		It("Doesn't tolerate error", func() {
+			// Run the HTTP/2 server:
+			go func() {
+				defer GinkgoRecover()
+				conn := Accept(listener)
+				Reject(conn)
+			}()
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Limit(0).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Get(address)
+			Expect(err).To(HaveOccurred())
+			Expect(response).To(BeNil())
+			message := err.Error()
+			Expect(message).To(ContainSubstring("PROTOCOL_ERROR"))
+		})
+	})
+})

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Red Hat, Inc.
+Copyright (c) 2021 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package sdk
+package retry
 
 import (
 	"log"
@@ -26,18 +26,18 @@ import (
 	. "github.com/onsi/gomega" // nolint
 )
 
-func TestClient(t *testing.T) {
+func TestRetry(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Client")
+	RunSpecs(t, "Retry")
 }
 
-// Logger used during the tests:
+// Logger used for tests:
 var logger logging.Logger
 
 var _ = BeforeSuite(func() {
 	var err error
 
-	// Create the logger:
+	// Create the logger that will be used by all the tests:
 	logger, err = logging.NewStdLoggerBuilder().
 		Streams(GinkgoWriter, GinkgoWriter).
 		Debug(true).

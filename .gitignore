@@ -1,3 +1,4 @@
+*.test
 /.gobin/
 /.idea/
 /examples/*
