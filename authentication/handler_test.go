@@ -557,6 +557,112 @@ var _ = Describe("Handler", func() {
 		}`))
 	})
 
+	It("Rejects impersonated token", func() {
+		// Prepare the next handler, which should not be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Prepare the impersonated token:
+		token := MakeTokenObject(jwt.MapClaims{
+			"impersonated": true,
+		})
+		bearer := token.Raw
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify that the request is rejected:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Impersonation isn't allowed"
+		}`))
+	})
+
+	It("Rejects bad impersonated claim", func() {
+		// Prepare the next handler, which should not be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Prepare the impersonated token:
+		token := MakeTokenObject(jwt.MapClaims{
+			"impersonated": "junk",
+		})
+		bearer := token.Raw
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify that the request is rejected:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Impersonation claim contains incorrect boolean value 'junk'"
+		}`))
+	})
+
+	It("Accepts false impersonated claim", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare the impersonated token:
+		token := MakeTokenObject(jwt.MapClaims{
+			"impersonated": false,
+		})
+		bearer := token.Raw
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify the response:
+		Expect(recorder.Code).To(Equal(http.StatusOK))
+	})
+
 	It("Loads keys from file", func() {
 		// Prepare the next handler:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
