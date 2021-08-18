@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.202 Aug 18 2021
+
+- Update model to v0.0.141:
+** Add support for EndOfLifeTimestamp in version
+
 == 0.1.201 Aug 17 2021
 
 - Retry when server sends go away before settings.

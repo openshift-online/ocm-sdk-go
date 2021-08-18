@@ -7860,6 +7860,11 @@
             "description": "Indicates if this version can be used to create clusters.\n",
             "type": "boolean"
           },
+          "end_of_life_timestamp": {
+            "description": "EndOfLifeTimestamp is the date and time when the version will get to End of Life, using the\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].\n",
+            "type": "string",
+            "format": "date-time"
+          },
           "raw_id": {
             "description": "RawID is the id of the version - without channel group and prefix.\n",
             "type": "string"
