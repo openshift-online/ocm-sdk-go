@@ -211,8 +211,23 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 		if err != nil {
 			message := err.Error()
 			switch {
+			case strings.Contains(message, "EOF"):
+				t.logger.Warn(
+					ctx,
+					"Request for method %s and URL '%s' failed with EOF, "+
+						"will try again: %v",
+					request.Method, request.URL, err,
+				)
+				continue
+			case strings.Contains(message, "connection reset by peer"):
+				t.logger.Warn(
+					ctx,
+					"Request for method %s and URL '%s' failed with connection "+
+						"reset by peer, will try again: %v",
+					request.Method, request.URL, err,
+				)
+				continue
 			case strings.Contains(message, "PROTOCOL_ERROR"):
-				// If the request failed due to a protocol error then we should retry:
 				t.logger.Warn(
 					ctx,
 					"Request for method %s and URL '%s' failed with protocol error, "+
