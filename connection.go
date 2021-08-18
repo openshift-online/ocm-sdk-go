@@ -775,9 +775,9 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		Scopes(b.scopes...).
 		TrustedCAs(b.trustedCAs...).
 		Insecure(b.insecure).
-		TransportWrappers(b.transportWrappers...).
-		TransportWrapper(loggingWrapper).
 		TransportWrapper(metricsWrapper).
+		TransportWrapper(loggingWrapper).
+		TransportWrappers(b.transportWrappers...).
 		MetricsSubsystem(b.metricsSubsystem).
 		MetricsRegisterer(b.metricsRegisterer).
 		Build(ctx)
@@ -802,9 +802,9 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		TrustedCAs(b.trustedCAs...).
 		Insecure(b.insecure).
 		TransportWrapper(authnWrapper.Wrap).
-		TransportWrapper(loggingWrapper).
 		TransportWrapper(metricsWrapper).
 		TransportWrapper(retryWrapper.Wrap).
+		TransportWrapper(loggingWrapper).
 		TransportWrappers(b.transportWrappers...).
 		Build(ctx)
 	if err != nil {
