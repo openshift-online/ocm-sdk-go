@@ -17,10 +17,13 @@ limitations under the License.
 package sdk
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"net/http"
 	"time"
+
+	"github.com/openshift-online/ocm-sdk-go/logging"
 
 	. "github.com/onsi/ginkgo"                         // nolint
 	. "github.com/onsi/gomega"                         // nolint
@@ -153,5 +156,79 @@ var _ = Describe("Retry", func() {
 			Expect(err).To(HaveOccurred())
 			Expect(response).To(BeNil())
 		})
+	})
+
+	It("Writes error to the debug log", func() {
+		// Create a logger that allows us to inspect the messages written to the log:
+		var buffer bytes.Buffer
+		logger, err := logging.NewStdLoggerBuilder().
+			Streams(&buffer, &buffer).
+			Debug(true).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Create a connection with a transport wrapper that returns an error for
+		// the first request and 200 for the second.
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
+				return CombineTransports(
+					ErrorTransport(errors.New("PROTOCOL_ERROR")),
+					JSONTransport(http.StatusOK, `{}`),
+				)
+			}).
+			RetryInterval(10 * time.Millisecond).
+			BuildContext(ctx)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		response, err := connection.Get().Path("/mypath").Send()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(response).ToNot(BeNil())
+
+		// Check that the details of the failed request are in the log:
+		messages := buffer.String()
+		Expect(messages).To(ContainSubstring("GET"))
+		Expect(messages).To(ContainSubstring("mypath"))
+		Expect(messages).To(ContainSubstring("failed with protocol error"))
+		Expect(messages).To(ContainSubstring("PROTOCOL_ERROR"))
+	})
+
+	It("Writes failed response details to the log", func() {
+		// Create a logger that allows us to inspect the messages written to the log:
+		var buffer bytes.Buffer
+		logger, err := logging.NewStdLoggerBuilder().
+			Streams(&buffer, &buffer).
+			Debug(true).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Create a connection with a transport wrapper that returns 503 for the first
+		// request and 200 for the second.
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(token).
+			TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
+				return CombineTransports(
+					JSONTransport(http.StatusServiceUnavailable, `{
+						"reason": "Something failed",
+					}`),
+					JSONTransport(http.StatusOK, `{}`),
+				)
+			}).
+			RetryInterval(10 * time.Millisecond).
+			BuildContext(ctx)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		response, err := connection.Get().Path("/mypath").Send()
+		Expect(err).ToNot(HaveOccurred())
+		Expect(response).ToNot(BeNil())
+
+		// Check that the details of the failed request are in the log:
+		messages := buffer.String()
+		Expect(messages).To(ContainSubstring("failed with code 503"))
+		Expect(messages).To(ContainSubstring(`"reason": "Something failed"`))
 	})
 })
