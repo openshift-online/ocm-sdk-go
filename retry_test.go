@@ -135,7 +135,7 @@ var _ = Describe("Retry", func() {
 	})
 
 	Describe("Post with body", func() {
-		It("Doesn't retry", func() {
+		It("Retries for protocol error", func() {
 			// Create a connection with a transport wrapper that returns an error for
 			// the first request and 200 for the second.
 			connection, err := NewConnectionBuilder().
@@ -153,8 +153,58 @@ var _ = Describe("Retry", func() {
 
 			// Send the request:
 			response, err := connection.Post().Path("/mypath").String("{}").Send()
-			Expect(err).To(HaveOccurred())
-			Expect(response).To(BeNil())
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+		})
+
+		It("Retries for 429", func() {
+			// Create a connection with a transport wrapper that returns 429 for the
+			// first request and 200 for the second.
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				Tokens(token).
+				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
+					return CombineTransports(
+						JSONTransport(http.StatusTooManyRequests, "{}"),
+						JSONTransport(http.StatusOK, "{}"),
+					)
+				}).
+				RetryInterval(10 * time.Millisecond).
+				BuildContext(ctx)
+			Expect(err).ToNot(HaveOccurred())
+
+			// Send the request:
+			response, err := connection.Post().
+				Path("/mypath").
+				String(`{}`).
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+		})
+
+		It("Retries for 503", func() {
+			// Create a connection with a transport wrapper that returns 503 for the
+			// first request and 200 for the second.
+			connection, err := NewConnectionBuilder().
+				Logger(logger).
+				Tokens(token).
+				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
+					return CombineTransports(
+						JSONTransport(http.StatusServiceUnavailable, "{}"),
+						JSONTransport(http.StatusOK, "{}"),
+					)
+				}).
+				RetryInterval(10 * time.Millisecond).
+				BuildContext(ctx)
+			Expect(err).ToNot(HaveOccurred())
+
+			// Send the request:
+			response, err := connection.Post().
+				Path("/mypath").
+				String(`{}`).
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
 		})
 	})
 

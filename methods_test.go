@@ -70,6 +70,7 @@ var _ = Describe("Methods", func() {
 			Tokens(refreshToken).
 			TrustedCAFile(oidCA).
 			TrustedCAFile(apiCA).
+			RetryLimit(0).
 			Build()
 		Expect(err).ToNot(HaveOccurred())
 	})
