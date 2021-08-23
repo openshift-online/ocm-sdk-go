@@ -391,16 +391,8 @@ func (b *ConnectionBuilder) DisableKeepAlives(flag bool) *ConnectionBuilder {
 	return b
 }
 
-// RetryLimit sets the maximum number of attempts to execute a request. When this is larger than
-// zero retriable requests will be retried after some time.
-//
-// Currently only requests without a request body are considered retriable. Thus usually means that
-// only GET and DELETE operations will be retried.
-//
-// The minimum value is one. Setting value smaller than that will produce an error when calling the
-// Build method.
-//
-// The default value is two, so by default failed requests will be retried once.
+// RetryLimit sets the maximum number of retries for a request. When this is zero no retries will be
+// performed. The default value is two.
 func (b *ConnectionBuilder) RetryLimit(value int) *ConnectionBuilder {
 	if b.err != nil {
 		return b
@@ -686,29 +678,6 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
-	// Check retry parameters:
-	if b.retryLimit < 1 {
-		err = fmt.Errorf(
-			"retry limit %d isn't valid, it should be one or larger",
-			b.retryLimit,
-		)
-		return
-	}
-	if b.retryInterval < 0 {
-		err = fmt.Errorf(
-			"retry interval %s isn't valid, it should be larger than zero",
-			b.retryInterval,
-		)
-		return
-	}
-	if b.retryJitter < 0 || b.retryJitter > 1 {
-		err = fmt.Errorf(
-			"retry jitter %f isn't valid, it should be between zero and one",
-			b.retryJitter,
-		)
-		return
-	}
-
 	// Create the default logger, if needed:
 	if b.logger == nil {
 		b.logger, err = logging.NewGoLoggerBuilder().
@@ -956,8 +925,7 @@ func (c *Connection) DisableKeepAlives() bool {
 	return c.clientSelector.DisableKeepAlives()
 }
 
-// Limit sets the maximum number of retries for a request. When this is zero no retries will be
-// performed. The default value is two.
+// RetryLimit gets the maximum number of retries for a request.
 func (c *Connection) RetryLimit() int {
 	return c.retryWrapper.Limit()
 }

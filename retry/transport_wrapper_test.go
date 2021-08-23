@@ -24,6 +24,8 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 
 	"golang.org/x/net/http2"
@@ -179,7 +181,7 @@ var _ = Describe("Server error", func() {
 	})
 
 	When("Retry enabled", func() {
-		It("Retries 503", func() {
+		It("Retries 503 without request body", func() {
 			// Create a transport that returns a 503 error for the first request and 200
 			// for the second:
 			transport := CombineTransports(
@@ -214,7 +216,46 @@ var _ = Describe("Server error", func() {
 			Expect(body).To(MatchJSON(`{ "ok": true }`))
 		})
 
-		It("Retries 429", func() {
+		It("Retries 503 with request body", func() {
+			// Create a transport that returns a 503 error for the first request and 200
+			// for the second:
+			transport := CombineTransports(
+				TextTransport(http.StatusServiceUnavailable, `ko`),
+				JSONTransport(http.StatusOK, `{ "ok": true }`),
+			)
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Create the client:
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Post(
+				"http://api.example.com/mypath",
+				"application/json",
+				strings.NewReader(`{}`),
+			)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
+			body, err := ioutil.ReadAll(response.Body)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(body).To(MatchJSON(`{ "ok": true }`))
+		})
+
+		It("Retries 429 without request body", func() {
 			// Create a transport that returns a 429 error for the first request and 200
 			// for the second:
 			transport := CombineTransports(
@@ -241,6 +282,45 @@ var _ = Describe("Server error", func() {
 
 			// Send the request:
 			response, err := client.Get("http://api.example.com/mypath")
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
+			body, err := ioutil.ReadAll(response.Body)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(body).To(MatchJSON(`{ "ok": true }`))
+		})
+
+		It("Retries 429 with request body", func() {
+			// Create a transport that returns a 429 error for the first request and 200
+			// for the second:
+			transport := CombineTransports(
+				JSONTransport(http.StatusTooManyRequests, `{ "ok": false }`),
+				JSONTransport(http.StatusOK, `{ "ok": true }`),
+			)
+
+			// Wrap the transport:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				Interval(10 * time.Millisecond).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Create the client:
+			client := &http.Client{
+				Transport: wrapper.Wrap(transport),
+				Timeout:   1 * time.Second,
+			}
+
+			// Send the request:
+			response, err := client.Post(
+				"http://api.example.com/mypath",
+				"application/json",
+				strings.NewReader(`{}`),
+			)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -601,6 +681,47 @@ var _ = It("Tolerates connection reset by peer", func() {
 	body, err := ioutil.ReadAll(response.Body)
 	Expect(err).ToNot(HaveOccurred())
 	Expect(body).To(MatchJSON("{}"))
+})
+
+var _ = It("Doesn't change request body object", func() {
+	var err error
+
+	// Create a context:
+	ctx := context.Background()
+
+	// Prepare the server:
+	server := MakeTCPServer()
+	defer server.Close()
+	server.AppendHandlers(
+		RespondWithJSON(http.StatusOK, `{}`),
+	)
+
+	// Wrap the transport:
+	wrapper, err := NewTransportWrapper().
+		Logger(logger).
+		Build(ctx)
+	Expect(err).ToNot(HaveOccurred())
+	defer func() {
+		err = wrapper.Close()
+		Expect(err).ToNot(HaveOccurred())
+	}()
+	client := &http.Client{
+		Transport: wrapper.Wrap(&http.Transport{}),
+		Timeout:   1 * time.Second,
+	}
+
+	// Send the request:
+	body := ioutil.NopCloser(strings.NewReader(`{}`))
+	addr, err := url.Parse(server.URL())
+	Expect(err).ToNot(HaveOccurred())
+	request := &http.Request{
+		Method: http.MethodGet,
+		URL:    addr,
+		Body:   body,
+	}
+	_, err = client.Do(request)
+	Expect(err).ToNot(HaveOccurred())
+	Expect(request.Body).To(Equal(body))
 })
 
 var _ = It("Tolerates unepected EOF", func() {

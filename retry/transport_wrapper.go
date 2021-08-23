@@ -20,7 +20,9 @@ limitations under the License.
 package retry
 
 import (
+	"bytes"
 	"context"
+	"io/ioutil"
 	"math/rand"
 	"strings"
 
@@ -186,10 +188,19 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 	// Get the context:
 	ctx := request.Context()
 
-	// Calculate the max number of times that we can retry this request:
-	limit := 0
-	if t.retriable(request) && t.limit > limit {
-		limit = t.limit
+	// If the request has a body then we need to read it fully and copy it in memory, so that we
+	// can later use that copy to retry the request. We also need to restore the old body before
+	// returning because the caller my rely on the type of body that it passed, for example.
+	originalBody := request.Body
+	defer func() {
+		request.Body = originalBody
+	}()
+	var bodyCopy []byte
+	if originalBody != nil {
+		bodyCopy, err = ioutil.ReadAll(originalBody)
+		if err != nil {
+			return
+		}
 	}
 
 	// Try to send the request till it succeeds or else the retry limit is exceeded:
@@ -200,10 +211,15 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 			t.sleep(ctx, attempt)
 		}
 
+		// Each time that we retry the request we need to rewind the request body:
+		if bodyCopy != nil {
+			request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyCopy))
+		}
+
 		// Do an attempt, and return inmediately if this is the last one:
 		response, err = t.transport.RoundTrip(request)
 		attempt++
-		if attempt > limit {
+		if attempt > t.limit {
 			return
 		}
 
@@ -243,11 +259,23 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 		}
 
 		// Handle HTTP responses with error codes:
+		method := request.Method
 		code := response.StatusCode
 		switch {
 		case code == http.StatusServiceUnavailable || code == http.StatusTooManyRequests:
 			// For 429 and 503 we know that the server didn't process the request, so we
-			// can safely retry.
+			// can safely retry regardless of the method.
+			t.logger.Warn(
+				ctx,
+				"Request for method %s and URL '%s' failed with code %d, "+
+					"will try again",
+				request.Method, request.URL, code,
+			)
+			continue
+		case code >= 500 && method == http.MethodGet:
+			// For any other 5xx status code we can't be sure if the server processed
+			// the request, so we retry only GET requests, as those don't have side
+			// effects.
 			t.logger.Warn(
 				ctx,
 				"Request for method %s and URL '%s' failed with code %d, "+
@@ -261,16 +289,6 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 			return
 		}
 	}
-}
-
-// retrieable decides if retrying is acceptable for the given request.
-func (t *roundTripper) retriable(request *http.Request) bool {
-	if request == nil {
-		return false
-	}
-	methodGood := request.Method == http.MethodGet || request.Method == http.MethodDelete
-	bodyGood := request.Body == nil
-	return methodGood && bodyGood
 }
 
 // sleep calculates a retry interval taking into account the configured interval and jitter factor
