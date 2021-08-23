@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.203 Aug 23 2021
+
+- Retry requests with body
+- Update to metamodel 0.0.39
+** Add Details to Errors
+
 == 0.1.202 Aug 18 2021
 
 - Update model to v0.0.141:
