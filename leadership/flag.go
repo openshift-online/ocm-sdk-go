@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This file contains functions useful for printing lists in a format that is easy to read for
-// humans in log files.
-
 package leadership
 
 import (
