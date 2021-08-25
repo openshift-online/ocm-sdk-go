@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.204 Aug 25 2021
+
+- Change level of token retry messages to `DEBUG`.
+
 == 0.1.203 Aug 23 2021
 
 - Retry requests with body
