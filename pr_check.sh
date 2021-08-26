@@ -31,12 +31,6 @@ go get golang.org/x/tools/cmd/goimports@v0.0.0-20200518194103-259583f2d8a9
 # will try to run the tests inside them:
 rm -rf model metamodel
 
-# Run the checks:
-make \
-  test \
-  examples \
-  lint
-
 # Check that running `make generate` doesn't introduce any change in the
 # generated code:
 make generate
