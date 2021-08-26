@@ -15,27 +15,7 @@
 # limitations under the License.
 #
 
-# This script is executed by a Jenkins job for each change request. If it
-# doesn't succeed the change won't be merged.
-
-# Set the `GOBIN` environment variable so that dependencies will be installed
-# always in the same place, regardless of the value of `GOPATH`:
-export GOBIN="${PWD}/.gobin"
-export PATH="${GOBIN}:${PATH}"
-
-# Install Go tools:
-go get github.com/onsi/ginkgo/ginkgo@v1.16.4
-go get golang.org/x/tools/cmd/goimports@v0.0.0-20200518194103-259583f2d8a9
-
-# Remove the temporary model and metamodel directories, as otherwise `ginkgo`
-# will try to run the tests inside them:
-rm -rf model metamodel
-
-# Check that running `make generate` doesn't introduce any change in the
-# generated code:
-make generate
-git diff --exit-code clustersmgmt accountsmgmt
-if [ $? = 1 ]; then
-  echo "Generated code isn't in sync with model and metamodel"
-  exit 1
-fi
+# This script is executed by a Jenkins job for each change request. It used to
+# run tests, but has now been replaced by GitHub actions and will be removed
+# soon.
+exit 0
