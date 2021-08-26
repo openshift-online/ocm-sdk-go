@@ -308,7 +308,8 @@ var _ = Describe("Methods", func() {
 			// Send the request with a timeout smaller than the artificial delay
 			// introduced by the server so that a deadline exceeded error will be
 			// created and returned:
-			ctx, _ := context.WithTimeout(context.Background(), 50*time.Millisecond)
+			ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+			defer cancel()
 			_, err := connection.Get().
 				Path("/mypath").
 				SendContext(ctx)

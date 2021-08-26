@@ -195,6 +195,5 @@ func RespondWithRedirect(code int, target string) http.HandlerFunc {
 		location.Host = parsed.Host
 		w.Header().Set("Location", location.String())
 		w.WriteHeader(code)
-		return
 	}
 }

@@ -86,10 +86,8 @@ var _ = Describe("H2C", func() {
 		})
 
 		AfterEach(func() {
-			var err error
-
 			// Close the connection:
-			err = connection.Close()
+			err := connection.Close()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Stop the API server:
