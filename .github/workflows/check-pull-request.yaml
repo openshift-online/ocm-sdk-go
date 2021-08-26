@@ -60,3 +60,30 @@ jobs:
       uses: golangci/golangci-lint-action@v2
       with:
         version: v1.42.0
+
+  generate:
+    name: Generate
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the source
+      uses: actions/checkout@v2
+
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Setup Goimports
+      run: go get golang.org/x/tools/cmd/goimports@v0.0.0-20200518194103-259583f2d8a9
+
+    - name: Generate code
+      run: make generate
+
+    - name: Check differences
+      run: |
+        git diff --exit-code \
+          accountsmgmt \
+          authorizations \
+          clustersmgmt \
+          jobqueue \
+          servicelogs
