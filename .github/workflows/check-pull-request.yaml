@@ -24,6 +24,7 @@ on:
 jobs:
 
   test:
+    name: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -44,3 +45,15 @@ jobs:
 
     - name: Run the tests
       run: make tests
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the source
+      uses: actions/checkout@v2
+
+    - name: Run the linter
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: v1.42.0
