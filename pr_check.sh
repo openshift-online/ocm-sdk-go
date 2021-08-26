@@ -15,6 +15,16 @@
 # limitations under the License.
 #
 
+uname -a
+for i in /etc/*-release
+do
+  echo $i
+  cat $i
+done
+rpm -q golang-bin
+rpm -q podman
+exit 1
+
 # This script is executed by a Jenkins job for each change request. If it
 # doesn't succeed the change won't be merged.
 
