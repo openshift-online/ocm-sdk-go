@@ -257,7 +257,7 @@ var _ = Describe("Tokens", func() {
 
 		It("Succeeds if access token expires soon and there is no refresh token", func() {
 			// Generate the tokens:
-			accessToken := MakeTokenString("Bearer", 1*time.Second)
+			accessToken := MakeTokenString("Bearer", 10*time.Second)
 
 			// Create the wrapper:
 			wrapper, err := NewTransportWrapper().
