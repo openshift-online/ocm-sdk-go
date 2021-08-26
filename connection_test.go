@@ -352,8 +352,8 @@ var _ = Describe("Connection", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create the YAML configuration string:
-		generatedAccess := MakeTokenString("Bearer", 5*time.Minute)
-		generatedRefresh := MakeTokenString("Refresh", 10*time.Hour)
+		fileAccess := MakeTokenString("Bearer", 5*time.Minute)
+		fileRefresh := MakeTokenString("Refresh", 10*time.Hour)
 		content := EvaluateTemplate(
 			`
 			url: https://my.server.com
@@ -380,8 +380,8 @@ var _ = Describe("Connection", func() {
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
-			"AccessToken", generatedAccess,
-			"RefreshToken", generatedRefresh,
+			"AccessToken", fileAccess,
+			"RefreshToken", fileRefresh,
 		)
 
 		// Create the connection and verify it has been created with the configuration
@@ -409,8 +409,8 @@ var _ = Describe("Connection", func() {
 		Expect(secret).To(Equal("mysecret"))
 		returnedAccess, returnedRefresh, err := connection.Tokens()
 		Expect(err).ToNot(HaveOccurred())
-		Expect(returnedAccess).To(Equal(generatedAccess))
-		Expect(returnedRefresh).To(Equal(generatedRefresh))
+		Expect(returnedAccess).To(Equal(fileAccess))
+		Expect(returnedRefresh).To(Equal(fileRefresh))
 		defer func() {
 			err = connection.Close()
 			Expect(err).ToNot(HaveOccurred())
@@ -436,8 +436,8 @@ var _ = Describe("Connection", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create a temporary YAML file containing the configuration:
-		generatedAccess := MakeTokenString("Bearer", 5*time.Minute)
-		generatedRefresh := MakeTokenString("Refresh", 10*time.Hour)
+		fileAccess := MakeTokenString("Bearer", 5*time.Minute)
+		fileRefresh := MakeTokenString("Refresh", 10*time.Hour)
 		content := EvaluateTemplate(
 			`
 			url: https://my.server.com
@@ -464,8 +464,8 @@ var _ = Describe("Connection", func() {
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
-			"AccessToken", generatedAccess,
-			"RefreshToken", generatedRefresh,
+			"AccessToken", fileAccess,
+			"RefreshToken", fileRefresh,
 		)
 		file, err := ioutil.TempFile("", "*.yaml")
 		Expect(err).ToNot(HaveOccurred())
@@ -504,8 +504,8 @@ var _ = Describe("Connection", func() {
 		Expect(secret).To(Equal("mysecret"))
 		returnedAccess, returnedRefresh, err := connection.Tokens()
 		Expect(err).ToNot(HaveOccurred())
-		Expect(returnedAccess).To(Equal(generatedAccess))
-		Expect(returnedRefresh).To(Equal(generatedRefresh))
+		Expect(returnedAccess).To(Equal(fileAccess))
+		Expect(returnedRefresh).To(Equal(fileRefresh))
 		defer func() {
 			err = connection.Close()
 			Expect(err).ToNot(HaveOccurred())
@@ -531,8 +531,8 @@ var _ = Describe("Connection", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create a temporary YAML file containing the configuration:
-		generatedAccess := MakeTokenString("Bearer", 5*time.Minute)
-		generatedRefresh := MakeTokenString("Refresh", 10*time.Hour)
+		fileAccess := MakeTokenString("Bearer", 5*time.Minute)
+		fileRefresh := MakeTokenString("Refresh", 10*time.Hour)
 		content := EvaluateTemplate(
 			`
 			url: https://my.server.com
@@ -559,8 +559,8 @@ var _ = Describe("Connection", func() {
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
-			"AccessToken", generatedAccess,
-			"RefreshToken", generatedRefresh,
+			"AccessToken", fileAccess,
+			"RefreshToken", fileRefresh,
 		)
 		file, err := ioutil.TempFile("", "*.yaml")
 		Expect(err).ToNot(HaveOccurred())
@@ -642,8 +642,8 @@ var _ = Describe("Connection", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create a temporary YAML file containing the configuration:
-		generatedAccess := MakeTokenString("Bearer", 5*time.Minute)
-		generatedRefresh := MakeTokenString("Refresh", 10*time.Hour)
+		fileAccess := MakeTokenString("Bearer", 5*time.Minute)
+		fileRefresh := MakeTokenString("Refresh", 10*time.Hour)
 		content := EvaluateTemplate(
 			`
 			url: https://my.server.com
@@ -670,8 +670,8 @@ var _ = Describe("Connection", func() {
 			metrics_subsystem: mysubsystem
 			`,
 			"Tmp", tmp,
-			"AccessToken", generatedAccess,
-			"RefreshToken", generatedRefresh,
+			"AccessToken", fileAccess,
+			"RefreshToken", fileRefresh,
 		)
 		file, err := ioutil.TempFile("", "*.yaml")
 		Expect(err).ToNot(HaveOccurred())
@@ -725,8 +725,8 @@ var _ = Describe("Connection", func() {
 		Expect(secret).To(Equal("mysecret"))
 		returnedAccess, returnedRefresh, err := connection.Tokens()
 		Expect(err).ToNot(HaveOccurred())
-		Expect(returnedAccess).To(Equal(overridenAccess))
-		Expect(returnedRefresh).To(Equal(overridenRefresh))
+		Expect(returnedAccess).To(Equal(fileAccess))
+		Expect(returnedRefresh).To(Equal(fileRefresh))
 		defer func() {
 			err = connection.Close()
 			Expect(err).ToNot(HaveOccurred())
