@@ -46,6 +46,9 @@ jobs:
     - name: Run the tests
       run: make tests
 
+    - name: Build the examples
+      run: make examples
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
