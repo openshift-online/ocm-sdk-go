@@ -250,8 +250,6 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	h.owner.requestCount.With(labels).Inc()
 	h.owner.requestDuration.With(labels).Observe(elapsed.Seconds())
-
-	return
 }
 
 // Header is part of the implementation of the http.ResponseWriter interface.

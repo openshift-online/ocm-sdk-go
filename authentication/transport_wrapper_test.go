@@ -333,7 +333,8 @@ var _ = Describe("Tokens", func() {
 				}()
 
 				// Try to get the access token:
-				ctx, _ = context.WithTimeout(ctx, 100*time.Millisecond)
+				ctx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
+				defer cancel()
 				_, _, err = wrapper.Tokens(ctx)
 				Expect(err).To(HaveOccurred())
 				message := err.Error()
@@ -1096,7 +1097,8 @@ var _ = Describe("Tokens", func() {
 
 			// Request the token with a timeout smaller than the artificial
 			// delay introduced by the server:
-			ctx, _ = context.WithTimeout(ctx, 5*time.Millisecond)
+			ctx, cancel := context.WithTimeout(ctx, 5*time.Millisecond)
+			defer cancel()
 			_, _, err = wrapper.Tokens(ctx)
 
 			// The request should fail with a context deadline exceeded error:

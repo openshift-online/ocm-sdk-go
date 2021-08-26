@@ -81,7 +81,6 @@ var _ = Describe("Metrics", func() {
 		called := false
 		handler = wrapper.Wrap(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			called = true
-			return
 		}))
 
 		// Send the request:

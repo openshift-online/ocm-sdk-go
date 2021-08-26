@@ -401,14 +401,18 @@ var _ = Describe("Object", func() {
 				var err error
 
 				// Set the environment variables:
+				var names []string
 				for name, value := range variables {
 					err = os.Setenv(name, value)
 					Expect(err).ToNot(HaveOccurred())
-					defer func() {
+					names = append(names, name)
+				}
+				defer func() {
+					for _, name := range names {
 						err = os.Unsetenv(name)
 						Expect(err).ToNot(HaveOccurred())
-					}()
-				}
+					}
+				}()
 
 				// Create a temporary directory to contain the temporary files:
 				var tmp string

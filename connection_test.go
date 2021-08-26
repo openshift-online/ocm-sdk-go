@@ -204,7 +204,8 @@ var _ = Describe("Connection", func() {
 		// Try to get the tokens using a explicit and short timeout to make the test run
 		// faster (by default it takes up to 15 seconds) but give it enough time to retry
 		// a few times:
-		ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
 		_, _, err = connection.TokensContext(ctx)
 
 		// Check that the transport was called at least three times:

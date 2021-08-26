@@ -946,12 +946,6 @@ func (w *TransportWrapper) sendFormTimed(ctx context.Context, form url.Values) (
 	return
 }
 
-// haveCredentials returns true if the connection has credentials that can be used to request new
-// tokens.
-func (w *TransportWrapper) haveCredentials() bool {
-	return w.havePassword() || w.haveSecret()
-}
-
 func (w *TransportWrapper) havePassword() bool {
 	return w.user != "" && w.password != ""
 }
