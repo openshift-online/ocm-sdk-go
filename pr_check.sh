@@ -24,7 +24,7 @@ export GOBIN="${PWD}/.gobin"
 export PATH="${GOBIN}:${PATH}"
 
 # Install Go tools:
-go get github.com/onsi/ginkgo/ginkgo@v1.8.0
+go get github.com/onsi/ginkgo/ginkgo@v1.16.4
 go get golang.org/x/tools/cmd/goimports@v0.0.0-20200518194103-259583f2d8a9
 
 # Remove the temporary model and metamodel directories, as otherwise `ginkgo`
