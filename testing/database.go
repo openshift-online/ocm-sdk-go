@@ -41,6 +41,9 @@ type DatabaseServer struct {
 	// Temporary directory for database configuration:
 	tmp string
 
+	// Name of the tool used to create containers (podman or docker):
+	tool string
+
 	// Identifier of the container where the database server is running:
 	container string
 
@@ -76,6 +79,13 @@ type Database struct {
 func MakeDatabaseServer() *DatabaseServer {
 	var err error
 
+	// Check if podman or docker are available:
+	tool, err := exec.LookPath("podman")
+	if err != nil {
+		tool, err = exec.LookPath("docker")
+		Expect(err).ToNot(HaveOccurred(), "Can't find 'podman' or 'docker'")
+	}
+
 	// Generate a random password for the database admnistrator:
 	password := uuid.NewString()
 
@@ -102,7 +112,7 @@ func MakeDatabaseServer() *DatabaseServer {
 	// Start the database server:
 	runOut := &bytes.Buffer{}
 	runCmd := exec.Command(
-		"podman", "run",
+		tool, "run",
 		"--env", "POSTGRESQL_ADMIN_PASSWORD="+password,
 		"--volume", tmp+":/opt/app-root/src/postgresql-cfg:Z",
 		"--publish", "5432",
@@ -116,11 +126,14 @@ func MakeDatabaseServer() *DatabaseServer {
 
 	// Find out the port number assigned to the database server:
 	portOut := &bytes.Buffer{}
-	portCmd := exec.Command("podman", "port", container, "5432/tcp") // #nosec G204
+	portCmd := exec.Command(tool, "port", container, "5432/tcp") // #nosec G204
 	portCmd.Stdout = portOut
 	err = portCmd.Run()
 	Expect(err).ToNot(HaveOccurred())
-	hostPort := strings.TrimSpace(portOut.String())
+	portLines := strings.Split(portOut.String(), "\n")
+	Expect(len(portLines)).To(BeNumerically(">=", 1))
+	portLine := portLines[0]
+	hostPort := strings.TrimSpace(portLine)
 	host, port, err := net.SplitHostPort(hostPort)
 	Expect(err).ToNot(HaveOccurred())
 	if host == "0.0.0.0" {
@@ -139,6 +152,7 @@ func MakeDatabaseServer() *DatabaseServer {
 	// Create and populate the object:
 	return &DatabaseServer{
 		tmp:       tmp,
+		tool:      tool,
 		container: container,
 		host:      host,
 		port:      port,
@@ -156,14 +170,14 @@ func (s *DatabaseServer) Close() {
 	}
 
 	// Get the logs of the database server:
-	logsCmd := exec.Command("podman", "logs", s.container) // #nosec G204
+	logsCmd := exec.Command(s.tool, "logs", s.container) // #nosec G204
 	logsCmd.Stdout = GinkgoWriter
 	logsCmd.Stderr = GinkgoWriter
 	err = logsCmd.Run()
 	Expect(err).ToNot(HaveOccurred())
 
 	// Stop the database server:
-	killCmd := exec.Command("podman", "kill", s.container) // #nosec G204
+	killCmd := exec.Command(s.tool, "kill", s.container) // #nosec G204
 	killCmd.Stdout = GinkgoWriter
 	killCmd.Stderr = GinkgoWriter
 	err = killCmd.Run()
