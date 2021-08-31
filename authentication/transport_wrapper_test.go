@@ -685,6 +685,68 @@ var _ = Describe("Tokens", func() {
 			_, _, err = wrapper.Tokens(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
+
+		It("Works if no refresh token is returned", func() {
+			// Generate the tokens:
+			accessToken := MakeTokenString("Bearer", 5*time.Minute)
+
+			// Configure the server:
+			server.AppendHandlers(
+				CombineHandlers(
+					VerifyPasswordGrant("myuser", "mypassword"),
+					RespondWithAccessToken(accessToken),
+				),
+			)
+
+			// Create the wrapper:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				TokenURL(server.URL()).
+				TrustedCA(ca).
+				User("myuser", "mypassword").
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Get the tokens:
+			returnedAccess, _, err := wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(accessToken))
+		})
+
+		It("Accepts lower case token type", func() {
+			// Generate the tokens:
+			accessToken := MakeTokenString("bearer", 5*time.Minute)
+
+			// Configure the server:
+			server.AppendHandlers(
+				CombineHandlers(
+					VerifyPasswordGrant("myuser", "mypassword"),
+					RespondWithAccessToken(accessToken),
+				),
+			)
+
+			// Create the wrapper:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				TokenURL(server.URL()).
+				TrustedCA(ca).
+				User("myuser", "mypassword").
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Get the tokens:
+			returnedAccess, _, err := wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(accessToken))
+		})
 	})
 
 	When("Only the access token is provided", func() {
