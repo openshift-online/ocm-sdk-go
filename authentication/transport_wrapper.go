@@ -365,8 +365,37 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 		}
 		claim, ok := claims["typ"]
 		if !ok {
-			err = fmt.Errorf("token %d doesn't contain the 'typ' claim", i)
-			return
+			// When the token doesn't have the `typ` claim we will use the position to
+			// decide: first token should be the access token and second should be the
+			// refresh token. That is consistent with the signature of the method that
+			// returns the tokens.
+			switch i {
+			case 0:
+				b.logger.Debug(
+					ctx,
+					"First token doesn't have a 'typ' claim, will assume "+
+						"that it is an access token",
+				)
+				accessToken = &tokenInfo{
+					text:   text,
+					object: object,
+				}
+				continue
+			case 1:
+				b.logger.Debug(
+					ctx,
+					"Second token doesn't have a 'typ' claim, will assume "+
+						"that it is a refresh token",
+				)
+				refreshToken = &tokenInfo{
+					text:   text,
+					object: object,
+				}
+				continue
+			default:
+				err = fmt.Errorf("token %d doesn't contain the 'typ' claim", i)
+				return
+			}
 		}
 		typ, ok := claim.(string)
 		if !ok {

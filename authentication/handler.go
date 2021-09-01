@@ -832,18 +832,26 @@ func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 // something is wrong it sends an error response to the client and returns false.
 func (h *Handler) checkClaims(w http.ResponseWriter, r *http.Request,
 	claims jwt.MapClaims) bool {
-	// Check the token type:
-	typ, ok := h.checkStringClaim(w, r, claims, "typ")
-	if !ok {
-		return false
-	}
-	if !strings.EqualFold(typ, "Bearer") {
-		h.sendError(
-			w, r,
-			"Bearer token type '%s' isn't supported",
-			typ,
-		)
-		return false
+	// The `typ` claim is optional, but if it exists the value must be `Bearer`:
+	value, ok := claims["typ"]
+	if ok {
+		typ, ok := value.(string)
+		if !ok {
+			h.sendError(
+				w, r,
+				"Bearer token type claim contains incorrect string value '%v'",
+				value,
+			)
+			return false
+		}
+		if !strings.EqualFold(typ, "Bearer") {
+			h.sendError(
+				w, r,
+				"Bearer token type '%s' isn't allowed",
+				typ,
+			)
+			return false
+		}
 	}
 
 	// Check the format of the issue and expiration date claims:
@@ -857,7 +865,7 @@ func (h *Handler) checkClaims(w http.ResponseWriter, r *http.Request,
 	}
 
 	// Make sure that the impersonation flag claim doesn't exist, or is `false`:
-	value, ok := claims["impersonated"]
+	value, ok = claims["impersonated"]
 	if ok {
 		flag, ok := value.(bool)
 		if !ok {
@@ -898,27 +906,6 @@ func (h *Handler) checkTimeClaim(w http.ResponseWriter, r *http.Request,
 		return
 	}
 	result = time.Unix(int64(seconds), 0)
-	return
-}
-
-// checkStringClaim checks that the given claim exists and that the value is a string. If it doesn't
-// exist or it has a wrong type it sends an error response to the client and returns false. If it
-// exists it returns its value and true.
-func (h *Handler) checkStringClaim(w http.ResponseWriter, r *http.Request,
-	claims jwt.MapClaims, name string) (result string, ok bool) {
-	value, ok := h.checkClaim(w, r, claims, name)
-	if !ok {
-		return
-	}
-	result, ok = value.(string)
-	if !ok {
-		h.sendError(
-			w, r,
-			"Bearer token claim '%s' contains incorrect text value '%v'",
-			name, value,
-		)
-		return
-	}
 	return
 }
 
