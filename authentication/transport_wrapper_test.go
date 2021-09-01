@@ -164,6 +164,39 @@ var _ = Describe("Tokens", func() {
 			Expect(returnedAccess).To(Equal(validAccess))
 		})
 
+		It("Uses opaque refresh token to refresh expired access token", func() {
+			// Generate the tokens:
+			expiredAccess := MakeTokenString("Bearer", -5*time.Minute)
+			validAccess := MakeTokenString("Bearer", 5*time.Minute)
+			refreshToken := "my_refresh_token"
+
+			// Configure the server:
+			server.AppendHandlers(
+				CombineHandlers(
+					VerifyRefreshGrant(refreshToken),
+					RespondWithAccessAndRefreshTokens(validAccess, refreshToken),
+				),
+			)
+
+			// Create the wrapper:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				TokenURL(server.URL()).
+				TrustedCA(ca).
+				Tokens(expiredAccess, refreshToken).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Get the tokens:
+			returnedAccess, _, err := wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(validAccess))
+		})
+
 		It("Refreshes the access token if it expires in less than one minute", func() {
 			// Generate the tokens:
 			firstAccess := MakeTokenString("Bearer", 50*time.Second)
@@ -746,6 +779,39 @@ var _ = Describe("Tokens", func() {
 			returnedAccess, _, err := wrapper.Tokens(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(returnedAccess).To(Equal(accessToken))
+		})
+
+		It("Accepts opaque refresh token", func() {
+			// Generate the tokens:
+			accessToken := MakeTokenString("bearer", 5*time.Minute)
+			refreshToken := "my_refresh_token"
+
+			// Configure the server:
+			server.AppendHandlers(
+				CombineHandlers(
+					VerifyPasswordGrant("myuser", "mypassword"),
+					RespondWithAccessAndRefreshTokens(accessToken, refreshToken),
+				),
+			)
+
+			// Create the wrapper:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				TokenURL(server.URL()).
+				TrustedCA(ca).
+				User("myuser", "mypassword").
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Get the tokens:
+			returnedAccess, returnedRefresh, err := wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(accessToken))
+			Expect(returnedRefresh).To(Equal(refreshToken))
 		})
 	})
 

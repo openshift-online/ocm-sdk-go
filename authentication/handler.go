@@ -505,7 +505,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add the token to the context:
-	ctx = ContextWithToken(ctx, token)
+	ctx = ContextWithToken(ctx, token.object)
 	r = r.WithContext(ctx)
 
 	// Call the next handler:
@@ -728,18 +728,22 @@ func (h *Handler) parseKey(data keyData) (key interface{}, err error) {
 // checkToken checks if the token is valid. If it is valid it returns the parsed token, the
 // claims and true. If it isn't valid it sends an error response to the client and returns false.
 func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
-	bearer string) (token *jwt.Token, claims jwt.MapClaims, ok bool) {
+	bearer string) (token *tokenInfo, claims jwt.MapClaims, ok bool) {
 	// Get the context:
 	ctx := r.Context()
 
 	// Parse the token:
 	claims = jwt.MapClaims{}
-	token, err := h.tokenParser.ParseWithClaims(
+	object, err := h.tokenParser.ParseWithClaims(
 		bearer, claims,
 		func(token *jwt.Token) (key interface{}, err error) {
 			return h.selectKey(ctx, token)
 		},
 	)
+	token = &tokenInfo{
+		text:   bearer,
+		object: object,
+	}
 	if err != nil {
 		switch typed := err.(type) {
 		case *jwt.ValidationError:
