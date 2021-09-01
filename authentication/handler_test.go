@@ -284,18 +284,46 @@ var _ = Describe("Handler", func() {
 		}`))
 	})
 
-	It("Rejects token without type claim", func() {
+	It("Accepts token without `typ` claim", func() {
+		// Prepare the next handler:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		// Prepare a token without the 'typ' claim:
+		bearer := MakeTokenObject(jwt.MapClaims{
+			"typ": nil,
+		}).Raw
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request with the bad token:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify that the request is accepted:
+		Expect(recorder.Code).To(Equal(http.StatusOK))
+	})
+
+	It("Rejects `typ` claim with incorrect type", func() {
 		// Prepare the next handler, which should not be called:
 		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			Expect(true).To(BeFalse())
 			w.WriteHeader(http.StatusBadRequest)
 		})
 
-		// Prepare a token without the 'typ' claim:
-		token := MakeTokenObject(jwt.MapClaims{
-			"typ": nil,
-		})
-		bearer := token.Raw
+		// Prepare a refresh token:
+		bearer := MakeTokenObject(jwt.MapClaims{
+			"typ": 123,
+		}).Raw
 
 		// Prepare the handler:
 		handler, err := NewHandler().
@@ -318,7 +346,7 @@ var _ = Describe("Handler", func() {
 			"id": "401",
 			"href": "/api/clusters_mgmt/v1/errors/401",
 			"code": "CLUSTERS-MGMT-401",
-			"reason": "Bearer token doesn't contain required claim 'typ'"
+			"reason": "Bearer token type claim contains incorrect string value '123'"
 		}`))
 	})
 
@@ -353,7 +381,7 @@ var _ = Describe("Handler", func() {
 			"id": "401",
 			"href": "/api/clusters_mgmt/v1/errors/401",
 			"code": "CLUSTERS-MGMT-401",
-			"reason": "Bearer token type 'Refresh' isn't supported"
+			"reason": "Bearer token type 'Refresh' isn't allowed"
 		}`))
 	})
 
@@ -388,7 +416,7 @@ var _ = Describe("Handler", func() {
 			"id": "401",
 			"href": "/api/clusters_mgmt/v1/errors/401",
 			"code": "CLUSTERS-MGMT-401",
-			"reason": "Bearer token type 'Offline' isn't supported"
+			"reason": "Bearer token type 'Offline' isn't allowed"
 		}`))
 	})
 
