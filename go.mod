@@ -18,6 +18,4 @@ require (
 	github.com/prometheus/client_golang v1.9.0
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
-	k8s.io/api v0.18.5
-	k8s.io/apimachinery v0.18.5
 )
