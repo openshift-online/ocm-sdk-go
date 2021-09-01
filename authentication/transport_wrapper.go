@@ -901,8 +901,8 @@ func (w *TransportWrapper) sendFormTimed(ctx context.Context, form url.Values) (
 		err = fmt.Errorf("token response status code is '%d'", response.StatusCode)
 		return
 	}
-	if result.TokenType != nil && *result.TokenType != "bearer" {
-		err = fmt.Errorf("expected 'bearer' token type but got '%s", *result.TokenType)
+	if result.TokenType != nil && !strings.EqualFold(*result.TokenType, "bearer") {
+		err = fmt.Errorf("expected 'bearer' token type but got '%s'", *result.TokenType)
 		return
 	}
 
@@ -918,10 +918,11 @@ func (w *TransportWrapper) sendFormTimed(ctx context.Context, form url.Values) (
 		return
 	}
 
-	// The refresh token isn't mandatory for the client credentials grant:
+	// The refresh token isn't mandatory for the password and client credentials grants:
 	var refreshToken *jwt.Token
 	if result.RefreshToken == nil {
-		if form.Get(grantTypeField) != clientCredentialsGrant {
+		grantType := form.Get(grantTypeField)
+		if grantType != passwordGrant && grantType != clientCredentialsGrant {
 			err = fmt.Errorf("no refresh token was received")
 			return
 		}
