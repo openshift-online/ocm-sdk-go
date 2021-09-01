@@ -7,3 +7,5 @@
 /vendor/
 !/examples/*.go
 !/examples/*.yaml
+!/examples/go.mod
+!/examples/go.sum
