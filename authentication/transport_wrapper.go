@@ -92,8 +92,8 @@ type TransportWrapper struct {
 	tokenServer    *internal.ServerAddress
 	tokenMutex     *sync.Mutex
 	tokenParser    *jwt.Parser
-	accessToken    *jwt.Token
-	refreshToken   *jwt.Token
+	accessToken    *tokenInfo
+	refreshToken   *tokenInfo
 
 	// Fields used for metrics:
 	metricsSubsystem    string
@@ -337,18 +337,28 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 		return
 	}
 
+	// Create the token parser:
+	tokenParser := &jwt.Parser{}
+
 	// Parse the tokens:
-	tokenParser := new(jwt.Parser)
-	var accessToken *jwt.Token
-	var refreshToken *jwt.Token
+	var accessToken *tokenInfo
+	var refreshToken *tokenInfo
 	for i, text := range b.tokens {
-		var token *jwt.Token
-		token, _, err = tokenParser.ParseUnverified(text, jwt.MapClaims{})
+		var object *jwt.Token
+		object, _, err = tokenParser.ParseUnverified(text, jwt.MapClaims{})
 		if err != nil {
-			err = fmt.Errorf("can't parse token %d: %w", i, err)
-			return
+			b.logger.Debug(
+				ctx,
+				"Can't parse token %d, will assume that it is an opaque "+
+					"refresh token: %v",
+				i, err,
+			)
+			refreshToken = &tokenInfo{
+				text: text,
+			}
+			continue
 		}
-		claims, ok := token.Claims.(jwt.MapClaims)
+		claims, ok := object.Claims.(jwt.MapClaims)
 		if !ok {
 			err = fmt.Errorf("claims of token %d are of type '%T'", i, claims)
 			return
@@ -363,13 +373,17 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 			err = fmt.Errorf("claim 'type' of token %d is of type '%T'", i, claim)
 			return
 		}
-		switch {
-		case strings.EqualFold(typ, "Bearer"):
-			accessToken = token
-		case strings.EqualFold(typ, "Refresh"):
-			refreshToken = token
-		case strings.EqualFold(typ, "Offline"):
-			refreshToken = token
+		switch strings.ToLower(typ) {
+		case "bearer":
+			accessToken = &tokenInfo{
+				text:   text,
+				object: object,
+			}
+		case "refresh", "offline":
+			refreshToken = &tokenInfo{
+				text:   text,
+				object: object,
+			}
 		default:
 			err = fmt.Errorf("type '%s' of token %d is unknown", typ, i)
 			return
@@ -650,9 +664,9 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 	// Check the expiration times of the tokens:
 	now := time.Now()
 	var accessExpires bool
-	var accessReamining time.Duration
+	var accessRemaining time.Duration
 	if w.accessToken != nil {
-		accessExpires, accessReamining, err = tokenRemaining(w.accessToken, now)
+		accessExpires, accessRemaining, err = tokenRemaining(w.accessToken, now)
 		if err != nil {
 			return
 		}
@@ -666,13 +680,13 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 		}
 	}
 	if w.logger.DebugEnabled() {
-		w.debugExpiry(ctx, "Bearer", w.accessToken, accessExpires, accessReamining)
+		w.debugExpiry(ctx, "Bearer", w.accessToken, accessExpires, accessRemaining)
 		w.debugExpiry(ctx, "Refresh", w.refreshToken, refreshExpires, refreshRemaining)
 	}
 
 	// If the access token is available and it isn't expired or about to expire then we can
 	// return the current tokens directly:
-	if w.accessToken != nil && (!accessExpires || accessReamining >= minRemaining) {
+	if w.accessToken != nil && (!accessExpires || accessRemaining >= minRemaining) {
 		access, refresh = w.currentTokens()
 		return
 	}
@@ -739,12 +753,12 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 	// that the refresh token is unavailable or completely expired. And we know that we don't
 	// have credentials to request new tokens. But we can still use the access token if it isn't
 	// expired.
-	if w.accessToken != nil && accessReamining > 0 {
+	if w.accessToken != nil && accessRemaining > 0 {
 		w.logger.Warn(
 			ctx,
 			"Access token expires in only %s, but there is no other mechanism to "+
 				"obtain a new token, so will try to use it anyhow",
-			accessReamining,
+			accessRemaining,
 		)
 		access, refresh = w.currentTokens()
 		return
@@ -764,10 +778,10 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 // strings.
 func (w *TransportWrapper) currentTokens() (access, refresh string) {
 	if w.accessToken != nil {
-		access = w.accessToken.Raw
+		access = w.accessToken.text
 	}
 	if w.refreshToken != nil {
-		refresh = w.refreshToken.Raw
+		refresh = w.refreshToken.text
 	}
 	return
 }
@@ -801,7 +815,7 @@ func (w *TransportWrapper) sendRefreshForm(ctx context.Context, attempt int) (co
 	form := url.Values{}
 	form.Set(grantTypeField, refreshTokenGrant)
 	form.Set(clientIDField, w.clientID)
-	form.Set(refreshTokenField, w.refreshToken.Raw)
+	form.Set(refreshTokenField, w.refreshToken.text)
 	code, result, err = w.sendForm(ctx, form, attempt)
 	return
 }
@@ -908,18 +922,32 @@ func (w *TransportWrapper) sendFormTimed(ctx context.Context, form url.Values) (
 
 	// The response should always contains the access token, regardless of the kind of grant
 	// that was used:
-	var accessToken *jwt.Token
+	var accessTokenText string
+	var accessTokenObject *jwt.Token
+	var accessToken *tokenInfo
 	if result.AccessToken == nil {
 		err = fmt.Errorf("no access token was received")
 		return
 	}
-	accessToken, _, err = w.tokenParser.ParseUnverified(*result.AccessToken, jwt.MapClaims{})
+	accessTokenText = *result.AccessToken
+	accessTokenObject, _, err = w.tokenParser.ParseUnverified(
+		accessTokenText,
+		jwt.MapClaims{},
+	)
 	if err != nil {
 		return
 	}
+	if accessTokenText != "" {
+		accessToken = &tokenInfo{
+			text:   accessTokenText,
+			object: accessTokenObject,
+		}
+	}
 
 	// The refresh token isn't mandatory for the password and client credentials grants:
-	var refreshToken *jwt.Token
+	var refreshTokenText string
+	var refreshTokenObject *jwt.Token
+	var refreshToken *tokenInfo
 	if result.RefreshToken == nil {
 		grantType := form.Get(grantTypeField)
 		if grantType != passwordGrant && grantType != clientCredentialsGrant {
@@ -927,12 +955,24 @@ func (w *TransportWrapper) sendFormTimed(ctx context.Context, form url.Values) (
 			return
 		}
 	} else {
-		refreshToken, _, err = w.tokenParser.ParseUnverified(
-			*result.RefreshToken,
+		refreshTokenText = *result.RefreshToken
+		refreshTokenObject, _, err = w.tokenParser.ParseUnverified(
+			refreshTokenText,
 			jwt.MapClaims{},
 		)
 		if err != nil {
-			return
+			w.logger.Debug(
+				ctx,
+				"Refresh token can't be parsed, will assume it is opaque: %v",
+				err,
+			)
+			err = nil
+		}
+	}
+	if refreshTokenText != "" {
+		refreshToken = &tokenInfo{
+			text:   refreshTokenText,
+			object: refreshTokenObject,
 		}
 	}
 
@@ -956,8 +996,8 @@ func (w *TransportWrapper) haveSecret() bool {
 }
 
 // debugExpiry sends to the log information about the expiration of the given token.
-func (w *TransportWrapper) debugExpiry(ctx context.Context, typ string, token *jwt.Token, expires bool,
-	left time.Duration) {
+func (w *TransportWrapper) debugExpiry(ctx context.Context, typ string, token *tokenInfo,
+	expires bool, left time.Duration) {
 	if token != nil {
 		if expires {
 			if left < 0 {
