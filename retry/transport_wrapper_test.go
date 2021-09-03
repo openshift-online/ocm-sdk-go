@@ -501,6 +501,7 @@ var _ = Describe("Protocol error", func() {
 				Logger(logger).
 				Limit(3).
 				Interval(100 * time.Millisecond).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -593,6 +594,7 @@ var _ = Describe("Protocol error", func() {
 				Logger(logger).
 				Limit(0).
 				Interval(100 * time.Millisecond).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -657,6 +659,7 @@ var _ = It("Tolerates connection reset by peer", func() {
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
 		Interval(100 * time.Millisecond).
+		Jitter(0).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
@@ -699,6 +702,7 @@ var _ = It("Doesn't change request body object", func() {
 	// Wrap the transport:
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
+		Jitter(0).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
@@ -768,6 +772,7 @@ var _ = It("Tolerates unepected EOF", func() {
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
 		Interval(100 * time.Millisecond).
+		Jitter(0).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
