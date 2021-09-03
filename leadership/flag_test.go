@@ -176,7 +176,7 @@ var _ = Describe("Flag behaviour", func() {
 		})
 
 		It("It is quicly raised ", func() {
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -225,7 +225,7 @@ var _ = Describe("Flag behaviour", func() {
 		})
 
 		It("It isn't quicly raised", func() {
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 			Expect(flag.Raised()).To(BeFalse())
 		})
 
@@ -284,7 +284,7 @@ var _ = Describe("Flag behaviour", func() {
 		})
 
 		It("It is quicly raised", func() {
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -332,7 +332,7 @@ var _ = Describe("Flag behaviour", func() {
 		})
 
 		It("It is quicly raised", func() {
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -381,7 +381,7 @@ var _ = Describe("Flag behaviour", func() {
 		})
 
 		It("It isn't quickly raised", func() {
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
