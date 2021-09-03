@@ -90,7 +90,7 @@ var _ = Describe("Creation", func() {
 	It("Can be created with positive retry interval", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
-			Interval(1 * time.Second).
+			Interval(5 * time.Second).
 			Build(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(wrapper).ToNot(BeNil())
@@ -192,7 +192,7 @@ var _ = Describe("Server error", func() {
 			// Wrap the transport:
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -203,7 +203,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -227,7 +227,7 @@ var _ = Describe("Server error", func() {
 			// Wrap the transport:
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -238,7 +238,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -266,7 +266,7 @@ var _ = Describe("Server error", func() {
 			// Wrap the transport:
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -277,7 +277,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -301,7 +301,7 @@ var _ = Describe("Server error", func() {
 			// Wrap the transport:
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -312,7 +312,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -343,7 +343,7 @@ var _ = Describe("Server error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Limit(0).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -354,7 +354,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -379,7 +379,7 @@ var _ = Describe("Server error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Limit(0).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -390,7 +390,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -458,7 +458,7 @@ var _ = Describe("Protocol error", func() {
 			// Wrap the transport:
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -467,7 +467,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -500,7 +500,7 @@ var _ = Describe("Protocol error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Limit(3).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -509,7 +509,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -535,21 +535,21 @@ var _ = Describe("Protocol error", func() {
 				conn = Accept(listener)
 				Reject(conn)
 				elapsed := time.Since(start)
-				Expect(elapsed).To(BeNumerically(">=", 50*time.Millisecond))
+				Expect(elapsed).To(BeNumerically(">=", 100*time.Millisecond))
 
 				// Reject the third connection and verify that it was sent after
 				// waiting the double of the configured interval:
 				conn = Accept(listener)
 				Reject(conn)
 				elapsed = time.Since(start)
-				Expect(elapsed).To(BeNumerically(">=", 100*time.Millisecond))
+				Expect(elapsed).To(BeNumerically(">=", 200*time.Millisecond))
 
 				// Reject the fourth connection and verify that it was sent after
 				// waiting the four times the configured interval:
 				conn = Accept(listener)
 				Reject(conn)
 				elapsed = time.Since(start)
-				Expect(elapsed).To(BeNumerically(">=", 200*time.Millisecond))
+				Expect(elapsed).To(BeNumerically(">=", 400*time.Millisecond))
 			}()
 
 			// Wrap the transport setting the jitter to zero so that we can reliably
@@ -557,7 +557,7 @@ var _ = Describe("Protocol error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Limit(3).
-				Interval(50 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -567,7 +567,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -592,7 +592,7 @@ var _ = Describe("Protocol error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Limit(0).
-				Interval(10 * time.Millisecond).
+				Interval(100 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -601,7 +601,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   1 * time.Second,
+				Timeout:   5 * time.Second,
 			}
 
 			// Send the request:
@@ -656,7 +656,7 @@ var _ = It("Tolerates connection reset by peer", func() {
 	// Wrap the transport:
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
-		Interval(10 * time.Millisecond).
+		Interval(100 * time.Millisecond).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
@@ -670,7 +670,7 @@ var _ = It("Tolerates connection reset by peer", func() {
 			},
 			ForceAttemptHTTP2: true,
 		}),
-		Timeout: 1 * time.Second,
+		Timeout: 5 * time.Second,
 	}
 
 	// Send the request:
@@ -707,7 +707,7 @@ var _ = It("Doesn't change request body object", func() {
 	}()
 	client := &http.Client{
 		Transport: wrapper.Wrap(&http.Transport{}),
-		Timeout:   1 * time.Second,
+		Timeout:   5 * time.Second,
 	}
 
 	// Send the request:
@@ -767,7 +767,7 @@ var _ = It("Tolerates unepected EOF", func() {
 	// Wrap the transport:
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
-		Interval(10 * time.Millisecond).
+		Interval(100 * time.Millisecond).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
@@ -781,7 +781,7 @@ var _ = It("Tolerates unepected EOF", func() {
 			},
 			ForceAttemptHTTP2: true,
 		}),
-		Timeout: 1 * time.Second,
+		Timeout: 5 * time.Second,
 	}
 
 	// Send the request:
