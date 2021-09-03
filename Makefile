@@ -38,8 +38,7 @@ examples:
 
 .PHONY: test tests
 test tests:
-	ginkgo -p -r --skipPackage=leadership
-	ginkgo leadership
+	ginkgo -r
 
 .PHONY: fmt
 fmt:
