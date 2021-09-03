@@ -501,6 +501,7 @@ var _ = Describe("Protocol error", func() {
 				Logger(logger).
 				Limit(3).
 				Interval(100 * time.Millisecond).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -525,31 +526,49 @@ var _ = Describe("Protocol error", func() {
 			go func() {
 				defer GinkgoRecover()
 
+				// We will use this to calculate the time between requests:
+				var start time.Time
+				var elapsed time.Duration
+
 				// Reject the first connection:
 				conn := Accept(listener)
 				Reject(conn)
-				start := time.Now()
+				start = time.Now()
 
 				// Reject the second connection an verify that it was sent after
 				// waiting the configured interval:
 				conn = Accept(listener)
 				Reject(conn)
-				elapsed := time.Since(start)
-				Expect(elapsed).To(BeNumerically(">=", 100*time.Millisecond))
+				elapsed = time.Since(start)
+				start = time.Now()
+				Expect(elapsed).To(BeNumerically(
+					"~",
+					100*time.Millisecond,
+					50*time.Millisecond,
+				))
 
 				// Reject the third connection and verify that it was sent after
 				// waiting the double of the configured interval:
 				conn = Accept(listener)
 				Reject(conn)
 				elapsed = time.Since(start)
-				Expect(elapsed).To(BeNumerically(">=", 200*time.Millisecond))
+				start = time.Now()
+				Expect(elapsed).To(BeNumerically(
+					"~",
+					200*time.Millisecond,
+					50*time.Millisecond,
+				))
 
 				// Reject the fourth connection and verify that it was sent after
 				// waiting the four times the configured interval:
 				conn = Accept(listener)
 				Reject(conn)
 				elapsed = time.Since(start)
-				Expect(elapsed).To(BeNumerically(">=", 400*time.Millisecond))
+				Expect(elapsed).To(BeNumerically(
+					"~",
+					400*time.Millisecond,
+					50*time.Millisecond,
+				))
 			}()
 
 			// Wrap the transport setting the jitter to zero so that we can reliably
@@ -593,6 +612,7 @@ var _ = Describe("Protocol error", func() {
 				Logger(logger).
 				Limit(0).
 				Interval(100 * time.Millisecond).
+				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
@@ -657,6 +677,7 @@ var _ = It("Tolerates connection reset by peer", func() {
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
 		Interval(100 * time.Millisecond).
+		Jitter(0).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
@@ -699,6 +720,7 @@ var _ = It("Doesn't change request body object", func() {
 	// Wrap the transport:
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
+		Jitter(0).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
@@ -768,6 +790,7 @@ var _ = It("Tolerates unepected EOF", func() {
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
 		Interval(100 * time.Millisecond).
+		Jitter(0).
 		Build(ctx)
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {

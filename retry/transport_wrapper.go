@@ -298,7 +298,7 @@ func (t *roundTripper) sleep(ctx context.Context, attempt int) {
 	interval := t.interval
 
 	// Double the interval for each attempt:
-	interval *= 1 << attempt
+	interval *= 1 << (attempt - 1)
 
 	// Adjust the interval adding or subtracting a random amount. For example, if the jitter
 	// factor given in the configuration is 0.1 will add or sustract up to a 10%.
