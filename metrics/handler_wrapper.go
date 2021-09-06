@@ -268,3 +268,11 @@ func (w *responseWriter) WriteHeader(code int) {
 	w.code = code
 	w.writer.WriteHeader(code)
 }
+
+// Flush is the implementation of the http.Flusher interface.
+func (w *responseWriter) Flush() {
+	flusher, ok := w.writer.(http.Flusher)
+	if ok {
+		flusher.Flush()
+	}
+}
