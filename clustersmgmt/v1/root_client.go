@@ -131,6 +131,16 @@ func (c *Client) Flavours() *FlavoursClient {
 	)
 }
 
+// LimitedSupportReasonTemplates returns the target 'limited_support_reason_templates' resource.
+//
+// Reference to limited support reason templates.
+func (c *Client) LimitedSupportReasonTemplates() *LimitedSupportReasonTemplatesClient {
+	return NewLimitedSupportReasonTemplatesClient(
+		c.transport,
+		path.Join(c.path, "limited_support_reason_templates"),
+	)
+}
+
 // MachineTypes returns the target 'machine_types' resource.
 //
 // Reference to the resource that manage the collection of machine types.

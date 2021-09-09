@@ -174,6 +174,9 @@ var pathTreeData = `{
             "ingresses": {
               "-": null
             },
+            "limited_support_reasons": {
+              "-": null
+            },
             "logs": {
               "install": null,
               "uninstall": null
@@ -211,6 +214,9 @@ var pathTreeData = `{
           "key_rings": null,
           "regions": null,
           "vpcs": null
+        },
+        "limited_support_reason_templates": {
+          "-": null
         },
         "machine_types": null,
         "products": {
