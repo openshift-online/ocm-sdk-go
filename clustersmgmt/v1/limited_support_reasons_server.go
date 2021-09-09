@@ -30,6 +30,11 @@ import (
 // LimitedSupportReasonsServer represents the interface the manages the 'limited_support_reasons' resource.
 type LimitedSupportReasonsServer interface {
 
+	// Add handles a request for the 'add' method.
+	//
+	// Adds a new reason to the cluster.
+	Add(ctx context.Context, request *LimitedSupportReasonsAddServerRequest, response *LimitedSupportReasonsAddServerResponse) error
+
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of reasons.
@@ -39,6 +44,54 @@ type LimitedSupportReasonsServer interface {
 	//
 	// Reference to the service that manages an specific reason.
 	LimitedSupportReason(id string) LimitedSupportReasonServer
+}
+
+// LimitedSupportReasonsAddServerRequest is the request for the 'add' method.
+type LimitedSupportReasonsAddServerRequest struct {
+	body *LimitedSupportReason
+}
+
+// Body returns the value of the 'body' parameter.
+//
+// Description of the reason.
+func (r *LimitedSupportReasonsAddServerRequest) Body() *LimitedSupportReason {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Description of the reason.
+func (r *LimitedSupportReasonsAddServerRequest) GetBody() (value *LimitedSupportReason, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// LimitedSupportReasonsAddServerResponse is the response for the 'add' method.
+type LimitedSupportReasonsAddServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *LimitedSupportReason
+}
+
+// Body sets the value of the 'body' parameter.
+//
+// Description of the reason.
+func (r *LimitedSupportReasonsAddServerResponse) Body(value *LimitedSupportReason) *LimitedSupportReasonsAddServerResponse {
+	r.body = value
+	return r
+}
+
+// Status sets the status code.
+func (r *LimitedSupportReasonsAddServerResponse) Status(value int) *LimitedSupportReasonsAddServerResponse {
+	r.status = value
+	return r
 }
 
 // LimitedSupportReasonsListServerRequest is the request for the 'list' method.
@@ -145,6 +198,9 @@ func (r *LimitedSupportReasonsListServerResponse) Status(value int) *LimitedSupp
 func dispatchLimitedSupportReasons(w http.ResponseWriter, r *http.Request, server LimitedSupportReasonsServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
+		case "POST":
+			adaptLimitedSupportReasonsAddRequest(w, r, server)
+			return
 		case "GET":
 			adaptLimitedSupportReasonsListRequest(w, r, server)
 			return
@@ -161,6 +217,41 @@ func dispatchLimitedSupportReasons(w http.ResponseWriter, r *http.Request, serve
 			return
 		}
 		dispatchLimitedSupportReason(w, r, target, segments[1:])
+	}
+}
+
+// adaptLimitedSupportReasonsAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptLimitedSupportReasonsAddRequest(w http.ResponseWriter, r *http.Request, server LimitedSupportReasonsServer) {
+	request := &LimitedSupportReasonsAddServerRequest{}
+	err := readLimitedSupportReasonsAddRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &LimitedSupportReasonsAddServerResponse{}
+	response.status = 201
+	err = server.Add(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeLimitedSupportReasonsAddResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		return
 	}
 }
 

@@ -26,6 +26,22 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
+func readLimitedSupportReasonsAddRequest(request *LimitedSupportReasonsAddServerRequest, r *http.Request) error {
+	var err error
+	request.body, err = UnmarshalLimitedSupportReason(r.Body)
+	return err
+}
+func writeLimitedSupportReasonsAddRequest(request *LimitedSupportReasonsAddRequest, writer io.Writer) error {
+	return MarshalLimitedSupportReason(request.body, writer)
+}
+func readLimitedSupportReasonsAddResponse(response *LimitedSupportReasonsAddResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalLimitedSupportReason(reader)
+	return err
+}
+func writeLimitedSupportReasonsAddResponse(response *LimitedSupportReasonsAddServerResponse, w http.ResponseWriter) error {
+	return MarshalLimitedSupportReason(response.body, w)
+}
 func readLimitedSupportReasonsListRequest(request *LimitedSupportReasonsListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()
