@@ -3285,6 +3285,204 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/limited_support_reasons": {
+      "post": {
+        "description": "Adds a new reason to the cluster.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LimitedSupportReason"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LimitedSupportReason"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of reasons.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of template.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LimitedSupportReason"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/limited_support_reasons/{limited_support_reason_id}": {
+      "delete": {
+        "description": "Deletes the reason.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limited_support_reason_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success.\n"
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the reason.\n",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limited_support_reason_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LimitedSupportReason"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/logs": {
       "get": {
         "description": "Retrieves the list of log links.\n",
@@ -4971,6 +5169,113 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/limited_support_reason_templates": {
+      "get": {
+        "description": "Retrieves the list of templates.\n",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of template.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LimitedSupportReasonTemplate"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/limited_support_reason_templates/{limited_support_reason_template_id}": {
+      "get": {
+        "description": "Retrieves the details of the template.\n",
+        "parameters": [
+          {
+            "name": "limited_support_reason_template_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LimitedSupportReasonTemplate"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/machine_types": {
       "get": {
         "description": "Retrieves the list of machine types.\n",
@@ -5773,6 +6078,23 @@
           }
         }
       },
+      "GCPNetwork": {
+        "description": "GCP Network configuration of a cluster.\n",
+        "properties": {
+          "vpc_name": {
+            "description": "VPC mame used by the cluster.\n",
+            "type": "string"
+          },
+          "compute_subnet": {
+            "description": "Compute subnet used by the cluster.\n",
+            "type": "string"
+          },
+          "control_plane_subnet": {
+            "description": "Control plane subnet used by the cluster.\n",
+            "type": "string"
+          }
+        }
+      },
       "HTPasswdIdentityProvider": {
         "description": "Details for `htpasswd` identity providers.\n",
         "properties": {
@@ -6395,6 +6717,14 @@
             "description": "Google cloud platform settings of the cluster.\n",
             "$ref": "#/components/schemas/GCP"
           },
+          "gcp_network": {
+            "description": "GCP Network.\n",
+            "$ref": "#/components/schemas/GCPNetwork"
+          },
+          "additional_trust_bundle": {
+            "description": "Additional trust bundle.\n",
+            "type": "string"
+          },
           "addons": {
             "description": "List of add-ons on this cluster.\n",
             "type": "array",
@@ -6527,6 +6857,10 @@
           "provision_shard": {
             "description": "ProvisionShard contains the properties of the provision shard, including AWS and GCP related configurations\n",
             "$ref": "#/components/schemas/ProvisionShard"
+          },
+          "proxy": {
+            "description": "Proxy.\n",
+            "$ref": "#/components/schemas/Proxy"
           },
           "region": {
             "description": "Link to the cloud provider region where the cluster is installed.\n",
@@ -6808,6 +7142,13 @@
             "$ref": "#/components/schemas/ClusterState"
           }
         }
+      },
+      "DetectionType": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "manual"
+        ]
       },
       "EncryptionKey": {
         "description": "Description of a cloud provider encryption key.\n",
@@ -7180,6 +7521,69 @@
           },
           "value": {
             "description": "the value to set in the label\n",
+            "type": "string"
+          }
+        }
+      },
+      "LimitedSupportReason": {
+        "description": "A reason that a cluster is in limited support.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LimitedSupportReason' if this is a complete object or 'LimitedSupportReasonLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "The time the reason was detected.\n",
+            "type": "string",
+            "format": "date-time"
+          },
+          "details": {
+            "description": "URL with a link to a detailed description of the reason.\n",
+            "type": "string"
+          },
+          "detection_type": {
+            "description": "Indicates if the reason was detected automatically or manually.\nWhen creating a new reason this field should be empty or \"manual\".\n",
+            "$ref": "#/components/schemas/DetectionType"
+          },
+          "summary": {
+            "description": "Summary of the reason.\n",
+            "type": "string"
+          },
+          "template": {
+            "description": "Optional link to a template with summary and details.\n",
+            "$ref": "#/components/schemas/LimitedSupportReasonTemplate"
+          }
+        }
+      },
+      "LimitedSupportReasonTemplate": {
+        "description": "A template for cluster limited support reason.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LimitedSupportReasonTemplate' if this is a complete object or 'LimitedSupportReasonTemplateLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "details": {
+            "description": "URL with a link to a detailed description of the reason.\n",
+            "type": "string"
+          },
+          "summary": {
+            "description": "Summary of the reason.\n",
             "type": "string"
           }
         }
@@ -7560,6 +7964,23 @@
           "hive_config": {
             "description": "Contains the configuration for Hive\n",
             "$ref": "#/components/schemas/ServerConfig"
+          }
+        }
+      },
+      "Proxy": {
+        "description": "Proxy configuration of a cluster.\n",
+        "properties": {
+          "http_proxy": {
+            "description": "HTTPProxy is the URL of the proxy for HTTP requests.\n",
+            "type": "string"
+          },
+          "https_proxy": {
+            "description": "HTTPSProxy is the URL of the proxy for HTTPS requests.\n",
+            "type": "string"
+          },
+          "no_proxy": {
+            "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used.\n",
+            "type": "string"
           }
         }
       },
