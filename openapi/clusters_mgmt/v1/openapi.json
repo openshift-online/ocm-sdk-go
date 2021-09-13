@@ -6078,6 +6078,23 @@
           }
         }
       },
+      "GCPNetwork": {
+        "description": "GCP Network configuration of a cluster.\n",
+        "properties": {
+          "vpc_name": {
+            "description": "VPC mame used by the cluster.\n",
+            "type": "string"
+          },
+          "compute_subnet": {
+            "description": "Compute subnet used by the cluster.\n",
+            "type": "string"
+          },
+          "control_plane_subnet": {
+            "description": "Control plane subnet used by the cluster.\n",
+            "type": "string"
+          }
+        }
+      },
       "HTPasswdIdentityProvider": {
         "description": "Details for `htpasswd` identity providers.\n",
         "properties": {
@@ -6700,6 +6717,14 @@
             "description": "Google cloud platform settings of the cluster.\n",
             "$ref": "#/components/schemas/GCP"
           },
+          "gcp_network": {
+            "description": "GCP Network.\n",
+            "$ref": "#/components/schemas/GCPNetwork"
+          },
+          "additional_trust_bundle": {
+            "description": "Additional trust bundle.\n",
+            "type": "string"
+          },
           "addons": {
             "description": "List of add-ons on this cluster.\n",
             "type": "array",
@@ -6832,6 +6857,10 @@
           "provision_shard": {
             "description": "ProvisionShard contains the properties of the provision shard, including AWS and GCP related configurations\n",
             "$ref": "#/components/schemas/ProvisionShard"
+          },
+          "proxy": {
+            "description": "Proxy.\n",
+            "$ref": "#/components/schemas/Proxy"
           },
           "region": {
             "description": "Link to the cloud provider region where the cluster is installed.\n",
@@ -7935,6 +7964,23 @@
           "hive_config": {
             "description": "Contains the configuration for Hive\n",
             "$ref": "#/components/schemas/ServerConfig"
+          }
+        }
+      },
+      "Proxy": {
+        "description": "Proxy configuration of a cluster.\n",
+        "properties": {
+          "http_proxy": {
+            "description": "HTTPProxy is the URL of the proxy for HTTP requests.\n",
+            "type": "string"
+          },
+          "https_proxy": {
+            "description": "HTTPSProxy is the URL of the proxy for HTTPS requests.\n",
+            "type": "string"
+          },
+          "no_proxy": {
+            "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used.\n",
+            "type": "string"
           }
         }
       },
