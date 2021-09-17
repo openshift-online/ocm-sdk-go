@@ -823,7 +823,7 @@ func Listen() (listener net.Listener, address string) {
 	// simulating an HTTP/2 server:
 	listener, err := tls.Listen("tcp", "127.0.0.1:0", &tls.Config{
 		Certificates: []tls.Certificate{
-			LocalhostKeyPair(),
+			LocalhostCertificate(),
 		},
 		NextProtos: []string{
 			http2.NextProtoTLS,
