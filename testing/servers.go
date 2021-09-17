@@ -17,14 +17,20 @@ limitations under the License.
 package testing
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
 	"crypto/tls"
+	"crypto/x509"
+	"crypto/x509/pkix"
 	"encoding/pem"
 	"io/ioutil"
 	"log"
+	"math/big"
 	"net"
 	"net/http"
 	"net/url"
 	"path/filepath"
+	"time"
 
 	"github.com/onsi/gomega/ghttp"
 	"golang.org/x/net/http2"
@@ -264,9 +270,10 @@ func VerifyCookie(name, value string) http.HandlerFunc {
 	}
 }
 
-// LocalhostKeyPair returns a TLS key pair valid for the name `localhost` DNS
-// name, for the `127.0.0.1` IPv4 address and for the `::1` IPv6 address. The
-// key pair has been generated with the following command:
+// LocalhostCertificate returns a self signed TLS certificate valid for the name `localhost` DNS
+// name, for the `127.0.0.1` IPv4 address and for the `::1` IPv6 address.
+//
+// A similar certificate can be generated with the following command:
 //
 //	openssl req \
 //	-x509 \
@@ -276,97 +283,40 @@ func VerifyCookie(name, value string) http.HandlerFunc {
 //	-out tls.crt \
 //	-subj '/CN=localhost' \
 //	-addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
-//	-days 3650
-func LocalhostKeyPair() tls.Certificate {
-	pair, err := tls.X509KeyPair(localhostCrt, localhostKey)
-	Expect(err).ToNot(HaveOccurred())
-	return pair
+//	-days 1
+func LocalhostCertificate() tls.Certificate {
+	if localhostCertificate == nil {
+		key, err := rsa.GenerateKey(rand.Reader, 4096)
+		Expect(err).ToNot(HaveOccurred())
+		now := time.Now()
+		spec := x509.Certificate{
+			SerialNumber: big.NewInt(0),
+			Subject: pkix.Name{
+				CommonName: "localhost",
+			},
+			DNSNames: []string{
+				"localhost",
+			},
+			IPAddresses: []net.IP{
+				net.ParseIP("127.0.0.1"),
+				net.ParseIP("::1"),
+			},
+			NotBefore: now,
+			NotAfter:  now.Add(24 * time.Hour),
+			KeyUsage:  x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+			ExtKeyUsage: []x509.ExtKeyUsage{
+				x509.ExtKeyUsageServerAuth,
+			},
+		}
+		data, err := x509.CreateCertificate(rand.Reader, &spec, &spec, &key.PublicKey, key)
+		Expect(err).ToNot(HaveOccurred())
+		localhostCertificate = &tls.Certificate{
+			Certificate: [][]byte{data},
+			PrivateKey:  key,
+		}
+	}
+	return *localhostCertificate
 }
 
-var localhostCrt = []byte(`
------BEGIN CERTIFICATE-----
-MIIFODCCAyCgAwIBAgIUdhdcmZ5JmTWpGQiuLnTMT6UxZb0wDQYJKoZIhvcNAQEL
-BQAwFDESMBAGA1UEAwwJbG9jYWxob3N0MB4XDTIxMDgxMjEwMjQyM1oXDTMxMDgx
-MDEwMjQyM1owFDESMBAGA1UEAwwJbG9jYWxob3N0MIICIjANBgkqhkiG9w0BAQEF
-AAOCAg8AMIICCgKCAgEAs4I2qpFnkss60FIxKTboLv6QpBt8QnR4l2xT1egCBr3x
-kqOkobZjrfZ61JbDyz9ZPcrwzksB+6/Xp8VNmbCvYx8hKAv0EMBTl3Lczv7jIrg8
-wXXncjSguRolXkeuQAHqk37CkVhEjfZuvd4ZCoumQXzmw61AZlxDOHDMDM3Um95m
-ZYNtVwDn/eZRFIPQbmCcDKC2v2/nlpuviUOuMwnPU/ev4eLaDFUqAO0llTVpJKdb
-E0KIyWX7fGFTtibfw5azEGxPEb/7FAUtaa3Rms70I7fwZU/FBy8iXuSzW/g7Ms3a
-zZo+rTQFCbNHdU22w4bhZtBvZkXyyDEtxypx77UZZIrKOVflu/VU2lNQS98LnaXF
-GtV0qVQ7hFdDRw/XmxDZPsG8xDORgx7PADPTqj0Hylg2oawPZdidqkqP5hgERuWk
-vBTMeJ6RjoKLV70FSnIzlOh0fFnln6iZB4dDXE2bLtHtB3oRDrN/VA+N1bCPZmWY
-7/s9OqlQ5xRsT9sz+iqyzaOk0XCRV3z+QgohmkOd0GCoZ+QDpogMaaXy0hQlFpaX
-hTBO/0FPXzg2ipop7ItgDZYQgl5wuva40R6j1KRqBZLNMuZhosIQ4qf9geeVbZfu
-A+QNUSJPrtXXNaCCstiIGJgHWGl1KWBHnmhLSb7yajEFfmQM+yVb/T/TEacjOYMC
-AwEAAaOBgTB/MB0GA1UdDgQWBBRK6ctms4WQmh8Qy+VKSHLgc74z3jAfBgNVHSME
-GDAWgBRK6ctms4WQmh8Qy+VKSHLgc74z3jAPBgNVHRMBAf8EBTADAQH/MCwGA1Ud
-EQQlMCOCCWxvY2FsaG9zdIcEfwAAAYcQAAAAAAAAAAAAAAAAAAAAATANBgkqhkiG
-9w0BAQsFAAOCAgEAQhcYqXuWIK0/4oJfJBabbtUUEN1As98gaomcQKMTk30K+aZD
-KejPeBZnOJSWpZRl4ypm4Z3u/jIHptLHKSSoSIyEIikV1MsZy9c8E/aetRbrJ4G/
-Y+TM/jCKZ9Rz6zxZznN52fME7Gh9de75QsUrmDl8wmgZ9Y09UYX6hG4+rCR0R+lX
-GQv3LAVCHXGtCqHS8zXXyymRQghqE8Tz7dzWtpo0AIVA0k8GL4bGxlAAuQL7TXHE
-jfLNh35RjULxM6JONYj/uQnaret5kE5ZuzQp+L4HHs/5qIE2wvTyFKyAtJP0E6AP
-hI754OEvOVMXfBOYWDalOcyka9kKUCTkDztW5VY/bpapqfTLN6McRqzEijLatg2c
-ADHabdIbhKhKKfH1ZmZFXthrPiPfc+Y7oTsf7gmIzR3actjfI6ZWaUhhaipFil3c
-7sedG68X7W7I4F5cdPTbZb3fnUb7Xk2mReivDgY2Cz1rMVBYI7wT+m82oPTRwsRU
-YZrbnOIXoWmTo6hVtvi7XXNVFj2vDgVQTSqJBUWl2DKqUQ+EALj9AVnDD4TS9Af1
-v7215I4iIaeVbmilS7GCoayiPczJfKDpMUf4OEV5r4EomJwWzgqxx5qioRpRvU9k
-9kFc5TTcHQENjK3Og/Ii5jpQegAo01sduDnCN05YfAZ2En6M/rqjWG/WiyY=
------END CERTIFICATE-----
-`)
-
-var localhostKey = []byte(`
------BEGIN PRIVATE KEY-----
-MIIJQwIBADANBgkqhkiG9w0BAQEFAASCCS0wggkpAgEAAoICAQCzgjaqkWeSyzrQ
-UjEpNugu/pCkG3xCdHiXbFPV6AIGvfGSo6ShtmOt9nrUlsPLP1k9yvDOSwH7r9en
-xU2ZsK9jHyEoC/QQwFOXctzO/uMiuDzBdedyNKC5GiVeR65AAeqTfsKRWESN9m69
-3hkKi6ZBfObDrUBmXEM4cMwMzdSb3mZlg21XAOf95lEUg9BuYJwMoLa/b+eWm6+J
-Q64zCc9T96/h4toMVSoA7SWVNWkkp1sTQojJZft8YVO2Jt/DlrMQbE8Rv/sUBS1p
-rdGazvQjt/BlT8UHLyJe5LNb+DsyzdrNmj6tNAUJs0d1TbbDhuFm0G9mRfLIMS3H
-KnHvtRlkiso5V+W79VTaU1BL3wudpcUa1XSpVDuEV0NHD9ebENk+wbzEM5GDHs8A
-M9OqPQfKWDahrA9l2J2qSo/mGARG5aS8FMx4npGOgotXvQVKcjOU6HR8WeWfqJkH
-h0NcTZsu0e0HehEOs39UD43VsI9mZZjv+z06qVDnFGxP2zP6KrLNo6TRcJFXfP5C
-CiGaQ53QYKhn5AOmiAxppfLSFCUWlpeFME7/QU9fODaKminsi2ANlhCCXnC69rjR
-HqPUpGoFks0y5mGiwhDip/2B55Vtl+4D5A1RIk+u1dc1oIKy2IgYmAdYaXUpYEee
-aEtJvvJqMQV+ZAz7JVv9P9MRpyM5gwIDAQABAoICACx3MudpgUiBgx4bXgYhjb4m
-XNnp3QvxIfYQZWv1PptA7dgvJRbRwTtUdPS4K+Pq20ZNQP0441LfKgJrA1/wvmFF
-UsdCvsBvg8VeNIgp50WwcYxSknRdyPpRGbSS+Pzt/JdwrO2n+cNYqfHqVDWihhpu
-wBL0laFFdXlDp6f8TJAXtTGsLqeAl/by2F7GkBjnYYBXRy2AoNNT2VWdKEeIRI0+
-K5k+wliPuAnmtIqTYmor8omAz7Vjx7n1ufDDDGa8q7qDucphzeYVqjwlTGiWny9B
-3xCZg+rVqCPtbuh3QuLAz1RiwufQnPbcK/VIvN8OSENZml6xMQSZ+gb94p9IMvOk
-JKfHH6jIPV9ou9y9k1htxHcozrZcr1/Ua63kQEPkzpQCL8orZJgfAqhsH0ZnM6zz
-WAwoCasdSQEbn9s5eMYWHN5cHj32gXEze1b0S/iv/72nEWyid2A9nqhu8tyIC6/l
-wxqYEInS3Sj0PvVJRrulkRn/ESxoY3Nl3TUmHlWduE077yVUT75BkArWvWpMblhz
-/6Z/LyjmZfTZmItkzLoOkT1y5oVqOLi4qGBipXwKTFjTs2dReX7q+HqVoP03lREA
-g1Flnx6wUWURTY+MGzJ8LBgJISm9uOpltpEtClO1mOGzim5Z/lxQ+edjZ/Ir3zVi
-NmllX1gV4NMXh/VBeMZBAoIBAQDr7G3BH6+RQliFA2YPMfQ+X1eompu4u7pM4aRY
-EVrOEUCq5XVLpRuCWQeHL+iPMMiP4IW2nZmsF6fUiGYsNXsdVvkOalxQuZNnrsZT
-6H1GQv3JeB1ToFU6psCfMVuHlimPNanm3rfPm1vTJNHORTCHj80nRF3Fn6oKi1OL
-LLu2LzjDaTwb2Ag5p0/8da712aogE/E1B2rp1gs53bjkMyYdJoODblZWFeG/B127
-SMh+sgmWzjINM9thdifrI3sI0uw/E0pJGjy27Q3yUj75ePs6gxtQwytcGqf3j2GM
-ci4m6fX8qeoRnpmsVBrO5LJTBX6WQNfwnPCyxC+JiuZ1bqATAoIBAQDCyMqthZ3B
-LBcr803uIEbkDlqaq/Tj+rgZJjYxs2N5BTpZAzRc+7Vsaj93cEbsOOack434UTs9
-BDCftVPvZzrQ/k7qTeSYSNTFUeqz2ECSh1HJPxyjHNjPq7lV1hZtI9W1eFBflNYw
-o+rXZJtshh6WRfMbc7bsdlvk7/tomumdc9w2fDfDmOD7pbkVBB3c4P5Rm/ZGsStZ
-2rqmB1T2qzdKPTApRFE6u0nq1SWx+GfUaJTCWqVE1Il5lDIT3+49qdLgShLciZfy
-WWS0XbG7Ifz81jtIPXSLSEuMvNrNZN9mg7+RjehkMKmjY9FaZZbDG7xOOhM7QWdP
-WY/0HOKZ2I7RAoIBAFVmOPh+asQPGxHTAB+h+oKVapq6lIHTWoW37BCA/7i2IA18
-j+/47TNK3OG/otQqWX9TS7Ol6tmTmonhcfKwzUb6k573O0FxW31dk6cN8kL7vvgt
-xZfe4tsfP3ygljxHS/Xt+/l5R1ocJ6oPmu6qtv1rPVzob3U47Ylxk6U+ZRh2kXqS
-3lJJ6fhMqzR8uP9/cgi4j0idzcKlW1zv+JyKM1K7/UEXMKNqulO26+P+Xa0W70eq
-jg2fZtsptRt1tXSlPSU761j46V9iAflkci1F8NLmYH3kmA54C7MeMLZxImmtqQBz
-1SnZmlD6BNY9jJtm0sK66C/N74cWYwrLv85kZAcCggEBAKF80vv1sQp8QWHAv7VS
-sTNV6ywcsFVqgcLn+TpPXYLyIKO3kmwcixctJx0gyswBiL/7XVKoFhLKLH3cWZA7
-53lpvYdnuMPAbhaBibI88ZwJ8HaGinl46w+RcYCGk+U8NmvTKd90h/efjo2w7WKV
-9znjGGCEGP4GSr2NcMQS2ugdLE9HwPu6/Zvkk4Om/BMpve9u/EkzjZtbSi9oGLrA
-zIASJqGv8CBfMjMtL6lTJtHlOp+/gxGDm85eXP45Q02AREKLZwPMV1snXeRjYXyh
-+xqrik6kFMF82JX/5O8wWD6nr+U+35Jg/eNmWCU34Dw1/HJml5ci7EHPIRfj8sJV
-1mECggEBAIoIzyJVxTQaOFm87ssM6JWg6E+OgXuYceZdAoLgusOOqWL/cI0J3uhS
-aIH7r2oc4i4G4bl8GCwTp1Rk3yTDz9/8k4YNklR+UwBdpmjRUwTOiq6WGyiqJYTN
-vQIDq0qReQVKz96HcsY3uDVCyRtQp3CcSgXWD6zuf/uKmLf/oQRa4bie+zmdRwm5
-Rkj6gTqym3L9EWc3ouk/DgeclGirm2YOx0O0YGD6dRK7Qe2rFBliAZ+9A6CO48DG
-z5vQ40nwaH0oMMEXCkFbSDP0GRr0t1fCDVTBv3DLc+OL+tQDPZtSUuBWQhlD+/Kp
-kQa+wVDL7TzyYOgTVJ1YtorASxSqJBg=
------END PRIVATE KEY-----
-`)
+// localhostCertificate contains the TLS certificate returned by the LocalhostCertificate function.
+var localhostCertificate *tls.Certificate
