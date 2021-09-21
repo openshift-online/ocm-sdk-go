@@ -10176,6 +10176,26 @@
           "resource": {
             "description": "Type of resource of the add-on requirement.\n",
             "type": "string"
+          },
+          "status": {
+            "description": "Optional cluster specific status for the add-on.\n",
+            "$ref": "#/components/schemas/AddOnRequirementStatus"
+          }
+        }
+      },
+      "AddOnRequirementStatus": {
+        "description": "Representation of an add-on requirement status.\n",
+        "properties": {
+          "error_msgs": {
+            "description": "Error messages detailing reasons for unfulfilled requirements.\n",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fulfilled": {
+            "description": "Indicates if this requirement is fulfilled.\n",
+            "type": "boolean"
           }
         }
       },
