@@ -316,6 +316,13 @@ var pathTreeData = `{
       "v1": {
         "cluster_logs": {
           "-": null
+        },
+        "clusters": {
+          "-": {
+            "cluster_logs": {
+              "-": null
+            }
+          }
         }
       }
     }
