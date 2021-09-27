@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.210 Sep 27 2021
+
+- Update to model 0.0.147:
+** Add missing connection to clusters collection in the `service_logs` service.
+
 == 0.1.209 Sep 21 2021
 
 - Avoid hard-coded private keys
