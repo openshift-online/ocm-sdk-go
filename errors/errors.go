@@ -436,7 +436,7 @@ func SendMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 // SendInternalServerError sends a generic 500 error.
 func SendInternalServerError(w http.ResponseWriter, r *http.Request) {
 	reason := fmt.Sprintf(
-		"Can't process '%s' request for path '%s' due to an internal"+
+		"Can't process '%s' request for path '%s' due to an internal "+
 			"server error",
 		r.Method, r.URL.Path,
 	)
