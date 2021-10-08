@@ -106,6 +106,8 @@ func (d *Digger) digFieldFromValue(value reflect.Value, field string) interface{
 		return d.digFieldFromPtr(value, field)
 	case reflect.Struct:
 		return d.digFieldFromStruct(value, field)
+	case reflect.Map:
+		return d.digFieldFromMap(value, field)
 	default:
 		return nil
 	}
@@ -167,6 +169,15 @@ func (d *Digger) digFieldFromMethod(value reflect.Value, method reflect.Method) 
 	}
 
 	// Return the result:
+	if !result.IsValid() {
+		return nil
+	}
+	return result.Interface()
+}
+
+func (d *Digger) digFieldFromMap(value reflect.Value, name string) interface{} {
+	key := reflect.ValueOf(name)
+	result := value.MapIndex(key)
 	if !result.IsValid() {
 		return nil
 	}
