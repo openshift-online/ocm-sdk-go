@@ -206,6 +206,24 @@ var _ = Describe("Digger", func() {
 			"does_not_exist",
 			nil,
 		),
+		Entry(
+			"Map field",
+			map[string]interface{}{
+				"id": "123",
+			},
+			"id",
+			"123",
+		),
+		Entry(
+			"Nested map field",
+			map[string]interface{}{
+				"object": map[string]interface{}{
+					"id": "123",
+				},
+			},
+			"object.id",
+			"123",
+		),
 	)
 })
 
