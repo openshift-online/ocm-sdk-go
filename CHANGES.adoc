@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.212 Oct 12 2021
+
+- Fix typo in HTTP internal server error message
+- Copy data package from CLI
+- Add support for digging inside maps
+- Update model to 0.0.149
+** Add Addon Versions
+
 == 0.1.211 Oct 05 2021
 
 - Update to model 0.0.148:
