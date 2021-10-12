@@ -122,7 +122,11 @@ var pathTreeData = `{
     "clusters_mgmt": {
       "v1": {
         "addons": {
-          "-": null
+          "-": {
+            "versions": {
+              "-": null
+            }
+          }
         },
         "aws_infrastructure_access_roles": {
           "-": null
