@@ -6601,6 +6601,10 @@
             "description": "Link to add-on attached to this cluster.\n",
             "$ref": "#/components/schemas/AddOn"
           },
+          "addon_version": {
+            "description": "Link to the installed version of this add-on.\n",
+            "$ref": "#/components/schemas/AddOnVersion"
+          },
           "cluster": {
             "description": "ID used to identify the cluster that this add-on is attached to.\n",
             "$ref": "#/components/schemas/Cluster"
@@ -6633,10 +6637,6 @@
             "description": "Date and time when the add-on installation information was last updated.\n",
             "type": "string",
             "format": "date-time"
-          },
-          "version": {
-            "description": "Link to the installed version of this add-on.\n",
-            "$ref": "#/components/schemas/AddOnVersion"
           }
         }
       },
@@ -7524,6 +7524,13 @@
       "Event": {
         "description": "Representation of a trackable event.\n",
         "properties": {
+          "body": {
+            "description": "Body of the event to track the details of the tracking event as Key value pair\n",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "key": {
             "description": "Key of the event to be tracked. This key should start with an\nuppercase letter followed by alphanumeric characters or\nunderscores. The entire key needs to be smaller than 64 characters.\n",
             "type": "string"
@@ -8326,10 +8333,6 @@
           },
           "https_proxy": {
             "description": "HTTPSProxy is the URL of the proxy for HTTPS requests.\n",
-            "type": "string"
-          },
-          "no_proxy": {
-            "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used.\n",
             "type": "string"
           }
         }
