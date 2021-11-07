@@ -29,6 +29,7 @@ type LDAPIdentityProvider struct {
 	attributes   *LDAPAttributes
 	bindDN       string
 	bindPassword string
+	name         string
 	insecure     bool
 }
 
@@ -175,6 +176,29 @@ func (o *LDAPIdentityProvider) GetInsecure() (value bool, ok bool) {
 	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.insecure
+	}
+	return
+}
+
+// Name returns the value of the 'name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Name is the name for the provider
+func (o *LDAPIdentityProvider) Name() string {
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.name
+	}
+	return ""
+}
+
+// GetName returns the value of the 'name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Name is the name for the provider
+func (o *LDAPIdentityProvider) GetName() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&64 != 0
+	if ok {
+		value = o.name
 	}
 	return
 }

@@ -6431,6 +6431,10 @@
           "insecure": {
             "description": "When `true` no TLS connection is made to the server. When `false` `ldaps://...` URLs\nconnect using TLS and `ldap://...` are upgraded to TLS.\n",
             "type": "boolean"
+          },
+          "name": {
+            "description": "Name is the name for the provider\n",
+            "type": "string"
           }
         }
       },
