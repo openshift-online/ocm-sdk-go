@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.215 Nov 7 2021
+- Update to model 0.0.151:
+** Add Name field to LDAP identity provider
+
 == 0.1.214 Oct 27 2021
 - Update to model 0.0.150:
 ** Fix addon installation version (addon_version vs version)

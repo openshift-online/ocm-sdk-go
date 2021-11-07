@@ -29,6 +29,7 @@ type LDAPIdentityProviderBuilder struct {
 	attributes   *LDAPAttributesBuilder
 	bindDN       string
 	bindPassword string
+	name         string
 	insecure     bool
 }
 
@@ -95,6 +96,15 @@ func (b *LDAPIdentityProviderBuilder) Insecure(value bool) *LDAPIdentityProvider
 	return b
 }
 
+// Name sets the value of the 'name' attribute to the given value.
+//
+//
+func (b *LDAPIdentityProviderBuilder) Name(value string) *LDAPIdentityProviderBuilder {
+	b.name = value
+	b.bitmap_ |= 64
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *LDAPIdentityProviderBuilder) Copy(object *LDAPIdentityProvider) *LDAPIdentityProviderBuilder {
 	if object == nil {
@@ -111,6 +121,7 @@ func (b *LDAPIdentityProviderBuilder) Copy(object *LDAPIdentityProvider) *LDAPId
 	b.bindDN = object.bindDN
 	b.bindPassword = object.bindPassword
 	b.insecure = object.insecure
+	b.name = object.name
 	return b
 }
 
@@ -129,5 +140,6 @@ func (b *LDAPIdentityProviderBuilder) Build() (object *LDAPIdentityProvider, err
 	object.bindDN = b.bindDN
 	object.bindPassword = b.bindPassword
 	object.insecure = b.insecure
+	object.name = b.name
 	return
 }
