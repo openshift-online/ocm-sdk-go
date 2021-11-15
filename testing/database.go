@@ -120,6 +120,7 @@ func MakeDatabaseServer() *DatabaseServer {
 		"docker.io/centos/postgresql-12-centos8:latest",
 	) // #nosec G204
 	runCmd.Stdout = runOut
+	runCmd.Stderr = GinkgoWriter
 	err = runCmd.Run()
 	Expect(err).ToNot(HaveOccurred())
 	container := strings.TrimSpace(runOut.String())
@@ -128,6 +129,7 @@ func MakeDatabaseServer() *DatabaseServer {
 	portOut := &bytes.Buffer{}
 	portCmd := exec.Command(tool, "port", container, "5432/tcp") // #nosec G204
 	portCmd.Stdout = portOut
+	portCmd.Stderr = GinkgoWriter
 	err = portCmd.Run()
 	Expect(err).ToNot(HaveOccurred())
 	portLines := strings.Split(portOut.String(), "\n")
