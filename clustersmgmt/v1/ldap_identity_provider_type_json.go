@@ -94,15 +94,6 @@ func writeLDAPIdentityProvider(object *LDAPIdentityProvider, stream *jsoniter.St
 		stream.WriteBool(object.insecure)
 		count++
 	}
-	present_ = object.bitmap_&64 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("name")
-		stream.WriteString(object.name)
-		count++
-	}
 	stream.WriteObjectEnd()
 }
 
@@ -154,10 +145,6 @@ func readLDAPIdentityProvider(iterator *jsoniter.Iterator) *LDAPIdentityProvider
 			value := iterator.ReadBool()
 			object.insecure = value
 			object.bitmap_ |= 32
-		case "name":
-			value := iterator.ReadString()
-			object.name = value
-			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}
