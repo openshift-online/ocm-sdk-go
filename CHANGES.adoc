@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+== 0.1.218 Nov 22 2021
+
+- Update to metamodel 0.0.44:
+** Check for loops in locator paths.
+** Add `Empty` method to builders.
+
 == 0.1.217 Nov 18 2021
 
 - Update to model 0.0.152
