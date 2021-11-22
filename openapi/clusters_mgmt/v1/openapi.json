@@ -7062,6 +7062,10 @@
             "description": "DNS settings of the cluster.\n",
             "$ref": "#/components/schemas/DNS"
           },
+          "fips": {
+            "description": "Create cluster that uses FIPS Validated / Modules in Process cryptographic libraries.\n",
+            "type": "boolean"
+          },
           "gcp": {
             "description": "Google cloud platform settings of the cluster.\n",
             "$ref": "#/components/schemas/GCP"
