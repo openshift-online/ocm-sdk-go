@@ -37,6 +37,11 @@ func (b *ClusterResourcesListBuilder) Items(values ...*ClusterResourcesBuilder) 
 	return b
 }
 
+// Empty returns true if the list is empty.
+func (b *ClusterResourcesListBuilder) Empty() bool {
+	return b == nil || len(b.items) == 0
+}
+
 // Copy copies the items of the given list into this builder, discarding any previous items.
 func (b *ClusterResourcesListBuilder) Copy(list *ClusterResourcesList) *ClusterResourcesListBuilder {
 	if list == nil || list.items == nil {
