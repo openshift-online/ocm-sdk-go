@@ -136,6 +136,11 @@ func (b *ClusterBuilder) HREF(value string) *ClusterBuilder {
 	return b
 }
 
+// Empty returns true if the builder is empty, i.e. no attribute has a value.
+func (b *ClusterBuilder) Empty() bool {
+	return b == nil || b.bitmap_&^1 == 0
+}
+
 // API sets the value of the 'API' attribute to the given value.
 //
 // Information about the API of a cluster.

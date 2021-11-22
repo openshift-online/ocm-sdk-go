@@ -60,6 +60,11 @@ func (b *ClusterResourcesBuilder) HREF(value string) *ClusterResourcesBuilder {
 	return b
 }
 
+// Empty returns true if the builder is empty, i.e. no attribute has a value.
+func (b *ClusterResourcesBuilder) Empty() bool {
+	return b == nil || b.bitmap_&^1 == 0
+}
+
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
 //
 //
