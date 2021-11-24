@@ -90,7 +90,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to sort the add-ons\ndescending by name the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to sort the add-ons\ndescending by name the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -107,7 +107,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nadd-ons with a name starting with `my` the value should be:\n\n\n```\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-ons\nthat the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nadd-ons with a name starting with `my` the value should be:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-ons\nthat the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -333,7 +333,7 @@
           },
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to sort the add-on\nversions descending by id the value should be:\n\n\n```\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to sort the add-on\nversions descending by id the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -350,7 +350,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on version instead\nof the names of the columns of a table. For example, in order to retrieve all the\nadd-on versions with an id starting with `0.1` the value should be:\n\n\n```\nid like '0.1.%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-on\nversions that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on version instead\nof the names of the columns of a table. For example, in order to retrieve all the\nadd-on versions with an id starting with `0.1` the value should be:\n\n```sql\nid like '0.1.%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-on\nversions that the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -546,7 +546,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to sort the roles\ndescending by dislay_name the value should be:\n\n\n```\ndisplay_name desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to sort the roles\ndescending by dislay_name the value should be:\n\n```sql\ndisplay_name desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -563,7 +563,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nrole with a name starting with `my`the value should be:\n\n\n```\ndisplay_name like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the roles\nthat the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the role instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nrole with a name starting with `my`the value should be:\n\n```sql\ndisplay_name like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the roles\nthat the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -829,7 +829,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the cloud provider\ninstead of the names of the columns of a table. For example, in order to sort the\nclusters descending by name identifier the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the cloud provider\ninstead of the names of the columns of a table. For example, in order to sort the\nclusters descending by name identifier the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -846,7 +846,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the cloud provider\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the cloud providers with a name starting with `A` the value should be:\n\n\n```\nname like 'A%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the clusters\nthat the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the cloud provider\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the cloud providers with a name starting with `A` the value should be:\n\n```sql\nname like 'A%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the clusters\nthat the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1194,7 +1194,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to sort the clusters\ndescending by region identifier the value should be:\n\n\n```\nregion.id desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to sort the clusters\ndescending by region identifier the value should be:\n\n```sql\nregion.id desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1211,7 +1211,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nclusters with a name starting with `my` in the `us-east-1` region the value\nshould be:\n\n\n```\nname like 'my%' and region.id = 'us-east-1'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nclusters that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nclusters with a name starting with `my` in the `us-east-1` region the value\nshould be:\n\n```sql\nname like 'my%' and region.id = 'us-east-1'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nclusters that the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1459,7 +1459,7 @@
           },
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to sort the add-ons\ndescending by name the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to sort the add-ons\ndescending by name the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1476,7 +1476,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nadd-ons with a name starting with `my` the value should be:\n\n\n```\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-ons\nthat the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nadd-ons with a name starting with `my` the value should be:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-ons\nthat the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1638,7 +1638,7 @@
           },
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on installation\ninstead of the names of the columns of a table. For example, in order to sort the\nadd-on installations descending by name the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the add-on installation\ninstead of the names of the columns of a table. For example, in order to sort the\nadd-on installations descending by name the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1655,7 +1655,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on installation\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the add-on installations with a name starting with `my` the value should be:\n\n\n```\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-on\ninstallations that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the add-on installation\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the add-on installations with a name starting with `my` the value should be:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the add-on\ninstallations that the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1902,7 +1902,7 @@
           },
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the AWS infrastructure access role grant\ninstead of the names of the columns of a table. For example, in order to sort the\nAWS infrastructure access role grants descending by user ARN the value should be:\n\n\n```\nuser_arn desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the AWS infrastructure access role grant\ninstead of the names of the columns of a table. For example, in order to sort the\nAWS infrastructure access role grants descending by user ARN the value should be:\n\n```sql\nuser_arn desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1919,7 +1919,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the AWS infrastructure access role grant\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the AWS infrastructure access role grants with a user ARN starting with `user` the value should be:\n\n\n```\nuser_arn like '%user'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the AWS\ninfrastructure access role grants that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the AWS infrastructure access role grant\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the AWS infrastructure access role grants with a user ARN starting with `user` the value should be:\n\n```sql\nuser_arn like '%user'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the AWS\ninfrastructure access role grants that the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -4953,7 +4953,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the flavour instead of\nthe names of the columns of a table. For example, in order to sort the flavours\ndescending by name the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the flavour instead of\nthe names of the columns of a table. For example, in order to sort the flavours\ndescending by name the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -4970,7 +4970,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the flavour instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nflavours with a name starting with `my`the value should be:\n\n\n```\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the flavours\nthat the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the flavour instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nflavours with a name starting with `my`the value should be:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the flavours\nthat the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5546,7 +5546,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the machine type\ninstead of the names of the columns of a table. For example, in order to sort the\nmachine types descending by name identifier the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the machine type\ninstead of the names of the columns of a table. For example, in order to sort the\nmachine types descending by name identifier the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5563,7 +5563,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the machine type\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the machine types with a name starting with `A` the value should be:\n\n\n```\nname like 'A%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the machine\ntypes that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the machine type\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the machine types with a name starting with `A` the value should be:\n\n```sql\nname like 'A%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the machine\ntypes that the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5633,7 +5633,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the product instead of\nthe names of the columns of a table. For example, in order to sort the products\ndescending by name the value should be:\n\n\n```\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the product instead of\nthe names of the columns of a table. For example, in order to sort the products\ndescending by name the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5650,7 +5650,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the product instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nproducts with a name starting with `my` the value should be:\n\n\n```\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the products\nthat the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the product instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nproducts with a name starting with `my` the value should be:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the products\nthat the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5862,7 +5862,7 @@
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the version instead of\nthe names of the columns of a table. For example, in order to sort the versions\ndescending by identifier the value should be:\n\n\n```\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the version instead of\nthe names of the columns of a table. For example, in order to sort the versions\ndescending by identifier the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5879,7 +5879,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the version instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nversions that are enabled:\n\n\n```\nenabled = 't'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the versions\nthat the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the version instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nversions that are enabled:\n\n```sql\nenabled = 't'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the versions\nthat the user has permission to see will be returned.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -6275,7 +6275,7 @@
         "description": "DNS settings of the cluster.\n",
         "properties": {
           "base_domain": {
-            "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the name of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n\n```\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n\n```\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).\n",
+            "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the name of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n```http\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n```json\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).\n",
             "type": "string"
           }
         }
@@ -7025,7 +7025,7 @@
         }
       },
       "Cluster": {
-        "description": "Definition of an _OpenShift_ cluster.\n\nThe `cloud_provider` attribute is a reference to the cloud provider. When a\ncluster is retrieved it will be a link to the cloud provider, containing only\nthe kind, id and href attributes:\n\n\n```\n{\n  \"cloud_provider\": {\n    \"kind\": \"CloudProviderLink\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/cloud_providers/123\"\n  }\n}\n```\n\nWhen a cluster is created this is optional, and if used it should contain the\nidentifier of the cloud provider to use:\n\n\n```\n{\n  \"cloud_provider\": {\n    \"id\": \"123\",\n  }\n}\n```\n\nIf not included, then the cluster will be created using the default cloud\nprovider, which is currently Amazon Web Services.\n\nThe region attribute is mandatory when a cluster is created.\n\nThe `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`\nattributes are mandatory when creation a cluster with your own Amazon Web\nServices account.\n",
+        "description": "Definition of an _OpenShift_ cluster.\n\nThe `cloud_provider` attribute is a reference to the cloud provider. When a\ncluster is retrieved it will be a link to the cloud provider, containing only\nthe kind, id and href attributes:\n\n```json\n{\n  \"cloud_provider\": {\n    \"kind\": \"CloudProviderLink\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/cloud_providers/123\"\n  }\n}\n```\n\nWhen a cluster is created this is optional, and if used it should contain the\nidentifier of the cloud provider to use:\n\n```json\n{\n  \"cloud_provider\": {\n    \"id\": \"123\",\n  }\n}\n```\n\nIf not included, then the cluster will be created using the default cloud\nprovider, which is currently Amazon Web Services.\n\nThe region attribute is mandatory when a cluster is created.\n\nThe `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`\nattributes are mandatory when creation a cluster with your own Amazon Web\nServices account.\n",
         "properties": {
           "kind": {
             "description": "Indicates the type of this object. Will be 'Cluster' if this is a complete object or 'ClusterLink' if it is just a link.\n",
@@ -7098,7 +7098,7 @@
             "$ref": "#/components/schemas/ClusterConsole"
           },
           "creation_timestamp": {
-            "description": "Date and time when the cluster was initially created, using the\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].\n",
+            "description": "Date and time when the cluster was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).\n",
             "type": "string",
             "format": "date-time"
           },
@@ -7115,7 +7115,7 @@
             "type": "boolean"
           },
           "expiration_timestamp": {
-            "description": "Date and time when the cluster will be automatically deleted, using the format defined in\nhttps://www.ietf.org/rfc/rfc3339.txt[RFC3339]. If no timestamp is provided, the cluster\nwill never expire.\n\nThis option is unsupported.\n",
+            "description": "Date and time when the cluster will be automatically deleted, using the format defined in\n[RFC3339](https://www.ietf.org/rfc/rfc3339.txt). If no timestamp is provided, the cluster\nwill never expire.\n\nThis option is unsupported.\n",
             "type": "string",
             "format": "date-time"
           },
@@ -7427,7 +7427,7 @@
         "description": "Registration of a new cluster to the service.\n",
         "properties": {
           "external_id": {
-            "description": "Identifier of the cluster generated by the installer.\n\nFor example, to register a cluster that has been provisioned outside\nof this service, send a a request like this:\n\n\n```\nPOST /api/clusters_mgmt/v1/register_cluster HTTP/1.1\n```\n\nWith a request body like this:\n\n\n```\n{\n  \"external_id\": \"d656aecf-11a6-4782-ad86-8f72638449ba\"\n}\n```\n",
+            "description": "Identifier of the cluster generated by the installer.\n\nFor example, to register a cluster that has been provisioned outside\nof this service, send a a request like this:\n\n```http\nPOST /api/clusters_mgmt/v1/register_cluster HTTP/1.1\n```\n\nWith a request body like this:\n\n```json\n{\n  \"external_id\": \"d656aecf-11a6-4782-ad86-8f72638449ba\"\n}\n```\n",
             "type": "string"
           },
           "organization_id": {

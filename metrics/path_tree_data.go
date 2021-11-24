@@ -263,6 +263,40 @@ var pathTreeData = `{
           }
         }
       }
+    },
+    "status_board": {
+      "v1": {
+        "application_dependencies": {
+          "-": null
+        },
+        "applications": {
+          "-": {
+            "services": {
+              "-": null
+            }
+          }
+        },
+        "peer_dependencies": {
+          "-": null
+        },
+        "products": {
+          "-": {
+            "applications": {
+              "-": {
+                "services": {
+                  "-": null
+                }
+              }
+            }
+          }
+        },
+        "services": {
+          "-": null
+        },
+        "statuses": {
+          "-": null
+        }
+      }
     }
   }
 }
