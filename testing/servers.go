@@ -35,6 +35,7 @@ import (
 	"github.com/onsi/gomega/ghttp"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
+        jsonpatch "github.com/evanphx/json-patch/v5"
 
 	. "github.com/onsi/ginkgo" // nolint
 	. "github.com/onsi/gomega" // nolint
@@ -248,6 +249,16 @@ func RespondWithJSON(status int, body string) http.HandlerFunc {
 // on how the template and the arguments are combined.
 func RespondWithJSONTemplate(status int, source string, args ...interface{}) http.HandlerFunc {
 	return RespondWithJSON(status, EvaluateTemplate(source, args...))
+}
+
+// RespondWithPatchedJSON responds with the given status code and the result of
+// patching the given JSON with the given patch.
+func RespondWithPatchedJSON(status int, body string, patch string) http.HandlerFunc {
+        patchObject, err := jsonpatch.DecodePatch([]byte(patch))
+        Expect(err).ToNot(HaveOccurred())
+        patchResult, err := patchObject.Apply([]byte(body))
+        Expect(err).ToNot(HaveOccurred())
+        return RespondWithJSON(status, string(patchResult))
 }
 
 // RespondWithCookie responds to the request adding a cookie with the given name and value.
