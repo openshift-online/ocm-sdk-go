@@ -8,6 +8,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/uuid v1.2.0
+	github.com/itchyny/gojq v0.12.5
 	github.com/jackc/pgconn v1.9.0
 	github.com/jackc/pgx/v4 v4.12.0
 	github.com/json-iterator/go v1.1.10
@@ -17,5 +18,5 @@ require (
 	github.com/onsi/gomega v1.16.0
 	github.com/prometheus/client_golang v1.9.0
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
-	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
