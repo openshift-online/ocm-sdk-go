@@ -188,26 +188,17 @@ build the object calling the `Build` method:
 // Create a new object of the `Cluster` type:
 cluster, err := cmv1.NewCluster().
 	Name("mycluster").
-	Flavour(
-		cmv1.NewFlavour().
-			ID("4"),
+	CloudProvider(
+		cmv1.NewCloudProvider().
+			ID("aws"),
 	).
 	Region(
 		cmv1.NewCloudRegion().
 			ID("us-east-1"),
 	).
-	DNS(
-		cmv1.NewDNS().
-			BaseDomain("example.com"),
-	).
-	AWS(
-		cmv1.NewAWS().
-			AccessKeyID("...").
-			SecretAccessKey("..."),
-	).
 	Version(
 		cmv1.NewVersion().
-			ID("openshift-v4.0-beta4"),
+			ID("openshift-v4.9.7"),
 	).
 	Build()
 if err != nil {
