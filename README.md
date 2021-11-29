@@ -251,7 +251,7 @@ are implemented as objects of a `...List` type. For example, the value of the
 These list types provide methods to process the elements of the list. For
 example, to print the names of a list of groups:
 
-```
+```go
 // Get the list of groups:
 groups := ...
 
