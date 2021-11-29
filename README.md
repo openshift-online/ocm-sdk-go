@@ -56,22 +56,13 @@ func main() {
 	// Prepare the description of the cluster to create:
 	cluster, err := cmv1.NewCluster().
 		Name("mycluster").
-		Flavour(
-			cmv1.NewFlavour().
-				ID("4"),
+		CloudProvider(
+			cmv1.NewCloudProvider().
+				ID("aws"),
 		).
 		Region(
 			cmv1.NewCloudRegion().
 				ID("us-east-1"),
-		).
-		DNS(
-			cmv1.NewDNS().
-				BaseDomain("example.com"),
-		).
-		AWS(
-			cmv1.NewAWS().
-				AccessKeyID("...").
-				SecretAccessKey("..."),
 		).
 		Version(
 			cmv1.NewVersion().
