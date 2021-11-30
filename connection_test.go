@@ -973,6 +973,20 @@ var _ = Describe("Connection", func() {
 		Expect(message).To(ContainSubstring("socket"))
 		Expect(message).To(ContainSubstring("path"))
 	})
+
+	It("Function Close returns nil when trying to close a closed connection", func() {
+		offlineToken := MakeTokenString("Offline", 0)
+		connection, err := NewConnectionBuilder().
+			Logger(logger).
+			Tokens(offlineToken).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+		err = connection.Close()
+		Expect(err).ToNot(HaveOccurred())
+		// Try to close the connection again
+		err = connection.Close()
+		Expect(err).To(BeNil())
+	})
 })
 
 type TestTransport struct {

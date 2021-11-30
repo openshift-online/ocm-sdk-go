@@ -991,6 +991,11 @@ func (c *Connection) JobQueue() *jobqueue.Client {
 func (c *Connection) Close() error {
 	var err error
 
+	// in case the connection is already closed, return instead of printing an error message
+	if c.closed {
+		return nil
+	}
+
 	// Close the HTTP clients:
 	err = c.clientSelector.Close()
 	if err != nil {
