@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.221 Dec 1 2021
+
+- Modify `func (c *Connection) Close()` to return nil in case the connection is already closed.
+
 ## 0.1.220 Nov 25 2021
 
 - Added utilities to test with `jq` expressions and JSON patches.
