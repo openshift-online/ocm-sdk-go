@@ -27,26 +27,60 @@ jobs:
     name: Publish release
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout the source
+      uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install Python modules
+      run: pip install -r .github/workflows/requirements.txt
+
     - name: Create release
+      shell: python
       run: |
-        # Get the version number:
-        version=$(echo -n ${{ github.ref }} | sed -E 's|^refs/tags/v(.*)$|\1|')
+        import re
+        import requests
+
+        # Get the context and secret data that we will need:
+        repository = "${{ github.repository }}"
+        reference = "${{ github.ref }}"
+        token = "${{ secrets.GITHUB_TOKEN }}"
+
+        # Calculate the version number:
+        version = re.sub(r"^refs/tags/v(.*)$", r"\1", reference)
+
+        # Get the list of changes:
+        body = ""
+        with open("CHANGES.md", "r") as stream:
+            while True:
+                line = stream.readline()
+                if line == "" or line.startswith("## " + version):
+                    break
+            while True:
+                line = stream.readline()
+                if line == "" or line.startswith("## "):
+                    break
+                body += line
 
         # Send the request to create the release:
-        cat > request.json <<.
-        {
-          "tag_name": "v${version}",
-          "name": "Release ${version}",
-          "body": "See the [CHANGES](CHANGES.md) file for details."
-        }
-        .
-        curl \
-        --silent \
-        --request "POST" \
-        --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-        --header "Content-Type: application/json" \
-        --header "Accept: application/json" \
-        --url "https://api.github.com/repos/${{ github.repository }}/releases" \
-        --data @request.json \
-        --output response.json \
-        --fail
+        response = requests.post(
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            json={
+                "tag_name": f"v{version}",
+                "name": f"Release {version}",
+                "body": body,
+            },
+            url=(
+                "https://api.github.com"
+                f"/repos/{repository}/releases"
+            ),
+        )
+        response.raise_for_status()
