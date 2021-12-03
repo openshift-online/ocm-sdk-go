@@ -8,7 +8,7 @@ If new api types or endpoints need to be added, the
 Fork and clone the [ocm-api-model](https://github.com/openshift-online/ocm-api-model) repository to
 get started.
 
-The [OCM API Model README](https://github.com/openshift-online/ocm-api-model/blob/master/README.md)
+The [OCM API Model README](https://github.com/openshift-online/ocm-api-model/blob/main/README.md)
 contains all the information needed to create or update models.
 
 Submit an MR with any changes after validation. The MR should be reviewed before merge.
@@ -42,7 +42,7 @@ To use any updates to the [ocm-api-model](https://github.com/openshift-online/oc
 must be incremented for consumption in ocm-sdk-go generation. The version is defined by the latest git tag.
 The version is also defined in the ocm-api-model/CHANGES.md file.
 
-Once all changes to the OCM API Model have been committed to the master branch, submit a separate change with
+Once all changes to the OCM API Model have been committed to the main branch, submit a separate change with
 an update to ocm-api-model/CHANGES.md. This update should indicate the version and describe the changes
 included with the version update. The following is an example update to version 0.0.9:
 
@@ -58,7 +58,7 @@ Submit an MR with the CHANGES.md modification and review/merge.
 Finally, create and submit a new tag with the new version following the below example:
 
 ```shell
-git checkout master
+git checkout main
 git pull
 git tag -a -m 'Release 0.0.9' v0.0.9
 git push origin v0.0.9
@@ -101,7 +101,7 @@ Submit an MR for review/merge with the CHANGES.md and version.go update.
 Finally, create and submit a new tag with the new version following the below example:
 
 ```shell
-git checkout master
+git checkout main
 git pull
 git tag -a -m 'Release 0.1.39' v0.1.39
 git push origin v0.1.39
