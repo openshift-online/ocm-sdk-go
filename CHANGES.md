@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.223 Dec 9 2021
+
+- Update to model 0.0.155:
+  - Add `status_board` service.
+
 ## 0.1.222 Dec 3 2021
 
 This version doesn't contain changes to the functionality, only to the
