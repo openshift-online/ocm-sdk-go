@@ -180,7 +180,7 @@ func (r *StatusPollResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *StatusPollResponse) Body() *Service {
+func (r *StatusPollResponse) Body() *Status {
 	return r.response.Body()
 }
 
@@ -188,7 +188,7 @@ func (r *StatusPollResponse) Body() *Service {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusPollResponse) GetBody() (value *Service, ok bool) {
+func (r *StatusPollResponse) GetBody() (value *Status, ok bool) {
 	return r.response.GetBody()
 }
 
@@ -366,7 +366,7 @@ type StatusGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Service
+	body   *Status
 }
 
 // Status returns the response status code.
@@ -396,7 +396,7 @@ func (r *StatusGetResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *StatusGetResponse) Body() *Service {
+func (r *StatusGetResponse) Body() *Status {
 	if r == nil {
 		return nil
 	}
@@ -407,7 +407,7 @@ func (r *StatusGetResponse) Body() *Service {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusGetResponse) GetBody() (value *Service, ok bool) {
+func (r *StatusGetResponse) GetBody() (value *Status, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body

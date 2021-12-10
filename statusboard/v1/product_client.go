@@ -90,6 +90,16 @@ func (c *ProductClient) Applications() *ApplicationsClient {
 	)
 }
 
+// Updates returns the target 'statuses' resource.
+//
+//
+func (c *ProductClient) Updates() *StatusesClient {
+	return NewStatusesClient(
+		c.transport,
+		path.Join(c.path, "updates"),
+	)
+}
+
 // ProductPollRequest is the request for the Poll method.
 type ProductPollRequest struct {
 	request    *ProductGetRequest

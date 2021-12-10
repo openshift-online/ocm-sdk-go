@@ -44,11 +44,11 @@ func writeStatusGetRequest(request *StatusGetRequest, writer io.Writer) error {
 }
 func readStatusGetResponse(response *StatusGetResponse, reader io.Reader) error {
 	var err error
-	response.body, err = UnmarshalService(reader)
+	response.body, err = UnmarshalStatus(reader)
 	return err
 }
 func writeStatusGetResponse(response *StatusGetServerResponse, w http.ResponseWriter) error {
-	return MarshalService(response.body, w)
+	return MarshalStatus(response.body, w)
 }
 func readStatusUpdateRequest(request *StatusUpdateServerRequest, r *http.Request) error {
 	var err error

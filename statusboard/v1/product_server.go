@@ -49,6 +49,11 @@ type ProductServer interface {
 	//
 	//
 	Applications() ApplicationsServer
+
+	// Updates returns the target 'statuses' resource.
+	//
+	//
+	Updates() StatusesServer
 }
 
 // ProductDeleteServerRequest is the request for the 'delete' method.
@@ -168,6 +173,13 @@ func dispatchProduct(w http.ResponseWriter, r *http.Request, server ProductServe
 			return
 		}
 		dispatchApplications(w, r, target, segments[1:])
+	case "updates":
+		target := server.Updates()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchStatuses(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return
