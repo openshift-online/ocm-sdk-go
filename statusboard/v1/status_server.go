@@ -70,13 +70,13 @@ type StatusGetServerRequest struct {
 type StatusGetServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *Service
+	body   *Status
 }
 
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *StatusGetServerResponse) Body(value *Service) *StatusGetServerResponse {
+func (r *StatusGetServerResponse) Body(value *Status) *StatusGetServerResponse {
 	r.body = value
 	return r
 }

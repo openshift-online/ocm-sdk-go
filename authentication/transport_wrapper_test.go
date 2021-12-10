@@ -1427,7 +1427,7 @@ var _ = Describe("Tokens", func() {
 func makeTestPullSecretToken() string {
 	id := uuid.New()
 	dummyTokenText := base64.StdEncoding.EncodeToString([]byte("abcdefghijklmnopqrstuvwxyz"))
-	return fmt.Sprintf("%s:%s",id,dummyTokenText)
+	return fmt.Sprintf("%s:%s", id, dummyTokenText)
 }
 
 func VerifyPasswordGrant(user, password string) http.HandlerFunc {

@@ -287,6 +287,9 @@ var pathTreeData = `{
                   "-": null
                 }
               }
+            },
+            "updates": {
+              "-": null
             }
           }
         },

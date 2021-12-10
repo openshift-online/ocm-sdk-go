@@ -354,7 +354,7 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 		if err != nil {
 			b.logger.Debug(
 				ctx,
-				"Can't parse token %d, will assume that it is either an " +
+				"Can't parse token %d, will assume that it is either an "+
 					"opaque refresh token or pull secret access token: %v",
 				i, err,
 			)
@@ -364,7 +364,7 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 			if err != nil {
 				b.logger.Debug(
 					ctx,
-					"Can't parse pull secret access token %d, will assume " +
+					"Can't parse pull secret access token %d, will assume "+
 						"that it is an opaque refresh token: %v",
 					i, err,
 				)
