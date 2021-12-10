@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.224 Dec 10 2021
+
+- Support pull-secret access token as a valid token.
+
+- Update to model 0.0.156:
+  - Add `updates` method to status board product resource.
+  - Fix status get method of status board.
+
 ## 0.1.223 Dec 9 2021
 
 - Update to model 0.0.155:
