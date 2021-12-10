@@ -71,6 +71,11 @@ func (m *jqMatcher) Match(actual interface{}) (success bool, err error) {
 		return
 	}
 
+	// Check that there is at least one result:
+	if len(m.results) == 0 {
+		return
+	}
+
 	// We consider the match sucessful if all the results returned by the JQ filter are exactly
 	// equal to the expected value.
 	success = true
