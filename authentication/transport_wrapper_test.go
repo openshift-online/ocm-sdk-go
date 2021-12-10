@@ -20,6 +20,7 @@ package authentication
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"net/http"
@@ -28,6 +29,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 	. "github.com/onsi/ginkgo"                         // nolint
 	. "github.com/onsi/gomega"                         // nolint
 	. "github.com/onsi/gomega/ghttp"                   // nolint
@@ -1378,7 +1380,55 @@ var _ = Describe("Tokens", func() {
 			Expect(errors.Is(err, context.DeadlineExceeded)).To(BeTrue())
 		})
 	})
+
+	When("Parsing a pull-secret access token", func() {
+		It("Will not consider a JWT as a pull-secret access token", func() {
+			refreshToken := MakeTokenString("Refresh", 10*time.Hour)
+			accessToken := MakeTokenString("Bearer", 5*time.Minute)
+			err := parsePullSecretAccessToken(refreshToken)
+			Expect(err).To(HaveOccurred())
+			err = parsePullSecretAccessToken(accessToken)
+			Expect(err).To(HaveOccurred())
+		})
+		It("Will validate a correctly-formatted token", func() {
+			pullSecretAccessToken := makeTestPullSecretToken()
+			err := parsePullSecretAccessToken(pullSecretAccessToken)
+			Expect(err).NotTo(HaveOccurred())
+		})
+	})
+
+	It("Will prefer the pull-secret access token if one is supplied", func() {
+		// Generate the tokens:
+		refreshToken := MakeTokenString("Refresh", 10*time.Hour)
+		accessToken := MakeTokenString("Bearer", 5*time.Minute)
+		pullSecretAccessToken := makeTestPullSecretToken()
+
+		// Create the wrapper:
+		wrapper, err := NewTransportWrapper().
+			Logger(logger).
+			TokenURL(server.URL()).
+			TrustedCA(ca).
+			Tokens(accessToken, refreshToken, pullSecretAccessToken).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		defer func() {
+			err = wrapper.Close()
+			Expect(err).ToNot(HaveOccurred())
+		}()
+
+		// Get the tokens:
+		returnedAccess, _, err := wrapper.Tokens(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(returnedAccess).To(Equal(pullSecretAccessToken), "Pull Secret Access Token not returned")
+	})
+
 })
+
+func makeTestPullSecretToken() string {
+	id := uuid.New()
+	dummyTokenText := base64.StdEncoding.EncodeToString([]byte("abcdefghijklmnopqrstuvwxyz"))
+	return fmt.Sprintf("%s:%s",id,dummyTokenText)
+}
 
 func VerifyPasswordGrant(user, password string) http.HandlerFunc {
 	return CombineHandlers(
