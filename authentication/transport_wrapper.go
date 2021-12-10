@@ -22,6 +22,7 @@ package authentication
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"sync"
 
@@ -36,6 +37,7 @@ import (
 	//
 	"github.com/cenkalti/backoff/v4"
 	jwt "github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 	"github.com/openshift-online/ocm-sdk-go/internal"
 	"github.com/openshift-online/ocm-sdk-go/logging"
 	"github.com/prometheus/client_golang/prometheus"
@@ -80,20 +82,21 @@ type TransportWrapperBuilder struct {
 // one that adds authorization tokens to requests.
 type TransportWrapper struct {
 	// Fields used for basic functionality:
-	logger         logging.Logger
-	clientID       string
-	clientSecret   string
-	user           string
-	password       string
-	scopes         []string
-	agent          string
-	clientSelector *internal.ClientSelector
-	tokenURL       string
-	tokenServer    *internal.ServerAddress
-	tokenMutex     *sync.Mutex
-	tokenParser    *jwt.Parser
-	accessToken    *tokenInfo
-	refreshToken   *tokenInfo
+	logger                logging.Logger
+	clientID              string
+	clientSecret          string
+	user                  string
+	password              string
+	scopes                []string
+	agent                 string
+	clientSelector        *internal.ClientSelector
+	tokenURL              string
+	tokenServer           *internal.ServerAddress
+	tokenMutex            *sync.Mutex
+	tokenParser           *jwt.Parser
+	accessToken           *tokenInfo
+	refreshToken          *tokenInfo
+	pullSecretAccessToken *tokenInfo
 
 	// Fields used for metrics:
 	metricsSubsystem    string
@@ -343,21 +346,43 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 	// Parse the tokens:
 	var accessToken *tokenInfo
 	var refreshToken *tokenInfo
+	var pullSecretAccessToken *tokenInfo
 	for i, text := range b.tokens {
 		var object *jwt.Token
+
 		object, _, err = tokenParser.ParseUnverified(text, jwt.MapClaims{})
 		if err != nil {
 			b.logger.Debug(
 				ctx,
-				"Can't parse token %d, will assume that it is an opaque "+
-					"refresh token: %v",
+				"Can't parse token %d, will assume that it is either an " +
+					"opaque refresh token or pull secret access token: %v",
 				i, err,
 			)
-			refreshToken = &tokenInfo{
+
+			// Attempt to detect/parse the token as a pull-secret access token
+			err := parsePullSecretAccessToken(text)
+			if err != nil {
+				b.logger.Debug(
+					ctx,
+					"Can't parse pull secret access token %d, will assume " +
+						"that it is an opaque refresh token: %v",
+					i, err,
+				)
+
+				// Not a pull-secret access token, so assume a opaque refresh token
+				refreshToken = &tokenInfo{
+					text: text,
+				}
+				continue
+			}
+
+			// Parsing as a pull-secret access token was successful, treat it as such
+			pullSecretAccessToken = &tokenInfo{
 				text: text,
 			}
 			continue
 		}
+
 		claims, ok := object.Claims.(jwt.MapClaims)
 		if !ok {
 			err = fmt.Errorf("claims of token %d are of type '%T'", i, claims)
@@ -525,24 +550,25 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 
 	// Create and populate the object:
 	result = &TransportWrapper{
-		logger:              b.logger,
-		clientID:            clientID,
-		clientSecret:        clientSecret,
-		user:                b.user,
-		password:            b.password,
-		scopes:              scopes,
-		agent:               b.agent,
-		clientSelector:      clientSelector,
-		tokenURL:            tokenURL,
-		tokenServer:         tokenServer,
-		tokenMutex:          &sync.Mutex{},
-		tokenParser:         tokenParser,
-		accessToken:         accessToken,
-		refreshToken:        refreshToken,
-		metricsSubsystem:    b.metricsSubsystem,
-		metricsRegisterer:   b.metricsRegisterer,
-		tokenCountMetric:    tokenCountMetric,
-		tokenDurationMetric: tokenDurationMetric,
+		logger:                b.logger,
+		clientID:              clientID,
+		clientSecret:          clientSecret,
+		user:                  b.user,
+		password:              b.password,
+		scopes:                scopes,
+		agent:                 b.agent,
+		clientSelector:        clientSelector,
+		tokenURL:              tokenURL,
+		tokenServer:           tokenServer,
+		tokenMutex:            &sync.Mutex{},
+		tokenParser:           tokenParser,
+		accessToken:           accessToken,
+		refreshToken:          refreshToken,
+		pullSecretAccessToken: pullSecretAccessToken,
+		metricsSubsystem:      b.metricsSubsystem,
+		metricsRegisterer:     b.metricsRegisterer,
+		tokenCountMetric:      tokenCountMetric,
+		tokenDurationMetric:   tokenDurationMetric,
 	}
 
 	return
@@ -615,8 +641,16 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 	if request.Header == nil {
 		request.Header = make(http.Header)
 	}
+
+	// If the access token is a pull-secret-access-token type, a
+	// different Authorization header must be used
 	if token != "" {
-		request.Header.Set("Authorization", "Bearer "+token)
+		if err := parsePullSecretAccessToken(token); err == nil {
+			// It is a pull-secret access token
+			request.Header.Set("Authorization", "AccessToken "+token)
+		} else {
+			request.Header.Set("Authorization", "Bearer "+token)
+		}
 	}
 
 	// Call the wrapped transport:
@@ -689,6 +723,12 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 	// multiple attributes of the connection:
 	w.tokenMutex.Lock()
 	defer w.tokenMutex.Unlock()
+
+	// A pull-secret access token can just be used as-is
+	if w.pullSecretAccessToken != nil {
+		access = w.pullSecretAccessToken.text
+		return
+	}
 
 	// Check the expiration times of the tokens:
 	now := time.Now()
@@ -1040,6 +1080,25 @@ func (w *TransportWrapper) debugExpiry(ctx context.Context, typ string, token *t
 	} else {
 		w.logger.Debug(ctx, "%s token isn't available", typ)
 	}
+}
+
+// parsePullSecretAccessToken will parse the supplied token to verify conformity
+// with that of a pull secret access token. A pull secret access token is of the
+// form <cluster id>:<Base64d pull secret token>.
+func parsePullSecretAccessToken(text string) error {
+	elems := strings.Split(text, ":")
+	if len(elems) != 2 {
+		return fmt.Errorf("Unparseable pull secret token")
+	}
+	_, err := uuid.Parse(elems[0])
+	if err != nil {
+		return fmt.Errorf("Unparseable pull secret token cluster ID")
+	}
+	_, err = base64.StdEncoding.DecodeString(elems[1])
+	if err != nil {
+		return fmt.Errorf("Unparseable pull secret token value")
+	}
+	return nil
 }
 
 // Names of fields in the token form:
