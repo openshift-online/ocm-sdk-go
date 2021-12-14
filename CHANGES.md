@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.225 Dec 10 2021
+- Update to model 0.0.157:
+  - Add support for multi user HTPasswd IDP 
+
 ## 0.1.224 Dec 10 2021
 
 - Support pull-secret access token as a valid token.

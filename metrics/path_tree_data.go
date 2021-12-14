@@ -173,7 +173,11 @@ var pathTreeData = `{
             },
             "hibernate": null,
             "identity_providers": {
-              "-": null
+              "-": {
+                "htpasswd_users": {
+                  "-": null
+                }
+              }
             },
             "ingresses": {
               "-": null

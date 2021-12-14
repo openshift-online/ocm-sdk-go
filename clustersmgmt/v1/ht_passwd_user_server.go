@@ -27,80 +27,75 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
-// IdentityProviderServer represents the interface the manages the 'identity_provider' resource.
-type IdentityProviderServer interface {
+// HTPasswdUserServer represents the interface the manages the 'HT_passwd_user' resource.
+type HTPasswdUserServer interface {
 
 	// Delete handles a request for the 'delete' method.
 	//
-	// Deletes the identity provider.
-	Delete(ctx context.Context, request *IdentityProviderDeleteServerRequest, response *IdentityProviderDeleteServerResponse) error
+	// Deletes the user.
+	Delete(ctx context.Context, request *HTPasswdUserDeleteServerRequest, response *HTPasswdUserDeleteServerResponse) error
 
 	// Get handles a request for the 'get' method.
 	//
-	// Retrieves the details of the identity provider.
-	Get(ctx context.Context, request *IdentityProviderGetServerRequest, response *IdentityProviderGetServerResponse) error
+	// Retrieves the details of the user.
+	Get(ctx context.Context, request *HTPasswdUserGetServerRequest, response *HTPasswdUserGetServerResponse) error
 
 	// Update handles a request for the 'update' method.
 	//
-	// Update identity provider in the cluster.
-	Update(ctx context.Context, request *IdentityProviderUpdateServerRequest, response *IdentityProviderUpdateServerResponse) error
-
-	// HtpasswdUsers returns the target 'HT_passwd_users' resource.
-	//
-	// Reference to the resource that manages the collection of _HTPasswd_ IDP users
-	HtpasswdUsers() HTPasswdUsersServer
+	// Updates the user's password. The username is not editable
+	Update(ctx context.Context, request *HTPasswdUserUpdateServerRequest, response *HTPasswdUserUpdateServerResponse) error
 }
 
-// IdentityProviderDeleteServerRequest is the request for the 'delete' method.
-type IdentityProviderDeleteServerRequest struct {
+// HTPasswdUserDeleteServerRequest is the request for the 'delete' method.
+type HTPasswdUserDeleteServerRequest struct {
 }
 
-// IdentityProviderDeleteServerResponse is the response for the 'delete' method.
-type IdentityProviderDeleteServerResponse struct {
+// HTPasswdUserDeleteServerResponse is the response for the 'delete' method.
+type HTPasswdUserDeleteServerResponse struct {
 	status int
 	err    *errors.Error
 }
 
 // Status sets the status code.
-func (r *IdentityProviderDeleteServerResponse) Status(value int) *IdentityProviderDeleteServerResponse {
+func (r *HTPasswdUserDeleteServerResponse) Status(value int) *HTPasswdUserDeleteServerResponse {
 	r.status = value
 	return r
 }
 
-// IdentityProviderGetServerRequest is the request for the 'get' method.
-type IdentityProviderGetServerRequest struct {
+// HTPasswdUserGetServerRequest is the request for the 'get' method.
+type HTPasswdUserGetServerRequest struct {
 }
 
-// IdentityProviderGetServerResponse is the response for the 'get' method.
-type IdentityProviderGetServerResponse struct {
+// HTPasswdUserGetServerResponse is the response for the 'get' method.
+type HTPasswdUserGetServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *IdentityProvider
+	body   *HTPasswdUser
 }
 
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *IdentityProviderGetServerResponse) Body(value *IdentityProvider) *IdentityProviderGetServerResponse {
+func (r *HTPasswdUserGetServerResponse) Body(value *HTPasswdUser) *HTPasswdUserGetServerResponse {
 	r.body = value
 	return r
 }
 
 // Status sets the status code.
-func (r *IdentityProviderGetServerResponse) Status(value int) *IdentityProviderGetServerResponse {
+func (r *HTPasswdUserGetServerResponse) Status(value int) *HTPasswdUserGetServerResponse {
 	r.status = value
 	return r
 }
 
-// IdentityProviderUpdateServerRequest is the request for the 'update' method.
-type IdentityProviderUpdateServerRequest struct {
-	body *IdentityProvider
+// HTPasswdUserUpdateServerRequest is the request for the 'update' method.
+type HTPasswdUserUpdateServerRequest struct {
+	body *HTPasswdUser
 }
 
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *IdentityProviderUpdateServerRequest) Body() *IdentityProvider {
+func (r *HTPasswdUserUpdateServerRequest) Body() *HTPasswdUser {
 	if r == nil {
 		return nil
 	}
@@ -111,7 +106,7 @@ func (r *IdentityProviderUpdateServerRequest) Body() *IdentityProvider {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *IdentityProviderUpdateServerRequest) GetBody() (value *IdentityProvider, ok bool) {
+func (r *HTPasswdUserUpdateServerRequest) GetBody() (value *HTPasswdUser, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -119,41 +114,41 @@ func (r *IdentityProviderUpdateServerRequest) GetBody() (value *IdentityProvider
 	return
 }
 
-// IdentityProviderUpdateServerResponse is the response for the 'update' method.
-type IdentityProviderUpdateServerResponse struct {
+// HTPasswdUserUpdateServerResponse is the response for the 'update' method.
+type HTPasswdUserUpdateServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *IdentityProvider
+	body   *HTPasswdUser
 }
 
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *IdentityProviderUpdateServerResponse) Body(value *IdentityProvider) *IdentityProviderUpdateServerResponse {
+func (r *HTPasswdUserUpdateServerResponse) Body(value *HTPasswdUser) *HTPasswdUserUpdateServerResponse {
 	r.body = value
 	return r
 }
 
 // Status sets the status code.
-func (r *IdentityProviderUpdateServerResponse) Status(value int) *IdentityProviderUpdateServerResponse {
+func (r *HTPasswdUserUpdateServerResponse) Status(value int) *HTPasswdUserUpdateServerResponse {
 	r.status = value
 	return r
 }
 
-// dispatchIdentityProvider navigates the servers tree rooted at the given server
+// dispatchHTPasswdUser navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchIdentityProvider(w http.ResponseWriter, r *http.Request, server IdentityProviderServer, segments []string) {
+func dispatchHTPasswdUser(w http.ResponseWriter, r *http.Request, server HTPasswdUserServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case "DELETE":
-			adaptIdentityProviderDeleteRequest(w, r, server)
+			adaptHTPasswdUserDeleteRequest(w, r, server)
 			return
 		case "GET":
-			adaptIdentityProviderGetRequest(w, r, server)
+			adaptHTPasswdUserGetRequest(w, r, server)
 			return
 		case "PATCH":
-			adaptIdentityProviderUpdateRequest(w, r, server)
+			adaptHTPasswdUserUpdateRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -161,25 +156,18 @@ func dispatchIdentityProvider(w http.ResponseWriter, r *http.Request, server Ide
 		}
 	}
 	switch segments[0] {
-	case "htpasswd_users":
-		target := server.HtpasswdUsers()
-		if target == nil {
-			errors.SendNotFound(w, r)
-			return
-		}
-		dispatchHTPasswdUsers(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return
 	}
 }
 
-// adaptIdentityProviderDeleteRequest translates the given HTTP request into a call to
+// adaptHTPasswdUserDeleteRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptIdentityProviderDeleteRequest(w http.ResponseWriter, r *http.Request, server IdentityProviderServer) {
-	request := &IdentityProviderDeleteServerRequest{}
-	err := readIdentityProviderDeleteRequest(request, r)
+func adaptHTPasswdUserDeleteRequest(w http.ResponseWriter, r *http.Request, server HTPasswdUserServer) {
+	request := &HTPasswdUserDeleteServerRequest{}
+	err := readHTPasswdUserDeleteRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -188,7 +176,7 @@ func adaptIdentityProviderDeleteRequest(w http.ResponseWriter, r *http.Request, 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &IdentityProviderDeleteServerResponse{}
+	response := &HTPasswdUserDeleteServerResponse{}
 	response.status = 204
 	err = server.Delete(r.Context(), request, response)
 	if err != nil {
@@ -199,7 +187,7 @@ func adaptIdentityProviderDeleteRequest(w http.ResponseWriter, r *http.Request, 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeIdentityProviderDeleteResponse(response, w)
+	err = writeHTPasswdUserDeleteResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
@@ -209,12 +197,12 @@ func adaptIdentityProviderDeleteRequest(w http.ResponseWriter, r *http.Request, 
 	}
 }
 
-// adaptIdentityProviderGetRequest translates the given HTTP request into a call to
+// adaptHTPasswdUserGetRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptIdentityProviderGetRequest(w http.ResponseWriter, r *http.Request, server IdentityProviderServer) {
-	request := &IdentityProviderGetServerRequest{}
-	err := readIdentityProviderGetRequest(request, r)
+func adaptHTPasswdUserGetRequest(w http.ResponseWriter, r *http.Request, server HTPasswdUserServer) {
+	request := &HTPasswdUserGetServerRequest{}
+	err := readHTPasswdUserGetRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -223,7 +211,7 @@ func adaptIdentityProviderGetRequest(w http.ResponseWriter, r *http.Request, ser
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &IdentityProviderGetServerResponse{}
+	response := &HTPasswdUserGetServerResponse{}
 	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
@@ -234,7 +222,7 @@ func adaptIdentityProviderGetRequest(w http.ResponseWriter, r *http.Request, ser
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeIdentityProviderGetResponse(response, w)
+	err = writeHTPasswdUserGetResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
@@ -244,12 +232,12 @@ func adaptIdentityProviderGetRequest(w http.ResponseWriter, r *http.Request, ser
 	}
 }
 
-// adaptIdentityProviderUpdateRequest translates the given HTTP request into a call to
+// adaptHTPasswdUserUpdateRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptIdentityProviderUpdateRequest(w http.ResponseWriter, r *http.Request, server IdentityProviderServer) {
-	request := &IdentityProviderUpdateServerRequest{}
-	err := readIdentityProviderUpdateRequest(request, r)
+func adaptHTPasswdUserUpdateRequest(w http.ResponseWriter, r *http.Request, server HTPasswdUserServer) {
+	request := &HTPasswdUserUpdateServerRequest{}
+	err := readHTPasswdUserUpdateRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -258,7 +246,7 @@ func adaptIdentityProviderUpdateRequest(w http.ResponseWriter, r *http.Request, 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &IdentityProviderUpdateServerResponse{}
+	response := &HTPasswdUserUpdateServerResponse{}
 	response.status = 200
 	err = server.Update(r.Context(), request, response)
 	if err != nil {
@@ -269,7 +257,7 @@ func adaptIdentityProviderUpdateRequest(w http.ResponseWriter, r *http.Request, 
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeIdentityProviderUpdateResponse(response, w)
+	err = writeHTPasswdUserUpdateResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

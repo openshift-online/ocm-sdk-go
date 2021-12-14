@@ -27,16 +27,16 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalHTPasswdIdentityProvider writes a value of the 'HT_passwd_identity_provider' type to the given writer.
-func MarshalHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, writer io.Writer) error {
+// MarshalHTPasswdUser writes a value of the 'HT_passwd_user' type to the given writer.
+func MarshalHTPasswdUser(object *HTPasswdUser, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeHTPasswdIdentityProvider(object, stream)
+	writeHTPasswdUser(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeHTPasswdIdentityProvider writes a value of the 'HT_passwd_identity_provider' type to the given stream.
-func writeHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, stream *jsoniter.Stream) {
+// writeHTPasswdUser writes a value of the 'HT_passwd_user' type to the given stream.
+func writeHTPasswdUser(object *HTPasswdUser, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -45,11 +45,20 @@ func writeHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, stream *jso
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("id")
+		stream.WriteString(object.id)
+		count++
+	}
+	present_ = object.bitmap_&2 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("password")
 		stream.WriteString(object.password)
 		count++
 	}
-	present_ = object.bitmap_&2 != 0
+	present_ = object.bitmap_&4 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -58,24 +67,12 @@ func writeHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, stream *jso
 		stream.WriteString(object.username)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0 && object.users != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("users")
-		stream.WriteObjectStart()
-		stream.WriteObjectField("items")
-		writeHTPasswdUserList(object.users.items, stream)
-		stream.WriteObjectEnd()
-		count++
-	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalHTPasswdIdentityProvider reads a value of the 'HT_passwd_identity_provider' type from the given
+// UnmarshalHTPasswdUser reads a value of the 'HT_passwd_user' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalHTPasswdIdentityProvider(source interface{}) (object *HTPasswdIdentityProvider, err error) {
+func UnmarshalHTPasswdUser(source interface{}) (object *HTPasswdUser, err error) {
 	if source == http.NoBody {
 		return
 	}
@@ -83,48 +80,31 @@ func UnmarshalHTPasswdIdentityProvider(source interface{}) (object *HTPasswdIden
 	if err != nil {
 		return
 	}
-	object = readHTPasswdIdentityProvider(iterator)
+	object = readHTPasswdUser(iterator)
 	err = iterator.Error
 	return
 }
 
-// readHTPasswdIdentityProvider reads a value of the 'HT_passwd_identity_provider' type from the given iterator.
-func readHTPasswdIdentityProvider(iterator *jsoniter.Iterator) *HTPasswdIdentityProvider {
-	object := &HTPasswdIdentityProvider{}
+// readHTPasswdUser reads a value of the 'HT_passwd_user' type from the given iterator.
+func readHTPasswdUser(iterator *jsoniter.Iterator) *HTPasswdUser {
+	object := &HTPasswdUser{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
+		case "id":
+			value := iterator.ReadString()
+			object.id = value
+			object.bitmap_ |= 1
 		case "password":
 			value := iterator.ReadString()
 			object.password = value
-			object.bitmap_ |= 1
+			object.bitmap_ |= 2
 		case "username":
 			value := iterator.ReadString()
 			object.username = value
-			object.bitmap_ |= 2
-		case "users":
-			value := &HTPasswdUserList{}
-			for {
-				field := iterator.ReadObject()
-				if field == "" {
-					break
-				}
-				switch field {
-				case "kind":
-					text := iterator.ReadString()
-					value.link = text == HTPasswdUserListLinkKind
-				case "href":
-					value.href = iterator.ReadString()
-				case "items":
-					value.items = readHTPasswdUserList(iterator)
-				default:
-					iterator.ReadAny()
-				}
-			}
-			object.users = value
 			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
