@@ -474,12 +474,20 @@
             "description": "Self link.\n",
             "type": "string"
           },
+          "cluster_id": {
+            "description": "Internal cluster ID.\n",
+            "type": "string"
+          },
           "cluster_uuid": {
             "description": "External cluster ID.\n",
             "type": "string"
           },
           "description": {
             "description": "Full description of the log entry content (supports Markdown format as well).\n",
+            "type": "string"
+          },
+          "event_stream_id": {
+            "description": "Log custom event id for a simple search of related cluster logs.\n",
             "type": "string"
           },
           "internal_only": {
@@ -493,6 +501,10 @@
           "severity": {
             "description": "Log severity for the specific log entry.\n",
             "$ref": "#/components/schemas/Severity"
+          },
+          "subscription_id": {
+            "description": "The related subscription id of the cluster.\n",
+            "type": "string"
           },
           "summary": {
             "description": "Title of the log entry.\n",

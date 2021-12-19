@@ -27,26 +27,26 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalCloudVPC writes a value of the 'cloud_VPC' type to the given writer.
-func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
+// MarshalSubnetwork writes a value of the 'subnetwork' type to the given writer.
+func MarshalSubnetwork(object *Subnetwork, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeCloudVPC(object, stream)
+	writeSubnetwork(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeCloudVPC writes a value of the 'cloud_VPC' type to the given stream.
-func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
+// writeSubnetwork writes a value of the 'subnetwork' type to the given stream.
+func writeSubnetwork(object *Subnetwork, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
-	present_ = object.bitmap_&1 != 0 && object.awsSubnets != nil
+	present_ = object.bitmap_&1 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("aws_subnets")
-		writeSubnetworkList(object.awsSubnets, stream)
+		stream.WriteObjectField("availability_zone")
+		stream.WriteString(object.availabilityZone)
 		count++
 	}
 	present_ = object.bitmap_&2 != 0
@@ -54,25 +54,16 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("name")
-		stream.WriteString(object.name)
-		count++
-	}
-	present_ = object.bitmap_&4 != 0 && object.subnets != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("subnets")
-		writeStringList(object.subnets, stream)
+		stream.WriteObjectField("subnet_id")
+		stream.WriteString(object.subnetID)
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalCloudVPC reads a value of the 'cloud_VPC' type from the given
+// UnmarshalSubnetwork reads a value of the 'subnetwork' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalCloudVPC(source interface{}) (object *CloudVPC, err error) {
+func UnmarshalSubnetwork(source interface{}) (object *Subnetwork, err error) {
 	if source == http.NoBody {
 		return
 	}
@@ -80,32 +71,28 @@ func UnmarshalCloudVPC(source interface{}) (object *CloudVPC, err error) {
 	if err != nil {
 		return
 	}
-	object = readCloudVPC(iterator)
+	object = readSubnetwork(iterator)
 	err = iterator.Error
 	return
 }
 
-// readCloudVPC reads a value of the 'cloud_VPC' type from the given iterator.
-func readCloudVPC(iterator *jsoniter.Iterator) *CloudVPC {
-	object := &CloudVPC{}
+// readSubnetwork reads a value of the 'subnetwork' type from the given iterator.
+func readSubnetwork(iterator *jsoniter.Iterator) *Subnetwork {
+	object := &Subnetwork{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "aws_subnets":
-			value := readSubnetworkList(iterator)
-			object.awsSubnets = value
-			object.bitmap_ |= 1
-		case "name":
+		case "availability_zone":
 			value := iterator.ReadString()
-			object.name = value
+			object.availabilityZone = value
+			object.bitmap_ |= 1
+		case "subnet_id":
+			value := iterator.ReadString()
+			object.subnetID = value
 			object.bitmap_ |= 2
-		case "subnets":
-			value := readStringList(iterator)
-			object.subnets = value
-			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}
