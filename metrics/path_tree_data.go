@@ -173,7 +173,11 @@ var pathTreeData = `{
             },
             "hibernate": null,
             "identity_providers": {
-              "-": null
+              "-": {
+                "htpasswd_users": {
+                  "-": null
+                }
+              }
             },
             "ingresses": {
               "-": null
@@ -272,7 +276,11 @@ var pathTreeData = `{
         "applications": {
           "-": {
             "services": {
-              "-": null
+              "-": {
+                "statuses": {
+                  "-": null
+                }
+              }
             }
           }
         },
@@ -284,7 +292,11 @@ var pathTreeData = `{
             "applications": {
               "-": {
                 "services": {
-                  "-": null
+                  "-": {
+                    "statuses": {
+                      "-": null
+                    }
+                  }
                 }
               }
             },
@@ -294,7 +306,11 @@ var pathTreeData = `{
           }
         },
         "services": {
-          "-": null
+          "-": {
+            "statuses": {
+              "-": null
+            }
+          }
         },
         "statuses": {
           "-": null

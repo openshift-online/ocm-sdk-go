@@ -27,26 +27,26 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalCloudVPC writes a value of the 'cloud_VPC' type to the given writer.
-func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
+// MarshalHTPasswdUser writes a value of the 'HT_passwd_user' type to the given writer.
+func MarshalHTPasswdUser(object *HTPasswdUser, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeCloudVPC(object, stream)
+	writeHTPasswdUser(object, stream)
 	stream.Flush()
 	return stream.Error
 }
 
-// writeCloudVPC writes a value of the 'cloud_VPC' type to the given stream.
-func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
+// writeHTPasswdUser writes a value of the 'HT_passwd_user' type to the given stream.
+func writeHTPasswdUser(object *HTPasswdUser, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
-	present_ = object.bitmap_&1 != 0 && object.awsSubnets != nil
+	present_ = object.bitmap_&1 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("aws_subnets")
-		writeSubnetworkList(object.awsSubnets, stream)
+		stream.WriteObjectField("id")
+		stream.WriteString(object.id)
 		count++
 	}
 	present_ = object.bitmap_&2 != 0
@@ -54,25 +54,25 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("name")
-		stream.WriteString(object.name)
+		stream.WriteObjectField("password")
+		stream.WriteString(object.password)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0 && object.subnets != nil
+	present_ = object.bitmap_&4 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("subnets")
-		writeStringList(object.subnets, stream)
+		stream.WriteObjectField("username")
+		stream.WriteString(object.username)
 		count++
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalCloudVPC reads a value of the 'cloud_VPC' type from the given
+// UnmarshalHTPasswdUser reads a value of the 'HT_passwd_user' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalCloudVPC(source interface{}) (object *CloudVPC, err error) {
+func UnmarshalHTPasswdUser(source interface{}) (object *HTPasswdUser, err error) {
 	if source == http.NoBody {
 		return
 	}
@@ -80,31 +80,31 @@ func UnmarshalCloudVPC(source interface{}) (object *CloudVPC, err error) {
 	if err != nil {
 		return
 	}
-	object = readCloudVPC(iterator)
+	object = readHTPasswdUser(iterator)
 	err = iterator.Error
 	return
 }
 
-// readCloudVPC reads a value of the 'cloud_VPC' type from the given iterator.
-func readCloudVPC(iterator *jsoniter.Iterator) *CloudVPC {
-	object := &CloudVPC{}
+// readHTPasswdUser reads a value of the 'HT_passwd_user' type from the given iterator.
+func readHTPasswdUser(iterator *jsoniter.Iterator) *HTPasswdUser {
+	object := &HTPasswdUser{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "aws_subnets":
-			value := readSubnetworkList(iterator)
-			object.awsSubnets = value
-			object.bitmap_ |= 1
-		case "name":
+		case "id":
 			value := iterator.ReadString()
-			object.name = value
+			object.id = value
+			object.bitmap_ |= 1
+		case "password":
+			value := iterator.ReadString()
+			object.password = value
 			object.bitmap_ |= 2
-		case "subnets":
-			value := readStringList(iterator)
-			object.subnets = value
+		case "username":
+			value := iterator.ReadString()
+			object.username = value
 			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()

@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.225 Dec 19 2021
+
+-  MatchJQ should require at least one result 
+- Update to model 0.0.158:
+  - Adding subnetworks to vpc inquiry
+  - Add statuses path to service model, add some comments.
+  - [SDB-2509] Update OSL API schema to be compatible with ocm-sdk-go
+
 ## 0.1.224 Dec 10 2021
 
 - Support pull-secret access token as a valid token.

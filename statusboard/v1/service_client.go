@@ -25,6 +25,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -77,6 +78,16 @@ func (c *ServiceClient) Update() *ServiceUpdateRequest {
 		transport: c.transport,
 		path:      c.path,
 	}
+}
+
+// Statuses returns the target 'statuses' resource.
+//
+//
+func (c *ServiceClient) Statuses() *StatusesClient {
+	return NewStatusesClient(
+		c.transport,
+		path.Join(c.path, "statuses"),
+	)
 }
 
 // ServicePollRequest is the request for the Poll method.

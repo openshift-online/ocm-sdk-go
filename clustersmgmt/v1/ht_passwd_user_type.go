@@ -19,27 +19,50 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// HTPasswdIdentityProvider represents the values of the 'HT_passwd_identity_provider' type.
+// HTPasswdUser represents the values of the 'HT_passwd_user' type.
 //
-// Details for `htpasswd` identity providers.
-type HTPasswdIdentityProvider struct {
+//
+type HTPasswdUser struct {
 	bitmap_  uint32
+	id       string
 	password string
 	username string
-	users    *HTPasswdUserList
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *HTPasswdIdentityProvider) Empty() bool {
+func (o *HTPasswdUser) Empty() bool {
 	return o == nil || o.bitmap_ == 0
+}
+
+// ID returns the value of the 'ID' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// ID for a secondary user in the _HTPasswd_ data file.
+func (o *HTPasswdUser) ID() string {
+	if o != nil && o.bitmap_&1 != 0 {
+		return o.id
+	}
+	return ""
+}
+
+// GetID returns the value of the 'ID' attribute and
+// a flag indicating if the attribute has a value.
+//
+// ID for a secondary user in the _HTPasswd_ data file.
+func (o *HTPasswdUser) GetID() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&1 != 0
+	if ok {
+		value = o.id
+	}
+	return
 }
 
 // Password returns the value of the 'password' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Password to be used in the _HTPasswd_ data file.
-func (o *HTPasswdIdentityProvider) Password() string {
-	if o != nil && o.bitmap_&1 != 0 {
+// Password for a secondary user in the _HTPasswd_ data file.
+func (o *HTPasswdUser) Password() string {
+	if o != nil && o.bitmap_&2 != 0 {
 		return o.password
 	}
 	return ""
@@ -48,9 +71,9 @@ func (o *HTPasswdIdentityProvider) Password() string {
 // GetPassword returns the value of the 'password' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Password to be used in the _HTPasswd_ data file.
-func (o *HTPasswdIdentityProvider) GetPassword() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&1 != 0
+// Password for a secondary user in the _HTPasswd_ data file.
+func (o *HTPasswdUser) GetPassword() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.password
 	}
@@ -60,9 +83,9 @@ func (o *HTPasswdIdentityProvider) GetPassword() (value string, ok bool) {
 // Username returns the value of the 'username' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Username to be used in the _HTPasswd_ data file.
-func (o *HTPasswdIdentityProvider) Username() string {
-	if o != nil && o.bitmap_&2 != 0 {
+// Username for a secondary user in the _HTPasswd_ data file.
+func (o *HTPasswdUser) Username() string {
+	if o != nil && o.bitmap_&4 != 0 {
 		return o.username
 	}
 	return ""
@@ -71,59 +94,36 @@ func (o *HTPasswdIdentityProvider) Username() string {
 // GetUsername returns the value of the 'username' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Username to be used in the _HTPasswd_ data file.
-func (o *HTPasswdIdentityProvider) GetUsername() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2 != 0
+// Username for a secondary user in the _HTPasswd_ data file.
+func (o *HTPasswdUser) GetUsername() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.username
 	}
 	return
 }
 
-// Users returns the value of the 'users' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Link to the collection of _HTPasswd_ users.
-func (o *HTPasswdIdentityProvider) Users() *HTPasswdUserList {
-	if o != nil && o.bitmap_&4 != 0 {
-		return o.users
-	}
-	return nil
-}
+// HTPasswdUserListKind is the name of the type used to represent list of objects of
+// type 'HT_passwd_user'.
+const HTPasswdUserListKind = "HTPasswdUserList"
 
-// GetUsers returns the value of the 'users' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Link to the collection of _HTPasswd_ users.
-func (o *HTPasswdIdentityProvider) GetUsers() (value *HTPasswdUserList, ok bool) {
-	ok = o != nil && o.bitmap_&4 != 0
-	if ok {
-		value = o.users
-	}
-	return
-}
+// HTPasswdUserListLinkKind is the name of the type used to represent links to list
+// of objects of type 'HT_passwd_user'.
+const HTPasswdUserListLinkKind = "HTPasswdUserListLink"
 
-// HTPasswdIdentityProviderListKind is the name of the type used to represent list of objects of
-// type 'HT_passwd_identity_provider'.
-const HTPasswdIdentityProviderListKind = "HTPasswdIdentityProviderList"
+// HTPasswdUserNilKind is the name of the type used to nil lists of objects of
+// type 'HT_passwd_user'.
+const HTPasswdUserListNilKind = "HTPasswdUserListNil"
 
-// HTPasswdIdentityProviderListLinkKind is the name of the type used to represent links to list
-// of objects of type 'HT_passwd_identity_provider'.
-const HTPasswdIdentityProviderListLinkKind = "HTPasswdIdentityProviderListLink"
-
-// HTPasswdIdentityProviderNilKind is the name of the type used to nil lists of objects of
-// type 'HT_passwd_identity_provider'.
-const HTPasswdIdentityProviderListNilKind = "HTPasswdIdentityProviderListNil"
-
-// HTPasswdIdentityProviderList is a list of values of the 'HT_passwd_identity_provider' type.
-type HTPasswdIdentityProviderList struct {
+// HTPasswdUserList is a list of values of the 'HT_passwd_user' type.
+type HTPasswdUserList struct {
 	href  string
 	link  bool
-	items []*HTPasswdIdentityProvider
+	items []*HTPasswdUser
 }
 
 // Len returns the length of the list.
-func (l *HTPasswdIdentityProviderList) Len() int {
+func (l *HTPasswdUserList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -131,13 +131,13 @@ func (l *HTPasswdIdentityProviderList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *HTPasswdIdentityProviderList) Empty() bool {
+func (l *HTPasswdUserList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *HTPasswdIdentityProviderList) Get(i int) *HTPasswdIdentityProvider {
+func (l *HTPasswdUserList) Get(i int) *HTPasswdUser {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -150,12 +150,12 @@ func (l *HTPasswdIdentityProviderList) Get(i int) *HTPasswdIdentityProvider {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *HTPasswdIdentityProviderList) Slice() []*HTPasswdIdentityProvider {
-	var slice []*HTPasswdIdentityProvider
+func (l *HTPasswdUserList) Slice() []*HTPasswdUser {
+	var slice []*HTPasswdUser
 	if l == nil {
-		slice = make([]*HTPasswdIdentityProvider, 0)
+		slice = make([]*HTPasswdUser, 0)
 	} else {
-		slice = make([]*HTPasswdIdentityProvider, len(l.items))
+		slice = make([]*HTPasswdUser, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -164,7 +164,7 @@ func (l *HTPasswdIdentityProviderList) Slice() []*HTPasswdIdentityProvider {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *HTPasswdIdentityProviderList) Each(f func(item *HTPasswdIdentityProvider) bool) {
+func (l *HTPasswdUserList) Each(f func(item *HTPasswdUser) bool) {
 	if l == nil {
 		return
 	}
@@ -178,7 +178,7 @@ func (l *HTPasswdIdentityProviderList) Each(f func(item *HTPasswdIdentityProvide
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *HTPasswdIdentityProviderList) Range(f func(index int, item *HTPasswdIdentityProvider) bool) {
+func (l *HTPasswdUserList) Range(f func(index int, item *HTPasswdUser) bool) {
 	if l == nil {
 		return
 	}

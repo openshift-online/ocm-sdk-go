@@ -19,111 +19,87 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// CloudVPC represents the values of the 'cloud_VPC' type.
+// Subnetwork represents the values of the 'subnetwork' type.
 //
-// Description of a cloud provider virtual private cloud.
-type CloudVPC struct {
-	bitmap_    uint32
-	awsSubnets []*Subnetwork
-	name       string
-	subnets    []string
+// AWS subnetwork object to be used while installing a cluster
+type Subnetwork struct {
+	bitmap_          uint32
+	availabilityZone string
+	subnetID         string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *CloudVPC) Empty() bool {
+func (o *Subnetwork) Empty() bool {
 	return o == nil || o.bitmap_ == 0
 }
 
-// AWSSubnets returns the value of the 'AWS_subnets' attribute, or
+// AvailabilityZone returns the value of the 'availability_zone' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// List of subnetworks
-func (o *CloudVPC) AWSSubnets() []*Subnetwork {
+// The availability zone to which the subnet is related
+func (o *Subnetwork) AvailabilityZone() string {
 	if o != nil && o.bitmap_&1 != 0 {
-		return o.awsSubnets
-	}
-	return nil
-}
-
-// GetAWSSubnets returns the value of the 'AWS_subnets' attribute and
-// a flag indicating if the attribute has a value.
-//
-// List of subnetworks
-func (o *CloudVPC) GetAWSSubnets() (value []*Subnetwork, ok bool) {
-	ok = o != nil && o.bitmap_&1 != 0
-	if ok {
-		value = o.awsSubnets
-	}
-	return
-}
-
-// Name returns the value of the 'name' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Name of virtual private cloud
-func (o *CloudVPC) Name() string {
-	if o != nil && o.bitmap_&2 != 0 {
-		return o.name
+		return o.availabilityZone
 	}
 	return ""
 }
 
-// GetName returns the value of the 'name' attribute and
+// GetAvailabilityZone returns the value of the 'availability_zone' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Name of virtual private cloud
-func (o *CloudVPC) GetName() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2 != 0
+// The availability zone to which the subnet is related
+func (o *Subnetwork) GetAvailabilityZone() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = o.name
+		value = o.availabilityZone
 	}
 	return
 }
 
-// Subnets returns the value of the 'subnets' attribute, or
+// SubnetID returns the value of the 'subnet_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// List of subnets used by the virtual private cloud.
-func (o *CloudVPC) Subnets() []string {
-	if o != nil && o.bitmap_&4 != 0 {
-		return o.subnets
+// The subnet id to be used while installing a cluster
+func (o *Subnetwork) SubnetID() string {
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.subnetID
 	}
-	return nil
+	return ""
 }
 
-// GetSubnets returns the value of the 'subnets' attribute and
+// GetSubnetID returns the value of the 'subnet_ID' attribute and
 // a flag indicating if the attribute has a value.
 //
-// List of subnets used by the virtual private cloud.
-func (o *CloudVPC) GetSubnets() (value []string, ok bool) {
-	ok = o != nil && o.bitmap_&4 != 0
+// The subnet id to be used while installing a cluster
+func (o *Subnetwork) GetSubnetID() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = o.subnets
+		value = o.subnetID
 	}
 	return
 }
 
-// CloudVPCListKind is the name of the type used to represent list of objects of
-// type 'cloud_VPC'.
-const CloudVPCListKind = "CloudVPCList"
+// SubnetworkListKind is the name of the type used to represent list of objects of
+// type 'subnetwork'.
+const SubnetworkListKind = "SubnetworkList"
 
-// CloudVPCListLinkKind is the name of the type used to represent links to list
-// of objects of type 'cloud_VPC'.
-const CloudVPCListLinkKind = "CloudVPCListLink"
+// SubnetworkListLinkKind is the name of the type used to represent links to list
+// of objects of type 'subnetwork'.
+const SubnetworkListLinkKind = "SubnetworkListLink"
 
-// CloudVPCNilKind is the name of the type used to nil lists of objects of
-// type 'cloud_VPC'.
-const CloudVPCListNilKind = "CloudVPCListNil"
+// SubnetworkNilKind is the name of the type used to nil lists of objects of
+// type 'subnetwork'.
+const SubnetworkListNilKind = "SubnetworkListNil"
 
-// CloudVPCList is a list of values of the 'cloud_VPC' type.
-type CloudVPCList struct {
+// SubnetworkList is a list of values of the 'subnetwork' type.
+type SubnetworkList struct {
 	href  string
 	link  bool
-	items []*CloudVPC
+	items []*Subnetwork
 }
 
 // Len returns the length of the list.
-func (l *CloudVPCList) Len() int {
+func (l *SubnetworkList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -131,13 +107,13 @@ func (l *CloudVPCList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *CloudVPCList) Empty() bool {
+func (l *SubnetworkList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *CloudVPCList) Get(i int) *CloudVPC {
+func (l *SubnetworkList) Get(i int) *Subnetwork {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -150,12 +126,12 @@ func (l *CloudVPCList) Get(i int) *CloudVPC {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *CloudVPCList) Slice() []*CloudVPC {
-	var slice []*CloudVPC
+func (l *SubnetworkList) Slice() []*Subnetwork {
+	var slice []*Subnetwork
 	if l == nil {
-		slice = make([]*CloudVPC, 0)
+		slice = make([]*Subnetwork, 0)
 	} else {
-		slice = make([]*CloudVPC, len(l.items))
+		slice = make([]*Subnetwork, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -164,7 +140,7 @@ func (l *CloudVPCList) Slice() []*CloudVPC {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *CloudVPCList) Each(f func(item *CloudVPC) bool) {
+func (l *SubnetworkList) Each(f func(item *Subnetwork) bool) {
 	if l == nil {
 		return
 	}
@@ -178,7 +154,7 @@ func (l *CloudVPCList) Each(f func(item *CloudVPC) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *CloudVPCList) Range(f func(index int, item *CloudVPC) bool) {
+func (l *SubnetworkList) Range(f func(index int, item *Subnetwork) bool) {
 	if l == nil {
 		return
 	}
