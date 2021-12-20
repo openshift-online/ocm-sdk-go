@@ -19,7 +19,6 @@ package leadership
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 
 	. "github.com/onsi/ginkgo"                         // nolint
@@ -383,66 +382,6 @@ var _ = Describe("Flag behaviour", func() {
 		It("It isn't quickly raised", func() {
 			time.Sleep(20 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
-		})
-	})
-
-	When("Multiple processes try to hold it", func() {
-		var flags []*Flag
-
-		BeforeEach(func() {
-			var err error
-
-			// Create the objects:
-			flags = make([]*Flag, 10)
-			for i := range flags {
-				flags[i], err = NewFlag().
-					Logger(logger).
-					Handle(dbHandle).
-					Name("my_flag").
-					Process(fmt.Sprintf("my_process_%d", i)).
-					Interval(100 * time.Millisecond).
-					Jitter(0).
-					Build(ctx)
-				Expect(err).ToNot(HaveOccurred())
-			}
-		})
-
-		AfterEach(func() {
-			var err error
-
-			// Close the objects:
-			for _, flag := range flags {
-				err = flag.Close()
-				Expect(err).ToNot(HaveOccurred())
-			}
-		})
-
-		It("Is never raised by more than one process", func() {
-			time.Sleep(100 * time.Millisecond)
-			for i := 0; i < 100; i++ {
-				count := 0
-				for _, flag := range flags {
-					if flag.Raised() {
-						count++
-					}
-				}
-				Expect(count).To(BeNumerically("<=", 1))
-				time.Sleep(10 * time.Millisecond)
-			}
-		})
-
-		It("Is always raised by at least one process", func() {
-			time.Sleep(100 * time.Millisecond)
-			for i := 0; i < 100; i++ {
-				count := 0
-				for _, flag := range flags {
-					if flag.Raised() {
-						count++
-					}
-				}
-				Expect(count).To(Equal(1))
-				time.Sleep(10 * time.Millisecond)
-			}
 		})
 	})
 
