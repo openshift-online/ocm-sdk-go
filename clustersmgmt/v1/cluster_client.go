@@ -282,6 +282,16 @@ func (c *ClusterClient) UpgradePolicies() *UpgradePoliciesClient {
 	)
 }
 
+// VersionGateAgreements returns the target 'version_gate_agreements' resource.
+//
+// Reference to cluster's agreed version gate.
+func (c *ClusterClient) VersionGateAgreements() *VersionGateAgreementsClient {
+	return NewVersionGateAgreementsClient(
+		c.transport,
+		path.Join(c.path, "version_gate_agreements"),
+	)
+}
+
 // ClusterPollRequest is the request for the Poll method.
 type ClusterPollRequest struct {
 	request    *ClusterGetRequest
