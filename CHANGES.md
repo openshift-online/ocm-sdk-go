@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.226 Dec 20 2021
+
+- Update to model 0.0.159:
+  - Support for version gates.
+
 ## 0.1.225 Dec 19 2021
 
 -  MatchJQ should require at least one result 

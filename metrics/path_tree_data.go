@@ -234,7 +234,11 @@ var pathTreeData = `{
           "-": null
         },
         "versions": {
-          "-": null
+          "-": {
+            "version_gates": {
+              "-": null
+            }
+          }
         }
       }
     },
