@@ -25,8 +25,6 @@ import (
 	"net/url"
 	"strconv"
 	"time"
-
-	jsoniter "github.com/json-iterator/go"
 )
 
 // NewIterator creates a new JSON iterator that will read to the given source, which

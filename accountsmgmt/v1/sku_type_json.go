@@ -23,7 +23,6 @@ import (
 	"io"
 	"net/http"
 
-	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 

@@ -27,7 +27,6 @@ import (
 	"strings"
 
 	"github.com/golang/glog"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
