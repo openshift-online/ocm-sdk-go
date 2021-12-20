@@ -6261,6 +6261,143 @@
           }
         }
       }
+    },
+    "/api/clusters_mgmt/v1/versions/{version_id}/version_gates": {
+      "get": {
+        "description": "Retrieves a list of version gates.\n",
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\nan SQL statement, but using the names of the attributes of the version gate instead of\nthe names of the columns of a table. For example, in order to sort the version gates\ndescending by identifier the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the version gate instead of\nthe names of the columns of a table.\n\nIf the parameter isn't provided, or if the value is empty, then all the version gates\nthat the user has permission to see will be returned.\n",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of version gates.\n",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VersionGate"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/versions/{version_id}/version_gates/{version_gate_id}": {
+      "get": {
+        "description": "Retrieves the details of the version gate.\n",
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version_gate_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionGate"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8975,6 +9112,48 @@
           },
           "raw_id": {
             "description": "RawID is the id of the version - without channel group and prefix.\n",
+            "type": "string"
+          }
+        }
+      },
+      "VersionGate": {
+        "description": "Representation of an _OpenShift_ version gate.\n",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'VersionGate' if this is a complete object or 'VersionGateLink' if it is just a link.\n",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.\n",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.\n",
+            "type": "string"
+          },
+          "sts_only": {
+            "description": "STSOnly indicates if this version gate is for STS clusters only\n",
+            "type": "boolean"
+          },
+          "creation_timestamp": {
+            "description": "CreationTimestamp is the date and time when the version gate was created,\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].\n",
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "description": "Description of the version gate.\n",
+            "type": "string"
+          },
+          "documentation_url": {
+            "description": "DocumentationURL is the URL for the documentation of the version gate.\n",
+            "type": "string"
+          },
+          "label": {
+            "description": "Label representing the version gate in OpenShift.\n",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value represents the required value of the label.\n",
             "type": "string"
           }
         }

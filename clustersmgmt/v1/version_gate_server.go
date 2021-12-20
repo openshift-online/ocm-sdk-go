@@ -27,53 +27,48 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
-// VersionServer represents the interface the manages the 'version' resource.
-type VersionServer interface {
+// VersionGateServer represents the interface the manages the 'version_gate' resource.
+type VersionGateServer interface {
 
 	// Get handles a request for the 'get' method.
 	//
-	// Retrieves the details of the version.
-	Get(ctx context.Context, request *VersionGetServerRequest, response *VersionGetServerResponse) error
-
-	// VersionGates returns the target 'version_gates' resource.
-	//
-	// Reference to version gates.
-	VersionGates() VersionGatesServer
+	// Retrieves the details of the version gate.
+	Get(ctx context.Context, request *VersionGateGetServerRequest, response *VersionGateGetServerResponse) error
 }
 
-// VersionGetServerRequest is the request for the 'get' method.
-type VersionGetServerRequest struct {
+// VersionGateGetServerRequest is the request for the 'get' method.
+type VersionGateGetServerRequest struct {
 }
 
-// VersionGetServerResponse is the response for the 'get' method.
-type VersionGetServerResponse struct {
+// VersionGateGetServerResponse is the response for the 'get' method.
+type VersionGateGetServerResponse struct {
 	status int
 	err    *errors.Error
-	body   *Version
+	body   *VersionGate
 }
 
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *VersionGetServerResponse) Body(value *Version) *VersionGetServerResponse {
+func (r *VersionGateGetServerResponse) Body(value *VersionGate) *VersionGateGetServerResponse {
 	r.body = value
 	return r
 }
 
 // Status sets the status code.
-func (r *VersionGetServerResponse) Status(value int) *VersionGetServerResponse {
+func (r *VersionGateGetServerResponse) Status(value int) *VersionGateGetServerResponse {
 	r.status = value
 	return r
 }
 
-// dispatchVersion navigates the servers tree rooted at the given server
+// dispatchVersionGate navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchVersion(w http.ResponseWriter, r *http.Request, server VersionServer, segments []string) {
+func dispatchVersionGate(w http.ResponseWriter, r *http.Request, server VersionGateServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case "GET":
-			adaptVersionGetRequest(w, r, server)
+			adaptVersionGateGetRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -81,25 +76,18 @@ func dispatchVersion(w http.ResponseWriter, r *http.Request, server VersionServe
 		}
 	}
 	switch segments[0] {
-	case "version_gates":
-		target := server.VersionGates()
-		if target == nil {
-			errors.SendNotFound(w, r)
-			return
-		}
-		dispatchVersionGates(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return
 	}
 }
 
-// adaptVersionGetRequest translates the given HTTP request into a call to
+// adaptVersionGateGetRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptVersionGetRequest(w http.ResponseWriter, r *http.Request, server VersionServer) {
-	request := &VersionGetServerRequest{}
-	err := readVersionGetRequest(request, r)
+func adaptVersionGateGetRequest(w http.ResponseWriter, r *http.Request, server VersionGateServer) {
+	request := &VersionGateGetServerRequest{}
+	err := readVersionGateGetRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -108,7 +96,7 @@ func adaptVersionGetRequest(w http.ResponseWriter, r *http.Request, server Versi
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &VersionGetServerResponse{}
+	response := &VersionGateGetServerResponse{}
 	response.status = 200
 	err = server.Get(r.Context(), request, response)
 	if err != nil {
@@ -119,7 +107,7 @@ func adaptVersionGetRequest(w http.ResponseWriter, r *http.Request, server Versi
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeVersionGetResponse(response, w)
+	err = writeVersionGateGetResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
