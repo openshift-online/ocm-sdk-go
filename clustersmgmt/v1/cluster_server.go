@@ -146,6 +146,11 @@ type ClusterServer interface {
 	//
 	// Reference to the resource that manages the collection of upgrade policies defined for this cluster.
 	UpgradePolicies() UpgradePoliciesServer
+
+	// VersionGateAgreements returns the target 'version_gate_agreements' resource.
+	//
+	// Reference to cluster's agreed version gate.
+	VersionGateAgreements() VersionGateAgreementsServer
 }
 
 // ClusterDeleteServerRequest is the request for the 'delete' method.
@@ -455,6 +460,13 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 			return
 		}
 		dispatchUpgradePolicies(w, r, target, segments[1:])
+	case "version_gate_agreements":
+		target := server.VersionGateAgreements()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchVersionGateAgreements(w, r, target, segments[1:])
 	default:
 		errors.SendNotFound(w, r)
 		return
