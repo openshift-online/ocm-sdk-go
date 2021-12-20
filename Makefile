@@ -27,7 +27,8 @@ model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
 metamodel_version:=v0.0.44
-metamodel_url:=https://github.com/openshift-online/ocm-api-metamodel.git
+metamodel_url:=https://github.com/openshift-online/ocm-api-metamodel/releases/download/$(metamodel_version)/metamodel-linux-amd64
+metamodel_sum:=02fe6fdca4b153e96efe01a913dcaa0ddb09d555fbdedcf65963901a8e71de4e
 
 .PHONY: examples
 examples:
@@ -60,11 +61,11 @@ generate: model metamodel
 		job_queue \
 		helpers \
 		openapi
-	metamodel/metamodel generate go \
+	./metamodel generate go \
 		--model=model/model \
 		--base=github.com/openshift-online/ocm-sdk-go \
 		--output=.
-	metamodel/metamodel generate openapi \
+	./metamodel generate openapi \
 		--model=model/model \
 		--output=openapi
 
@@ -80,18 +81,10 @@ model:
 		git checkout -B build "$(model_version)"; \
 	fi
 
-.PHONY: metamodel
 metamodel:
-	rm -rf "$@"
-	if [ -d "$(metamodel_url)" ]; then \
-		cp -r "$(metamodel_url)" "$@"; \
-	else \
-		git clone "$(metamodel_url)" "$@"; \
-		cd "$@"; \
-		git fetch --tags origin; \
-		git checkout -B build "$(metamodel_version)"; \
-	fi
-	make -C "$@"
+	wget --progress=dot:giga --output-document="$@" "$(metamodel_url)"
+	echo "$(metamodel_sum) $@" | sha256sum --check
+	chmod +x "$@"
 
 .PHONY: clean
 clean:
