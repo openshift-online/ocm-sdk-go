@@ -6262,7 +6262,7 @@
         }
       }
     },
-    "/api/clusters_mgmt/v1/versions/{version_id}/version_gates": {
+    "/api/clusters_mgmt/v1/versions/{version_id}/gates": {
       "get": {
         "description": "Retrieves a list of version gates.\n",
         "parameters": [
@@ -6356,7 +6356,7 @@
         }
       }
     },
-    "/api/clusters_mgmt/v1/versions/{version_id}/version_gates/{version_gate_id}": {
+    "/api/clusters_mgmt/v1/versions/{version_id}/gates/{version_gate_id}": {
       "get": {
         "description": "Retrieves the details of the version gate.\n",
         "parameters": [
