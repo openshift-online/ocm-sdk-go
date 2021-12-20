@@ -31,7 +31,10 @@ import (
 func MarshalSubnetwork(object *Subnetwork, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeSubnetwork(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -56,7 +59,6 @@ func writeSubnetwork(object *Subnetwork, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("subnet_id")
 		stream.WriteString(object.subnetID)
-		count++
 	}
 	stream.WriteObjectEnd()
 }

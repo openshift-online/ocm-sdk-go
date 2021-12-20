@@ -32,7 +32,10 @@ import (
 func MarshalProduct(object *Product, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeProduct(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -116,7 +119,6 @@ func writeProduct(object *Product, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("updated_at")
 		stream.WriteString((object.updatedAt).Format(time.RFC3339))
-		count++
 	}
 	stream.WriteObjectEnd()
 }

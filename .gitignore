@@ -1,5 +1,4 @@
 *.test
-/.gobin/
 /.idea/
 /examples/*
 /metamodel

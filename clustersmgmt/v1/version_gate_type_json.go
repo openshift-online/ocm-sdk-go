@@ -32,7 +32,10 @@ import (
 func MarshalVersionGate(object *VersionGate, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeVersionGate(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -116,7 +119,6 @@ func writeVersionGate(object *VersionGate, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("value")
 		stream.WriteString(object.value)
-		count++
 	}
 	stream.WriteObjectEnd()
 }

@@ -31,7 +31,10 @@ import (
 func MarshalStatusList(list []*Status, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeStatusList(list, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 

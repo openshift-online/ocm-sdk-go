@@ -25,10 +25,10 @@
   "paths": {
     "/api/job_queue/v1": {
       "get": {
-        "description": "Retrieves the version metadata.\n",
+        "description": "Retrieves the version metadata.",
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -38,7 +38,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -52,11 +52,11 @@
     },
     "/api/job_queue/v1/queues": {
       "get": {
-        "description": "Retrieves a list of job queues.\n",
+        "description": "Retrieves a list of job queues.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\nPage may be a token to the next page\n",
+            "description": "Index of the requested page, where one corresponds to the first page.\nPage may be a token to the next page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -65,7 +65,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -75,31 +75,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of job queues.\n",
+                      "description": "Retrieved list of job queues.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Queue"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\nPage may be a token to the next page\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.\nPage may be a token to the next page",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection regardless of the size of the page.\n",
+                      "description": "Total number of items of the collection regardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -109,7 +109,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -123,7 +123,7 @@
     },
     "/api/job_queue/v1/queues/{queue_id}": {
       "get": {
-        "description": "Retrieves the details of a job queue by ID.\n",
+        "description": "Retrieves the details of a job queue by ID.",
         "parameters": [
           {
             "name": "queue_id",
@@ -135,7 +135,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -145,7 +145,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -159,7 +159,7 @@
     },
     "/api/job_queue/v1/queues/{queue_id}/pop": {
       "post": {
-        "description": "POP new job from a job queue\n",
+        "description": "POP new job from a job queue",
         "parameters": [
           {
             "name": "queue_id",
@@ -171,7 +171,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -214,7 +214,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -228,7 +228,7 @@
     },
     "/api/job_queue/v1/queues/{queue_id}/push": {
       "post": {
-        "description": "PUSH a new job into job queue\n",
+        "description": "PUSH a new job into job queue",
         "parameters": [
           {
             "name": "queue_id",
@@ -266,7 +266,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -309,7 +309,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -323,7 +323,7 @@
     },
     "/api/job_queue/v1/queues/{queue_id}/jobs/{job_id}/failure": {
       "post": {
-        "description": "Mark a job as Failed. This method returns '204 No Content'\n",
+        "description": "Mark a job as Failed. This method returns '204 No Content'",
         "parameters": [
           {
             "name": "queue_id",
@@ -350,7 +350,7 @@
                     "type": "string"
                   },
                   "receipt_id": {
-                    "description": "A unique ID of a pop'ed job\n",
+                    "description": "A unique ID of a pop'ed job",
                     "type": "string"
                   }
                 }
@@ -360,10 +360,10 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -377,7 +377,7 @@
     },
     "/api/job_queue/v1/queues/{queue_id}/jobs/{job_id}/success": {
       "post": {
-        "description": "Mark a job as Successful. This method returns '204 No Content'\n",
+        "description": "Mark a job as Successful. This method returns '204 No Content'",
         "parameters": [
           {
             "name": "queue_id",
@@ -401,7 +401,7 @@
                 "type": "object",
                 "properties": {
                   "receipt_id": {
-                    "description": "A unique ID of a pop'ed job\n",
+                    "description": "A unique ID of a pop'ed job",
                     "type": "string"
                   }
                 }
@@ -411,10 +411,10 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -430,40 +430,40 @@
   "components": {
     "schemas": {
       "Metadata": {
-        "description": "Version metadata.\n",
+        "description": "Version metadata.",
         "properties": {
           "server_version": {
-            "description": "Version of the server.\n",
+            "description": "Version of the server.",
             "type": "string"
           }
         }
       },
       "Job": {
-        "description": "This struct is a job in a Job Queue.\n",
+        "description": "This struct is a job in a Job Queue.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Job' if this is a complete object or 'JobLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Job' if this is a complete object or 'JobLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "abandoned_at": {
-            "description": "DLQ sent timestamp\n",
+            "description": "DLQ sent timestamp",
             "type": "string",
             "format": "date-time"
           },
           "arguments": {
-            "description": "Arguments to run Job with.\n",
+            "description": "Arguments to run Job with.",
             "type": "string"
           },
           "attempts": {
-            "description": "Number of retries.\n",
+            "description": "Number of retries.",
             "type": "integer",
             "format": "int32"
           },
@@ -472,7 +472,7 @@
             "format": "date-time"
           },
           "receipt_id": {
-            "description": "Each time a specific job is pop'd, the receiptId will change, while the ID stays the same.\n",
+            "description": "Each time a specific job is pop'd, the receiptId will change, while the ID stays the same.",
             "type": "string"
           },
           "updated_at": {
@@ -484,15 +484,15 @@
       "Queue": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Queue' if this is a complete object or 'QueueLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Queue' if this is a complete object or 'QueueLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "created_at": {
@@ -500,7 +500,7 @@
             "format": "date-time"
           },
           "max_attempts": {
-            "description": "SQS Visibility Timeout\n",
+            "description": "SQS Visibility Timeout",
             "type": "integer",
             "format": "int32"
           },
@@ -521,28 +521,28 @@
         "type": "object",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will always be 'Error'\n",
+            "description": "Indicates the type of this object. Will always be 'Error'",
             "type": "string"
           },
           "id": {
-            "description": "Numeric identifier of the error.\n",
+            "description": "Numeric identifier of the error.",
             "type": "integer",
             "format": "int32"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "code": {
-            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.\n",
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
             "type": "string"
           },
           "reason": {
-            "description": "Human readable description of the error.\n",
+            "description": "Human readable description of the error.",
             "type": "string"
           },
           "details": {
-            "description": "Extra information about the error.\n",
+            "description": "Extra information about the error.",
             "type": "object",
             "additionalProperties": "true"
           }

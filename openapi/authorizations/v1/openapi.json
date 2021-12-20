@@ -25,10 +25,10 @@
   "paths": {
     "/api/authorizations/v1": {
       "get": {
-        "description": "Retrieves the version metadata.\n",
+        "description": "Retrieves the version metadata.",
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -38,7 +38,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -52,7 +52,7 @@
     },
     "/api/authorizations/v1/access_review": {
       "post": {
-        "description": "Reviews a user's access to a resource\n",
+        "description": "Reviews a user's access to a resource",
         "requestBody": {
           "content": {
             "application/json": {
@@ -64,7 +64,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -74,7 +74,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -88,7 +88,7 @@
     },
     "/api/authorizations/v1/capability_review": {
       "post": {
-        "description": "Reviews a user's capability to a resource.\n",
+        "description": "Reviews a user's capability to a resource.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -100,7 +100,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -110,7 +110,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -124,7 +124,7 @@
     },
     "/api/authorizations/v1/export_control_review": {
       "post": {
-        "description": "Screens a user by account user name.\n",
+        "description": "Screens a user by account user name.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -136,7 +136,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -146,7 +146,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -160,7 +160,7 @@
     },
     "/api/authorizations/v1/feature_review": {
       "post": {
-        "description": "Reviews a user's ability to toggle a feature\n",
+        "description": "Reviews a user's ability to toggle a feature",
         "requestBody": {
           "content": {
             "application/json": {
@@ -172,7 +172,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -182,7 +182,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -196,7 +196,7 @@
     },
     "/api/authorizations/v1/resource_review": {
       "post": {
-        "description": "Returns the list of identifiers of the resources that an account can\nperform the specified action upon.\n",
+        "description": "Returns the list of identifiers of the resources that an account can\nperform the specified action upon.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -208,7 +208,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -218,7 +218,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -232,7 +232,7 @@
     },
     "/api/authorizations/v1/self_access_review": {
       "post": {
-        "description": "Reviews a user's access to a resource\n",
+        "description": "Reviews a user's access to a resource",
         "requestBody": {
           "content": {
             "application/json": {
@@ -244,7 +244,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -254,7 +254,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -268,7 +268,7 @@
     },
     "/api/authorizations/v1/self_capability_review": {
       "post": {
-        "description": "Reviews a user's capability to a resource.\n",
+        "description": "Reviews a user's capability to a resource.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -280,7 +280,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -290,7 +290,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -304,7 +304,7 @@
     },
     "/api/authorizations/v1/self_feature_review": {
       "post": {
-        "description": "Reviews ability to toggle a feature\n",
+        "description": "Reviews ability to toggle a feature",
         "requestBody": {
           "content": {
             "application/json": {
@@ -316,7 +316,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -326,7 +326,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -340,7 +340,7 @@
     },
     "/api/authorizations/v1/self_terms_review": {
       "post": {
-        "description": "Reviews a user's status of Terms.\n",
+        "description": "Reviews a user's status of Terms.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -352,7 +352,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -362,7 +362,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -376,7 +376,7 @@
     },
     "/api/authorizations/v1/terms_review": {
       "post": {
-        "description": "Reviews a user's status of Terms.\n",
+        "description": "Reviews a user's status of Terms.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -388,7 +388,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -398,7 +398,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -414,119 +414,119 @@
   "components": {
     "schemas": {
       "Metadata": {
-        "description": "Version metadata.\n",
+        "description": "Version metadata.",
         "properties": {
           "server_version": {
-            "description": "Version of the server.\n",
+            "description": "Version of the server.",
             "type": "string"
           }
         }
       },
       "AccessReviewRequest": {
-        "description": "Representation of an access review\n",
+        "description": "Representation of an access review",
         "properties": {
           "account_username": {
-            "description": "Defines the username of the account of which access is being reviewed\n",
+            "description": "Defines the username of the account of which access is being reviewed",
             "type": "string"
           },
           "action": {
-            "description": "Indicates the action, one of: [get,list,create,delete,update]\n",
+            "description": "Indicates the action, one of: [get,list,create,delete,update]",
             "type": "string"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "Indicates which Cluster (external id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (external id) the resource type belongs to",
             "type": "string"
           },
           "organization_id": {
-            "description": "Indicates which Organization the resource type belongs to\n",
+            "description": "Indicates which Organization the resource type belongs to",
             "type": "string"
           },
           "resource_type": {
-            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values\n",
+            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to\n",
+            "description": "Indicates which Subscription the resource type belongs to",
             "type": "string"
           }
         }
       },
       "AccessReviewResponse": {
-        "description": "Representation of an access review response\n",
+        "description": "Representation of an access review response",
         "properties": {
           "account_username": {
-            "description": "Defines the username of the account of which access is being reviewed\n",
+            "description": "Defines the username of the account of which access is being reviewed",
             "type": "string"
           },
           "action": {
-            "description": "Indicates the action, one of: [get,list,create,delete,update]\n",
+            "description": "Indicates the action, one of: [get,list,create,delete,update]",
             "type": "string"
           },
           "allowed": {
-            "description": "Defines whether the action on the specified resource type is allowed\n",
+            "description": "Defines whether the action on the specified resource type is allowed",
             "type": "boolean"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "Indicates which Cluster (external id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (external id) the resource type belongs to",
             "type": "string"
           },
           "organization_id": {
-            "description": "Indicates which Organization the resource type belongs to\n",
+            "description": "Indicates which Organization the resource type belongs to",
             "type": "string"
           },
           "resource_type": {
-            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values\n",
+            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to\n",
+            "description": "Indicates which Subscription the resource type belongs to",
             "type": "string"
           }
         }
       },
       "CapabilityReviewRequest": {
-        "description": "Representation of a capability review.\n",
+        "description": "Representation of a capability review.",
         "properties": {
           "account_username": {
-            "description": "Defines the username of the account of which capability is being reviewed.\n",
+            "description": "Defines the username of the account of which capability is being reviewed.",
             "type": "string"
           },
           "capability": {
-            "description": "Capability to review [manage_cluster_admin].\n",
+            "description": "Capability to review [manage_cluster_admin].",
             "type": "string"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to.\n",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to.",
             "type": "string"
           },
           "organization_id": {
-            "description": "Indicates which Organization the resource type belongs to.\n",
+            "description": "Indicates which Organization the resource type belongs to.",
             "type": "string"
           },
           "resource_type": {
-            "description": "Indicates the type of the resource.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values.\n",
+            "description": "Indicates the type of the resource.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values.",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to.\n",
+            "description": "Indicates which Subscription the resource type belongs to.",
             "type": "string"
           },
           "type": {
-            "description": "Type of capability [Cluster].\n",
+            "description": "Type of capability [Cluster].",
             "type": "string"
           }
         }
       },
       "CapabilityReviewResponse": {
-        "description": "Representation of a capability review response.\n",
+        "description": "Representation of a capability review response.",
         "properties": {
           "result": {
             "type": "string"
@@ -548,69 +548,69 @@
         }
       },
       "FeatureReviewRequest": {
-        "description": "Representation of a feature review\n",
+        "description": "Representation of a feature review",
         "properties": {
           "account_username": {
-            "description": "Defines the username of the account of which access is being reviewed \n",
+            "description": "Defines the username of the account of which access is being reviewed ",
             "type": "string"
           },
           "feature": {
-            "description": "Indicates the feature which can be toggled\n",
+            "description": "Indicates the feature which can be toggled",
             "type": "string"
           }
         }
       },
       "FeatureReviewResponse": {
-        "description": "Representation of a feature review response\n",
+        "description": "Representation of a feature review response",
         "properties": {
           "enabled": {
-            "description": "Defines whether the feature can be toggled\n",
+            "description": "Defines whether the feature can be toggled",
             "type": "boolean"
           },
           "feature_id": {
-            "description": "Defines the feature id which can be toggled\n",
+            "description": "Defines the feature id which can be toggled",
             "type": "string"
           }
         }
       },
       "ResourceReview": {
-        "description": "Contains the result of performing a resource access review.\n",
+        "description": "Contains the result of performing a resource access review.",
         "properties": {
           "account_username": {
-            "description": "Name of the account that is trying to perform the access.\n",
+            "description": "Name of the account that is trying to perform the access.",
             "type": "string"
           },
           "action": {
-            "description": "Action that will the user is trying to perform.\n",
+            "description": "Action that will the user is trying to perform.",
             "type": "string"
           },
           "cluster_ids": {
-            "description": "Identifiers of the Clusters (internal ids) that the user has permission to perform the action upon.\n",
+            "description": "Identifiers of the Clusters (internal ids) that the user has permission to perform the action upon.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "cluster_uuids": {
-            "description": "Identifiers which Clusters (external ids) that the user has permission to perform the action upon.\n",
+            "description": "Identifiers which Clusters (external ids) that the user has permission to perform the action upon.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "organization_ids": {
-            "description": "Identifiers of the organizations that the user has permissions to perform the action\nupon.\n",
+            "description": "Identifiers of the organizations that the user has permissions to perform the action\nupon.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "resource_type": {
-            "description": "Type of resource.\n",
+            "description": "Type of resource.",
             "type": "string"
           },
           "subscription_ids": {
-            "description": "Identifiers of the subscriptions that the user has permission to perform the action upon.\n",
+            "description": "Identifiers of the subscriptions that the user has permission to perform the action upon.",
             "type": "array",
             "items": {
               "type": "string"
@@ -619,123 +619,123 @@
         }
       },
       "ResourceReviewRequest": {
-        "description": "Request to perform a resource access review.\n",
+        "description": "Request to perform a resource access review.",
         "properties": {
           "account_username": {
-            "description": "Name of the account that is trying to access the resource.\n",
+            "description": "Name of the account that is trying to access the resource.",
             "type": "string"
           },
           "action": {
-            "description": "Action that will be performed on the resource.\n",
+            "description": "Action that will be performed on the resource.",
             "type": "string"
           },
           "reduce_cluster_list": {
-            "description": "If true, in the case when all subscriptions in organization are permitted, response will *not* include\nthese subscriptions' ID, but organization only.\n",
+            "description": "If true, in the case when all subscriptions in organization are permitted, response will *not* include\nthese subscriptions' ID, but organization only.",
             "type": "boolean"
           },
           "resource_type": {
-            "description": "Type of resource.\n",
+            "description": "Type of resource.",
             "type": "string"
           }
         }
       },
       "SelfAccessReviewRequest": {
-        "description": "Representation of an access review performed against oneself\n",
+        "description": "Representation of an access review performed against oneself",
         "properties": {
           "action": {
-            "description": "Indicates the action, one of: [get,list,create,delete,update]\n",
+            "description": "Indicates the action, one of: [get,list,create,delete,update]",
             "type": "string"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "Indicates which Cluster (external id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (external id) the resource type belongs to",
             "type": "string"
           },
           "organization_id": {
-            "description": "Indicates which Organization the resource type belongs to\n",
+            "description": "Indicates which Organization the resource type belongs to",
             "type": "string"
           },
           "resource_type": {
-            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values\n",
+            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to\n",
+            "description": "Indicates which Subscription the resource type belongs to",
             "type": "string"
           }
         }
       },
       "SelfAccessReviewResponse": {
-        "description": "Representation of an access review response, performed against oneself\n",
+        "description": "Representation of an access review response, performed against oneself",
         "properties": {
           "action": {
-            "description": "Indicates the action, one of: [get,list,create,delete,update]\n",
+            "description": "Indicates the action, one of: [get,list,create,delete,update]",
             "type": "string"
           },
           "allowed": {
-            "description": "Defines whether the action on the specified resource type is allowed\n",
+            "description": "Defines whether the action on the specified resource type is allowed",
             "type": "boolean"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "Indicates which Cluster (external id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (external id) the resource type belongs to",
             "type": "string"
           },
           "organization_id": {
-            "description": "Indicates which Organization the resource type belongs to\n",
+            "description": "Indicates which Organization the resource type belongs to",
             "type": "string"
           },
           "resource_type": {
-            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values\n",
+            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to\n",
+            "description": "Indicates which Subscription the resource type belongs to",
             "type": "string"
           }
         }
       },
       "SelfCapabilityReviewRequest": {
-        "description": "Representation of a capability review.\n",
+        "description": "Representation of a capability review.",
         "properties": {
           "account_username": {
-            "description": "Defines the username of the account of which capability is being reviewed.\n",
+            "description": "Defines the username of the account of which capability is being reviewed.",
             "type": "string"
           },
           "capability": {
-            "description": "Capability to review [manage_cluster_admin].\n",
+            "description": "Capability to review [manage_cluster_admin].",
             "type": "string"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to.\n",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to.",
             "type": "string"
           },
           "organization_id": {
-            "description": "Indicates which Organization the resource type belongs to.\n",
+            "description": "Indicates which Organization the resource type belongs to.",
             "type": "string"
           },
           "resource_type": {
-            "description": "Indicates the type of the resource.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values.\n",
+            "description": "Indicates the type of the resource.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values.",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to.\n",
+            "description": "Indicates which Subscription the resource type belongs to.",
             "type": "string"
           },
           "type": {
-            "description": "Type of capability [Cluster].\n",
+            "description": "Type of capability [Cluster].",
             "type": "string"
           }
         }
       },
       "SelfCapabilityReviewResponse": {
-        "description": "Representation of a capability review response.\n",
+        "description": "Representation of a capability review response.",
         "properties": {
           "result": {
             "type": "string"
@@ -743,82 +743,82 @@
         }
       },
       "SelfFeatureReviewRequest": {
-        "description": "Representation of a feature review performed against oneself\n",
+        "description": "Representation of a feature review performed against oneself",
         "properties": {
           "feature": {
-            "description": "Indicates the feature which can be toggled\n",
+            "description": "Indicates the feature which can be toggled",
             "type": "string"
           }
         }
       },
       "SelfFeatureReviewResponse": {
-        "description": "Representation of a feature review response, performed against oneself\n",
+        "description": "Representation of a feature review response, performed against oneself",
         "properties": {
           "enabled": {
-            "description": "Defines whether the feature can be toggled\n",
+            "description": "Defines whether the feature can be toggled",
             "type": "boolean"
           },
           "feature_id": {
-            "description": "Defines the feature id which can be toggled\n",
+            "description": "Defines the feature id which can be toggled",
             "type": "string"
           }
         }
       },
       "SelfTermsReviewRequest": {
-        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.\n",
+        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.",
         "properties": {
           "event_code": {
-            "description": "Defines the event code of the terms being checked\n",
+            "description": "Defines the event code of the terms being checked",
             "type": "string"
           },
           "site_code": {
-            "description": "Defines the site code of the terms being checked\n",
+            "description": "Defines the site code of the terms being checked",
             "type": "string"
           }
         }
       },
       "TermsReviewRequest": {
-        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.\n",
+        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.",
         "properties": {
           "account_username": {
-            "description": "Defines the username of the account of which Terms is being reviewed.\n",
+            "description": "Defines the username of the account of which Terms is being reviewed.",
             "type": "string"
           },
           "check_optional_terms": {
-            "description": "If false, only `terms_required` will be checked\n",
+            "description": "If false, only `terms_required` will be checked",
             "type": "boolean"
           },
           "event_code": {
-            "description": "Defines the event code of the terms being checked\n",
+            "description": "Defines the event code of the terms being checked",
             "type": "string"
           },
           "site_code": {
-            "description": "Defines the site code of the terms being checked\n",
+            "description": "Defines the site code of the terms being checked",
             "type": "string"
           }
         }
       },
       "TermsReviewResponse": {
-        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview response.\n",
+        "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview response.",
         "properties": {
           "account_id": {
-            "description": "Account ID of requesting user.\n",
+            "description": "Account ID of requesting user.",
             "type": "string"
           },
           "organization_id": {
-            "description": "Indicates which Organization the user belongs to.\n",
+            "description": "Indicates which Organization the user belongs to.",
             "type": "string"
           },
           "redirect_url": {
-            "description": "Optional URL to Red Hat's Terms and Conditions Application if the user has either required or available Terms\nneeds to acknowledge.\n",
+            "description": "Optional URL to Red Hat's Terms and Conditions Application if the user has either required or available Terms\nneeds to acknowledge.",
             "type": "string"
           },
           "terms_available": {
-            "description": "Defines whether Terms are available.\n",
+            "description": "Defines whether Terms are available.",
             "type": "boolean"
           },
           "terms_required": {
-            "description": "Defines whether user is required to accept Terms before using OpenShift Dedicated and Amazon Red Hat OpenShift.\n",
+            "description": "Defines whether user is required to accept Terms before using OpenShift Dedicated and Amazon Red Hat OpenShift.",
             "type": "boolean"
           }
         }
@@ -827,28 +827,28 @@
         "type": "object",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will always be 'Error'\n",
+            "description": "Indicates the type of this object. Will always be 'Error'",
             "type": "string"
           },
           "id": {
-            "description": "Numeric identifier of the error.\n",
+            "description": "Numeric identifier of the error.",
             "type": "integer",
             "format": "int32"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "code": {
-            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.\n",
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
             "type": "string"
           },
           "reason": {
-            "description": "Human readable description of the error.\n",
+            "description": "Human readable description of the error.",
             "type": "string"
           },
           "details": {
-            "description": "Extra information about the error.\n",
+            "description": "Extra information about the error.",
             "type": "object",
             "additionalProperties": "true"
           }

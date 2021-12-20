@@ -31,7 +31,10 @@ import (
 func MarshalHTPasswdUser(object *HTPasswdUser, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeHTPasswdUser(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -65,7 +68,6 @@ func writeHTPasswdUser(object *HTPasswdUser, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("username")
 		stream.WriteString(object.username)
-		count++
 	}
 	stream.WriteObjectEnd()
 }
