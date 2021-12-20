@@ -235,7 +235,7 @@ var pathTreeData = `{
         },
         "versions": {
           "-": {
-            "version_gates": {
+            "gates": {
               "-": null
             }
           }

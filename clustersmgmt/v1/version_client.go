@@ -58,13 +58,13 @@ func (c *VersionClient) Get() *VersionGetRequest {
 	}
 }
 
-// VersionGates returns the target 'version_gates' resource.
+// Gates returns the target 'version_gates' resource.
 //
 // Reference to version gates.
-func (c *VersionClient) VersionGates() *VersionGatesClient {
+func (c *VersionClient) Gates() *VersionGatesClient {
 	return NewVersionGatesClient(
 		c.transport,
-		path.Join(c.path, "version_gates"),
+		path.Join(c.path, "gates"),
 	)
 }
 

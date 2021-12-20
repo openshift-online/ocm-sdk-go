@@ -35,10 +35,10 @@ type VersionServer interface {
 	// Retrieves the details of the version.
 	Get(ctx context.Context, request *VersionGetServerRequest, response *VersionGetServerResponse) error
 
-	// VersionGates returns the target 'version_gates' resource.
+	// Gates returns the target 'version_gates' resource.
 	//
 	// Reference to version gates.
-	VersionGates() VersionGatesServer
+	Gates() VersionGatesServer
 }
 
 // VersionGetServerRequest is the request for the 'get' method.
@@ -81,8 +81,8 @@ func dispatchVersion(w http.ResponseWriter, r *http.Request, server VersionServe
 		}
 	}
 	switch segments[0] {
-	case "version_gates":
-		target := server.VersionGates()
+	case "gates":
+		target := server.Gates()
 		if target == nil {
 			errors.SendNotFound(w, r)
 			return
