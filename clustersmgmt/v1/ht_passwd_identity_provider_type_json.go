@@ -31,7 +31,10 @@ import (
 func MarshalHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeHTPasswdIdentityProvider(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -68,7 +71,6 @@ func writeHTPasswdIdentityProvider(object *HTPasswdIdentityProvider, stream *jso
 		stream.WriteObjectField("items")
 		writeHTPasswdUserList(object.users.items, stream)
 		stream.WriteObjectEnd()
-		count++
 	}
 	stream.WriteObjectEnd()
 }

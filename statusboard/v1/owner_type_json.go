@@ -31,7 +31,10 @@ import (
 func MarshalOwner(object *Owner, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeOwner(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -79,7 +82,6 @@ func writeOwner(object *Owner, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("username")
 		stream.WriteString(object.username)
-		count++
 	}
 	stream.WriteObjectEnd()
 }

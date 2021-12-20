@@ -25,10 +25,10 @@
   "paths": {
     "/api/accounts_mgmt/v1": {
       "get": {
-        "description": "Retrieves the version metadata.\n",
+        "description": "Retrieves the version metadata.",
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -38,7 +38,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -52,10 +52,10 @@
     },
     "/api/accounts_mgmt/v1/access_token": {
       "post": {
-        "description": "Returns access token generated from registries in docker format.\n",
+        "description": "Returns access token generated from registries in docker format.",
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -65,7 +65,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -79,7 +79,7 @@
     },
     "/api/accounts_mgmt/v1/accounts": {
       "post": {
-        "description": "Creates a new account.\n",
+        "description": "Creates a new account.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -91,7 +91,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -101,7 +101,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -113,11 +113,11 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of accounts.\n",
+        "description": "Retrieves the list of accounts.",
         "parameters": [
           {
             "name": "fetchlabels_labels",
-            "description": "If true, includes the labels on an account in the output. Could slow request response time.\n",
+            "description": "If true, includes the labels on an account in the output. Could slow request response time.",
             "in": "query",
             "schema": {
               "type": "boolean"
@@ -125,7 +125,7 @@
           },
           {
             "name": "fields",
-            "description": "Projection\nThis field contains a comma-separated list of fields you'd like to get in\na result. No new fields can be added, only existing ones can be filtered.\nTo specify a field 'id' of a structure 'plan' use 'plan.id'.\nTo specify all fields of a structure 'labels' use 'labels.*'.\n\n",
+            "description": "Projection\nThis field contains a comma-separated list of fields you'd like to get in\na result. No new fields can be added, only existing ones can be filtered.\nTo specify a field 'id' of a structure 'plan' use 'plan.id'.\nTo specify all fields of a structure 'labels' use 'labels.*'.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -133,7 +133,7 @@
           },
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement. For example, in order to sort the\naccounts descending by name identifier the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement. For example, in order to sort the\naccounts descending by name identifier the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -141,7 +141,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -150,7 +150,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the account\ninstead of the names of the columns of a table. For example, in order to\nretrieve accounts with username starting with my:\n\n```sql\nusername like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the account\ninstead of the names of the columns of a table. For example, in order to\nretrieve accounts with username starting with my:\n\n```sql\nusername like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -158,7 +158,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -168,31 +168,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of accounts.\n",
+                      "description": "Retrieved list of accounts.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Account"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -202,7 +202,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -216,7 +216,7 @@
     },
     "/api/accounts_mgmt/v1/accounts/{account_id}": {
       "get": {
-        "description": "Retrieves the details of the account.\n",
+        "description": "Retrieves the details of the account.",
         "parameters": [
           {
             "name": "account_id",
@@ -228,7 +228,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -238,7 +238,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -250,7 +250,7 @@
         }
       },
       "patch": {
-        "description": "Updates the account.\n",
+        "description": "Updates the account.",
         "parameters": [
           {
             "name": "account_id",
@@ -271,7 +271,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -281,7 +281,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -295,7 +295,7 @@
     },
     "/api/accounts_mgmt/v1/accounts/{account_id}/labels": {
       "post": {
-        "description": "Create a new account/organization/subscription label.\n",
+        "description": "Create a new account/organization/subscription label.",
         "parameters": [
           {
             "name": "account_id",
@@ -316,7 +316,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -326,7 +326,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -338,7 +338,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.\n",
+        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.",
         "parameters": [
           {
             "name": "account_id",
@@ -349,7 +349,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -358,7 +358,7 @@
           },
           {
             "name": "size",
-            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -368,31 +368,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of cloud providers.\n",
+                      "description": "Retrieved list of cloud providers.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Label"
                       }
                     },
                     "page": {
-                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -402,7 +402,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -416,7 +416,7 @@
     },
     "/api/accounts_mgmt/v1/accounts/{account_id}/labels/{labels_id}": {
       "delete": {
-        "description": "Deletes the account label.\n",
+        "description": "Deletes the account label.",
         "parameters": [
           {
             "name": "account_id",
@@ -435,10 +435,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -450,7 +450,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the label.\n",
+        "description": "Retrieves the details of the label.",
         "parameters": [
           {
             "name": "account_id",
@@ -469,7 +469,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -479,7 +479,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -491,7 +491,7 @@
         }
       },
       "patch": {
-        "description": "Updates the account label.\n",
+        "description": "Updates the account label.",
         "parameters": [
           {
             "name": "account_id",
@@ -519,7 +519,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -529,7 +529,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -543,7 +543,7 @@
     },
     "/api/accounts_mgmt/v1/cluster_authorizations": {
       "post": {
-        "description": "Authorizes new cluster creation against an existing subscription.\n",
+        "description": "Authorizes new cluster creation against an existing subscription.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -555,7 +555,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -565,7 +565,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -579,7 +579,7 @@
     },
     "/api/accounts_mgmt/v1/cluster_registrations": {
       "post": {
-        "description": "Finds or creates a cluster registration with a registry credential\ntoken and cluster identifier.\n",
+        "description": "Finds or creates a cluster registration with a registry credential\ntoken and cluster identifier.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -591,7 +591,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -601,7 +601,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -615,7 +615,7 @@
     },
     "/api/accounts_mgmt/v1/current_access": {
       "post": {
-        "description": "Creates a new role.\n",
+        "description": "Creates a new role.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -627,7 +627,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -637,7 +637,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -649,11 +649,11 @@
         }
       },
       "get": {
-        "description": "Retrieves a list of roles.\n",
+        "description": "Retrieves a list of roles.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -662,7 +662,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the role\ninstead of the names of the columns of a table. For example, in order to\nretrieve roles named starting with `Organization`:\n\n```sql\nname like 'Organization%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the role\ninstead of the names of the columns of a table. For example, in order to\nretrieve roles named starting with `Organization`:\n\n```sql\nname like 'Organization%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -670,7 +670,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -680,31 +680,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of roles.\n",
+                      "description": "Retrieved list of roles.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Role"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -714,7 +714,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -728,7 +728,7 @@
     },
     "/api/accounts_mgmt/v1/current_access/{role_id}": {
       "delete": {
-        "description": "Deletes the role.\n",
+        "description": "Deletes the role.",
         "parameters": [
           {
             "name": "role_id",
@@ -740,10 +740,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -755,7 +755,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the role.\n",
+        "description": "Retrieves the details of the role.",
         "parameters": [
           {
             "name": "role_id",
@@ -767,7 +767,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -777,7 +777,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -789,7 +789,7 @@
         }
       },
       "patch": {
-        "description": "Updates the role.\n",
+        "description": "Updates the role.",
         "parameters": [
           {
             "name": "role_id",
@@ -810,7 +810,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -820,7 +820,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -834,10 +834,10 @@
     },
     "/api/accounts_mgmt/v1/current_account": {
       "get": {
-        "description": "Retrieves the details of the account.\n",
+        "description": "Retrieves the details of the account.",
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -847,7 +847,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -861,7 +861,7 @@
     },
     "/api/accounts_mgmt/v1/feature_toggles/{feature_toggle_id}/query": {
       "post": {
-        "description": "Retrieves the details of the feature toggle by providing query context\n",
+        "description": "Retrieves the details of the feature toggle by providing query context",
         "parameters": [
           {
             "name": "feature_toggle_id",
@@ -882,7 +882,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -892,7 +892,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -906,11 +906,11 @@
     },
     "/api/accounts_mgmt/v1/labels": {
       "get": {
-        "description": "Retrieves a list of labels.\n",
+        "description": "Retrieves a list of labels.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -919,7 +919,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the organization\ninstead of the names of the columns of a table. For example, in order to\nretrieve labels with name starting with my:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the organization\ninstead of the names of the columns of a table. For example, in order to\nretrieve labels with name starting with my:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -927,7 +927,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -937,31 +937,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of labels.\n",
+                      "description": "Retrieved list of labels.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Label"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -971,7 +971,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -985,7 +985,7 @@
     },
     "/api/accounts_mgmt/v1/notify": {
       "post": {
-        "description": "Notify user related to subscription/cluster via email\n",
+        "description": "Notify user related to subscription/cluster via email",
         "requestBody": {
           "content": {
             "application/json": {
@@ -997,7 +997,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1007,7 +1007,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1021,7 +1021,7 @@
     },
     "/api/accounts_mgmt/v1/organizations": {
       "post": {
-        "description": "Creates a new organization.\n",
+        "description": "Creates a new organization.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1033,7 +1033,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1043,7 +1043,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1055,11 +1055,11 @@
         }
       },
       "get": {
-        "description": "Retrieves a list of organizations.\n",
+        "description": "Retrieves a list of organizations.",
         "parameters": [
           {
             "name": "fetchlabels_labels",
-            "description": "If true, includes the labels on an organization in the output. Could slow request response time.\n",
+            "description": "If true, includes the labels on an organization in the output. Could slow request response time.",
             "in": "query",
             "schema": {
               "type": "boolean"
@@ -1067,7 +1067,7 @@
           },
           {
             "name": "fields",
-            "description": "Projection\nThis field contains a comma-separated list of fields you'd like to get in\na result. No new fields can be added, only existing ones can be filtered.\nTo specify a field 'id' of a structure 'plan' use 'plan.id'.\nTo specify all fields of a structure 'labels' use 'labels.*'.\n\n",
+            "description": "Projection\nThis field contains a comma-separated list of fields you'd like to get in\na result. No new fields can be added, only existing ones can be filtered.\nTo specify a field 'id' of a structure 'plan' use 'plan.id'.\nTo specify all fields of a structure 'labels' use 'labels.*'.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1075,7 +1075,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1084,7 +1084,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the organization\ninstead of the names of the columns of a table. For example, in order to\nretrieve organizations with name starting with my:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the organization\ninstead of the names of the columns of a table. For example, in order to\nretrieve organizations with name starting with my:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1092,7 +1092,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1102,31 +1102,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of organizations.\n",
+                      "description": "Retrieved list of organizations.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Organization"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -1136,7 +1136,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1150,7 +1150,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}": {
       "get": {
-        "description": "Retrieves the details of the organization.\n",
+        "description": "Retrieves the details of the organization.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1162,7 +1162,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1172,7 +1172,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1184,7 +1184,7 @@
         }
       },
       "patch": {
-        "description": "Updates the organization.\n",
+        "description": "Updates the organization.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1205,7 +1205,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1215,7 +1215,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1229,7 +1229,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/labels": {
       "post": {
-        "description": "Create a new account/organization/subscription label.\n",
+        "description": "Create a new account/organization/subscription label.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1250,7 +1250,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1260,7 +1260,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1272,7 +1272,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.\n",
+        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1283,7 +1283,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1292,7 +1292,7 @@
           },
           {
             "name": "size",
-            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1302,31 +1302,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of cloud providers.\n",
+                      "description": "Retrieved list of cloud providers.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Label"
                       }
                     },
                     "page": {
-                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -1336,7 +1336,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1350,7 +1350,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/labels/{labels_id}": {
       "delete": {
-        "description": "Deletes the account label.\n",
+        "description": "Deletes the account label.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1369,10 +1369,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1384,7 +1384,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the label.\n",
+        "description": "Retrieves the details of the label.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1403,7 +1403,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1413,7 +1413,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1425,7 +1425,7 @@
         }
       },
       "patch": {
-        "description": "Updates the account label.\n",
+        "description": "Updates the account label.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1453,7 +1453,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1463,7 +1463,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1477,7 +1477,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/quota_cost": {
       "get": {
-        "description": "Retrieves the quota cost.\n",
+        "description": "Retrieves the quota cost.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1488,7 +1488,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1497,7 +1497,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the quota\ncost instead of the names of the columns of a table. For example, in order\nto retrieve the quota cost for all add-ons:\n\n```sql\nquota_id LIKE 'add-on%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the quota\ncost instead of the names of the columns of a table. For example, in order\nto retrieve the quota cost for all add-ons:\n\n```sql\nquota_id LIKE 'add-on%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1505,7 +1505,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1515,31 +1515,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved quota cost items.\n",
+                      "description": "Retrieved quota cost items.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/QuotaCost"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -1549,7 +1549,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1563,7 +1563,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/quota_summary": {
       "get": {
-        "description": "Retrieves the Quota summary.\n",
+        "description": "Retrieves the Quota summary.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1574,7 +1574,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1583,7 +1583,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the quota\nsummary instead of the names of the columns of a table. For example, in order\nto retrieve the quota summary for clusters that run in multiple availability\nzones:\n\n```sql\navailability_zone_type = 'multi'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the quota\nsummary instead of the names of the columns of a table. For example, in order\nto retrieve the quota summary for clusters that run in multiple availability\nzones:\n\n```sql\navailability_zone_type = 'multi'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1591,7 +1591,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1601,31 +1601,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved quota summary items.\n",
+                      "description": "Retrieved quota summary items.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/QuotaSummary"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -1635,7 +1635,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1649,7 +1649,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/resource_quota": {
       "post": {
-        "description": "Creates a new resource quota.\n",
+        "description": "Creates a new resource quota.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1670,7 +1670,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1680,7 +1680,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1692,7 +1692,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of resource quotas.\n",
+        "description": "Retrieves the list of resource quotas.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1703,7 +1703,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1712,7 +1712,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the account\ninstead of the names of the columns of a table. For example, in order to\nretrieve resource quota with resource_type cluster.aws:\n\n```sql\nresource_type = 'cluster.aws'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the account\ninstead of the names of the columns of a table. For example, in order to\nretrieve resource quota with resource_type cluster.aws:\n\n```sql\nresource_type = 'cluster.aws'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1720,7 +1720,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1730,31 +1730,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of resource quotas.\n",
+                      "description": "Retrieved list of resource quotas.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ResourceQuota"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -1764,7 +1764,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1778,7 +1778,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/resource_quota/{resource_quota_id}": {
       "delete": {
-        "description": "Deletes the resource quota.\n",
+        "description": "Deletes the resource quota.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1797,10 +1797,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1812,7 +1812,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the resource quota.\n",
+        "description": "Retrieves the details of the resource quota.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1831,7 +1831,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1841,7 +1841,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1853,7 +1853,7 @@
         }
       },
       "patch": {
-        "description": "Updates the resource quota.\n",
+        "description": "Updates the resource quota.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1881,7 +1881,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1891,7 +1891,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1905,7 +1905,7 @@
     },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/summary_dashboard": {
       "get": {
-        "description": "Retrieves the details of the organization's summary dashboard.\n",
+        "description": "Retrieves the details of the organization's summary dashboard.",
         "parameters": [
           {
             "name": "organization_id",
@@ -1917,7 +1917,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1927,7 +1927,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1941,7 +1941,7 @@
     },
     "/api/accounts_mgmt/v1/permissions": {
       "post": {
-        "description": "Creates a new permission.\n",
+        "description": "Creates a new permission.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1953,7 +1953,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1963,7 +1963,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1975,11 +1975,11 @@
         }
       },
       "get": {
-        "description": "Retrieves a list of permissions.\n",
+        "description": "Retrieves a list of permissions.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1988,7 +1988,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1998,31 +1998,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of permissions.\n",
+                      "description": "Retrieved list of permissions.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Permission"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -2032,7 +2032,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2046,7 +2046,7 @@
     },
     "/api/accounts_mgmt/v1/permissions/{permission_id}": {
       "delete": {
-        "description": "Deletes the permission.\n",
+        "description": "Deletes the permission.",
         "parameters": [
           {
             "name": "permission_id",
@@ -2058,10 +2058,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2073,7 +2073,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the permission.\n",
+        "description": "Retrieves the details of the permission.",
         "parameters": [
           {
             "name": "permission_id",
@@ -2085,7 +2085,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2095,7 +2095,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2109,7 +2109,7 @@
     },
     "/api/accounts_mgmt/v1/pull_secrets": {
       "post": {
-        "description": "Returns access token generated from registries in docker format.\n",
+        "description": "Returns access token generated from registries in docker format.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2121,7 +2121,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2131,7 +2131,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2145,7 +2145,7 @@
     },
     "/api/accounts_mgmt/v1/pull_secrets/{pull_secret_id}": {
       "delete": {
-        "description": "Deletes the pull secret.\n",
+        "description": "Deletes the pull secret.",
         "parameters": [
           {
             "name": "pull_secret_id",
@@ -2157,10 +2157,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2174,11 +2174,11 @@
     },
     "/api/accounts_mgmt/v1/registries": {
       "get": {
-        "description": "Retrieves a list of registries.\n",
+        "description": "Retrieves a list of registries.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2187,7 +2187,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2197,31 +2197,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of registries.\n",
+                      "description": "Retrieved list of registries.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Registry"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -2231,7 +2231,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2245,7 +2245,7 @@
     },
     "/api/accounts_mgmt/v1/registries/{registry_id}": {
       "get": {
-        "description": "Retrieves the details of the registry.\n",
+        "description": "Retrieves the details of the registry.",
         "parameters": [
           {
             "name": "registry_id",
@@ -2257,7 +2257,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2267,7 +2267,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2281,7 +2281,7 @@
     },
     "/api/accounts_mgmt/v1/registry_credentials": {
       "post": {
-        "description": "Creates a new registry credential.\n",
+        "description": "Creates a new registry credential.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2293,7 +2293,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2303,7 +2303,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2315,11 +2315,11 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of accounts.\n",
+        "description": "Retrieves the list of accounts.",
         "parameters": [
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement. For example, in order to sort the\nRegistryCredentials descending by username the value should be:\n\n```sql\nusername desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement. For example, in order to sort the\nRegistryCredentials descending by username the value should be:\n\n```sql\nusername desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2327,7 +2327,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2336,7 +2336,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the RegistryCredentials instead\nof the names of the columns of a table. For example, in order to retrieve all the\nRegistryCredentials for a user the value should be:\n\n```sql\nusername = 'abcxyz...'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nRegistryCredentials that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the RegistryCredentials instead\nof the names of the columns of a table. For example, in order to retrieve all the\nRegistryCredentials for a user the value should be:\n\n```sql\nusername = 'abcxyz...'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nRegistryCredentials that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2344,7 +2344,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2354,31 +2354,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of registry credentials.\n",
+                      "description": "Retrieved list of registry credentials.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/RegistryCredential"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -2388,7 +2388,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2402,7 +2402,7 @@
     },
     "/api/accounts_mgmt/v1/registry_credentials/{registry_credential_id}": {
       "get": {
-        "description": "Retrieves the details of the registry credential.\n",
+        "description": "Retrieves the details of the registry credential.",
         "parameters": [
           {
             "name": "registry_credential_id",
@@ -2414,7 +2414,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2424,7 +2424,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2438,7 +2438,7 @@
     },
     "/api/accounts_mgmt/v1/resource_quota": {
       "post": {
-        "description": "Creates a new resource quota.\n",
+        "description": "Creates a new resource quota.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2450,7 +2450,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2460,7 +2460,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2472,11 +2472,11 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of resource quotas.\n",
+        "description": "Retrieves the list of resource quotas.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2485,7 +2485,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the account\ninstead of the names of the columns of a table. For example, in order to\nretrieve resource quota with resource_type cluster.aws:\n\n```sql\nresource_type = 'cluster.aws'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the account\ninstead of the names of the columns of a table. For example, in order to\nretrieve resource quota with resource_type cluster.aws:\n\n```sql\nresource_type = 'cluster.aws'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2493,7 +2493,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2503,31 +2503,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of resource quotas.\n",
+                      "description": "Retrieved list of resource quotas.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ResourceQuota"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -2537,7 +2537,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2551,7 +2551,7 @@
     },
     "/api/accounts_mgmt/v1/resource_quota/{resource_quota_id}": {
       "delete": {
-        "description": "Deletes the resource quota.\n",
+        "description": "Deletes the resource quota.",
         "parameters": [
           {
             "name": "resource_quota_id",
@@ -2563,10 +2563,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2578,7 +2578,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the resource quota.\n",
+        "description": "Retrieves the details of the resource quota.",
         "parameters": [
           {
             "name": "resource_quota_id",
@@ -2590,7 +2590,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2600,7 +2600,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2612,7 +2612,7 @@
         }
       },
       "patch": {
-        "description": "Updates the resource quota.\n",
+        "description": "Updates the resource quota.",
         "parameters": [
           {
             "name": "resource_quota_id",
@@ -2633,7 +2633,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2643,7 +2643,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2657,7 +2657,7 @@
     },
     "/api/accounts_mgmt/v1/role_bindings": {
       "post": {
-        "description": "Creates a new role binding.\n",
+        "description": "Creates a new role binding.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2669,7 +2669,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2679,7 +2679,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2691,11 +2691,11 @@
         }
       },
       "get": {
-        "description": "Retrieves a list of role bindings.\n",
+        "description": "Retrieves a list of role bindings.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2704,7 +2704,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the role binding\ninstead of the names of the columns of a table. For example, in order to\nretrieve role bindings with role_id AuthenticatedUser:\n\n```sql\nrole_id = 'AuthenticatedUser'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the role binding\ninstead of the names of the columns of a table. For example, in order to\nretrieve role bindings with role_id AuthenticatedUser:\n\n```sql\nrole_id = 'AuthenticatedUser'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2712,7 +2712,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2722,31 +2722,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of role bindings.\n",
+                      "description": "Retrieved list of role bindings.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/RoleBinding"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -2756,7 +2756,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2770,7 +2770,7 @@
     },
     "/api/accounts_mgmt/v1/role_bindings/{role_binding_id}": {
       "delete": {
-        "description": "Deletes the role binding.\n",
+        "description": "Deletes the role binding.",
         "parameters": [
           {
             "name": "role_binding_id",
@@ -2782,10 +2782,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2797,7 +2797,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the role binding.\n",
+        "description": "Retrieves the details of the role binding.",
         "parameters": [
           {
             "name": "role_binding_id",
@@ -2809,7 +2809,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2819,7 +2819,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2831,7 +2831,7 @@
         }
       },
       "patch": {
-        "description": "Updates the account.\n",
+        "description": "Updates the account.",
         "parameters": [
           {
             "name": "role_binding_id",
@@ -2852,7 +2852,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2862,7 +2862,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2876,7 +2876,7 @@
     },
     "/api/accounts_mgmt/v1/roles": {
       "post": {
-        "description": "Creates a new role.\n",
+        "description": "Creates a new role.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2888,7 +2888,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2898,7 +2898,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2910,11 +2910,11 @@
         }
       },
       "get": {
-        "description": "Retrieves a list of roles.\n",
+        "description": "Retrieves a list of roles.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2923,7 +2923,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the role\ninstead of the names of the columns of a table. For example, in order to\nretrieve roles named starting with `Organization`:\n\n```sql\nname like 'Organization%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the role\ninstead of the names of the columns of a table. For example, in order to\nretrieve roles named starting with `Organization`:\n\n```sql\nname like 'Organization%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2931,7 +2931,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2941,31 +2941,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of roles.\n",
+                      "description": "Retrieved list of roles.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Role"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -2975,7 +2975,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2989,7 +2989,7 @@
     },
     "/api/accounts_mgmt/v1/roles/{role_id}": {
       "delete": {
-        "description": "Deletes the role.\n",
+        "description": "Deletes the role.",
         "parameters": [
           {
             "name": "role_id",
@@ -3001,10 +3001,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3016,7 +3016,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the role.\n",
+        "description": "Retrieves the details of the role.",
         "parameters": [
           {
             "name": "role_id",
@@ -3028,7 +3028,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3038,7 +3038,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3050,7 +3050,7 @@
         }
       },
       "patch": {
-        "description": "Updates the role.\n",
+        "description": "Updates the role.",
         "parameters": [
           {
             "name": "role_id",
@@ -3071,7 +3071,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3081,7 +3081,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3095,11 +3095,11 @@
     },
     "/api/accounts_mgmt/v1/sku_rules": {
       "get": {
-        "description": "Retrieves a list of Sku Rules.\n",
+        "description": "Retrieves a list of Sku Rules.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3108,7 +3108,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the SKU\ninstead of the names of the columns of a table. For example, in order to\nretrieve SKUS large sized resources:\n\n```sql\nresource_name like '%large'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the SKU\ninstead of the names of the columns of a table. For example, in order to\nretrieve SKUS large sized resources:\n\n```sql\nresource_name like '%large'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3116,7 +3116,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3126,31 +3126,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of Sku Rules.\n",
+                      "description": "Retrieved list of Sku Rules.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/SkuRule"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -3160,7 +3160,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3174,7 +3174,7 @@
     },
     "/api/accounts_mgmt/v1/sku_rules/{sku_rule_id}": {
       "get": {
-        "description": "Retrieves the details of the Sku Rule.\n",
+        "description": "Retrieves the details of the Sku Rule.",
         "parameters": [
           {
             "name": "sku_rule_id",
@@ -3186,7 +3186,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3196,7 +3196,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3210,11 +3210,11 @@
     },
     "/api/accounts_mgmt/v1/skus": {
       "get": {
-        "description": "Retrieves a list of SKUS.\n",
+        "description": "Retrieves a list of SKUS.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3223,7 +3223,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the SKU\ninstead of the names of the columns of a table. For example, in order to\nretrieve SKUS large sized resources:\n\n```sql\nresource_name like '%large'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the SKU\ninstead of the names of the columns of a table. For example, in order to\nretrieve SKUS large sized resources:\n\n```sql\nresource_name like '%large'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3231,7 +3231,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3241,31 +3241,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of SKUS.\n",
+                      "description": "Retrieved list of SKUS.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/SKU"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -3275,7 +3275,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3289,7 +3289,7 @@
     },
     "/api/accounts_mgmt/v1/skus/{sku_id}": {
       "get": {
-        "description": "Retrieves the details of the SKU.\n",
+        "description": "Retrieves the details of the SKU.",
         "parameters": [
           {
             "name": "sku_id",
@@ -3301,7 +3301,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3311,7 +3311,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3325,11 +3325,11 @@
     },
     "/api/accounts_mgmt/v1/subscriptions": {
       "get": {
-        "description": "Retrieves a list of subscriptions.\n",
+        "description": "Retrieves a list of subscriptions.",
         "parameters": [
           {
             "name": "fetchaccounts_accounts",
-            "description": "If true, includes the account reference information in the output. Could slow request response time.\n",
+            "description": "If true, includes the account reference information in the output. Could slow request response time.",
             "in": "query",
             "schema": {
               "type": "boolean"
@@ -3337,7 +3337,7 @@
           },
           {
             "name": "fetchlabels_labels",
-            "description": "If true, includes the labels on a subscription in the output. Could slow request response time.\n",
+            "description": "If true, includes the labels on a subscription in the output. Could slow request response time.",
             "in": "query",
             "schema": {
               "type": "boolean"
@@ -3345,7 +3345,7 @@
           },
           {
             "name": "fields",
-            "description": "Projection\nThis field contains a comma-separated list of fields you'd like to get in\na result. No new fields can be added, only existing ones can be filtered.\nTo specify a field 'id' of a structure 'plan' use 'plan.id'.\nTo specify all fields of a structure 'labels' use 'labels.*'.\n\n",
+            "description": "Projection\nThis field contains a comma-separated list of fields you'd like to get in\na result. No new fields can be added, only existing ones can be filtered.\nTo specify a field 'id' of a structure 'plan' use 'plan.id'.\nTo specify all fields of a structure 'labels' use 'labels.*'.\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3353,7 +3353,7 @@
           },
           {
             "name": "labels",
-            "description": "Filter subscriptions by a comma separated list of labels:\n\n[source]\n```\nenv=staging,department=sales\n```\n\n",
+            "description": "Filter subscriptions by a comma separated list of labels:\n\n[source]\n----\nenv=staging,department=sales\n----\n",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3361,7 +3361,7 @@
           },
           {
             "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement. For example, in order to sort the\nsubscriptions descending by name identifier the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.\n",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement. For example, in order to sort the\nsubscriptions descending by name identifier the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3369,7 +3369,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3378,7 +3378,7 @@
           },
           {
             "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the subscription instead\nof the names of the columns of a table. For example, in order to retrieve all the\nsubscriptions for managed clusters the value should be:\n\n```sql\nmanaged = 't'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nclusters that the user has permission to see will be returned.\n",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the subscription instead\nof the names of the columns of a table. For example, in order to retrieve all the\nsubscriptions for managed clusters the value should be:\n\n```sql\nmanaged = 't'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nclusters that the user has permission to see will be returned.",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3386,7 +3386,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3396,31 +3396,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of subscriptions.\n",
+                      "description": "Retrieved list of subscriptions.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Subscription"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -3430,7 +3430,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3442,7 +3442,7 @@
         }
       },
       "post": {
-        "description": "Create a new subscription and register a cluster for it.\n",
+        "description": "Create a new subscription and register a cluster for it.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3454,7 +3454,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3464,7 +3464,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3478,7 +3478,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/labels": {
       "post": {
-        "description": "Create a new account/organization/subscription label.\n",
+        "description": "Create a new account/organization/subscription label.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3490,7 +3490,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3500,7 +3500,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3512,11 +3512,11 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.\n",
+        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.",
         "parameters": [
           {
             "name": "page",
-            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3525,7 +3525,7 @@
           },
           {
             "name": "size",
-            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3535,31 +3535,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of cloud providers.\n",
+                      "description": "Retrieved list of cloud providers.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Label"
                       }
                     },
                     "page": {
-                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -3569,7 +3569,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3583,7 +3583,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/labels/{labels_id}": {
       "delete": {
-        "description": "Deletes the account label.\n",
+        "description": "Deletes the account label.",
         "parameters": [
           {
             "name": "labels_id",
@@ -3595,10 +3595,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3610,7 +3610,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the label.\n",
+        "description": "Retrieves the details of the label.",
         "parameters": [
           {
             "name": "labels_id",
@@ -3622,7 +3622,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3632,7 +3632,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3644,7 +3644,7 @@
         }
       },
       "patch": {
-        "description": "Updates the account label.\n",
+        "description": "Updates the account label.",
         "parameters": [
           {
             "name": "labels_id",
@@ -3665,7 +3665,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3675,7 +3675,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3689,7 +3689,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}": {
       "delete": {
-        "description": "Deletes the subscription by ID.\n",
+        "description": "Deletes the subscription by ID.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -3701,10 +3701,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3716,7 +3716,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the subscription by ID.\n",
+        "description": "Retrieves the details of the subscription by ID.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -3728,7 +3728,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3738,7 +3738,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3750,7 +3750,7 @@
         }
       },
       "patch": {
-        "description": "Update a subscription\n",
+        "description": "Update a subscription",
         "parameters": [
           {
             "name": "subscription_id",
@@ -3771,7 +3771,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3781,7 +3781,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3795,7 +3795,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/labels": {
       "post": {
-        "description": "Create a new account/organization/subscription label.\n",
+        "description": "Create a new account/organization/subscription label.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -3816,7 +3816,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3826,7 +3826,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3838,7 +3838,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.\n",
+        "description": "Retrieves the list of labels of the account/organization/subscription.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of labels\nof the account/organization/subscription.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -3849,7 +3849,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3858,7 +3858,7 @@
           },
           {
             "name": "size",
-            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3868,31 +3868,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of cloud providers.\n",
+                      "description": "Retrieved list of cloud providers.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Label"
                       }
                     },
                     "page": {
-                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.\n",
+                      "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.\n",
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nlabels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of labels of the account/organization/subscription.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -3902,7 +3902,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3916,7 +3916,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/labels/{labels_id}": {
       "delete": {
-        "description": "Deletes the account label.\n",
+        "description": "Deletes the account label.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -3935,10 +3935,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3950,7 +3950,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of the label.\n",
+        "description": "Retrieves the details of the label.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -3969,7 +3969,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3979,7 +3979,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3991,7 +3991,7 @@
         }
       },
       "patch": {
-        "description": "Updates the account label.\n",
+        "description": "Updates the account label.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -4019,7 +4019,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4029,7 +4029,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4043,7 +4043,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/notify": {
       "post": {
-        "description": "Notify user related to subscription via email\n",
+        "description": "Notify user related to subscription via email",
         "parameters": [
           {
             "name": "subscription_id",
@@ -4064,7 +4064,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4074,7 +4074,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4088,7 +4088,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/reserved_resources": {
       "get": {
-        "description": "Retrieves items of the collection of reserved resources by the subscription.\n",
+        "description": "Retrieves items of the collection of reserved resources by the subscription.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -4099,7 +4099,7 @@
           },
           {
             "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.\n",
+            "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4108,7 +4108,7 @@
           },
           {
             "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n",
+            "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4118,31 +4118,31 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of reserved resources.\n",
+                      "description": "Retrieved list of reserved resources.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ReservedResource"
                       }
                     },
                     "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.\n",
+                      "description": "Index of the requested page, where one corresponds to the first page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n",
+                      "description": "Maximum number of items that will be contained in the returned page.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.\n",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -4152,7 +4152,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4166,7 +4166,7 @@
     },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/reserved_resources/{reserved_resource_id}": {
       "get": {
-        "description": "Retrieves the reserved resource.\n",
+        "description": "Retrieves the reserved resource.",
         "parameters": [
           {
             "name": "subscription_id",
@@ -4185,7 +4185,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4195,7 +4195,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4209,7 +4209,7 @@
     },
     "/api/accounts_mgmt/v1/support_cases": {
       "post": {
-        "description": "Create a support case related to Hydra\n",
+        "description": "Create a support case related to Hydra",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4221,7 +4221,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4231,7 +4231,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4245,7 +4245,7 @@
     },
     "/api/accounts_mgmt/v1/support_cases/{support_case_id}": {
       "delete": {
-        "description": "Deletes the support case by Case ID.\n",
+        "description": "Deletes the support case by Case ID.",
         "parameters": [
           {
             "name": "support_case_id",
@@ -4257,10 +4257,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4274,7 +4274,7 @@
     },
     "/api/accounts_mgmt/v1/token_authorization": {
       "post": {
-        "description": "Returns a specific account based on the given pull secret\n",
+        "description": "Returns a specific account based on the given pull secret",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4286,7 +4286,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4296,7 +4296,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4312,27 +4312,27 @@
   "components": {
     "schemas": {
       "Metadata": {
-        "description": "Version metadata.\n",
+        "description": "Version metadata.",
         "properties": {
           "server_version": {
-            "description": "Version of the server.\n",
+            "description": "Version of the server.",
             "type": "string"
           }
         }
       },
       "SKU": {
-        "description": "Identifies computing resources\n",
+        "description": "Identifies computing resources",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'SKU' if this is a complete object or 'SKULink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'SKU' if this is a complete object or 'SKULink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "byoc": {
@@ -4342,7 +4342,7 @@
             "type": "string"
           },
           "resource_name": {
-            "description": "platform-specific name, such as \"M5.2Xlarge\" for a type of EC2 node\n",
+            "description": "platform-specific name, such as \"M5.2Xlarge\" for a type of EC2 node",
             "type": "string"
           },
           "resource_type": {
@@ -4379,15 +4379,15 @@
       "Account": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Account' if this is a complete object or 'AccountLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Account' if this is a complete object or 'AccountLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "ban_code": {
@@ -4434,7 +4434,7 @@
         }
       },
       "Action": {
-        "description": "Possible actions for a permission.\n",
+        "description": "Possible actions for a permission.",
         "type": "string",
         "enum": [
           "create",
@@ -4445,7 +4445,7 @@
         ]
       },
       "BillingModel": {
-        "description": "Billing model for subscripiton and reserved_resource resources.\n",
+        "description": "Billing model for subscripiton and reserved_resource resources.",
         "type": "string",
         "enum": [
           "marketplace",
@@ -4453,18 +4453,18 @@
         ]
       },
       "Capability": {
-        "description": "Capability model that represents internal labels with a key that matches a set list defined in AMS (defined in pkg/api/capability_types.go).\n",
+        "description": "Capability model that represents internal labels with a key that matches a set list defined in AMS (defined in pkg/api/capability_types.go).",
         "properties": {
           "inherited": {
-            "description": "Dynamic attribute of the capability that tells us that this capability was inherited from the subscription's organization. \n",
+            "description": "Dynamic attribute of the capability that tells us that this capability was inherited from the subscription's organization. ",
             "type": "boolean"
           },
           "name": {
-            "description": "Name of the capability label.\n",
+            "description": "Name of the capability label.",
             "type": "string"
           },
           "value": {
-            "description": "Value that can be assigned to the capability (eg. \"true\", \"false\" etc).\n",
+            "description": "Value that can be assigned to the capability (eg. \"true\", \"false\" etc).",
             "type": "string"
           }
         }
@@ -4576,7 +4576,7 @@
             "type": "string"
           },
           "expires_at": {
-            "description": "Cluster registration expiration.\n",
+            "description": "Cluster registration expiration.",
             "type": "string"
           }
         }
@@ -4615,15 +4615,15 @@
       "FeatureToggle": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'FeatureToggle' if this is a complete object or 'FeatureToggleLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'FeatureToggle' if this is a complete object or 'FeatureToggleLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "enabled": {
@@ -4641,15 +4641,15 @@
       "Label": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Label' if this is a complete object or 'LabelLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Label' if this is a complete object or 'LabelLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "created_at": {
@@ -4674,15 +4674,15 @@
       "Organization": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Organization' if this is a complete object or 'OrganizationLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Organization' if this is a complete object or 'OrganizationLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "capabilities": {
@@ -4719,15 +4719,15 @@
       "Permission": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Permission' if this is a complete object or 'PermissionLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Permission' if this is a complete object or 'PermissionLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "action": {
@@ -4741,15 +4741,15 @@
       "Plan": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Plan' if this is a complete object or 'PlanLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Plan' if this is a complete object or 'PlanLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "category": {
@@ -4764,7 +4764,7 @@
         }
       },
       "PlanID": {
-        "description": "Plan ID of subscription.\n",
+        "description": "Plan ID of subscription.",
         "type": "string",
         "enum": [
           "ocp"
@@ -4831,15 +4831,15 @@
       "Registry": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Registry' if this is a complete object or 'RegistryLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Registry' if this is a complete object or 'RegistryLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "url": {
@@ -4873,15 +4873,15 @@
       "RegistryCredential": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'RegistryCredential' if this is a complete object or 'RegistryCredentialLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'RegistryCredential' if this is a complete object or 'RegistryCredentialLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "account": {
@@ -4910,7 +4910,7 @@
         }
       },
       "RelatedResource": {
-        "description": "Resource which can be provisioned using the allowed quota.\n",
+        "description": "Resource which can be provisioned using the allowed quota.",
         "properties": {
           "byoc": {
             "type": "string"
@@ -4971,18 +4971,18 @@
         }
       },
       "Resource": {
-        "description": "Identifies computing resources\n",
+        "description": "Identifies computing resources",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Resource' if this is a complete object or 'ResourceLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Resource' if this is a complete object or 'ResourceLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "byoc": {
@@ -4992,7 +4992,7 @@
             "type": "string"
           },
           "allowed": {
-            "description": "Number of allowed nodes\n",
+            "description": "Number of allowed nodes",
             "type": "integer",
             "format": "int32"
           },
@@ -5000,7 +5000,7 @@
             "type": "string"
           },
           "resource_name": {
-            "description": "platform-specific name, such as \"M5.2Xlarge\" for a type of EC2 node\n",
+            "description": "platform-specific name, such as \"M5.2Xlarge\" for a type of EC2 node",
             "type": "string"
           },
           "resource_type": {
@@ -5011,15 +5011,15 @@
       "ResourceQuota": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'ResourceQuota' if this is a complete object or 'ResourceQuotaLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'ResourceQuota' if this is a complete object or 'ResourceQuotaLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "sku": {
@@ -5048,15 +5048,15 @@
       "Role": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Role' if this is a complete object or 'RoleLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Role' if this is a complete object or 'RoleLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "name": {
@@ -5073,15 +5073,15 @@
       "RoleBinding": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'RoleBinding' if this is a complete object or 'RoleBindingLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'RoleBinding' if this is a complete object or 'RoleBindingLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "account": {
@@ -5125,31 +5125,31 @@
         }
       },
       "SkuRule": {
-        "description": "Identifies sku rule\n",
+        "description": "Identifies sku rule",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'SkuRule' if this is a complete object or 'SkuRuleLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'SkuRule' if this is a complete object or 'SkuRuleLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "allowed": {
-            "description": "Specifies the allowed parameter for calculation\n",
+            "description": "Specifies the allowed parameter for calculation",
             "type": "integer",
             "format": "int32"
           },
           "quota_id": {
-            "description": "Specifies the quota id\n",
+            "description": "Specifies the quota id",
             "type": "string"
           },
           "sku": {
-            "description": "Specifies the sku, such as \"\"MW00504\"\"\n",
+            "description": "Specifies the sku, such as \"\"MW00504\"\"",
             "type": "string"
           }
         }
@@ -5157,15 +5157,15 @@
       "Subscription": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Subscription' if this is a complete object or 'SubscriptionLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Subscription' if this is a complete object or 'SubscriptionLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "capabilities": {
@@ -5201,7 +5201,7 @@
             "format": "date-time"
           },
           "creator": {
-            "description": "Link to the account that created the subscription.\n",
+            "description": "Link to the account that created the subscription.",
             "$ref": "#/components/schemas/Account"
           },
           "display_name": {
@@ -5217,17 +5217,17 @@
             }
           },
           "last_reconcile_date": {
-            "description": "Last time this subscription were reconciled about cluster usage.\n",
+            "description": "Last time this subscription were reconciled about cluster usage.",
             "type": "string",
             "format": "date-time"
           },
           "last_released_at": {
-            "description": "Last time status was set to Released for this cluster/subscription.\n",
+            "description": "Last time status was set to Released for this cluster/subscription.",
             "type": "string",
             "format": "date-time"
           },
           "last_telemetry_date": {
-            "description": "Last telemetry authorization request for this  cluster/subscription in Unix time\n",
+            "description": "Last telemetry authorization request for this  cluster/subscription in Unix time",
             "type": "string",
             "format": "date-time"
           },
@@ -5235,7 +5235,7 @@
             "type": "boolean"
           },
           "metrics": {
-            "description": "Metrics array. One or zero elements will present.\n",
+            "description": "Metrics array. One or zero elements will present.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SubscriptionMetrics"
@@ -5257,14 +5257,14 @@
             "type": "string"
           },
           "provenance": {
-            "description": "The origin of cluster registration (values are defined in AMS at pkg/api/subscription_types.go).\n",
+            "description": "The origin of cluster registration (values are defined in AMS at pkg/api/subscription_types.go).",
             "type": "string"
           },
           "region_id": {
             "type": "string"
           },
           "released": {
-            "description": "Flag used to denote whether or not the owner of the cluster has released the ownership and ready to be transferred to a different user.\n",
+            "description": "Flag used to denote whether or not the owner of the cluster has released the ownership and ready to be transferred to a different user.",
             "type": "boolean"
           },
           "service_level": {
@@ -5284,7 +5284,7 @@
             "type": "string"
           },
           "trial_end_date": {
-            "description": "If the subscription is a trial, date the trial ends.\n",
+            "description": "If the subscription is a trial, date the trial ends.",
             "type": "string",
             "format": "date-time"
           },
@@ -5298,7 +5298,7 @@
         }
       },
       "SubscriptionMetrics": {
-        "description": "Each field is a metric fetched for a specific Subscription's cluster.\n",
+        "description": "Each field is a metric fetched for a specific Subscription's cluster.",
         "properties": {
           "cloud_provider": {
             "type": "string"
@@ -5374,42 +5374,42 @@
         }
       },
       "SubscriptionNotify": {
-        "description": "This struct is a request to send a templated email to a user related to this\nsubscription.\n",
+        "description": "This struct is a request to send a templated email to a user related to this\nsubscription.",
         "properties": {
           "bcc_address": {
-            "description": "The BCC address to be included on the email that is sent\n",
+            "description": "The BCC address to be included on the email that is sent",
             "type": "string"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "Indicates which Cluster (external id) the resource type belongs to\n",
+            "description": "Indicates which Cluster (external id) the resource type belongs to",
             "type": "string"
           },
           "include_red_hat_associates": {
-            "description": "Indicates whether to include red hat associates in the email notification\n",
+            "description": "Indicates whether to include red hat associates in the email notification",
             "type": "boolean"
           },
           "internal_only": {
-            "description": "Indicates whether the service log is internal only to RH\n",
+            "description": "Indicates whether the service log is internal only to RH",
             "type": "boolean"
           },
           "subject": {
-            "description": "The email subject\n",
+            "description": "The email subject",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to\n",
+            "description": "Indicates which Subscription the resource type belongs to",
             "type": "string"
           },
           "template_name": {
-            "description": "The name of the template used to construct the email contents\n",
+            "description": "The name of the template used to construct the email contents",
             "type": "string"
           },
           "template_parameters": {
-            "description": "The values which will be substituted into the templated email\n",
+            "description": "The values which will be substituted into the templated email",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TemplateParameter"
@@ -5418,26 +5418,26 @@
         }
       },
       "SubscriptionRegistration": {
-        "description": "Registration of a new subscription.\n",
+        "description": "Registration of a new subscription.",
         "properties": {
           "cluster_uuid": {
-            "description": "External cluster ID.\n",
+            "description": "External cluster ID.",
             "type": "string"
           },
           "console_url": {
-            "description": "Console URL of subscription (optional).\n",
+            "description": "Console URL of subscription (optional).",
             "type": "string"
           },
           "display_name": {
-            "description": "Display name of subscription (optional).\n",
+            "description": "Display name of subscription (optional).",
             "type": "string"
           },
           "plan_id": {
-            "description": "Plan ID of subscription.\n",
+            "description": "Plan ID of subscription.",
             "$ref": "#/components/schemas/PlanID"
           },
           "status": {
-            "description": "Status of subscription.\n",
+            "description": "Status of subscription.",
             "type": "string"
           }
         }
@@ -5445,15 +5445,15 @@
       "SummaryDashboard": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'SummaryDashboard' if this is a complete object or 'SummaryDashboardLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'SummaryDashboard' if this is a complete object or 'SummaryDashboardLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "metrics": {
@@ -5491,43 +5491,43 @@
       "SupportCaseRequest": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'SupportCaseRequest' if this is a complete object or 'SupportCaseRequestLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'SupportCaseRequest' if this is a complete object or 'SupportCaseRequestLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "cluster_id": {
-            "description": "(optional) cluster id of the cluster on which we create the support case for.\n",
+            "description": "(optional) cluster id of the cluster on which we create the support case for.",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "(optional) cluster uuid of the cluster on which we create the support case for.\n",
+            "description": "(optional) cluster uuid of the cluster on which we create the support case for.",
             "type": "string"
           },
           "description": {
-            "description": "Support case desciption.\n",
+            "description": "Support case desciption.",
             "type": "string"
           },
           "event_stream_id": {
-            "description": "(optional) event stream id for the support case so we could track it.\n",
+            "description": "(optional) event stream id for the support case so we could track it.",
             "type": "string"
           },
           "severity": {
-            "description": "Support case severity.\n",
+            "description": "Support case severity.",
             "type": "string"
           },
           "subscription_id": {
-            "description": "(optional) subscription id of the subscription on which we create the support case for.\n",
+            "description": "(optional) subscription id of the subscription on which we create the support case for.",
             "type": "string"
           },
           "summary": {
-            "description": "Support case title.\n",
+            "description": "Support case title.",
             "type": "string"
           }
         }
@@ -5535,64 +5535,64 @@
       "SupportCaseResponse": {
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'SupportCaseResponse' if this is a complete object or 'SupportCaseResponseLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'SupportCaseResponse' if this is a complete object or 'SupportCaseResponseLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "uri": {
-            "description": "Support case uri.\n",
+            "description": "Support case uri.",
             "type": "string"
           },
           "case_number": {
-            "description": "Support case number.\n",
+            "description": "Support case number.",
             "type": "string"
           },
           "cluster_id": {
-            "description": "(optional) cluster id of the cluster on which we created the support case for.\n",
+            "description": "(optional) cluster id of the cluster on which we created the support case for.",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "(optional) cluster uuid of the cluster on which we created the support case for.\n",
+            "description": "(optional) cluster uuid of the cluster on which we created the support case for.",
             "type": "string"
           },
           "description": {
-            "description": "Support case desciption.\n",
+            "description": "Support case desciption.",
             "type": "string"
           },
           "severity": {
-            "description": "Support case severity.\n",
+            "description": "Support case severity.",
             "type": "string"
           },
           "status": {
-            "description": "Support case status.\n",
+            "description": "Support case status.",
             "type": "string"
           },
           "subscription_id": {
-            "description": "(optional) subscription id of the subscription on which we created the support case for.\n",
+            "description": "(optional) subscription id of the subscription on which we created the support case for.",
             "type": "string"
           },
           "summary": {
-            "description": "Support case title.\n",
+            "description": "Support case title.",
             "type": "string"
           }
         }
       },
       "TemplateParameter": {
-        "description": "A template parameter is used in an email to replace placeholder content with\nvalues specific to the email recipient.\n",
+        "description": "A template parameter is used in an email to replace placeholder content with\nvalues specific to the email recipient.",
         "properties": {
           "content": {
-            "description": "The content that will replace the template parameter in the email\n",
+            "description": "The content that will replace the template parameter in the email",
             "type": "string"
           },
           "name": {
-            "description": "Name of the value to be replaced\n",
+            "description": "Name of the value to be replaced",
             "type": "string"
           }
         }
@@ -5600,7 +5600,7 @@
       "TokenAuthorizationRequest": {
         "properties": {
           "authorization_token": {
-            "description": "The pull secret of a given account\n",
+            "description": "The pull secret of a given account",
             "type": "string"
           }
         }
@@ -5627,28 +5627,28 @@
         "type": "object",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will always be 'Error'\n",
+            "description": "Indicates the type of this object. Will always be 'Error'",
             "type": "string"
           },
           "id": {
-            "description": "Numeric identifier of the error.\n",
+            "description": "Numeric identifier of the error.",
             "type": "integer",
             "format": "int32"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "code": {
-            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.\n",
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
             "type": "string"
           },
           "reason": {
-            "description": "Human readable description of the error.\n",
+            "description": "Human readable description of the error.",
             "type": "string"
           },
           "details": {
-            "description": "Extra information about the error.\n",
+            "description": "Extra information about the error.",
             "type": "object",
             "additionalProperties": "true"
           }

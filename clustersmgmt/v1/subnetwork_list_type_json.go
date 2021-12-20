@@ -31,7 +31,10 @@ import (
 func MarshalSubnetworkList(list []*Subnetwork, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeSubnetworkList(list, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 

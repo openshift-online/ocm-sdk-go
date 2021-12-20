@@ -32,7 +32,10 @@ import (
 func MarshalServiceDependency(object *ServiceDependency, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeServiceDependency(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -134,7 +137,6 @@ func writeServiceDependency(object *ServiceDependency, stream *jsoniter.Stream) 
 		}
 		stream.WriteObjectField("updated_at")
 		stream.WriteString((object.updatedAt).Format(time.RFC3339))
-		count++
 	}
 	stream.WriteObjectEnd()
 }

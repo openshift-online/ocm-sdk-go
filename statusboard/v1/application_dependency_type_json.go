@@ -32,7 +32,10 @@ import (
 func MarshalApplicationDependency(object *ApplicationDependency, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeApplicationDependency(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -134,7 +137,6 @@ func writeApplicationDependency(object *ApplicationDependency, stream *jsoniter.
 		}
 		stream.WriteObjectField("updated_at")
 		stream.WriteString((object.updatedAt).Format(time.RFC3339))
-		count++
 	}
 	stream.WriteObjectEnd()
 }

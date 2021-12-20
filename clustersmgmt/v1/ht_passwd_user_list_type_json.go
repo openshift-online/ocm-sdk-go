@@ -31,7 +31,10 @@ import (
 func MarshalHTPasswdUserList(list []*HTPasswdUser, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeHTPasswdUserList(list, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 

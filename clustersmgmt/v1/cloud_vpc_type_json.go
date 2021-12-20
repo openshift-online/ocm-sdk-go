@@ -31,7 +31,10 @@ import (
 func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeCloudVPC(object, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
@@ -65,7 +68,6 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("subnets")
 		writeStringList(object.subnets, stream)
-		count++
 	}
 	stream.WriteObjectEnd()
 }

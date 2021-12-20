@@ -26,9 +26,9 @@ model_version:=v0.0.160
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=v0.0.44
+metamodel_version:=v0.0.46
 metamodel_url:=https://github.com/openshift-online/ocm-api-metamodel/releases/download/$(metamodel_version)/metamodel-linux-amd64
-metamodel_sum:=02fe6fdca4b153e96efe01a913dcaa0ddb09d555fbdedcf65963901a8e71de4e
+metamodel_sum:=4177653d91c1279b43f6ae301afd4a3c8a53d330d312f5d7ef22b58f9c656cda
 
 .PHONY: examples
 examples:
@@ -89,7 +89,6 @@ metamodel:
 .PHONY: clean
 clean:
 	rm -rf \
-		.gobin \
 		metamodel \
 		model \
 		$(NULL)

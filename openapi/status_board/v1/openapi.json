@@ -25,10 +25,10 @@
   "paths": {
     "/api/status_board/v1": {
       "get": {
-        "description": "Retrieves the version metadata.\n",
+        "description": "Retrieves the version metadata.",
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -38,7 +38,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -63,7 +63,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -73,7 +73,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -85,7 +85,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of application dependencies.\n",
+        "description": "Retrieves the list of application dependencies.",
         "parameters": [
           {
             "name": "order_by",
@@ -113,7 +113,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -143,7 +143,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -168,10 +168,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -194,7 +194,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -204,7 +204,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -236,7 +236,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -246,7 +246,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -271,7 +271,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -281,7 +281,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -293,7 +293,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of applications.\n",
+        "description": "Retrieves the list of applications.",
         "parameters": [
           {
             "name": "fullname",
@@ -328,7 +328,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -358,7 +358,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -383,10 +383,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -409,7 +409,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -419,7 +419,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -451,7 +451,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -461,7 +461,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -495,7 +495,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -505,7 +505,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -517,7 +517,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of services.\n",
+        "description": "Retrieves the list of services.",
         "parameters": [
           {
             "name": "application_id",
@@ -566,7 +566,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -596,7 +596,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -628,10 +628,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -661,7 +661,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -671,7 +671,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -710,7 +710,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -720,7 +720,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -761,7 +761,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -771,7 +771,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -783,7 +783,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of statuses.\n",
+        "description": "Retrieves the list of statuses.",
         "parameters": [
           {
             "name": "application_id",
@@ -834,7 +834,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -864,7 +864,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -903,10 +903,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -943,7 +943,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -953,7 +953,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -999,7 +999,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1009,7 +1009,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1034,7 +1034,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1044,7 +1044,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1056,7 +1056,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of peer dependencies.\n",
+        "description": "Retrieves the list of peer dependencies.",
         "parameters": [
           {
             "name": "order_by",
@@ -1084,7 +1084,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1114,7 +1114,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1139,10 +1139,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1165,7 +1165,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1175,7 +1175,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1207,7 +1207,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1217,7 +1217,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1242,7 +1242,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1252,7 +1252,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1264,7 +1264,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of products.\n",
+        "description": "Retrieves the list of products.",
         "parameters": [
           {
             "name": "fullname",
@@ -1299,7 +1299,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1329,7 +1329,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1354,10 +1354,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1380,7 +1380,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1390,7 +1390,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1422,7 +1422,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1432,7 +1432,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1466,7 +1466,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1476,7 +1476,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1488,7 +1488,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of applications.\n",
+        "description": "Retrieves the list of applications.",
         "parameters": [
           {
             "name": "product_id",
@@ -1530,7 +1530,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1560,7 +1560,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1592,10 +1592,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1625,7 +1625,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1635,7 +1635,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1674,7 +1674,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1684,7 +1684,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1725,7 +1725,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1735,7 +1735,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1747,7 +1747,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of services.\n",
+        "description": "Retrieves the list of services.",
         "parameters": [
           {
             "name": "product_id",
@@ -1803,7 +1803,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1833,7 +1833,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1872,10 +1872,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1912,7 +1912,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1922,7 +1922,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1968,7 +1968,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1978,7 +1978,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2026,7 +2026,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2036,7 +2036,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2048,7 +2048,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of statuses.\n",
+        "description": "Retrieves the list of statuses.",
         "parameters": [
           {
             "name": "product_id",
@@ -2106,7 +2106,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2136,7 +2136,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2182,10 +2182,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2229,7 +2229,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2239,7 +2239,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2292,7 +2292,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2302,7 +2302,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2336,7 +2336,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2346,7 +2346,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2358,7 +2358,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of statuses.\n",
+        "description": "Retrieves the list of statuses.",
         "parameters": [
           {
             "name": "product_id",
@@ -2402,7 +2402,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2432,7 +2432,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2464,10 +2464,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2497,7 +2497,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2507,7 +2507,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2546,7 +2546,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2556,7 +2556,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2581,7 +2581,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2591,7 +2591,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2603,7 +2603,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of services.\n",
+        "description": "Retrieves the list of services.",
         "parameters": [
           {
             "name": "fullname",
@@ -2645,7 +2645,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2675,7 +2675,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2700,10 +2700,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2726,7 +2726,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2736,7 +2736,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2768,7 +2768,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2778,7 +2778,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2812,7 +2812,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2822,7 +2822,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2834,7 +2834,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of statuses.\n",
+        "description": "Retrieves the list of statuses.",
         "parameters": [
           {
             "name": "service_id",
@@ -2878,7 +2878,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2908,7 +2908,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2940,10 +2940,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2973,7 +2973,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2983,7 +2983,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3022,7 +3022,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3032,7 +3032,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3057,7 +3057,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3067,7 +3067,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3079,7 +3079,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the list of statuses.\n",
+        "description": "Retrieves the list of statuses.",
         "parameters": [
           {
             "name": "created_after",
@@ -3116,7 +3116,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3146,7 +3146,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3171,10 +3171,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Success.\n"
+            "description": "Success."
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3197,7 +3197,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3207,7 +3207,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3239,7 +3239,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success.\n",
+            "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3249,7 +3249,7 @@
             }
           },
           "default": {
-            "description": "Error.\n",
+            "description": "Error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3265,259 +3265,259 @@
   "components": {
     "schemas": {
       "Metadata": {
-        "description": "Version metadata.\n",
+        "description": "Version metadata.",
         "properties": {
           "server_version": {
-            "description": "Version of the server.\n",
+            "description": "Version of the server.",
             "type": "string"
           }
         }
       },
       "Application": {
-        "description": "Definition of a Status Board application.\n",
+        "description": "Definition of a Status Board application.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Application' if this is a complete object or 'ApplicationLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Application' if this is a complete object or 'ApplicationLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "created_at": {
-            "description": "Object creation timestamp.\n",
+            "description": "Object creation timestamp.",
             "type": "string",
             "format": "date-time"
           },
           "fullname": {
-            "description": "The full name of the application. \n",
+            "description": "The full name of the application. ",
             "type": "string"
           },
           "metadata": {
-            "description": "Miscellaneous metadata about the application.\n",
+            "description": "Miscellaneous metadata about the application.",
             "type": "object"
           },
           "name": {
-            "description": "The name of the application. \n",
+            "description": "The name of the application. ",
             "type": "string"
           },
           "owners": {
-            "description": "The application owners (name and email)\n",
+            "description": "The application owners (name and email)",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Owner"
             }
           },
           "product": {
-            "description": "The group ID that the application belongs to. \n",
+            "description": "The group ID that the application belongs to. ",
             "$ref": "#/components/schemas/Product"
           },
           "updated_at": {
-            "description": "Object modification timestamp.\n",
+            "description": "Object modification timestamp.",
             "type": "string",
             "format": "date-time"
           }
         }
       },
       "ApplicationDependency": {
-        "description": "Definition of a Status Board application dependency.\n",
+        "description": "Definition of a Status Board application dependency.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'ApplicationDependency' if this is a complete object or 'ApplicationDependencyLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'ApplicationDependency' if this is a complete object or 'ApplicationDependencyLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "application": {
-            "description": "The parent Application of the dependency.\n",
+            "description": "The parent Application of the dependency.",
             "$ref": "#/components/schemas/Application"
           },
           "created_at": {
-            "description": "Object creation timestamp.\n",
+            "description": "Object creation timestamp.",
             "type": "string",
             "format": "date-time"
           },
           "metadata": {
-            "description": "Miscellaneous metadata about the application.\n",
+            "description": "Miscellaneous metadata about the application.",
             "type": "object"
           },
           "name": {
-            "description": "The name of the application. \n",
+            "description": "The name of the application. ",
             "type": "string"
           },
           "owners": {
-            "description": "The application dependency owners (name and email)\n",
+            "description": "The application dependency owners (name and email)",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Owner"
             }
           },
           "service": {
-            "description": "The Service associated with the dependency.\n",
+            "description": "The Service associated with the dependency.",
             "$ref": "#/components/schemas/Service"
           },
           "type": {
-            "description": "The type of application dependency, e.g. soft or hard.\n",
+            "description": "The type of application dependency, e.g. soft or hard.",
             "type": "string"
           },
           "updated_at": {
-            "description": "Object modification timestamp.\n",
+            "description": "Object modification timestamp.",
             "type": "string",
             "format": "date-time"
           }
         }
       },
       "Owner": {
-        "description": "Definition of a Status Board owner.\n",
+        "description": "Definition of a Status Board owner.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Owner' if this is a complete object or 'OwnerLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Owner' if this is a complete object or 'OwnerLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "email": {
-            "description": "The owner's email address.\n",
+            "description": "The owner's email address.",
             "type": "string"
           },
           "username": {
-            "description": "The owner's username.\n",
+            "description": "The owner's username.",
             "type": "string"
           }
         }
       },
       "PeerDependency": {
-        "description": "Definition of a Status Board peer dependency.\n",
+        "description": "Definition of a Status Board peer dependency.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'PeerDependency' if this is a complete object or 'PeerDependencyLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'PeerDependency' if this is a complete object or 'PeerDependencyLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "created_at": {
-            "description": "Object creation timestamp.\n",
+            "description": "Object creation timestamp.",
             "type": "string",
             "format": "date-time"
           },
           "metadata": {
-            "description": "Miscellaneous metadata about the peer dependency.\n",
+            "description": "Miscellaneous metadata about the peer dependency.",
             "type": "object"
           },
           "name": {
-            "description": "The name of the peer dependency.\n",
+            "description": "The name of the peer dependency.",
             "type": "string"
           },
           "owners": {
-            "description": "The peer dependency owners (name and email)\n",
+            "description": "The peer dependency owners (name and email)",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Owner"
             }
           },
           "services": {
-            "description": "Services associated with the peer dependency.\n",
+            "description": "Services associated with the peer dependency.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Service"
             }
           },
           "updated_at": {
-            "description": "Object modification timestamp.\n",
+            "description": "Object modification timestamp.",
             "type": "string",
             "format": "date-time"
           }
         }
       },
       "Product": {
-        "description": "Definition of a Status Board product.\n",
+        "description": "Definition of a Status Board product.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Product' if this is a complete object or 'ProductLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Product' if this is a complete object or 'ProductLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "created_at": {
-            "description": "Object creation timestamp.\n",
+            "description": "Object creation timestamp.",
             "type": "string",
             "format": "date-time"
           },
           "fullname": {
-            "description": "The fullname of the product.\n",
+            "description": "The fullname of the product.",
             "type": "string"
           },
           "metadata": {
-            "description": "Miscellaneous data about the product.\n",
+            "description": "Miscellaneous data about the product.",
             "type": "object"
           },
           "name": {
-            "description": "The name of the product.\n",
+            "description": "The name of the product.",
             "type": "string"
           },
           "owners": {
-            "description": "The product owners (name and email).\n",
+            "description": "The product owners (name and email).",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Owner"
             }
           },
           "updated_at": {
-            "description": "Object modification timestamp.\n",
+            "description": "Object modification timestamp.",
             "type": "string",
             "format": "date-time"
           }
         }
       },
       "Service": {
-        "description": "Definition of a Status Board Service.\n",
+        "description": "Definition of a Status Board Service.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Service' if this is a complete object or 'ServiceLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Service' if this is a complete object or 'ServiceLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "application": {
-            "description": "The Application associated with the Service\n",
+            "description": "The Application associated with the Service",
             "$ref": "#/components/schemas/Application"
           },
           "created_at": {
-            "description": "Object creation timestamp.\n",
+            "description": "Object creation timestamp.",
             "type": "string",
             "format": "date-time"
           },
@@ -3535,7 +3535,7 @@
             "type": "object"
           },
           "name": {
-            "description": "The name of the Service\n",
+            "description": "The name of the Service",
             "type": "string"
           },
           "owners": {
@@ -3561,100 +3561,100 @@
             "type": "string"
           },
           "updated_at": {
-            "description": "Object modification timestamp.\n",
+            "description": "Object modification timestamp.",
             "type": "string",
             "format": "date-time"
           }
         }
       },
       "ServiceDependency": {
-        "description": "Definition of a Status Board service dependency.\n",
+        "description": "Definition of a Status Board service dependency.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'ServiceDependency' if this is a complete object or 'ServiceDependencyLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'ServiceDependency' if this is a complete object or 'ServiceDependencyLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "child_service": {
-            "description": "The service dependency's child service\n",
+            "description": "The service dependency's child service",
             "$ref": "#/components/schemas/Service"
           },
           "created_at": {
-            "description": "Object creation timestamp.\n",
+            "description": "Object creation timestamp.",
             "type": "string",
             "format": "date-time"
           },
           "metadata": {
-            "description": "Miscellaneous metadata about the service dependency.\n",
+            "description": "Miscellaneous metadata about the service dependency.",
             "type": "object"
           },
           "name": {
-            "description": "The name of the service dependency.\n",
+            "description": "The name of the service dependency.",
             "type": "string"
           },
           "owners": {
-            "description": "The service dependency owners (name and email)\n",
+            "description": "The service dependency owners (name and email)",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Owner"
             }
           },
           "parent_service": {
-            "description": "The service dependency's parent service\n",
+            "description": "The service dependency's parent service",
             "$ref": "#/components/schemas/Service"
           },
           "type": {
-            "description": "The type of service dependency, e.g. soft or hard.\n",
+            "description": "The type of service dependency, e.g. soft or hard.",
             "type": "string"
           },
           "updated_at": {
-            "description": "Object modification timestamp.\n",
+            "description": "Object modification timestamp.",
             "type": "string",
             "format": "date-time"
           }
         }
       },
       "Status": {
-        "description": "Definition of a Status Board status.\n",
+        "description": "Definition of a Status Board status.",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will be 'Status' if this is a complete object or 'StatusLink' if it is just a link.\n",
+            "description": "Indicates the type of this object. Will be 'Status' if this is a complete object or 'StatusLink' if it is just a link.",
             "type": "string"
           },
           "id": {
-            "description": "Unique identifier of the object.\n",
+            "description": "Unique identifier of the object.",
             "type": "string"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "created_at": {
-            "description": "Object creation timestamp.\n",
+            "description": "Object creation timestamp.",
             "type": "string",
             "format": "date-time"
           },
           "metadata": {
-            "description": "Miscellaneous metadata about the application.\n",
+            "description": "Miscellaneous metadata about the application.",
             "type": "object"
           },
           "service": {
-            "description": "The associated service ID.\n",
+            "description": "The associated service ID.",
             "$ref": "#/components/schemas/Service"
           },
           "status": {
-            "description": "A status message for the given service.\n",
+            "description": "A status message for the given service.",
             "type": "string"
           },
           "updated_at": {
-            "description": "Object modification timestamp.\n",
+            "description": "Object modification timestamp.",
             "type": "string",
             "format": "date-time"
           }
@@ -3664,28 +3664,28 @@
         "type": "object",
         "properties": {
           "kind": {
-            "description": "Indicates the type of this object. Will always be 'Error'\n",
+            "description": "Indicates the type of this object. Will always be 'Error'",
             "type": "string"
           },
           "id": {
-            "description": "Numeric identifier of the error.\n",
+            "description": "Numeric identifier of the error.",
             "type": "integer",
             "format": "int32"
           },
           "href": {
-            "description": "Self link.\n",
+            "description": "Self link.",
             "type": "string"
           },
           "code": {
-            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.\n",
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
             "type": "string"
           },
           "reason": {
-            "description": "Human readable description of the error.\n",
+            "description": "Human readable description of the error.",
             "type": "string"
           },
           "details": {
-            "description": "Extra information about the error.\n",
+            "description": "Extra information about the error.",
             "type": "object",
             "additionalProperties": "true"
           }

@@ -31,7 +31,10 @@ import (
 func MarshalVersionGateList(list []*VersionGate, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
 	writeVersionGateList(list, stream)
-	stream.Flush()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
 	return stream.Error
 }
 
