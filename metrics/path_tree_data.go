@@ -210,6 +210,9 @@ var pathTreeData = `{
               "-": {
                 "state": null
               }
+            },
+            "version_gate_agreements": {
+              "-": null
             }
           }
         },
