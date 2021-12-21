@@ -30,6 +30,11 @@ import (
 // VersionGatesServer represents the interface the manages the 'version_gates' resource.
 type VersionGatesServer interface {
 
+	// Add handles a request for the 'add' method.
+	//
+	// Adds a new version gate
+	Add(ctx context.Context, request *VersionGatesAddServerRequest, response *VersionGatesAddServerResponse) error
+
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves a list of version gates.
@@ -39,6 +44,54 @@ type VersionGatesServer interface {
 	//
 	// Reference to the resource that manages a specific version gate.
 	VersionGate(id string) VersionGateServer
+}
+
+// VersionGatesAddServerRequest is the request for the 'add' method.
+type VersionGatesAddServerRequest struct {
+	body *VersionGate
+}
+
+// Body returns the value of the 'body' parameter.
+//
+// Details of the version gate
+func (r *VersionGatesAddServerRequest) Body() *VersionGate {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+// Details of the version gate
+func (r *VersionGatesAddServerRequest) GetBody() (value *VersionGate, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// VersionGatesAddServerResponse is the response for the 'add' method.
+type VersionGatesAddServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *VersionGate
+}
+
+// Body sets the value of the 'body' parameter.
+//
+// Details of the version gate
+func (r *VersionGatesAddServerResponse) Body(value *VersionGate) *VersionGatesAddServerResponse {
+	r.body = value
+	return r
+}
+
+// Status sets the status code.
+func (r *VersionGatesAddServerResponse) Status(value int) *VersionGatesAddServerResponse {
+	r.status = value
+	return r
 }
 
 // VersionGatesListServerRequest is the request for the 'list' method.
@@ -236,6 +289,9 @@ func (r *VersionGatesListServerResponse) Status(value int) *VersionGatesListServ
 func dispatchVersionGates(w http.ResponseWriter, r *http.Request, server VersionGatesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
+		case "POST":
+			adaptVersionGatesAddRequest(w, r, server)
+			return
 		case "GET":
 			adaptVersionGatesListRequest(w, r, server)
 			return
@@ -252,6 +308,41 @@ func dispatchVersionGates(w http.ResponseWriter, r *http.Request, server Version
 			return
 		}
 		dispatchVersionGate(w, r, target, segments[1:])
+	}
+}
+
+// adaptVersionGatesAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptVersionGatesAddRequest(w http.ResponseWriter, r *http.Request, server VersionGatesServer) {
+	request := &VersionGatesAddServerRequest{}
+	err := readVersionGatesAddRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &VersionGatesAddServerResponse{}
+	response.status = 201
+	err = server.Add(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeVersionGatesAddResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		return
 	}
 }
 
