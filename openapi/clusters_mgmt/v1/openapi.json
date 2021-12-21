@@ -6461,6 +6461,49 @@
       }
     },
     "/api/clusters_mgmt/v1/versions/{version_id}/gates": {
+      "post": {
+        "description": "Adds a new version gate",
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionGate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionGate"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "description": "Retrieves a list of version gates.",
         "parameters": [

@@ -26,6 +26,22 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
+func readVersionGatesAddRequest(request *VersionGatesAddServerRequest, r *http.Request) error {
+	var err error
+	request.body, err = UnmarshalVersionGate(r.Body)
+	return err
+}
+func writeVersionGatesAddRequest(request *VersionGatesAddRequest, writer io.Writer) error {
+	return MarshalVersionGate(request.body, writer)
+}
+func readVersionGatesAddResponse(response *VersionGatesAddResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalVersionGate(reader)
+	return err
+}
+func writeVersionGatesAddResponse(response *VersionGatesAddServerResponse, w http.ResponseWriter) error {
+	return MarshalVersionGate(response.body, w)
+}
 func readVersionGatesListRequest(request *VersionGatesListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()
