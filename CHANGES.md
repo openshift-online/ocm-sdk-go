@@ -3,9 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.230 Dec 21 2021
+
+- Update to model 0.0.163:
+  - Add support for deleting version gate.
+
 ## 0.1.229 Dec 21 2021
 
-- Update to model 0.0.161:
+- Update to model 0.0.162:
   - Add support for adding version gate.
 
 ## 0.1.228 Dec 20 2021

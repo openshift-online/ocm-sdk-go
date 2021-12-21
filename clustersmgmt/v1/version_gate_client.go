@@ -47,6 +47,16 @@ func NewVersionGateClient(transport http.RoundTripper, path string) *VersionGate
 	}
 }
 
+// Delete creates a request for the 'delete' method.
+//
+// Deletes the version gate.
+func (c *VersionGateClient) Delete() *VersionGateDeleteRequest {
+	return &VersionGateDeleteRequest{
+		transport: c.transport,
+		path:      c.path,
+	}
+}
+
 // Get creates a request for the 'get' method.
 //
 // Retrieves the details of the version gate.
@@ -176,6 +186,100 @@ func (c *VersionGateClient) Poll() *VersionGatePollRequest {
 	return &VersionGatePollRequest{
 		request: c.Get(),
 	}
+}
+
+// VersionGateDeleteRequest is the request for the 'delete' method.
+type VersionGateDeleteRequest struct {
+	transport http.RoundTripper
+	path      string
+	query     url.Values
+	header    http.Header
+}
+
+// Parameter adds a query parameter.
+func (r *VersionGateDeleteRequest) Parameter(name string, value interface{}) *VersionGateDeleteRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *VersionGateDeleteRequest) Header(name string, value interface{}) *VersionGateDeleteRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *VersionGateDeleteRequest) Send() (result *VersionGateDeleteResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *VersionGateDeleteRequest) SendContext(ctx context.Context) (result *VersionGateDeleteResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.CopyHeader(r.header)
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: "DELETE",
+		URL:    uri,
+		Header: header,
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = &VersionGateDeleteResponse{}
+	result.status = response.StatusCode
+	result.header = response.Header
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalErrorStatus(response.Body, result.status)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	return
+}
+
+// VersionGateDeleteResponse is the response for the 'delete' method.
+type VersionGateDeleteResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+}
+
+// Status returns the response status code.
+func (r *VersionGateDeleteResponse) Status() int {
+	if r == nil {
+		return 0
+	}
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *VersionGateDeleteResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
+	return r.header
+}
+
+// Error returns the response error.
+func (r *VersionGateDeleteResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
+	return r.err
 }
 
 // VersionGateGetRequest is the request for the 'get' method.
