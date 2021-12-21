@@ -30,10 +30,31 @@ import (
 // VersionGateServer represents the interface the manages the 'version_gate' resource.
 type VersionGateServer interface {
 
+	// Delete handles a request for the 'delete' method.
+	//
+	// Deletes the version gate.
+	Delete(ctx context.Context, request *VersionGateDeleteServerRequest, response *VersionGateDeleteServerResponse) error
+
 	// Get handles a request for the 'get' method.
 	//
 	// Retrieves the details of the version gate.
 	Get(ctx context.Context, request *VersionGateGetServerRequest, response *VersionGateGetServerResponse) error
+}
+
+// VersionGateDeleteServerRequest is the request for the 'delete' method.
+type VersionGateDeleteServerRequest struct {
+}
+
+// VersionGateDeleteServerResponse is the response for the 'delete' method.
+type VersionGateDeleteServerResponse struct {
+	status int
+	err    *errors.Error
+}
+
+// Status sets the status code.
+func (r *VersionGateDeleteServerResponse) Status(value int) *VersionGateDeleteServerResponse {
+	r.status = value
+	return r
 }
 
 // VersionGateGetServerRequest is the request for the 'get' method.
@@ -67,6 +88,9 @@ func (r *VersionGateGetServerResponse) Status(value int) *VersionGateGetServerRe
 func dispatchVersionGate(w http.ResponseWriter, r *http.Request, server VersionGateServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
+		case "DELETE":
+			adaptVersionGateDeleteRequest(w, r, server)
+			return
 		case "GET":
 			adaptVersionGateGetRequest(w, r, server)
 			return
@@ -78,6 +102,41 @@ func dispatchVersionGate(w http.ResponseWriter, r *http.Request, server VersionG
 	switch segments[0] {
 	default:
 		errors.SendNotFound(w, r)
+		return
+	}
+}
+
+// adaptVersionGateDeleteRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptVersionGateDeleteRequest(w http.ResponseWriter, r *http.Request, server VersionGateServer) {
+	request := &VersionGateDeleteServerRequest{}
+	err := readVersionGateDeleteRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &VersionGateDeleteServerResponse{}
+	response.status = 204
+	err = server.Delete(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeVersionGateDeleteResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
 		return
 	}
 }

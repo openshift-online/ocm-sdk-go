@@ -24,6 +24,18 @@ import (
 	"net/http"
 )
 
+func readVersionGateDeleteRequest(request *VersionGateDeleteServerRequest, r *http.Request) error {
+	return nil
+}
+func writeVersionGateDeleteRequest(request *VersionGateDeleteRequest, writer io.Writer) error {
+	return nil
+}
+func readVersionGateDeleteResponse(response *VersionGateDeleteResponse, reader io.Reader) error {
+	return nil
+}
+func writeVersionGateDeleteResponse(response *VersionGateDeleteServerResponse, w http.ResponseWriter) error {
+	return nil
+}
 func readVersionGateGetRequest(request *VersionGateGetServerRequest, r *http.Request) error {
 	return nil
 }

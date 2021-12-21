@@ -6598,6 +6598,40 @@
       }
     },
     "/api/clusters_mgmt/v1/versions/{version_id}/gates/{version_gate_id}": {
+      "delete": {
+        "description": "Deletes the version gate.",
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version_gate_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "description": "Retrieves the details of the version gate.",
         "parameters": [
