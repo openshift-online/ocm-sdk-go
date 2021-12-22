@@ -9,10 +9,10 @@ require (
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/uuid v1.2.0
 	github.com/itchyny/gojq v0.12.5
-	github.com/jackc/pgconn v1.9.0
-	github.com/jackc/pgx/v4 v4.12.0
+	github.com/jackc/pgconn v1.10.1
+	github.com/jackc/pgx/v4 v4.14.1
 	github.com/json-iterator/go v1.1.10
-	github.com/lib/pq v1.10.2
+	github.com/lib/pq v1.10.4
 	github.com/microcosm-cc/bluemonday v1.0.16
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
