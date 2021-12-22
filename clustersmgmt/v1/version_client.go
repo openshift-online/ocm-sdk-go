@@ -23,7 +23,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -56,16 +55,6 @@ func (c *VersionClient) Get() *VersionGetRequest {
 		transport: c.transport,
 		path:      c.path,
 	}
-}
-
-// Gates returns the target 'version_gates' resource.
-//
-// Reference to version gates.
-func (c *VersionClient) Gates() *VersionGatesClient {
-	return NewVersionGatesClient(
-		c.transport,
-		path.Join(c.path, "gates"),
-	)
 }
 
 // VersionPollRequest is the request for the Poll method.
