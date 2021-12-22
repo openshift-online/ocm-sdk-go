@@ -11,7 +11,7 @@ require (
 	github.com/itchyny/gojq v0.12.5
 	github.com/jackc/pgconn v1.10.1
 	github.com/jackc/pgx/v4 v4.14.1
-	github.com/json-iterator/go v1.1.10
+	github.com/json-iterator/go v1.1.12
 	github.com/lib/pq v1.10.4
 	github.com/microcosm-cc/bluemonday v1.0.16
 	github.com/onsi/ginkgo v1.16.5
