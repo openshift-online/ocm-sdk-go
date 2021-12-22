@@ -8,6 +8,10 @@ SDK.
 - Update to model 0.0.165:
   - Move version gates to be top level resource.
   - Add version raw id prefix to version gates.
+- Update version of JSON iterator.
+- Update SQL drivers.
+- Don't use github.com/ghodss/yaml
+- Require Go 1.16
 
 ## 0.1.230 Dec 21 2021
 
