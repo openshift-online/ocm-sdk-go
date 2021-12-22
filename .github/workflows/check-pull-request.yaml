@@ -29,7 +29,6 @@ jobs:
     strategy:
       matrix:
         go:
-        - 1.15
         - 1.16
         - 1.17
     steps:
@@ -43,14 +42,7 @@ jobs:
 
     - name: Setup Go tools
       run: |
-        # The support to specify a version in the `go install` command was
-        # added in Go 1.16, so we need to check the version and use `go get`
-        # if not available yet.
-        command="install"
-        if [ "${{ matrix.go }}" = "1.15" ]; then
-          command="get"
-        fi
-        go "${command}" github.com/onsi/ginkgo/ginkgo@v1.16.4
+        go install github.com/onsi/ginkgo/ginkgo@v1.16.5
 
     - name: Run the tests
       run: make tests
