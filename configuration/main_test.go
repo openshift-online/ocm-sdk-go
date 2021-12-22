@@ -19,8 +19,8 @@ package configuration
 import (
 	"testing"
 
-	. "github.com/onsi/ginkgo" // nolint
-	. "github.com/onsi/gomega" // nolint
+	. "github.com/onsi/ginkgo/v2" // nolint
+	. "github.com/onsi/gomega"    // nolint
 )
 
 func TestConfiguration(t *testing.T) {

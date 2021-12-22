@@ -42,7 +42,7 @@ jobs:
 
     - name: Setup Go tools
       run: |
-        go install github.com/onsi/ginkgo/ginkgo@v1.16.5
+        go install github.com/onsi/ginkgo/v2/ginkgo@v2.0.0
 
     - name: Run the tests
       run: make tests
