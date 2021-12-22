@@ -164,7 +164,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("my_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
@@ -174,8 +174,8 @@ var _ = Describe("Flag behaviour", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 
-		It("It is quicly raised ", func() {
-			time.Sleep(20 * time.Millisecond)
+		It("It is quickly raised ", func() {
+			time.Sleep(40 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -212,7 +212,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("my_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -223,18 +223,18 @@ var _ = Describe("Flag behaviour", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 
-		It("It isn't quicly raised", func() {
-			time.Sleep(20 * time.Millisecond)
+		It("It isn't quickly raised", func() {
+			time.Sleep(40 * time.Millisecond)
 			Expect(flag.Raised()).To(BeFalse())
 		})
 
 		It("It isn't raised while the previous holder can still renew", func() {
-			time.Sleep(50 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 			Expect(flag.Raised()).To(BeFalse())
 		})
 
 		It("It is raised when the previous holder fails to renew", func() {
-			time.Sleep(150 * time.Millisecond)
+			time.Sleep(300 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -271,7 +271,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("my_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -282,8 +282,8 @@ var _ = Describe("Flag behaviour", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 
-		It("It is quicly raised", func() {
-			time.Sleep(20 * time.Millisecond)
+		It("It is quickly raised", func() {
+			time.Sleep(40 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -319,7 +319,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("my_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -330,8 +330,8 @@ var _ = Describe("Flag behaviour", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 
-		It("It is quicly raised", func() {
-			time.Sleep(20 * time.Millisecond)
+		It("It is quickly raised", func() {
+			time.Sleep(40 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -368,7 +368,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("my_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -380,7 +380,7 @@ var _ = Describe("Flag behaviour", func() {
 		})
 
 		It("It isn't quickly raised", func() {
-			time.Sleep(20 * time.Millisecond)
+			time.Sleep(40 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -395,14 +395,14 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("first_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
 
 			// Give the first process some time to get hold of the flag and then check
 			// that it did:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(first.Raised()).To(BeTrue())
 
 			// Create the second process:
@@ -411,7 +411,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("second_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -422,7 +422,7 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Give the second process some time to try to get hold of the flag and
 			// check that it didn't:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(second.Raised()).To(BeFalse())
 
 			// Close the first process so that it will fail to renew the flag:
@@ -431,7 +431,7 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Allow time for the second process to get hold of the flag and check that
 			// it did:
-			time.Sleep(200 * time.Millisecond)
+			time.Sleep(400 * time.Millisecond)
 			Expect(second.Raised()).To(BeTrue())
 		})
 	})
@@ -448,7 +448,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(altHandle).
 				Name("my_flag").
 				Process("first_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -459,7 +459,7 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Give the first process some time to get hold of the flag and then check
 			// that it did:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(first.Raised()).To(BeTrue())
 
 			// Create the second process:
@@ -468,7 +468,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("second_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -479,7 +479,7 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Give the second process some time to try to get hold of the flag and then
 			// check that it didn't:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(second.Raised()).To(BeFalse())
 
 			// Close the database connection of the first process:
@@ -488,7 +488,7 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Allow time for the second process to get hold of the flag and then check
 			// that it did:
-			time.Sleep(200 * time.Millisecond)
+			time.Sleep(400 * time.Millisecond)
 			Expect(second.Raised()).To(BeTrue())
 		})
 	})
@@ -503,7 +503,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("my_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -513,7 +513,7 @@ var _ = Describe("Flag behaviour", func() {
 			}()
 
 			// Give the process some time to get hold of the flag and check that it did:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 
 			// Steal the flag updating the database directly:
@@ -531,7 +531,7 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Give the process some time to detect the situation and then check that it
 			// lowers the flag:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(flag.Raised()).To(BeFalse())
 		})
 	})
@@ -546,7 +546,7 @@ var _ = Describe("Flag behaviour", func() {
 				Handle(dbHandle).
 				Name("my_flag").
 				Process("my_process").
-				Interval(100 * time.Millisecond).
+				Interval(200 * time.Millisecond).
 				Jitter(0).
 				Build(ctx)
 			Expect(err).ToNot(HaveOccurred())
@@ -557,7 +557,7 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Give the process some time to get hold of the flag and then check that
 			// it did:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 
 			// Force another holder updating the database directly:
@@ -575,12 +575,12 @@ var _ = Describe("Flag behaviour", func() {
 
 			// Give the process some time to detect the situation and check that it
 			// lowers the flag:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(flag.Raised()).To(BeFalse())
 
 			// Give it more time, so that the forced holder fails to renew and then check
 			// that it recovers and raises it:
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(200 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
@@ -619,7 +619,7 @@ var _ = Describe("Flag metrics enabled", func() {
 			Handle(dbHandle).
 			Name("my_flag").
 			Process("first_process").
-			Interval(100 * time.Millisecond).
+			Interval(200 * time.Millisecond).
 			Jitter(0).
 			MetricsSubsystem("my").
 			MetricsRegisterer(metricsServer.Registry()).
@@ -631,7 +631,7 @@ var _ = Describe("Flag metrics enabled", func() {
 		}()
 
 		// Give it time to raise:
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 		Expect(first.Raised()).To(BeTrue())
 
 		// Create the second process:
@@ -640,7 +640,7 @@ var _ = Describe("Flag metrics enabled", func() {
 			Handle(dbHandle).
 			Name("my_flag").
 			Process("second_process").
-			Interval(100 * time.Millisecond).
+			Interval(200 * time.Millisecond).
 			Jitter(0).
 			MetricsSubsystem("my").
 			MetricsRegisterer(metricsServer.Registry()).
@@ -652,7 +652,7 @@ var _ = Describe("Flag metrics enabled", func() {
 		}()
 
 		// Git it time to lower:
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 		Expect(second.Raised()).To(BeFalse())
 
 		// Verify the metrics:
