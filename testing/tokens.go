@@ -25,7 +25,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v4"
 
 	. "github.com/onsi/gomega" // nolint
 )
@@ -69,10 +69,12 @@ func MakeClaims() jwt.MapClaims {
 // token will be valid, and expire after that time. If the life is negative the token will be
 // already expired that time ago.
 func MakeTokenString(typ string, life time.Duration) string {
-	token := MakeTokenObject(jwt.MapClaims{
-		"typ": typ,
-		"exp": time.Now().Add(life).Unix(),
-	})
+	claims := jwt.MapClaims{}
+	claims["typ"] = typ
+	if life != 0 {
+		claims["exp"] = time.Now().Add(life).Unix()
+	}
+	token := MakeTokenObject(claims)
 	return token.Raw
 }
 

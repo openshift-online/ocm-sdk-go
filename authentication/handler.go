@@ -35,8 +35,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golang-jwt/jwt"
 	"gopkg.in/yaml.v3"
+	"github.com/golang-jwt/jwt/v4"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/logging"
