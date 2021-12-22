@@ -27,15 +27,16 @@ import (
 //
 // Representation of an _OpenShift_ version gate.
 type VersionGateBuilder struct {
-	bitmap_           uint32
-	id                string
-	href              string
-	creationTimestamp time.Time
-	description       string
-	documentationURL  string
-	label             string
-	value             string
-	stsOnly           bool
+	bitmap_            uint32
+	id                 string
+	href               string
+	creationTimestamp  time.Time
+	description        string
+	documentationURL   string
+	label              string
+	value              string
+	versionRawIDPrefix string
+	stsOnly            bool
 }
 
 // NewVersionGate creates a new builder of 'version_gate' objects.
@@ -122,6 +123,15 @@ func (b *VersionGateBuilder) Value(value string) *VersionGateBuilder {
 	return b
 }
 
+// VersionRawIDPrefix sets the value of the 'version_raw_ID_prefix' attribute to the given value.
+//
+//
+func (b *VersionGateBuilder) VersionRawIDPrefix(value string) *VersionGateBuilder {
+	b.versionRawIDPrefix = value
+	b.bitmap_ |= 512
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *VersionGateBuilder) Copy(object *VersionGate) *VersionGateBuilder {
 	if object == nil {
@@ -136,6 +146,7 @@ func (b *VersionGateBuilder) Copy(object *VersionGate) *VersionGateBuilder {
 	b.documentationURL = object.documentationURL
 	b.label = object.label
 	b.value = object.value
+	b.versionRawIDPrefix = object.versionRawIDPrefix
 	return b
 }
 
@@ -151,5 +162,6 @@ func (b *VersionGateBuilder) Build() (object *VersionGate, err error) {
 	object.documentationURL = b.documentationURL
 	object.label = b.label
 	object.value = b.value
+	object.versionRawIDPrefix = b.versionRawIDPrefix
 	return
 }

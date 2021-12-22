@@ -236,12 +236,11 @@ var pathTreeData = `{
         "provision_shards": {
           "-": null
         },
+        "version_gates": {
+          "-": null
+        },
         "versions": {
-          "-": {
-            "gates": {
-              "-": null
-            }
-          }
+          "-": null
         }
       }
     },

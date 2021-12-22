@@ -39,15 +39,16 @@ const VersionGateNilKind = "VersionGateNil"
 //
 // Representation of an _OpenShift_ version gate.
 type VersionGate struct {
-	bitmap_           uint32
-	id                string
-	href              string
-	creationTimestamp time.Time
-	description       string
-	documentationURL  string
-	label             string
-	value             string
-	stsOnly           bool
+	bitmap_            uint32
+	id                 string
+	href               string
+	creationTimestamp  time.Time
+	description        string
+	documentationURL   string
+	label              string
+	value              string
+	versionRawIDPrefix string
+	stsOnly            bool
 }
 
 // Kind returns the name of the type of the object.
@@ -243,6 +244,29 @@ func (o *VersionGate) GetValue() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
 		value = o.value
+	}
+	return
+}
+
+// VersionRawIDPrefix returns the value of the 'version_raw_ID_prefix' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// VersionRawIDPrefix represents the versions prefix that the gate applies to.
+func (o *VersionGate) VersionRawIDPrefix() string {
+	if o != nil && o.bitmap_&512 != 0 {
+		return o.versionRawIDPrefix
+	}
+	return ""
+}
+
+// GetVersionRawIDPrefix returns the value of the 'version_raw_ID_prefix' attribute and
+// a flag indicating if the attribute has a value.
+//
+// VersionRawIDPrefix represents the versions prefix that the gate applies to.
+func (o *VersionGate) GetVersionRawIDPrefix() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&512 != 0
+	if ok {
+		value = o.versionRawIDPrefix
 	}
 	return
 }

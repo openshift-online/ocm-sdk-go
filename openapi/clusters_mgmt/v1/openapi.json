@@ -6337,6 +6337,190 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/version_gates": {
+      "post": {
+        "description": "Adds a new version gate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionGate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionGate"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves a list of version gates.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\nan SQL statement, but using the names of the attributes of the version gate instead of\nthe names of the columns of a table. For example, in order to sort the version gates\ndescending by identifier the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the version gate instead of\nthe names of the columns of a table.\n\nIf the parameter isn't provided, or if the value is empty, then all the version gates\nthat the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of version gates.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VersionGate"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/version_gates/{version_gate_id}": {
+      "delete": {
+        "description": "Deletes the version gate.",
+        "parameters": [
+          {
+            "name": "version_gate_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the version gate.",
+        "parameters": [
+          {
+            "name": "version_gate_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionGate"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/versions": {
       "get": {
         "description": "Retrieves a list of versions.",
@@ -6443,220 +6627,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Version"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/clusters_mgmt/v1/versions/{version_id}/gates": {
-      "post": {
-        "description": "Adds a new version gate",
-        "parameters": [
-          {
-            "name": "version_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VersionGate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VersionGate"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "Retrieves a list of version gates.",
-        "parameters": [
-          {
-            "name": "version_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order",
-            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\nan SQL statement, but using the names of the attributes of the version gate instead of\nthe names of the columns of a table. For example, in order to sort the version gates\ndescending by identifier the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the version gate instead of\nthe names of the columns of a table.\n\nIf the parameter isn't provided, or if the value is empty, then all the version gates\nthat the user has permission to see will be returned.",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "description": "Retrieved list of version gates.",
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/VersionGate"
-                      }
-                    },
-                    "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.\n\nDefault value is `100`.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/clusters_mgmt/v1/versions/{version_id}/gates/{version_gate_id}": {
-      "delete": {
-        "description": "Deletes the version gate.",
-        "parameters": [
-          {
-            "name": "version_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "version_gate_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success."
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "Retrieves the details of the version gate.",
-        "parameters": [
-          {
-            "name": "version_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "version_gate_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VersionGate"
                 }
               }
             }
@@ -9429,6 +9399,10 @@
           },
           "value": {
             "description": "Value represents the required value of the label.",
+            "type": "string"
+          },
+          "version_raw_id_prefix": {
+            "description": "VersionRawIDPrefix represents the versions prefix that the gate applies to.",
             "type": "string"
           }
         }
