@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // This example shows how to update the collection of add-ons from an external source. To simplify
-// things that external source is a YAML document embedded in this source file, but it could be an
+// things that external source is a JSON document embedded in this source file, but it could be an
 // external file or an external collection of files.
 
 package main
@@ -24,8 +24,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-
-	"github.com/ghodss/yaml"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
@@ -62,10 +60,10 @@ func main() {
 	// Get the client for the collection of add-ons:
 	collection := connection.ClustersMgmt().V1().Addons()
 
-	// Load the sets of add-ons from the YAML file and from the API:
-	fileIndex, err := loadYAML(ctx, fileData)
+	// Load the sets of add-ons from the JSON file and from the API:
+	fileIndex, err := loadJSON(ctx, fileData)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't load YAML data: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Can't load JSON data: %v\n", err)
 		os.Exit(1)
 	}
 	apiIndex, err := loadAPI(ctx, collection)
@@ -142,14 +140,10 @@ func main() {
 	}
 }
 
-// loadYAML loads the add-ons from the YAML document and returns a map where the key is the
+// loadJSON loads the add-ons from the JSON document and returns a map where the key is the
 // identifier of the add-on and the value is the add-on object.
-func loadYAML(ctx context.Context, data []byte) (result map[string]*cmv1.AddOn, err error) {
-	// Load the list of add-ons from the API:
-	data, err = yaml.YAMLToJSON(data)
-	if err != nil {
-		return
-	}
+func loadJSON(ctx context.Context, data []byte) (result map[string]*cmv1.AddOn, err error) {
+	// Load the list of add-ons:
 	items, err := cmv1.UnmarshalAddOnList(data)
 	if err != nil {
 		return
@@ -201,13 +195,17 @@ func loadAPI(ctx context.Context, collection *cmv1.AddOnsClient) (result map[str
 	return
 }
 
-var fileData = []byte(`
-- id: black
-  name: Black add-on
-  description: Very black add-on
-  icon: iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg==
-- id: white
-  name: White add-on
-  description: Very white add-on
-  icon: iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg==
-`)
+var fileData = []byte(`[
+  {
+    "id": "black",
+    "name": "Black add-on",
+    "description": "Very black add-on",
+    "icon": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg=="
+  },
+  {
+    "id": "white",
+    "name": "White add-on",
+    "description": "Very white add-on",
+    "icon": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg=="
+  }
+]`)

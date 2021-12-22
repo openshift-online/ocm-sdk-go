@@ -35,7 +35,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ghodss/yaml"
+	"gopkg.in/yaml.v3"
 	"github.com/golang-jwt/jwt"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -388,8 +388,8 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 
 // aclItem is the type used to read a single ACL item from a YAML document.
 type aclItem struct {
-	Claim   string `json:"claim"`
-	Pattern string `json:"pattern"`
+	Claim   string `yaml:"claim"`
+	Pattern string `yaml:"pattern"`
 }
 
 // loadACLFile loads the given ACL file into the given map of ACL items.
