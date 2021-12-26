@@ -164,6 +164,9 @@ var pathTreeData = `{
                 "-": null
               }
             },
+            "gate_agreements": {
+              "-": null
+            },
             "groups": {
               "-": {
                 "users": {
@@ -210,9 +213,6 @@ var pathTreeData = `{
               "-": {
                 "state": null
               }
-            },
-            "version_gate_agreements": {
-              "-": null
             }
           }
         },
