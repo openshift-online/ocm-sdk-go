@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.233 Dec 28 2021
+
+- Update to model 0.0.167:
+  - Change field name in version gate agreement link to version gate.
+
 ## 0.1.232 Dec 26 2021
 
 - Update to model 0.0.166:

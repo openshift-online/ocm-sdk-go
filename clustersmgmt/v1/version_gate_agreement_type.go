@@ -43,7 +43,7 @@ type VersionGateAgreement struct {
 	id              string
 	href            string
 	agreedTimestamp time.Time
-	gate            *VersionGate
+	versionGate     *VersionGate
 }
 
 // Kind returns the name of the type of the object.
@@ -126,25 +126,25 @@ func (o *VersionGateAgreement) GetAgreedTimestamp() (value time.Time, ok bool) {
 	return
 }
 
-// Gate returns the value of the 'gate' attribute, or
+// VersionGate returns the value of the 'version_gate' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // link to the version gate that the user agreed to
-func (o *VersionGateAgreement) Gate() *VersionGate {
+func (o *VersionGateAgreement) VersionGate() *VersionGate {
 	if o != nil && o.bitmap_&16 != 0 {
-		return o.gate
+		return o.versionGate
 	}
 	return nil
 }
 
-// GetGate returns the value of the 'gate' attribute and
+// GetVersionGate returns the value of the 'version_gate' attribute and
 // a flag indicating if the attribute has a value.
 //
 // link to the version gate that the user agreed to
-func (o *VersionGateAgreement) GetGate() (value *VersionGate, ok bool) {
+func (o *VersionGateAgreement) GetVersionGate() (value *VersionGate, ok bool) {
 	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = o.gate
+		value = o.versionGate
 	}
 	return
 }
