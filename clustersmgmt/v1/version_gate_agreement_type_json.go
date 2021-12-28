@@ -76,13 +76,13 @@ func writeVersionGateAgreement(object *VersionGateAgreement, stream *jsoniter.St
 		stream.WriteString((object.agreedTimestamp).Format(time.RFC3339))
 		count++
 	}
-	present_ = object.bitmap_&16 != 0 && object.gate != nil
+	present_ = object.bitmap_&16 != 0 && object.versionGate != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("gate")
-		writeVersionGate(object.gate, stream)
+		stream.WriteObjectField("version_gate")
+		writeVersionGate(object.versionGate, stream)
 	}
 	stream.WriteObjectEnd()
 }
@@ -130,9 +130,9 @@ func readVersionGateAgreement(iterator *jsoniter.Iterator) *VersionGateAgreement
 			}
 			object.agreedTimestamp = value
 			object.bitmap_ |= 8
-		case "gate":
+		case "version_gate":
 			value := readVersionGate(iterator)
-			object.gate = value
+			object.versionGate = value
 			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()

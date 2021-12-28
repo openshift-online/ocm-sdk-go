@@ -31,7 +31,7 @@ type VersionGateAgreementBuilder struct {
 	id              string
 	href            string
 	agreedTimestamp time.Time
-	gate            *VersionGateBuilder
+	versionGate     *VersionGateBuilder
 }
 
 // NewVersionGateAgreement creates a new builder of 'version_gate_agreement' objects.
@@ -73,11 +73,11 @@ func (b *VersionGateAgreementBuilder) AgreedTimestamp(value time.Time) *VersionG
 	return b
 }
 
-// Gate sets the value of the 'gate' attribute to the given value.
+// VersionGate sets the value of the 'version_gate' attribute to the given value.
 //
 // Representation of an _OpenShift_ version gate.
-func (b *VersionGateAgreementBuilder) Gate(value *VersionGateBuilder) *VersionGateAgreementBuilder {
-	b.gate = value
+func (b *VersionGateAgreementBuilder) VersionGate(value *VersionGateBuilder) *VersionGateAgreementBuilder {
+	b.versionGate = value
 	if value != nil {
 		b.bitmap_ |= 16
 	} else {
@@ -95,10 +95,10 @@ func (b *VersionGateAgreementBuilder) Copy(object *VersionGateAgreement) *Versio
 	b.id = object.id
 	b.href = object.href
 	b.agreedTimestamp = object.agreedTimestamp
-	if object.gate != nil {
-		b.gate = NewVersionGate().Copy(object.gate)
+	if object.versionGate != nil {
+		b.versionGate = NewVersionGate().Copy(object.versionGate)
 	} else {
-		b.gate = nil
+		b.versionGate = nil
 	}
 	return b
 }
@@ -110,8 +110,8 @@ func (b *VersionGateAgreementBuilder) Build() (object *VersionGateAgreement, err
 	object.href = b.href
 	object.bitmap_ = b.bitmap_
 	object.agreedTimestamp = b.agreedTimestamp
-	if b.gate != nil {
-		object.gate, err = b.gate.Build()
+	if b.versionGate != nil {
+		object.versionGate, err = b.versionGate.Build()
 		if err != nil {
 			return
 		}

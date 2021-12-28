@@ -9427,7 +9427,7 @@
             "type": "string",
             "format": "date-time"
           },
-          "gate": {
+          "version_gate": {
             "description": "link to the version gate that the user agreed to",
             "$ref": "#/components/schemas/VersionGate"
           }
