@@ -3,6 +3,25 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.234 Jan 4 2022
+
+- Update to version 4 of JWT library.
+
+  Note that this is a backwards compatibility breaking change because the
+  `jwt.Token` type is used as parameter in the `authentication.ContextWithToken`
+  and `authentication.TokenFromContext` methods. If you are using those methods
+  then you will have to change your code to import `github.com/jwt-go/jwt/v4`
+  instead of `github.com/jwt-go/jwt`.
+
+- Update to Ginkgo 2.
+
+  This change affects only the tests, but if you are using _Ginkgo_ in your
+  project and you are still using version 1 then you may find issues when
+  running the `ginkgo` command because both versions of the library will be
+  included in your tests binaries and both will try to use the `flag` package to
+  create conflicting command line flags. If that is the case the best approach
+  is to update your project go use version 2 as well.
+
 ## 0.1.233 Dec 28 2021
 
 - Update to model 0.0.167:
