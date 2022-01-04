@@ -21,7 +21,7 @@ import (
 	"database/sql"
 	"time"
 
-	. "github.com/onsi/ginkgo"                         // nolint
+	. "github.com/onsi/ginkgo/v2"                      // nolint
 	. "github.com/onsi/gomega"                         // nolint
 	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
 )
