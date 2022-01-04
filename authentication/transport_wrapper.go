@@ -24,23 +24,22 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
-	"sync"
-
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
-	//
 	"github.com/cenkalti/backoff/v4"
-	jwt "github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
+	"github.com/prometheus/client_golang/prometheus"
+
 	"github.com/openshift-online/ocm-sdk-go/internal"
 	"github.com/openshift-online/ocm-sdk-go/logging"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 // Default values:
