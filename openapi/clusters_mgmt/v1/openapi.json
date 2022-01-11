@@ -745,7 +745,7 @@
     },
     "/api/clusters_mgmt/v1/aws_inquiries/vpcs": {
       "post": {
-        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.",
+        "description": "Retrieves the list of available vpcs of the cloud provider for specific region.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available vpcs\nof the provider.",
         "parameters": [
           {
             "name": "page",
@@ -758,7 +758,7 @@
           },
           {
             "name": "size",
-            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nvpcs of the provider.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -796,12 +796,12 @@
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.",
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nvpcs of the provider.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available vpcs of the provider.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -5676,7 +5676,7 @@
     },
     "/api/clusters_mgmt/v1/gcp_inquiries/key_rings": {
       "post": {
-        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.",
+        "description": "Retrieves the list of available key rings of the cloud provider.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.",
         "parameters": [
           {
             "name": "page",
@@ -5689,7 +5689,7 @@
           },
           {
             "name": "size",
-            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nkey rings of the provider.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -5727,12 +5727,12 @@
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.",
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nkey rings of the provider.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available key rings of the provider.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -5836,7 +5836,7 @@
     },
     "/api/clusters_mgmt/v1/gcp_inquiries/vpcs": {
       "post": {
-        "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.",
+        "description": "Retrieves the list of available vpcs of the cloud provider for specific region.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available vpcs\nof the provider.",
         "parameters": [
           {
             "name": "page",
@@ -5849,7 +5849,7 @@
           },
           {
             "name": "size",
-            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.",
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nvpcs of the provider.",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -5887,12 +5887,12 @@
                       "format": "int32"
                     },
                     "size": {
-                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nregions of the provider.",
+                      "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nvpcs of the provider.",
                       "type": "integer",
                       "format": "int32"
                     },
                     "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available regions of the provider.",
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of available vpcs of the provider.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -7414,6 +7414,10 @@
             "description": "Validation rule for the add-on parameter.",
             "type": "string"
           },
+          "validation_err_msg": {
+            "description": "Error message to return should the parameter be invalid.",
+            "type": "string"
+          },
           "value_type": {
             "description": "Type of value of the add-on parameter.",
             "type": "string"
@@ -8882,6 +8886,10 @@
           },
           "service_cidr": {
             "description": "IP address block from which to assign service IP addresses, for example `172.30.0.0/16`.",
+            "type": "string"
+          },
+          "type": {
+            "description": "The main controller responsible for rendering the core networking components.",
             "type": "string"
           }
         }
