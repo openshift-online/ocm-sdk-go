@@ -23,9 +23,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	. "github.com/onsi/ginkgo/v2"    // nolint
-	. "github.com/onsi/gomega"       // nolint
-	. "github.com/onsi/gomega/ghttp" // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/core"  // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/table" // nolint
+	. "github.com/onsi/gomega"              // nolint
+	. "github.com/onsi/gomega/ghttp"        // nolint
 
 	. "github.com/openshift-online/ocm-sdk-go/testing"
 )
@@ -77,7 +78,7 @@ var _ = Describe("Metrics", func() {
 		apiClient.CloseIdleConnections()
 	})
 
-	// Get sends a GET request to the API server.
+	// Send sends a GET request to the API server.
 	var Send = func(method, path string) {
 		request, err := http.NewRequest(method, apiServer.URL()+path, nil)
 		Expect(err).ToNot(HaveOccurred())
