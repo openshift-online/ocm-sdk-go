@@ -21,8 +21,8 @@ package metrics
 import (
 	"encoding/json"
 
-	. "github.com/onsi/ginkgo/v2" // nolint
-	. "github.com/onsi/gomega"    // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/table" // nolint
+	. "github.com/onsi/gomega"              // nolint
 )
 
 var _ = DescribeTable(

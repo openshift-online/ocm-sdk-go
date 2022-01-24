@@ -19,8 +19,8 @@ package database
 import (
 	"testing"
 
-	. "github.com/onsi/ginkgo/v2" // nolint
-	. "github.com/onsi/gomega"    // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
+	. "github.com/onsi/gomega"             // nolint
 )
 
 func TestDatabase(t *testing.T) {

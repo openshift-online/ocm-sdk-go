@@ -19,8 +19,8 @@ package database
 import (
 	"io"
 
-	. "github.com/onsi/ginkgo/v2" // nolint
-	. "github.com/onsi/gomega"    // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/table" // nolint
+	. "github.com/onsi/gomega"              // nolint
 
 	"github.com/jackc/pgconn"
 	"github.com/lib/pq"
