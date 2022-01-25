@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.237 Jan 25 2022
+
+- Update to metamodel 0.0.50:
+  - Fix format of date query parameters so that it is RFC3339.
+
 ## 0.1.236 Jan 25 2022
 - Update to model v0.0.169
   - Version gate type: Add warning message field
