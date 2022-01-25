@@ -9412,6 +9412,10 @@
           "version_raw_id_prefix": {
             "description": "VersionRawIDPrefix represents the versions prefix that the gate applies to.",
             "type": "string"
+          },
+          "warning_message": {
+            "description": "WarningMessage is a warning that will be displayed to the user before they acknowledge the gate",
+            "type": "string"
           }
         }
       },
