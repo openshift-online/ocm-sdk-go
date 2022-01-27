@@ -203,7 +203,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -238,7 +238,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -277,7 +277,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -312,7 +312,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -354,7 +354,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -390,7 +390,7 @@ var _ = Describe("Server error", func() {
 			// Create the client:
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -467,7 +467,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -510,7 +510,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -586,7 +586,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -621,7 +621,7 @@ var _ = Describe("Protocol error", func() {
 			}()
 			client := &http.Client{
 				Transport: wrapper.Wrap(transport),
-				Timeout:   5 * time.Second,
+				Timeout:   10 * time.Second,
 			}
 
 			// Send the request:
@@ -691,7 +691,7 @@ var _ = It("Tolerates connection reset by peer", func() {
 			},
 			ForceAttemptHTTP2: true,
 		}),
-		Timeout: 5 * time.Second,
+		Timeout: 10 * time.Second,
 	}
 
 	// Send the request:
@@ -729,7 +729,7 @@ var _ = It("Doesn't change request body object", func() {
 	}()
 	client := &http.Client{
 		Transport: wrapper.Wrap(&http.Transport{}),
-		Timeout:   5 * time.Second,
+		Timeout:   10 * time.Second,
 	}
 
 	// Send the request:
@@ -804,7 +804,7 @@ var _ = It("Tolerates unepected EOF", func() {
 			},
 			ForceAttemptHTTP2: true,
 		}),
-		Timeout: 5 * time.Second,
+		Timeout: 10 * time.Second,
 	}
 
 	// Send the request:
