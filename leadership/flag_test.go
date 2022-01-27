@@ -234,7 +234,7 @@ var _ = Describe("Flag behaviour", func() {
 		})
 
 		It("It is raised when the previous holder fails to renew", func() {
-			time.Sleep(300 * time.Millisecond)
+			time.Sleep(400 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
 		})
 	})
