@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.238 Jan 28 2022
+
+- Update to model 0.0.170:
+  - Add `ServiceInfo` type to status board service.
+
 ## 0.1.237 Jan 25 2022
 
 - Update to metamodel 0.0.50:
