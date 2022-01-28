@@ -94,7 +94,16 @@ func writeStatus(object *Status, stream *jsoniter.Stream) {
 		writeService(object.service, stream)
 		count++
 	}
-	present_ = object.bitmap_&64 != 0
+	present_ = object.bitmap_&64 != 0 && object.serviceInfo != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("service_info")
+		writeServiceInfo(object.serviceInfo, stream)
+		count++
+	}
+	present_ = object.bitmap_&128 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -103,7 +112,7 @@ func writeStatus(object *Status, stream *jsoniter.Stream) {
 		stream.WriteString(object.status)
 		count++
 	}
-	present_ = object.bitmap_&128 != 0
+	present_ = object.bitmap_&256 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -166,10 +175,14 @@ func readStatus(iterator *jsoniter.Iterator) *Status {
 			value := readService(iterator)
 			object.service = value
 			object.bitmap_ |= 32
+		case "service_info":
+			value := readServiceInfo(iterator)
+			object.serviceInfo = value
+			object.bitmap_ |= 64
 		case "status":
 			value := iterator.ReadString()
 			object.status = value
-			object.bitmap_ |= 64
+			object.bitmap_ |= 128
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
@@ -177,7 +190,7 @@ func readStatus(iterator *jsoniter.Iterator) *Status {
 				iterator.ReportError("", err.Error())
 			}
 			object.updatedAt = value
-			object.bitmap_ |= 128
+			object.bitmap_ |= 256
 		default:
 			iterator.ReadAny()
 		}

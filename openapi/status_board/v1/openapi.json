@@ -3621,6 +3621,19 @@
           }
         }
       },
+      "ServiceInfo": {
+        "description": "Definition of a Status Board service info.",
+        "properties": {
+          "fullname": {
+            "description": "Full name of the service",
+            "type": "string"
+          },
+          "status_type": {
+            "description": "Type of the service status",
+            "type": "string"
+          }
+        }
+      },
       "Status": {
         "description": "Definition of a Status Board status.",
         "properties": {
@@ -3648,6 +3661,10 @@
           "service": {
             "description": "The associated service ID.",
             "$ref": "#/components/schemas/Service"
+          },
+          "service_info": {
+            "description": "Additional Service related data.",
+            "$ref": "#/components/schemas/ServiceInfo"
           },
           "status": {
             "description": "A status message for the given service.",
