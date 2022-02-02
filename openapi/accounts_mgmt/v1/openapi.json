@@ -4507,6 +4507,9 @@
           "product_category": {
             "type": "string"
           },
+          "quota_version": {
+            "type": "string"
+          },
           "reserve": {
             "type": "boolean"
           },
