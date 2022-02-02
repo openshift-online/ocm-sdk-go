@@ -30,6 +30,8 @@ import (
 	. "github.com/onsi/ginkgo/v2/dsl/core"             // nolint
 	. "github.com/onsi/gomega"                         // nolint
 	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+
+	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
 )
 
 var _ = Describe("Methods", func() {
@@ -350,6 +352,34 @@ var _ = Describe("Methods", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
+		})
+
+		It("Accepts 204 with empty body", func() {
+			// Configure the server:
+			apiServer.AppendHandlers(
+				RespondWithJSON(http.StatusNoContent, ""),
+			)
+
+			// Prepare the body:
+			body, err := cmv1.NewUpgradePolicy().
+				ScheduleType("my-type").
+				Version("my-version").
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Send the request:
+			collection := connection.ClustersMgmt().V1().
+				Clusters().
+				Cluster("123").
+				UpgradePolicies()
+			response, err := collection.Add().
+				Body(body).
+				Parameter("dryRun", true).
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(response).ToNot(BeNil())
+			Expect(response.Status()).To(Equal(http.StatusNoContent))
+			Expect(response.Body()).To(BeNil())
 		})
 	})
 
