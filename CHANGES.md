@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.239 Feb 3 2022
+
+- Update to metamodel 0.0.51:
+  - Check for `io.EOF` before trying to parse response body.
+
 ## 0.1.238 Jan 28 2022
 
 - Update to model 0.0.170:
