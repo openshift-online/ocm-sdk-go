@@ -33,7 +33,7 @@ examples:
 
 .PHONY: test tests
 test tests:
-	ginkgo run -r
+	ginkgo run -r .
 
 .PHONY: fmt
 fmt:
