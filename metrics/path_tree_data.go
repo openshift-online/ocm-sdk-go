@@ -82,9 +82,6 @@ var pathTreeData = `{
         "sku_rules": {
           "-": null
         },
-        "skus": {
-          "-": null
-        },
         "subscriptions": {
           "-": {
             "labels": {
