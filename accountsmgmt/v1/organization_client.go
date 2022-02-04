@@ -92,17 +92,6 @@ func (c *OrganizationClient) QuotaCost() *QuotaCostClient {
 	)
 }
 
-// QuotaSummary returns the target 'quota_summary' resource.
-//
-// Reference to the service that returns the summary of the resource quota for this
-// organization.
-func (c *OrganizationClient) QuotaSummary() *QuotaSummaryClient {
-	return NewQuotaSummaryClient(
-		c.transport,
-		path.Join(c.path, "quota_summary"),
-	)
-}
-
 // ResourceQuota returns the target 'resource_quotas' resource.
 //
 // Reference to the service that manages the resource quotas for this

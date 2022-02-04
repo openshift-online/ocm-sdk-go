@@ -51,7 +51,6 @@ var pathTreeData = `{
               "-": null
             },
             "quota_cost": null,
-            "quota_summary": null,
             "resource_quota": {
               "-": null
             },
@@ -80,9 +79,6 @@ var pathTreeData = `{
           "-": null
         },
         "sku_rules": {
-          "-": null
-        },
-        "skus": {
           "-": null
         },
         "subscriptions": {
@@ -209,6 +205,9 @@ var pathTreeData = `{
             },
             "resume": null,
             "status": null,
+            "sts_operator_roles": {
+              "-": null
+            },
             "upgrade_policies": {
               "-": {
                 "state": null

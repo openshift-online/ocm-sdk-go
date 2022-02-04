@@ -114,6 +114,16 @@ func (c *ClusterClient) AWSInfrastructureAccessRoleGrants() *AWSInfrastructureAc
 	)
 }
 
+// STSOperatorRoles returns the target 'operator_IAM_roles' resource.
+//
+//
+func (c *ClusterClient) STSOperatorRoles() *OperatorIAMRolesClient {
+	return NewOperatorIAMRolesClient(
+		c.transport,
+		path.Join(c.path, "sts_operator_roles"),
+	)
+}
+
 // AddonInquiries returns the target 'addon_inquiries' resource.
 //
 // Reference to the resource that manages the collection of the add-on inquiries on this cluster.

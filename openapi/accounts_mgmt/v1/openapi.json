@@ -1561,92 +1561,6 @@
         }
       }
     },
-    "/api/accounts_mgmt/v1/organizations/{organization_id}/quota_summary": {
-      "get": {
-        "description": "Retrieves the Quota summary.",
-        "parameters": [
-          {
-            "name": "organization_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the quota\nsummary instead of the names of the columns of a table. For example, in order\nto retrieve the quota summary for clusters that run in multiple availability\nzones:\n\n```sql\navailability_zone_type = 'multi'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "description": "Retrieved quota summary items.",
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/QuotaSummary"
-                      }
-                    },
-                    "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/accounts_mgmt/v1/organizations/{organization_id}/resource_quota": {
       "post": {
         "description": "Creates a new resource quota.",
@@ -3208,121 +3122,6 @@
         }
       }
     },
-    "/api/accounts_mgmt/v1/skus": {
-      "get": {
-        "description": "Retrieves a list of SKUS.",
-        "parameters": [
-          {
-            "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "search",
-            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the SKU\ninstead of the names of the columns of a table. For example, in order to\nretrieve SKUS large sized resources:\n\n```sql\nresource_name like '%large'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "size",
-            "description": "Maximum number of items that will be contained in the returned page.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "description": "Retrieved list of SKUS.",
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/SKU"
-                      }
-                    },
-                    "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "size": {
-                      "description": "Maximum number of items that will be contained in the returned page.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "total": {
-                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/accounts_mgmt/v1/skus/{sku_id}": {
-      "get": {
-        "description": "Retrieves the details of the SKU.",
-        "parameters": [
-          {
-            "name": "sku_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SKU"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/accounts_mgmt/v1/subscriptions": {
       "get": {
         "description": "Retrieves a list of subscriptions.",
@@ -4320,42 +4119,6 @@
           }
         }
       },
-      "SKU": {
-        "description": "Identifies computing resources",
-        "properties": {
-          "kind": {
-            "description": "Indicates the type of this object. Will be 'SKU' if this is a complete object or 'SKULink' if it is just a link.",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique identifier of the object.",
-            "type": "string"
-          },
-          "href": {
-            "description": "Self link.",
-            "type": "string"
-          },
-          "byoc": {
-            "type": "boolean"
-          },
-          "availability_zone_type": {
-            "type": "string"
-          },
-          "resource_name": {
-            "description": "platform-specific name, such as \"M5.2Xlarge\" for a type of EC2 node",
-            "type": "string"
-          },
-          "resource_type": {
-            "type": "string"
-          },
-          "resources": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Resource"
-            }
-          }
-        }
-      },
       "AccessToken": {
         "properties": {
           "auths": {
@@ -4505,6 +4268,9 @@
             "type": "string"
           },
           "product_category": {
+            "type": "string"
+          },
+          "quota_version": {
             "type": "string"
           },
           "reserve": {
@@ -4798,33 +4564,6 @@
             "items": {
               "$ref": "#/components/schemas/RelatedResource"
             }
-          }
-        }
-      },
-      "QuotaSummary": {
-        "properties": {
-          "byoc": {
-            "type": "boolean"
-          },
-          "allowed": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "availability_zone_type": {
-            "type": "string"
-          },
-          "organization_id": {
-            "type": "string"
-          },
-          "reserved": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "resource_name": {
-            "type": "string"
-          },
-          "resource_type": {
-            "type": "string"
           }
         }
       },
