@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.240 Feb 4 2022
+
+- Update to model 0.1.172:
+  - Remove deprecated `SKUs` endpoint.
+  - Remove deprecated quota summary resource and type.
+  - Add QuotaVersion to ClusterAuth.
+  - Allow adding/removing operator roles.
+
 ## 0.1.239 Feb 3 2022
 
 - Update to metamodel 0.0.51:
