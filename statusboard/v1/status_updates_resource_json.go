@@ -26,23 +26,23 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func readStatusesAddRequest(request *StatusesAddServerRequest, r *http.Request) error {
+func readStatusUpdatesAddRequest(request *StatusUpdatesAddServerRequest, r *http.Request) error {
 	var err error
 	request.body, err = UnmarshalStatus(r.Body)
 	return err
 }
-func writeStatusesAddRequest(request *StatusesAddRequest, writer io.Writer) error {
+func writeStatusUpdatesAddRequest(request *StatusUpdatesAddRequest, writer io.Writer) error {
 	return MarshalStatus(request.body, writer)
 }
-func readStatusesAddResponse(response *StatusesAddResponse, reader io.Reader) error {
+func readStatusUpdatesAddResponse(response *StatusUpdatesAddResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalStatus(reader)
 	return err
 }
-func writeStatusesAddResponse(response *StatusesAddServerResponse, w http.ResponseWriter) error {
+func writeStatusUpdatesAddResponse(response *StatusUpdatesAddServerResponse, w http.ResponseWriter) error {
 	return MarshalStatus(response.body, w)
 }
-func readStatusesListRequest(request *StatusesListServerRequest, r *http.Request) error {
+func readStatusUpdatesListRequest(request *StatusUpdatesListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()
 	request.createdAfter, err = helpers.ParseDate(query, "created_after")
@@ -73,10 +73,10 @@ func readStatusesListRequest(request *StatusesListServerRequest, r *http.Request
 	}
 	return nil
 }
-func writeStatusesListRequest(request *StatusesListRequest, writer io.Writer) error {
+func writeStatusUpdatesListRequest(request *StatusUpdatesListRequest, writer io.Writer) error {
 	return nil
 }
-func readStatusesListResponse(response *StatusesListResponse, reader io.Reader) error {
+func readStatusUpdatesListResponse(response *StatusUpdatesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func readStatusesListResponse(response *StatusesListResponse, reader io.Reader) 
 	}
 	return iterator.Error
 }
-func writeStatusesListResponse(response *StatusesListServerResponse, w http.ResponseWriter) error {
+func writeStatusUpdatesListResponse(response *StatusUpdatesListServerResponse, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.status)
 	stream := helpers.NewStream(w)

@@ -34,19 +34,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// StatusesClient is the client of the 'statuses' resource.
+// StatusUpdatesClient is the client of the 'status_updates' resource.
 //
 // Manages the collection of statuses
-type StatusesClient struct {
+type StatusUpdatesClient struct {
 	transport http.RoundTripper
 	path      string
 }
 
-// NewStatusesClient creates a new client for the 'statuses'
+// NewStatusUpdatesClient creates a new client for the 'status_updates'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewStatusesClient(transport http.RoundTripper, path string) *StatusesClient {
-	return &StatusesClient{
+func NewStatusUpdatesClient(transport http.RoundTripper, path string) *StatusUpdatesClient {
+	return &StatusUpdatesClient{
 		transport: transport,
 		path:      path,
 	}
@@ -55,8 +55,8 @@ func NewStatusesClient(transport http.RoundTripper, path string) *StatusesClient
 // Add creates a request for the 'add' method.
 //
 //
-func (c *StatusesClient) Add() *StatusesAddRequest {
-	return &StatusesAddRequest{
+func (c *StatusUpdatesClient) Add() *StatusUpdatesAddRequest {
+	return &StatusUpdatesAddRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -65,8 +65,8 @@ func (c *StatusesClient) Add() *StatusesAddRequest {
 // List creates a request for the 'list' method.
 //
 // Retrieves the list of statuses.
-func (c *StatusesClient) List() *StatusesListRequest {
-	return &StatusesListRequest{
+func (c *StatusUpdatesClient) List() *StatusUpdatesListRequest {
+	return &StatusUpdatesListRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -75,15 +75,15 @@ func (c *StatusesClient) List() *StatusesListRequest {
 // Status returns the target 'status' resource for the given identifier.
 //
 //
-func (c *StatusesClient) Status(id string) *StatusClient {
+func (c *StatusUpdatesClient) Status(id string) *StatusClient {
 	return NewStatusClient(
 		c.transport,
 		path.Join(c.path, id),
 	)
 }
 
-// StatusesAddRequest is the request for the 'add' method.
-type StatusesAddRequest struct {
+// StatusUpdatesAddRequest is the request for the 'add' method.
+type StatusUpdatesAddRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -92,13 +92,13 @@ type StatusesAddRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *StatusesAddRequest) Parameter(name string, value interface{}) *StatusesAddRequest {
+func (r *StatusUpdatesAddRequest) Parameter(name string, value interface{}) *StatusUpdatesAddRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *StatusesAddRequest) Header(name string, value interface{}) *StatusesAddRequest {
+func (r *StatusUpdatesAddRequest) Header(name string, value interface{}) *StatusUpdatesAddRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -106,7 +106,7 @@ func (r *StatusesAddRequest) Header(name string, value interface{}) *StatusesAdd
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *StatusesAddRequest) Body(value *Status) *StatusesAddRequest {
+func (r *StatusUpdatesAddRequest) Body(value *Status) *StatusUpdatesAddRequest {
 	r.body = value
 	return r
 }
@@ -115,16 +115,16 @@ func (r *StatusesAddRequest) Body(value *Status) *StatusesAddRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *StatusesAddRequest) Send() (result *StatusesAddResponse, err error) {
+func (r *StatusUpdatesAddRequest) Send() (result *StatusUpdatesAddResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *StatusesAddRequest) SendContext(ctx context.Context) (result *StatusesAddResponse, err error) {
+func (r *StatusUpdatesAddRequest) SendContext(ctx context.Context) (result *StatusUpdatesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
-	err = writeStatusesAddRequest(r, buffer)
+	err = writeStatusUpdatesAddRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -146,7 +146,7 @@ func (r *StatusesAddRequest) SendContext(ctx context.Context) (result *StatusesA
 		return
 	}
 	defer response.Body.Close()
-	result = &StatusesAddResponse{}
+	result = &StatusUpdatesAddResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -163,15 +163,15 @@ func (r *StatusesAddRequest) SendContext(ctx context.Context) (result *StatusesA
 		err = result.err
 		return
 	}
-	err = readStatusesAddResponse(result, reader)
+	err = readStatusUpdatesAddResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// StatusesAddResponse is the response for the 'add' method.
-type StatusesAddResponse struct {
+// StatusUpdatesAddResponse is the response for the 'add' method.
+type StatusUpdatesAddResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
@@ -179,7 +179,7 @@ type StatusesAddResponse struct {
 }
 
 // Status returns the response status code.
-func (r *StatusesAddResponse) Status() int {
+func (r *StatusUpdatesAddResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -187,7 +187,7 @@ func (r *StatusesAddResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *StatusesAddResponse) Header() http.Header {
+func (r *StatusUpdatesAddResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -195,7 +195,7 @@ func (r *StatusesAddResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *StatusesAddResponse) Error() *errors.Error {
+func (r *StatusUpdatesAddResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -205,7 +205,7 @@ func (r *StatusesAddResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *StatusesAddResponse) Body() *Status {
+func (r *StatusUpdatesAddResponse) Body() *Status {
 	if r == nil {
 		return nil
 	}
@@ -216,7 +216,7 @@ func (r *StatusesAddResponse) Body() *Status {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesAddResponse) GetBody() (value *Status, ok bool) {
+func (r *StatusUpdatesAddResponse) GetBody() (value *Status, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -224,8 +224,8 @@ func (r *StatusesAddResponse) GetBody() (value *Status, ok bool) {
 	return
 }
 
-// StatusesListRequest is the request for the 'list' method.
-type StatusesListRequest struct {
+// StatusUpdatesListRequest is the request for the 'list' method.
+type StatusUpdatesListRequest struct {
 	transport     http.RoundTripper
 	path          string
 	query         url.Values
@@ -238,13 +238,13 @@ type StatusesListRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *StatusesListRequest) Parameter(name string, value interface{}) *StatusesListRequest {
+func (r *StatusUpdatesListRequest) Parameter(name string, value interface{}) *StatusUpdatesListRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *StatusesListRequest) Header(name string, value interface{}) *StatusesListRequest {
+func (r *StatusUpdatesListRequest) Header(name string, value interface{}) *StatusUpdatesListRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -252,7 +252,7 @@ func (r *StatusesListRequest) Header(name string, value interface{}) *StatusesLi
 // CreatedAfter sets the value of the 'created_after' parameter.
 //
 //
-func (r *StatusesListRequest) CreatedAfter(value time.Time) *StatusesListRequest {
+func (r *StatusUpdatesListRequest) CreatedAfter(value time.Time) *StatusUpdatesListRequest {
 	r.createdAfter = &value
 	return r
 }
@@ -260,7 +260,7 @@ func (r *StatusesListRequest) CreatedAfter(value time.Time) *StatusesListRequest
 // CreatedBefore sets the value of the 'created_before' parameter.
 //
 //
-func (r *StatusesListRequest) CreatedBefore(value time.Time) *StatusesListRequest {
+func (r *StatusUpdatesListRequest) CreatedBefore(value time.Time) *StatusUpdatesListRequest {
 	r.createdBefore = &value
 	return r
 }
@@ -268,7 +268,7 @@ func (r *StatusesListRequest) CreatedBefore(value time.Time) *StatusesListReques
 // Page sets the value of the 'page' parameter.
 //
 //
-func (r *StatusesListRequest) Page(value int) *StatusesListRequest {
+func (r *StatusUpdatesListRequest) Page(value int) *StatusUpdatesListRequest {
 	r.page = &value
 	return r
 }
@@ -276,7 +276,7 @@ func (r *StatusesListRequest) Page(value int) *StatusesListRequest {
 // ProductIds sets the value of the 'product_ids' parameter.
 //
 //
-func (r *StatusesListRequest) ProductIds(value string) *StatusesListRequest {
+func (r *StatusUpdatesListRequest) ProductIds(value string) *StatusUpdatesListRequest {
 	r.productIds = &value
 	return r
 }
@@ -284,7 +284,7 @@ func (r *StatusesListRequest) ProductIds(value string) *StatusesListRequest {
 // Size sets the value of the 'size' parameter.
 //
 //
-func (r *StatusesListRequest) Size(value int) *StatusesListRequest {
+func (r *StatusUpdatesListRequest) Size(value int) *StatusUpdatesListRequest {
 	r.size = &value
 	return r
 }
@@ -293,12 +293,12 @@ func (r *StatusesListRequest) Size(value int) *StatusesListRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *StatusesListRequest) Send() (result *StatusesListResponse, err error) {
+func (r *StatusUpdatesListRequest) Send() (result *StatusUpdatesListResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *StatusesListRequest) SendContext(ctx context.Context) (result *StatusesListResponse, err error) {
+func (r *StatusUpdatesListRequest) SendContext(ctx context.Context) (result *StatusUpdatesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.createdAfter != nil {
 		helpers.AddValue(&query, "created_after", *r.createdAfter)
@@ -333,7 +333,7 @@ func (r *StatusesListRequest) SendContext(ctx context.Context) (result *Statuses
 		return
 	}
 	defer response.Body.Close()
-	result = &StatusesListResponse{}
+	result = &StatusUpdatesListResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -350,15 +350,15 @@ func (r *StatusesListRequest) SendContext(ctx context.Context) (result *Statuses
 		err = result.err
 		return
 	}
-	err = readStatusesListResponse(result, reader)
+	err = readStatusUpdatesListResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// StatusesListResponse is the response for the 'list' method.
-type StatusesListResponse struct {
+// StatusUpdatesListResponse is the response for the 'list' method.
+type StatusUpdatesListResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
@@ -369,7 +369,7 @@ type StatusesListResponse struct {
 }
 
 // Status returns the response status code.
-func (r *StatusesListResponse) Status() int {
+func (r *StatusUpdatesListResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -377,7 +377,7 @@ func (r *StatusesListResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *StatusesListResponse) Header() http.Header {
+func (r *StatusUpdatesListResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -385,7 +385,7 @@ func (r *StatusesListResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *StatusesListResponse) Error() *errors.Error {
+func (r *StatusUpdatesListResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -395,7 +395,7 @@ func (r *StatusesListResponse) Error() *errors.Error {
 // Items returns the value of the 'items' parameter.
 //
 //
-func (r *StatusesListResponse) Items() *StatusList {
+func (r *StatusUpdatesListResponse) Items() *StatusList {
 	if r == nil {
 		return nil
 	}
@@ -406,7 +406,7 @@ func (r *StatusesListResponse) Items() *StatusList {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListResponse) GetItems() (value *StatusList, ok bool) {
+func (r *StatusUpdatesListResponse) GetItems() (value *StatusList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
 		value = r.items
@@ -417,7 +417,7 @@ func (r *StatusesListResponse) GetItems() (value *StatusList, ok bool) {
 // Page returns the value of the 'page' parameter.
 //
 //
-func (r *StatusesListResponse) Page() int {
+func (r *StatusUpdatesListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
 	}
@@ -428,7 +428,7 @@ func (r *StatusesListResponse) Page() int {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListResponse) GetPage() (value int, ok bool) {
+func (r *StatusUpdatesListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
@@ -439,7 +439,7 @@ func (r *StatusesListResponse) GetPage() (value int, ok bool) {
 // Size returns the value of the 'size' parameter.
 //
 //
-func (r *StatusesListResponse) Size() int {
+func (r *StatusUpdatesListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
 	}
@@ -450,7 +450,7 @@ func (r *StatusesListResponse) Size() int {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListResponse) GetSize() (value int, ok bool) {
+func (r *StatusUpdatesListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
 		value = *r.size
@@ -461,7 +461,7 @@ func (r *StatusesListResponse) GetSize() (value int, ok bool) {
 // Total returns the value of the 'total' parameter.
 //
 //
-func (r *StatusesListResponse) Total() int {
+func (r *StatusUpdatesListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
 	}
@@ -472,7 +472,7 @@ func (r *StatusesListResponse) Total() int {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListResponse) GetTotal() (value int, ok bool) {
+func (r *StatusUpdatesListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {
 		value = *r.total

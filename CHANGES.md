@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+
+## 0.1.241 Feb 11 2022
+
+- Update to model 0.1.173:  
+  - addons: Support attributes necessary for STS.
+  - Add ProductIds param to Status Resource.
+  - Add Role bindings to Subscription.
+
 ## 0.1.240 Feb 4 2022
 
 - Update to model 0.1.172:

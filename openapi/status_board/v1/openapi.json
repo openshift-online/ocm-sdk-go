@@ -824,6 +824,13 @@
             }
           },
           {
+            "name": "product_ids",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "size",
             "in": "query",
             "schema": {
@@ -2096,6 +2103,13 @@
             }
           },
           {
+            "name": "product_ids",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "size",
             "in": "query",
             "schema": {
@@ -2389,6 +2403,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "product_ids",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -2868,6 +2889,13 @@
             }
           },
           {
+            "name": "product_ids",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "size",
             "in": "query",
             "schema": {
@@ -3044,6 +3072,230 @@
         }
       }
     },
+    "/api/status_board/v1/status_updates": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Status"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of statuses.",
+        "parameters": [
+          {
+            "name": "created_after",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "product_ids",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Status"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/status_board/v1/status_updates/{status_id}": {
+      "delete": {
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Status"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/status_board/v1/statuses": {
       "post": {
         "requestBody": {
@@ -3103,6 +3355,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "product_ids",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -3639,6 +3898,48 @@
         "properties": {
           "kind": {
             "description": "Indicates the type of this object. Will be 'Status' if this is a complete object or 'StatusLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "description": "Miscellaneous metadata about the application.",
+            "type": "object"
+          },
+          "service": {
+            "description": "The associated service ID.",
+            "$ref": "#/components/schemas/Service"
+          },
+          "service_info": {
+            "description": "Additional Service related data.",
+            "$ref": "#/components/schemas/ServiceInfo"
+          },
+          "status": {
+            "description": "A status message for the given service.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "StatusUpdate": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'StatusUpdate' if this is a complete object or 'StatusUpdateLink' if it is just a link.",
             "type": "string"
           },
           "id": {
