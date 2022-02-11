@@ -7386,6 +7386,13 @@
               "$ref": "#/components/schemas/AddOnParameter"
             }
           },
+          "policy_permissions": {
+            "description": "List of policy permissions needed to access cloud resources",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "requirements": {
             "description": "List of requirements for this add-on.",
             "type": "array",
@@ -7400,6 +7407,10 @@
           },
           "resource_name": {
             "description": "Used to determine from where to reserve quota for this add-on.",
+            "type": "string"
+          },
+          "service_account": {
+            "description": "The name of the service account used when authenticating",
             "type": "string"
           },
           "sub_operators": {
@@ -7469,6 +7480,10 @@
             "items": {
               "$ref": "#/components/schemas/AddOnInstallationParameter"
             }
+          },
+          "role_arn": {
+            "description": "Role ARN used to authenticate the addon operator",
+            "type": "string"
           },
           "state": {
             "description": "Overall state of the add-on installation.",

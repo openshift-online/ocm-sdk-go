@@ -28,18 +28,18 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/errors"
 )
 
-// StatusesServer represents the interface the manages the 'statuses' resource.
-type StatusesServer interface {
+// StatusUpdatesServer represents the interface the manages the 'status_updates' resource.
+type StatusUpdatesServer interface {
 
 	// Add handles a request for the 'add' method.
 	//
 	//
-	Add(ctx context.Context, request *StatusesAddServerRequest, response *StatusesAddServerResponse) error
+	Add(ctx context.Context, request *StatusUpdatesAddServerRequest, response *StatusUpdatesAddServerResponse) error
 
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of statuses.
-	List(ctx context.Context, request *StatusesListServerRequest, response *StatusesListServerResponse) error
+	List(ctx context.Context, request *StatusUpdatesListServerRequest, response *StatusUpdatesListServerResponse) error
 
 	// Status returns the target 'status' server for the given identifier.
 	//
@@ -47,15 +47,15 @@ type StatusesServer interface {
 	Status(id string) StatusServer
 }
 
-// StatusesAddServerRequest is the request for the 'add' method.
-type StatusesAddServerRequest struct {
+// StatusUpdatesAddServerRequest is the request for the 'add' method.
+type StatusUpdatesAddServerRequest struct {
 	body *Status
 }
 
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *StatusesAddServerRequest) Body() *Status {
+func (r *StatusUpdatesAddServerRequest) Body() *Status {
 	if r == nil {
 		return nil
 	}
@@ -66,7 +66,7 @@ func (r *StatusesAddServerRequest) Body() *Status {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesAddServerRequest) GetBody() (value *Status, ok bool) {
+func (r *StatusUpdatesAddServerRequest) GetBody() (value *Status, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -74,8 +74,8 @@ func (r *StatusesAddServerRequest) GetBody() (value *Status, ok bool) {
 	return
 }
 
-// StatusesAddServerResponse is the response for the 'add' method.
-type StatusesAddServerResponse struct {
+// StatusUpdatesAddServerResponse is the response for the 'add' method.
+type StatusUpdatesAddServerResponse struct {
 	status int
 	err    *errors.Error
 	body   *Status
@@ -84,19 +84,19 @@ type StatusesAddServerResponse struct {
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *StatusesAddServerResponse) Body(value *Status) *StatusesAddServerResponse {
+func (r *StatusUpdatesAddServerResponse) Body(value *Status) *StatusUpdatesAddServerResponse {
 	r.body = value
 	return r
 }
 
 // Status sets the status code.
-func (r *StatusesAddServerResponse) Status(value int) *StatusesAddServerResponse {
+func (r *StatusUpdatesAddServerResponse) Status(value int) *StatusUpdatesAddServerResponse {
 	r.status = value
 	return r
 }
 
-// StatusesListServerRequest is the request for the 'list' method.
-type StatusesListServerRequest struct {
+// StatusUpdatesListServerRequest is the request for the 'list' method.
+type StatusUpdatesListServerRequest struct {
 	createdAfter  *time.Time
 	createdBefore *time.Time
 	page          *int
@@ -107,7 +107,7 @@ type StatusesListServerRequest struct {
 // CreatedAfter returns the value of the 'created_after' parameter.
 //
 //
-func (r *StatusesListServerRequest) CreatedAfter() time.Time {
+func (r *StatusUpdatesListServerRequest) CreatedAfter() time.Time {
 	if r != nil && r.createdAfter != nil {
 		return *r.createdAfter
 	}
@@ -118,7 +118,7 @@ func (r *StatusesListServerRequest) CreatedAfter() time.Time {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListServerRequest) GetCreatedAfter() (value time.Time, ok bool) {
+func (r *StatusUpdatesListServerRequest) GetCreatedAfter() (value time.Time, ok bool) {
 	ok = r != nil && r.createdAfter != nil
 	if ok {
 		value = *r.createdAfter
@@ -129,7 +129,7 @@ func (r *StatusesListServerRequest) GetCreatedAfter() (value time.Time, ok bool)
 // CreatedBefore returns the value of the 'created_before' parameter.
 //
 //
-func (r *StatusesListServerRequest) CreatedBefore() time.Time {
+func (r *StatusUpdatesListServerRequest) CreatedBefore() time.Time {
 	if r != nil && r.createdBefore != nil {
 		return *r.createdBefore
 	}
@@ -140,7 +140,7 @@ func (r *StatusesListServerRequest) CreatedBefore() time.Time {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListServerRequest) GetCreatedBefore() (value time.Time, ok bool) {
+func (r *StatusUpdatesListServerRequest) GetCreatedBefore() (value time.Time, ok bool) {
 	ok = r != nil && r.createdBefore != nil
 	if ok {
 		value = *r.createdBefore
@@ -151,7 +151,7 @@ func (r *StatusesListServerRequest) GetCreatedBefore() (value time.Time, ok bool
 // Page returns the value of the 'page' parameter.
 //
 //
-func (r *StatusesListServerRequest) Page() int {
+func (r *StatusUpdatesListServerRequest) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
 	}
@@ -162,7 +162,7 @@ func (r *StatusesListServerRequest) Page() int {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListServerRequest) GetPage() (value int, ok bool) {
+func (r *StatusUpdatesListServerRequest) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
 		value = *r.page
@@ -173,7 +173,7 @@ func (r *StatusesListServerRequest) GetPage() (value int, ok bool) {
 // ProductIds returns the value of the 'product_ids' parameter.
 //
 //
-func (r *StatusesListServerRequest) ProductIds() string {
+func (r *StatusUpdatesListServerRequest) ProductIds() string {
 	if r != nil && r.productIds != nil {
 		return *r.productIds
 	}
@@ -184,7 +184,7 @@ func (r *StatusesListServerRequest) ProductIds() string {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListServerRequest) GetProductIds() (value string, ok bool) {
+func (r *StatusUpdatesListServerRequest) GetProductIds() (value string, ok bool) {
 	ok = r != nil && r.productIds != nil
 	if ok {
 		value = *r.productIds
@@ -195,7 +195,7 @@ func (r *StatusesListServerRequest) GetProductIds() (value string, ok bool) {
 // Size returns the value of the 'size' parameter.
 //
 //
-func (r *StatusesListServerRequest) Size() int {
+func (r *StatusUpdatesListServerRequest) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
 	}
@@ -206,7 +206,7 @@ func (r *StatusesListServerRequest) Size() int {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *StatusesListServerRequest) GetSize() (value int, ok bool) {
+func (r *StatusUpdatesListServerRequest) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
 		value = *r.size
@@ -214,8 +214,8 @@ func (r *StatusesListServerRequest) GetSize() (value int, ok bool) {
 	return
 }
 
-// StatusesListServerResponse is the response for the 'list' method.
-type StatusesListServerResponse struct {
+// StatusUpdatesListServerResponse is the response for the 'list' method.
+type StatusUpdatesListServerResponse struct {
 	status int
 	err    *errors.Error
 	items  *StatusList
@@ -227,7 +227,7 @@ type StatusesListServerResponse struct {
 // Items sets the value of the 'items' parameter.
 //
 //
-func (r *StatusesListServerResponse) Items(value *StatusList) *StatusesListServerResponse {
+func (r *StatusUpdatesListServerResponse) Items(value *StatusList) *StatusUpdatesListServerResponse {
 	r.items = value
 	return r
 }
@@ -235,7 +235,7 @@ func (r *StatusesListServerResponse) Items(value *StatusList) *StatusesListServe
 // Page sets the value of the 'page' parameter.
 //
 //
-func (r *StatusesListServerResponse) Page(value int) *StatusesListServerResponse {
+func (r *StatusUpdatesListServerResponse) Page(value int) *StatusUpdatesListServerResponse {
 	r.page = &value
 	return r
 }
@@ -243,7 +243,7 @@ func (r *StatusesListServerResponse) Page(value int) *StatusesListServerResponse
 // Size sets the value of the 'size' parameter.
 //
 //
-func (r *StatusesListServerResponse) Size(value int) *StatusesListServerResponse {
+func (r *StatusUpdatesListServerResponse) Size(value int) *StatusUpdatesListServerResponse {
 	r.size = &value
 	return r
 }
@@ -251,28 +251,28 @@ func (r *StatusesListServerResponse) Size(value int) *StatusesListServerResponse
 // Total sets the value of the 'total' parameter.
 //
 //
-func (r *StatusesListServerResponse) Total(value int) *StatusesListServerResponse {
+func (r *StatusUpdatesListServerResponse) Total(value int) *StatusUpdatesListServerResponse {
 	r.total = &value
 	return r
 }
 
 // Status sets the status code.
-func (r *StatusesListServerResponse) Status(value int) *StatusesListServerResponse {
+func (r *StatusUpdatesListServerResponse) Status(value int) *StatusUpdatesListServerResponse {
 	r.status = value
 	return r
 }
 
-// dispatchStatuses navigates the servers tree rooted at the given server
+// dispatchStatusUpdates navigates the servers tree rooted at the given server
 // till it finds one that matches the given set of path segments, and then invokes
 // the corresponding server.
-func dispatchStatuses(w http.ResponseWriter, r *http.Request, server StatusesServer, segments []string) {
+func dispatchStatusUpdates(w http.ResponseWriter, r *http.Request, server StatusUpdatesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
 		case "POST":
-			adaptStatusesAddRequest(w, r, server)
+			adaptStatusUpdatesAddRequest(w, r, server)
 			return
 		case "GET":
-			adaptStatusesListRequest(w, r, server)
+			adaptStatusUpdatesListRequest(w, r, server)
 			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
@@ -290,12 +290,12 @@ func dispatchStatuses(w http.ResponseWriter, r *http.Request, server StatusesSer
 	}
 }
 
-// adaptStatusesAddRequest translates the given HTTP request into a call to
+// adaptStatusUpdatesAddRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptStatusesAddRequest(w http.ResponseWriter, r *http.Request, server StatusesServer) {
-	request := &StatusesAddServerRequest{}
-	err := readStatusesAddRequest(request, r)
+func adaptStatusUpdatesAddRequest(w http.ResponseWriter, r *http.Request, server StatusUpdatesServer) {
+	request := &StatusUpdatesAddServerRequest{}
+	err := readStatusUpdatesAddRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -304,7 +304,7 @@ func adaptStatusesAddRequest(w http.ResponseWriter, r *http.Request, server Stat
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &StatusesAddServerResponse{}
+	response := &StatusUpdatesAddServerResponse{}
 	response.status = 201
 	err = server.Add(r.Context(), request, response)
 	if err != nil {
@@ -315,7 +315,7 @@ func adaptStatusesAddRequest(w http.ResponseWriter, r *http.Request, server Stat
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeStatusesAddResponse(response, w)
+	err = writeStatusUpdatesAddResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",
@@ -325,12 +325,12 @@ func adaptStatusesAddRequest(w http.ResponseWriter, r *http.Request, server Stat
 	}
 }
 
-// adaptStatusesListRequest translates the given HTTP request into a call to
+// adaptStatusUpdatesListRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptStatusesListRequest(w http.ResponseWriter, r *http.Request, server StatusesServer) {
-	request := &StatusesListServerRequest{}
-	err := readStatusesListRequest(request, r)
+func adaptStatusUpdatesListRequest(w http.ResponseWriter, r *http.Request, server StatusUpdatesServer) {
+	request := &StatusUpdatesListServerRequest{}
+	err := readStatusUpdatesListRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -339,7 +339,7 @@ func adaptStatusesListRequest(w http.ResponseWriter, r *http.Request, server Sta
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &StatusesListServerResponse{}
+	response := &StatusUpdatesListServerResponse{}
 	response.status = 200
 	err = server.List(r.Context(), request, response)
 	if err != nil {
@@ -350,7 +350,7 @@ func adaptStatusesListRequest(w http.ResponseWriter, r *http.Request, server Sta
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeStatusesListResponse(response, w)
+	err = writeStatusUpdatesListResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

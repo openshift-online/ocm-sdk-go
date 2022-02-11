@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/statusboard/v1
 
 import (
 	"bufio"
@@ -27,26 +27,25 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// SubscriptionClient is the client of the 'subscription' resource.
+// StatusUpdateClient is the client of the 'status_update' resource.
 //
-// Manages a specific subscription.
-type SubscriptionClient struct {
+// Provides detailed information about the specified status.
+type StatusUpdateClient struct {
 	transport http.RoundTripper
 	path      string
 }
 
-// NewSubscriptionClient creates a new client for the 'subscription'
+// NewStatusUpdateClient creates a new client for the 'status_update'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewSubscriptionClient(transport http.RoundTripper, path string) *SubscriptionClient {
-	return &SubscriptionClient{
+func NewStatusUpdateClient(transport http.RoundTripper, path string) *StatusUpdateClient {
+	return &StatusUpdateClient{
 		transport: transport,
 		path:      path,
 	}
@@ -54,9 +53,9 @@ func NewSubscriptionClient(transport http.RoundTripper, path string) *Subscripti
 
 // Delete creates a request for the 'delete' method.
 //
-// Deletes the subscription by ID.
-func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
-	return &SubscriptionDeleteRequest{
+//
+func (c *StatusUpdateClient) Delete() *StatusUpdateDeleteRequest {
+	return &StatusUpdateDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -64,9 +63,9 @@ func (c *SubscriptionClient) Delete() *SubscriptionDeleteRequest {
 
 // Get creates a request for the 'get' method.
 //
-// Retrieves the details of the subscription by ID.
-func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
-	return &SubscriptionGetRequest{
+//
+func (c *StatusUpdateClient) Get() *StatusUpdateGetRequest {
+	return &StatusUpdateGetRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -74,84 +73,43 @@ func (c *SubscriptionClient) Get() *SubscriptionGetRequest {
 
 // Update creates a request for the 'update' method.
 //
-// Update a subscription
-func (c *SubscriptionClient) Update() *SubscriptionUpdateRequest {
-	return &SubscriptionUpdateRequest{
+//
+func (c *StatusUpdateClient) Update() *StatusUpdateUpdateRequest {
+	return &StatusUpdateUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
 }
 
-// Labels returns the target 'generic_labels' resource.
-//
-// Reference to the list of labels of a specific subscription.
-func (c *SubscriptionClient) Labels() *GenericLabelsClient {
-	return NewGenericLabelsClient(
-		c.transport,
-		path.Join(c.path, "labels"),
-	)
-}
-
-// Notify returns the target 'subscription_notify' resource.
-//
-// Notify a user related to the subscription via email
-func (c *SubscriptionClient) Notify() *SubscriptionNotifyClient {
-	return NewSubscriptionNotifyClient(
-		c.transport,
-		path.Join(c.path, "notify"),
-	)
-}
-
-// ReservedResources returns the target 'subscription_reserved_resources' resource.
-//
-// Reference to the resource that manages the collection of resources reserved by the
-// subscription.
-func (c *SubscriptionClient) ReservedResources() *SubscriptionReservedResourcesClient {
-	return NewSubscriptionReservedResourcesClient(
-		c.transport,
-		path.Join(c.path, "reserved_resources"),
-	)
-}
-
-// RoleBindings returns the target 'role_bindings' resource.
-//
-// Reference to the role bindings
-func (c *SubscriptionClient) RoleBindings() *RoleBindingsClient {
-	return NewRoleBindingsClient(
-		c.transport,
-		path.Join(c.path, "role_bindings"),
-	)
-}
-
-// SubscriptionPollRequest is the request for the Poll method.
-type SubscriptionPollRequest struct {
-	request    *SubscriptionGetRequest
+// StatusUpdatePollRequest is the request for the Poll method.
+type StatusUpdatePollRequest struct {
+	request    *StatusUpdateGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *SubscriptionPollRequest) Parameter(name string, value interface{}) *SubscriptionPollRequest {
+func (r *StatusUpdatePollRequest) Parameter(name string, value interface{}) *StatusUpdatePollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *SubscriptionPollRequest) Header(name string, value interface{}) *SubscriptionPollRequest {
+func (r *StatusUpdatePollRequest) Header(name string, value interface{}) *StatusUpdatePollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *SubscriptionPollRequest) Interval(value time.Duration) *SubscriptionPollRequest {
+func (r *StatusUpdatePollRequest) Interval(value time.Duration) *StatusUpdatePollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *SubscriptionPollRequest) Status(value int) *SubscriptionPollRequest {
+func (r *StatusUpdatePollRequest) Status(value int) *StatusUpdatePollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -159,9 +117,9 @@ func (r *SubscriptionPollRequest) Status(value int) *SubscriptionPollRequest {
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *SubscriptionPollRequest) Predicate(value func(*SubscriptionGetResponse) bool) *SubscriptionPollRequest {
+func (r *StatusUpdatePollRequest) Predicate(value func(*StatusUpdateGetResponse) bool) *StatusUpdatePollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*SubscriptionGetResponse))
+		return value(response.(*StatusUpdateGetResponse))
 	})
 	return r
 }
@@ -171,11 +129,11 @@ func (r *SubscriptionPollRequest) Predicate(value func(*SubscriptionGetResponse)
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *SubscriptionPollRequest) StartContext(ctx context.Context) (response *SubscriptionPollResponse, err error) {
+func (r *StatusUpdatePollRequest) StartContext(ctx context.Context) (response *StatusUpdatePollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &SubscriptionPollResponse{
-			response: result.(*SubscriptionGetResponse),
+		response = &StatusUpdatePollResponse{
+			response: result.(*StatusUpdateGetResponse),
 		}
 	}
 	return
@@ -183,7 +141,7 @@ func (r *SubscriptionPollRequest) StartContext(ctx context.Context) (response *S
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *SubscriptionPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *StatusUpdatePollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -192,13 +150,13 @@ func (r *SubscriptionPollRequest) task(ctx context.Context) (status int, result 
 	return
 }
 
-// SubscriptionPollResponse is the response for the Poll method.
-type SubscriptionPollResponse struct {
-	response *SubscriptionGetResponse
+// StatusUpdatePollResponse is the response for the Poll method.
+type StatusUpdatePollResponse struct {
+	response *StatusUpdateGetResponse
 }
 
 // Status returns the response status code.
-func (r *SubscriptionPollResponse) Status() int {
+func (r *StatusUpdatePollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -206,7 +164,7 @@ func (r *SubscriptionPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionPollResponse) Header() http.Header {
+func (r *StatusUpdatePollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -214,7 +172,7 @@ func (r *SubscriptionPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionPollResponse) Error() *errors.Error {
+func (r *StatusUpdatePollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -224,7 +182,7 @@ func (r *SubscriptionPollResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *SubscriptionPollResponse) Body() *Subscription {
+func (r *StatusUpdatePollResponse) Body() *Status {
 	return r.response.Body()
 }
 
@@ -232,20 +190,20 @@ func (r *SubscriptionPollResponse) Body() *Subscription {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *SubscriptionPollResponse) GetBody() (value *Subscription, ok bool) {
+func (r *StatusUpdatePollResponse) GetBody() (value *Status, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *SubscriptionClient) Poll() *SubscriptionPollRequest {
-	return &SubscriptionPollRequest{
+func (c *StatusUpdateClient) Poll() *StatusUpdatePollRequest {
+	return &StatusUpdatePollRequest{
 		request: c.Get(),
 	}
 }
 
-// SubscriptionDeleteRequest is the request for the 'delete' method.
-type SubscriptionDeleteRequest struct {
+// StatusUpdateDeleteRequest is the request for the 'delete' method.
+type StatusUpdateDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -253,13 +211,13 @@ type SubscriptionDeleteRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *SubscriptionDeleteRequest) Parameter(name string, value interface{}) *SubscriptionDeleteRequest {
+func (r *StatusUpdateDeleteRequest) Parameter(name string, value interface{}) *StatusUpdateDeleteRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *SubscriptionDeleteRequest {
+func (r *StatusUpdateDeleteRequest) Header(name string, value interface{}) *StatusUpdateDeleteRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -268,12 +226,12 @@ func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *Subs
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *SubscriptionDeleteRequest) Send() (result *SubscriptionDeleteResponse, err error) {
+func (r *StatusUpdateDeleteRequest) Send() (result *StatusUpdateDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *SubscriptionDeleteResponse, err error) {
+func (r *StatusUpdateDeleteRequest) SendContext(ctx context.Context) (result *StatusUpdateDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -293,7 +251,7 @@ func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *Su
 		return
 	}
 	defer response.Body.Close()
-	result = &SubscriptionDeleteResponse{}
+	result = &StatusUpdateDeleteResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -313,15 +271,15 @@ func (r *SubscriptionDeleteRequest) SendContext(ctx context.Context) (result *Su
 	return
 }
 
-// SubscriptionDeleteResponse is the response for the 'delete' method.
-type SubscriptionDeleteResponse struct {
+// StatusUpdateDeleteResponse is the response for the 'delete' method.
+type StatusUpdateDeleteResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
 }
 
 // Status returns the response status code.
-func (r *SubscriptionDeleteResponse) Status() int {
+func (r *StatusUpdateDeleteResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -329,7 +287,7 @@ func (r *SubscriptionDeleteResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionDeleteResponse) Header() http.Header {
+func (r *StatusUpdateDeleteResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -337,15 +295,15 @@ func (r *SubscriptionDeleteResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionDeleteResponse) Error() *errors.Error {
+func (r *StatusUpdateDeleteResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// SubscriptionGetRequest is the request for the 'get' method.
-type SubscriptionGetRequest struct {
+// StatusUpdateGetRequest is the request for the 'get' method.
+type StatusUpdateGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -353,13 +311,13 @@ type SubscriptionGetRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *SubscriptionGetRequest) Parameter(name string, value interface{}) *SubscriptionGetRequest {
+func (r *StatusUpdateGetRequest) Parameter(name string, value interface{}) *StatusUpdateGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *SubscriptionGetRequest) Header(name string, value interface{}) *SubscriptionGetRequest {
+func (r *StatusUpdateGetRequest) Header(name string, value interface{}) *StatusUpdateGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -368,12 +326,12 @@ func (r *SubscriptionGetRequest) Header(name string, value interface{}) *Subscri
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *SubscriptionGetRequest) Send() (result *SubscriptionGetResponse, err error) {
+func (r *StatusUpdateGetRequest) Send() (result *StatusUpdateGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *SubscriptionGetResponse, err error) {
+func (r *StatusUpdateGetRequest) SendContext(ctx context.Context) (result *StatusUpdateGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -393,7 +351,7 @@ func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *Subsc
 		return
 	}
 	defer response.Body.Close()
-	result = &SubscriptionGetResponse{}
+	result = &StatusUpdateGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -410,23 +368,23 @@ func (r *SubscriptionGetRequest) SendContext(ctx context.Context) (result *Subsc
 		err = result.err
 		return
 	}
-	err = readSubscriptionGetResponse(result, reader)
+	err = readStatusUpdateGetResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// SubscriptionGetResponse is the response for the 'get' method.
-type SubscriptionGetResponse struct {
+// StatusUpdateGetResponse is the response for the 'get' method.
+type StatusUpdateGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Subscription
+	body   *Status
 }
 
 // Status returns the response status code.
-func (r *SubscriptionGetResponse) Status() int {
+func (r *StatusUpdateGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -434,7 +392,7 @@ func (r *SubscriptionGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionGetResponse) Header() http.Header {
+func (r *StatusUpdateGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -442,7 +400,7 @@ func (r *SubscriptionGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionGetResponse) Error() *errors.Error {
+func (r *StatusUpdateGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -452,7 +410,7 @@ func (r *SubscriptionGetResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *SubscriptionGetResponse) Body() *Subscription {
+func (r *StatusUpdateGetResponse) Body() *Status {
 	if r == nil {
 		return nil
 	}
@@ -463,7 +421,7 @@ func (r *SubscriptionGetResponse) Body() *Subscription {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *SubscriptionGetResponse) GetBody() (value *Subscription, ok bool) {
+func (r *StatusUpdateGetResponse) GetBody() (value *Status, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -471,31 +429,31 @@ func (r *SubscriptionGetResponse) GetBody() (value *Subscription, ok bool) {
 	return
 }
 
-// SubscriptionUpdateRequest is the request for the 'update' method.
-type SubscriptionUpdateRequest struct {
+// StatusUpdateUpdateRequest is the request for the 'update' method.
+type StatusUpdateUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
 	header    http.Header
-	body      *Subscription
+	body      *Status
 }
 
 // Parameter adds a query parameter.
-func (r *SubscriptionUpdateRequest) Parameter(name string, value interface{}) *SubscriptionUpdateRequest {
+func (r *StatusUpdateUpdateRequest) Parameter(name string, value interface{}) *StatusUpdateUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *SubscriptionUpdateRequest) Header(name string, value interface{}) *SubscriptionUpdateRequest {
+func (r *StatusUpdateUpdateRequest) Header(name string, value interface{}) *StatusUpdateUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Body sets the value of the 'body' parameter.
 //
-// Updated subscription data
-func (r *SubscriptionUpdateRequest) Body(value *Subscription) *SubscriptionUpdateRequest {
+//
+func (r *StatusUpdateUpdateRequest) Body(value *Status) *StatusUpdateUpdateRequest {
 	r.body = value
 	return r
 }
@@ -504,16 +462,16 @@ func (r *SubscriptionUpdateRequest) Body(value *Subscription) *SubscriptionUpdat
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *SubscriptionUpdateRequest) Send() (result *SubscriptionUpdateResponse, err error) {
+func (r *StatusUpdateUpdateRequest) Send() (result *StatusUpdateUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *SubscriptionUpdateResponse, err error) {
+func (r *StatusUpdateUpdateRequest) SendContext(ctx context.Context) (result *StatusUpdateUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
-	err = writeSubscriptionUpdateRequest(r, buffer)
+	err = writeStatusUpdateUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -535,7 +493,7 @@ func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *Su
 		return
 	}
 	defer response.Body.Close()
-	result = &SubscriptionUpdateResponse{}
+	result = &StatusUpdateUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -552,23 +510,23 @@ func (r *SubscriptionUpdateRequest) SendContext(ctx context.Context) (result *Su
 		err = result.err
 		return
 	}
-	err = readSubscriptionUpdateResponse(result, reader)
+	err = readStatusUpdateUpdateResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// SubscriptionUpdateResponse is the response for the 'update' method.
-type SubscriptionUpdateResponse struct {
+// StatusUpdateUpdateResponse is the response for the 'update' method.
+type StatusUpdateUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Subscription
+	body   *Status
 }
 
 // Status returns the response status code.
-func (r *SubscriptionUpdateResponse) Status() int {
+func (r *StatusUpdateUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -576,7 +534,7 @@ func (r *SubscriptionUpdateResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *SubscriptionUpdateResponse) Header() http.Header {
+func (r *StatusUpdateUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -584,7 +542,7 @@ func (r *SubscriptionUpdateResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *SubscriptionUpdateResponse) Error() *errors.Error {
+func (r *StatusUpdateUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -593,8 +551,8 @@ func (r *SubscriptionUpdateResponse) Error() *errors.Error {
 
 // Body returns the value of the 'body' parameter.
 //
-// Updated subscription data
-func (r *SubscriptionUpdateResponse) Body() *Subscription {
+//
+func (r *StatusUpdateUpdateResponse) Body() *Status {
 	if r == nil {
 		return nil
 	}
@@ -604,8 +562,8 @@ func (r *SubscriptionUpdateResponse) Body() *Subscription {
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Updated subscription data
-func (r *SubscriptionUpdateResponse) GetBody() (value *Subscription, ok bool) {
+//
+func (r *StatusUpdateUpdateResponse) GetBody() (value *Status, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body

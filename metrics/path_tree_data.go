@@ -89,6 +89,9 @@ var pathTreeData = `{
             "notify": null,
             "reserved_resources": {
               "-": null
+            },
+            "role_bindings": {
+              "-": null
             }
           },
           "labels": {
@@ -316,6 +319,9 @@ var pathTreeData = `{
               "-": null
             }
           }
+        },
+        "status_updates": {
+          "-": null
         },
         "statuses": {
           "-": null
