@@ -3,17 +3,21 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.242 Feb 16 2022
+
+- Update to model 0.0.174
+  - adding rhit_account_id to Account class
 
 ## 0.1.241 Feb 11 2022
 
-- Update to model 0.1.173:  
+- Update to model 0.0.173:  
   - addons: Support attributes necessary for STS.
   - Add ProductIds param to Status Resource.
   - Add Role bindings to Subscription.
 
 ## 0.1.240 Feb 4 2022
 
-- Update to model 0.1.172:
+- Update to model 0.0.172:
   - Remove deprecated `SKUs` endpoint.
   - Remove deprecated quota summary resource and type.
   - Add QuotaVersion to ClusterAuth.

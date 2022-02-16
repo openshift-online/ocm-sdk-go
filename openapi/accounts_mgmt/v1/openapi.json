@@ -4440,6 +4440,9 @@
           "organization": {
             "$ref": "#/components/schemas/Organization"
           },
+          "rhit_account_id": {
+            "type": "string"
+          },
           "service_account": {
             "type": "boolean"
           },

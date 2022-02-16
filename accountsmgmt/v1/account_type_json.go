@@ -152,11 +152,20 @@ func writeAccount(object *Account, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("rhit_account_id")
+		stream.WriteString(object.rhitAccountID)
+		count++
+	}
+	present_ = object.bitmap_&8192 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("service_account")
 		stream.WriteBool(object.serviceAccount)
 		count++
 	}
-	present_ = object.bitmap_&8192 != 0
+	present_ = object.bitmap_&16384 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -165,7 +174,7 @@ func writeAccount(object *Account, stream *jsoniter.Stream) {
 		stream.WriteString((object.updatedAt).Format(time.RFC3339))
 		count++
 	}
-	present_ = object.bitmap_&16384 != 0
+	present_ = object.bitmap_&32768 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -248,10 +257,14 @@ func readAccount(iterator *jsoniter.Iterator) *Account {
 			value := readOrganization(iterator)
 			object.organization = value
 			object.bitmap_ |= 2048
+		case "rhit_account_id":
+			value := iterator.ReadString()
+			object.rhitAccountID = value
+			object.bitmap_ |= 4096
 		case "service_account":
 			value := iterator.ReadBool()
 			object.serviceAccount = value
-			object.bitmap_ |= 4096
+			object.bitmap_ |= 8192
 		case "updated_at":
 			text := iterator.ReadString()
 			value, err := time.Parse(time.RFC3339, text)
@@ -259,11 +272,11 @@ func readAccount(iterator *jsoniter.Iterator) *Account {
 				iterator.ReportError("", err.Error())
 			}
 			object.updatedAt = value
-			object.bitmap_ |= 8192
+			object.bitmap_ |= 16384
 		case "username":
 			value := iterator.ReadString()
 			object.username = value
-			object.bitmap_ |= 16384
+			object.bitmap_ |= 32768
 		default:
 			iterator.ReadAny()
 		}
