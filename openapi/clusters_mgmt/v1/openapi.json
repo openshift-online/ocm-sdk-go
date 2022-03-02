@@ -7339,6 +7339,10 @@
             "description": "Self link.",
             "type": "string"
           },
+          "config": {
+            "description": "Additional configs to be used by the addon once its installed in the cluster.",
+            "$ref": "#/components/schemas/AddOnConfig"
+          },
           "description": {
             "description": "Description of the add-on.",
             "type": "string"
@@ -7427,6 +7431,55 @@
           "version": {
             "description": "Link to the current default version of this add-on.",
             "$ref": "#/components/schemas/AddOnVersion"
+          }
+        }
+      },
+      "AddOnConfig": {
+        "description": "Representation of an add-on config.\nThe attributes under it are to be used by the addon once its installed in the cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnConfig' if this is a complete object or 'AddOnConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "add_on_environment_variables": {
+            "description": "List of environment variables for the addon",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnEnvironmentVariable"
+            }
+          }
+        }
+      },
+      "AddOnEnvironmentVariable": {
+        "description": "Representation of an add-on env object.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnEnvironmentVariable' if this is a complete object or 'AddOnEnvironmentVariableLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the env object.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the env object.",
+            "type": "string"
           }
         }
       },
@@ -7603,6 +7656,13 @@
             "description": "Name of the add-on parameter option.",
             "type": "string"
           },
+          "requirements": {
+            "description": "List of add-on requirements for this parameter option.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnRequirement"
+            }
+          },
           "value": {
             "description": "Value of the add-on parameter option.",
             "type": "string"
@@ -7693,8 +7753,12 @@
             }
           },
           "channel": {
-            "description": "The specific addon catalog source channel of packages ",
+            "description": "The specific addon catalog source channel of packages",
             "type": "string"
+          },
+          "config": {
+            "description": "Additional configs to be used by the addon once its installed in the cluster.",
+            "$ref": "#/components/schemas/AddOnConfig"
           },
           "enabled": {
             "description": "Indicates if this add-on version can be added to clusters.",
@@ -7791,8 +7855,12 @@
               "$ref": "#/components/schemas/Subnetwork"
             }
           },
+          "id": {
+            "description": "ID of virtual private cloud",
+            "type": "string"
+          },
           "name": {
-            "description": "Name of virtual private cloud",
+            "description": "Name of virtual private cloud according to its `Name` tag on AWS",
             "type": "string"
           },
           "subnets": {
@@ -9323,6 +9391,10 @@
         "properties": {
           "availability_zone": {
             "description": "The availability zone to which the subnet is related",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the subnet according to its `Name` tag on AWS",
             "type": "string"
           },
           "subnet_id": {
