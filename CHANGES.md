@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.244 Mar 02 2022
+- Update to model 0.0.176
+  - adding new endpoint for 'environment'
+  
 ## 0.1.243 Mar 02 2022
 - Update to model 0.0.175
   - adding new apis for addon config attribute
