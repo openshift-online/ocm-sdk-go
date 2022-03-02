@@ -2,11 +2,6 @@
 
 This document describes the relevant changes between releases of the OCM API
 SDK.
-
-## 0.1.243 Mar 02 2022
-
-- Update to model 0.0.175
-- Add environment endpoints get and patch
   
 ## 0.1.242 Feb 16 2022
 

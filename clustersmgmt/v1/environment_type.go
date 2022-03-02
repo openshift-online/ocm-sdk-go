@@ -19,64 +19,67 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// CloudVPC represents the values of the 'cloud_VPC' type.
+import (
+	time "time"
+)
+
+// Environment represents the values of the 'environment' type.
 //
-// Description of a cloud provider virtual private cloud.
-type CloudVPC struct {
-	bitmap_    uint32
-	awsSubnets []*Subnetwork
-	id         string
-	name       string
-	subnets    []string
+// Description of an environment
+type Environment struct {
+	bitmap_                   uint32
+	lastLimitedSupportCheck   time.Time
+	lastUpgradeAvailableCheck time.Time
+	name                      string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
-func (o *CloudVPC) Empty() bool {
+func (o *Environment) Empty() bool {
 	return o == nil || o.bitmap_ == 0
 }
 
-// AWSSubnets returns the value of the 'AWS_subnets' attribute, or
+// LastLimitedSupportCheck returns the value of the 'last_limited_support_check' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// List of subnetworks
-func (o *CloudVPC) AWSSubnets() []*Subnetwork {
+// last time that the worker checked for limited support clusters
+func (o *Environment) LastLimitedSupportCheck() time.Time {
 	if o != nil && o.bitmap_&1 != 0 {
-		return o.awsSubnets
+		return o.lastLimitedSupportCheck
 	}
-	return nil
+	return time.Time{}
 }
 
-// GetAWSSubnets returns the value of the 'AWS_subnets' attribute and
+// GetLastLimitedSupportCheck returns the value of the 'last_limited_support_check' attribute and
 // a flag indicating if the attribute has a value.
 //
-// List of subnetworks
-func (o *CloudVPC) GetAWSSubnets() (value []*Subnetwork, ok bool) {
+// last time that the worker checked for limited support clusters
+func (o *Environment) GetLastLimitedSupportCheck() (value time.Time, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
-		value = o.awsSubnets
+		value = o.lastLimitedSupportCheck
 	}
 	return
 }
 
-// ID returns the value of the 'ID' attribute, or
+// LastUpgradeAvailableCheck returns the value of the 'last_upgrade_available_check' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// ID of virtual private cloud
-func (o *CloudVPC) ID() string {
+// last time that the worker checked for available upgrades
+func (o *Environment) LastUpgradeAvailableCheck() time.Time {
 	if o != nil && o.bitmap_&2 != 0 {
-		return o.id
+		return o.lastUpgradeAvailableCheck
 	}
-	return ""
+	return time.Time{}
 }
 
-// GetID returns the value of the 'ID' attribute and
+// GetLastUpgradeAvailableCheck returns the value of the 'last_upgrade_available_check' attribute and
 // a flag indicating if the attribute has a value.
 //
-// ID of virtual private cloud
-func (o *CloudVPC) GetID() (value string, ok bool) {
+// last time that the worker checked for available upgrades
+func (o *Environment) GetLastUpgradeAvailableCheck() (value time.Time, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
-		value = o.id
+		value = o.lastUpgradeAvailableCheck
 	}
 	return
 }
@@ -84,8 +87,8 @@ func (o *CloudVPC) GetID() (value string, ok bool) {
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Name of virtual private cloud according to its `Name` tag on AWS
-func (o *CloudVPC) Name() string {
+// environment name
+func (o *Environment) Name() string {
 	if o != nil && o.bitmap_&4 != 0 {
 		return o.name
 	}
@@ -95,8 +98,8 @@ func (o *CloudVPC) Name() string {
 // GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Name of virtual private cloud according to its `Name` tag on AWS
-func (o *CloudVPC) GetName() (value string, ok bool) {
+// environment name
+func (o *Environment) GetName() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.name
@@ -104,50 +107,27 @@ func (o *CloudVPC) GetName() (value string, ok bool) {
 	return
 }
 
-// Subnets returns the value of the 'subnets' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// List of subnets used by the virtual private cloud.
-func (o *CloudVPC) Subnets() []string {
-	if o != nil && o.bitmap_&8 != 0 {
-		return o.subnets
-	}
-	return nil
-}
+// EnvironmentListKind is the name of the type used to represent list of objects of
+// type 'environment'.
+const EnvironmentListKind = "EnvironmentList"
 
-// GetSubnets returns the value of the 'subnets' attribute and
-// a flag indicating if the attribute has a value.
-//
-// List of subnets used by the virtual private cloud.
-func (o *CloudVPC) GetSubnets() (value []string, ok bool) {
-	ok = o != nil && o.bitmap_&8 != 0
-	if ok {
-		value = o.subnets
-	}
-	return
-}
+// EnvironmentListLinkKind is the name of the type used to represent links to list
+// of objects of type 'environment'.
+const EnvironmentListLinkKind = "EnvironmentListLink"
 
-// CloudVPCListKind is the name of the type used to represent list of objects of
-// type 'cloud_VPC'.
-const CloudVPCListKind = "CloudVPCList"
+// EnvironmentNilKind is the name of the type used to nil lists of objects of
+// type 'environment'.
+const EnvironmentListNilKind = "EnvironmentListNil"
 
-// CloudVPCListLinkKind is the name of the type used to represent links to list
-// of objects of type 'cloud_VPC'.
-const CloudVPCListLinkKind = "CloudVPCListLink"
-
-// CloudVPCNilKind is the name of the type used to nil lists of objects of
-// type 'cloud_VPC'.
-const CloudVPCListNilKind = "CloudVPCListNil"
-
-// CloudVPCList is a list of values of the 'cloud_VPC' type.
-type CloudVPCList struct {
+// EnvironmentList is a list of values of the 'environment' type.
+type EnvironmentList struct {
 	href  string
 	link  bool
-	items []*CloudVPC
+	items []*Environment
 }
 
 // Len returns the length of the list.
-func (l *CloudVPCList) Len() int {
+func (l *EnvironmentList) Len() int {
 	if l == nil {
 		return 0
 	}
@@ -155,13 +135,13 @@ func (l *CloudVPCList) Len() int {
 }
 
 // Empty returns true if the list is empty.
-func (l *CloudVPCList) Empty() bool {
+func (l *EnvironmentList) Empty() bool {
 	return l == nil || len(l.items) == 0
 }
 
 // Get returns the item of the list with the given index. If there is no item with
 // that index it returns nil.
-func (l *CloudVPCList) Get(i int) *CloudVPC {
+func (l *EnvironmentList) Get(i int) *Environment {
 	if l == nil || i < 0 || i >= len(l.items) {
 		return nil
 	}
@@ -174,12 +154,12 @@ func (l *CloudVPCList) Get(i int) *CloudVPC {
 //
 // If you don't need to modify the returned slice consider using the Each or Range
 // functions, as they don't need to allocate a new slice.
-func (l *CloudVPCList) Slice() []*CloudVPC {
-	var slice []*CloudVPC
+func (l *EnvironmentList) Slice() []*Environment {
+	var slice []*Environment
 	if l == nil {
-		slice = make([]*CloudVPC, 0)
+		slice = make([]*Environment, 0)
 	} else {
-		slice = make([]*CloudVPC, len(l.items))
+		slice = make([]*Environment, len(l.items))
 		copy(slice, l.items)
 	}
 	return slice
@@ -188,7 +168,7 @@ func (l *CloudVPCList) Slice() []*CloudVPC {
 // Each runs the given function for each item of the list, in order. If the function
 // returns false the iteration stops, otherwise it continues till all the elements
 // of the list have been processed.
-func (l *CloudVPCList) Each(f func(item *CloudVPC) bool) {
+func (l *EnvironmentList) Each(f func(item *Environment) bool) {
 	if l == nil {
 		return
 	}
@@ -202,7 +182,7 @@ func (l *CloudVPCList) Each(f func(item *CloudVPC) bool) {
 // Range runs the given function for each index and item of the list, in order. If
 // the function returns false the iteration stops, otherwise it continues till all
 // the elements of the list have been processed.
-func (l *CloudVPCList) Range(f func(index int, item *CloudVPC) bool) {
+func (l *EnvironmentList) Range(f func(index int, item *Environment) bool) {
 	if l == nil {
 		return
 	}

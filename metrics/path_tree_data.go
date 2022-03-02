@@ -218,6 +218,9 @@ var pathTreeData = `{
             }
           }
         },
+        "environment": {
+          "patch": null
+        },
         "events": null,
         "flavours": {
           "-": null

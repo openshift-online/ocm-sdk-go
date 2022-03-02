@@ -21,15 +21,16 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"io"
+	"time"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalCloudVPC writes a value of the 'cloud_VPC' type to the given writer.
-func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
+// MarshalEnvironment writes a value of the 'environment' type to the given writer.
+func MarshalEnvironment(object *Environment, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeCloudVPC(object, stream)
+	writeEnvironment(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,18 +38,18 @@ func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeCloudVPC writes a value of the 'cloud_VPC' type to the given stream.
-func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
+// writeEnvironment writes a value of the 'environment' type to the given stream.
+func writeEnvironment(object *Environment, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
-	present_ = object.bitmap_&1 != 0 && object.awsSubnets != nil
+	present_ = object.bitmap_&1 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("aws_subnets")
-		writeSubnetworkList(object.awsSubnets, stream)
+		stream.WriteObjectField("last_limited_support_check")
+		stream.WriteString((object.lastLimitedSupportCheck).Format(time.RFC3339))
 		count++
 	}
 	present_ = object.bitmap_&2 != 0
@@ -56,8 +57,8 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("id")
-		stream.WriteString(object.id)
+		stream.WriteObjectField("last_upgrade_available_check")
+		stream.WriteString((object.lastUpgradeAvailableCheck).Format(time.RFC3339))
 		count++
 	}
 	present_ = object.bitmap_&4 != 0
@@ -67,56 +68,51 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("name")
 		stream.WriteString(object.name)
-		count++
-	}
-	present_ = object.bitmap_&8 != 0 && object.subnets != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("subnets")
-		writeStringList(object.subnets, stream)
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalCloudVPC reads a value of the 'cloud_VPC' type from the given
+// UnmarshalEnvironment reads a value of the 'environment' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalCloudVPC(source interface{}) (object *CloudVPC, err error) {
+func UnmarshalEnvironment(source interface{}) (object *Environment, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readCloudVPC(iterator)
+	object = readEnvironment(iterator)
 	err = iterator.Error
 	return
 }
 
-// readCloudVPC reads a value of the 'cloud_VPC' type from the given iterator.
-func readCloudVPC(iterator *jsoniter.Iterator) *CloudVPC {
-	object := &CloudVPC{}
+// readEnvironment reads a value of the 'environment' type from the given iterator.
+func readEnvironment(iterator *jsoniter.Iterator) *Environment {
+	object := &Environment{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "aws_subnets":
-			value := readSubnetworkList(iterator)
-			object.awsSubnets = value
+		case "last_limited_support_check":
+			text := iterator.ReadString()
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.lastLimitedSupportCheck = value
 			object.bitmap_ |= 1
-		case "id":
-			value := iterator.ReadString()
-			object.id = value
+		case "last_upgrade_available_check":
+			text := iterator.ReadString()
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.lastUpgradeAvailableCheck = value
 			object.bitmap_ |= 2
 		case "name":
 			value := iterator.ReadString()
 			object.name = value
 			object.bitmap_ |= 4
-		case "subnets":
-			value := readStringList(iterator)
-			object.subnets = value
-			object.bitmap_ |= 8
 		default:
 			iterator.ReadAny()
 		}

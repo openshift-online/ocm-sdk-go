@@ -26,10 +26,10 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalCloudVPC writes a value of the 'cloud_VPC' type to the given writer.
-func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
+// MarshalAddOnEnvironmentVariable writes a value of the 'add_on_environment_variable' type to the given writer.
+func MarshalAddOnEnvironmentVariable(object *AddOnEnvironmentVariable, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeCloudVPC(object, stream)
+	writeAddOnEnvironmentVariable(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,22 +37,18 @@ func MarshalCloudVPC(object *CloudVPC, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeCloudVPC writes a value of the 'cloud_VPC' type to the given stream.
-func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
+// writeAddOnEnvironmentVariable writes a value of the 'add_on_environment_variable' type to the given stream.
+func writeAddOnEnvironmentVariable(object *AddOnEnvironmentVariable, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	var present_ bool
-	present_ = object.bitmap_&1 != 0 && object.awsSubnets != nil
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("aws_subnets")
-		writeSubnetworkList(object.awsSubnets, stream)
-		count++
+	stream.WriteObjectField("kind")
+	if object.bitmap_&1 != 0 {
+		stream.WriteString(AddOnEnvironmentVariableLinkKind)
+	} else {
+		stream.WriteString(AddOnEnvironmentVariableKind)
 	}
-	present_ = object.bitmap_&2 != 0
-	if present_ {
+	count++
+	if object.bitmap_&2 != 0 {
 		if count > 0 {
 			stream.WriteMore()
 		}
@@ -60,7 +56,16 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		stream.WriteString(object.id)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	if object.bitmap_&4 != 0 {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("href")
+		stream.WriteString(object.href)
+		count++
+	}
+	var present_ bool
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -69,54 +74,57 @@ func writeCloudVPC(object *CloudVPC, stream *jsoniter.Stream) {
 		stream.WriteString(object.name)
 		count++
 	}
-	present_ = object.bitmap_&8 != 0 && object.subnets != nil
+	present_ = object.bitmap_&16 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("subnets")
-		writeStringList(object.subnets, stream)
+		stream.WriteObjectField("value")
+		stream.WriteString(object.value)
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalCloudVPC reads a value of the 'cloud_VPC' type from the given
+// UnmarshalAddOnEnvironmentVariable reads a value of the 'add_on_environment_variable' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalCloudVPC(source interface{}) (object *CloudVPC, err error) {
+func UnmarshalAddOnEnvironmentVariable(source interface{}) (object *AddOnEnvironmentVariable, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readCloudVPC(iterator)
+	object = readAddOnEnvironmentVariable(iterator)
 	err = iterator.Error
 	return
 }
 
-// readCloudVPC reads a value of the 'cloud_VPC' type from the given iterator.
-func readCloudVPC(iterator *jsoniter.Iterator) *CloudVPC {
-	object := &CloudVPC{}
+// readAddOnEnvironmentVariable reads a value of the 'add_on_environment_variable' type from the given iterator.
+func readAddOnEnvironmentVariable(iterator *jsoniter.Iterator) *AddOnEnvironmentVariable {
+	object := &AddOnEnvironmentVariable{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "aws_subnets":
-			value := readSubnetworkList(iterator)
-			object.awsSubnets = value
-			object.bitmap_ |= 1
-		case "id":
+		case "kind":
 			value := iterator.ReadString()
-			object.id = value
+			if value == AddOnEnvironmentVariableLinkKind {
+				object.bitmap_ |= 1
+			}
+		case "id":
+			object.id = iterator.ReadString()
 			object.bitmap_ |= 2
+		case "href":
+			object.href = iterator.ReadString()
+			object.bitmap_ |= 4
 		case "name":
 			value := iterator.ReadString()
 			object.name = value
-			object.bitmap_ |= 4
-		case "subnets":
-			value := readStringList(iterator)
-			object.subnets = value
 			object.bitmap_ |= 8
+		case "value":
+			value := iterator.ReadString()
+			object.value = value
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}
