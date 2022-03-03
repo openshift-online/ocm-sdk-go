@@ -35,7 +35,7 @@ type EnvironmentServer interface {
 	// Retrieves the details of the environment.
 	Get(ctx context.Context, request *EnvironmentGetServerRequest, response *EnvironmentGetServerResponse) error
 
-	// Patch handles a request for the 'patch' method.
+	// Update handles a request for the 'update' method.
 	//
 	// Updates the environment.
 	//
@@ -43,7 +43,7 @@ type EnvironmentServer interface {
 	//
 	// - `last_upgrade_available_check`
 	// - `last_limited_support_check`
-	Patch(ctx context.Context, request *EnvironmentPatchServerRequest, response *EnvironmentPatchServerResponse) error
+	Update(ctx context.Context, request *EnvironmentUpdateServerRequest, response *EnvironmentUpdateServerResponse) error
 }
 
 // EnvironmentGetServerRequest is the request for the 'get' method.
@@ -71,15 +71,15 @@ func (r *EnvironmentGetServerResponse) Status(value int) *EnvironmentGetServerRe
 	return r
 }
 
-// EnvironmentPatchServerRequest is the request for the 'patch' method.
-type EnvironmentPatchServerRequest struct {
+// EnvironmentUpdateServerRequest is the request for the 'update' method.
+type EnvironmentUpdateServerRequest struct {
 	body *Environment
 }
 
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *EnvironmentPatchServerRequest) Body() *Environment {
+func (r *EnvironmentUpdateServerRequest) Body() *Environment {
 	if r == nil {
 		return nil
 	}
@@ -90,7 +90,7 @@ func (r *EnvironmentPatchServerRequest) Body() *Environment {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *EnvironmentPatchServerRequest) GetBody() (value *Environment, ok bool) {
+func (r *EnvironmentUpdateServerRequest) GetBody() (value *Environment, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -98,8 +98,8 @@ func (r *EnvironmentPatchServerRequest) GetBody() (value *Environment, ok bool) 
 	return
 }
 
-// EnvironmentPatchServerResponse is the response for the 'patch' method.
-type EnvironmentPatchServerResponse struct {
+// EnvironmentUpdateServerResponse is the response for the 'update' method.
+type EnvironmentUpdateServerResponse struct {
 	status int
 	err    *errors.Error
 	body   *Environment
@@ -108,13 +108,13 @@ type EnvironmentPatchServerResponse struct {
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *EnvironmentPatchServerResponse) Body(value *Environment) *EnvironmentPatchServerResponse {
+func (r *EnvironmentUpdateServerResponse) Body(value *Environment) *EnvironmentUpdateServerResponse {
 	r.body = value
 	return r
 }
 
 // Status sets the status code.
-func (r *EnvironmentPatchServerResponse) Status(value int) *EnvironmentPatchServerResponse {
+func (r *EnvironmentUpdateServerResponse) Status(value int) *EnvironmentUpdateServerResponse {
 	r.status = value
 	return r
 }
@@ -128,19 +128,15 @@ func dispatchEnvironment(w http.ResponseWriter, r *http.Request, server Environm
 		case "GET":
 			adaptEnvironmentGetRequest(w, r, server)
 			return
+		case "PATCH":
+			adaptEnvironmentUpdateRequest(w, r, server)
+			return
 		default:
 			errors.SendMethodNotAllowed(w, r)
 			return
 		}
 	}
 	switch segments[0] {
-	case "patch":
-		if r.Method != "POST" {
-			errors.SendMethodNotAllowed(w, r)
-			return
-		}
-		adaptEnvironmentPatchRequest(w, r, server)
-		return
 	default:
 		errors.SendNotFound(w, r)
 		return
@@ -182,12 +178,12 @@ func adaptEnvironmentGetRequest(w http.ResponseWriter, r *http.Request, server E
 	}
 }
 
-// adaptEnvironmentPatchRequest translates the given HTTP request into a call to
+// adaptEnvironmentUpdateRequest translates the given HTTP request into a call to
 // the corresponding method of the given server. Then it translates the
 // results returned by that method into an HTTP response.
-func adaptEnvironmentPatchRequest(w http.ResponseWriter, r *http.Request, server EnvironmentServer) {
-	request := &EnvironmentPatchServerRequest{}
-	err := readEnvironmentPatchRequest(request, r)
+func adaptEnvironmentUpdateRequest(w http.ResponseWriter, r *http.Request, server EnvironmentServer) {
+	request := &EnvironmentUpdateServerRequest{}
+	err := readEnvironmentUpdateRequest(request, r)
 	if err != nil {
 		glog.Errorf(
 			"Can't read request for method '%s' and path '%s': %v",
@@ -196,9 +192,9 @@ func adaptEnvironmentPatchRequest(w http.ResponseWriter, r *http.Request, server
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	response := &EnvironmentPatchServerResponse{}
+	response := &EnvironmentUpdateServerResponse{}
 	response.status = 200
-	err = server.Patch(r.Context(), request, response)
+	err = server.Update(r.Context(), request, response)
 	if err != nil {
 		glog.Errorf(
 			"Can't process request for method '%s' and path '%s': %v",
@@ -207,7 +203,7 @@ func adaptEnvironmentPatchRequest(w http.ResponseWriter, r *http.Request, server
 		errors.SendInternalServerError(w, r)
 		return
 	}
-	err = writeEnvironmentPatchResponse(response, w)
+	err = writeEnvironmentUpdateResponse(response, w)
 	if err != nil {
 		glog.Errorf(
 			"Can't write response for method '%s' and path '%s': %v",

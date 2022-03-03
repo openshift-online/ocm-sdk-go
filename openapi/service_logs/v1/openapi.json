@@ -234,52 +234,9 @@
         }
       }
     },
-    "/api/service_logs/v1/clusters/{cluster_id}/cluster_logs": {
-      "post": {
-        "description": "Creates a new log entry.",
-        "parameters": [
-          {
-            "name": "cluster_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LogEntry"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LogEntry"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/service_logs/v1/clusters/{cluster_id}/cluster_logs_uuid": {
       "get": {
-        "description": "Retrieves the list of cluster logs.",
+        "description": "Retrieves the list of cluster logs by cluster uuid.",
         "parameters": [
           {
             "name": "cluster_id",
@@ -354,83 +311,6 @@
                       "format": "int32"
                     }
                   }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/service_logs/v1/clusters/{cluster_id}/cluster_logs/{log_entry_id}": {
-      "delete": {
-        "description": "Deletes the log entry.",
-        "parameters": [
-          {
-            "name": "cluster_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "log_entry_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success."
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "Retrieves the details of the log entry.",
-        "parameters": [
-          {
-            "name": "cluster_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "log_entry_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LogEntry"
                 }
               }
             }

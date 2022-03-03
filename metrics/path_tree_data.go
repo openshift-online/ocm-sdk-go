@@ -218,9 +218,7 @@ var pathTreeData = `{
             }
           }
         },
-        "environment": {
-          "patch": null
-        },
+        "environment": null,
         "events": null,
         "flavours": {
           "-": null
@@ -272,9 +270,7 @@ var pathTreeData = `{
         },
         "clusters": {
           "-": {
-            "cluster_logs": {
-              "-": null
-            }
+            "cluster_logs_uuid": null
           }
         }
       }

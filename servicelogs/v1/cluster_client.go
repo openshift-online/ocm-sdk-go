@@ -42,12 +42,12 @@ func NewClusterClient(transport http.RoundTripper, path string) *ClusterClient {
 	}
 }
 
-// ClusterLogs returns the target 'cluster_logs' resource.
+// ClusterLogsUUID returns the target 'cluster_logs_UUID' resource.
 //
 // Reference to the list of cluster logs for a specific cluster uuid.
-func (c *ClusterClient) ClusterLogs() *ClusterLogsClient {
-	return NewClusterLogsClient(
+func (c *ClusterClient) ClusterLogsUUID() *ClusterLogsUUIDClient {
+	return NewClusterLogsUUIDClient(
 		c.transport,
-		path.Join(c.path, "cluster_logs"),
+		path.Join(c.path, "cluster_logs_uuid"),
 	)
 }

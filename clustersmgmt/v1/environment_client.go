@@ -27,7 +27,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -62,7 +61,7 @@ func (c *EnvironmentClient) Get() *EnvironmentGetRequest {
 	}
 }
 
-// Patch creates a request for the 'patch' method.
+// Update creates a request for the 'update' method.
 //
 // Updates the environment.
 //
@@ -70,10 +69,10 @@ func (c *EnvironmentClient) Get() *EnvironmentGetRequest {
 //
 // - `last_upgrade_available_check`
 // - `last_limited_support_check`
-func (c *EnvironmentClient) Patch() *EnvironmentPatchRequest {
-	return &EnvironmentPatchRequest{
+func (c *EnvironmentClient) Update() *EnvironmentUpdateRequest {
+	return &EnvironmentUpdateRequest{
 		transport: c.transport,
-		path:      path.Join(c.path, "patch"),
+		path:      c.path,
 	}
 }
 
@@ -325,8 +324,8 @@ func (r *EnvironmentGetResponse) GetBody() (value *Environment, ok bool) {
 	return
 }
 
-// EnvironmentPatchRequest is the request for the 'patch' method.
-type EnvironmentPatchRequest struct {
+// EnvironmentUpdateRequest is the request for the 'update' method.
+type EnvironmentUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -335,13 +334,13 @@ type EnvironmentPatchRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *EnvironmentPatchRequest) Parameter(name string, value interface{}) *EnvironmentPatchRequest {
+func (r *EnvironmentUpdateRequest) Parameter(name string, value interface{}) *EnvironmentUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *EnvironmentPatchRequest) Header(name string, value interface{}) *EnvironmentPatchRequest {
+func (r *EnvironmentUpdateRequest) Header(name string, value interface{}) *EnvironmentUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
@@ -349,7 +348,7 @@ func (r *EnvironmentPatchRequest) Header(name string, value interface{}) *Enviro
 // Body sets the value of the 'body' parameter.
 //
 //
-func (r *EnvironmentPatchRequest) Body(value *Environment) *EnvironmentPatchRequest {
+func (r *EnvironmentUpdateRequest) Body(value *Environment) *EnvironmentUpdateRequest {
 	r.body = value
 	return r
 }
@@ -358,16 +357,16 @@ func (r *EnvironmentPatchRequest) Body(value *Environment) *EnvironmentPatchRequ
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *EnvironmentPatchRequest) Send() (result *EnvironmentPatchResponse, err error) {
+func (r *EnvironmentUpdateRequest) Send() (result *EnvironmentUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *EnvironmentPatchRequest) SendContext(ctx context.Context) (result *EnvironmentPatchResponse, err error) {
+func (r *EnvironmentUpdateRequest) SendContext(ctx context.Context) (result *EnvironmentUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
-	err = writeEnvironmentPatchRequest(r, buffer)
+	err = writeEnvironmentUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -376,7 +375,7 @@ func (r *EnvironmentPatchRequest) SendContext(ctx context.Context) (result *Envi
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: "POST",
+		Method: "PATCH",
 		URL:    uri,
 		Header: header,
 		Body:   ioutil.NopCloser(buffer),
@@ -389,7 +388,7 @@ func (r *EnvironmentPatchRequest) SendContext(ctx context.Context) (result *Envi
 		return
 	}
 	defer response.Body.Close()
-	result = &EnvironmentPatchResponse{}
+	result = &EnvironmentUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -406,15 +405,15 @@ func (r *EnvironmentPatchRequest) SendContext(ctx context.Context) (result *Envi
 		err = result.err
 		return
 	}
-	err = readEnvironmentPatchResponse(result, reader)
+	err = readEnvironmentUpdateResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// EnvironmentPatchResponse is the response for the 'patch' method.
-type EnvironmentPatchResponse struct {
+// EnvironmentUpdateResponse is the response for the 'update' method.
+type EnvironmentUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
@@ -422,7 +421,7 @@ type EnvironmentPatchResponse struct {
 }
 
 // Status returns the response status code.
-func (r *EnvironmentPatchResponse) Status() int {
+func (r *EnvironmentUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -430,7 +429,7 @@ func (r *EnvironmentPatchResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *EnvironmentPatchResponse) Header() http.Header {
+func (r *EnvironmentUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -438,7 +437,7 @@ func (r *EnvironmentPatchResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *EnvironmentPatchResponse) Error() *errors.Error {
+func (r *EnvironmentUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -448,7 +447,7 @@ func (r *EnvironmentPatchResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *EnvironmentPatchResponse) Body() *Environment {
+func (r *EnvironmentUpdateResponse) Body() *Environment {
 	if r == nil {
 		return nil
 	}
@@ -459,7 +458,7 @@ func (r *EnvironmentPatchResponse) Body() *Environment {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *EnvironmentPatchResponse) GetBody() (value *Environment, ok bool) {
+func (r *EnvironmentUpdateResponse) GetBody() (value *Environment, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body

@@ -5541,21 +5541,14 @@
             }
           }
         }
-      }
-    },
-    "/api/clusters_mgmt/v1/environment/patch": {
-      "post": {
+      },
+      "patch": {
         "description": "Updates the environment.\n\nAttributes that can be updated are:\n\n- `last_upgrade_available_check`\n- `last_limited_support_check`",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "body": {
-                    "$ref": "#/components/schemas/Environment"
-                  }
-                }
+                "$ref": "#/components/schemas/Environment"
               }
             }
           }
@@ -5566,12 +5559,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "body": {
-                      "$ref": "#/components/schemas/Environment"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Environment"
                 }
               }
             }
