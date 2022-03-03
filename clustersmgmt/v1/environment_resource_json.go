@@ -22,8 +22,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 import (
 	"io"
 	"net/http"
-
-	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
 func readEnvironmentGetRequest(request *EnvironmentGetServerRequest, r *http.Request) error {
@@ -40,85 +38,19 @@ func readEnvironmentGetResponse(response *EnvironmentGetResponse, reader io.Read
 func writeEnvironmentGetResponse(response *EnvironmentGetServerResponse, w http.ResponseWriter) error {
 	return MarshalEnvironment(response.body, w)
 }
-func readEnvironmentPatchRequest(request *EnvironmentPatchServerRequest, r *http.Request) error {
-	iterator, err := helpers.NewIterator(r.Body)
-	if err != nil {
-		return err
-	}
-	for {
-		field := iterator.ReadObject()
-		if field == "" {
-			break
-		}
-		switch field {
-		case "body":
-			value := readEnvironment(iterator)
-			request.body = value
-		default:
-			iterator.ReadAny()
-		}
-	}
-	err = iterator.Error
-	if err != nil {
-		return err
-	}
-	return nil
+func readEnvironmentUpdateRequest(request *EnvironmentUpdateServerRequest, r *http.Request) error {
+	var err error
+	request.body, err = UnmarshalEnvironment(r.Body)
+	return err
 }
-func writeEnvironmentPatchRequest(request *EnvironmentPatchRequest, writer io.Writer) error {
-	count := 0
-	stream := helpers.NewStream(writer)
-	stream.WriteObjectStart()
-	if request.body != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("body")
-		writeEnvironment(request.body, stream)
-		count++
-	}
-	stream.WriteObjectEnd()
-	err := stream.Flush()
-	if err != nil {
-		return err
-	}
-	return stream.Error
+func writeEnvironmentUpdateRequest(request *EnvironmentUpdateRequest, writer io.Writer) error {
+	return MarshalEnvironment(request.body, writer)
 }
-func readEnvironmentPatchResponse(response *EnvironmentPatchResponse, reader io.Reader) error {
-	iterator, err := helpers.NewIterator(reader)
-	if err != nil {
-		return err
-	}
-	for {
-		field := iterator.ReadObject()
-		if field == "" {
-			break
-		}
-		switch field {
-		case "body":
-			value := readEnvironment(iterator)
-			response.body = value
-		default:
-			iterator.ReadAny()
-		}
-	}
-	return iterator.Error
+func readEnvironmentUpdateResponse(response *EnvironmentUpdateResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalEnvironment(reader)
+	return err
 }
-func writeEnvironmentPatchResponse(response *EnvironmentPatchServerResponse, w http.ResponseWriter) error {
-	count := 0
-	stream := helpers.NewStream(w)
-	stream.WriteObjectStart()
-	if response.body != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("body")
-		writeEnvironment(response.body, stream)
-		count++
-	}
-	stream.WriteObjectEnd()
-	err := stream.Flush()
-	if err != nil {
-		return err
-	}
-	return stream.Error
+func writeEnvironmentUpdateResponse(response *EnvironmentUpdateServerResponse, w http.ResponseWriter) error {
+	return MarshalEnvironment(response.body, w)
 }
