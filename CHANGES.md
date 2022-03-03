@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.245 Mar 3 2022
+
+- Update to model 0.0.177:
+  - Fix update method of environment endpoint, should be `Update` instead of
+    `Patch`.
+  - Remove unimplemented `POST /api/service_logs/v1/cluster_logs/clusters/{uuid}/cluster_logs`
+    method.
+
 ## 0.1.244 Mar 02 2022
 - Update to model 0.0.176
   - adding new endpoint for 'environment'
