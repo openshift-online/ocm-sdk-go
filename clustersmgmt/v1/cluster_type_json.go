@@ -337,7 +337,16 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteBool(object.managed)
 		count++
 	}
-	present_ = object.bitmap_&2147483648 != 0
+	present_ = object.bitmap_&2147483648 != 0 && object.managedService != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("managed_service")
+		writeManagedService(object.managedService, stream)
+		count++
+	}
+	present_ = object.bitmap_&4294967296 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -346,7 +355,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteBool(object.multiAZ)
 		count++
 	}
-	present_ = object.bitmap_&4294967296 != 0
+	present_ = object.bitmap_&8589934592 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -355,7 +364,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteString(object.name)
 		count++
 	}
-	present_ = object.bitmap_&8589934592 != 0 && object.network != nil
+	present_ = object.bitmap_&17179869184 != 0 && object.network != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -364,7 +373,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeNetwork(object.network, stream)
 		count++
 	}
-	present_ = object.bitmap_&17179869184 != 0 && object.nodeDrainGracePeriod != nil
+	present_ = object.bitmap_&34359738368 != 0 && object.nodeDrainGracePeriod != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -373,7 +382,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeValue(object.nodeDrainGracePeriod, stream)
 		count++
 	}
-	present_ = object.bitmap_&34359738368 != 0 && object.nodes != nil
+	present_ = object.bitmap_&68719476736 != 0 && object.nodes != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -382,7 +391,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeClusterNodes(object.nodes, stream)
 		count++
 	}
-	present_ = object.bitmap_&68719476736 != 0
+	present_ = object.bitmap_&137438953472 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -391,7 +400,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteString(object.openshiftVersion)
 		count++
 	}
-	present_ = object.bitmap_&137438953472 != 0 && object.product != nil
+	present_ = object.bitmap_&274877906944 != 0 && object.product != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -400,7 +409,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeProduct(object.product, stream)
 		count++
 	}
-	present_ = object.bitmap_&274877906944 != 0 && object.properties != nil
+	present_ = object.bitmap_&549755813888 != 0 && object.properties != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -429,7 +438,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		}
 		count++
 	}
-	present_ = object.bitmap_&549755813888 != 0 && object.provisionShard != nil
+	present_ = object.bitmap_&1099511627776 != 0 && object.provisionShard != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -438,7 +447,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeProvisionShard(object.provisionShard, stream)
 		count++
 	}
-	present_ = object.bitmap_&1099511627776 != 0 && object.proxy != nil
+	present_ = object.bitmap_&2199023255552 != 0 && object.proxy != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -447,7 +456,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeProxy(object.proxy, stream)
 		count++
 	}
-	present_ = object.bitmap_&2199023255552 != 0 && object.region != nil
+	present_ = object.bitmap_&4398046511104 != 0 && object.region != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -456,7 +465,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeCloudRegion(object.region, stream)
 		count++
 	}
-	present_ = object.bitmap_&4398046511104 != 0
+	present_ = object.bitmap_&8796093022208 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -465,7 +474,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteString(string(object.state))
 		count++
 	}
-	present_ = object.bitmap_&8796093022208 != 0 && object.status != nil
+	present_ = object.bitmap_&17592186044416 != 0 && object.status != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -474,7 +483,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeClusterStatus(object.status, stream)
 		count++
 	}
-	present_ = object.bitmap_&17592186044416 != 0 && object.storageQuota != nil
+	present_ = object.bitmap_&35184372088832 != 0 && object.storageQuota != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -483,7 +492,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeValue(object.storageQuota, stream)
 		count++
 	}
-	present_ = object.bitmap_&35184372088832 != 0 && object.subscription != nil
+	present_ = object.bitmap_&70368744177664 != 0 && object.subscription != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -492,7 +501,7 @@ func writeCluster(object *Cluster, stream *jsoniter.Stream) {
 		writeSubscription(object.subscription, stream)
 		count++
 	}
-	present_ = object.bitmap_&70368744177664 != 0 && object.version != nil
+	present_ = object.bitmap_&140737488355328 != 0 && object.version != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -759,34 +768,38 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 			value := iterator.ReadBool()
 			object.managed = value
 			object.bitmap_ |= 1073741824
+		case "managed_service":
+			value := readManagedService(iterator)
+			object.managedService = value
+			object.bitmap_ |= 2147483648
 		case "multi_az":
 			value := iterator.ReadBool()
 			object.multiAZ = value
-			object.bitmap_ |= 2147483648
+			object.bitmap_ |= 4294967296
 		case "name":
 			value := iterator.ReadString()
 			object.name = value
-			object.bitmap_ |= 4294967296
+			object.bitmap_ |= 8589934592
 		case "network":
 			value := readNetwork(iterator)
 			object.network = value
-			object.bitmap_ |= 8589934592
+			object.bitmap_ |= 17179869184
 		case "node_drain_grace_period":
 			value := readValue(iterator)
 			object.nodeDrainGracePeriod = value
-			object.bitmap_ |= 17179869184
+			object.bitmap_ |= 34359738368
 		case "nodes":
 			value := readClusterNodes(iterator)
 			object.nodes = value
-			object.bitmap_ |= 34359738368
+			object.bitmap_ |= 68719476736
 		case "openshift_version":
 			value := iterator.ReadString()
 			object.openshiftVersion = value
-			object.bitmap_ |= 68719476736
+			object.bitmap_ |= 137438953472
 		case "product":
 			value := readProduct(iterator)
 			object.product = value
-			object.bitmap_ |= 137438953472
+			object.bitmap_ |= 274877906944
 		case "properties":
 			value := map[string]string{}
 			for {
@@ -798,40 +811,40 @@ func readCluster(iterator *jsoniter.Iterator) *Cluster {
 				value[key] = item
 			}
 			object.properties = value
-			object.bitmap_ |= 274877906944
+			object.bitmap_ |= 549755813888
 		case "provision_shard":
 			value := readProvisionShard(iterator)
 			object.provisionShard = value
-			object.bitmap_ |= 549755813888
+			object.bitmap_ |= 1099511627776
 		case "proxy":
 			value := readProxy(iterator)
 			object.proxy = value
-			object.bitmap_ |= 1099511627776
+			object.bitmap_ |= 2199023255552
 		case "region":
 			value := readCloudRegion(iterator)
 			object.region = value
-			object.bitmap_ |= 2199023255552
+			object.bitmap_ |= 4398046511104
 		case "state":
 			text := iterator.ReadString()
 			value := ClusterState(text)
 			object.state = value
-			object.bitmap_ |= 4398046511104
+			object.bitmap_ |= 8796093022208
 		case "status":
 			value := readClusterStatus(iterator)
 			object.status = value
-			object.bitmap_ |= 8796093022208
+			object.bitmap_ |= 17592186044416
 		case "storage_quota":
 			value := readValue(iterator)
 			object.storageQuota = value
-			object.bitmap_ |= 17592186044416
+			object.bitmap_ |= 35184372088832
 		case "subscription":
 			value := readSubscription(iterator)
 			object.subscription = value
-			object.bitmap_ |= 35184372088832
+			object.bitmap_ |= 70368744177664
 		case "version":
 			value := readVersion(iterator)
 			object.version = value
-			object.bitmap_ |= 70368744177664
+			object.bitmap_ |= 140737488355328
 		default:
 			iterator.ReadAny()
 		}

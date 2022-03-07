@@ -62,7 +62,7 @@ func (o *OperatorIAMRole) GetID() (value string, ok bool) {
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Name of the operator
+// Name of the credentials secret used to access cloud resources
 func (o *OperatorIAMRole) Name() string {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.name
@@ -73,7 +73,7 @@ func (o *OperatorIAMRole) Name() string {
 // GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Name of the operator
+// Name of the credentials secret used to access cloud resources
 func (o *OperatorIAMRole) GetName() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
@@ -85,7 +85,7 @@ func (o *OperatorIAMRole) GetName() (value string, ok bool) {
 // Namespace returns the value of the 'namespace' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Namespace where the operator lives in the cluster
+// Namespace where the credentials secret lives in the cluster
 func (o *OperatorIAMRole) Namespace() string {
 	if o != nil && o.bitmap_&4 != 0 {
 		return o.namespace
@@ -96,7 +96,7 @@ func (o *OperatorIAMRole) Namespace() string {
 // GetNamespace returns the value of the 'namespace' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Namespace where the operator lives in the cluster
+// Namespace where the credentials secret lives in the cluster
 func (o *OperatorIAMRole) GetNamespace() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
