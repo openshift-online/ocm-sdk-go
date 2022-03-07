@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.246 Mar 7 2022
+
+- Update to model 0.0.178:
+  - Add `managed_service` field to add-on type.
+  - Add `credentials_secret` field to add-on type.
+  - Add `region` field to provision shard.
+
 ## 0.1.245 Mar 3 2022
 
 - Update to model 0.0.177:
