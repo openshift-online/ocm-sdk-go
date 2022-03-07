@@ -108,6 +108,15 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("hive_config")
 		writeServerConfig(object.hiveConfig, stream)
+		count++
+	}
+	present_ = object.bitmap_&256 != 0 && object.region != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("region")
+		writeCloudRegion(object.region, stream)
 	}
 	stream.WriteObjectEnd()
 }
@@ -164,6 +173,10 @@ func readProvisionShard(iterator *jsoniter.Iterator) *ProvisionShard {
 			value := readServerConfig(iterator)
 			object.hiveConfig = value
 			object.bitmap_ |= 128
+		case "region":
+			value := readCloudRegion(iterator)
+			object.region = value
+			object.bitmap_ |= 256
 		default:
 			iterator.ReadAny()
 		}

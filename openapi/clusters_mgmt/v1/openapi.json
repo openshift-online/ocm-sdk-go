@@ -7404,6 +7404,10 @@
             "description": "Additional configs to be used by the addon once its installed in the cluster.",
             "$ref": "#/components/schemas/AddOnConfig"
           },
+          "credentials_secret": {
+            "description": "Name of the secret that will hold the credentials required to access cloud resources.",
+            "type": "string"
+          },
           "description": {
             "description": "Description of the add-on.",
             "type": "string"
@@ -7435,6 +7439,10 @@
           "label": {
             "description": "Label used to attach to a cluster deployment when add-on is installed.",
             "type": "string"
+          },
+          "managed_service": {
+            "description": "Indicates if add-on is part of a managed service",
+            "type": "boolean"
           },
           "name": {
             "description": "Name of the add-on.",
@@ -8171,6 +8179,10 @@
           "managed": {
             "description": "Flag indicating if the cluster is managed (by Red Hat) or\nself-managed by the user.",
             "type": "boolean"
+          },
+          "managed_service": {
+            "description": "Contains information about Managed Service",
+            "$ref": "#/components/schemas/ManagedService"
           },
           "multi_az": {
             "description": "Flag indicating if the cluster should be created with nodes in\ndifferent availability zones or all the nodes in a single one\nrandomly selected.",
@@ -9188,6 +9200,15 @@
           "small"
         ]
       },
+      "ManagedService": {
+        "description": "Contains the necessary attributes to support role-based authentication on AWS.",
+        "properties": {
+          "enabled": {
+            "description": "Indicates whether the cluster belongs to a managed service\nThis should only be set by the \"Managed Service\" service.\nclusters with this set can only be modified by the \"Managed Service\" service.",
+            "type": "boolean"
+          }
+        }
+      },
       "Network": {
         "description": "Network configuration of a cluster.",
         "properties": {
@@ -9321,11 +9342,11 @@
             "type": "string"
           },
           "name": {
-            "description": "Name of the operator",
+            "description": "Name of the credentials secret used to access cloud resources",
             "type": "string"
           },
           "namespace": {
-            "description": "Namespace where the operator lives in the cluster",
+            "description": "Namespace where the credentials secret lives in the cluster",
             "type": "string"
           },
           "role_arn": {
@@ -9393,6 +9414,10 @@
           "hive_config": {
             "description": "Contains the configuration for Hive",
             "$ref": "#/components/schemas/ServerConfig"
+          },
+          "region": {
+            "description": "Contains the cloud-provider region in which the provisioner spins up the cluster",
+            "$ref": "#/components/schemas/CloudRegion"
           }
         }
       },
