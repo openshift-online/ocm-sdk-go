@@ -381,6 +381,29 @@ var _ = Describe("Methods", func() {
 			Expect(response.Status()).To(Equal(http.StatusNoContent))
 			Expect(response.Body()).To(BeNil())
 		})
+
+		It("Sends impersonation header", func() {
+			// Configure the server:
+			apiServer.AppendHandlers(
+				ghttp.CombineHandlers(
+					ghttp.VerifyHeaderKV("Impersonate-User", "my-user"),
+					RespondWithJSON(http.StatusOK, "{}"),
+				),
+			)
+
+			// Prepare the body:
+			body, err := cmv1.NewCluster().
+				Name("my-cluster").
+				Build()
+			Expect(err).ToNot(HaveOccurred())
+
+			// Send the request:
+			_, err = connection.ClustersMgmt().V1().Clusters().Add().
+				Impersonate("my-user").
+				Body(body).
+				Send()
+			Expect(err).ToNot(HaveOccurred())
+		})
 	})
 
 	Describe("Patch", func() {
