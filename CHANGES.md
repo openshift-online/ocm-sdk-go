@@ -3,6 +3,15 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.247 Mar 8 2022
+
+- Update to metamodel 0.0.52:
+  - Add support for annotations.
+  - Add `@json` and `@http` annotations.
+  - Add `@go` annotation.
+  - Add original text to names.
+  - Add `Impersonate` method to support the `Impersonate-User` header.
+
 ## 0.1.246 Mar 7 2022
 
 - Update to model 0.0.178:
