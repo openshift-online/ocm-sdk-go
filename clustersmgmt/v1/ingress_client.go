@@ -222,6 +222,13 @@ func (r *IngressDeleteRequest) Header(name string, value interface{}) *IngressDe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IngressDeleteRequest) Impersonate(user string) *IngressDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *IngressGetRequest) Parameter(name string, value interface{}) *IngressGe
 // Header adds a request header.
 func (r *IngressGetRequest) Header(name string, value interface{}) *IngressGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IngressGetRequest) Impersonate(user string) *IngressGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *IngressUpdateRequest) Parameter(name string, value interface{}) *Ingres
 // Header adds a request header.
 func (r *IngressUpdateRequest) Header(name string, value interface{}) *IngressUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IngressUpdateRequest) Impersonate(user string) *IngressUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

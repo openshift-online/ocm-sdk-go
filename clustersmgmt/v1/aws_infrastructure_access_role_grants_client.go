@@ -103,6 +103,13 @@ func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Header(name string, value 
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Impersonate(user string) *AWSInfrastructureAccessRoleGrantsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the AWS infrastructure access role grant.
@@ -245,6 +252,13 @@ func (r *AWSInfrastructureAccessRoleGrantsListRequest) Parameter(name string, va
 // Header adds a request header.
 func (r *AWSInfrastructureAccessRoleGrantsListRequest) Header(name string, value interface{}) *AWSInfrastructureAccessRoleGrantsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Impersonate(user string) *AWSInfrastructureAccessRoleGrantsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

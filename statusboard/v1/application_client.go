@@ -233,6 +233,13 @@ func (r *ApplicationDeleteRequest) Header(name string, value interface{}) *Appli
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ApplicationDeleteRequest) Impersonate(user string) *ApplicationDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -330,6 +337,13 @@ func (r *ApplicationGetRequest) Parameter(name string, value interface{}) *Appli
 // Header adds a request header.
 func (r *ApplicationGetRequest) Header(name string, value interface{}) *ApplicationGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ApplicationGetRequest) Impersonate(user string) *ApplicationGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -458,6 +472,13 @@ func (r *ApplicationUpdateRequest) Parameter(name string, value interface{}) *Ap
 // Header adds a request header.
 func (r *ApplicationUpdateRequest) Header(name string, value interface{}) *ApplicationUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ApplicationUpdateRequest) Impersonate(user string) *ApplicationUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

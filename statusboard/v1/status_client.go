@@ -222,6 +222,13 @@ func (r *StatusDeleteRequest) Header(name string, value interface{}) *StatusDele
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *StatusDeleteRequest) Impersonate(user string) *StatusDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *StatusGetRequest) Parameter(name string, value interface{}) *StatusGetR
 // Header adds a request header.
 func (r *StatusGetRequest) Header(name string, value interface{}) *StatusGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *StatusGetRequest) Impersonate(user string) *StatusGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *StatusUpdateRequest) Parameter(name string, value interface{}) *StatusU
 // Header adds a request header.
 func (r *StatusUpdateRequest) Header(name string, value interface{}) *StatusUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *StatusUpdateRequest) Impersonate(user string) *StatusUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

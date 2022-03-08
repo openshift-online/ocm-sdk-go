@@ -212,6 +212,13 @@ func (r *UpgradePolicyStateGetRequest) Header(name string, value interface{}) *U
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *UpgradePolicyStateGetRequest) Impersonate(user string) *UpgradePolicyStateGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -337,6 +344,13 @@ func (r *UpgradePolicyStateUpdateRequest) Parameter(name string, value interface
 // Header adds a request header.
 func (r *UpgradePolicyStateUpdateRequest) Header(name string, value interface{}) *UpgradePolicyStateUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *UpgradePolicyStateUpdateRequest) Impersonate(user string) *UpgradePolicyStateUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

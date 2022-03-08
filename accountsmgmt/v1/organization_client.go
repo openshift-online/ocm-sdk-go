@@ -255,6 +255,13 @@ func (r *OrganizationGetRequest) Header(name string, value interface{}) *Organiz
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *OrganizationGetRequest) Impersonate(user string) *OrganizationGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -380,6 +387,13 @@ func (r *OrganizationUpdateRequest) Parameter(name string, value interface{}) *O
 // Header adds a request header.
 func (r *OrganizationUpdateRequest) Header(name string, value interface{}) *OrganizationUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *OrganizationUpdateRequest) Impersonate(user string) *OrganizationUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

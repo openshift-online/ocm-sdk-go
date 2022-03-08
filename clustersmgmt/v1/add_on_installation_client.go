@@ -222,6 +222,13 @@ func (r *AddOnInstallationDeleteRequest) Header(name string, value interface{}) 
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnInstallationDeleteRequest) Impersonate(user string) *AddOnInstallationDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *AddOnInstallationGetRequest) Parameter(name string, value interface{}) 
 // Header adds a request header.
 func (r *AddOnInstallationGetRequest) Header(name string, value interface{}) *AddOnInstallationGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnInstallationGetRequest) Impersonate(user string) *AddOnInstallationGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *AddOnInstallationUpdateRequest) Parameter(name string, value interface{
 // Header adds a request header.
 func (r *AddOnInstallationUpdateRequest) Header(name string, value interface{}) *AddOnInstallationUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnInstallationUpdateRequest) Impersonate(user string) *AddOnInstallationUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

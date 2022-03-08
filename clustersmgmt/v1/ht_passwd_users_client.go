@@ -102,6 +102,13 @@ func (r *HTPasswdUsersAddRequest) Header(name string, value interface{}) *HTPass
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *HTPasswdUsersAddRequest) Impersonate(user string) *HTPasswdUsersAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // New user to be added
@@ -242,6 +249,13 @@ func (r *HTPasswdUsersListRequest) Parameter(name string, value interface{}) *HT
 // Header adds a request header.
 func (r *HTPasswdUsersListRequest) Header(name string, value interface{}) *HTPasswdUsersListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *HTPasswdUsersListRequest) Impersonate(user string) *HTPasswdUsersListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

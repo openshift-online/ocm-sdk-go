@@ -224,6 +224,13 @@ func (r *LogGetRequest) Header(name string, value interface{}) *LogGetRequest {
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *LogGetRequest) Impersonate(user string) *LogGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Offset sets the value of the 'offset' parameter.
 //
 // Line offset to start logs from. if 0 retreive entire log.

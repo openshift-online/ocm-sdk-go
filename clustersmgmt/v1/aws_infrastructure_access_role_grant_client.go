@@ -210,6 +210,13 @@ func (r *AWSInfrastructureAccessRoleGrantDeleteRequest) Header(name string, valu
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AWSInfrastructureAccessRoleGrantDeleteRequest) Impersonate(user string) *AWSInfrastructureAccessRoleGrantDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -307,6 +314,13 @@ func (r *AWSInfrastructureAccessRoleGrantGetRequest) Parameter(name string, valu
 // Header adds a request header.
 func (r *AWSInfrastructureAccessRoleGrantGetRequest) Header(name string, value interface{}) *AWSInfrastructureAccessRoleGrantGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AWSInfrastructureAccessRoleGrantGetRequest) Impersonate(user string) *AWSInfrastructureAccessRoleGrantGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

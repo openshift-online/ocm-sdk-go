@@ -91,6 +91,13 @@ func (r *RegistriesListRequest) Header(name string, value interface{}) *Registri
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *RegistriesListRequest) Impersonate(user string) *RegistriesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Page sets the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.

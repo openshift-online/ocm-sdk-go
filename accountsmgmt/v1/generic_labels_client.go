@@ -106,6 +106,13 @@ func (r *GenericLabelsAddRequest) Header(name string, value interface{}) *Generi
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *GenericLabelsAddRequest) Impersonate(user string) *GenericLabelsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Label
@@ -246,6 +253,13 @@ func (r *GenericLabelsListRequest) Parameter(name string, value interface{}) *Ge
 // Header adds a request header.
 func (r *GenericLabelsListRequest) Header(name string, value interface{}) *GenericLabelsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *GenericLabelsListRequest) Impersonate(user string) *GenericLabelsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

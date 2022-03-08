@@ -82,6 +82,13 @@ func (r *MachineTypesListRequest) Header(name string, value interface{}) *Machin
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *MachineTypesListRequest) Impersonate(user string) *MachineTypesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Order sets the value of the 'order' parameter.
 //
 // Order criteria.

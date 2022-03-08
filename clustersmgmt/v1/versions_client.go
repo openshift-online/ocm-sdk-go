@@ -93,6 +93,13 @@ func (r *VersionsListRequest) Header(name string, value interface{}) *VersionsLi
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *VersionsListRequest) Impersonate(user string) *VersionsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Order sets the value of the 'order' parameter.
 //
 // Order criteria.

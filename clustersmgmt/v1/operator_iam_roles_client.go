@@ -102,6 +102,13 @@ func (r *OperatorIAMRolesAddRequest) Header(name string, value interface{}) *Ope
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *OperatorIAMRolesAddRequest) Impersonate(user string) *OperatorIAMRolesAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the operator role.
@@ -242,6 +249,13 @@ func (r *OperatorIAMRolesListRequest) Parameter(name string, value interface{}) 
 // Header adds a request header.
 func (r *OperatorIAMRolesListRequest) Header(name string, value interface{}) *OperatorIAMRolesListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *OperatorIAMRolesListRequest) Impersonate(user string) *OperatorIAMRolesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

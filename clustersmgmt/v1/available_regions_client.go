@@ -87,6 +87,13 @@ func (r *AvailableRegionsSearchRequest) Header(name string, value interface{}) *
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AvailableRegionsSearchRequest) Impersonate(user string) *AvailableRegionsSearchRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // AWS account details

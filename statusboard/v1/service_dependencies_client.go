@@ -102,6 +102,13 @@ func (r *ServiceDependenciesAddRequest) Header(name string, value interface{}) *
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ServiceDependenciesAddRequest) Impersonate(user string) *ServiceDependenciesAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 //
@@ -243,6 +250,13 @@ func (r *ServiceDependenciesListRequest) Parameter(name string, value interface{
 // Header adds a request header.
 func (r *ServiceDependenciesListRequest) Header(name string, value interface{}) *ServiceDependenciesListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ServiceDependenciesListRequest) Impersonate(user string) *ServiceDependenciesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

@@ -210,6 +210,13 @@ func (r *VersionGateAgreementDeleteRequest) Header(name string, value interface{
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *VersionGateAgreementDeleteRequest) Impersonate(user string) *VersionGateAgreementDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -307,6 +314,13 @@ func (r *VersionGateAgreementGetRequest) Parameter(name string, value interface{
 // Header adds a request header.
 func (r *VersionGateAgreementGetRequest) Header(name string, value interface{}) *VersionGateAgreementGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *VersionGateAgreementGetRequest) Impersonate(user string) *VersionGateAgreementGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

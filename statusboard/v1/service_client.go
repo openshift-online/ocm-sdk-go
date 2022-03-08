@@ -233,6 +233,13 @@ func (r *ServiceDeleteRequest) Header(name string, value interface{}) *ServiceDe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ServiceDeleteRequest) Impersonate(user string) *ServiceDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -330,6 +337,13 @@ func (r *ServiceGetRequest) Parameter(name string, value interface{}) *ServiceGe
 // Header adds a request header.
 func (r *ServiceGetRequest) Header(name string, value interface{}) *ServiceGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ServiceGetRequest) Impersonate(user string) *ServiceGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -458,6 +472,13 @@ func (r *ServiceUpdateRequest) Parameter(name string, value interface{}) *Servic
 // Header adds a request header.
 func (r *ServiceUpdateRequest) Header(name string, value interface{}) *ServiceUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ServiceUpdateRequest) Impersonate(user string) *ServiceUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

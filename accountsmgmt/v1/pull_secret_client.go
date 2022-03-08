@@ -78,6 +78,13 @@ func (r *PullSecretDeleteRequest) Header(name string, value interface{}) *PullSe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PullSecretDeleteRequest) Impersonate(user string) *PullSecretDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.

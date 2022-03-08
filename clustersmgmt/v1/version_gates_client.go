@@ -102,6 +102,13 @@ func (r *VersionGatesAddRequest) Header(name string, value interface{}) *Version
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *VersionGatesAddRequest) Impersonate(user string) *VersionGatesAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Details of the version gate
@@ -244,6 +251,13 @@ func (r *VersionGatesListRequest) Parameter(name string, value interface{}) *Ver
 // Header adds a request header.
 func (r *VersionGatesListRequest) Header(name string, value interface{}) *VersionGatesListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *VersionGatesListRequest) Impersonate(user string) *VersionGatesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

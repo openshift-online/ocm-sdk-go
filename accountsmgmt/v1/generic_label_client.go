@@ -222,6 +222,13 @@ func (r *GenericLabelDeleteRequest) Header(name string, value interface{}) *Gene
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *GenericLabelDeleteRequest) Impersonate(user string) *GenericLabelDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *GenericLabelGetRequest) Parameter(name string, value interface{}) *Gene
 // Header adds a request header.
 func (r *GenericLabelGetRequest) Header(name string, value interface{}) *GenericLabelGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *GenericLabelGetRequest) Impersonate(user string) *GenericLabelGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *GenericLabelUpdateRequest) Parameter(name string, value interface{}) *G
 // Header adds a request header.
 func (r *GenericLabelUpdateRequest) Header(name string, value interface{}) *GenericLabelUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *GenericLabelUpdateRequest) Impersonate(user string) *GenericLabelUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

@@ -95,6 +95,13 @@ func (r *CloudRegionsListRequest) Header(name string, value interface{}) *CloudR
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *CloudRegionsListRequest) Impersonate(user string) *CloudRegionsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Page sets the value of the 'page' parameter.
 //
 // Index of the returned page, where one corresponds to the first page. As this

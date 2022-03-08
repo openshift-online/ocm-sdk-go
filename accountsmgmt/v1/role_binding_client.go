@@ -222,6 +222,13 @@ func (r *RoleBindingDeleteRequest) Header(name string, value interface{}) *RoleB
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *RoleBindingDeleteRequest) Impersonate(user string) *RoleBindingDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *RoleBindingGetRequest) Parameter(name string, value interface{}) *RoleB
 // Header adds a request header.
 func (r *RoleBindingGetRequest) Header(name string, value interface{}) *RoleBindingGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *RoleBindingGetRequest) Impersonate(user string) *RoleBindingGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *RoleBindingUpdateRequest) Parameter(name string, value interface{}) *Ro
 // Header adds a request header.
 func (r *RoleBindingUpdateRequest) Header(name string, value interface{}) *RoleBindingUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *RoleBindingUpdateRequest) Impersonate(user string) *RoleBindingUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

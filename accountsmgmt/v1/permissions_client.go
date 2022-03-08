@@ -102,6 +102,13 @@ func (r *PermissionsAddRequest) Header(name string, value interface{}) *Permissi
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PermissionsAddRequest) Impersonate(user string) *PermissionsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Permission data.
@@ -242,6 +249,13 @@ func (r *PermissionsListRequest) Parameter(name string, value interface{}) *Perm
 // Header adds a request header.
 func (r *PermissionsListRequest) Header(name string, value interface{}) *PermissionsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PermissionsListRequest) Impersonate(user string) *PermissionsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

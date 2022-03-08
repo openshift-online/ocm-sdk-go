@@ -222,6 +222,13 @@ func (r *MachinePoolDeleteRequest) Header(name string, value interface{}) *Machi
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *MachinePoolDeleteRequest) Impersonate(user string) *MachinePoolDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *MachinePoolGetRequest) Parameter(name string, value interface{}) *Machi
 // Header adds a request header.
 func (r *MachinePoolGetRequest) Header(name string, value interface{}) *MachinePoolGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *MachinePoolGetRequest) Impersonate(user string) *MachinePoolGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *MachinePoolUpdateRequest) Parameter(name string, value interface{}) *Ma
 // Header adds a request header.
 func (r *MachinePoolUpdateRequest) Header(name string, value interface{}) *MachinePoolUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *MachinePoolUpdateRequest) Impersonate(user string) *MachinePoolUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
