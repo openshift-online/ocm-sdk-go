@@ -102,6 +102,13 @@ func (r *OrganizationsAddRequest) Header(name string, value interface{}) *Organi
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *OrganizationsAddRequest) Impersonate(user string) *OrganizationsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Organization data.
@@ -245,6 +252,13 @@ func (r *OrganizationsListRequest) Parameter(name string, value interface{}) *Or
 // Header adds a request header.
 func (r *OrganizationsListRequest) Header(name string, value interface{}) *OrganizationsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *OrganizationsListRequest) Impersonate(user string) *OrganizationsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

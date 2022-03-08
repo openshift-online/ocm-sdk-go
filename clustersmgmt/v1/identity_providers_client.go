@@ -102,6 +102,13 @@ func (r *IdentityProvidersAddRequest) Header(name string, value interface{}) *Id
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IdentityProvidersAddRequest) Impersonate(user string) *IdentityProvidersAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the cluster.
@@ -242,6 +249,13 @@ func (r *IdentityProvidersListRequest) Parameter(name string, value interface{})
 // Header adds a request header.
 func (r *IdentityProvidersListRequest) Header(name string, value interface{}) *IdentityProvidersListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IdentityProvidersListRequest) Impersonate(user string) *IdentityProvidersListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

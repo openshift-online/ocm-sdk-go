@@ -200,6 +200,13 @@ func (r *SubscriptionReservedResourceGetRequest) Header(name string, value inter
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SubscriptionReservedResourceGetRequest) Impersonate(user string) *SubscriptionReservedResourceGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.

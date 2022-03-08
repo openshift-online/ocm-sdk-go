@@ -102,6 +102,13 @@ func (r *UpgradePoliciesAddRequest) Header(name string, value interface{}) *Upgr
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *UpgradePoliciesAddRequest) Impersonate(user string) *UpgradePoliciesAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the upgrade policy.
@@ -242,6 +249,13 @@ func (r *UpgradePoliciesListRequest) Parameter(name string, value interface{}) *
 // Header adds a request header.
 func (r *UpgradePoliciesListRequest) Header(name string, value interface{}) *UpgradePoliciesListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *UpgradePoliciesListRequest) Impersonate(user string) *UpgradePoliciesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

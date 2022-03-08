@@ -222,6 +222,13 @@ func (r *RoleDeleteRequest) Header(name string, value interface{}) *RoleDeleteRe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *RoleDeleteRequest) Impersonate(user string) *RoleDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *RoleGetRequest) Parameter(name string, value interface{}) *RoleGetReque
 // Header adds a request header.
 func (r *RoleGetRequest) Header(name string, value interface{}) *RoleGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *RoleGetRequest) Impersonate(user string) *RoleGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *RoleUpdateRequest) Parameter(name string, value interface{}) *RoleUpdat
 // Header adds a request header.
 func (r *RoleUpdateRequest) Header(name string, value interface{}) *RoleUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *RoleUpdateRequest) Impersonate(user string) *RoleUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

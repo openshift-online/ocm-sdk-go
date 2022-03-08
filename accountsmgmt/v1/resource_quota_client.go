@@ -222,6 +222,13 @@ func (r *ResourceQuotaDeleteRequest) Header(name string, value interface{}) *Res
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ResourceQuotaDeleteRequest) Impersonate(user string) *ResourceQuotaDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *ResourceQuotaGetRequest) Parameter(name string, value interface{}) *Res
 // Header adds a request header.
 func (r *ResourceQuotaGetRequest) Header(name string, value interface{}) *ResourceQuotaGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ResourceQuotaGetRequest) Impersonate(user string) *ResourceQuotaGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *ResourceQuotaUpdateRequest) Parameter(name string, value interface{}) *
 // Header adds a request header.
 func (r *ResourceQuotaUpdateRequest) Header(name string, value interface{}) *ResourceQuotaUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ResourceQuotaUpdateRequest) Impersonate(user string) *ResourceQuotaUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

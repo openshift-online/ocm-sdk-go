@@ -222,6 +222,13 @@ func (r *AddOnVersionDeleteRequest) Header(name string, value interface{}) *AddO
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnVersionDeleteRequest) Impersonate(user string) *AddOnVersionDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *AddOnVersionGetRequest) Parameter(name string, value interface{}) *AddO
 // Header adds a request header.
 func (r *AddOnVersionGetRequest) Header(name string, value interface{}) *AddOnVersionGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnVersionGetRequest) Impersonate(user string) *AddOnVersionGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *AddOnVersionUpdateRequest) Parameter(name string, value interface{}) *A
 // Header adds a request header.
 func (r *AddOnVersionUpdateRequest) Header(name string, value interface{}) *AddOnVersionUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnVersionUpdateRequest) Impersonate(user string) *AddOnVersionUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

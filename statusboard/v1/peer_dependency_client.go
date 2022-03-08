@@ -222,6 +222,13 @@ func (r *PeerDependencyDeleteRequest) Header(name string, value interface{}) *Pe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PeerDependencyDeleteRequest) Impersonate(user string) *PeerDependencyDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *PeerDependencyGetRequest) Parameter(name string, value interface{}) *Pe
 // Header adds a request header.
 func (r *PeerDependencyGetRequest) Header(name string, value interface{}) *PeerDependencyGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PeerDependencyGetRequest) Impersonate(user string) *PeerDependencyGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *PeerDependencyUpdateRequest) Parameter(name string, value interface{}) 
 // Header adds a request header.
 func (r *PeerDependencyUpdateRequest) Header(name string, value interface{}) *PeerDependencyUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PeerDependencyUpdateRequest) Impersonate(user string) *PeerDependencyUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

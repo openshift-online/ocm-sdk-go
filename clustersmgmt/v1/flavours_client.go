@@ -102,6 +102,13 @@ func (r *FlavoursAddRequest) Header(name string, value interface{}) *FlavoursAdd
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *FlavoursAddRequest) Impersonate(user string) *FlavoursAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Details of the cluster flavour.
@@ -244,6 +251,13 @@ func (r *FlavoursListRequest) Parameter(name string, value interface{}) *Flavour
 // Header adds a request header.
 func (r *FlavoursListRequest) Header(name string, value interface{}) *FlavoursListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *FlavoursListRequest) Impersonate(user string) *FlavoursListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

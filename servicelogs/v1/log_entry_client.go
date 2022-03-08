@@ -210,6 +210,13 @@ func (r *LogEntryDeleteRequest) Header(name string, value interface{}) *LogEntry
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *LogEntryDeleteRequest) Impersonate(user string) *LogEntryDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -307,6 +314,13 @@ func (r *LogEntryGetRequest) Parameter(name string, value interface{}) *LogEntry
 // Header adds a request header.
 func (r *LogEntryGetRequest) Header(name string, value interface{}) *LogEntryGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *LogEntryGetRequest) Impersonate(user string) *LogEntryGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

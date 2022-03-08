@@ -218,6 +218,13 @@ func (r *FlavourGetRequest) Header(name string, value interface{}) *FlavourGetRe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *FlavourGetRequest) Impersonate(user string) *FlavourGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -343,6 +350,13 @@ func (r *FlavourUpdateRequest) Parameter(name string, value interface{}) *Flavou
 // Header adds a request header.
 func (r *FlavourUpdateRequest) Header(name string, value interface{}) *FlavourUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *FlavourUpdateRequest) Impersonate(user string) *FlavourUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

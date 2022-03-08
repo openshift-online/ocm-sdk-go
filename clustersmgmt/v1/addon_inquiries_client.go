@@ -94,6 +94,13 @@ func (r *AddonInquiriesListRequest) Header(name string, value interface{}) *Addo
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddonInquiriesListRequest) Impersonate(user string) *AddonInquiriesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Order sets the value of the 'order' parameter.
 //
 // Order criteria.

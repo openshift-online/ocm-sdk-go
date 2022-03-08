@@ -102,6 +102,13 @@ func (r *SyncsetsAddRequest) Header(name string, value interface{}) *SyncsetsAdd
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SyncsetsAddRequest) Impersonate(user string) *SyncsetsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the syncset.
@@ -242,6 +249,13 @@ func (r *SyncsetsListRequest) Parameter(name string, value interface{}) *Syncset
 // Header adds a request header.
 func (r *SyncsetsListRequest) Header(name string, value interface{}) *SyncsetsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SyncsetsListRequest) Impersonate(user string) *SyncsetsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

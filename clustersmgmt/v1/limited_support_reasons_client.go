@@ -102,6 +102,13 @@ func (r *LimitedSupportReasonsAddRequest) Header(name string, value interface{})
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *LimitedSupportReasonsAddRequest) Impersonate(user string) *LimitedSupportReasonsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the reason.
@@ -242,6 +249,13 @@ func (r *LimitedSupportReasonsListRequest) Parameter(name string, value interfac
 // Header adds a request header.
 func (r *LimitedSupportReasonsListRequest) Header(name string, value interface{}) *LimitedSupportReasonsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *LimitedSupportReasonsListRequest) Impersonate(user string) *LimitedSupportReasonsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

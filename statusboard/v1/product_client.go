@@ -243,6 +243,13 @@ func (r *ProductDeleteRequest) Header(name string, value interface{}) *ProductDe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ProductDeleteRequest) Impersonate(user string) *ProductDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -340,6 +347,13 @@ func (r *ProductGetRequest) Parameter(name string, value interface{}) *ProductGe
 // Header adds a request header.
 func (r *ProductGetRequest) Header(name string, value interface{}) *ProductGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ProductGetRequest) Impersonate(user string) *ProductGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -468,6 +482,13 @@ func (r *ProductUpdateRequest) Parameter(name string, value interface{}) *Produc
 // Header adds a request header.
 func (r *ProductUpdateRequest) Header(name string, value interface{}) *ProductUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ProductUpdateRequest) Impersonate(user string) *ProductUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

@@ -102,6 +102,13 @@ func (r *AccountsAddRequest) Header(name string, value interface{}) *AccountsAdd
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AccountsAddRequest) Impersonate(user string) *AccountsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Account data.
@@ -246,6 +253,13 @@ func (r *AccountsListRequest) Parameter(name string, value interface{}) *Account
 // Header adds a request header.
 func (r *AccountsListRequest) Header(name string, value interface{}) *AccountsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AccountsListRequest) Impersonate(user string) *AccountsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

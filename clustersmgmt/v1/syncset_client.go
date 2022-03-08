@@ -222,6 +222,13 @@ func (r *SyncsetDeleteRequest) Header(name string, value interface{}) *SyncsetDe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SyncsetDeleteRequest) Impersonate(user string) *SyncsetDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *SyncsetGetRequest) Parameter(name string, value interface{}) *SyncsetGe
 // Header adds a request header.
 func (r *SyncsetGetRequest) Header(name string, value interface{}) *SyncsetGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SyncsetGetRequest) Impersonate(user string) *SyncsetGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *SyncsetUpdateRequest) Parameter(name string, value interface{}) *Syncse
 // Header adds a request header.
 func (r *SyncsetUpdateRequest) Header(name string, value interface{}) *SyncsetUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SyncsetUpdateRequest) Impersonate(user string) *SyncsetUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

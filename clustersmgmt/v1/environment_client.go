@@ -217,6 +217,13 @@ func (r *EnvironmentGetRequest) Header(name string, value interface{}) *Environm
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *EnvironmentGetRequest) Impersonate(user string) *EnvironmentGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -342,6 +349,13 @@ func (r *EnvironmentUpdateRequest) Parameter(name string, value interface{}) *En
 // Header adds a request header.
 func (r *EnvironmentUpdateRequest) Header(name string, value interface{}) *EnvironmentUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *EnvironmentUpdateRequest) Impersonate(user string) *EnvironmentUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

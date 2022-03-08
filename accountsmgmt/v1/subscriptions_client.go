@@ -119,6 +119,13 @@ func (r *SubscriptionsListRequest) Header(name string, value interface{}) *Subsc
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SubscriptionsListRequest) Impersonate(user string) *SubscriptionsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // FetchaccountsAccounts sets the value of the 'fetchaccounts_accounts' parameter.
 //
 // If true, includes the account reference information in the output. Could slow request response time.
@@ -437,6 +444,13 @@ func (r *SubscriptionsPostRequest) Parameter(name string, value interface{}) *Su
 // Header adds a request header.
 func (r *SubscriptionsPostRequest) Header(name string, value interface{}) *SubscriptionsPostRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SubscriptionsPostRequest) Impersonate(user string) *SubscriptionsPostRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

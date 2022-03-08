@@ -223,6 +223,13 @@ func (r *AccountGetRequest) Header(name string, value interface{}) *AccountGetRe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AccountGetRequest) Impersonate(user string) *AccountGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -348,6 +355,13 @@ func (r *AccountUpdateRequest) Parameter(name string, value interface{}) *Accoun
 // Header adds a request header.
 func (r *AccountUpdateRequest) Header(name string, value interface{}) *AccountUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AccountUpdateRequest) Impersonate(user string) *AccountUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
