@@ -92,6 +92,13 @@ func (r *PullSecretsPostRequest) Header(name string, value interface{}) *PullSec
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PullSecretsPostRequest) Impersonate(user string) *PullSecretsPostRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Request sets the value of the 'request' parameter.
 //
 //

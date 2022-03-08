@@ -102,6 +102,13 @@ func (r *AddOnVersionsAddRequest) Header(name string, value interface{}) *AddOnV
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnVersionsAddRequest) Impersonate(user string) *AddOnVersionsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the add-on version.
@@ -244,6 +251,13 @@ func (r *AddOnVersionsListRequest) Parameter(name string, value interface{}) *Ad
 // Header adds a request header.
 func (r *AddOnVersionsListRequest) Header(name string, value interface{}) *AddOnVersionsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AddOnVersionsListRequest) Impersonate(user string) *AddOnVersionsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

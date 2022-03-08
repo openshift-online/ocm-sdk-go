@@ -80,6 +80,13 @@ func (r *CurrentAccessListRequest) Header(name string, value interface{}) *Curre
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *CurrentAccessListRequest) Impersonate(user string) *CurrentAccessListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Page sets the value of the 'page' parameter.
 //
 // Index of the requested page, where one corresponds to the first page.

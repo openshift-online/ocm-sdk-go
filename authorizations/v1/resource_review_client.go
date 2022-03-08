@@ -82,6 +82,13 @@ func (r *ResourceReviewPostRequest) Header(name string, value interface{}) *Reso
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ResourceReviewPostRequest) Impersonate(user string) *ResourceReviewPostRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Request sets the value of the 'request' parameter.
 //
 //

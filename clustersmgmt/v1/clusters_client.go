@@ -104,6 +104,13 @@ func (r *ClustersAddRequest) Header(name string, value interface{}) *ClustersAdd
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClustersAddRequest) Impersonate(user string) *ClustersAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Description of the cluster.
@@ -246,6 +253,13 @@ func (r *ClustersListRequest) Parameter(name string, value interface{}) *Cluster
 // Header adds a request header.
 func (r *ClustersListRequest) Header(name string, value interface{}) *ClustersListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClustersListRequest) Impersonate(user string) *ClustersListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

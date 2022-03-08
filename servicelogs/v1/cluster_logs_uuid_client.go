@@ -82,6 +82,13 @@ func (r *ClusterLogsUUIDListRequest) Header(name string, value interface{}) *Clu
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClusterLogsUUIDListRequest) Impersonate(user string) *ClusterLogsUUIDListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Order sets the value of the 'order' parameter.
 //
 // Order criteria.

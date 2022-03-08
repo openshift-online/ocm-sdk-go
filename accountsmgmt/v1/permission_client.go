@@ -210,6 +210,13 @@ func (r *PermissionDeleteRequest) Header(name string, value interface{}) *Permis
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PermissionDeleteRequest) Impersonate(user string) *PermissionDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -307,6 +314,13 @@ func (r *PermissionGetRequest) Parameter(name string, value interface{}) *Permis
 // Header adds a request header.
 func (r *PermissionGetRequest) Header(name string, value interface{}) *PermissionGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PermissionGetRequest) Impersonate(user string) *PermissionGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

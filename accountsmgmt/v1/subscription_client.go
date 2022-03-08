@@ -264,6 +264,13 @@ func (r *SubscriptionDeleteRequest) Header(name string, value interface{}) *Subs
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SubscriptionDeleteRequest) Impersonate(user string) *SubscriptionDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -361,6 +368,13 @@ func (r *SubscriptionGetRequest) Parameter(name string, value interface{}) *Subs
 // Header adds a request header.
 func (r *SubscriptionGetRequest) Header(name string, value interface{}) *SubscriptionGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SubscriptionGetRequest) Impersonate(user string) *SubscriptionGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -489,6 +503,13 @@ func (r *SubscriptionUpdateRequest) Parameter(name string, value interface{}) *S
 // Header adds a request header.
 func (r *SubscriptionUpdateRequest) Header(name string, value interface{}) *SubscriptionUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SubscriptionUpdateRequest) Impersonate(user string) *SubscriptionUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

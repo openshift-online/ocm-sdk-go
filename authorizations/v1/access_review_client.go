@@ -81,6 +81,13 @@ func (r *AccessReviewPostRequest) Header(name string, value interface{}) *Access
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *AccessReviewPostRequest) Impersonate(user string) *AccessReviewPostRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Request sets the value of the 'request' parameter.
 //
 //

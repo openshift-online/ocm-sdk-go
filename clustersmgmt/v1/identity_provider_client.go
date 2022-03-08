@@ -233,6 +233,13 @@ func (r *IdentityProviderDeleteRequest) Header(name string, value interface{}) *
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IdentityProviderDeleteRequest) Impersonate(user string) *IdentityProviderDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -330,6 +337,13 @@ func (r *IdentityProviderGetRequest) Parameter(name string, value interface{}) *
 // Header adds a request header.
 func (r *IdentityProviderGetRequest) Header(name string, value interface{}) *IdentityProviderGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IdentityProviderGetRequest) Impersonate(user string) *IdentityProviderGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -458,6 +472,13 @@ func (r *IdentityProviderUpdateRequest) Parameter(name string, value interface{}
 // Header adds a request header.
 func (r *IdentityProviderUpdateRequest) Header(name string, value interface{}) *IdentityProviderUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *IdentityProviderUpdateRequest) Impersonate(user string) *IdentityProviderUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

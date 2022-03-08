@@ -86,6 +86,13 @@ func (r *KeyRingsInquirySearchRequest) Header(name string, value interface{}) *K
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *KeyRingsInquirySearchRequest) Impersonate(user string) *KeyRingsInquirySearchRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 // Cloud provider data needed for the inquiry

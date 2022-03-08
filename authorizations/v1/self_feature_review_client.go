@@ -81,6 +81,13 @@ func (r *SelfFeatureReviewPostRequest) Header(name string, value interface{}) *S
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *SelfFeatureReviewPostRequest) Impersonate(user string) *SelfFeatureReviewPostRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Request sets the value of the 'request' parameter.
 //
 //

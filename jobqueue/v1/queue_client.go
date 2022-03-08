@@ -233,6 +233,13 @@ func (r *QueueGetRequest) Header(name string, value interface{}) *QueueGetReques
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *QueueGetRequest) Impersonate(user string) *QueueGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -357,6 +364,13 @@ func (r *QueuePopRequest) Parameter(name string, value interface{}) *QueuePopReq
 // Header adds a request header.
 func (r *QueuePopRequest) Header(name string, value interface{}) *QueuePopRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *QueuePopRequest) Impersonate(user string) *QueuePopRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -672,6 +686,13 @@ func (r *QueuePushRequest) Parameter(name string, value interface{}) *QueuePushR
 // Header adds a request header.
 func (r *QueuePushRequest) Header(name string, value interface{}) *QueuePushRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *QueuePushRequest) Impersonate(user string) *QueuePushRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

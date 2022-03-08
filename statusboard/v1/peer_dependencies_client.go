@@ -102,6 +102,13 @@ func (r *PeerDependenciesAddRequest) Header(name string, value interface{}) *Pee
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PeerDependenciesAddRequest) Impersonate(user string) *PeerDependenciesAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 //
@@ -243,6 +250,13 @@ func (r *PeerDependenciesListRequest) Parameter(name string, value interface{}) 
 // Header adds a request header.
 func (r *PeerDependenciesListRequest) Header(name string, value interface{}) *PeerDependenciesListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *PeerDependenciesListRequest) Impersonate(user string) *PeerDependenciesListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

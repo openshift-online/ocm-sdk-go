@@ -222,6 +222,13 @@ func (r *HTPasswdUserDeleteRequest) Header(name string, value interface{}) *HTPa
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *HTPasswdUserDeleteRequest) Impersonate(user string) *HTPasswdUserDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -319,6 +326,13 @@ func (r *HTPasswdUserGetRequest) Parameter(name string, value interface{}) *HTPa
 // Header adds a request header.
 func (r *HTPasswdUserGetRequest) Header(name string, value interface{}) *HTPasswdUserGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *HTPasswdUserGetRequest) Impersonate(user string) *HTPasswdUserGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -447,6 +461,13 @@ func (r *HTPasswdUserUpdateRequest) Parameter(name string, value interface{}) *H
 // Header adds a request header.
 func (r *HTPasswdUserUpdateRequest) Header(name string, value interface{}) *HTPasswdUserUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *HTPasswdUserUpdateRequest) Impersonate(user string) *HTPasswdUserUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

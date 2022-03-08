@@ -446,6 +446,13 @@ func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClusterDeleteRequest) Impersonate(user string) *ClusterDeleteRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Deprovision sets the value of the 'deprovision' parameter.
 //
 // If false it will only delete from OCM but not the actual cluster resources.
@@ -555,6 +562,13 @@ func (r *ClusterGetRequest) Parameter(name string, value interface{}) *ClusterGe
 // Header adds a request header.
 func (r *ClusterGetRequest) Header(name string, value interface{}) *ClusterGetRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClusterGetRequest) Impersonate(user string) *ClusterGetRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -685,6 +699,13 @@ func (r *ClusterHibernateRequest) Header(name string, value interface{}) *Cluste
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClusterHibernateRequest) Impersonate(user string) *ClusterHibernateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -782,6 +803,13 @@ func (r *ClusterResumeRequest) Parameter(name string, value interface{}) *Cluste
 // Header adds a request header.
 func (r *ClusterResumeRequest) Header(name string, value interface{}) *ClusterResumeRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClusterResumeRequest) Impersonate(user string) *ClusterResumeRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
@@ -883,6 +911,13 @@ func (r *ClusterUpdateRequest) Parameter(name string, value interface{}) *Cluste
 // Header adds a request header.
 func (r *ClusterUpdateRequest) Header(name string, value interface{}) *ClusterUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ClusterUpdateRequest) Impersonate(user string) *ClusterUpdateRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

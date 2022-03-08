@@ -93,6 +93,13 @@ func (r *JobFailureRequest) Header(name string, value interface{}) *JobFailureRe
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *JobFailureRequest) Impersonate(user string) *JobFailureRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // FailureReason sets the value of the 'failure_reason' parameter.
 //
 //
@@ -213,6 +220,13 @@ func (r *JobSuccessRequest) Parameter(name string, value interface{}) *JobSucces
 // Header adds a request header.
 func (r *JobSuccessRequest) Header(name string, value interface{}) *JobSuccessRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *JobSuccessRequest) Impersonate(user string) *JobSuccessRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 

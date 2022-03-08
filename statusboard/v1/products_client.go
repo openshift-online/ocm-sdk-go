@@ -102,6 +102,13 @@ func (r *ProductsAddRequest) Header(name string, value interface{}) *ProductsAdd
 	return r
 }
 
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ProductsAddRequest) Impersonate(user string) *ProductsAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
 // Body sets the value of the 'body' parameter.
 //
 //
@@ -244,6 +251,13 @@ func (r *ProductsListRequest) Parameter(name string, value interface{}) *Product
 // Header adds a request header.
 func (r *ProductsListRequest) Header(name string, value interface{}) *ProductsListRequest {
 	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *ProductsListRequest) Impersonate(user string) *ProductsListRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
