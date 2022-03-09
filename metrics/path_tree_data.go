@@ -270,7 +270,7 @@ var pathTreeData = `{
         },
         "clusters": {
           "-": {
-            "cluster_logs_uuid": null
+            "cluster_logs": null
           }
         }
       }
