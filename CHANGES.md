@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.249 Mar 9 2022
+
+- Update to model 0.0.180:
+  - Add CloudProvider info to ProvisionShards.
+
 ## 0.1.248 Mar 9 2022
 
 - Update to model 0.0.179:
