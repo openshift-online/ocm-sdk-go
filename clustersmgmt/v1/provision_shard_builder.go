@@ -30,6 +30,7 @@ type ProvisionShardBuilder struct {
 	awsBaseDomain            string
 	gcpBaseDomain            string
 	gcpProjectOperator       *ServerConfigBuilder
+	cloudProvider            *CloudProviderBuilder
 	hiveConfig               *ServerConfigBuilder
 	region                   *CloudRegionBuilder
 }
@@ -108,15 +109,28 @@ func (b *ProvisionShardBuilder) GCPProjectOperator(value *ServerConfigBuilder) *
 	return b
 }
 
+// CloudProvider sets the value of the 'cloud_provider' attribute to the given value.
+//
+// Cloud provider.
+func (b *ProvisionShardBuilder) CloudProvider(value *CloudProviderBuilder) *ProvisionShardBuilder {
+	b.cloudProvider = value
+	if value != nil {
+		b.bitmap_ |= 128
+	} else {
+		b.bitmap_ &^= 128
+	}
+	return b
+}
+
 // HiveConfig sets the value of the 'hive_config' attribute to the given value.
 //
 // Representation of a server config
 func (b *ProvisionShardBuilder) HiveConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.hiveConfig = value
 	if value != nil {
-		b.bitmap_ |= 128
+		b.bitmap_ |= 256
 	} else {
-		b.bitmap_ &^= 128
+		b.bitmap_ &^= 256
 	}
 	return b
 }
@@ -127,9 +141,9 @@ func (b *ProvisionShardBuilder) HiveConfig(value *ServerConfigBuilder) *Provisio
 func (b *ProvisionShardBuilder) Region(value *CloudRegionBuilder) *ProvisionShardBuilder {
 	b.region = value
 	if value != nil {
-		b.bitmap_ |= 256
+		b.bitmap_ |= 512
 	} else {
-		b.bitmap_ &^= 256
+		b.bitmap_ &^= 512
 	}
 	return b
 }
@@ -153,6 +167,11 @@ func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuil
 		b.gcpProjectOperator = NewServerConfig().Copy(object.gcpProjectOperator)
 	} else {
 		b.gcpProjectOperator = nil
+	}
+	if object.cloudProvider != nil {
+		b.cloudProvider = NewCloudProvider().Copy(object.cloudProvider)
+	} else {
+		b.cloudProvider = nil
 	}
 	if object.hiveConfig != nil {
 		b.hiveConfig = NewServerConfig().Copy(object.hiveConfig)
@@ -183,6 +202,12 @@ func (b *ProvisionShardBuilder) Build() (object *ProvisionShard, err error) {
 	object.gcpBaseDomain = b.gcpBaseDomain
 	if b.gcpProjectOperator != nil {
 		object.gcpProjectOperator, err = b.gcpProjectOperator.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.cloudProvider != nil {
+		object.cloudProvider, err = b.cloudProvider.Build()
 		if err != nil {
 			return
 		}

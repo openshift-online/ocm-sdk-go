@@ -9411,6 +9411,10 @@
             "description": "Contains the configuration for the GCP project operator",
             "$ref": "#/components/schemas/ServerConfig"
           },
+          "cloud_provider": {
+            "description": "Contains the cloud provider name",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
           "hive_config": {
             "description": "Contains the configuration for Hive",
             "$ref": "#/components/schemas/ServerConfig"
