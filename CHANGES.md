@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.248 Mar 9 2022
+
+- Update to model 0.0.179:
+  - Fix cluster logs URL, should be `cluster_logs` instead of `cluster_logs_uuid`.
+
 ## 0.1.247 Mar 8 2022
 
 - Update to metamodel 0.0.52:
