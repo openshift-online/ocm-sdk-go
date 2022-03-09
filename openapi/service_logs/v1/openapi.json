@@ -234,7 +234,7 @@
         }
       }
     },
-    "/api/service_logs/v1/clusters/{cluster_id}/cluster_logs_uuid": {
+    "/api/service_logs/v1/clusters/{cluster_id}/cluster_logs": {
       "get": {
         "description": "Retrieves the list of cluster logs by cluster uuid.",
         "parameters": [
