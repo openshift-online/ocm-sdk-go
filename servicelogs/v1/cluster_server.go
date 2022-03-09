@@ -28,10 +28,10 @@ import (
 // ClusterServer represents the interface the manages the 'cluster' resource.
 type ClusterServer interface {
 
-	// ClusterLogsUUID returns the target 'cluster_logs_UUID' resource.
+	// ClusterLogs returns the target 'cluster_logs_UUID' resource.
 	//
 	// Reference to the list of cluster logs for a specific cluster uuid.
-	ClusterLogsUUID() ClusterLogsUUIDServer
+	ClusterLogs() ClusterLogsUUIDServer
 }
 
 // dispatchCluster navigates the servers tree rooted at the given server
@@ -46,8 +46,8 @@ func dispatchCluster(w http.ResponseWriter, r *http.Request, server ClusterServe
 		}
 	}
 	switch segments[0] {
-	case "cluster_logs_uuid":
-		target := server.ClusterLogsUUID()
+	case "cluster_logs":
+		target := server.ClusterLogs()
 		if target == nil {
 			errors.SendNotFound(w, r)
 			return
