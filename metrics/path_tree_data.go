@@ -132,6 +132,7 @@ var pathTreeData = `{
         },
         "aws_inquiries": {
           "regions": null,
+          "sts_policies": null,
           "vpcs": null
         },
         "cloud_providers": {
