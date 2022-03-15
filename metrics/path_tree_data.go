@@ -276,6 +276,13 @@ var pathTreeData = `{
         }
       }
     },
+    "service_mgmt": {
+      "v1": {
+        "services": {
+          "-": null
+        }
+      }
+    },
     "status_board": {
       "v1": {
         "application_dependencies": {
