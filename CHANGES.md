@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.251 Mar 15 2022
+
+- Update to model 0.1.182:
+  - Adding `service_mgmt` service.
 
 ## 0.1.250 Mar 14 2022
 
