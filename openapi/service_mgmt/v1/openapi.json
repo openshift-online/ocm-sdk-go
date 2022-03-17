@@ -376,6 +376,12 @@
             "type": "string",
             "format": "date-time"
           },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceParameter"
+            }
+          },
           "resources": {
             "type": "array",
             "items": {
