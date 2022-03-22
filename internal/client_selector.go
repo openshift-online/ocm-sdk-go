@@ -127,7 +127,7 @@ func (b *ClientSelectorBuilder) TransportWrappers(
 }
 
 // Build uses the information stored in the builder to create a new HTTP client selector.
-func (b *ClientSelectorBuilder) Build(ctx context.Context) (result *ClientSelector, err error) {
+func (b *ClientSelectorBuilder) Build() (result *ClientSelector, err error) {
 	// Check parameters:
 	if b.logger.GetSink() == nil {
 		err = fmt.Errorf("logger is mandatory")
@@ -141,7 +141,7 @@ func (b *ClientSelectorBuilder) Build(ctx context.Context) (result *ClientSelect
 	}
 
 	// Load trusted CAs:
-	trustedCAs, err := b.loadTrustedCAs(ctx)
+	trustedCAs, err := b.loadTrustedCAs()
 	if err != nil {
 		return
 	}
@@ -161,7 +161,7 @@ func (b *ClientSelectorBuilder) Build(ctx context.Context) (result *ClientSelect
 	return
 }
 
-func (b *ClientSelectorBuilder) loadTrustedCAs(ctx context.Context) (result *x509.CertPool,
+func (b *ClientSelectorBuilder) loadTrustedCAs() (result *x509.CertPool,
 	err error) {
 	result, err = loadSystemCAs()
 	if err != nil {
@@ -216,7 +216,7 @@ func (b *ClientSelectorBuilder) createCookieJar() (result http.CookieJar, err er
 
 // Select returns an HTTP client to use to connect to the given server address. If a client has been
 // created previously for the server address it will be reused, otherwise it will be created.
-func (s *ClientSelector) Select(ctx context.Context, address *ServerAddress) (client *http.Client,
+func (s *ClientSelector) Select(address *ServerAddress) (client *http.Client,
 	err error) {
 	// We will be modifiying the clients table so we need to acquire the lock before proceeding:
 	s.clientsMutex.Lock()
@@ -232,7 +232,7 @@ func (s *ClientSelector) Select(ctx context.Context, address *ServerAddress) (cl
 		"Client doesn't exist, will create it",
 		"key", key,
 	)
-	client, err = s.create(ctx, address)
+	client, err = s.create(address)
 	if err != nil {
 		return
 	}
@@ -245,7 +245,7 @@ func (s *ClientSelector) Select(ctx context.Context, address *ServerAddress) (cl
 // client is missbehaving, for example when it is generating protocol errors. In those situations
 // connections may be still open but already unusable. To avoid additional errors is beter to
 // discard the client and create a new one.
-func (s *ClientSelector) Forget(ctx context.Context, address *ServerAddress) error {
+func (s *ClientSelector) Forget(address *ServerAddress) error {
 	// We will be modifiying the clients table so we need to acquire the lock before proceeding:
 	s.clientsMutex.Lock()
 	defer s.clientsMutex.Unlock()
@@ -292,10 +292,10 @@ func (s *ClientSelector) key(address *ServerAddress) string {
 }
 
 // create creates a new HTTP client to use to connect to the given address.
-func (s *ClientSelector) create(ctx context.Context, address *ServerAddress) (result *http.Client,
+func (s *ClientSelector) create(address *ServerAddress) (result *http.Client,
 	err error) {
 	// Create the transport:
-	transport, err := s.createTransport(ctx, address)
+	transport, err := s.createTransport(address)
 	if err != nil {
 		return
 	}
@@ -320,8 +320,8 @@ func (s *ClientSelector) create(ctx context.Context, address *ServerAddress) (re
 }
 
 // createTransport creates a new HTTP transport to use to connect to the given server address.
-func (s *ClientSelector) createTransport(ctx context.Context,
-	address *ServerAddress) (result http.RoundTripper, err error) {
+func (s *ClientSelector) createTransport(address *ServerAddress) (result http.RoundTripper,
+	err error) {
 	// Prepare the TLS configuration:
 	// #nosec 402
 	config := &tls.Config{

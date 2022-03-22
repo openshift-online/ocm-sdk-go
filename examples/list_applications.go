@@ -35,7 +35,7 @@ func listApplications(ctx context.Context, args []string) error {
 		Logger(logger).
 		URL("http://localhost:8000").
 		Tokens(token).
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}

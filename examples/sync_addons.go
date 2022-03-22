@@ -36,7 +36,7 @@ func syncAddons(ctx context.Context, args []string) error {
 		URL("https://clusters-service.apps-crc.testing").
 		Insecure(true).
 		Tokens(token).
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}

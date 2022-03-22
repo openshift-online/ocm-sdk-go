@@ -113,7 +113,7 @@ func (b *TransportWrapperBuilder) Jitter(value float64) *TransportWrapperBuilder
 }
 
 // Build uses the information stored in the builder to create a new transport wrapper.
-func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportWrapper, err error) {
+func (b *TransportWrapperBuilder) Build() (result *TransportWrapper, err error) {
 	// Check parameters:
 	if b.logger.GetSink() == nil {
 		err = fmt.Errorf("logger is mandatory")

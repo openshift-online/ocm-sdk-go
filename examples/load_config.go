@@ -32,7 +32,7 @@ func loadConfig(ctx context.Context, args []string) error {
 	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Load("load_config.yaml").
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}

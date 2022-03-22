@@ -54,7 +54,7 @@ var _ = Describe("Retry", func() {
 					)
 				}).
 				RetryInterval(10 * time.Millisecond).
-				BuildContext(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
@@ -76,7 +76,7 @@ var _ = Describe("Retry", func() {
 					)
 				}).
 				RetryInterval(10 * time.Millisecond).
-				BuildContext(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
@@ -98,7 +98,7 @@ var _ = Describe("Retry", func() {
 					)
 				}).
 				RetryInterval(10 * time.Millisecond).
-				BuildContext(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
@@ -122,7 +122,7 @@ var _ = Describe("Retry", func() {
 					)
 				}).
 				RetryInterval(10 * time.Millisecond).
-				BuildContext(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
@@ -146,7 +146,7 @@ var _ = Describe("Retry", func() {
 					)
 				}).
 				RetryInterval(10 * time.Millisecond).
-				BuildContext(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
@@ -168,7 +168,7 @@ var _ = Describe("Retry", func() {
 					)
 				}).
 				RetryInterval(10 * time.Millisecond).
-				BuildContext(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
@@ -193,7 +193,7 @@ var _ = Describe("Retry", func() {
 					)
 				}).
 				RetryInterval(10 * time.Millisecond).
-				BuildContext(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
@@ -223,7 +223,7 @@ var _ = Describe("Retry", func() {
 				)
 			}).
 			RetryInterval(10 * time.Millisecond).
-			BuildContext(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
@@ -258,7 +258,7 @@ var _ = Describe("Retry", func() {
 				)
 			}).
 			RetryInterval(10 * time.Millisecond).
-			BuildContext(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:

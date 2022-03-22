@@ -32,7 +32,7 @@ func clientCredentialsGrant(ctx context.Context, args []string) error {
 	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Client("myclientid", "myclientsecret").
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}

@@ -46,7 +46,7 @@ func existingToken(ctx context.Context, args []string) error {
 	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Tokens(string(accessToken), string(refreshToken)).
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}
