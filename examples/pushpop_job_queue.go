@@ -24,22 +24,9 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func pushpopJobQueue(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -47,8 +34,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer func(connection *sdk.Connection) {
 		_ = connection.Close()
@@ -64,8 +50,7 @@ func main() {
 	// Push a new job
 	pushResponse, err := client.Push().Arguments("foo bar").SendContext(ctx)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't push: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	pushID := pushResponse.ID()
 	pushArguments := pushResponse.Arguments()
@@ -74,8 +59,7 @@ func main() {
 	// Retrieve this job back
 	popResponse, err := client.Pop().SendContext(ctx)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't pop: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	popID := popResponse.ID()
 	popAttempts := popResponse.Attempts()
@@ -88,10 +72,11 @@ func main() {
 	// Mark it as success
 	_, err = client.Jobs().Job(popID).Success().ReceiptId(receiptID).SendContext(ctx)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "ERROR: Can't success: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// To mark it as Failure use
 	// _, err = client.Jobs().Job(popID).Failure().FailureReason("Failure reason").ReceiptId(receiptID).SendContext(ctx)
+
+	return nil
 }

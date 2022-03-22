@@ -60,9 +60,9 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	switch request.Method {
 	case http.MethodGet, http.MethodDelete:
 		if request.Body != nil {
-			c.logger.Warn(ctx,
-				"Request body is not allowed for the '%s' method",
-				request.Method,
+			c.logger.V(1).Info(
+				"Request body is not allowed",
+				"method", request.Method,
 			)
 		}
 	case http.MethodPost, http.MethodPatch, http.MethodPut:

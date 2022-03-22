@@ -25,23 +25,10 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 	sb "github.com/openshift-online/ocm-sdk-go/v2/statusboard/v1"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func listApplications(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -50,8 +37,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -70,8 +56,7 @@ func main() {
 			Page(page).
 			SendContext(ctx)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Can't retrieve page %d: %s\n", page, err)
-			os.Exit(1)
+			return err
 		}
 
 		// Display the page:
@@ -100,8 +85,7 @@ func main() {
 			Page(page).
 			SendContext(ctx)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Can't retrieve page %d: %s\n", page, err)
-			os.Exit(1)
+			return err
 		}
 
 		// Display the page:
@@ -117,4 +101,6 @@ func main() {
 		}
 		page++
 	}
+
+	return nil
 }

@@ -21,26 +21,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		log.Fatalf("Can't build logger: %v", err)
-	}
-
+func getClusterLogs(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -48,8 +35,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -64,8 +50,7 @@ func main() {
 	// Send the request to retrieve the collection of logs:
 	listResponse, err := logsCollection.List().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't retrieve list of logs: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// The response obtained from the above list operation will contain the identifier of each
@@ -76,16 +61,18 @@ func main() {
 		logResource := logsCollection.Install()
 		getResponse, err := logResource.Get().SendContext(ctx)
 		if err != nil {
-			fmt.Fprintf(
-				os.Stderr,
-				"Can't retrive details of log '%s': %v\n",
-				logID, err,
+			logger.Error(
+				err,
+				"Can't retrive details of log",
+				"log_id", logID,
 			)
-			os.Exit(1)
+			return false
 		}
 		log = getResponse.Body()
 		logContent := log.Content()
 		fmt.Printf("%s:\n%s\n", logID, logContent)
 		return true
 	})
+
+	return nil
 }

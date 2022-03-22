@@ -34,12 +34,12 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
+	"github.com/go-logr/logr"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/openshift-online/ocm-sdk-go/v2/internal"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 // Default values:
@@ -59,7 +59,7 @@ var DefaultScopes = []string{
 // token. Don't create objects of this type directly; use the NewTransportWrapper function instead.
 type TransportWrapperBuilder struct {
 	// Fields used for basic functionality:
-	logger            logging.Logger
+	logger            logr.Logger
 	tokenURL          string
 	clientID          string
 	clientSecret      string
@@ -81,7 +81,7 @@ type TransportWrapperBuilder struct {
 // one that adds authorization tokens to requests.
 type TransportWrapper struct {
 	// Fields used for basic functionality:
-	logger                logging.Logger
+	logger                logr.Logger
 	clientID              string
 	clientSecret          string
 	user                  string
@@ -107,7 +107,7 @@ type TransportWrapper struct {
 // roundTripper is a round tripper that adds authorization tokens to requests.
 type roundTripper struct {
 	owner     *TransportWrapper
-	logger    logging.Logger
+	logger    logr.Logger
 	transport http.RoundTripper
 }
 
@@ -123,7 +123,7 @@ func NewTransportWrapper() *TransportWrapperBuilder {
 }
 
 // Logger sets the logger that will be used by the wrapper and by the transports that it creates.
-func (b *TransportWrapperBuilder) Logger(value logging.Logger) *TransportWrapperBuilder {
+func (b *TransportWrapperBuilder) Logger(value logr.Logger) *TransportWrapperBuilder {
 	b.logger = value
 	return b
 }
@@ -322,7 +322,7 @@ func (b *TransportWrapperBuilder) MetricsRegisterer(
 // Build uses the information stored in the builder to create a new transport wrapper.
 func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportWrapper, err error) {
 	// Check parameters:
-	if b.logger == nil {
+	if b.logger.GetSink() == nil {
 		err = fmt.Errorf("logger is mandatory")
 		return
 	}
@@ -351,21 +351,21 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 
 		object, _, err = tokenParser.ParseUnverified(text, jwt.MapClaims{})
 		if err != nil {
-			b.logger.Debug(
-				ctx,
-				"Can't parse token %d, will assume that it is either an "+
-					"opaque refresh token or pull secret access token: %v",
-				i, err,
+			b.logger.V(1).Info(
+				"Can't parse token, will assume that it is either an "+
+					"opaque refresh token or pull secret access token",
+				"index", i,
+				"err", err.Error(),
 			)
 
 			// Attempt to detect/parse the token as a pull-secret access token
 			err := parsePullSecretAccessToken(text)
 			if err != nil {
-				b.logger.Debug(
-					ctx,
-					"Can't parse pull secret access token %d, will assume "+
-						"that it is an opaque refresh token: %v",
-					i, err,
+				b.logger.V(1).Info(
+					"Can't parse pull secret access token, will assume "+
+						"that it is an opaque refresh token",
+					"index", i,
+					"err", err.Error(),
 				)
 
 				// Not a pull-secret access token, so assume a opaque refresh token
@@ -395,9 +395,8 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 			// returns the tokens.
 			switch i {
 			case 0:
-				b.logger.Debug(
-					ctx,
-					"First token doesn't have a 'typ' claim, will assume "+
+				b.logger.V(1).Info(
+					"First token doesn't have a 'typ' claim, will assume " +
 						"that it is an access token",
 				)
 				accessToken = &tokenInfo{
@@ -406,9 +405,8 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 				}
 				continue
 			case 1:
-				b.logger.Debug(
-					ctx,
-					"Second token doesn't have a 'typ' claim, will assume "+
+				b.logger.V(1).Info(
+					"Second token doesn't have a 'typ' claim, will assume " +
 						"that it is a refresh token",
 				)
 				refreshToken = &tokenInfo{
@@ -447,10 +445,9 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 	tokenURL := b.tokenURL
 	if tokenURL == "" {
 		tokenURL = DefaultTokenURL
-		b.logger.Debug(
-			ctx,
-			"Token URL wasn't provided, will use the default '%s'",
-			tokenURL,
+		b.logger.V(1).Info(
+			"Token URL wasn't provided, will use the default",
+			"default", tokenURL,
 		)
 	}
 	tokenServer, err := internal.ParseServerAddress(ctx, tokenURL)
@@ -461,17 +458,15 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 	clientID := b.clientID
 	if clientID == "" {
 		clientID = DefaultClientID
-		b.logger.Debug(
-			ctx,
-			"Client identifier wasn't provided, will use the default '%s'",
-			clientID,
+		b.logger.V(1).Info(
+			"Client identifier wasn't provided, will use the default",
+			"default", clientID,
 		)
 	}
 	clientSecret := b.clientSecret
 	if clientSecret == "" {
 		clientSecret = DefaultClientSecret
-		b.logger.Debug(
-			ctx,
+		b.logger.V(1).Info(
 			"Client secret wasn't provided, will use the default",
 		)
 	}
@@ -574,7 +569,7 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 }
 
 // Logger returns the logger that is used by the wrapper.
-func (w *TransportWrapper) Logger() logging.Logger {
+func (w *TransportWrapper) Logger() logr.Logger {
 	return w.logger
 }
 
@@ -688,26 +683,24 @@ func (w *TransportWrapper) Tokens(ctx context.Context, expiresIn ...time.Duratio
 		code, access, refresh, err = w.tokens(ctx, attempt, expiresDuration)
 		if err != nil {
 			if code >= http.StatusInternalServerError {
-				w.logger.Debug(
-					ctx,
-					"Can't get tokens, got HTTP code %d, will retry: %v",
-					code, err,
+				w.logger.V(1).Info(
+					"Can't get tokens, will retry",
+					"code", code,
+					"err", err.Error(),
 				)
 				return err
 			}
-			w.logger.Debug(
-				ctx,
-				"Can't get tokens, got HTTP code %d, will not retry: %v",
-				code, err,
+			w.logger.V(1).Info(
+				"Can't get tokens, will not retry",
+				"code", code,
+				"err", err.Error(),
 			)
 			return backoff.Permanent(err)
 		}
-
-		if attempt > 1 {
-			w.logger.Debug(ctx, "Got tokens on attempt %d", attempt)
-		} else {
-			w.logger.Debug(ctx, "Got tokens on first attempt")
-		}
+		w.logger.V(1).Info(
+			"Got tokens",
+			"attempt", attempt,
+		)
 		return nil
 	}
 
@@ -747,9 +740,9 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 			return
 		}
 	}
-	if w.logger.DebugEnabled() {
-		w.debugExpiry(ctx, "Bearer", w.accessToken, accessExpires, accessRemaining)
-		w.debugExpiry(ctx, "Refresh", w.refreshToken, refreshExpires, refreshRemaining)
+	if w.logger.V(1).Enabled() {
+		w.debugExpiry(ctx, "bearer", w.accessToken, accessExpires, accessRemaining)
+		w.debugExpiry(ctx, "refresh", w.refreshToken, refreshExpires, refreshRemaining)
 	}
 
 	// If the access token is available and it isn't expired or about to expire then we can
@@ -760,7 +753,10 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 	}
 
 	// At this point we know that the access token is unavailable, expired or about to expire.
-	w.logger.Debug(ctx, "Trying to get new tokens (attempt %d)", attempt)
+	w.logger.V(1).Info(
+		"Trying to get new tokens",
+		"attempt", attempt,
+	)
 
 	// If we have a client identifier and secret we should use the client credentials grant even
 	// if we have a valid refresh token. Having both is a side effect of a incorrect behaviour
@@ -803,11 +799,10 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 	// expire. We also know that we don't have credentials to request new ones. But we could
 	// still use the refresh token if it isn't completely expired.
 	if w.refreshToken != nil && refreshRemaining > 0 {
-		w.logger.Warn(
-			ctx,
-			"Refresh token expires in only %s, but there is no other mechanism to "+
+		w.logger.Info(
+			"Refresh token expires soon, but there is no other mechanism to "+
 				"obtain a new token, so will try to use it anyhow",
-			refreshRemaining,
+			"remaining", refreshRemaining,
 		)
 		code, _, err = w.sendRefreshForm(ctx, attempt)
 		if err != nil {
@@ -822,11 +817,10 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 	// have credentials to request new tokens. But we can still use the access token if it isn't
 	// expired.
 	if w.accessToken != nil && accessRemaining > 0 {
-		w.logger.Warn(
-			ctx,
-			"Access token expires in only %s, but there is no other mechanism to "+
+		w.logger.Info(
+			"Access token expires soon, but there is no other mechanism to "+
 				"obtain a new token, so will try to use it anyhow",
-			accessRemaining,
+			"remaining", accessRemaining,
 		)
 		access, refresh = w.currentTokens()
 		return
@@ -857,7 +851,7 @@ func (w *TransportWrapper) currentTokens() (access, refresh string) {
 func (w *TransportWrapper) sendClientCredentialsForm(ctx context.Context, attempt int) (code int,
 	result *internal.TokenResponse, err error) {
 	form := url.Values{}
-	w.logger.Debug(ctx, "Requesting new token using the client credentials grant")
+	w.logger.V(1).Info("Requesting new token using the client credentials grant")
 	form.Set(grantTypeField, clientCredentialsGrant)
 	form.Set(clientIDField, w.clientID)
 	form.Set(clientSecretField, w.clientSecret)
@@ -868,7 +862,7 @@ func (w *TransportWrapper) sendClientCredentialsForm(ctx context.Context, attemp
 func (w *TransportWrapper) sendPasswordForm(ctx context.Context, attempt int) (code int,
 	result *internal.TokenResponse, err error) {
 	form := url.Values{}
-	w.logger.Debug(ctx, "Requesting new token using the password grant")
+	w.logger.V(1).Info("Requesting new token using the password grant")
 	form.Set(grantTypeField, passwordGrant)
 	form.Set(clientIDField, w.clientID)
 	form.Set(usernameField, w.user)
@@ -879,7 +873,7 @@ func (w *TransportWrapper) sendPasswordForm(ctx context.Context, attempt int) (c
 
 func (w *TransportWrapper) sendRefreshForm(ctx context.Context, attempt int) (code int,
 	result *internal.TokenResponse, err error) {
-	w.logger.Debug(ctx, "Requesting new token using the refresh token grant")
+	w.logger.V(1).Info("Requesting new token using the refresh token grant")
 	form := url.Values{}
 	form.Set(grantTypeField, refreshTokenGrant)
 	form.Set(clientIDField, w.clientID)
@@ -1029,10 +1023,9 @@ func (w *TransportWrapper) sendFormTimed(ctx context.Context, form url.Values) (
 			jwt.MapClaims{},
 		)
 		if err != nil {
-			w.logger.Debug(
-				ctx,
-				"Refresh token can't be parsed, will assume it is opaque: %v",
-				err,
+			w.logger.V(1).Info(
+				"Refresh token can't be parsed, will assume it is opaque",
+				"err", err.Error(),
 			)
 			err = nil
 		}
@@ -1069,15 +1062,29 @@ func (w *TransportWrapper) debugExpiry(ctx context.Context, typ string, token *t
 	if token != nil {
 		if expires {
 			if left < 0 {
-				w.logger.Debug(ctx, "%s token expired %s ago", typ, -left)
+				w.logger.V(1).Info(
+					"Token expired",
+					"type", typ,
+					"ago", -left,
+				)
 			} else if left > 0 {
-				w.logger.Debug(ctx, "%s token expires in %s", typ, left)
+				w.logger.V(1).Info(
+					"Token expires",
+					"type", typ,
+					"in", left,
+				)
 			} else {
-				w.logger.Debug(ctx, "%s token expired just now", typ)
+				w.logger.V(1).Info(
+					"Token expired just now",
+					"type", typ,
+				)
 			}
 		}
 	} else {
-		w.logger.Debug(ctx, "%s token isn't available", typ)
+		w.logger.V(1).Info(
+			"Token isn't available",
+			"type", typ,
+		)
 	}
 }
 

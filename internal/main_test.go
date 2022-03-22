@@ -19,10 +19,11 @@ package internal
 import (
 	"testing"
 
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
+	"github.com/go-logr/logr"
 
-	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
-	. "github.com/onsi/gomega"             // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/core"                // nolint
+	. "github.com/onsi/gomega"                            // nolint
+	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
 )
 
 func TestInternal(t *testing.T) {
@@ -31,15 +32,8 @@ func TestInternal(t *testing.T) {
 }
 
 // Logger used during the tests:
-var logger logging.Logger
+var logger logr.Logger
 
 var _ = BeforeSuite(func() {
-	var err error
-
-	// Create the logger:
-	logger, err = logging.NewStdLoggerBuilder().
-		Streams(GinkgoWriter, GinkgoWriter).
-		Debug(true).
-		Build()
-	Expect(err).ToNot(HaveOccurred())
+	logger = MakeLogger(GinkgoWriter)
 })

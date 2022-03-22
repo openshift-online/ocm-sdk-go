@@ -23,37 +23,21 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func existingToken(ctx context.Context, args []string) error {
 	// Get the tokens, maybe receiving it from some other part of the application, or reading
 	// them from a file where they have been previously saved:
 	accessToken, err := ioutil.ReadFile("access.token")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't read access token: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	refreshToken, err := ioutil.ReadFile("refresh.token")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't read refresh token: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Create the connection, and remember to close it. Note that this connection will stop
@@ -64,8 +48,7 @@ func main() {
 		Tokens(string(accessToken), string(refreshToken)).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -79,8 +62,7 @@ func main() {
 		Size(10).
 		SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't retrieve clusters: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Print the result:
@@ -88,4 +70,6 @@ func main() {
 		fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
 		return false
 	})
+
+	return nil
 }

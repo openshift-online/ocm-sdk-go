@@ -21,28 +21,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		log.Fatalf("Can't build logger: %v", err)
-	}
-
+func createSyncset(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -50,8 +37,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -80,8 +66,7 @@ func main() {
 	syncsetBuilder = syncsetBuilder.ID("ext-foo2").Resources(resources...)
 	syncset, err := syncsetBuilder.Build()
 	if err != nil {
-		fmt.Printf("%v\n", err)
-		return
+		return err
 	}
 
 	// Create the syncset on the cluster
@@ -92,12 +77,12 @@ func main() {
 		Body(syncset).
 		Send()
 	if err != nil {
-		fmt.Printf("%v\n", err)
-		return
+		return err
 	}
 
 	// Print the result:
 	syncset = response.Body()
 	fmt.Printf("%s - %s\n", syncset.ID(), syncset.Resources())
 
+	return nil
 }

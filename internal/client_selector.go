@@ -30,15 +30,14 @@ import (
 	"net/http/cookiejar"
 	"sync"
 
+	"github.com/go-logr/logr"
 	"golang.org/x/net/http2"
-
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 // ClientSelectorBuilder contains the information and logic needed to create an HTTP client
 // selector. Don't create instances of this type directly, use the NewClientSelector function.
 type ClientSelectorBuilder struct {
-	logger            logging.Logger
+	logger            logr.Logger
 	trustedCAs        []interface{}
 	insecure          bool
 	disableKeepAlives bool
@@ -48,7 +47,7 @@ type ClientSelectorBuilder struct {
 // ClientSelector contains the information needed to create select the HTTP client to use to connect
 // to servers using TCP or Unix sockets.
 type ClientSelector struct {
-	logger            logging.Logger
+	logger            logr.Logger
 	trustedCAs        *x509.CertPool
 	insecure          bool
 	disableKeepAlives bool
@@ -66,7 +65,7 @@ func NewClientSelector() *ClientSelectorBuilder {
 
 // Logger sets the logger that will be used by the selector and by the created HTTP clients to write
 // messages to the log. This is mandatory.
-func (b *ClientSelectorBuilder) Logger(value logging.Logger) *ClientSelectorBuilder {
+func (b *ClientSelectorBuilder) Logger(value logr.Logger) *ClientSelectorBuilder {
 	b.logger = value
 	return b
 }
@@ -130,7 +129,7 @@ func (b *ClientSelectorBuilder) TransportWrappers(
 // Build uses the information stored in the builder to create a new HTTP client selector.
 func (b *ClientSelectorBuilder) Build(ctx context.Context) (result *ClientSelector, err error) {
 	// Check parameters:
-	if b.logger == nil {
+	if b.logger.GetSink() == nil {
 		err = fmt.Errorf("logger is mandatory")
 		return
 	}
@@ -171,16 +170,14 @@ func (b *ClientSelectorBuilder) loadTrustedCAs(ctx context.Context) (result *x50
 	for _, ca := range b.trustedCAs {
 		switch source := ca.(type) {
 		case *x509.CertPool:
-			b.logger.Debug(
-				ctx,
+			b.logger.V(1).Info(
 				"Default trusted CA certificates have been explicitly replaced",
 			)
 			result = source
 		case string:
-			b.logger.Debug(
-				ctx,
-				"Loading trusted CA certificates from file '%s'",
-				source,
+			b.logger.V(1).Info(
+				"Loading trusted CA certificates",
+				"file", source,
 			)
 			var buffer []byte
 			buffer, err = ioutil.ReadFile(source) // #nosec G304
@@ -231,7 +228,10 @@ func (s *ClientSelector) Select(ctx context.Context, address *ServerAddress) (cl
 	if ok {
 		return
 	}
-	s.logger.Debug(ctx, "Client for key '%s' doesn't exist, will create it", key)
+	s.logger.V(1).Info(
+		"Client doesn't exist, will create it",
+		"key", key,
+	)
 	client, err = s.create(ctx, address)
 	if err != nil {
 		return
@@ -257,7 +257,10 @@ func (s *ClientSelector) Forget(ctx context.Context, address *ServerAddress) err
 		delete(s.clientsTable, key)
 		client.CloseIdleConnections()
 	}
-	s.logger.Debug(ctx, "Discarded client for key '%s'", key)
+	s.logger.V(1).Info(
+		"Discarded client",
+		"key", key,
+	)
 
 	return nil
 }
@@ -302,13 +305,12 @@ func (s *ClientSelector) create(ctx context.Context, address *ServerAddress) (re
 		Jar:       s.cookieJar,
 		Transport: transport,
 	}
-	if s.logger.DebugEnabled() {
+	if s.logger.V(1).Enabled() {
 		result.CheckRedirect = func(request *http.Request, via []*http.Request) error {
-			s.logger.Info(
-				request.Context(),
-				"Following redirect from '%s' to '%s'",
-				via[0].URL,
-				request.URL,
+			s.logger.V(1).Info(
+				"Following redirect",
+				"from", via[0].URL,
+				"to", request.URL,
 			)
 			return nil
 		}

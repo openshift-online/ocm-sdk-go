@@ -24,22 +24,9 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func getClusterCredentials(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -47,8 +34,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -63,8 +49,7 @@ func main() {
 	// Send the request to retrieve the credentials:
 	response, err := resource.Get().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't retrieve cluster credentials: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Print the credentials:
@@ -74,4 +59,6 @@ func main() {
 	fmt.Printf("SSH public key:\n%s\n", credentials.SSH().PublicKey())
 	fmt.Printf("SSH private key:\n%s\n", credentials.SSH().PrivateKey())
 	fmt.Printf("Kubeconfig:\n%s\n", credentials.Kubeconfig())
+
+	return nil
 }

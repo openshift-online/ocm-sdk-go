@@ -20,26 +20,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func deleteSubscription(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -47,8 +33,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't create connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -63,7 +48,8 @@ func main() {
 	// Send the request to delete the subscription:
 	_, err = resource.Delete().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't delete subscription: %v\n", err)
-		os.Exit(1)
+		return err
 	}
+
+	return nil
 }

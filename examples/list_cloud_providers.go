@@ -25,22 +25,9 @@ import (
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func listCloudProviders(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -48,8 +35,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -59,16 +45,15 @@ func main() {
 	// Retrieve the first page of cloud providers and print them:
 	providersResponse, err := providersCollection.List().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't retrieve providers: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	providersResponse.Items().Each(func(provider *cmv1.CloudProvider) bool {
 		providerID := provider.ID()
 		regionsCollection := providersCollection.CloudProvider(providerID).Regions()
 		regionsResponse, err := regionsCollection.List().SendContext(ctx)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Can't retrieve regions: %v\n", err)
-			os.Exit(1)
+			logger.Error(err, "Can't retrieve regions")
+			return false
 		}
 		regionsResponse.Items().Each(func(region *cmv1.CloudRegion) bool {
 			regionID := region.ID()
@@ -77,4 +62,6 @@ func main() {
 		})
 		return true
 	})
+
+	return nil
 }

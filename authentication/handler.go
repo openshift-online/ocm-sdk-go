@@ -35,17 +35,17 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-logr/logr"
 	"github.com/golang-jwt/jwt/v4"
 	"gopkg.in/yaml.v3"
 
 	"github.com/openshift-online/ocm-sdk-go/v2/errors"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 // HandlerBuilder contains the data and logic needed to create a new authentication handler. Don't
 // create objects of this type directly, use the NewHandler function instead.
 type HandlerBuilder struct {
-	logger       logging.Logger
+	logger       logr.Logger
 	publicPaths  []string
 	keysFiles    []string
 	keysURLs     []string
@@ -63,7 +63,7 @@ type HandlerBuilder struct {
 // Handler is an HTTP handler that checks authentication using the JWT tokens from the authorization
 // header.
 type Handler struct {
-	logger        logging.Logger
+	logger        logr.Logger
 	publicPaths   []*regexp.Regexp
 	tokenParser   *jwt.Parser
 	keysFiles     []string
@@ -90,7 +90,7 @@ func NewHandler() *HandlerBuilder {
 
 // Logger sets the logger that the middleware will use to send messages to the log. This is
 // mandatory.
-func (b *HandlerBuilder) Logger(value logging.Logger) *HandlerBuilder {
+func (b *HandlerBuilder) Logger(value logr.Logger) *HandlerBuilder {
 	b.logger = value
 	return b
 }
@@ -275,7 +275,7 @@ func (b *HandlerBuilder) Cookie(value string) *HandlerBuilder {
 // Build uses the data stored in the builder to create a new authentication handler.
 func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 	// Check parameters:
-	if b.logger == nil {
+	if b.logger.GetSink() == nil {
 		err = fmt.Errorf("logger is mandatory")
 		return
 	}
@@ -567,19 +567,33 @@ type setData struct {
 func (h *Handler) loadKeys(ctx context.Context) error {
 	// Load keys from the files given in the configuration:
 	for _, keysFile := range h.keysFiles {
-		h.logger.Info(ctx, "Loading keys from file '%s'", keysFile)
+		h.logger.Info(
+			"Loading keys",
+			"file", keysFile,
+		)
 		err := h.loadKeysFile(ctx, keysFile)
 		if err != nil {
-			h.logger.Error(ctx, "Can't load keys from file '%s': %v", keysFile, err)
+			h.logger.Error(
+				err,
+				"Can't load keys",
+				"file", keysFile,
+			)
 		}
 	}
 
 	// Load keys from URLs given in the configuration:
 	for _, keysURL := range h.keysURLs {
-		h.logger.Info(ctx, "Loading keys from URL '%s'", keysURL)
+		h.logger.Info(
+			"Loading keys",
+			"url", keysURL,
+		)
 		err := h.loadKeysURL(ctx, keysURL)
 		if err != nil {
-			h.logger.Error(ctx, "Can't load keys from URL '%s': %v", keysURL, err)
+			h.logger.Error(
+				err,
+				"Can't load keys",
+				"url", keysURL,
+			)
 		}
 	}
 
@@ -610,9 +624,9 @@ func (h *Handler) loadKeysURL(ctx context.Context, addr string) error {
 		err := response.Body.Close()
 		if err != nil {
 			h.logger.Error(
-				ctx,
-				"Can't close response body for request to '%s': %v",
-				addr, err,
+				err,
+				"Can't close response body",
+				"address", addr,
 			)
 		}
 	}()
@@ -637,46 +651,47 @@ func (h *Handler) readKeys(ctx context.Context, reader io.Reader) error {
 	// Convert the key data to actual keys that can be used to verify the signatures of the
 	// tokens:
 	for _, keyData := range setData.Keys {
-		if h.logger.DebugEnabled() {
-			h.logger.Debug(ctx, "Value of 'kid' is '%s'", keyData.Kid)
-			h.logger.Debug(ctx, "Value of 'kty' is '%s'", keyData.Kty)
-			h.logger.Debug(ctx, "Value of 'alg' is '%s'", keyData.Alg)
-			h.logger.Debug(ctx, "Value of 'e' is '%s'", keyData.E)
-			h.logger.Debug(ctx, "Value of 'n' is '%s'", keyData.N)
-		}
+		h.logger.V(1).Info(
+			"Reading key",
+			"kid", keyData.Kid,
+			"kty", keyData.Kty,
+			"alg", keyData.Alg,
+			"e", keyData.E,
+			"n", keyData.N,
+		)
 		if keyData.Kid == "" {
-			h.logger.Error(ctx, "Can't read key because 'kid' is empty")
+			h.logger.Error(nil, "Can't read key because 'kid' is empty")
 			continue
 		}
 		if keyData.Kty == "" {
 			h.logger.Error(
-				ctx,
-				"Can't read key '%s' because 'kty' is empty",
-				keyData.Kid,
+				nil,
+				"Can't read key  because 'kty' is empty",
+				"kind", keyData.Kid,
 			)
 			continue
 		}
 		if keyData.Alg == "" {
 			h.logger.Error(
-				ctx,
-				"Can't read key '%s' because 'alg' is empty",
-				keyData.Kid,
+				nil,
+				"Can't read key because 'alg' is empty",
+				"kid", keyData.Kid,
 			)
 			continue
 		}
 		if keyData.E == "" {
 			h.logger.Error(
-				ctx,
-				"Can't read key '%s' because 'e' is empty",
-				keyData.Kid,
+				nil,
+				"Can't read key because 'e' is empty",
+				"kind", keyData.Kid,
 			)
 			continue
 		}
 		if keyData.E == "" {
 			h.logger.Error(
-				ctx,
-				"Can't read key '%s' because 'n' is empty",
-				keyData.Kid,
+				nil,
+				"Can't read key because 'n' is empty",
+				"kid", keyData.Kid,
 			)
 			continue
 		}
@@ -684,14 +699,17 @@ func (h *Handler) readKeys(ctx context.Context, reader io.Reader) error {
 		key, err = h.parseKey(keyData)
 		if err != nil {
 			h.logger.Error(
-				ctx,
-				"Key '%s' will be ignored because it can't be parsed",
-				keyData.Kid,
+				nil,
+				"Key will be ignored because it can't be parsed",
+				"kid", keyData.Kid,
 			)
 			continue
 		}
 		h.keys.Store(keyData.Kid, key)
-		h.logger.Info(ctx, "Loaded key '%s'", keyData.Kid)
+		h.logger.Info(
+			"Loaded key",
+			"kid", keyData.Kid,
+		)
 	}
 
 	return nil
@@ -774,9 +792,8 @@ func (h *Handler) checkToken(w http.ResponseWriter, r *http.Request,
 					_, remaining, err = tokenRemaining(token, time.Now())
 					if err != nil {
 						h.logger.Error(
-							ctx,
-							"Can't check token duration: %v",
-							err,
+							nil,
+							"Can't check token duration",
 						)
 						remaining = 0
 					}
@@ -961,9 +978,6 @@ func (h *Handler) checkACL(w http.ResponseWriter, r *http.Request, claims jwt.Ma
 // sendError sends an error response to the client with the given status code and with a message
 // compossed using the given format and arguments as the fmt.Sprintf function does.
 func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format string, args ...interface{}) {
-	// Get the context:
-	ctx := r.Context()
-
 	// Prepare the body:
 	segments := strings.Split(r.URL.Path, "/")
 	realm := ""
@@ -999,7 +1013,7 @@ func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format strin
 	}
 	body, err := builder.Build()
 	if err != nil {
-		h.logger.Error(ctx, "Can't build error response: %v", err)
+		h.logger.Error(err, "Can't build error response")
 		errors.SendPanic(w, r)
 	}
 
@@ -1010,10 +1024,9 @@ func (h *Handler) sendError(w http.ResponseWriter, r *http.Request, format strin
 	err = errors.MarshalError(body, w)
 	if err != nil {
 		h.logger.Error(
-			r.Context(),
-			"Can't send response body for request '%s': %v",
-			r.URL.Path,
 			err,
+			"Can't send response body for request",
+			"path", r.URL.Path,
 		)
 	}
 }

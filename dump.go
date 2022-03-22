@@ -29,16 +29,16 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/go-logr/logr"
 	jsoniter "github.com/json-iterator/go"
 
 	"github.com/openshift-online/ocm-sdk-go/v2/helpers"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 // dumpTransportWrapper is a transport wrapper that creates round trippers that dump the details of
 // the request and the responses to the log.
 type dumpTransportWrapper struct {
-	logger logging.Logger
+	logger logr.Logger
 }
 
 // Wrap creates a round tripper on top of the given one that sends to the log the details of
@@ -53,7 +53,7 @@ func (w *dumpTransportWrapper) Wrap(transport http.RoundTripper) http.RoundTripp
 // dumpRoundTripper is a round tripper that dumps the details of the requests and the responses to
 // the log.
 type dumpRoundTripper struct {
-	logger logging.Logger
+	logger logr.Logger
 	next   http.RoundTripper
 }
 
@@ -129,62 +129,50 @@ var redactFields = map[string]bool{
 
 // dumpRequest dumps to the log, in debug level, the details of the given HTTP request.
 func (d *dumpRoundTripper) dumpRequest(ctx context.Context, request *http.Request, body []byte) {
-	d.logger.Debug(ctx, "Request method is %s", request.Method)
-	d.logger.Debug(ctx, "Request URL is '%s'", request.URL)
+	var pairs []interface{}
+	pairs = append(
+		pairs,
+		"method", request.Method,
+		"url", request.URL,
+	)
+	header := http.Header{}
 	if request.Host != "" {
-		d.logger.Debug(ctx, "Request header 'Host' is '%s'", request.Host)
+		header.Add("Host", request.Host)
 	}
-	header := request.Header
-	names := make([]string, len(header))
-	i := 0
-	for name := range header {
-		names[i] = name
-		i++
-	}
-	sort.Strings(names)
-	for _, name := range names {
-		values := header[name]
-		for _, value := range values {
-			if strings.ToLower(name) == "authorization" {
-				d.logger.Debug(ctx, "Request header '%s' is omitted", name)
-			} else {
-				d.logger.Debug(ctx, "Request header '%s' is '%s'", name, value)
+	for name, values := range request.Header {
+		if strings.ToLower(name) == "authorization" {
+			header.Add(name, "***")
+		} else {
+			for _, value := range values {
+				header.Add(name, value)
 			}
 		}
 	}
+	pairs = append(pairs, "header", header)
 	if body != nil {
-		d.logger.Debug(ctx, "Request body follows")
-		d.dumpBody(ctx, header, body)
+		pairs = append(pairs, "body", d.dumpBody(header, body))
 	}
+	d.logger.Info("Response", pairs...)
 }
 
 // dumpResponse dumps to the log, in debug level, the details of the given HTTP response.
 func (d *dumpRoundTripper) dumpResponse(ctx context.Context, response *http.Response, body []byte) {
-	d.logger.Debug(ctx, "Response protocol is '%s'", response.Proto)
-	d.logger.Debug(ctx, "Response status is '%s'", response.Status)
-	header := response.Header
-	names := make([]string, len(header))
-	i := 0
-	for name := range header {
-		names[i] = name
-		i++
-	}
-	sort.Strings(names)
-	for _, name := range names {
-		values := header[name]
-		for _, value := range values {
-			d.logger.Debug(ctx, "Response header '%s' is '%s'", name, value)
-		}
-	}
+	var pairs []interface{}
+	pairs = append(
+		pairs,
+		"protocol", response.Proto,
+		"status", response.Status,
+		"header", response.Header,
+	)
 	if body != nil {
-		d.logger.Debug(ctx, "Response body follows")
-		d.dumpBody(ctx, header, body)
+		pairs = append(pairs, "body", d.dumpBody(response.Header, body))
 	}
+	d.logger.Info("Response", pairs...)
 }
 
-// dumpBody checks the content type used in the given header and then it dumps the given body in a
-// format suitable for that content type.
-func (d *dumpRoundTripper) dumpBody(ctx context.Context, header http.Header, body []byte) {
+// dumpBody checks the content type used in the given header and then it converts the given body
+// into an object that can be added as a field of a log message.
+func (d *dumpRoundTripper) dumpBody(header http.Header, body []byte) interface{} {
 	// Try to parse the content type:
 	var mediaType string
 	contentType := header.Get("Content-Type")
@@ -192,7 +180,11 @@ func (d *dumpRoundTripper) dumpBody(ctx context.Context, header http.Header, bod
 		var err error
 		mediaType, _, err = mime.ParseMediaType(contentType)
 		if err != nil {
-			d.logger.Error(ctx, "Can't parse content type '%s': %v", contentType, err)
+			d.logger.Error(
+				err,
+				"Can't parse content type",
+				"content_type", contentType,
+			)
 		}
 	} else {
 		mediaType = contentType
@@ -201,22 +193,21 @@ func (d *dumpRoundTripper) dumpBody(ctx context.Context, header http.Header, bod
 	// Dump the body according to the content type:
 	switch mediaType {
 	case "application/x-www-form-urlencoded":
-		d.dumpForm(ctx, body)
+		return d.dumpForm(body)
 	case "application/json", "":
-		d.dumpJSON(ctx, body)
+		return d.dumpJSON(body)
 	default:
-		d.dumpBytes(ctx, body)
+		return body
 	}
 }
 
-// dumpForm sends to the log the contents of the given form data, excluding security sensitive
-// fields.
-func (d *dumpRoundTripper) dumpForm(ctx context.Context, data []byte) {
+// dumpForm prepares the given form data for use as a field in the log, excluding security sensitive
+// parts.
+func (d *dumpRoundTripper) dumpForm(data []byte) interface{} {
 	// Parse the form:
 	form, err := url.ParseQuery(string(data))
 	if err != nil {
-		d.dumpBytes(ctx, data)
-		return
+		return data
 	}
 
 	// Redact values corresponding to security sensitive fields:
@@ -228,64 +219,68 @@ func (d *dumpRoundTripper) dumpForm(ctx context.Context, data []byte) {
 		}
 	}
 
+	// Remove values of sensitive fields:
+	redactedForm := url.Values{}
+	for name, values := range form {
+		redactedValues := make([]string, len(values))
+		for i, value := range values {
+			if redactFields[name] {
+				redactedValues[i] = "***"
+			} else {
+				redactedValues[i] = value
+			}
+		}
+		redactedForm[name] = redactedValues
+	}
+
 	// Get and sort the names of the fields of the form, so that the generated output will be
 	// predictable:
-	names := make([]string, 0, len(form))
+	names := make([]string, len(form))
+	i := 0
 	for name := range form {
-		names = append(names, name)
+		names[i] = name
+		i++
 	}
 	sort.Strings(names)
 
-	// Write the names and values to the buffer while redacting the sensitive fields:
-	buffer := &bytes.Buffer{}
-	for _, name := range names {
-		key := url.QueryEscape(name)
-		values := form[name]
-		for _, value := range values {
-			var redacted string
-			if redactFields[name] {
-				redacted = "***"
-			} else {
-				redacted = url.QueryEscape(value)
-			}
-			if buffer.Len() > 0 {
-				buffer.WriteByte('&') // #nosec G104
-			}
-			buffer.WriteString(key)      // #nosec G104
-			buffer.WriteByte('=')        // #nosec G104
-			buffer.WriteString(redacted) // #nosec G104
-		}
-	}
-
 	// Send the redacted data to the log:
-	d.dumpBytes(ctx, buffer.Bytes())
-}
-
-// dumpJSON tries to parse the given data as a JSON document. If that works, then it dumps it
-// indented, otherwise dumps it as is.
-func (d *dumpRoundTripper) dumpJSON(ctx context.Context, data []byte) {
-	it, err := helpers.NewIterator(data)
-	if err != nil {
-		d.logger.Debug(ctx, "%s", data)
-	} else {
-		var buf bytes.Buffer
-		str := helpers.NewStream(&buf)
-
-		// remove sensitive information
-		d.redactSensitive(it, str)
-
-		err := str.Flush()
-		if err != nil {
-			d.logger.Debug(ctx, "%s", data)
-		} else {
-			d.logger.Debug(ctx, "%s", buf.String())
+	result := map[string]interface{}{}
+	for _, name := range names {
+		var value interface{}
+		values := redactedForm[name]
+		switch len(values) {
+		case 1:
+			value = values[0]
+		default:
+			value = values
 		}
+		result[name] = value
+
 	}
+	return result
 }
 
-// dumpBytes dump the given data as an array of bytes.
-func (d *dumpRoundTripper) dumpBytes(ctx context.Context, data []byte) {
-	d.logger.Debug(ctx, "%s", data)
+// dumpJSON tries to parse the given data as a JSON document. If that works, then it returns the
+// result, otherwise it returns it as is.
+func (d *dumpRoundTripper) dumpJSON(data []byte) interface{} {
+	iterator, err := helpers.NewIterator(data)
+	if err != nil {
+		return data
+	}
+	var buffer bytes.Buffer
+	stream := helpers.NewStream(&buffer)
+	d.redactSensitive(iterator, stream)
+	err = stream.Flush()
+	if err != nil {
+		return data
+	}
+	data = buffer.Bytes()
+	var result interface{}
+	err = jsoniter.Unmarshal(data, &result)
+	if err != nil {
+		return data
+	}
+	return result
 }
 
 // redactSensitive replaces sensitive fields within a response with redactionStr.

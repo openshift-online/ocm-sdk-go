@@ -25,22 +25,9 @@ import (
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	azv1 "github.com/openshift-online/ocm-sdk-go/v2/authorizations/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func exportControlReview(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -48,8 +35,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -61,8 +47,7 @@ func main() {
 		AccountUsername("alice").
 		Build()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build request: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Send the request:
@@ -70,11 +55,12 @@ func main() {
 		Request(reviewRequest).
 		SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't run metrics query: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Print the results:
 	reviewResponse := postResponse.Response()
 	fmt.Printf("Restricted: %v\n", reviewResponse.Restricted())
+
+	return nil
 }
