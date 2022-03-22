@@ -22,7 +22,7 @@ model_version:=v0.0.183
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=v0.0.52
+metamodel_version:=54a2413ff3822a178ae40d7161a69eaa25e37c55
 
 .PHONY: examples
 examples:
@@ -55,6 +55,7 @@ generate: model metamodel
 		jobqueue \
 		servicelogs \
 		servicemgmt \
+		statusboard \
 		openapi
 	metamodel generate go \
 		--model=model/model \
@@ -78,7 +79,7 @@ model:
 
 .PHONY: metamodel
 metamodel:
-	go install github.com/openshift-online/ocm-api-metamodel/cmd/metamodel@$(metamodel_version)
+	go install github.com/openshift-online/ocm-api-metamodel/v2/cmd/metamodel@$(metamodel_version)
 
 .PHONY: clean
 clean:
