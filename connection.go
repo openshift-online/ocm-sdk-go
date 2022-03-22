@@ -488,14 +488,6 @@ func (b *ConnectionBuilder) MetricsRegisterer(value prometheus.Registerer) *Conn
 	return b
 }
 
-// Metrics sets the name of the subsystem that will be used by the connection to register metrics
-// with Prometheus.
-//
-// Deprecated: has been replaced by MetricsSubsystem.
-func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
-	return b.MetricsSubsystem(value)
-}
-
 // Load loads the connection configuration from the given source. The source must be a YAML
 // document with content similar to this:
 //
