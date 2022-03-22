@@ -20,7 +20,6 @@ limitations under the License.
 package data
 
 import (
-	"context"
 	"reflect"
 	"regexp"
 	"strings"
@@ -53,7 +52,7 @@ func NewDigger() *DiggerBuilder {
 }
 
 // Build uses the configuration stored in the builder to create a new digger.
-func (b *DiggerBuilder) Build(ctx context.Context) (result *Digger, err error) {
+func (b *DiggerBuilder) Build() (result *Digger, err error) {
 	// Create and populate the object:
 	result = &Digger{
 		methodCache:     map[cacheKey]reflect.Method{},

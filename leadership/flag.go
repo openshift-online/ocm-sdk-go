@@ -162,7 +162,7 @@ func (b *FlagBuilder) MetricsRegisterer(value prometheus.Registerer) *FlagBuilde
 }
 
 // Build uses the data stored in the builder to configure and create a new leadership flag.
-func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
+func (b *FlagBuilder) Build() (result *Flag, err error) {
 	// Check parameters:
 	if b.logger.GetSink() == nil {
 		err = errors.New("logger is mandatory")
@@ -199,7 +199,7 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 	retryInterval := b.interval / 10
 
 	// Make sure that the table exists, creating it if needed:
-	err = b.ensureTable(ctx)
+	err = b.ensureTable()
 	if err != nil {
 		return
 	}
@@ -258,10 +258,9 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 }
 
 // ensureTable creates the table if it doesn't already exist.
-func (b *FlagBuilder) ensureTable(ctx context.Context) error {
+func (b *FlagBuilder) ensureTable() error {
 	var err error
-	_, err = b.handle.ExecContext(
-		ctx,
+	_, err = b.handle.Exec(
 		`
 		create table if not exists leadership_flags (
 			name text not null primary key,

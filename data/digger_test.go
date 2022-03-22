@@ -17,7 +17,6 @@ limitations under the License.
 package data
 
 import (
-	"context"
 	"time"
 
 	. "github.com/onsi/ginkgo/v2/dsl/core"  // nolint
@@ -31,12 +30,9 @@ var _ = Describe("Digger", func() {
 	BeforeEach(func() {
 		var err error
 
-		// Create a context:
-		ctx := context.Background()
-
 		// Create the digger:
 		digger, err = NewDigger().
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 	})
 
