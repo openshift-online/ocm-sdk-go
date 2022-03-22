@@ -30,7 +30,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
+	"github.com/go-logr/logr"
 )
 
 // Default configuration:
@@ -43,7 +43,7 @@ const (
 // TransportWrapperBuilder contains the data and logic needed to create a new retry transport
 // wrapper.
 type TransportWrapperBuilder struct {
-	logger   logging.Logger
+	logger   logr.Logger
 	limit    int
 	interval time.Duration
 	jitter   float64
@@ -52,7 +52,7 @@ type TransportWrapperBuilder struct {
 // TransportWrapper contains the data and logic needed to wrap an HTTP round tripper with another
 // one that adds retry capability.
 type TransportWrapper struct {
-	logger   logging.Logger
+	logger   logr.Logger
 	limit    int
 	interval time.Duration
 	jitter   float64
@@ -60,7 +60,7 @@ type TransportWrapper struct {
 
 // roundTripper is a round tripper that adds retry logic.
 type roundTripper struct {
-	logger    logging.Logger
+	logger    logr.Logger
 	limit     int
 	interval  time.Duration
 	jitter    float64
@@ -82,7 +82,7 @@ func NewTransportWrapper() *TransportWrapperBuilder {
 
 // Logger sets the logger that will be used by the wrapper and by the round trippers that it
 // creates.
-func (b *TransportWrapperBuilder) Logger(value logging.Logger) *TransportWrapperBuilder {
+func (b *TransportWrapperBuilder) Logger(value logr.Logger) *TransportWrapperBuilder {
 	b.logger = value
 	return b
 }
@@ -115,7 +115,7 @@ func (b *TransportWrapperBuilder) Jitter(value float64) *TransportWrapperBuilder
 // Build uses the information stored in the builder to create a new transport wrapper.
 func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportWrapper, err error) {
 	// Check parameters:
-	if b.logger == nil {
+	if b.logger.GetSink() == nil {
 		err = fmt.Errorf("logger is mandatory")
 		return
 	}
@@ -228,35 +228,35 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 			message := err.Error()
 			switch {
 			case strings.Contains(message, "EOF"):
-				t.logger.Warn(
-					ctx,
-					"Request for method %s and URL '%s' failed with EOF, "+
-						"will try again: %v",
-					request.Method, request.URL, err,
+				t.logger.Info(
+					"Request failed with EOF, will try again",
+					"method", request.Method,
+					"url", request.URL,
+					"err", err.Error(),
 				)
 				continue
 			case strings.Contains(message, "connection reset by peer"):
-				t.logger.Warn(
-					ctx,
-					"Request for method %s and URL '%s' failed with connection "+
-						"reset by peer, will try again: %v",
-					request.Method, request.URL, err,
+				t.logger.Info(
+					"Request failed with connection reset by peer, will try again",
+					"method", request.Method,
+					"url", request.URL,
+					"err", err.Error(),
 				)
 				continue
 			case strings.Contains(message, "PROTOCOL_ERROR"):
-				t.logger.Warn(
-					ctx,
-					"Request for method %s and URL '%s' failed with protocol error, "+
-						"will try again: %v",
-					request.Method, request.URL, err,
+				t.logger.Info(
+					"Request failed with protocol error, will try again",
+					"method", request.Method,
+					"url", request.URL,
+					"err", err.Error(),
 				)
 				continue
 			case strings.Contains(message, "REFUSED_STREAM"):
-				t.logger.Warn(
-					ctx,
-					"Request for method %s and URL '%s' failed with refused stream, "+
-						"will try again: %v",
-					request.Method, request.URL, err,
+				t.logger.Info(
+					"Request failed with refused stream, will try again",
+					"method", request.Method,
+					"url", request.URL,
+					"err", err.Error(),
 				)
 				continue
 			default:
@@ -273,22 +273,22 @@ func (t *roundTripper) RoundTrip(request *http.Request) (response *http.Response
 		case code == http.StatusServiceUnavailable || code == http.StatusTooManyRequests:
 			// For 429 and 503 we know that the server didn't process the request, so we
 			// can safely retry regardless of the method.
-			t.logger.Warn(
-				ctx,
-				"Request for method %s and URL '%s' failed with code %d, "+
-					"will try again",
-				request.Method, request.URL, code,
+			t.logger.Info(
+				"Request failed, will try again",
+				"method", request.Method,
+				"url", request.URL,
+				"code", code,
 			)
 			continue
 		case code >= 500 && method == http.MethodGet:
 			// For any other 5xx status code we can't be sure if the server processed
 			// the request, so we retry only GET requests, as those don't have side
 			// effects.
-			t.logger.Warn(
-				ctx,
-				"Request for method %s and URL '%s' failed with code %d, "+
-					"will try again",
-				request.Method, request.URL, code,
+			t.logger.Info(
+				"Request failed, will try again",
+				"method", request.Method,
+				"url", request.URL,
+				"code", code,
 			)
 			continue
 		default:
@@ -315,6 +315,6 @@ func (t *roundTripper) sleep(ctx context.Context, attempt int) {
 	interval += delta
 
 	// Go sleep for a while:
-	t.logger.Debug(ctx, "Wating %s before next attempt", interval)
+	t.logger.V(1).Info("Waiting %s before next attempt", interval)
 	time.Sleep(interval)
 }

@@ -24,15 +24,16 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/v2/database"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
+	"github.com/go-logr/logr"
 	"github.com/prometheus/client_golang/prometheus"
+
+	"github.com/openshift-online/ocm-sdk-go/v2/database"
 )
 
 // FlagBuilder contains the data and logic needed to build leadership flags.
 type FlagBuilder struct {
 	// Basic fields:
-	logger   logging.Logger
+	logger   logr.Logger
 	handle   *sql.DB
 	name     string
 	process  string
@@ -49,7 +50,7 @@ type FlagBuilder struct {
 // processes using it will see it raised at any point in time.
 type Flag struct {
 	// Basic fields:
-	logger        logging.Logger
+	logger        logr.Logger
 	handle        *sql.DB
 	name          string
 	process       string
@@ -77,7 +78,7 @@ func NewFlag() *FlagBuilder {
 }
 
 // Logger sets the logger that the flag will use to write to the log. This is mandatory.
-func (b *FlagBuilder) Logger(value logging.Logger) *FlagBuilder {
+func (b *FlagBuilder) Logger(value logr.Logger) *FlagBuilder {
 	b.logger = value
 	return b
 }
@@ -163,7 +164,7 @@ func (b *FlagBuilder) MetricsRegisterer(value prometheus.Registerer) *FlagBuilde
 // Build uses the data stored in the builder to configure and create a new leadership flag.
 func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 	// Check parameters:
-	if b.logger == nil {
+	if b.logger.GetSink() == nil {
 		err = errors.New("logger is mandatory")
 		return
 	}
@@ -312,9 +313,10 @@ func (f *Flag) check() {
 	now, err = f.now(ctx)
 	if err != nil {
 		f.logger.Error(
-			ctx,
-			"Process '%s' can't get current time for flag '%s': %v",
-			f.process, f.name, err,
+			err,
+			"Process 'can't get current",
+			"process", f.process,
+			"flag", f.name,
 		)
 		f.lower(ctx)
 		f.schedule(ctx, f.retryInterval)
@@ -325,9 +327,10 @@ func (f *Flag) check() {
 	found, holder, version, timestamp, err := f.loadState(ctx)
 	if err != nil {
 		f.logger.Error(
-			ctx,
-			"Process '%s' can't load state for flag '%s': %v",
-			f.process, f.name, err,
+			err,
+			"Process can't load state",
+			"process", f.process,
+			"flag", f.name,
 		)
 		f.lower(ctx)
 		f.schedule(ctx, f.retryInterval)
@@ -340,29 +343,30 @@ func (f *Flag) check() {
 		created, err = f.createState(ctx, now)
 		if err != nil {
 			f.logger.Error(
-				ctx,
-				"Process '%s' can't create initial state for flag: %v",
-				f.process, f.name, err,
+				err,
+				"Process can't create initial state",
+				"process", f.process,
+				"flag", f.name,
 			)
 			f.lower(ctx)
 			f.schedule(ctx, f.retryInterval)
 			return
 		}
 		if !created {
-			f.logger.Debug(
-				ctx,
-				"Process '%s' found a conflict when trying to create the initial "+
-					"state for flag '%s'",
-				f.process, f.name,
+			f.logger.V(1).Info(
+				"Process found a conflict when trying to create the initial "+
+					"state",
+				"process", f.process,
+				"flag", f.name,
 			)
 			f.lower(ctx)
 			f.schedule(ctx, f.checkInterval)
 			return
 		}
 		f.logger.Info(
-			ctx,
-			"Process '%s' successfully created initial state for flag '%s'",
-			f.process, f.name,
+			"Process successfully created initial state",
+			"process", f.process,
+			"flag", f.name,
 		)
 		f.raise(ctx)
 		f.schedule(ctx, f.checkInterval)
@@ -377,9 +381,10 @@ func (f *Flag) check() {
 		updated, err = f.updateTimestamp(ctx, version, now)
 		if err != nil {
 			f.logger.Error(
-				ctx,
-				"Process '%s' can't update the timestamp for flag '%s': %v",
-				f.process, f.name, err,
+				err,
+				"Process can't update the timestamp",
+				"process", f.process,
+				"flag", f.name,
 			)
 			f.lower(ctx)
 			f.schedule(ctx, f.retryInterval)
@@ -387,19 +392,19 @@ func (f *Flag) check() {
 		}
 		if !updated {
 			f.logger.Info(
-				ctx,
-				"Process '%s' found a conflict when trying to update the "+
-					"timestamp for flag '%s'",
-				f.process, f.name,
+				"Process found a conflict when trying to update the "+
+					"timestamp",
+				"process", f.process,
+				"flag", f.name,
 			)
 			f.lower(ctx)
 			f.schedule(ctx, f.checkInterval)
 			return
 		}
-		f.logger.Debug(
-			ctx,
-			"Process '%s' successfully updated the timestamp for flag '%s'",
-			f.process, f.name,
+		f.logger.V(1).Info(
+			"Process successfully updated the timestamp",
+			"process", f.process,
+			"flag", f.name,
 		)
 		f.raise(ctx)
 		f.schedule(ctx, f.checkInterval)
@@ -411,19 +416,22 @@ func (f *Flag) check() {
 	excess := now.Sub(timestamp) - f.renewInterval
 	if excess > 0 {
 		f.logger.Info(
-			ctx,
-			"Process '%s' detected that flag '%s' is currently held by process '%s' "+
-				"but it should have been renewed %s ago, will try to get hold "+
-				"of it",
-			f.process, f.name, holder, excess,
+			"Process detected that flag is currently held by another process "+
+				"but it should have been renewed some time ago ago, will "+
+				"try to get hold of it",
+			"process", f.process,
+			"flag", f.name,
+			"holder", holder,
+			"time", excess,
 		)
 		var updated bool
 		updated, err = f.updateHolder(ctx, version, now)
 		if err != nil {
 			f.logger.Error(
-				ctx,
-				"Process '%s' can't update holder for flag '%s': %v",
-				f.process, f.name,
+				err,
+				"Process can't update holder",
+				"process", f.process,
+				"flag", f.name,
 			)
 			f.lower(ctx)
 			f.schedule(ctx, f.retryInterval)
@@ -431,19 +439,18 @@ func (f *Flag) check() {
 		}
 		if !updated {
 			f.logger.Info(
-				ctx,
-				"Process '%s' found a conflict when trying to update the holder "+
-					"for flag '%s'",
-				f.process, f.name,
+				"Process found a conflict when trying to update the holder",
+				"process", f.process,
+				"flag", f.name,
 			)
 			f.lower(ctx)
 			f.schedule(ctx, f.checkInterval)
 			return
 		}
-		f.logger.Debug(
-			ctx,
-			"Process '%s' successfully updated holder for flag '%s'",
-			f.process, f.name,
+		f.logger.V(1).Info(
+			"Process successfully updated holder",
+			"process", f.process,
+			"name", f.name,
 		)
 		f.raise(ctx)
 		f.schedule(ctx, f.checkInterval)
@@ -452,11 +459,13 @@ func (f *Flag) check() {
 
 	// If we are here we aren't the holder, and the renew time isn't expired, so all we should
 	// do is check again later:
-	f.logger.Debug(
-		ctx,
-		"Process '%s' found that flag '%s' is currently held by process '%s' and it "+
-			"should be renewed in %s",
-		f.process, f.name, holder, -excess,
+	f.logger.V(1).Info(
+		"Process found that flag is currently held by another process and it "+
+			"should be renewed",
+		"process", f.process,
+		"flag", f.name,
+		"holder", holder,
+		"time", -excess,
 	)
 	f.lower(ctx)
 	f.schedule(ctx, f.checkInterval)
@@ -473,7 +482,12 @@ func (f *Flag) schedule(ctx context.Context, d time.Duration) {
 	d += delta
 
 	// Reset the timer:
-	f.logger.Debug(ctx, "Process '%s' will check flag '%s' in %s", f.process, f.name, d)
+	f.logger.V(1).Info(
+		"Process will check flag",
+		"process", f.process,
+		"flag", f.name,
+		"time", d,
+	)
 	f.timer.Reset(d)
 }
 
@@ -645,10 +659,10 @@ func (f *Flag) updateHolder(ctx context.Context, version int64, timestamp time.T
 func (f *Flag) raise(ctx context.Context) {
 	old := atomic.SwapInt32(&f.value, 1)
 	if old == 0 {
-		f.logger.Debug(
-			ctx,
-			"Process '%s' is now holding flag '%s'",
-			f.process, f.name,
+		f.logger.V(1).Info(
+			"Process is now holding the flag",
+			"process", f.process,
+			"flag", f.name,
 		)
 	}
 	if f.stateMetric != nil {
@@ -660,10 +674,10 @@ func (f *Flag) raise(ctx context.Context) {
 func (f *Flag) lower(ctx context.Context) {
 	old := atomic.SwapInt32(&f.value, 0)
 	if old == 1 {
-		f.logger.Debug(
-			ctx,
-			"Process '%s' is no longer holding flag '%s'",
-			f.process, f.name,
+		f.logger.V(1).Info(
+			"Process is no longer holding the flag",
+			"process", f.process,
+			"flag", f.name,
 		)
 	}
 	if f.stateMetric != nil {

@@ -28,6 +28,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/go-logr/logr"
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/openshift-online/ocm-sdk-go/v2/accountsmgmt"
@@ -37,7 +38,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/v2/configuration"
 	"github.com/openshift-online/ocm-sdk-go/v2/internal"
 	"github.com/openshift-online/ocm-sdk-go/v2/jobqueue"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 	"github.com/openshift-online/ocm-sdk-go/v2/metrics"
 	"github.com/openshift-online/ocm-sdk-go/v2/retry"
 	"github.com/openshift-online/ocm-sdk-go/v2/servicelogs"
@@ -65,7 +65,7 @@ var DefaultScopes = []string{
 // function instead.
 type ConnectionBuilder struct {
 	// Basic attributes:
-	logger            logging.Logger
+	logger            logr.Logger
 	trustedCAs        []interface{}
 	insecure          bool
 	disableKeepAlives bool
@@ -102,7 +102,7 @@ type TransportWrapper func(http.RoundTripper) http.RoundTripper
 type Connection struct {
 	// Basic attributes:
 	closed         bool
-	logger         logging.Logger
+	logger         logr.Logger
 	authnWrapper   *authentication.TransportWrapper
 	retryWrapper   *retry.TransportWrapper
 	clientSelector *internal.ClientSelector
@@ -136,28 +136,8 @@ func NewConnection() *ConnectionBuilder {
 	}
 }
 
-// Logger sets the logger that will be used by the connection. By default it uses the Go `log`
-// package, and with the debug level disabled and the rest enabled. If you need to change that you
-// can create a logger and pass it to this method. For example:
-//
-//	// Create a logger with the debug level enabled:
-//	logger, err := logging.NewGoLoggerBuilder().
-//		Debug(true).
-//		Build()
-//	if err != nil {
-//		panic(err)
-//	}
-//
-//	// Create the connection:
-//	cl, err := client.NewConnection().
-//		Logger(logger).
-//		Build()
-//	if err != nil {
-//		panic(err)
-//	}
-//
-// You can also build your own logger, implementing the Logger interface.
-func (b *ConnectionBuilder) Logger(logger logging.Logger) *ConnectionBuilder {
+// Logger sets the logger that will be used by the connection. This is mandatory.
+func (b *ConnectionBuilder) Logger(logger logr.Logger) *ConnectionBuilder {
 	if b.err != nil {
 		return b
 	}
@@ -680,19 +660,10 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		return
 	}
 
-	// Create the default logger, if needed:
-	if b.logger == nil {
-		b.logger, err = logging.NewGoLoggerBuilder().
-			Debug(false).
-			Info(true).
-			Warn(true).
-			Error(true).
-			Build()
-		if err != nil {
-			err = fmt.Errorf("can't create default logger: %w", err)
-			return
-		}
-		b.logger.Debug(ctx, "Logger wasn't provided, will use Go log")
+	// Check the logger:
+	if b.logger.GetSink() == nil {
+		err = fmt.Errorf("logger is mandatory")
+		return
 	}
 
 	// Create the URL table:
@@ -729,9 +700,9 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 
 	// Create the logging wrapper:
 	var loggingWrapper func(http.RoundTripper) http.RoundTripper
-	if b.logger.DebugEnabled() {
+	if b.logger.V(1).Enabled() {
 		wrapper := &dumpTransportWrapper{
-			logger: b.logger,
+			logger: b.logger.V(1),
 		}
 		loggingWrapper = wrapper.Wrap
 	}
@@ -850,13 +821,13 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 	})
 
 	// Write to the log the resulting table:
-	if b.logger.DebugEnabled() {
+	if b.logger.V(1).Enabled() {
 		for _, entry := range table {
-			b.logger.Debug(
-				ctx,
-				"Added URL with prefix '%s', regular expression "+
-					"'%s' and URL '%s'",
-				entry.prefix, entry.re, entry.url.Text,
+			b.logger.V(1).Info(
+				"Added prefix",
+				"prefix", entry.prefix,
+				"regex", entry.re,
+				"url", entry.url.Text,
 			)
 		}
 	}
@@ -865,7 +836,7 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 }
 
 // Logger returns the logger that is used by the connection.
-func (c *Connection) Logger() logging.Logger {
+func (c *Connection) Logger() logr.Logger {
 	return c.logger
 }
 

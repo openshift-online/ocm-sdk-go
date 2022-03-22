@@ -19,16 +19,15 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
+	"context"
 	"os"
 
 	"github.com/openshift-online/ocm-sdk-go/v2/configuration"
 )
 
-func main() {
+func dumpConfig(ctx context.Context, args []string) error {
 	// Create the configuration and load all the files given in the command line:
 	builder := configuration.New()
-	args := os.Args[1:]
 	if len(args) > 0 {
 		for _, arg := range args {
 			builder.Load(arg)
@@ -38,22 +37,18 @@ func main() {
 	}
 	object, err := builder.Build()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't load configuration: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Dump the resulting YAML file:
 	effective, err := object.Effective()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't generate effective configuration: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	_, err = os.Stdout.Write(effective)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't write effective configuration: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
-	// Bye:
-	os.Exit(0)
+	return nil
 }

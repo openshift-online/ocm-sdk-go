@@ -21,7 +21,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
+	"github.com/go-logr/logr"
 
 	. "github.com/onsi/ginkgo/v2/dsl/core"                // nolint
 	. "github.com/onsi/gomega"                            // nolint
@@ -34,7 +34,7 @@ func TestAuthentication(t *testing.T) {
 }
 
 // Logger used for tests:
-var logger logging.Logger
+var logger logr.Logger
 
 // JSON web key set used for tests:
 var keysBytes []byte
@@ -54,11 +54,7 @@ var _ = BeforeSuite(func() {
 	keysFile = keysFD.Name()
 
 	// Create the logger that will be used by all the tests:
-	logger, err = logging.NewStdLoggerBuilder().
-		Streams(GinkgoWriter, GinkgoWriter).
-		Debug(true).
-		Build()
-	Expect(err).ToNot(HaveOccurred())
+	logger = MakeLogger(GinkgoWriter)
 })
 
 var _ = AfterSuite(func() {

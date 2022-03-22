@@ -22,27 +22,13 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func syncAddons(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -52,8 +38,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -63,13 +48,11 @@ func main() {
 	// Load the sets of add-ons from the JSON file and from the API:
 	fileIndex, err := loadJSON(ctx, fileData)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't load JSON data: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	apiIndex, err := loadAPI(ctx, collection)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't load API data: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Add to the API the items that are in the file but not in the API:
@@ -81,15 +64,13 @@ func main() {
 				Enabled(true).
 				Build()
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Can't build add-on: %v\n", err)
-				os.Exit(1)
+				return err
 			}
 			_, err = collection.Add().
 				Body(apiItem).
 				SendContext(ctx)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Can't add add-on: %v\n", err)
-				os.Exit(1)
+				return err
 			}
 		}
 	}
@@ -105,15 +86,13 @@ func main() {
 				Enabled(true).
 				Build()
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Can't build patch: %v\n", err)
-				os.Exit(1)
+				return err
 			}
 			_, err = collection.Addon(id).Update().
 				Body(apiItem).
 				SendContext(ctx)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Can't update add-on: %v\n", err)
-				os.Exit(1)
+				return err
 			}
 		}
 	}
@@ -126,18 +105,18 @@ func main() {
 				Enabled(false).
 				Build()
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Can't build patch: %v\n", err)
-				os.Exit(1)
+				return err
 			}
 			_, err = collection.Addon(id).Update().
 				Body(apiItem).
 				SendContext(ctx)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Can't update add-on: %v\n", err)
-				os.Exit(1)
+				return err
 			}
 		}
 	}
+
+	return nil
 }
 
 // loadJSON loads the add-ons from the JSON document and returns a map where the key is the

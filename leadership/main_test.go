@@ -19,11 +19,10 @@ package leadership
 import (
 	"testing"
 
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
+	"github.com/go-logr/logr"
 
-	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
-	. "github.com/onsi/gomega"             // nolint
-
+	. "github.com/onsi/ginkgo/v2/dsl/core"                // nolint
+	. "github.com/onsi/gomega"                            // nolint
 	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
 
 	_ "github.com/lib/pq"
@@ -35,20 +34,14 @@ func TestLeadership(t *testing.T) {
 }
 
 // logger is the logger that will be used by the tests.
-var logger logging.Logger
+var logger logr.Logger
 
 // dbServer is the database dbServer that will be used to create the databases used by the tests.
 var dbServer *DatabaseServer
 
 var _ = BeforeSuite(func() {
-	var err error
-
 	// Create a logger that writes to the Ginkgo stream:
-	logger, err = logging.NewStdLoggerBuilder().
-		Streams(GinkgoWriter, GinkgoWriter).
-		Debug(true).
-		Build()
-	Expect(err).ToNot(HaveOccurred())
+	logger = MakeLogger(GinkgoWriter)
 
 	// Start the database server:
 	dbServer = MakeDatabaseServer()

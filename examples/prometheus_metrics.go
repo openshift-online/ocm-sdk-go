@@ -29,25 +29,12 @@ import (
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
+func prometheusMetrics(ctx context.Context, args []string) error {
 	// Create and start a Prometheus metric server that will respond to any request in port
 	// 8000, regardless of the request path.
 	go http.ListenAndServe(":8000", promhttp.Handler())
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
 
 	// Create the connection, specifying the `api_outbound` subsystem so that metrics are
 	// enabled and available with the `api_outbound_` prefix.
@@ -58,8 +45,7 @@ func main() {
 		MetricsSubsystem("api_outbound").
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -97,4 +83,6 @@ func main() {
 		// Wait a bit:
 		time.Sleep(1 * time.Second)
 	}
+
+	return nil
 }

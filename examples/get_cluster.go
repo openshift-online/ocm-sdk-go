@@ -24,22 +24,9 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger that has the debug level enabled:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(true).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func getCluster(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -47,8 +34,7 @@ func main() {
 		Tokens(token).
 		Build()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -63,11 +49,12 @@ func main() {
 	// Send the request to retrieve the cluster:
 	response, err := resource.Get().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't retrieve cluster: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	// Print the result:
 	cluster := response.Body()
 	fmt.Printf("%s - %s\n", cluster.ID(), cluster.Name())
+
+	return nil
 }

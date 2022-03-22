@@ -26,10 +26,7 @@ metamodel_version:=54a2413ff3822a178ae40d7161a69eaa25e37c55
 
 .PHONY: examples
 examples:
-	cd examples && \
-	for i in *.go; do \
-		go build $${i} || exit 1; \
-	done
+	cd examples && go build -o main
 
 .PHONY: test tests
 test tests:

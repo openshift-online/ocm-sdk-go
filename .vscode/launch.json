@@ -1,0 +1,27 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+
+		{
+			"name": "test client",
+			"type": "go",
+			"request": "launch",
+			"mode": "test",
+			"program": "${workspaceFolder}",
+			"args": [
+				"-test.run",
+				"TestClient"
+			]
+		},
+		{
+			"name": "example list_version",
+			"type": "go",
+			"request": "launch",
+			"mode": "auto",
+			"program": "${workspaceFolder}/examples",
+			"args": [
+				"list_versions"
+			]
+		},
+	]
+}

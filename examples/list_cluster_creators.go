@@ -26,22 +26,9 @@ import (
 
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
 	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(false).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func listClusterCreators(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -49,8 +36,7 @@ func main() {
 		Tokens(token).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -76,8 +62,7 @@ func main() {
 			Page(page).
 			SendContext(ctx)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Can't retrieve clusters page %d: %s\n", page, err)
-			os.Exit(1)
+			return err
 		}
 
 		// Process the page:
@@ -99,12 +84,13 @@ func main() {
 			subscriptionResource := subscriptionsCollection.Subscription(subscriptionID)
 			subscriptionGetResponse, err := subscriptionResource.Get().Send()
 			if err != nil {
-				fmt.Fprintf(
-					os.Stderr,
-					"Can't retrieve details of subscription '%s' for cluster '%s': %v\n",
-					subscriptionID, clusterID, err,
+				logger.Error(
+					err,
+					"Can't retrieve details of subscription",
+					"subscription", subscriptionID,
+					"cluster", clusterID,
 				)
-				os.Exit(1)
+				return false
 			}
 			subscription := subscriptionGetResponse.Body()
 
@@ -121,13 +107,14 @@ func main() {
 			accountResource := accountsCollection.Account(creatorID)
 			accountGetResponse, err := accountResource.Get().Send()
 			if err != nil {
-				fmt.Fprintf(
-					os.Stderr,
-					"Can't retrieve details of creator account '%s' for "+
-						"subscription '%s' and cluster '%s': %v\n",
-					creatorID, subscriptionID, clusterID,
+				logger.Error(
+					err,
+					"Can't retrieve details of creator account",
+					"creator", creatorID,
+					"subscription", subscriptionID,
+					"cluster", clusterID,
 				)
-				os.Exit(1)
+				return false
 			}
 			account := accountGetResponse.Body()
 
@@ -160,4 +147,6 @@ func main() {
 
 	// Flush the tab writer, otherwise the results may not be displayed:
 	writer.Flush()
+
+	return nil
 }

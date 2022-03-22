@@ -20,22 +20,22 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 
+	"github.com/go-logr/logr"
+
 	sdk "github.com/openshift-online/ocm-sdk-go/v2"
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 type LoggingTransport struct {
-	logger  logging.Logger
+	logger  logr.Logger
 	wrapped http.RoundTripper
 }
 
 // NewLoggingTransport creates a transport that sends basic details of requests to the
 // given logger. The wrapped transport will be used actually send the requests.
-func NewLoggingTransport(logger logging.Logger, wrapped http.RoundTripper) http.RoundTripper {
+func NewLoggingTransport(logger logr.Logger, wrapped http.RoundTripper) http.RoundTripper {
 	return &LoggingTransport{
 		logger:  logger,
 		wrapped: wrapped,
@@ -43,29 +43,21 @@ func NewLoggingTransport(logger logging.Logger, wrapped http.RoundTripper) http.
 }
 
 func (t *LoggingTransport) RoundTrip(request *http.Request) (response *http.Response, err error) {
-	t.logger.Info(request.Context(), "Sending request %s '%s'", request.Method, request.URL.String())
+	t.logger.Info(
+		"Sending request",
+		"method", request.Method,
+		"url", request.URL,
+	)
 	response, err = t.wrapped.RoundTrip(request)
 	if err != nil {
-		t.logger.Error(response.Request.Context(), "Got error sending request")
+		t.logger.Error(err, "Got error sending request")
 	} else {
-		t.logger.Info(response.Request.Context(), "Got response status code %d", response.StatusCode)
+		t.logger.Info("Got response status code %d", response.StatusCode)
 	}
 	return response, err
 }
 
-func main() {
-	// Create a context:
-	ctx := context.Background()
-
-	// Create a logger:
-	logger, err := logging.NewGoLoggerBuilder().
-		Debug(false).
-		Build()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to build logger: %v\n", err)
-		os.Exit(1)
-	}
-
+func transportWrapper(ctx context.Context, args []string) error {
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
 	connection, err := sdk.NewConnection().
@@ -76,8 +68,7 @@ func main() {
 		}).
 		BuildContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 	defer connection.Close()
 
@@ -87,7 +78,8 @@ func main() {
 	// Retrieve the first page of cloud providers:
 	_, err = providersCollection.List().SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to retrieve providers: %v\n", err)
-		os.Exit(1)
+		return err
 	}
+
+	return nil
 }

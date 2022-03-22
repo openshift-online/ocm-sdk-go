@@ -23,8 +23,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/v2/logging"
-
 	. "github.com/onsi/ginkgo/v2/dsl/core"                // nolint
 	. "github.com/onsi/gomega"                            // nolint
 	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
@@ -211,11 +209,7 @@ var _ = Describe("Retry", func() {
 	It("Writes error to the debug log", func() {
 		// Create a logger that allows us to inspect the messages written to the log:
 		var buffer bytes.Buffer
-		logger, err := logging.NewStdLoggerBuilder().
-			Streams(&buffer, &buffer).
-			Debug(true).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
+		logger := MakeLogger(&buffer)
 
 		// Create a connection with a transport wrapper that returns an error for
 		// the first request and 200 for the second.
@@ -248,11 +242,7 @@ var _ = Describe("Retry", func() {
 	It("Writes failed response details to the log", func() {
 		// Create a logger that allows us to inspect the messages written to the log:
 		var buffer bytes.Buffer
-		logger, err := logging.NewStdLoggerBuilder().
-			Streams(&buffer, &buffer).
-			Debug(true).
-			Build()
-		Expect(err).ToNot(HaveOccurred())
+		logger = MakeLogger(&buffer)
 
 		// Create a connection with a transport wrapper that returns 503 for the first
 		// request and 200 for the second.
@@ -278,7 +268,7 @@ var _ = Describe("Retry", func() {
 
 		// Check that the details of the failed request are in the log:
 		messages := buffer.String()
-		Expect(messages).To(ContainSubstring("failed with code 503"))
-		Expect(messages).To(ContainSubstring(`"reason": "Something failed"`))
+		Expect(messages).To(ContainSubstring("503"))
+		Expect(messages).To(ContainSubstring("Something failed"))
 	})
 })
