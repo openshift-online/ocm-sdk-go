@@ -177,7 +177,7 @@ func (b *TransportWrapperBuilder) Client(id string, secret string) *TransportWra
 // secret blank. For example:
 //
 //	// Use the resource owner password grant:
-//	wrapper, err := authentication.NewConnectionBuilder().
+//	wrapper, err := authentication.NewConnection().
 //		User("myuser", "mypassword").
 //		Client("myclientid", "").
 //		Build()

@@ -86,7 +86,7 @@ var _ = Describe("Redirect", func() {
 		)
 
 		// Create the connection:
-		connection, err = NewConnectionBuilder().
+		connection, err = NewConnection().
 			Logger(logger).
 			TokenURL(oidURL).
 			Tokens(accessToken, refreshToken).

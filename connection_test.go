@@ -36,7 +36,7 @@ import (
 var _ = Describe("Connection", func() {
 	It("Can be created with access token", func() {
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(accessToken).
 			Build()
@@ -47,7 +47,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can be created with refresh token", func() {
 		refreshToken := MakeTokenString("Refresh", 10*time.Hour)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(refreshToken).
 			Build()
@@ -58,7 +58,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can be created with offline access token", func() {
 		offlineToken := MakeTokenString("Offline", 0)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(offlineToken).
 			Build()
@@ -70,7 +70,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with access and refresh tokens", func() {
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
 		refreshToken := MakeTokenString("Refresh", 10*time.Hour)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(accessToken, refreshToken).
 			Build()
@@ -82,7 +82,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with access and offline tokens", func() {
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
 		offlineToken := MakeTokenString("Offline", 10*time.Hour)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(accessToken, offlineToken).
 			Build()
@@ -92,7 +92,7 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Can be created with user name and password", func() {
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			User("myuser", "mypassword").
 			Build()
@@ -102,7 +102,7 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Can be created with client identifier and secret", func() {
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Client("myclientid", "myclientsecret").
 			Build()
@@ -113,7 +113,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can be created with metrics subsystem", func() {
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(accessToken).
 			MetricsSubsystem("my_subsystem").
@@ -129,7 +129,7 @@ var _ = Describe("Connection", func() {
 
 	It("Selects default OpenID server with default access token", func() {
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(accessToken).
 			Build()
@@ -144,7 +144,7 @@ var _ = Describe("Connection", func() {
 
 	It("Selects default OpenID server with default refresh token", func() {
 		refreshToken := MakeTokenString("Refresh", 10*time.Hour)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(refreshToken).
 			Build()
@@ -159,7 +159,7 @@ var _ = Describe("Connection", func() {
 
 	It("Selects default OpenID server with default offline access token", func() {
 		offlineToken := MakeTokenString("Offline", 0)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(offlineToken).
 			Build()
@@ -173,7 +173,7 @@ var _ = Describe("Connection", func() {
 	})
 
 	It("Honours explicitly provided OpenID server with user name and password", func() {
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			User("myuser", "mypassword").
 			TokenURL(DefaultTokenURL).
@@ -191,7 +191,7 @@ var _ = Describe("Connection", func() {
 	It("Use transport wrapper", func() {
 		// Create a connection:
 		transport := NewTestTransport()
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			User("test", "test").
 			TransportWrapper(func(wrapped http.RoundTripper) http.RoundTripper {
@@ -216,7 +216,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with one alternative URL", func() {
 		// Create the connection:
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			URL("https://my.server.com").
@@ -237,7 +237,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with two alternative URLs", func() {
 		// Create the connection:
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			URL("https://my.server.com").
@@ -263,7 +263,7 @@ var _ = Describe("Connection", func() {
 	It("Can be created with a map of alternative URLs", func() {
 		// Create the connection:
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			URL("https://my.server.com").
@@ -291,7 +291,7 @@ var _ = Describe("Connection", func() {
 	It("Altering returned alternative URLs doesn't affect internal state", func() {
 		// Create the connection:
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			URL("https://my.server.com").
@@ -321,7 +321,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with invalid alternative URL prefix", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		_, err := NewConnectionBuilder().
+		_, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			AlternativeURL("junk", "https://api.openshift.com").
@@ -331,7 +331,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with invalid alternative URL", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		_, err := NewConnectionBuilder().
+		_, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			AlternativeURL("/api/clusters_mgmt", ":junk").
@@ -387,7 +387,7 @@ var _ = Describe("Connection", func() {
 
 		// Create the connection and verify it has been created with the configuration
 		// stored in the YAML string:
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Load(content).
 			Build()
@@ -482,7 +482,7 @@ var _ = Describe("Connection", func() {
 
 		// Create the connection and verify it has been created with the configuration
 		// stored in the YAML file:
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Load(path).
 			Build()
@@ -579,7 +579,7 @@ var _ = Describe("Connection", func() {
 		// calls:
 		overridenAccess := MakeTokenString("Bearer", 5*time.Minute)
 		overridenRefresh := MakeTokenString("Refresh", 10*time.Hour)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Load(path).
 			URL("https://overriden.my.server.com").
@@ -689,7 +689,7 @@ var _ = Describe("Connection", func() {
 		// Configure the connection with methods call and then load the configuration file:
 		overridenAccess := MakeTokenString("Bearer", 5*time.Minute)
 		overridenRefresh := MakeTokenString("Refresh", 10*time.Hour)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("https://overriden.my.server.com").
 			AlternativeURL("/api/clusters_mgmt", "https://overriden.your.server.com").
@@ -741,7 +741,7 @@ var _ = Describe("Connection", func() {
 
 	It("Returns configured URL when there are no alternative URLs", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("https://my.server.com").
 			Tokens(token).
@@ -752,7 +752,7 @@ var _ = Describe("Connection", func() {
 
 	It("Returns configured URL when there are alternative URLs", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("https://my.server.com").
 			AlternativeURL("/api/clusters_mgmt", "https://your.server.com").
@@ -765,7 +765,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with URL without scheme", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("my.server.com").
 			Tokens(token).
@@ -781,7 +781,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with URL with wrong scheme", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("junk://my.server.com").
 			Tokens(token).
@@ -798,7 +798,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with alternative URL wihout scheme", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			AlternativeURL("/api/clusters_mtmt", "my.server.com").
 			Tokens(token).
@@ -814,7 +814,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with alternative URL with wrong scheme", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			AlternativeURL("/api/clusters_mtmt", "junk://my.server.com").
 			Tokens(token).
@@ -831,7 +831,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with URL without host name", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		_, err := NewConnectionBuilder().
+		_, err := NewConnection().
 			Logger(logger).
 			URL("http:///mypath").
 			Tokens(token).
@@ -844,7 +844,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with alternative URL without host name", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			AlternativeURL("/api/clusters_mgmt", "http:///mypath").
 			Tokens(token).
@@ -858,7 +858,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with token URL without scheme", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("https://my.server.com").
 			TokenURL("your.server.com").
@@ -875,7 +875,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with token URL with wrong scheme", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("https://my.server.com").
 			TokenURL("junk://your.server.com").
@@ -893,7 +893,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with token URL without host name", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("http://my.server.com").
 			TokenURL("http:///yourpath").
@@ -908,7 +908,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can be created with Unix network and host", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("unix://my.server.com/tmp/api.socket").
 			Tokens(token).
@@ -919,7 +919,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can be created with Unix network and HTTPS", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("unix+https://my.server.com/tmp/api.socket").
 			Tokens(token).
@@ -930,7 +930,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with Unix network and no host", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("unix:/tmp/api.socket").
 			Tokens(token).
@@ -945,7 +945,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with incorrect network", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("junk+https://my.server.com").
 			Tokens(token).
@@ -961,7 +961,7 @@ var _ = Describe("Connection", func() {
 
 	It("Can't be created with Unix network and no socket", func() {
 		token := MakeTokenString("Bearer", 5*time.Minute)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			URL("unix://my.server.com").
 			Tokens(token).
@@ -976,7 +976,7 @@ var _ = Describe("Connection", func() {
 
 	It("Function Close returns nil when trying to close a closed connection", func() {
 		offlineToken := MakeTokenString("Offline", 0)
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(offlineToken).
 			Build()

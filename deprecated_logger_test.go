@@ -75,7 +75,7 @@ var _ = Describe("Deprecated logging", func() {
 
 			// Create the connection:
 			token := MakeTokenString("Bearer", 5*time.Minute)
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				Build()

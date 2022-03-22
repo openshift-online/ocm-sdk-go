@@ -52,7 +52,7 @@ func main() {
 	// Create the connection, specifying the `api_outbound` subsystem so that metrics are
 	// enabled and available with the `api_outbound_` prefix.
 	token := os.Getenv("OCM_TOKEN")
-	connection, err := sdk.NewConnectionBuilder().
+	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Tokens(token).
 		MetricsSubsystem("api_outbound").

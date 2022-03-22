@@ -61,7 +61,7 @@ var DefaultScopes = []string{
 }
 
 // ConnectionBuilder contains the configuration and logic needed to create connections to
-// `api.openshift.com`. Don't create instances of this type directly, use the NewConnectionBuilder
+// `api.openshift.com`. Don't create instances of this type directly, use the NewConnection
 // function instead.
 type ConnectionBuilder struct {
 	// Basic attributes:
@@ -122,9 +122,9 @@ type urlTableEntry struct {
 	url    *internal.ServerAddress
 }
 
-// NewConnectionBuilder creates an builder that knows how to create connections with the default
+// NewConnection creates an builder that knows how to create connections with the default
 // configuration.
-func NewConnectionBuilder() *ConnectionBuilder {
+func NewConnection() *ConnectionBuilder {
 	return &ConnectionBuilder{
 		urlTable: map[string]string{
 			"": DefaultURL,
@@ -149,7 +149,7 @@ func NewConnectionBuilder() *ConnectionBuilder {
 //	}
 //
 //	// Create the connection:
-//	cl, err := client.NewConnectionBuilder().
+//	cl, err := client.NewConnection().
 //		Logger(logger).
 //		Build()
 //	if err != nil {
@@ -182,7 +182,7 @@ func (b *ConnectionBuilder) TokenURL(url string) *ConnectionBuilder {
 // credentials grant do the following:
 //
 //	// Use the client credentials grant:
-//	connection, err := sdk.NewConnectionBuilder().
+//	connection, err := sdk.NewConnection().
 //		Client("myclientid", "myclientsecret").
 //		Build()
 //
@@ -191,7 +191,7 @@ func (b *ConnectionBuilder) TokenURL(url string) *ConnectionBuilder {
 // secret blank. For example:
 //
 //	// Use the resource owner password grant:
-//	connection, err := sdk.NewConnectionBuilder().
+//	connection, err := sdk.NewConnection().
 //		User("myuser", "mypassword").
 //		Client("myclientid", "").
 //		Build()
@@ -211,7 +211,7 @@ func (b *ConnectionBuilder) Client(id string, secret string) *ConnectionBuilder 
 // To connect using a Unix sockets and HTTP use the `unix` URL scheme and put the name of socket file
 // in the URL path:
 //
-//	connection, err := sdk.NewConnectionBuilder().
+//	connection, err := sdk.NewConnection().
 //		URL("unix://my.server.com/tmp/api.socket").
 //		Build()
 //
@@ -233,7 +233,7 @@ func (b *ConnectionBuilder) URL(url string) *ConnectionBuilder {
 // the connection so that it sends the requests for the clusters management service to
 // `https://my.server.com`:
 //
-//	connection, err := client.NewConnectionBuilder().
+//	connection, err := client.NewConnection().
 //		URL("https://api.example.com").
 //		AlternativeURL("/api/clusters_mgmt", "https://my.server.com").
 //		Build()
@@ -255,7 +255,7 @@ func (b *ConnectionBuilder) AlternativeURL(prefix, base string) *ConnectionBuild
 // `https://my.server.com` and the requests for the accounts management service to
 // `https://your.server.com`:
 //
-//	connection, err := client.NewConnectionBuilder().
+//	connection, err := client.NewConnection().
 //		URL("https://api.example.com").
 //		AlternativeURLs(map[string]string{
 //			"/api/clusters_mgmt": "https://my.server.com",
@@ -289,7 +289,7 @@ func (b *ConnectionBuilder) Agent(agent string) *ConnectionBuilder {
 // obtain the token. For example:
 //
 //	// Use the resource owner password grant:
-//	connection, err := sdk.NewConnectionBuilder().
+//	connection, err := sdk.NewConnection().
 //		User("myuser", "mypassword").
 //		Build()
 //
@@ -298,7 +298,7 @@ func (b *ConnectionBuilder) Agent(agent string) *ConnectionBuilder {
 // secret blank. For example:
 //
 //	// Use the resource owner password grant:
-//	connection, err := sdk.NewConnectionBuilder().
+//	connection, err := sdk.NewConnection().
 //		User("myuser", "mypassword").
 //		Client("myclientid", "").
 //		Build()
@@ -319,7 +319,7 @@ func (b *ConnectionBuilder) User(name string, password string) *ConnectionBuilde
 // scope 'myscope' without loosing the default you will have to do something like this:
 //
 //	// Create a connection with the default 'openid' scope and some additional scopes:
-//	connection, err := sdk.NewConnectionBuilder().
+//	connection, err := sdk.NewConnection().
 //		User("myuser", "mypassword").
 //		Scopes("openid", "myscope", "yourscope").
 //		Build()

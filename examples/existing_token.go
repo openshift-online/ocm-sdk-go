@@ -59,7 +59,7 @@ func main() {
 	// Create the connection, and remember to close it. Note that this connection will stop
 	// working when both tokens expire. This can happen, for example, if the connection isn't
 	// used for period of time longer than the life of the refresh token.
-	connection, err := sdk.NewConnectionBuilder().
+	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Tokens(string(accessToken), string(refreshToken)).
 		BuildContext(ctx)
