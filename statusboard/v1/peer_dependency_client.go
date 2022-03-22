@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/statusboard/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/v2/statusboard/v1
 
 import (
 	"bufio"
@@ -29,8 +29,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/openshift-online/ocm-sdk-go/v2/errors"
+	"github.com/openshift-online/ocm-sdk-go/v2/helpers"
 )
 
 // PeerDependencyClient is the client of the 'peer_dependency' resource.

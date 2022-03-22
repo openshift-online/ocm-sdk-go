@@ -24,8 +24,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/database"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/openshift-online/ocm-sdk-go/v2/database"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

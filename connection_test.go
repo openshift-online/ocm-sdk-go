@@ -30,7 +30,7 @@ import (
 	. "github.com/onsi/gomega"             // nolint
 	. "github.com/onsi/gomega/gbytes"      // nolint
 
-	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
 )
 
 var _ = Describe("Connection", func() {

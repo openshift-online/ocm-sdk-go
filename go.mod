@@ -1,4 +1,4 @@
-module github.com/openshift-online/ocm-sdk-go
+module github.com/openshift-online/ocm-sdk-go/v2
 
 go 1.17
 

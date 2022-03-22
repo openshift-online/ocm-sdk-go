@@ -28,7 +28,7 @@ import (
 
 	"github.com/onsi/gomega/ghttp"
 
-	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
 )
 
 var _ = Describe("Compression", func() {

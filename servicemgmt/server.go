@@ -17,13 +17,13 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package servicemgmt // github.com/openshift-online/ocm-sdk-go/servicemgmt
+package servicemgmt // github.com/openshift-online/ocm-sdk-go/v2/servicemgmt
 
 import (
 	"net/http"
 
-	"github.com/openshift-online/ocm-sdk-go/errors"
-	v1 "github.com/openshift-online/ocm-sdk-go/servicemgmt/v1"
+	"github.com/openshift-online/ocm-sdk-go/v2/errors"
+	v1 "github.com/openshift-online/ocm-sdk-go/v2/servicemgmt/v1"
 )
 
 // Server is the interface for the 'service_mgmt' service.

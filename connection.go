@@ -30,19 +30,19 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/openshift-online/ocm-sdk-go/accountsmgmt"
-	"github.com/openshift-online/ocm-sdk-go/authentication"
-	"github.com/openshift-online/ocm-sdk-go/authorizations"
-	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
-	"github.com/openshift-online/ocm-sdk-go/configuration"
-	"github.com/openshift-online/ocm-sdk-go/internal"
-	"github.com/openshift-online/ocm-sdk-go/jobqueue"
-	"github.com/openshift-online/ocm-sdk-go/logging"
-	"github.com/openshift-online/ocm-sdk-go/metrics"
-	"github.com/openshift-online/ocm-sdk-go/retry"
-	"github.com/openshift-online/ocm-sdk-go/servicelogs"
-	"github.com/openshift-online/ocm-sdk-go/servicemgmt"
-	"github.com/openshift-online/ocm-sdk-go/statusboard"
+	"github.com/openshift-online/ocm-sdk-go/v2/accountsmgmt"
+	"github.com/openshift-online/ocm-sdk-go/v2/authentication"
+	"github.com/openshift-online/ocm-sdk-go/v2/authorizations"
+	"github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt"
+	"github.com/openshift-online/ocm-sdk-go/v2/configuration"
+	"github.com/openshift-online/ocm-sdk-go/v2/internal"
+	"github.com/openshift-online/ocm-sdk-go/v2/jobqueue"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
+	"github.com/openshift-online/ocm-sdk-go/v2/metrics"
+	"github.com/openshift-online/ocm-sdk-go/v2/retry"
+	"github.com/openshift-online/ocm-sdk-go/v2/servicelogs"
+	"github.com/openshift-online/ocm-sdk-go/v2/servicemgmt"
+	"github.com/openshift-online/ocm-sdk-go/v2/statusboard"
 )
 
 // Default values:

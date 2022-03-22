@@ -17,14 +17,14 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/v2/accountsmgmt/v1
 
 import (
 	"io"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/openshift-online/ocm-sdk-go/v2/helpers"
 )
 
 // MarshalAccount writes a value of the 'account' type to the given writer.

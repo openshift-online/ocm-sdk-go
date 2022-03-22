@@ -17,14 +17,14 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/jobqueue/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/v2/jobqueue/v1
 
 import (
 	"io"
 	"net/http"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/openshift-online/ocm-sdk-go/v2/helpers"
 )
 
 func readQueueGetRequest(request *QueueGetServerRequest, r *http.Request) error {

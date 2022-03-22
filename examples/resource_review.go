@@ -23,9 +23,9 @@ import (
 	"fmt"
 	"os"
 
-	sdk "github.com/openshift-online/ocm-sdk-go"
-	azv1 "github.com/openshift-online/ocm-sdk-go/authorizations/v1"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	sdk "github.com/openshift-online/ocm-sdk-go/v2"
+	azv1 "github.com/openshift-online/ocm-sdk-go/v2/authorizations/v1"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 func main() {

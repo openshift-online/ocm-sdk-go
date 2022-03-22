@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/statusboard/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/v2/statusboard/v1
 
 import (
 	"context"
@@ -25,7 +25,7 @@ import (
 	time "time"
 
 	"github.com/golang/glog"
-	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/v2/errors"
 )
 
 // StatusUpdatesServer represents the interface the manages the 'status_updates' resource.

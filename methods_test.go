@@ -27,11 +27,11 @@ import (
 
 	"github.com/onsi/gomega/ghttp"
 
-	. "github.com/onsi/ginkgo/v2/dsl/core"             // nolint
-	. "github.com/onsi/gomega"                         // nolint
-	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/core"                // nolint
+	. "github.com/onsi/gomega"                            // nolint
+	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
 
-	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
 )
 
 var _ = Describe("Methods", func() {

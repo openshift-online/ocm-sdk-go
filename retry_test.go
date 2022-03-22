@@ -23,11 +23,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 
-	. "github.com/onsi/ginkgo/v2/dsl/core"             // nolint
-	. "github.com/onsi/gomega"                         // nolint
-	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/core"                // nolint
+	. "github.com/onsi/gomega"                            // nolint
+	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
 )
 
 var _ = Describe("Retry", func() {

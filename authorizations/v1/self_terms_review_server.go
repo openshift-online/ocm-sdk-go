@@ -17,14 +17,14 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/authorizations/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/v2/authorizations/v1
 
 import (
 	"context"
 	"net/http"
 
 	"github.com/golang/glog"
-	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/v2/errors"
 )
 
 // SelfTermsReviewServer represents the interface the manages the 'self_terms_review' resource.
