@@ -34,6 +34,12 @@ import (
 )
 
 var _ = Describe("Connection", func() {
+	var ctx context.Context
+
+	BeforeEach(func() {
+		ctx = context.Background()
+	})
+
 	It("Can be created with access token", func() {
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
 		connection, err := NewConnection().
@@ -204,9 +210,9 @@ var _ = Describe("Connection", func() {
 		// Try to get the tokens using a explicit and short timeout to make the test run
 		// faster (by default it takes up to 15 seconds) but give it enough time to retry
 		// a few times:
-		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 		defer cancel()
-		_, _, err = connection.TokensContext(ctx)
+		_, _, err = connection.Tokens(ctx)
 
 		// Check that the transport was called at least three times:
 		Expect(transport.called).To(BeNumerically(">=", 3))
@@ -408,7 +414,7 @@ var _ = Describe("Connection", func() {
 		client, secret := connection.Client()
 		Expect(client).To(Equal("myclient"))
 		Expect(secret).To(Equal("mysecret"))
-		returnedAccess, returnedRefresh, err := connection.Tokens()
+		returnedAccess, returnedRefresh, err := connection.Tokens(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(returnedAccess).To(Equal(fileAccess))
 		Expect(returnedRefresh).To(Equal(fileRefresh))
@@ -503,7 +509,7 @@ var _ = Describe("Connection", func() {
 		client, secret := connection.Client()
 		Expect(client).To(Equal("myclient"))
 		Expect(secret).To(Equal("mysecret"))
-		returnedAccess, returnedRefresh, err := connection.Tokens()
+		returnedAccess, returnedRefresh, err := connection.Tokens(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(returnedAccess).To(Equal(fileAccess))
 		Expect(returnedRefresh).To(Equal(fileRefresh))
@@ -614,7 +620,7 @@ var _ = Describe("Connection", func() {
 		client, secret := connection.Client()
 		Expect(client).To(Equal("overriden.myclient"))
 		Expect(secret).To(Equal("overriden.mysecret"))
-		returnedAccess, returnedRefresh, err := connection.Tokens()
+		returnedAccess, returnedRefresh, err := connection.Tokens(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(returnedAccess).To(Equal(overridenAccess))
 		Expect(returnedRefresh).To(Equal(overridenRefresh))
@@ -724,7 +730,7 @@ var _ = Describe("Connection", func() {
 		client, secret := connection.Client()
 		Expect(client).To(Equal("myclient"))
 		Expect(secret).To(Equal("mysecret"))
-		returnedAccess, returnedRefresh, err := connection.Tokens()
+		returnedAccess, returnedRefresh, err := connection.Tokens(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(returnedAccess).To(Equal(fileAccess))
 		Expect(returnedRefresh).To(Equal(fileRefresh))
