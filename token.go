@@ -25,30 +25,12 @@ import (
 	"time"
 )
 
-// Tokens returns the access and refresh tokens that are currently in use by the connection. If it
+// Tokens returns the access and refresh tokens that are currently in use by the connection.  If it
 // is necessary to request new tokens because they weren't requested yet, or because they are
 // expired, this method will do it and will return an error if it fails.
 //
 // If new tokens are needed the request will be retried with an exponential backoff.
-//
-// This operation is potentially lengthy, as it may require network communication. Consider using a
-// context and the TokensContext method.
-func (c *Connection) Tokens(expiresIn ...time.Duration) (access, refresh string, err error) {
-	if len(expiresIn) == 1 {
-		access, refresh, err = c.TokensContext(context.Background(), expiresIn[0])
-	} else {
-		access, refresh, err = c.TokensContext(context.Background())
-	}
-	return
-
-}
-
-// TokensContext returns the access and refresh tokens that are currently in use by the connection.
-// If it is necessary to request new tokens because they weren't requested yet, or because they are
-// expired, this method will do it and will return an error if it fails.
-//
-// If new tokens are needed the request will be retried with an exponential backoff.
-func (c *Connection) TokensContext(ctx context.Context, expiresIn ...time.Duration) (access,
+func (c *Connection) Tokens(ctx context.Context, expiresIn ...time.Duration) (access,
 	refresh string, err error) {
 	access, refresh, err = c.authnWrapper.Tokens(ctx, expiresIn...)
 	return
