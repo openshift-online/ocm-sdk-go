@@ -48,7 +48,7 @@ func listStatusUpdates(ctx context.Context, args []string) error {
 	// Update as needed.
 	product_ids := "4aff22fc-b5b9-4863-adfd-92dc92974cd5,33496a9f-f2bc-408a-b503-be726ab04976"
 
-	response, err := collection.List().ProductIds(product_ids).SendContext(ctx)
+	response, err := collection.List().ProductIds(product_ids).Send(ctx)
 
 	if err != nil {
 		return err

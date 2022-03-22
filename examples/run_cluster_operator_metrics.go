@@ -46,7 +46,7 @@ func runClusterOperatorMetrics(ctx context.Context, args []string) error {
 		ClusterOperators()
 
 	// Send the request to run the query:
-	response, err := resource.Get().SendContext(ctx)
+	response, err := resource.Get().Send(ctx)
 	if err != nil {
 		return err
 	}

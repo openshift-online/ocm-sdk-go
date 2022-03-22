@@ -108,15 +108,7 @@ func (r *SupportCasesPostRequest) Request(value *SupportCaseRequest) *SupportCas
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SupportCasesPostRequest) Send() (result *SupportCasesPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SupportCasesPostRequest) SendContext(ctx context.Context) (result *SupportCasesPostResponse, err error) {
+func (r *SupportCasesPostRequest) Send(ctx context.Context) (result *SupportCasesPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

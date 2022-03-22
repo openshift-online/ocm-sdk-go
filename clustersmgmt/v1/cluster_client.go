@@ -347,13 +347,13 @@ func (r *ClusterPollRequest) Predicate(value func(*ClusterGetResponse) bool) *Cl
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ClusterPollRequest) StartContext(ctx context.Context) (response *ClusterPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *ClusterPollRequest) Start(ctx context.Context) (response *ClusterPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &ClusterPollResponse{
 			response: result.(*ClusterGetResponse),
@@ -365,7 +365,7 @@ func (r *ClusterPollRequest) StartContext(ctx context.Context) (response *Cluste
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *ClusterPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -463,15 +463,7 @@ func (r *ClusterDeleteRequest) Deprovision(value bool) *ClusterDeleteRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
+func (r *ClusterDeleteRequest) Send(ctx context.Context) (result *ClusterDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.deprovision != nil {
 		helpers.AddValue(&query, "deprovision", *r.deprovision)
@@ -573,15 +565,7 @@ func (r *ClusterGetRequest) Impersonate(user string) *ClusterGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterGetRequest) Send() (result *ClusterGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGetResponse, err error) {
+func (r *ClusterGetRequest) Send(ctx context.Context) (result *ClusterGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -707,15 +691,7 @@ func (r *ClusterHibernateRequest) Impersonate(user string) *ClusterHibernateRequ
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterHibernateRequest) Send() (result *ClusterHibernateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterHibernateRequest) SendContext(ctx context.Context) (result *ClusterHibernateResponse, err error) {
+func (r *ClusterHibernateRequest) Send(ctx context.Context) (result *ClusterHibernateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -814,15 +790,7 @@ func (r *ClusterResumeRequest) Impersonate(user string) *ClusterResumeRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterResumeRequest) Send() (result *ClusterResumeResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterResumeRequest) SendContext(ctx context.Context) (result *ClusterResumeResponse, err error) {
+func (r *ClusterResumeRequest) Send(ctx context.Context) (result *ClusterResumeResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -930,15 +898,7 @@ func (r *ClusterUpdateRequest) Body(value *Cluster) *ClusterUpdateRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterUpdateRequest) Send() (result *ClusterUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *ClusterUpdateResponse, err error) {
+func (r *ClusterUpdateRequest) Send(ctx context.Context) (result *ClusterUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

@@ -157,15 +157,7 @@ func (r *CloudProvidersListRequest) Size(value int) *CloudProvidersListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *CloudProvidersListRequest) Send() (result *CloudProvidersListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *CloudProvidersListRequest) SendContext(ctx context.Context) (result *CloudProvidersListResponse, err error) {
+func (r *CloudProvidersListRequest) Send(ctx context.Context) (result *CloudProvidersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

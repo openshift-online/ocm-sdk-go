@@ -72,7 +72,7 @@ func createCluster(ctx context.Context, args []string) error {
 	// Send a request to create the cluster:
 	response, err := collection.Add().
 		Body(cluster).
-		SendContext(ctx)
+		Send(ctx)
 	if err != nil {
 		return err
 	}

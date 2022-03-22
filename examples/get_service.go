@@ -48,7 +48,7 @@ func getService(ctx context.Context, args []string) error {
 	resource := collection.Service("dc440fc4-db27-40eb-8180-765bc4e28620") // Update as needed
 
 	// Send the request to retrieve the service:
-	response, err := resource.Get().SendContext(ctx)
+	response, err := resource.Get().Send(ctx)
 	if err != nil {
 		return err
 	}

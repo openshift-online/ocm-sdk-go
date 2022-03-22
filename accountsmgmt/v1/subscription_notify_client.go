@@ -97,15 +97,7 @@ func (r *SubscriptionNotifyAddRequest) Body(value *SubscriptionNotify) *Subscrip
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SubscriptionNotifyAddRequest) Send() (result *SubscriptionNotifyAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionNotifyAddRequest) SendContext(ctx context.Context) (result *SubscriptionNotifyAddResponse, err error) {
+func (r *SubscriptionNotifyAddRequest) Send(ctx context.Context) (result *SubscriptionNotifyAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

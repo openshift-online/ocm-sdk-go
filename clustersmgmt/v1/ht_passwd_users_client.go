@@ -118,15 +118,7 @@ func (r *HTPasswdUsersAddRequest) Body(value *HTPasswdUser) *HTPasswdUsersAddReq
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *HTPasswdUsersAddRequest) Send() (result *HTPasswdUsersAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *HTPasswdUsersAddRequest) SendContext(ctx context.Context) (result *HTPasswdUsersAddResponse, err error) {
+func (r *HTPasswdUsersAddRequest) Send(ctx context.Context) (result *HTPasswdUsersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *HTPasswdUsersListRequest) Size(value int) *HTPasswdUsersListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *HTPasswdUsersListRequest) Send() (result *HTPasswdUsersListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *HTPasswdUsersListRequest) SendContext(ctx context.Context) (result *HTPasswdUsersListResponse, err error) {
+func (r *HTPasswdUsersListRequest) Send(ctx context.Context) (result *HTPasswdUsersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

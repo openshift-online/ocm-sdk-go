@@ -51,7 +51,7 @@ func loadConfig(ctx context.Context, args []string) error {
 			Search("name like 'my%'").
 			Size(size).
 			Page(page).
-			SendContext(ctx)
+			Send(ctx)
 		if err != nil {
 			return err
 		}

@@ -75,7 +75,7 @@ func createSyncset(ctx context.Context, args []string) error {
 		Syncsets().
 		Add().
 		Body(syncset).
-		Send()
+		Send(ctx)
 	if err != nil {
 		return err
 	}

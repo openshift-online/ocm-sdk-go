@@ -118,15 +118,7 @@ func (r *AddOnVersionsAddRequest) Body(value *AddOnVersion) *AddOnVersionsAddReq
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnVersionsAddRequest) Send() (result *AddOnVersionsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnVersionsAddRequest) SendContext(ctx context.Context) (result *AddOnVersionsAddResponse, err error) {
+func (r *AddOnVersionsAddRequest) Send(ctx context.Context) (result *AddOnVersionsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -318,15 +310,7 @@ func (r *AddOnVersionsListRequest) Size(value int) *AddOnVersionsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnVersionsListRequest) Send() (result *AddOnVersionsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnVersionsListRequest) SendContext(ctx context.Context) (result *AddOnVersionsListResponse, err error) {
+func (r *AddOnVersionsListRequest) Send(ctx context.Context) (result *AddOnVersionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

@@ -118,15 +118,7 @@ func (r *LimitedSupportReasonsAddRequest) Body(value *LimitedSupportReason) *Lim
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LimitedSupportReasonsAddRequest) Send() (result *LimitedSupportReasonsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LimitedSupportReasonsAddRequest) SendContext(ctx context.Context) (result *LimitedSupportReasonsAddResponse, err error) {
+func (r *LimitedSupportReasonsAddRequest) Send(ctx context.Context) (result *LimitedSupportReasonsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *LimitedSupportReasonsListRequest) Size(value int) *LimitedSupportReason
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LimitedSupportReasonsListRequest) Send() (result *LimitedSupportReasonsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LimitedSupportReasonsListRequest) SendContext(ctx context.Context) (result *LimitedSupportReasonsListResponse, err error) {
+func (r *LimitedSupportReasonsListRequest) Send(ctx context.Context) (result *LimitedSupportReasonsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

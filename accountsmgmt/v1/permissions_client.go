@@ -118,15 +118,7 @@ func (r *PermissionsAddRequest) Body(value *Permission) *PermissionsAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PermissionsAddRequest) Send() (result *PermissionsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PermissionsAddRequest) SendContext(ctx context.Context) (result *PermissionsAddResponse, err error) {
+func (r *PermissionsAddRequest) Send(ctx context.Context) (result *PermissionsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *PermissionsListRequest) Size(value int) *PermissionsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PermissionsListRequest) Send() (result *PermissionsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PermissionsListRequest) SendContext(ctx context.Context) (result *PermissionsListResponse, err error) {
+func (r *PermissionsListRequest) Send(ctx context.Context) (result *PermissionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

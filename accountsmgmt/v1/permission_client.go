@@ -112,13 +112,13 @@ func (r *PermissionPollRequest) Predicate(value func(*PermissionGetResponse) boo
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *PermissionPollRequest) StartContext(ctx context.Context) (response *PermissionPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *PermissionPollRequest) Start(ctx context.Context) (response *PermissionPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &PermissionPollResponse{
 			response: result.(*PermissionGetResponse),
@@ -130,7 +130,7 @@ func (r *PermissionPollRequest) StartContext(ctx context.Context) (response *Per
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *PermissionPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -218,15 +218,7 @@ func (r *PermissionDeleteRequest) Impersonate(user string) *PermissionDeleteRequ
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PermissionDeleteRequest) Send() (result *PermissionDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PermissionDeleteRequest) SendContext(ctx context.Context) (result *PermissionDeleteResponse, err error) {
+func (r *PermissionDeleteRequest) Send(ctx context.Context) (result *PermissionDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -325,15 +317,7 @@ func (r *PermissionGetRequest) Impersonate(user string) *PermissionGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PermissionGetRequest) Send() (result *PermissionGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PermissionGetRequest) SendContext(ctx context.Context) (result *PermissionGetResponse, err error) {
+func (r *PermissionGetRequest) Send(ctx context.Context) (result *PermissionGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

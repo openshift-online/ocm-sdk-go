@@ -47,7 +47,7 @@ func getCluster(ctx context.Context, args []string) error {
 	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
 
 	// Send the request to retrieve the cluster:
-	response, err := resource.Get().SendContext(ctx)
+	response, err := resource.Get().Send(ctx)
 	if err != nil {
 		return err
 	}

@@ -97,15 +97,7 @@ func (r *ClusterAuthorizationsPostRequest) Request(value *ClusterAuthorizationRe
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterAuthorizationsPostRequest) Send() (result *ClusterAuthorizationsPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterAuthorizationsPostRequest) SendContext(ctx context.Context) (result *ClusterAuthorizationsPostResponse, err error) {
+func (r *ClusterAuthorizationsPostRequest) Send(ctx context.Context) (result *ClusterAuthorizationsPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

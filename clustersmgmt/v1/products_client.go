@@ -157,15 +157,7 @@ func (r *ProductsListRequest) Size(value int) *ProductsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ProductsListRequest) Send() (result *ProductsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ProductsListRequest) SendContext(ctx context.Context) (result *ProductsListResponse, err error) {
+func (r *ProductsListRequest) Send(ctx context.Context) (result *ProductsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

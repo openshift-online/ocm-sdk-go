@@ -118,15 +118,7 @@ func (r *RegistryCredentialsAddRequest) Body(value *RegistryCredential) *Registr
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RegistryCredentialsAddRequest) Send() (result *RegistryCredentialsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RegistryCredentialsAddRequest) SendContext(ctx context.Context) (result *RegistryCredentialsAddResponse, err error) {
+func (r *RegistryCredentialsAddRequest) Send(ctx context.Context) (result *RegistryCredentialsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -317,15 +309,7 @@ func (r *RegistryCredentialsListRequest) Size(value int) *RegistryCredentialsLis
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RegistryCredentialsListRequest) Send() (result *RegistryCredentialsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RegistryCredentialsListRequest) SendContext(ctx context.Context) (result *RegistryCredentialsListResponse, err error) {
+func (r *RegistryCredentialsListRequest) Send(ctx context.Context) (result *RegistryCredentialsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

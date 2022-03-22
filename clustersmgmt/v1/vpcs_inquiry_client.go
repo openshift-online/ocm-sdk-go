@@ -121,15 +121,7 @@ func (r *VpcsInquirySearchRequest) Size(value int) *VpcsInquirySearchRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *VpcsInquirySearchRequest) Send() (result *VpcsInquirySearchResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *VpcsInquirySearchRequest) SendContext(ctx context.Context) (result *VpcsInquirySearchResponse, err error) {
+func (r *VpcsInquirySearchRequest) Send(ctx context.Context) (result *VpcsInquirySearchResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

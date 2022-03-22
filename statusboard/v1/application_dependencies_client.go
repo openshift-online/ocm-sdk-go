@@ -118,15 +118,7 @@ func (r *ApplicationDependenciesAddRequest) Body(value *ApplicationDependency) *
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ApplicationDependenciesAddRequest) Send() (result *ApplicationDependenciesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ApplicationDependenciesAddRequest) SendContext(ctx context.Context) (result *ApplicationDependenciesAddResponse, err error) {
+func (r *ApplicationDependenciesAddRequest) Send(ctx context.Context) (result *ApplicationDependenciesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -285,15 +277,7 @@ func (r *ApplicationDependenciesListRequest) Size(value int) *ApplicationDepende
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ApplicationDependenciesListRequest) Send() (result *ApplicationDependenciesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ApplicationDependenciesListRequest) SendContext(ctx context.Context) (result *ApplicationDependenciesListResponse, err error) {
+func (r *ApplicationDependenciesListRequest) Send(ctx context.Context) (result *ApplicationDependenciesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.orderBy != nil {
 		helpers.AddValue(&query, "order_by", *r.orderBy)

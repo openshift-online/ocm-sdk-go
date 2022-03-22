@@ -56,7 +56,7 @@ func resourceReview(ctx context.Context, args []string) error {
 	// Send a request to get the list identifiers of clusters that we can see:
 	response, err := resource.Post().
 		Request(request).
-		SendContext(ctx)
+		Send(ctx)
 	if err != nil {
 		return err
 	}

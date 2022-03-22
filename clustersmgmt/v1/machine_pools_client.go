@@ -118,15 +118,7 @@ func (r *MachinePoolsAddRequest) Body(value *MachinePool) *MachinePoolsAddReques
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *MachinePoolsAddRequest) Send() (result *MachinePoolsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *MachinePoolsAddRequest) SendContext(ctx context.Context) (result *MachinePoolsAddResponse, err error) {
+func (r *MachinePoolsAddRequest) Send(ctx context.Context) (result *MachinePoolsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *MachinePoolsListRequest) Size(value int) *MachinePoolsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *MachinePoolsListRequest) Send() (result *MachinePoolsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *MachinePoolsListRequest) SendContext(ctx context.Context) (result *MachinePoolsListResponse, err error) {
+func (r *MachinePoolsListRequest) Send(ctx context.Context) (result *MachinePoolsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

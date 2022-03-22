@@ -118,15 +118,7 @@ func (r *AccountsAddRequest) Body(value *Account) *AccountsAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AccountsAddRequest) Send() (result *AccountsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AccountsAddRequest) SendContext(ctx context.Context) (result *AccountsAddResponse, err error) {
+func (r *AccountsAddRequest) Send(ctx context.Context) (result *AccountsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -340,15 +332,7 @@ func (r *AccountsListRequest) Size(value int) *AccountsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AccountsListRequest) Send() (result *AccountsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AccountsListRequest) SendContext(ctx context.Context) (result *AccountsListResponse, err error) {
+func (r *AccountsListRequest) Send(ctx context.Context) (result *AccountsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.fetchlabelsLabels != nil {
 		helpers.AddValue(&query, "fetchlabels_labels", *r.fetchlabelsLabels)

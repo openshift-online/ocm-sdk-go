@@ -112,13 +112,13 @@ func (r *LogEntryPollRequest) Predicate(value func(*LogEntryGetResponse) bool) *
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *LogEntryPollRequest) StartContext(ctx context.Context) (response *LogEntryPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *LogEntryPollRequest) Start(ctx context.Context) (response *LogEntryPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &LogEntryPollResponse{
 			response: result.(*LogEntryGetResponse),
@@ -130,7 +130,7 @@ func (r *LogEntryPollRequest) StartContext(ctx context.Context) (response *LogEn
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *LogEntryPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -218,15 +218,7 @@ func (r *LogEntryDeleteRequest) Impersonate(user string) *LogEntryDeleteRequest 
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LogEntryDeleteRequest) Send() (result *LogEntryDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LogEntryDeleteRequest) SendContext(ctx context.Context) (result *LogEntryDeleteResponse, err error) {
+func (r *LogEntryDeleteRequest) Send(ctx context.Context) (result *LogEntryDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -325,15 +317,7 @@ func (r *LogEntryGetRequest) Impersonate(user string) *LogEntryGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LogEntryGetRequest) Send() (result *LogEntryGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LogEntryGetRequest) SendContext(ctx context.Context) (result *LogEntryGetResponse, err error) {
+func (r *LogEntryGetRequest) Send(ctx context.Context) (result *LogEntryGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

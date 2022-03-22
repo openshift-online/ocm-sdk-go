@@ -58,7 +58,7 @@ func updateProduct(ctx context.Context, args []string) error {
 	// Send the request to update the product:
 	_, err = resource.Update().
 		Body(patch).
-		SendContext(ctx)
+		Send(ctx)
 	if err != nil {
 		return err
 	}

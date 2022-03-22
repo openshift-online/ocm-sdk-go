@@ -128,15 +128,7 @@ func (r *IngressesAddRequest) Body(value *Ingress) *IngressesAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *IngressesAddRequest) Send() (result *IngressesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *IngressesAddRequest) SendContext(ctx context.Context) (result *IngressesAddResponse, err error) {
+func (r *IngressesAddRequest) Send(ctx context.Context) (result *IngressesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -286,15 +278,7 @@ func (r *IngressesListRequest) Size(value int) *IngressesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *IngressesListRequest) Send() (result *IngressesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *IngressesListRequest) SendContext(ctx context.Context) (result *IngressesListResponse, err error) {
+func (r *IngressesListRequest) Send(ctx context.Context) (result *IngressesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)
@@ -504,15 +488,7 @@ func (r *IngressesUpdateRequest) Body(value []*Ingress) *IngressesUpdateRequest 
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *IngressesUpdateRequest) Send() (result *IngressesUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *IngressesUpdateRequest) SendContext(ctx context.Context) (result *IngressesUpdateResponse, err error) {
+func (r *IngressesUpdateRequest) Send(ctx context.Context) (result *IngressesUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

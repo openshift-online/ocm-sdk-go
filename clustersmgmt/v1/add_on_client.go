@@ -135,13 +135,13 @@ func (r *AddOnPollRequest) Predicate(value func(*AddOnGetResponse) bool) *AddOnP
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *AddOnPollRequest) StartContext(ctx context.Context) (response *AddOnPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *AddOnPollRequest) Start(ctx context.Context) (response *AddOnPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &AddOnPollResponse{
 			response: result.(*AddOnGetResponse),
@@ -153,7 +153,7 @@ func (r *AddOnPollRequest) StartContext(ctx context.Context) (response *AddOnPol
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *AddOnPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -241,15 +241,7 @@ func (r *AddOnDeleteRequest) Impersonate(user string) *AddOnDeleteRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnDeleteRequest) Send() (result *AddOnDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnDeleteRequest) SendContext(ctx context.Context) (result *AddOnDeleteResponse, err error) {
+func (r *AddOnDeleteRequest) Send(ctx context.Context) (result *AddOnDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -348,15 +340,7 @@ func (r *AddOnGetRequest) Impersonate(user string) *AddOnGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnGetRequest) Send() (result *AddOnGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnGetRequest) SendContext(ctx context.Context) (result *AddOnGetResponse, err error) {
+func (r *AddOnGetRequest) Send(ctx context.Context) (result *AddOnGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -491,15 +475,7 @@ func (r *AddOnUpdateRequest) Body(value *AddOn) *AddOnUpdateRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnUpdateRequest) Send() (result *AddOnUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnUpdateRequest) SendContext(ctx context.Context) (result *AddOnUpdateResponse, err error) {
+func (r *AddOnUpdateRequest) Send(ctx context.Context) (result *AddOnUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

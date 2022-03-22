@@ -113,13 +113,13 @@ func (r *ResourcesPollRequest) Predicate(value func(*ResourcesGetResponse) bool)
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ResourcesPollRequest) StartContext(ctx context.Context) (response *ResourcesPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *ResourcesPollRequest) Start(ctx context.Context) (response *ResourcesPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &ResourcesPollResponse{
 			response: result.(*ResourcesGetResponse),
@@ -131,7 +131,7 @@ func (r *ResourcesPollRequest) StartContext(ctx context.Context) (response *Reso
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *ResourcesPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -219,15 +219,7 @@ func (r *ResourcesGetRequest) Impersonate(user string) *ResourcesGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ResourcesGetRequest) Send() (result *ResourcesGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ResourcesGetRequest) SendContext(ctx context.Context) (result *ResourcesGetResponse, err error) {
+func (r *ResourcesGetRequest) Send(ctx context.Context) (result *ResourcesGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

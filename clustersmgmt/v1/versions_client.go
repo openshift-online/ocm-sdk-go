@@ -159,15 +159,7 @@ func (r *VersionsListRequest) Size(value int) *VersionsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *VersionsListRequest) Send() (result *VersionsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *VersionsListRequest) SendContext(ctx context.Context) (result *VersionsListResponse, err error) {
+func (r *VersionsListRequest) Send(ctx context.Context) (result *VersionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

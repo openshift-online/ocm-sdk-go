@@ -101,9 +101,9 @@ func Segments(path string) []string {
 	return strings.Split(path, "/")
 }
 
-// PollContext repeatedly executes a task till it returns one of the given statuses and till the result
+// Poll repeatedly executes a task till it returns one of the given statuses and till the result
 // satisfies all the given predicates.
-func PollContext(
+func Poll(
 	ctx context.Context,
 	interval time.Duration,
 	statuses []int,

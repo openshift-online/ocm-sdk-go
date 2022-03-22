@@ -135,13 +135,13 @@ func (r *QueuePollRequest) Predicate(value func(*QueueGetResponse) bool) *QueueP
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *QueuePollRequest) StartContext(ctx context.Context) (response *QueuePollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *QueuePollRequest) Start(ctx context.Context) (response *QueuePollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &QueuePollResponse{
 			response: result.(*QueueGetResponse),
@@ -153,7 +153,7 @@ func (r *QueuePollRequest) StartContext(ctx context.Context) (response *QueuePol
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *QueuePollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -241,15 +241,7 @@ func (r *QueueGetRequest) Impersonate(user string) *QueueGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *QueueGetRequest) Send() (result *QueueGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *QueueGetRequest) SendContext(ctx context.Context) (result *QueueGetResponse, err error) {
+func (r *QueueGetRequest) Send(ctx context.Context) (result *QueueGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -375,15 +367,7 @@ func (r *QueuePopRequest) Impersonate(user string) *QueuePopRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *QueuePopRequest) Send() (result *QueuePopResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *QueuePopRequest) SendContext(ctx context.Context) (result *QueuePopResponse, err error) {
+func (r *QueuePopRequest) Send(ctx context.Context) (result *QueuePopResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -729,15 +713,7 @@ func (r *QueuePushRequest) CreatedAt(value time.Time) *QueuePushRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *QueuePushRequest) Send() (result *QueuePushResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *QueuePushRequest) SendContext(ctx context.Context) (result *QueuePushResponse, err error) {
+func (r *QueuePushRequest) Send(ctx context.Context) (result *QueuePushResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

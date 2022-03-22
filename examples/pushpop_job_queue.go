@@ -48,7 +48,7 @@ func pushpopJobQueue(ctx context.Context, args []string) error {
 	client := jobQueues.Queues().Queue(queueID)
 
 	// Push a new job
-	pushResponse, err := client.Push().Arguments("foo bar").SendContext(ctx)
+	pushResponse, err := client.Push().Arguments("foo bar").Send(ctx)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func pushpopJobQueue(ctx context.Context, args []string) error {
 	fmt.Printf("Pushed:\n\tid: %s\n\targuments: %s\n\n", pushID, pushArguments)
 
 	// Retrieve this job back
-	popResponse, err := client.Pop().SendContext(ctx)
+	popResponse, err := client.Pop().Send(ctx)
 	if err != nil {
 		return err
 	}
@@ -70,13 +70,13 @@ func pushpopJobQueue(ctx context.Context, args []string) error {
 		popID, popArguments, popAttempts, abandonedAt, receiptID)
 
 	// Mark it as success
-	_, err = client.Jobs().Job(popID).Success().ReceiptId(receiptID).SendContext(ctx)
+	_, err = client.Jobs().Job(popID).Success().ReceiptId(receiptID).Send(ctx)
 	if err != nil {
 		return err
 	}
 
 	// To mark it as Failure use
-	// _, err = client.Jobs().Job(popID).Failure().FailureReason("Failure reason").ReceiptId(receiptID).SendContext(ctx)
+	// _, err = client.Jobs().Job(popID).Failure().FailureReason("Failure reason").ReceiptId(receiptID).Send(ctx)
 
 	return nil
 }

@@ -54,7 +54,7 @@ func listApplications(ctx context.Context, args []string) error {
 			//Fullname("similitudinem-consentiat"). // Uncomment this to restrict results by fullname
 			Size(size).
 			Page(page).
-			SendContext(ctx)
+			Send(ctx)
 		if err != nil {
 			return err
 		}
@@ -83,7 +83,7 @@ func listApplications(ctx context.Context, args []string) error {
 		response, err := services_collection.List().
 			Size(size).
 			Page(page).
-			SendContext(ctx)
+			Send(ctx)
 		if err != nil {
 			return err
 		}

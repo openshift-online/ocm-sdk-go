@@ -118,15 +118,7 @@ func (r *RoleBindingsAddRequest) Body(value *RoleBinding) *RoleBindingsAddReques
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RoleBindingsAddRequest) Send() (result *RoleBindingsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RoleBindingsAddRequest) SendContext(ctx context.Context) (result *RoleBindingsAddResponse, err error) {
+func (r *RoleBindingsAddRequest) Send(ctx context.Context) (result *RoleBindingsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -297,15 +289,7 @@ func (r *RoleBindingsListRequest) Size(value int) *RoleBindingsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RoleBindingsListRequest) Send() (result *RoleBindingsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RoleBindingsListRequest) SendContext(ctx context.Context) (result *RoleBindingsListResponse, err error) {
+func (r *RoleBindingsListRequest) Send(ctx context.Context) (result *RoleBindingsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

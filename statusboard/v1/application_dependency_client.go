@@ -124,13 +124,13 @@ func (r *ApplicationDependencyPollRequest) Predicate(value func(*ApplicationDepe
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ApplicationDependencyPollRequest) StartContext(ctx context.Context) (response *ApplicationDependencyPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *ApplicationDependencyPollRequest) Start(ctx context.Context) (response *ApplicationDependencyPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &ApplicationDependencyPollResponse{
 			response: result.(*ApplicationDependencyGetResponse),
@@ -142,7 +142,7 @@ func (r *ApplicationDependencyPollRequest) StartContext(ctx context.Context) (re
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *ApplicationDependencyPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *ApplicationDependencyDeleteRequest) Impersonate(user string) *Applicati
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ApplicationDependencyDeleteRequest) Send() (result *ApplicationDependencyDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ApplicationDependencyDeleteRequest) SendContext(ctx context.Context) (result *ApplicationDependencyDeleteResponse, err error) {
+func (r *ApplicationDependencyDeleteRequest) Send(ctx context.Context) (result *ApplicationDependencyDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *ApplicationDependencyGetRequest) Impersonate(user string) *ApplicationD
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ApplicationDependencyGetRequest) Send() (result *ApplicationDependencyGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ApplicationDependencyGetRequest) SendContext(ctx context.Context) (result *ApplicationDependencyGetResponse, err error) {
+func (r *ApplicationDependencyGetRequest) Send(ctx context.Context) (result *ApplicationDependencyGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *ApplicationDependencyUpdateRequest) Body(value *ApplicationDependency) 
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ApplicationDependencyUpdateRequest) Send() (result *ApplicationDependencyUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ApplicationDependencyUpdateRequest) SendContext(ctx context.Context) (result *ApplicationDependencyUpdateResponse, err error) {
+func (r *ApplicationDependencyUpdateRequest) Send(ctx context.Context) (result *ApplicationDependencyUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

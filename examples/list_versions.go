@@ -51,7 +51,7 @@ func listVersions(ctx context.Context, args []string) error {
 		response, err := collection.List().
 			Size(size).
 			Page(page).
-			SendContext(ctx)
+			Send(ctx)
 		if err != nil {
 			return err
 		}

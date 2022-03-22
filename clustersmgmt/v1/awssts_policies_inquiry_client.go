@@ -147,15 +147,7 @@ func (r *AWSSTSPoliciesInquiryListRequest) Size(value int) *AWSSTSPoliciesInquir
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AWSSTSPoliciesInquiryListRequest) Send() (result *AWSSTSPoliciesInquiryListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AWSSTSPoliciesInquiryListRequest) SendContext(ctx context.Context) (result *AWSSTSPoliciesInquiryListResponse, err error) {
+func (r *AWSSTSPoliciesInquiryListRequest) Send(ctx context.Context) (result *AWSSTSPoliciesInquiryListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

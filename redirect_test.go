@@ -19,6 +19,7 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"os"
@@ -32,6 +33,9 @@ import (
 )
 
 var _ = Describe("Redirect", func() {
+	// Context used during the tests:
+	var ctx context.Context
+
 	// Tokens used during the tests:
 	var accessToken string
 	var refreshToken string
@@ -56,6 +60,9 @@ var _ = Describe("Redirect", func() {
 
 	BeforeEach(func() {
 		var err error
+
+		// Create the context:
+		ctx = context.Background()
 
 		// Create the tokens:
 		accessToken = MakeTokenString("Bearer", 5*time.Minute)
@@ -155,7 +162,7 @@ var _ = Describe("Redirect", func() {
 			)
 
 			// Send the request:
-			_, err := connection.ClustersMgmt().V1().Get().Send()
+			_, err := connection.ClustersMgmt().V1().Get().Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -166,7 +173,7 @@ var _ = Describe("Redirect", func() {
 			)
 
 			// Send the request:
-			_, err := connection.ClustersMgmt().V1().Get().Send()
+			_, err := connection.ClustersMgmt().V1().Get().Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})

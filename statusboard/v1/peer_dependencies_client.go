@@ -118,15 +118,7 @@ func (r *PeerDependenciesAddRequest) Body(value *PeerDependency) *PeerDependenci
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PeerDependenciesAddRequest) Send() (result *PeerDependenciesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PeerDependenciesAddRequest) SendContext(ctx context.Context) (result *PeerDependenciesAddResponse, err error) {
+func (r *PeerDependenciesAddRequest) Send(ctx context.Context) (result *PeerDependenciesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -285,15 +277,7 @@ func (r *PeerDependenciesListRequest) Size(value int) *PeerDependenciesListReque
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PeerDependenciesListRequest) Send() (result *PeerDependenciesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PeerDependenciesListRequest) SendContext(ctx context.Context) (result *PeerDependenciesListResponse, err error) {
+func (r *PeerDependenciesListRequest) Send(ctx context.Context) (result *PeerDependenciesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.orderBy != nil {
 		helpers.AddValue(&query, "order_by", *r.orderBy)

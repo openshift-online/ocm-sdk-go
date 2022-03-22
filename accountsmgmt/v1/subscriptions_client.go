@@ -225,15 +225,7 @@ func (r *SubscriptionsListRequest) Size(value int) *SubscriptionsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SubscriptionsListRequest) Send() (result *SubscriptionsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *SubscriptionsListResponse, err error) {
+func (r *SubscriptionsListRequest) Send(ctx context.Context) (result *SubscriptionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.fetchaccountsAccounts != nil {
 		helpers.AddValue(&query, "fetchaccounts_accounts", *r.fetchaccountsAccounts)
@@ -463,15 +455,7 @@ func (r *SubscriptionsPostRequest) Request(value *SubscriptionRegistration) *Sub
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SubscriptionsPostRequest) Send() (result *SubscriptionsPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SubscriptionsPostRequest) SendContext(ctx context.Context) (result *SubscriptionsPostResponse, err error) {
+func (r *SubscriptionsPostRequest) Send(ctx context.Context) (result *SubscriptionsPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

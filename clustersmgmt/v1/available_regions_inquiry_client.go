@@ -121,15 +121,7 @@ func (r *AvailableRegionsInquirySearchRequest) Size(value int) *AvailableRegions
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AvailableRegionsInquirySearchRequest) Send() (result *AvailableRegionsInquirySearchResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AvailableRegionsInquirySearchRequest) SendContext(ctx context.Context) (result *AvailableRegionsInquirySearchResponse, err error) {
+func (r *AvailableRegionsInquirySearchRequest) Send(ctx context.Context) (result *AvailableRegionsInquirySearchResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

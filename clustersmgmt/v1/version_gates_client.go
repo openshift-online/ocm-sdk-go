@@ -118,15 +118,7 @@ func (r *VersionGatesAddRequest) Body(value *VersionGate) *VersionGatesAddReques
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *VersionGatesAddRequest) Send() (result *VersionGatesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *VersionGatesAddRequest) SendContext(ctx context.Context) (result *VersionGatesAddResponse, err error) {
+func (r *VersionGatesAddRequest) Send(ctx context.Context) (result *VersionGatesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -315,15 +307,7 @@ func (r *VersionGatesListRequest) Size(value int) *VersionGatesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *VersionGatesListRequest) Send() (result *VersionGatesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *VersionGatesListRequest) SendContext(ctx context.Context) (result *VersionGatesListResponse, err error) {
+func (r *VersionGatesListRequest) Send(ctx context.Context) (result *VersionGatesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

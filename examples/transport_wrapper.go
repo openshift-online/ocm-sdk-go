@@ -76,7 +76,7 @@ func transportWrapper(ctx context.Context, args []string) error {
 	providersCollection := connection.ClustersMgmt().V1().CloudProviders()
 
 	// Retrieve the first page of cloud providers:
-	_, err = providersCollection.List().SendContext(ctx)
+	_, err = providersCollection.List().Send(ctx)
 	if err != nil {
 		return err
 	}

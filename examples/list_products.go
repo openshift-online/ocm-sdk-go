@@ -54,7 +54,7 @@ func listProducts(ctx context.Context, args []string) error {
 			//Fullname("exhibentur").
 			Size(size).
 			Page(page).
-			SendContext(ctx)
+			Send(ctx)
 		if err != nil {
 			return err
 		}

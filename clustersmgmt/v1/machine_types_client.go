@@ -146,15 +146,7 @@ func (r *MachineTypesListRequest) Size(value int) *MachineTypesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *MachineTypesListRequest) Send() (result *MachineTypesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *MachineTypesListRequest) SendContext(ctx context.Context) (result *MachineTypesListResponse, err error) {
+func (r *MachineTypesListRequest) Send(ctx context.Context) (result *MachineTypesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

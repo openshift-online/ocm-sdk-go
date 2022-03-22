@@ -114,13 +114,13 @@ func (r *UpgradePolicyStatePollRequest) Predicate(value func(*UpgradePolicyState
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *UpgradePolicyStatePollRequest) StartContext(ctx context.Context) (response *UpgradePolicyStatePollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *UpgradePolicyStatePollRequest) Start(ctx context.Context) (response *UpgradePolicyStatePollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &UpgradePolicyStatePollResponse{
 			response: result.(*UpgradePolicyStateGetResponse),
@@ -132,7 +132,7 @@ func (r *UpgradePolicyStatePollRequest) StartContext(ctx context.Context) (respo
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *UpgradePolicyStatePollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -220,15 +220,7 @@ func (r *UpgradePolicyStateGetRequest) Impersonate(user string) *UpgradePolicySt
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UpgradePolicyStateGetRequest) Send() (result *UpgradePolicyStateGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UpgradePolicyStateGetRequest) SendContext(ctx context.Context) (result *UpgradePolicyStateGetResponse, err error) {
+func (r *UpgradePolicyStateGetRequest) Send(ctx context.Context) (result *UpgradePolicyStateGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -363,15 +355,7 @@ func (r *UpgradePolicyStateUpdateRequest) Body(value *UpgradePolicyState) *Upgra
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UpgradePolicyStateUpdateRequest) Send() (result *UpgradePolicyStateUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UpgradePolicyStateUpdateRequest) SendContext(ctx context.Context) (result *UpgradePolicyStateUpdateResponse, err error) {
+func (r *UpgradePolicyStateUpdateRequest) Send(ctx context.Context) (result *UpgradePolicyStateUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

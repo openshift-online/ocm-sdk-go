@@ -124,13 +124,13 @@ func (r *RolePollRequest) Predicate(value func(*RoleGetResponse) bool) *RolePoll
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *RolePollRequest) StartContext(ctx context.Context) (response *RolePollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *RolePollRequest) Start(ctx context.Context) (response *RolePollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &RolePollResponse{
 			response: result.(*RoleGetResponse),
@@ -142,7 +142,7 @@ func (r *RolePollRequest) StartContext(ctx context.Context) (response *RolePollR
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *RolePollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *RoleDeleteRequest) Impersonate(user string) *RoleDeleteRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RoleDeleteRequest) Send() (result *RoleDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RoleDeleteRequest) SendContext(ctx context.Context) (result *RoleDeleteResponse, err error) {
+func (r *RoleDeleteRequest) Send(ctx context.Context) (result *RoleDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *RoleGetRequest) Impersonate(user string) *RoleGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RoleGetRequest) Send() (result *RoleGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RoleGetRequest) SendContext(ctx context.Context) (result *RoleGetResponse, err error) {
+func (r *RoleGetRequest) Send(ctx context.Context) (result *RoleGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *RoleUpdateRequest) Body(value *Role) *RoleUpdateRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RoleUpdateRequest) Send() (result *RoleUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RoleUpdateRequest) SendContext(ctx context.Context) (result *RoleUpdateResponse, err error) {
+func (r *RoleUpdateRequest) Send(ctx context.Context) (result *RoleUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

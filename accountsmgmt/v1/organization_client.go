@@ -157,13 +157,13 @@ func (r *OrganizationPollRequest) Predicate(value func(*OrganizationGetResponse)
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *OrganizationPollRequest) StartContext(ctx context.Context) (response *OrganizationPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *OrganizationPollRequest) Start(ctx context.Context) (response *OrganizationPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &OrganizationPollResponse{
 			response: result.(*OrganizationGetResponse),
@@ -175,7 +175,7 @@ func (r *OrganizationPollRequest) StartContext(ctx context.Context) (response *O
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *OrganizationPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -263,15 +263,7 @@ func (r *OrganizationGetRequest) Impersonate(user string) *OrganizationGetReques
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *OrganizationGetRequest) Send() (result *OrganizationGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *OrganizationGetRequest) SendContext(ctx context.Context) (result *OrganizationGetResponse, err error) {
+func (r *OrganizationGetRequest) Send(ctx context.Context) (result *OrganizationGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -406,15 +398,7 @@ func (r *OrganizationUpdateRequest) Body(value *Organization) *OrganizationUpdat
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *OrganizationUpdateRequest) Send() (result *OrganizationUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *OrganizationUpdateRequest) SendContext(ctx context.Context) (result *OrganizationUpdateResponse, err error) {
+func (r *OrganizationUpdateRequest) Send(ctx context.Context) (result *OrganizationUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

@@ -121,15 +121,7 @@ func (r *KeyRingsInquirySearchRequest) Size(value int) *KeyRingsInquirySearchReq
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *KeyRingsInquirySearchRequest) Send() (result *KeyRingsInquirySearchResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *KeyRingsInquirySearchRequest) SendContext(ctx context.Context) (result *KeyRingsInquirySearchResponse, err error) {
+func (r *KeyRingsInquirySearchRequest) Send(ctx context.Context) (result *KeyRingsInquirySearchResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

@@ -48,7 +48,7 @@ func getClusterLogs(ctx context.Context, args []string) error {
 	logsCollection := clustersResource.Cluster("1Jam7Ejgpm7AbZshbgaA9TsM1SQ").Logs()
 
 	// Send the request to retrieve the collection of logs:
-	listResponse, err := logsCollection.List().SendContext(ctx)
+	listResponse, err := logsCollection.List().Send(ctx)
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func getClusterLogs(ctx context.Context, args []string) error {
 	listResponse.Items().Each(func(log *cmv1.Log) bool {
 		logID := log.ID()
 		logResource := logsCollection.Install()
-		getResponse, err := logResource.Get().SendContext(ctx)
+		getResponse, err := logResource.Get().Send(ctx)
 		if err != nil {
 			logger.Error(
 				err,

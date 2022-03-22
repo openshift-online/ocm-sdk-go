@@ -86,15 +86,7 @@ func (r *AccessTokenPostRequest) Impersonate(user string) *AccessTokenPostReques
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AccessTokenPostRequest) Send() (result *AccessTokenPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AccessTokenPostRequest) SendContext(ctx context.Context) (result *AccessTokenPostResponse, err error) {
+func (r *AccessTokenPostRequest) Send(ctx context.Context) (result *AccessTokenPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

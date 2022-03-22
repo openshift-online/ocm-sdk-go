@@ -118,15 +118,7 @@ func (r *FlavoursAddRequest) Body(value *Flavour) *FlavoursAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *FlavoursAddRequest) Send() (result *FlavoursAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *FlavoursAddRequest) SendContext(ctx context.Context) (result *FlavoursAddResponse, err error) {
+func (r *FlavoursAddRequest) Send(ctx context.Context) (result *FlavoursAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -318,15 +310,7 @@ func (r *FlavoursListRequest) Size(value int) *FlavoursListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *FlavoursListRequest) Send() (result *FlavoursListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *FlavoursListRequest) SendContext(ctx context.Context) (result *FlavoursListResponse, err error) {
+func (r *FlavoursListRequest) Send(ctx context.Context) (result *FlavoursListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

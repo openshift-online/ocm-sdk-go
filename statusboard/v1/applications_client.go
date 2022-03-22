@@ -118,15 +118,7 @@ func (r *ApplicationsAddRequest) Body(value *Application) *ApplicationsAddReques
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ApplicationsAddRequest) Send() (result *ApplicationsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ApplicationsAddRequest) SendContext(ctx context.Context) (result *ApplicationsAddResponse, err error) {
+func (r *ApplicationsAddRequest) Send(ctx context.Context) (result *ApplicationsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -294,15 +286,7 @@ func (r *ApplicationsListRequest) Size(value int) *ApplicationsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ApplicationsListRequest) Send() (result *ApplicationsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ApplicationsListRequest) SendContext(ctx context.Context) (result *ApplicationsListResponse, err error) {
+func (r *ApplicationsListRequest) Send(ctx context.Context) (result *ApplicationsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.fullname != nil {
 		helpers.AddValue(&query, "fullname", *r.fullname)

@@ -97,15 +97,7 @@ func (r *SelfFeatureReviewPostRequest) Request(value *SelfFeatureReviewRequest) 
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SelfFeatureReviewPostRequest) Send() (result *SelfFeatureReviewPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SelfFeatureReviewPostRequest) SendContext(ctx context.Context) (result *SelfFeatureReviewPostResponse, err error) {
+func (r *SelfFeatureReviewPostRequest) Send(ctx context.Context) (result *SelfFeatureReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
