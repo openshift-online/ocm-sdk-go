@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	connection, err := sdk.NewConnectionBuilder().
+	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Load("load_config.yaml").
 		BuildContext(ctx)

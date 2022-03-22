@@ -72,7 +72,7 @@ var _ = Describe("Unix sockets", func() {
 			apiURL = "unix://127.0.0.1" + apiSocket
 
 			// Create the connection:
-			connection, err = NewConnectionBuilder().
+			connection, err = NewConnection().
 				Logger(logger).
 				TokenURL(oidURL).
 				URL(apiURL).
@@ -133,7 +133,7 @@ var _ = Describe("Unix sockets", func() {
 			apiURL = "unix+https://127.0.0.1" + apiSocket
 
 			// Create the connection:
-			connection, err = NewConnectionBuilder().
+			connection, err = NewConnection().
 				Logger(logger).
 				TokenURL(oidURL).
 				URL(apiURL).
@@ -202,7 +202,7 @@ var _ = Describe("Unix sockets", func() {
 			tcpURL = tcpServer.URL()
 
 			// Create the connection:
-			connection, err = NewConnectionBuilder().
+			connection, err = NewConnection().
 				Logger(logger).
 				TokenURL(oidURL).
 				AlternativeURL("/api/clusters_mgmt", unixURL).

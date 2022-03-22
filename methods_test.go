@@ -65,7 +65,7 @@ var _ = Describe("Methods", func() {
 		apiServer, apiCA = MakeTCPTLSServer()
 
 		// Create the connection:
-		connection, err = NewConnectionBuilder().
+		connection, err = NewConnection().
 			Logger(logger).
 			TokenURL(oidServer.URL()).
 			URL(apiServer.URL()).

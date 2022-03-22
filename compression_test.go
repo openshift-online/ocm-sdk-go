@@ -47,7 +47,7 @@ var _ = Describe("Compression", func() {
 		server = MakeTCPServer()
 
 		// Create the connection:
-		connection, err = NewConnectionBuilder().
+		connection, err = NewConnection().
 			Logger(logger).
 			URL(server.URL()).
 			Tokens(token).

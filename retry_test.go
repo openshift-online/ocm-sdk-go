@@ -46,7 +46,7 @@ var _ = Describe("Retry", func() {
 		It("Retries if protocol error", func() {
 			// Create a connection with a transport wrapper that returns an error for
 			// the first request and 200 for the second.
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -68,7 +68,7 @@ var _ = Describe("Retry", func() {
 		It("Retries for 429", func() {
 			// Create a connection with a transport wrapper that returns 429 for the
 			// first request and 200 for the second.
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -90,7 +90,7 @@ var _ = Describe("Retry", func() {
 		It("Retries for 503", func() {
 			// Create a connection with a transport wrapper that returns 503 for the
 			// first request and 200 for the second.
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -114,7 +114,7 @@ var _ = Describe("Retry", func() {
 		It("Retries for protocol error", func() {
 			// Create a connection with a transport wrapper that returns an error for
 			// the first request and 200 for the second.
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -138,7 +138,7 @@ var _ = Describe("Retry", func() {
 		It("Retries for protocol error", func() {
 			// Create a connection with a transport wrapper that returns an error for
 			// the first request and 200 for the second.
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -160,7 +160,7 @@ var _ = Describe("Retry", func() {
 		It("Retries for 429", func() {
 			// Create a connection with a transport wrapper that returns 429 for the
 			// first request and 200 for the second.
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -185,7 +185,7 @@ var _ = Describe("Retry", func() {
 		It("Retries for 503", func() {
 			// Create a connection with a transport wrapper that returns 503 for the
 			// first request and 200 for the second.
-			connection, err := NewConnectionBuilder().
+			connection, err := NewConnection().
 				Logger(logger).
 				Tokens(token).
 				TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -219,7 +219,7 @@ var _ = Describe("Retry", func() {
 
 		// Create a connection with a transport wrapper that returns an error for
 		// the first request and 200 for the second.
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {
@@ -256,7 +256,7 @@ var _ = Describe("Retry", func() {
 
 		// Create a connection with a transport wrapper that returns 503 for the first
 		// request and 200 for the second.
-		connection, err := NewConnectionBuilder().
+		connection, err := NewConnection().
 			Logger(logger).
 			Tokens(token).
 			TransportWrapper(func(_ http.RoundTripper) http.RoundTripper {

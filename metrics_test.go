@@ -63,7 +63,7 @@ var _ = Describe("Metrics enabled", func() {
 		metricsServer = NewMetricsServer()
 
 		// Create the connection:
-		connection, err = NewConnectionBuilder().
+		connection, err = NewConnection().
 			Logger(logger).
 			URL(apiServer.URL()).
 			TokenURL(oidServer.URL() + "/my_token").
@@ -179,7 +179,7 @@ var _ = Describe("Metrics disabled", func() {
 		metricsServer = NewMetricsServer()
 
 		// Create the connection:
-		connection, err = NewConnectionBuilder().
+		connection, err = NewConnection().
 			Logger(logger).
 			URL(apiServer.URL()).
 			TokenURL(oidServer.URL()).

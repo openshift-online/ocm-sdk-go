@@ -76,7 +76,7 @@ var _ = Describe("H2C", func() {
 			apiURL.Scheme = "h2c"
 
 			// Create the connection:
-			connection, err = NewConnectionBuilder().
+			connection, err = NewConnection().
 				Logger(logger).
 				TokenURL(oidServer.URL()).
 				URL(apiURL.String()).
@@ -134,7 +134,7 @@ var _ = Describe("H2C", func() {
 			apiURL := "unix+h2c://127.0.0.1" + apiSocket
 
 			// Create the connection:
-			connection, err = NewConnectionBuilder().
+			connection, err = NewConnection().
 				Logger(logger).
 				TokenURL(oidServer.URL()).
 				URL(apiURL).

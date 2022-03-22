@@ -40,7 +40,7 @@ func main() {
 
 	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
-	connection, err := sdk.NewConnectionBuilder().
+	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Tokens(token).
 		Build()
@@ -137,7 +137,7 @@ import (
 )
 
 // Create the connection:
-connection, err := sdk.NewConnectionBuilder().
+connection, err := sdk.NewConnection().
 	Tokens(token).
 	Build()
 if err != nil {
