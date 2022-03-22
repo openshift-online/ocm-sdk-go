@@ -118,15 +118,7 @@ func (r *UsersAddRequest) Body(value *User) *UsersAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UsersAddRequest) Send() (result *UsersAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UsersAddRequest) SendContext(ctx context.Context) (result *UsersAddResponse, err error) {
+func (r *UsersAddRequest) Send(ctx context.Context) (result *UsersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *UsersListRequest) Size(value int) *UsersListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UsersListRequest) Send() (result *UsersListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UsersListRequest) SendContext(ctx context.Context) (result *UsersListResponse, err error) {
+func (r *UsersListRequest) Send(ctx context.Context) (result *UsersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

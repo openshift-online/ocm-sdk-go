@@ -118,15 +118,7 @@ func (r *OperatorIAMRolesAddRequest) Body(value *OperatorIAMRole) *OperatorIAMRo
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *OperatorIAMRolesAddRequest) Send() (result *OperatorIAMRolesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *OperatorIAMRolesAddRequest) SendContext(ctx context.Context) (result *OperatorIAMRolesAddResponse, err error) {
+func (r *OperatorIAMRolesAddRequest) Send(ctx context.Context) (result *OperatorIAMRolesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *OperatorIAMRolesListRequest) Size(value int) *OperatorIAMRolesListReque
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *OperatorIAMRolesListRequest) Send() (result *OperatorIAMRolesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *OperatorIAMRolesListRequest) SendContext(ctx context.Context) (result *OperatorIAMRolesListResponse, err error) {
+func (r *OperatorIAMRolesListRequest) Send(ctx context.Context) (result *OperatorIAMRolesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

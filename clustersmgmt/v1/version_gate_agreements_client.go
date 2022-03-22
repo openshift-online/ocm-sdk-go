@@ -118,15 +118,7 @@ func (r *VersionGateAgreementsAddRequest) Body(value *VersionGateAgreement) *Ver
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *VersionGateAgreementsAddRequest) Send() (result *VersionGateAgreementsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *VersionGateAgreementsAddRequest) SendContext(ctx context.Context) (result *VersionGateAgreementsAddResponse, err error) {
+func (r *VersionGateAgreementsAddRequest) Send(ctx context.Context) (result *VersionGateAgreementsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *VersionGateAgreementsListRequest) Size(value int) *VersionGateAgreement
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *VersionGateAgreementsListRequest) Send() (result *VersionGateAgreementsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *VersionGateAgreementsListRequest) SendContext(ctx context.Context) (result *VersionGateAgreementsListResponse, err error) {
+func (r *VersionGateAgreementsListRequest) Send(ctx context.Context) (result *VersionGateAgreementsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

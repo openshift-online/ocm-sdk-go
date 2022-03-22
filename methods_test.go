@@ -35,6 +35,9 @@ import (
 )
 
 var _ = Describe("Methods", func() {
+	// Context used during the tests:
+	var ctx context.Context
+
 	// Servers used during the tests:
 	var oidServer *ghttp.Server
 	var apiServer *ghttp.Server
@@ -48,6 +51,9 @@ var _ = Describe("Methods", func() {
 
 	BeforeEach(func() {
 		var err error
+
+		// Create the context:
+		ctx = context.Background()
 
 		// Create the tokens:
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
@@ -375,7 +381,7 @@ var _ = Describe("Methods", func() {
 			response, err := collection.Add().
 				Body(body).
 				Parameter("dryRun", true).
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusNoContent))
@@ -401,7 +407,7 @@ var _ = Describe("Methods", func() {
 			_, err = connection.ClustersMgmt().V1().Clusters().Add().
 				Impersonate("my-user").
 				Body(body).
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})

@@ -46,7 +46,7 @@ func clientCredentialsGrant(ctx context.Context, args []string) error {
 		Search("name like 'my%'").
 		Page(1).
 		Size(10).
-		SendContext(ctx)
+		Send(ctx)
 	if err != nil {
 		return err
 	}

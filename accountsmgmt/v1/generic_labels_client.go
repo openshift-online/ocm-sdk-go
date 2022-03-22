@@ -122,15 +122,7 @@ func (r *GenericLabelsAddRequest) Body(value *Label) *GenericLabelsAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *GenericLabelsAddRequest) Send() (result *GenericLabelsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *GenericLabelsAddRequest) SendContext(ctx context.Context) (result *GenericLabelsAddResponse, err error) {
+func (r *GenericLabelsAddRequest) Send(ctx context.Context) (result *GenericLabelsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -283,15 +275,7 @@ func (r *GenericLabelsListRequest) Size(value int) *GenericLabelsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *GenericLabelsListRequest) Send() (result *GenericLabelsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *GenericLabelsListRequest) SendContext(ctx context.Context) (result *GenericLabelsListResponse, err error) {
+func (r *GenericLabelsListRequest) Send(ctx context.Context) (result *GenericLabelsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

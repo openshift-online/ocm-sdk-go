@@ -112,13 +112,13 @@ func (r *UserPollRequest) Predicate(value func(*UserGetResponse) bool) *UserPoll
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *UserPollRequest) StartContext(ctx context.Context) (response *UserPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *UserPollRequest) Start(ctx context.Context) (response *UserPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &UserPollResponse{
 			response: result.(*UserGetResponse),
@@ -130,7 +130,7 @@ func (r *UserPollRequest) StartContext(ctx context.Context) (response *UserPollR
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *UserPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -218,15 +218,7 @@ func (r *UserDeleteRequest) Impersonate(user string) *UserDeleteRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UserDeleteRequest) Send() (result *UserDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UserDeleteRequest) SendContext(ctx context.Context) (result *UserDeleteResponse, err error) {
+func (r *UserDeleteRequest) Send(ctx context.Context) (result *UserDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -325,15 +317,7 @@ func (r *UserGetRequest) Impersonate(user string) *UserGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UserGetRequest) Send() (result *UserGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UserGetRequest) SendContext(ctx context.Context) (result *UserGetResponse, err error) {
+func (r *UserGetRequest) Send(ctx context.Context) (result *UserGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

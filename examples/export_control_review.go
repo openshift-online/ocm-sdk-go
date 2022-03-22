@@ -53,7 +53,7 @@ func exportControlReview(ctx context.Context, args []string) error {
 	// Send the request:
 	postResponse, err := resource.Post().
 		Request(reviewRequest).
-		SendContext(ctx)
+		Send(ctx)
 	if err != nil {
 		return err
 	}

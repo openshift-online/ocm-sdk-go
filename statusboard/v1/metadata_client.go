@@ -59,15 +59,7 @@ func (r *MetadataRequest) Header(name string, value interface{}) *MetadataReques
 }
 
 // Send sends the metadata request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *MetadataRequest) Send() (result *MetadataResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends the metadata request, waits for the response, and returns it.
-func (r *MetadataRequest) SendContext(ctx context.Context) (result *MetadataResponse, err error) {
+func (r *MetadataRequest) Send(ctx context.Context) (result *MetadataResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

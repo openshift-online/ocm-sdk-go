@@ -46,7 +46,7 @@ func deleteCluster(ctx context.Context, args []string) error {
 	resource := collection.Cluster("1BDFg66jv2kDfBh6bBog3IsZWVH")
 
 	// Send the request to delete the cluster:
-	_, err = resource.Delete().SendContext(ctx)
+	_, err = resource.Delete().Send(ctx)
 	if err != nil {
 		return err
 	}

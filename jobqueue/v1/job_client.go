@@ -117,15 +117,7 @@ func (r *JobFailureRequest) ReceiptId(value string) *JobFailureRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *JobFailureRequest) Send() (result *JobFailureResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *JobFailureRequest) SendContext(ctx context.Context) (result *JobFailureResponse, err error) {
+func (r *JobFailureRequest) Send(ctx context.Context) (result *JobFailureResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -239,15 +231,7 @@ func (r *JobSuccessRequest) ReceiptId(value string) *JobSuccessRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *JobSuccessRequest) Send() (result *JobSuccessResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *JobSuccessRequest) SendContext(ctx context.Context) (result *JobSuccessResponse, err error) {
+func (r *JobSuccessRequest) Send(ctx context.Context) (result *JobSuccessResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

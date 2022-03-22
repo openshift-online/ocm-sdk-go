@@ -118,15 +118,7 @@ func (r *ClusterLogsAddRequest) Body(value *LogEntry) *ClusterLogsAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterLogsAddRequest) Send() (result *ClusterLogsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterLogsAddRequest) SendContext(ctx context.Context) (result *ClusterLogsAddResponse, err error) {
+func (r *ClusterLogsAddRequest) Send(ctx context.Context) (result *ClusterLogsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -317,15 +309,7 @@ func (r *ClusterLogsListRequest) Size(value int) *ClusterLogsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterLogsListRequest) Send() (result *ClusterLogsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterLogsListRequest) SendContext(ctx context.Context) (result *ClusterLogsListResponse, err error) {
+func (r *ClusterLogsListRequest) Send(ctx context.Context) (result *ClusterLogsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

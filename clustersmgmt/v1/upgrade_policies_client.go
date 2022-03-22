@@ -118,15 +118,7 @@ func (r *UpgradePoliciesAddRequest) Body(value *UpgradePolicy) *UpgradePoliciesA
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UpgradePoliciesAddRequest) Send() (result *UpgradePoliciesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UpgradePoliciesAddRequest) SendContext(ctx context.Context) (result *UpgradePoliciesAddResponse, err error) {
+func (r *UpgradePoliciesAddRequest) Send(ctx context.Context) (result *UpgradePoliciesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *UpgradePoliciesListRequest) Size(value int) *UpgradePoliciesListRequest
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *UpgradePoliciesListRequest) Send() (result *UpgradePoliciesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *UpgradePoliciesListRequest) SendContext(ctx context.Context) (result *UpgradePoliciesListResponse, err error) {
+func (r *UpgradePoliciesListRequest) Send(ctx context.Context) (result *UpgradePoliciesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

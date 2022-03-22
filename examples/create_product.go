@@ -53,7 +53,7 @@ func createProduct(ctx context.Context, args []string) error {
 	// Send a request to create the product:
 	response, err := collection.Add().
 		Body(product).
-		SendContext(ctx)
+		Send(ctx)
 	if err != nil {
 		return err
 	}

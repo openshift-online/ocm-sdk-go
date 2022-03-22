@@ -120,15 +120,7 @@ func (r *ClustersAddRequest) Body(value *Cluster) *ClustersAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClustersAddRequest) Send() (result *ClustersAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClustersAddRequest) SendContext(ctx context.Context) (result *ClustersAddResponse, err error) {
+func (r *ClustersAddRequest) Send(ctx context.Context) (result *ClustersAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -321,15 +313,7 @@ func (r *ClustersListRequest) Size(value int) *ClustersListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClustersListRequest) Send() (result *ClustersListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClustersListRequest) SendContext(ctx context.Context) (result *ClustersListResponse, err error) {
+func (r *ClustersListRequest) Send(ctx context.Context) (result *ClustersListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

@@ -115,15 +115,7 @@ func (r *RegistriesListRequest) Size(value int) *RegistriesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *RegistriesListRequest) Send() (result *RegistriesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *RegistriesListRequest) SendContext(ctx context.Context) (result *RegistriesListResponse, err error) {
+func (r *RegistriesListRequest) Send(ctx context.Context) (result *RegistriesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

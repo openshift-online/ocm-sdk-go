@@ -102,15 +102,7 @@ func (r *EventsAddRequest) Body(value *Event) *EventsAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *EventsAddRequest) Send() (result *EventsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *EventsAddRequest) SendContext(ctx context.Context) (result *EventsAddResponse, err error) {
+func (r *EventsAddRequest) Send(ctx context.Context) (result *EventsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

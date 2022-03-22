@@ -118,15 +118,7 @@ func (r *ServicesAddRequest) Body(value *Service) *ServicesAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ServicesAddRequest) Send() (result *ServicesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ServicesAddRequest) SendContext(ctx context.Context) (result *ServicesAddResponse, err error) {
+func (r *ServicesAddRequest) Send(ctx context.Context) (result *ServicesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -303,15 +295,7 @@ func (r *ServicesListRequest) Size(value int) *ServicesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ServicesListRequest) Send() (result *ServicesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ServicesListRequest) SendContext(ctx context.Context) (result *ServicesListResponse, err error) {
+func (r *ServicesListRequest) Send(ctx context.Context) (result *ServicesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.fullname != nil {
 		helpers.AddValue(&query, "fullname", *r.fullname)

@@ -124,13 +124,13 @@ func (r *ResourceQuotaPollRequest) Predicate(value func(*ResourceQuotaGetRespons
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ResourceQuotaPollRequest) StartContext(ctx context.Context) (response *ResourceQuotaPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *ResourceQuotaPollRequest) Start(ctx context.Context) (response *ResourceQuotaPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &ResourceQuotaPollResponse{
 			response: result.(*ResourceQuotaGetResponse),
@@ -142,7 +142,7 @@ func (r *ResourceQuotaPollRequest) StartContext(ctx context.Context) (response *
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *ResourceQuotaPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *ResourceQuotaDeleteRequest) Impersonate(user string) *ResourceQuotaDele
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ResourceQuotaDeleteRequest) Send() (result *ResourceQuotaDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ResourceQuotaDeleteRequest) SendContext(ctx context.Context) (result *ResourceQuotaDeleteResponse, err error) {
+func (r *ResourceQuotaDeleteRequest) Send(ctx context.Context) (result *ResourceQuotaDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *ResourceQuotaGetRequest) Impersonate(user string) *ResourceQuotaGetRequ
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ResourceQuotaGetRequest) Send() (result *ResourceQuotaGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ResourceQuotaGetRequest) SendContext(ctx context.Context) (result *ResourceQuotaGetResponse, err error) {
+func (r *ResourceQuotaGetRequest) Send(ctx context.Context) (result *ResourceQuotaGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *ResourceQuotaUpdateRequest) Body(value *ResourceQuota) *ResourceQuotaUp
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ResourceQuotaUpdateRequest) Send() (result *ResourceQuotaUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ResourceQuotaUpdateRequest) SendContext(ctx context.Context) (result *ResourceQuotaUpdateResponse, err error) {
+func (r *ResourceQuotaUpdateRequest) Send(ctx context.Context) (result *ResourceQuotaUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

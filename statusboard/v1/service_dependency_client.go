@@ -124,13 +124,13 @@ func (r *ServiceDependencyPollRequest) Predicate(value func(*ServiceDependencyGe
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ServiceDependencyPollRequest) StartContext(ctx context.Context) (response *ServiceDependencyPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *ServiceDependencyPollRequest) Start(ctx context.Context) (response *ServiceDependencyPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &ServiceDependencyPollResponse{
 			response: result.(*ServiceDependencyGetResponse),
@@ -142,7 +142,7 @@ func (r *ServiceDependencyPollRequest) StartContext(ctx context.Context) (respon
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *ServiceDependencyPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *ServiceDependencyDeleteRequest) Impersonate(user string) *ServiceDepend
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ServiceDependencyDeleteRequest) Send() (result *ServiceDependencyDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ServiceDependencyDeleteRequest) SendContext(ctx context.Context) (result *ServiceDependencyDeleteResponse, err error) {
+func (r *ServiceDependencyDeleteRequest) Send(ctx context.Context) (result *ServiceDependencyDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *ServiceDependencyGetRequest) Impersonate(user string) *ServiceDependenc
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ServiceDependencyGetRequest) Send() (result *ServiceDependencyGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ServiceDependencyGetRequest) SendContext(ctx context.Context) (result *ServiceDependencyGetResponse, err error) {
+func (r *ServiceDependencyGetRequest) Send(ctx context.Context) (result *ServiceDependencyGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *ServiceDependencyUpdateRequest) Body(value *ServiceDependency) *Service
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ServiceDependencyUpdateRequest) Send() (result *ServiceDependencyUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ServiceDependencyUpdateRequest) SendContext(ctx context.Context) (result *ServiceDependencyUpdateResponse, err error) {
+func (r *ServiceDependencyUpdateRequest) Send(ctx context.Context) (result *ServiceDependencyUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

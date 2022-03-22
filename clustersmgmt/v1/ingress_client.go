@@ -124,13 +124,13 @@ func (r *IngressPollRequest) Predicate(value func(*IngressGetResponse) bool) *In
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *IngressPollRequest) StartContext(ctx context.Context) (response *IngressPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *IngressPollRequest) Start(ctx context.Context) (response *IngressPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &IngressPollResponse{
 			response: result.(*IngressGetResponse),
@@ -142,7 +142,7 @@ func (r *IngressPollRequest) StartContext(ctx context.Context) (response *Ingres
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *IngressPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *IngressDeleteRequest) Impersonate(user string) *IngressDeleteRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *IngressDeleteRequest) Send() (result *IngressDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *IngressDeleteRequest) SendContext(ctx context.Context) (result *IngressDeleteResponse, err error) {
+func (r *IngressDeleteRequest) Send(ctx context.Context) (result *IngressDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *IngressGetRequest) Impersonate(user string) *IngressGetRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *IngressGetRequest) Send() (result *IngressGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *IngressGetRequest) SendContext(ctx context.Context) (result *IngressGetResponse, err error) {
+func (r *IngressGetRequest) Send(ctx context.Context) (result *IngressGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *IngressUpdateRequest) Body(value *Ingress) *IngressUpdateRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *IngressUpdateRequest) Send() (result *IngressUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *IngressUpdateRequest) SendContext(ctx context.Context) (result *IngressUpdateResponse, err error) {
+func (r *IngressUpdateRequest) Send(ctx context.Context) (result *IngressUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

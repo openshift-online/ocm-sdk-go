@@ -118,15 +118,7 @@ func (r *ResourceQuotasAddRequest) Body(value *ResourceQuota) *ResourceQuotasAdd
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ResourceQuotasAddRequest) Send() (result *ResourceQuotasAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ResourceQuotasAddRequest) SendContext(ctx context.Context) (result *ResourceQuotasAddResponse, err error) {
+func (r *ResourceQuotasAddRequest) Send(ctx context.Context) (result *ResourceQuotasAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -297,15 +289,7 @@ func (r *ResourceQuotasListRequest) Size(value int) *ResourceQuotasListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ResourceQuotasListRequest) Send() (result *ResourceQuotasListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ResourceQuotasListRequest) SendContext(ctx context.Context) (result *ResourceQuotasListResponse, err error) {
+func (r *ResourceQuotasListRequest) Send(ctx context.Context) (result *ResourceQuotasListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

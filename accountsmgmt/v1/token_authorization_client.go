@@ -97,15 +97,7 @@ func (r *TokenAuthorizationPostRequest) Request(value *TokenAuthorizationRequest
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *TokenAuthorizationPostRequest) Send() (result *TokenAuthorizationPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *TokenAuthorizationPostRequest) SendContext(ctx context.Context) (result *TokenAuthorizationPostResponse, err error) {
+func (r *TokenAuthorizationPostRequest) Send(ctx context.Context) (result *TokenAuthorizationPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

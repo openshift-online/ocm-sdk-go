@@ -118,15 +118,7 @@ func (r *AddOnInstallationsAddRequest) Body(value *AddOnInstallation) *AddOnInst
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnInstallationsAddRequest) Send() (result *AddOnInstallationsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnInstallationsAddRequest) SendContext(ctx context.Context) (result *AddOnInstallationsAddResponse, err error) {
+func (r *AddOnInstallationsAddRequest) Send(ctx context.Context) (result *AddOnInstallationsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -318,15 +310,7 @@ func (r *AddOnInstallationsListRequest) Size(value int) *AddOnInstallationsListR
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnInstallationsListRequest) Send() (result *AddOnInstallationsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnInstallationsListRequest) SendContext(ctx context.Context) (result *AddOnInstallationsListResponse, err error) {
+func (r *AddOnInstallationsListRequest) Send(ctx context.Context) (result *AddOnInstallationsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

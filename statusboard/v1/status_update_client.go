@@ -124,13 +124,13 @@ func (r *StatusUpdatePollRequest) Predicate(value func(*StatusUpdateGetResponse)
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *StatusUpdatePollRequest) StartContext(ctx context.Context) (response *StatusUpdatePollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *StatusUpdatePollRequest) Start(ctx context.Context) (response *StatusUpdatePollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &StatusUpdatePollResponse{
 			response: result.(*StatusUpdateGetResponse),
@@ -142,7 +142,7 @@ func (r *StatusUpdatePollRequest) StartContext(ctx context.Context) (response *S
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *StatusUpdatePollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *StatusUpdateDeleteRequest) Impersonate(user string) *StatusUpdateDelete
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *StatusUpdateDeleteRequest) Send() (result *StatusUpdateDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *StatusUpdateDeleteRequest) SendContext(ctx context.Context) (result *StatusUpdateDeleteResponse, err error) {
+func (r *StatusUpdateDeleteRequest) Send(ctx context.Context) (result *StatusUpdateDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *StatusUpdateGetRequest) Impersonate(user string) *StatusUpdateGetReques
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *StatusUpdateGetRequest) Send() (result *StatusUpdateGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *StatusUpdateGetRequest) SendContext(ctx context.Context) (result *StatusUpdateGetResponse, err error) {
+func (r *StatusUpdateGetRequest) Send(ctx context.Context) (result *StatusUpdateGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *StatusUpdateUpdateRequest) Body(value *Status) *StatusUpdateUpdateReque
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *StatusUpdateUpdateRequest) Send() (result *StatusUpdateUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *StatusUpdateUpdateRequest) SendContext(ctx context.Context) (result *StatusUpdateUpdateResponse, err error) {
+func (r *StatusUpdateUpdateRequest) Send(ctx context.Context) (result *StatusUpdateUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

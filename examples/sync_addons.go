@@ -68,7 +68,7 @@ func syncAddons(ctx context.Context, args []string) error {
 			}
 			_, err = collection.Add().
 				Body(apiItem).
-				SendContext(ctx)
+				Send(ctx)
 			if err != nil {
 				return err
 			}
@@ -90,7 +90,7 @@ func syncAddons(ctx context.Context, args []string) error {
 			}
 			_, err = collection.Addon(id).Update().
 				Body(apiItem).
-				SendContext(ctx)
+				Send(ctx)
 			if err != nil {
 				return err
 			}
@@ -109,7 +109,7 @@ func syncAddons(ctx context.Context, args []string) error {
 			}
 			_, err = collection.Addon(id).Update().
 				Body(apiItem).
-				SendContext(ctx)
+				Send(ctx)
 			if err != nil {
 				return err
 			}
@@ -151,7 +151,7 @@ func loadAPI(ctx context.Context, collection *cmv1.AddOnsClient) (result map[str
 		response, err = collection.List().
 			Size(size).
 			Page(page).
-			SendContext(ctx)
+			Send(ctx)
 		if err != nil {
 			return
 		}

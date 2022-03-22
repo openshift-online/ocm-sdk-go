@@ -57,7 +57,7 @@ func prometheusMetrics(ctx context.Context, args []string) error {
 	// your browser to http://localhost:8000.
 	for {
 		// Get the list of clusters:
-		clustersListResponse, err := clustersCollection.List().SendContext(ctx)
+		clustersListResponse, err := clustersCollection.List().Send(ctx)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Can't send list request: %v\n", err)
 			os.Exit(1)
@@ -67,15 +67,15 @@ func prometheusMetrics(ctx context.Context, args []string) error {
 		clustersListResponse.Items().Each(func(cluster *cmv1.Cluster) bool {
 			// Get the details:
 			clusterResource := clustersCollection.Cluster(cluster.ID())
-			clusterResource.Get().SendContext(ctx)
+			clusterResource.Get().Send(ctx)
 
 			// Get the list of logs:
 			logsResource := clusterResource.Logs()
-			logsResource.List().SendContext(ctx)
+			logsResource.List().Send(ctx)
 
 			// Get the credentials:
 			credentialsResource := clusterResource.Credentials()
-			credentialsResource.Get().SendContext(ctx)
+			credentialsResource.Get().Send(ctx)
 
 			return true
 		})

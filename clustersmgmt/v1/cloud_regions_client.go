@@ -122,15 +122,7 @@ func (r *CloudRegionsListRequest) Size(value int) *CloudRegionsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *CloudRegionsListRequest) Send() (result *CloudRegionsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *CloudRegionsListRequest) SendContext(ctx context.Context) (result *CloudRegionsListResponse, err error) {
+func (r *CloudRegionsListRequest) Send(ctx context.Context) (result *CloudRegionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

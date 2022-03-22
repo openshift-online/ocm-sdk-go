@@ -115,15 +115,7 @@ func (r *GroupsListRequest) Size(value int) *GroupsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *GroupsListRequest) Send() (result *GroupsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *GroupsListRequest) SendContext(ctx context.Context) (result *GroupsListResponse, err error) {
+func (r *GroupsListRequest) Send(ctx context.Context) (result *GroupsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

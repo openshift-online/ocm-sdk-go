@@ -124,13 +124,13 @@ func (r *MachinePoolPollRequest) Predicate(value func(*MachinePoolGetResponse) b
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *MachinePoolPollRequest) StartContext(ctx context.Context) (response *MachinePoolPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *MachinePoolPollRequest) Start(ctx context.Context) (response *MachinePoolPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &MachinePoolPollResponse{
 			response: result.(*MachinePoolGetResponse),
@@ -142,7 +142,7 @@ func (r *MachinePoolPollRequest) StartContext(ctx context.Context) (response *Ma
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *MachinePoolPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *MachinePoolDeleteRequest) Impersonate(user string) *MachinePoolDeleteRe
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *MachinePoolDeleteRequest) Send() (result *MachinePoolDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *MachinePoolDeleteRequest) SendContext(ctx context.Context) (result *MachinePoolDeleteResponse, err error) {
+func (r *MachinePoolDeleteRequest) Send(ctx context.Context) (result *MachinePoolDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *MachinePoolGetRequest) Impersonate(user string) *MachinePoolGetRequest 
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *MachinePoolGetRequest) Send() (result *MachinePoolGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *MachinePoolGetRequest) SendContext(ctx context.Context) (result *MachinePoolGetResponse, err error) {
+func (r *MachinePoolGetRequest) Send(ctx context.Context) (result *MachinePoolGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *MachinePoolUpdateRequest) Body(value *MachinePool) *MachinePoolUpdateRe
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *MachinePoolUpdateRequest) Send() (result *MachinePoolUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *MachinePoolUpdateRequest) SendContext(ctx context.Context) (result *MachinePoolUpdateResponse, err error) {
+func (r *MachinePoolUpdateRequest) Send(ctx context.Context) (result *MachinePoolUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

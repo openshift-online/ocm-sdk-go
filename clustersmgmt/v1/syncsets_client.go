@@ -118,15 +118,7 @@ func (r *SyncsetsAddRequest) Body(value *Syncset) *SyncsetsAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SyncsetsAddRequest) Send() (result *SyncsetsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SyncsetsAddRequest) SendContext(ctx context.Context) (result *SyncsetsAddResponse, err error) {
+func (r *SyncsetsAddRequest) Send(ctx context.Context) (result *SyncsetsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *SyncsetsListRequest) Size(value int) *SyncsetsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *SyncsetsListRequest) Send() (result *SyncsetsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *SyncsetsListRequest) SendContext(ctx context.Context) (result *SyncsetsListResponse, err error) {
+func (r *SyncsetsListRequest) Send(ctx context.Context) (result *SyncsetsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

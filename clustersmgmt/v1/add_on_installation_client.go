@@ -124,13 +124,13 @@ func (r *AddOnInstallationPollRequest) Predicate(value func(*AddOnInstallationGe
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *AddOnInstallationPollRequest) StartContext(ctx context.Context) (response *AddOnInstallationPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *AddOnInstallationPollRequest) Start(ctx context.Context) (response *AddOnInstallationPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &AddOnInstallationPollResponse{
 			response: result.(*AddOnInstallationGetResponse),
@@ -142,7 +142,7 @@ func (r *AddOnInstallationPollRequest) StartContext(ctx context.Context) (respon
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *AddOnInstallationPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -230,15 +230,7 @@ func (r *AddOnInstallationDeleteRequest) Impersonate(user string) *AddOnInstalla
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnInstallationDeleteRequest) Send() (result *AddOnInstallationDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnInstallationDeleteRequest) SendContext(ctx context.Context) (result *AddOnInstallationDeleteResponse, err error) {
+func (r *AddOnInstallationDeleteRequest) Send(ctx context.Context) (result *AddOnInstallationDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -337,15 +329,7 @@ func (r *AddOnInstallationGetRequest) Impersonate(user string) *AddOnInstallatio
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnInstallationGetRequest) Send() (result *AddOnInstallationGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnInstallationGetRequest) SendContext(ctx context.Context) (result *AddOnInstallationGetResponse, err error) {
+func (r *AddOnInstallationGetRequest) Send(ctx context.Context) (result *AddOnInstallationGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -480,15 +464,7 @@ func (r *AddOnInstallationUpdateRequest) Body(value *AddOnInstallation) *AddOnIn
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddOnInstallationUpdateRequest) Send() (result *AddOnInstallationUpdateResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddOnInstallationUpdateRequest) SendContext(ctx context.Context) (result *AddOnInstallationUpdateResponse, err error) {
+func (r *AddOnInstallationUpdateRequest) Send(ctx context.Context) (result *AddOnInstallationUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

@@ -97,15 +97,7 @@ func (r *CapabilityReviewPostRequest) Request(value *CapabilityReviewRequest) *C
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *CapabilityReviewPostRequest) Send() (result *CapabilityReviewPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *CapabilityReviewPostRequest) SendContext(ctx context.Context) (result *CapabilityReviewPostResponse, err error) {
+func (r *CapabilityReviewPostRequest) Send(ctx context.Context) (result *CapabilityReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

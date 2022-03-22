@@ -42,7 +42,7 @@ func getMetadata(ctx context.Context, args []string) error {
 	client := connection.ClustersMgmt().V1()
 
 	// Send the request to retrieve the metadata:
-	response, err := client.Get().SendContext(ctx)
+	response, err := client.Get().Send(ctx)
 	if err != nil {
 		return err
 	}

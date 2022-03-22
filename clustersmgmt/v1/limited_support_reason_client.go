@@ -112,13 +112,13 @@ func (r *LimitedSupportReasonPollRequest) Predicate(value func(*LimitedSupportRe
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *LimitedSupportReasonPollRequest) StartContext(ctx context.Context) (response *LimitedSupportReasonPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *LimitedSupportReasonPollRequest) Start(ctx context.Context) (response *LimitedSupportReasonPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &LimitedSupportReasonPollResponse{
 			response: result.(*LimitedSupportReasonGetResponse),
@@ -130,7 +130,7 @@ func (r *LimitedSupportReasonPollRequest) StartContext(ctx context.Context) (res
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *LimitedSupportReasonPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -218,15 +218,7 @@ func (r *LimitedSupportReasonDeleteRequest) Impersonate(user string) *LimitedSup
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LimitedSupportReasonDeleteRequest) Send() (result *LimitedSupportReasonDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LimitedSupportReasonDeleteRequest) SendContext(ctx context.Context) (result *LimitedSupportReasonDeleteResponse, err error) {
+func (r *LimitedSupportReasonDeleteRequest) Send(ctx context.Context) (result *LimitedSupportReasonDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -325,15 +317,7 @@ func (r *LimitedSupportReasonGetRequest) Impersonate(user string) *LimitedSuppor
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LimitedSupportReasonGetRequest) Send() (result *LimitedSupportReasonGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LimitedSupportReasonGetRequest) SendContext(ctx context.Context) (result *LimitedSupportReasonGetResponse, err error) {
+func (r *LimitedSupportReasonGetRequest) Send(ctx context.Context) (result *LimitedSupportReasonGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

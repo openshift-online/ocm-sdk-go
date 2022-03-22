@@ -47,7 +47,7 @@ func listQuotaCost(ctx context.Context, args []string) error {
 	// Search quota cost items where quota_id starts with 'add-on':
 	response, err := collection.List().
 		Search("quota_id like 'add-on%'").
-		SendContext(ctx)
+		Send(ctx)
 	if err != nil {
 		return err
 	}

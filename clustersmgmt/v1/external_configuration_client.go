@@ -123,13 +123,13 @@ func (r *ExternalConfigurationPollRequest) Predicate(value func(*ExternalConfigu
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ExternalConfigurationPollRequest) StartContext(ctx context.Context) (response *ExternalConfigurationPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *ExternalConfigurationPollRequest) Start(ctx context.Context) (response *ExternalConfigurationPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &ExternalConfigurationPollResponse{
 			response: result.(*ExternalConfigurationGetResponse),
@@ -141,7 +141,7 @@ func (r *ExternalConfigurationPollRequest) StartContext(ctx context.Context) (re
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *ExternalConfigurationPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -229,15 +229,7 @@ func (r *ExternalConfigurationGetRequest) Impersonate(user string) *ExternalConf
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ExternalConfigurationGetRequest) Send() (result *ExternalConfigurationGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ExternalConfigurationGetRequest) SendContext(ctx context.Context) (result *ExternalConfigurationGetResponse, err error) {
+func (r *ExternalConfigurationGetRequest) Send(ctx context.Context) (result *ExternalConfigurationGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

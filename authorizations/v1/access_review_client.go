@@ -97,15 +97,7 @@ func (r *AccessReviewPostRequest) Request(value *AccessReviewRequest) *AccessRev
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AccessReviewPostRequest) Send() (result *AccessReviewPostResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AccessReviewPostRequest) SendContext(ctx context.Context) (result *AccessReviewPostResponse, err error) {
+func (r *AccessReviewPostRequest) Send(ctx context.Context) (result *AccessReviewPostResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

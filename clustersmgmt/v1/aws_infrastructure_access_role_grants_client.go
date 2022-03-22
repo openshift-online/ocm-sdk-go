@@ -119,15 +119,7 @@ func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Body(value *AWSInfrastruct
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Send() (result *AWSInfrastructureAccessRoleGrantsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AWSInfrastructureAccessRoleGrantsAddRequest) SendContext(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantsAddResponse, err error) {
+func (r *AWSInfrastructureAccessRoleGrantsAddRequest) Send(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -319,15 +311,7 @@ func (r *AWSInfrastructureAccessRoleGrantsListRequest) Size(value int) *AWSInfra
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AWSInfrastructureAccessRoleGrantsListRequest) Send() (result *AWSInfrastructureAccessRoleGrantsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AWSInfrastructureAccessRoleGrantsListRequest) SendContext(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantsListResponse, err error) {
+func (r *AWSInfrastructureAccessRoleGrantsListRequest) Send(ctx context.Context) (result *AWSInfrastructureAccessRoleGrantsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

@@ -19,6 +19,7 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -30,6 +31,9 @@ import (
 )
 
 var _ = Describe("Metrics enabled", func() {
+	// Context used during the tests:
+	var ctx context.Context
+
 	// Servers used during the tests:
 	var oidServer *ghttp.Server
 	var apiServer *ghttp.Server
@@ -40,6 +44,9 @@ var _ = Describe("Metrics enabled", func() {
 
 	BeforeEach(func() {
 		var err error
+
+		// Create the context:
+		ctx = context.Background()
 
 		// Create the tokens:
 		accessToken := MakeTokenString("Bearer", 5*time.Minute)
@@ -100,7 +107,7 @@ var _ = Describe("Metrics enabled", func() {
 	It("Generates request count for type safe request", func() {
 		// Send the request:
 		_, err := connection.ClustersMgmt().V1().Clusters().Cluster("123").Get().
-			Send()
+			Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Verify the metrics:
@@ -111,7 +118,7 @@ var _ = Describe("Metrics enabled", func() {
 	It("Generates token request count", func() {
 		// Send the request:
 		_, err := connection.ClustersMgmt().V1().Clusters().Cluster("123").Get().
-			Send()
+			Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Verify the metrics:
@@ -123,7 +130,7 @@ var _ = Describe("Metrics enabled", func() {
 	It("Generates token request duration", func() {
 		// Send the request:
 		_, err := connection.ClustersMgmt().V1().Clusters().Cluster("123").Get().
-			Send()
+			Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Verify the metrics:
@@ -146,6 +153,9 @@ var _ = Describe("Metrics enabled", func() {
 })
 
 var _ = Describe("Metrics disabled", func() {
+	// Context used during the tests:
+	var ctx context.Context
+
 	// Servers used during the tests:
 	var oidServer *ghttp.Server
 	var apiServer *ghttp.Server
@@ -215,7 +225,7 @@ var _ = Describe("Metrics disabled", func() {
 	It("Doesn't generate metrics for type safe request", func() {
 		// Send the request:
 		_, err := connection.ClustersMgmt().V1().Clusters().Cluster("123").Get().
-			Send()
+			Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Verify the metrics:

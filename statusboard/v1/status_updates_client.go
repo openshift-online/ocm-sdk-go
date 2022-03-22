@@ -119,15 +119,7 @@ func (r *StatusUpdatesAddRequest) Body(value *Status) *StatusUpdatesAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *StatusUpdatesAddRequest) Send() (result *StatusUpdatesAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *StatusUpdatesAddRequest) SendContext(ctx context.Context) (result *StatusUpdatesAddResponse, err error) {
+func (r *StatusUpdatesAddRequest) Send(ctx context.Context) (result *StatusUpdatesAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -304,15 +296,7 @@ func (r *StatusUpdatesListRequest) Size(value int) *StatusUpdatesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *StatusUpdatesListRequest) Send() (result *StatusUpdatesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *StatusUpdatesListRequest) SendContext(ctx context.Context) (result *StatusUpdatesListResponse, err error) {
+func (r *StatusUpdatesListRequest) Send(ctx context.Context) (result *StatusUpdatesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.createdAfter != nil {
 		helpers.AddValue(&query, "created_after", *r.createdAfter)

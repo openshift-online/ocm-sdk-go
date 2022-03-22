@@ -47,7 +47,7 @@ func deleteProduct(ctx context.Context, args []string) error {
 	resource := collection.Product("ea7ee64f-978d-4705-a271-85b072bc5241")
 
 	// Send the request to delete the product:
-	_, err = resource.Delete().SendContext(ctx)
+	_, err = resource.Delete().Send(ctx)
 	if err != nil {
 		return err
 	}

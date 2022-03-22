@@ -43,14 +43,14 @@ func listCloudProviders(ctx context.Context, args []string) error {
 	providersCollection := connection.ClustersMgmt().V1().CloudProviders()
 
 	// Retrieve the first page of cloud providers and print them:
-	providersResponse, err := providersCollection.List().SendContext(ctx)
+	providersResponse, err := providersCollection.List().Send(ctx)
 	if err != nil {
 		return err
 	}
 	providersResponse.Items().Each(func(provider *cmv1.CloudProvider) bool {
 		providerID := provider.ID()
 		regionsCollection := providersCollection.CloudProvider(providerID).Regions()
-		regionsResponse, err := regionsCollection.List().SendContext(ctx)
+		regionsResponse, err := regionsCollection.List().Send(ctx)
 		if err != nil {
 			logger.Error(err, "Can't retrieve regions")
 			return false

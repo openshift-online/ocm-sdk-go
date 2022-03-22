@@ -102,13 +102,13 @@ func (r *CloudRegionPollRequest) Predicate(value func(*CloudRegionGetResponse) b
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *CloudRegionPollRequest) StartContext(ctx context.Context) (response *CloudRegionPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *CloudRegionPollRequest) Start(ctx context.Context) (response *CloudRegionPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &CloudRegionPollResponse{
 			response: result.(*CloudRegionGetResponse),
@@ -120,7 +120,7 @@ func (r *CloudRegionPollRequest) StartContext(ctx context.Context) (response *Cl
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *CloudRegionPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -208,15 +208,7 @@ func (r *CloudRegionGetRequest) Impersonate(user string) *CloudRegionGetRequest 
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *CloudRegionGetRequest) Send() (result *CloudRegionGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *CloudRegionGetRequest) SendContext(ctx context.Context) (result *CloudRegionGetResponse, err error) {
+func (r *CloudRegionGetRequest) Send(ctx context.Context) (result *CloudRegionGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

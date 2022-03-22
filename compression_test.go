@@ -20,6 +20,7 @@ package sdk
 
 import (
 	"compress/gzip"
+	"context"
 	"net/http"
 	"time"
 
@@ -33,12 +34,16 @@ import (
 
 var _ = Describe("Compression", func() {
 	var (
+		ctx        context.Context
 		server     *ghttp.Server
 		connection *Connection
 	)
 
 	BeforeEach(func() {
 		var err error
+
+		// Create the context:
+		ctx = context.Background()
 
 		// Create the tokens:
 		token := MakeTokenString("Bearer", 5*time.Minute)
@@ -89,7 +94,7 @@ var _ = Describe("Compression", func() {
 
 		// Send the request:
 		response, err := connection.ClustersMgmt().V1().Clusters().Cluster("123").Get().
-			Send()
+			Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(response).ToNot(BeNil())
 		result := response.Body()

@@ -145,15 +145,7 @@ func (r *ClusterLogsUUIDListRequest) Size(value int) *ClusterLogsUUIDListRequest
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterLogsUUIDListRequest) Send() (result *ClusterLogsUUIDListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterLogsUUIDListRequest) SendContext(ctx context.Context) (result *ClusterLogsUUIDListResponse, err error) {
+func (r *ClusterLogsUUIDListRequest) Send(ctx context.Context) (result *ClusterLogsUUIDListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

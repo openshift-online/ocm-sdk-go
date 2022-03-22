@@ -19,6 +19,7 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"time"
@@ -32,6 +33,9 @@ import (
 )
 
 var _ = Describe("Alternative URLs", func() {
+	// Context used during the tests:
+	var ctx context.Context
+
 	// Tokens used during the tests:
 	var accessToken string
 	var refreshToken string
@@ -52,6 +56,9 @@ var _ = Describe("Alternative URLs", func() {
 	var alternativeURL string
 
 	BeforeEach(func() {
+		// Create the context:
+		ctx = context.Background()
+
 		// Create the tokens:
 		accessToken = MakeTokenString("Bearer", 5*time.Minute)
 		refreshToken = MakeTokenString("Refresh", 10*time.Hour)
@@ -221,7 +228,7 @@ var _ = Describe("Alternative URLs", func() {
 			}()
 
 			// Send the request:
-			_, err = connection.ClustersMgmt().V1().Get().Send()
+			_, err = connection.ClustersMgmt().V1().Get().Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -253,7 +260,7 @@ var _ = Describe("Alternative URLs", func() {
 			}()
 
 			// Send the request:
-			_, err = connection.ClustersMgmt().V1().Get().Send()
+			_, err = connection.ClustersMgmt().V1().Get().Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -286,7 +293,7 @@ var _ = Describe("Alternative URLs", func() {
 			}()
 
 			// Send the request:
-			_, err = connection.ClustersMgmt().V1().Get().Send()
+			_, err = connection.ClustersMgmt().V1().Get().Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})

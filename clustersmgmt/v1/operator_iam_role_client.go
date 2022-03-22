@@ -86,15 +86,7 @@ func (r *OperatorIAMRoleDeleteRequest) Impersonate(user string) *OperatorIAMRole
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *OperatorIAMRoleDeleteRequest) Send() (result *OperatorIAMRoleDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *OperatorIAMRoleDeleteRequest) SendContext(ctx context.Context) (result *OperatorIAMRoleDeleteResponse, err error) {
+func (r *OperatorIAMRoleDeleteRequest) Send(ctx context.Context) (result *OperatorIAMRoleDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

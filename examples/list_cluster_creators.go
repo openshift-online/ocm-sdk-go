@@ -60,7 +60,7 @@ func listClusterCreators(ctx context.Context, args []string) error {
 			Search("managed = 't'").
 			Size(size).
 			Page(page).
-			SendContext(ctx)
+			Send(ctx)
 		if err != nil {
 			return err
 		}
@@ -82,7 +82,7 @@ func listClusterCreators(ctx context.Context, args []string) error {
 			// Retrieve the details of the subscription, so that we can follow the link
 			// to the account that created it:
 			subscriptionResource := subscriptionsCollection.Subscription(subscriptionID)
-			subscriptionGetResponse, err := subscriptionResource.Get().Send()
+			subscriptionGetResponse, err := subscriptionResource.Get().Send(ctx)
 			if err != nil {
 				logger.Error(
 					err,
@@ -105,7 +105,7 @@ func listClusterCreators(ctx context.Context, args []string) error {
 
 			// Retrieve the details of the account:
 			accountResource := accountsCollection.Account(creatorID)
-			accountGetResponse, err := accountResource.Get().Send()
+			accountGetResponse, err := accountResource.Get().Send(ctx)
 			if err != nil {
 				logger.Error(
 					err,

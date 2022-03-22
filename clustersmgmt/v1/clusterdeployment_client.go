@@ -86,15 +86,7 @@ func (r *ClusterdeploymentDeleteRequest) Impersonate(user string) *Clusterdeploy
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterdeploymentDeleteRequest) Send() (result *ClusterdeploymentDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterdeploymentDeleteRequest) SendContext(ctx context.Context) (result *ClusterdeploymentDeleteResponse, err error) {
+func (r *ClusterdeploymentDeleteRequest) Send(ctx context.Context) (result *ClusterdeploymentDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

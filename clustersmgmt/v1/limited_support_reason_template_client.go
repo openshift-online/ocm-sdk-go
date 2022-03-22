@@ -102,13 +102,13 @@ func (r *LimitedSupportReasonTemplatePollRequest) Predicate(value func(*LimitedS
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *LimitedSupportReasonTemplatePollRequest) StartContext(ctx context.Context) (response *LimitedSupportReasonTemplatePollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *LimitedSupportReasonTemplatePollRequest) Start(ctx context.Context) (response *LimitedSupportReasonTemplatePollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &LimitedSupportReasonTemplatePollResponse{
 			response: result.(*LimitedSupportReasonTemplateGetResponse),
@@ -120,7 +120,7 @@ func (r *LimitedSupportReasonTemplatePollRequest) StartContext(ctx context.Conte
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *LimitedSupportReasonTemplatePollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -208,15 +208,7 @@ func (r *LimitedSupportReasonTemplateGetRequest) Impersonate(user string) *Limit
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LimitedSupportReasonTemplateGetRequest) Send() (result *LimitedSupportReasonTemplateGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LimitedSupportReasonTemplateGetRequest) SendContext(ctx context.Context) (result *LimitedSupportReasonTemplateGetResponse, err error) {
+func (r *LimitedSupportReasonTemplateGetRequest) Send(ctx context.Context) (result *LimitedSupportReasonTemplateGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

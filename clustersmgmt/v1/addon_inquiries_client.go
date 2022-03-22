@@ -158,15 +158,7 @@ func (r *AddonInquiriesListRequest) Size(value int) *AddonInquiriesListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *AddonInquiriesListRequest) Send() (result *AddonInquiriesListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *AddonInquiriesListRequest) SendContext(ctx context.Context) (result *AddonInquiriesListResponse, err error) {
+func (r *AddonInquiriesListRequest) Send(ctx context.Context) (result *AddonInquiriesListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.order != nil {
 		helpers.AddValue(&query, "order", *r.order)

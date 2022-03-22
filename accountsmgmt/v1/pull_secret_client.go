@@ -86,15 +86,7 @@ func (r *PullSecretDeleteRequest) Impersonate(user string) *PullSecretDeleteRequ
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *PullSecretDeleteRequest) Send() (result *PullSecretDeleteResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *PullSecretDeleteRequest) SendContext(ctx context.Context) (result *PullSecretDeleteResponse, err error) {
+func (r *PullSecretDeleteRequest) Send(ctx context.Context) (result *PullSecretDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{

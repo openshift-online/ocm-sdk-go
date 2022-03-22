@@ -22,7 +22,7 @@ model_version:=v0.0.183
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=54a2413ff3822a178ae40d7161a69eaa25e37c55
+metamodel_version:=7b30ef5fe95d0d13ca93e1d21a83039f5fca1bc6
 
 .PHONY: examples
 examples:

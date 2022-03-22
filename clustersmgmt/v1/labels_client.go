@@ -118,15 +118,7 @@ func (r *LabelsAddRequest) Body(value *Label) *LabelsAddRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LabelsAddRequest) Send() (result *LabelsAddResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LabelsAddRequest) SendContext(ctx context.Context) (result *LabelsAddResponse, err error) {
+func (r *LabelsAddRequest) Send(ctx context.Context) (result *LabelsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
@@ -276,15 +268,7 @@ func (r *LabelsListRequest) Size(value int) *LabelsListRequest {
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *LabelsListRequest) Send() (result *LabelsListResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *LabelsListRequest) SendContext(ctx context.Context) (result *LabelsListResponse, err error) {
+func (r *LabelsListRequest) Send(ctx context.Context) (result *LabelsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.page != nil {
 		helpers.AddValue(&query, "page", *r.page)

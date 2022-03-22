@@ -102,13 +102,13 @@ func (r *ClusterResourcesPollRequest) Predicate(value func(*ClusterResourcesGetR
 	return r
 }
 
-// StartContext starts the polling loop. Responses will be considered successful if the status is one of
+// Start starts the polling loop. Responses will be considered successful if the status is one of
 // the values specified with the Status method and if all the predicates specified with the Predicate
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ClusterResourcesPollRequest) StartContext(ctx context.Context) (response *ClusterResourcesPollResponse, err error) {
-	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
+func (r *ClusterResourcesPollRequest) Start(ctx context.Context) (response *ClusterResourcesPollResponse, err error) {
+	result, err := helpers.Poll(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
 		response = &ClusterResourcesPollResponse{
 			response: result.(*ClusterResourcesGetResponse),
@@ -120,7 +120,7 @@ func (r *ClusterResourcesPollRequest) StartContext(ctx context.Context) (respons
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
 func (r *ClusterResourcesPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
-	response, err := r.request.SendContext(ctx)
+	response, err := r.request.Send(ctx)
 	if response != nil {
 		status = response.Status()
 		result = response
@@ -208,15 +208,7 @@ func (r *ClusterResourcesGetRequest) Impersonate(user string) *ClusterResourcesG
 }
 
 // Send sends this request, waits for the response, and returns it.
-//
-// This is a potentially lengthy operation, as it requires network communication.
-// Consider using a context and the SendContext method.
-func (r *ClusterResourcesGetRequest) Send() (result *ClusterResourcesGetResponse, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterResourcesGetRequest) SendContext(ctx context.Context) (result *ClusterResourcesGetResponse, err error) {
+func (r *ClusterResourcesGetRequest) Send(ctx context.Context) (result *ClusterResourcesGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
