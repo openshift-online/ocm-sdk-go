@@ -125,7 +125,7 @@ var _ = Describe("Alternative URLs", func() {
 			// Send the request:
 			_, err = connection.Get().
 				Path("/api/clusters_mgmt").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -159,7 +159,7 @@ var _ = Describe("Alternative URLs", func() {
 			// Send the request:
 			_, err = connection.Get().
 				Path("/api/clusters_mgmt").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -194,7 +194,7 @@ var _ = Describe("Alternative URLs", func() {
 			// Send the request:
 			_, err = connection.Get().
 				Path("/api/clusters_mgmt/v1").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})

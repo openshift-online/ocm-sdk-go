@@ -19,6 +19,7 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"os"
@@ -34,12 +35,16 @@ import (
 
 var _ = Describe("H2C", func() {
 	var (
+		ctx          context.Context
 		accessToken  string
 		refreshToken string
 		oidServer    *ghttp.Server
 	)
 
 	BeforeEach(func() {
+		// Create the context:
+		ctx = context.Background()
+
 		// Create the tokens:
 		accessToken = MakeTokenString("Bearer", 5*time.Minute)
 		refreshToken = MakeTokenString("Refresh", 10*time.Hour)
@@ -110,7 +115,7 @@ var _ = Describe("H2C", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.String()).To(MatchJSON(`{
@@ -174,7 +179,7 @@ var _ = Describe("H2C", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.String()).To(MatchJSON(`{

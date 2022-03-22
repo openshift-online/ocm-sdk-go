@@ -96,7 +96,7 @@ var _ = Describe("Metrics enabled", func() {
 		// Send the request:
 		_, err := connection.Get().
 			Path("/api/clusters_mgmt/v1/clusters/123").
-			Send()
+			Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Verify the metrics:
@@ -214,7 +214,7 @@ var _ = Describe("Metrics disabled", func() {
 		// Send the request:
 		_, err := connection.Get().
 			Path("/api/clusters_mgmt/v1/clusters/123").
-			Send()
+			Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Verify the metrics:

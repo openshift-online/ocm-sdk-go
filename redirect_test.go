@@ -136,7 +136,7 @@ var _ = Describe("Redirect", func() {
 			// Send the request:
 			_, err := connection.Get().
 				Path("/api/clusters_mgmt/v1").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -149,7 +149,7 @@ var _ = Describe("Redirect", func() {
 			// Send the request:
 			_, err := connection.Get().
 				Path("/api/clusters_mgmt/v1").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})

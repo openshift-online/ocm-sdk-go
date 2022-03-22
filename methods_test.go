@@ -112,7 +112,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			_, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -128,7 +128,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			_, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -145,7 +145,7 @@ var _ = Describe("Methods", func() {
 			_, err := connection.Get().
 				Path("/mypath").
 				Parameter("myparameter", "myvalue").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -164,7 +164,7 @@ var _ = Describe("Methods", func() {
 				Path("/mypath").
 				Parameter("myparameter", "myvalue").
 				Parameter("yourparameter", "yourvalue").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -181,7 +181,7 @@ var _ = Describe("Methods", func() {
 			_, err := connection.Get().
 				Path("/mypath").
 				Header("myheader", "myvalue").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -200,7 +200,7 @@ var _ = Describe("Methods", func() {
 				Path("/mypath").
 				Header("myheader", "myvalue").
 				Header("yourheader", "yourvalue").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -213,7 +213,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
@@ -230,7 +230,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
@@ -245,7 +245,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusBadRequest))
@@ -260,7 +260,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusInternalServerError))
@@ -268,7 +268,7 @@ var _ = Describe("Methods", func() {
 
 		It("Fails if no path is given", func() {
 			response, err := connection.Get().
-				Send()
+				Send(ctx)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("path"))
 			Expect(err.Error()).To(ContainSubstring("mandatory"))
@@ -291,14 +291,14 @@ var _ = Describe("Methods", func() {
 			// Send first request. The server will respond setting a cookie.
 			_, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send second request, which should include the cookie returned by the
 			// server in the first response.
 			_, err = connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -320,7 +320,7 @@ var _ = Describe("Methods", func() {
 			defer cancel()
 			_, err := connection.Get().
 				Path("/mypath").
-				SendContext(ctx)
+				Send(ctx)
 			Expect(err).To(HaveOccurred())
 			Expect(errors.Is(err, context.DeadlineExceeded)).To(BeTrue())
 		})
@@ -339,7 +339,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			_, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})
@@ -354,7 +354,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Post().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
@@ -422,7 +422,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Patch().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
@@ -439,7 +439,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Put().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
@@ -462,7 +462,7 @@ var _ = Describe("Methods", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/api/clusters_mgmt/v1/clusters").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.Status()).To(Equal(http.StatusOK))
@@ -485,7 +485,7 @@ var _ = Describe("Methods", func() {
 			// Try to get the access token:
 			_, err := connection.Get().
 				Path("/api/clusters_mgmt/v1/clusters").
-				Send()
+				Send(ctx)
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
 			Expect(message).To(ContainSubstring("text/plain"))
@@ -504,7 +504,7 @@ var _ = Describe("Methods", func() {
 			// Try to get the access token:
 			_, err := connection.Get().
 				Path("/api/clusters_mgmt/v1/clusters").
-				Send()
+				Send(ctx)
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
 			Expect(message).To(ContainSubstring("text/html"))
@@ -523,7 +523,7 @@ var _ = Describe("Methods", func() {
 			// Try to get the access token:
 			_, err := connection.Get().
 				Path("/api/clusters_mgmt/v1/clusters").
-				Send()
+				Send(ctx)
 			Expect(err).To(HaveOccurred())
 			message := err.Error()
 			Expect(message).To(ContainSubstring("text/html"))

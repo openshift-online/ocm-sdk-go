@@ -58,7 +58,7 @@ var _ = Describe("Retry", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
-			response, err := connection.Get().Path("/mypath").Send()
+			response, err := connection.Get().Path("/mypath").Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 		})
@@ -80,7 +80,7 @@ var _ = Describe("Retry", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
-			response, err := connection.Get().Path("/mypath").Send()
+			response, err := connection.Get().Path("/mypath").Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 		})
@@ -102,7 +102,7 @@ var _ = Describe("Retry", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
-			response, err := connection.Get().Path("/mypath").Send()
+			response, err := connection.Get().Path("/mypath").Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 		})
@@ -126,7 +126,7 @@ var _ = Describe("Retry", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
-			response, err := connection.Delete().Path("/mypath").Send()
+			response, err := connection.Delete().Path("/mypath").Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 		})
@@ -150,7 +150,7 @@ var _ = Describe("Retry", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			// Send the request:
-			response, err := connection.Post().Path("/mypath").String("{}").Send()
+			response, err := connection.Post().Path("/mypath").String("{}").Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 		})
@@ -175,7 +175,7 @@ var _ = Describe("Retry", func() {
 			response, err := connection.Post().
 				Path("/mypath").
 				String(`{}`).
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 		})
@@ -200,7 +200,7 @@ var _ = Describe("Retry", func() {
 			response, err := connection.Post().
 				Path("/mypath").
 				String(`{}`).
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 		})
@@ -227,7 +227,7 @@ var _ = Describe("Retry", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		response, err := connection.Get().Path("/mypath").Send()
+		response, err := connection.Get().Path("/mypath").Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(response).ToNot(BeNil())
 
@@ -262,7 +262,7 @@ var _ = Describe("Retry", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Send the request:
-		response, err := connection.Get().Path("/mypath").Send()
+		response, err := connection.Get().Path("/mypath").Send(ctx)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(response).ToNot(BeNil())
 

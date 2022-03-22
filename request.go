@@ -89,18 +89,7 @@ func (r *Request) String(value string) *Request {
 // something fails. Note that any HTTP status code returned by the server is considered a valid
 // response, and will not be translated into an error. It is up to the caller to check the status
 // code and handle it.
-//
-// This operation is potentially lengthy, as it requires network communication. Consider using a
-// context and the SendContext method.
-func (r *Request) Send() (result *Response, err error) {
-	return r.SendContext(context.Background())
-}
-
-// SendContext sends this request to the server and returns the corresponding response, or an error
-// if something fails. Note that any HTTP status code returned by the server is considered a valid
-// response, and will not be translated into an error. It is up to the caller to check the status
-// code and handle it.
-func (r *Request) SendContext(ctx context.Context) (result *Response, err error) {
+func (r *Request) Send(ctx context.Context) (result *Response, err error) {
 	query := internal.CopyQuery(r.query)
 	header := internal.CopyHeader(r.header)
 	uri := &url.URL{
