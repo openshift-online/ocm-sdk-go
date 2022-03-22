@@ -81,7 +81,7 @@ var _ = Describe("Tokens", func() {
 			TokenURL(server.URL()).
 			TrustedCA(ca).
 			Tokens(accessToken, refreshToken).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = wrapper.Close()
@@ -115,7 +115,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -154,7 +154,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(accessToken, refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -187,7 +187,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -225,7 +225,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(expiredAccess, refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -258,7 +258,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(expiredAccess, refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -291,7 +291,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(firstAccess, refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -327,7 +327,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(firstAccess, refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -350,7 +350,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(accessToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -372,7 +372,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(accessToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -394,7 +394,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -432,7 +432,7 @@ var _ = Describe("Tokens", func() {
 					TokenURL(server.URL()).
 					TrustedCA(ca).
 					Tokens(refreshToken).
-					Build(ctx)
+					Build()
 				Expect(err).ToNot(HaveOccurred())
 				defer func() {
 					err = wrapper.Close()
@@ -475,7 +475,7 @@ var _ = Describe("Tokens", func() {
 					TokenURL(server.URL()).
 					TrustedCA(ca).
 					Tokens(refreshToken).
-					Build(ctx)
+					Build()
 				Expect(err).ToNot(HaveOccurred())
 				defer func() {
 					err = wrapper.Close()
@@ -516,7 +516,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(expiredAccess, refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -555,7 +555,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -594,7 +594,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -632,7 +632,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -675,7 +675,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -718,7 +718,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -751,7 +751,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("baduser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -778,7 +778,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "badpassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -814,7 +814,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -850,7 +850,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -881,7 +881,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -913,7 +913,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				User("myuser", "mypassword").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -939,7 +939,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(accessToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -963,7 +963,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(accessToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -997,7 +997,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Client("myclient", "mysecret").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1031,7 +1031,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Client("myclient", "mysecret").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1064,7 +1064,7 @@ var _ = Describe("Tokens", func() {
 				TrustedCA(ca).
 				Client("myclient", "mysecret").
 				Tokens(expiredAccess).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1092,7 +1092,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Client("badclient", "mysecret").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1119,7 +1119,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Client("myclient", "badsecret").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1155,7 +1155,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Client("myclient", "mysecret").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1192,7 +1192,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Client("myclient", "mysecret").
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1234,7 +1234,7 @@ var _ = Describe("Tokens", func() {
 				TrustedCA(ca).
 				Client("myclient", "mysecret").
 				Tokens(expiredAccess, validRefresh).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1287,7 +1287,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1328,7 +1328,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1363,7 +1363,7 @@ var _ = Describe("Tokens", func() {
 				TokenURL(server.URL()).
 				TrustedCA(ca).
 				Tokens(refreshToken).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -1410,7 +1410,7 @@ var _ = Describe("Tokens", func() {
 			TokenURL(server.URL()).
 			TrustedCA(ca).
 			Tokens(accessToken, refreshToken, pullSecretAccessToken).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = wrapper.Close()

@@ -17,7 +17,6 @@ limitations under the License.
 package internal
 
 import (
-	"context"
 	"net/url"
 
 	. "github.com/onsi/ginkgo/v2/dsl/table" // nolint
@@ -27,7 +26,7 @@ import (
 var _ = DescribeTable(
 	"Parsing success",
 	func(input string, expected *ServerAddress) {
-		actual, err := ParseServerAddress(context.Background(), input)
+		actual, err := ParseServerAddress(input)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(actual.Text).To(Equal(input))
 		Expect(actual.Network).To(Equal(expected.Network))
@@ -388,7 +387,7 @@ var _ = DescribeTable(
 var _ = DescribeTable(
 	"Parsing error",
 	func(input string, expected ...string) {
-		actual, err := ParseServerAddress(context.Background(), input)
+		actual, err := ParseServerAddress(input)
 		Expect(err).To(HaveOccurred())
 		Expect(actual).To(BeNil())
 		message := err.Error()

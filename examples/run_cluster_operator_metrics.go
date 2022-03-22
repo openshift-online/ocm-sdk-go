@@ -32,7 +32,7 @@ func runClusterOperatorMetrics(ctx context.Context, args []string) error {
 	connection, err := sdk.NewConnection().
 		Logger(logger).
 		Tokens(token).
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}

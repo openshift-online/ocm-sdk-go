@@ -66,7 +66,7 @@ func transportWrapper(ctx context.Context, args []string) error {
 		TransportWrapper(func(wrapped http.RoundTripper) http.RoundTripper {
 			return NewLoggingTransport(logger, wrapped)
 		}).
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}

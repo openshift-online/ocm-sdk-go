@@ -571,7 +571,7 @@ func (h *Handler) loadKeys(ctx context.Context) error {
 			"Loading keys",
 			"file", keysFile,
 		)
-		err := h.loadKeysFile(ctx, keysFile)
+		err := h.loadKeysFile(keysFile)
 		if err != nil {
 			h.logger.Error(
 				err,
@@ -601,12 +601,12 @@ func (h *Handler) loadKeys(ctx context.Context) error {
 }
 
 // loadKeysFile loads a JSON we key set from a file.
-func (h *Handler) loadKeysFile(ctx context.Context, file string) error {
+func (h *Handler) loadKeysFile(file string) error {
 	reader, err := os.Open(file) // nolint
 	if err != nil {
 		return err
 	}
-	return h.readKeys(ctx, reader)
+	return h.readKeys(reader)
 }
 
 // loadKeysURL loads a JSON we key set from an URL.
@@ -630,11 +630,11 @@ func (h *Handler) loadKeysURL(ctx context.Context, addr string) error {
 			)
 		}
 	}()
-	return h.readKeys(ctx, response.Body)
+	return h.readKeys(response.Body)
 }
 
 // readKeys reads the keys from JSON web key set available in the given reader.
-func (h *Handler) readKeys(ctx context.Context, reader io.Reader) error {
+func (h *Handler) readKeys(reader io.Reader) error {
 	// Read the JSON data:
 	jsonData, err := ioutil.ReadAll(reader)
 	if err != nil {

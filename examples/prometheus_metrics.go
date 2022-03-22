@@ -43,7 +43,7 @@ func prometheusMetrics(ctx context.Context, args []string) error {
 		Logger(logger).
 		Tokens(token).
 		MetricsSubsystem("api_outbound").
-		BuildContext(ctx)
+		Build()
 	if err != nil {
 		return err
 	}

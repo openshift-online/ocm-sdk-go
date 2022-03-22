@@ -87,7 +87,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	request.Header.Set("Accept", "application/json")
 
 	// Select the client:
-	client, err := c.clientSelector.Select(ctx, server)
+	client, err := c.clientSelector.Select(server)
 	if err != nil {
 		return
 	}

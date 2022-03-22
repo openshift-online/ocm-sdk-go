@@ -19,7 +19,6 @@ limitations under the License.
 package retry
 
 import (
-	"context"
 	"crypto/tls"
 	"io/ioutil"
 	"net"
@@ -36,15 +35,9 @@ import (
 )
 
 var _ = Describe("Creation", func() {
-	var ctx context.Context
-
-	BeforeEach(func() {
-		ctx = context.Background()
-	})
-
 	It("Can't be created without a logger", func() {
 		wrapper, err := NewTransportWrapper().
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(wrapper).To(BeNil())
 		message := err.Error()
@@ -56,7 +49,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Limit(10).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		Expect(wrapper).ToNot(BeNil())
 		err = wrapper.Close()
@@ -67,7 +60,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Limit(0).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		Expect(wrapper).ToNot(BeNil())
 		err = wrapper.Close()
@@ -78,7 +71,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Limit(-1).
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(wrapper).To(BeNil())
 		message := err.Error()
@@ -91,7 +84,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Interval(5 * time.Second).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		Expect(wrapper).ToNot(BeNil())
 		err = wrapper.Close()
@@ -102,7 +95,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Interval(0).
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(wrapper).To(BeNil())
 		message := err.Error()
@@ -115,7 +108,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Interval(0).
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(wrapper).To(BeNil())
 		message := err.Error()
@@ -128,7 +121,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Jitter(0.3).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		Expect(wrapper).ToNot(BeNil())
 		err = wrapper.Close()
@@ -139,7 +132,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Jitter(0.0).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		Expect(wrapper).ToNot(BeNil())
 		err = wrapper.Close()
@@ -150,7 +143,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Jitter(-1).
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(wrapper).To(BeNil())
 		message := err.Error()
@@ -163,7 +156,7 @@ var _ = Describe("Creation", func() {
 		wrapper, err := NewTransportWrapper().
 			Logger(logger).
 			Jitter(2).
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		Expect(wrapper).To(BeNil())
 		message := err.Error()
@@ -174,12 +167,6 @@ var _ = Describe("Creation", func() {
 })
 
 var _ = Describe("Server error", func() {
-	var ctx context.Context
-
-	BeforeEach(func() {
-		ctx = context.Background()
-	})
-
 	When("Retry enabled", func() {
 		It("Retries 503 without request body", func() {
 			// Create a transport that returns a 503 error for the first request and 200
@@ -193,7 +180,7 @@ var _ = Describe("Server error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Interval(100 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -228,7 +215,7 @@ var _ = Describe("Server error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Interval(100 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -267,7 +254,7 @@ var _ = Describe("Server error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Interval(100 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -302,7 +289,7 @@ var _ = Describe("Server error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Interval(100 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -344,7 +331,7 @@ var _ = Describe("Server error", func() {
 				Logger(logger).
 				Limit(0).
 				Interval(100 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -380,7 +367,7 @@ var _ = Describe("Server error", func() {
 				Logger(logger).
 				Limit(0).
 				Interval(100 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -406,15 +393,11 @@ var _ = Describe("Server error", func() {
 })
 
 var _ = Describe("Protocol error", func() {
-	var ctx context.Context
 	var listener net.Listener
 	var address string
 	var transport http.RoundTripper
 
 	BeforeEach(func() {
-		// Create a context:
-		ctx = context.Background()
-
 		// Create a listener:
 		listener, address = Listen()
 
@@ -459,7 +442,7 @@ var _ = Describe("Protocol error", func() {
 			wrapper, err := NewTransportWrapper().
 				Logger(logger).
 				Interval(100 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -502,7 +485,7 @@ var _ = Describe("Protocol error", func() {
 				Limit(3).
 				Interval(100 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -578,7 +561,7 @@ var _ = Describe("Protocol error", func() {
 				Limit(3).
 				Interval(100 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -613,7 +596,7 @@ var _ = Describe("Protocol error", func() {
 				Limit(0).
 				Interval(100 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = wrapper.Close()
@@ -636,9 +619,6 @@ var _ = Describe("Protocol error", func() {
 
 var _ = It("Tolerates connection reset by peer", func() {
 	var err error
-
-	// Create a context:
-	ctx := context.Background()
 
 	// Create a listener:
 	listener, address := Listen()
@@ -678,7 +658,7 @@ var _ = It("Tolerates connection reset by peer", func() {
 		Logger(logger).
 		Interval(100 * time.Millisecond).
 		Jitter(0).
-		Build(ctx)
+		Build()
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
 		err = wrapper.Close()
@@ -707,9 +687,6 @@ var _ = It("Tolerates connection reset by peer", func() {
 var _ = It("Doesn't change request body object", func() {
 	var err error
 
-	// Create a context:
-	ctx := context.Background()
-
 	// Prepare the server:
 	server := MakeTCPServer()
 	defer server.Close()
@@ -721,7 +698,7 @@ var _ = It("Doesn't change request body object", func() {
 	wrapper, err := NewTransportWrapper().
 		Logger(logger).
 		Jitter(0).
-		Build(ctx)
+		Build()
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
 		err = wrapper.Close()
@@ -748,9 +725,6 @@ var _ = It("Doesn't change request body object", func() {
 
 var _ = It("Tolerates unepected EOF", func() {
 	var err error
-
-	// Create a context:
-	ctx := context.Background()
 
 	// Create a listener:
 	listener, address := Listen()
@@ -791,7 +765,7 @@ var _ = It("Tolerates unepected EOF", func() {
 		Logger(logger).
 		Interval(100 * time.Millisecond).
 		Jitter(0).
-		Build(ctx)
+		Build()
 	Expect(err).ToNot(HaveOccurred())
 	defer func() {
 		err = wrapper.Close()

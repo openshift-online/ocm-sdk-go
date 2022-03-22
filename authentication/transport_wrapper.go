@@ -320,7 +320,7 @@ func (b *TransportWrapperBuilder) MetricsRegisterer(
 }
 
 // Build uses the information stored in the builder to create a new transport wrapper.
-func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportWrapper, err error) {
+func (b *TransportWrapperBuilder) Build() (result *TransportWrapper, err error) {
 	// Check parameters:
 	if b.logger.GetSink() == nil {
 		err = fmt.Errorf("logger is mandatory")
@@ -450,7 +450,7 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 			"default", tokenURL,
 		)
 	}
-	tokenServer, err := internal.ParseServerAddress(ctx, tokenURL)
+	tokenServer, err := internal.ParseServerAddress(tokenURL)
 	if err != nil {
 		err = fmt.Errorf("can't parse token URL '%s': %w", tokenURL, err)
 		return
@@ -488,7 +488,7 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 		TrustedCAs(b.trustedCAs...).
 		Insecure(b.insecure).
 		TransportWrappers(b.transportWrappers...).
-		Build(ctx)
+		Build()
 	if err != nil {
 		return
 	}
@@ -741,8 +741,8 @@ func (w *TransportWrapper) tokens(ctx context.Context, attempt int,
 		}
 	}
 	if w.logger.V(1).Enabled() {
-		w.debugExpiry(ctx, "bearer", w.accessToken, accessExpires, accessRemaining)
-		w.debugExpiry(ctx, "refresh", w.refreshToken, refreshExpires, refreshRemaining)
+		w.debugExpiry("bearer", w.accessToken, accessExpires, accessRemaining)
+		w.debugExpiry("refresh", w.refreshToken, refreshExpires, refreshRemaining)
 	}
 
 	// If the access token is available and it isn't expired or about to expire then we can
@@ -930,7 +930,7 @@ func (w *TransportWrapper) sendFormTimed(ctx context.Context, form url.Values) (
 	}
 
 	// Select the HTTP client:
-	client, err := w.clientSelector.Select(ctx, w.tokenServer)
+	client, err := w.clientSelector.Select(w.tokenServer)
 	if err != nil {
 		return
 	}
@@ -1057,8 +1057,8 @@ func (w *TransportWrapper) haveSecret() bool {
 }
 
 // debugExpiry sends to the log information about the expiration of the given token.
-func (w *TransportWrapper) debugExpiry(ctx context.Context, typ string, token *tokenInfo,
-	expires bool, left time.Duration) {
+func (w *TransportWrapper) debugExpiry(typ string, token *tokenInfo, expires bool,
+	left time.Duration) {
 	if token != nil {
 		if expires {
 			if left < 0 {

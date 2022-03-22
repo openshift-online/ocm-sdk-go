@@ -17,15 +17,13 @@ limitations under the License.
 package internal
 
 import (
-	"context"
-
 	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
 	. "github.com/onsi/gomega"             // nolint
 )
 
 var _ = Describe("Create client selector", func() {
 	It("Can't be created without a logger", func() {
-		selector, err := NewClientSelector().Build(context.Background())
+		selector, err := NewClientSelector().Build()
 		Expect(err).To(HaveOccurred())
 		Expect(selector).To(BeNil())
 		message := err.Error()
@@ -36,20 +34,16 @@ var _ = Describe("Create client selector", func() {
 
 var _ = Describe("Select client", func() {
 	var (
-		ctx      context.Context
 		selector *ClientSelector
 	)
 
 	BeforeEach(func() {
 		var err error
 
-		// Create a context:
-		ctx = context.Background()
-
 		// Create the selector:
 		selector, err = NewClientSelector().
 			Logger(logger).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		Expect(selector).ToNot(BeNil())
 	})
@@ -61,47 +55,47 @@ var _ = Describe("Select client", func() {
 	})
 
 	It("Reuses client for same TCP address", func() {
-		address, err := ParseServerAddress(ctx, "tcp://my.server.com")
+		address, err := ParseServerAddress("tcp://my.server.com")
 		Expect(err).ToNot(HaveOccurred())
-		firstClient, err := selector.Select(ctx, address)
+		firstClient, err := selector.Select(address)
 		Expect(err).ToNot(HaveOccurred())
-		secondClient, err := selector.Select(ctx, address)
+		secondClient, err := selector.Select(address)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(secondClient).To(BeIdenticalTo(firstClient))
 	})
 
 	It("Doesn't reuse client for different TCP addresses", func() {
-		firstAddress, err := ParseServerAddress(ctx, "tcp://my.server.com")
+		firstAddress, err := ParseServerAddress("tcp://my.server.com")
 		Expect(err).ToNot(HaveOccurred())
-		secondAddress, err := ParseServerAddress(ctx, "tcp://your.server.com")
+		secondAddress, err := ParseServerAddress("tcp://your.server.com")
 		Expect(err).ToNot(HaveOccurred())
-		firstClient, err := selector.Select(ctx, firstAddress)
+		firstClient, err := selector.Select(firstAddress)
 		Expect(err).ToNot(HaveOccurred())
-		secondClient, err := selector.Select(ctx, secondAddress)
+		secondClient, err := selector.Select(secondAddress)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(secondClient == firstClient).To(BeFalse())
 	})
 
 	It("Reuses client for different TCP protocols", func() {
-		firstAddress, err := ParseServerAddress(ctx, "http://my.server.com")
+		firstAddress, err := ParseServerAddress("http://my.server.com")
 		Expect(err).ToNot(HaveOccurred())
-		secondAddress, err := ParseServerAddress(ctx, "https://my.server.com")
+		secondAddress, err := ParseServerAddress("https://my.server.com")
 		Expect(err).ToNot(HaveOccurred())
-		firstClient, err := selector.Select(ctx, firstAddress)
+		firstClient, err := selector.Select(firstAddress)
 		Expect(err).ToNot(HaveOccurred())
-		secondClient, err := selector.Select(ctx, secondAddress)
+		secondClient, err := selector.Select(secondAddress)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(secondClient == firstClient).To(BeTrue())
 	})
 
 	It("Doesn't resuse client for different Unix sockets", func() {
-		firstAddress, err := ParseServerAddress(ctx, "unix://my.server.com/my.socket")
+		firstAddress, err := ParseServerAddress("unix://my.server.com/my.socket")
 		Expect(err).ToNot(HaveOccurred())
-		secondAddress, err := ParseServerAddress(ctx, "unix://my.server.com/your.socket")
+		secondAddress, err := ParseServerAddress("unix://my.server.com/your.socket")
 		Expect(err).ToNot(HaveOccurred())
-		firstClient, err := selector.Select(ctx, firstAddress)
+		firstClient, err := selector.Select(firstAddress)
 		Expect(err).ToNot(HaveOccurred())
-		secondClient, err := selector.Select(ctx, secondAddress)
+		secondClient, err := selector.Select(secondAddress)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(secondClient == firstClient).To(BeFalse())
 	})

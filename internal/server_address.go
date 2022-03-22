@@ -19,7 +19,6 @@ limitations under the License.
 package internal
 
 import (
-	"context"
 	"fmt"
 	neturl "net/url"
 	"strings"
@@ -95,7 +94,7 @@ type ServerAddress struct {
 //	- unix://my.server.com/sockets/my.socket - HTTP on top Unix socket.
 //	- unix+https://my.server.com/sockets/my.socket - HTTPS on top of Unix socket.
 //	- h2c+unix://my.server.com?socket=/sockets/my.socket - H2C on top of Unix.
-func ParseServerAddress(ctx context.Context, text string) (result *ServerAddress, err error) {
+func ParseServerAddress(text string) (result *ServerAddress, err error) {
 	// Parse the URL:
 	parsed, err := neturl.Parse(text)
 	if err != nil {
@@ -104,7 +103,7 @@ func ParseServerAddress(ctx context.Context, text string) (result *ServerAddress
 	query := parsed.Query()
 
 	// Extract the network and protocol from the scheme:
-	networkFromScheme, protocolFromScheme, err := parseScheme(ctx, parsed.Scheme)
+	networkFromScheme, protocolFromScheme, err := parseScheme(parsed.Scheme)
 	if err != nil {
 		return
 	}
@@ -255,7 +254,7 @@ func ParseServerAddress(ctx context.Context, text string) (result *ServerAddress
 	return
 }
 
-func parseScheme(ctx context.Context, scheme string) (network, protocol string,
+func parseScheme(scheme string) (network, protocol string,
 	err error) {
 	components := strings.Split(strings.ToLower(scheme), "+")
 	if len(components) > 2 {

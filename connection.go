@@ -19,7 +19,6 @@ limitations under the License.
 package sdk
 
 import (
-	"context"
 	"crypto/x509"
 	"fmt"
 	"net/http"
@@ -643,17 +642,7 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 // Build uses the configuration stored in the builder to create a new connection. The builder can be
 // reused to create multiple connections with the same configuration. It returns a pointer to the
 // connection, and an error if something fails when trying to create it.
-//
-// This operation is potentially lengthy, as it may require network communications. Consider using a
-// context and the BuildContext method.
 func (b *ConnectionBuilder) Build() (connection *Connection, err error) {
-	return b.BuildContext(context.Background())
-}
-
-// BuildContext uses the configuration stored in the builder to create a new connection. The builder
-// can be reused to create multiple connections with the same configuration. It returns a pointer to
-// the connection, and an error if something fails when trying to create it.
-func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Connection, err error) {
 	// If an error has been detected while populating the builder then return it and finish:
 	if b.err != nil {
 		err = b.err
@@ -667,7 +656,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	}
 
 	// Create the URL table:
-	urlTable, err := b.createURLTable(ctx)
+	urlTable, err := b.createURLTable()
 	if err != nil {
 		return
 	}
@@ -722,7 +711,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		TransportWrappers(b.transportWrappers...).
 		MetricsSubsystem(b.metricsSubsystem).
 		MetricsRegisterer(b.metricsRegisterer).
-		Build(ctx)
+		Build()
 	if err != nil {
 		return
 	}
@@ -733,7 +722,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		Limit(b.retryLimit).
 		Interval(b.retryInterval).
 		Jitter(b.retryJitter).
-		Build(ctx)
+		Build()
 	if err != nil {
 		return
 	}
@@ -748,7 +737,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 		TransportWrapper(retryWrapper.Wrap).
 		TransportWrapper(loggingWrapper).
 		TransportWrappers(b.transportWrappers...).
-		Build(ctx)
+		Build()
 	if err != nil {
 		return
 	}
@@ -768,7 +757,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	return
 }
 
-func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTableEntry, err error) {
+func (b *ConnectionBuilder) createURLTable() (table []urlTableEntry, err error) {
 	// Check that all the prefixes are acceptable:
 	for prefix, base := range b.urlTable {
 		if !validPrefixRE.MatchString(prefix) {
@@ -801,7 +790,7 @@ func (b *ConnectionBuilder) createURLTable(ctx context.Context) (table []urlTabl
 			)
 			return
 		}
-		entry.url, err = internal.ParseServerAddress(ctx, base)
+		entry.url, err = internal.ParseServerAddress(base)
 		if err != nil {
 			err = fmt.Errorf(
 				"can't parse URL '%s' for prefix '%s': %w",
