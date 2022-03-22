@@ -19,6 +19,7 @@ limitations under the License.
 package sdk
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -32,6 +33,7 @@ import (
 )
 
 var _ = Describe("Unix sockets", func() {
+	var ctx context.Context
 	var accessToken string
 	var refreshToken string
 	var oidServer *ghttp.Server
@@ -39,6 +41,9 @@ var _ = Describe("Unix sockets", func() {
 	var oidURL string
 
 	BeforeEach(func() {
+		// Create the context:
+		ctx = context.Background()
+
 		// Create the tokens:
 		accessToken = MakeTokenString("Bearer", 5*time.Minute)
 		refreshToken = MakeTokenString("Refresh", 10*time.Hour)
@@ -109,7 +114,7 @@ var _ = Describe("Unix sockets", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.String()).To(MatchJSON(`{
@@ -173,7 +178,7 @@ var _ = Describe("Unix sockets", func() {
 			// Send the request:
 			response, err := connection.Get().
 				Path("/mypath").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.String()).To(MatchJSON(`{
@@ -248,7 +253,7 @@ var _ = Describe("Unix sockets", func() {
 			// Send a request to the Unix server:
 			unixResponse, err := connection.Get().
 				Path("/api/clusters_mgmt").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(unixResponse.String()).To(MatchJSON(`{
 				"href": "/api/clusters_mgmt"
@@ -257,7 +262,7 @@ var _ = Describe("Unix sockets", func() {
 			// Send a request to the TCP server:
 			tcpResponse, err := connection.Get().
 				Path("/api/accounts_mgmt").
-				Send()
+				Send(ctx)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(tcpResponse.String()).To(MatchJSON(`{
 				"href": "/api/accounts_mgmt"
