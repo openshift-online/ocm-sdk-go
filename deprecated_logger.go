@@ -20,7 +20,7 @@ limitations under the License.
 package sdk
 
 import (
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 // Logger has been moved to the logging package.

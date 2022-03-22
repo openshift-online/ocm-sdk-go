@@ -17,13 +17,13 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package authorizations // github.com/openshift-online/ocm-sdk-go/authorizations
+package authorizations // github.com/openshift-online/ocm-sdk-go/v2/authorizations
 
 import (
 	"net/http"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/authorizations/v1"
-	"github.com/openshift-online/ocm-sdk-go/errors"
+	v1 "github.com/openshift-online/ocm-sdk-go/v2/authorizations/v1"
+	"github.com/openshift-online/ocm-sdk-go/v2/errors"
 )
 
 // Server is the interface for the 'authorizations' service.

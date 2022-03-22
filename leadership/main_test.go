@@ -19,12 +19,12 @@ package leadership
 import (
 	"testing"
 
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 
 	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
 	. "github.com/onsi/gomega"             // nolint
 
-	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+	. "github.com/openshift-online/ocm-sdk-go/v2/testing" // nolint
 
 	_ "github.com/lib/pq"
 )

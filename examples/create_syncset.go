@@ -24,9 +24,9 @@ import (
 	"log"
 	"os"
 
-	sdk "github.com/openshift-online/ocm-sdk-go"
-	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	sdk "github.com/openshift-online/ocm-sdk-go/v2"
+	cmv1 "github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt/v1"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )

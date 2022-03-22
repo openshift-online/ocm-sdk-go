@@ -17,13 +17,13 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package accountsmgmt // github.com/openshift-online/ocm-sdk-go/accountsmgmt
+package accountsmgmt // github.com/openshift-online/ocm-sdk-go/v2/accountsmgmt
 
 import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1"
+	v1 "github.com/openshift-online/ocm-sdk-go/v2/accountsmgmt/v1"
 )
 
 // Client is the client for service 'accounts_mgmt'.

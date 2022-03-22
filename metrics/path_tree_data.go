@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package metrics // github.com/openshift-online/ocm-sdk-go/metrics
+package metrics // github.com/openshift-online/ocm-sdk-go/v2/metrics
 
 // pathTreeData is the JSON representation of the tree of URL paths.
 var pathTreeData = `{

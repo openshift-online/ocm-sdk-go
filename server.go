@@ -17,20 +17,20 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package sdk // github.com/openshift-online/ocm-sdk-go
+package sdk // github.com/openshift-online/ocm-sdk-go/v2
 
 import (
 	"net/http"
 
-	"github.com/openshift-online/ocm-sdk-go/accountsmgmt"
-	"github.com/openshift-online/ocm-sdk-go/authorizations"
-	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
-	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
-	"github.com/openshift-online/ocm-sdk-go/jobqueue"
-	"github.com/openshift-online/ocm-sdk-go/servicelogs"
-	"github.com/openshift-online/ocm-sdk-go/servicemgmt"
-	"github.com/openshift-online/ocm-sdk-go/statusboard"
+	"github.com/openshift-online/ocm-sdk-go/v2/accountsmgmt"
+	"github.com/openshift-online/ocm-sdk-go/v2/authorizations"
+	"github.com/openshift-online/ocm-sdk-go/v2/clustersmgmt"
+	"github.com/openshift-online/ocm-sdk-go/v2/errors"
+	"github.com/openshift-online/ocm-sdk-go/v2/helpers"
+	"github.com/openshift-online/ocm-sdk-go/v2/jobqueue"
+	"github.com/openshift-online/ocm-sdk-go/v2/servicelogs"
+	"github.com/openshift-online/ocm-sdk-go/v2/servicemgmt"
+	"github.com/openshift-online/ocm-sdk-go/v2/statusboard"
 )
 
 // Server is the interface of the top level server.

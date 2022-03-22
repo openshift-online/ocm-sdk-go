@@ -31,8 +31,8 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 
-	"github.com/openshift-online/ocm-sdk-go/helpers"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/openshift-online/ocm-sdk-go/v2/helpers"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 // dumpTransportWrapper is a transport wrapper that creates round trippers that dump the details of

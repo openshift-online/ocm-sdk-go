@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package errors // github.com/openshift-online/ocm-sdk-go/errors
+package errors // github.com/openshift-online/ocm-sdk-go/v2/errors
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ import (
 
 	"github.com/golang/glog"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/openshift-online/ocm-sdk-go/v2/helpers"
 )
 
 // Error kind is the name of the type used to represent errors.

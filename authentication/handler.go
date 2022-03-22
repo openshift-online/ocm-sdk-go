@@ -38,8 +38,8 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"gopkg.in/yaml.v3"
 
-	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/openshift-online/ocm-sdk-go/v2/errors"
+	"github.com/openshift-online/ocm-sdk-go/v2/logging"
 )
 
 // HandlerBuilder contains the data and logic needed to create a new authentication handler. Don't

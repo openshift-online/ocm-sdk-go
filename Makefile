@@ -58,7 +58,7 @@ generate: model metamodel
 		openapi
 	metamodel generate go \
 		--model=model/model \
-		--base=github.com/openshift-online/ocm-sdk-go \
+		--base=github.com/openshift-online/ocm-sdk-go/v2 \
 		--output=.
 	metamodel generate openapi \
 		--model=model/model \
