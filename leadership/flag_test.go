@@ -17,7 +17,6 @@ limitations under the License.
 package leadership
 
 import (
-	"context"
 	"database/sql"
 	"time"
 
@@ -27,7 +26,6 @@ import (
 )
 
 var _ = Describe("Flag behaviour", func() {
-	var ctx context.Context
 	var dbObject *Database
 	var dbHandle *sql.DB
 
@@ -44,9 +42,6 @@ var _ = Describe("Flag behaviour", func() {
 	}
 
 	BeforeEach(func() {
-		// Create a context:
-		ctx = context.Background()
-
 		// Create a database:
 		dbObject = dbServer.MakeDatabase()
 		dbHandle = dbObject.MakeHandle()
@@ -61,7 +56,7 @@ var _ = Describe("Flag behaviour", func() {
 			Handle(dbHandle).
 			Name("my_flag").
 			Process("my_process").
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		message := err.Error()
 		Expect(message).To(ContainSubstring("logger"))
@@ -73,7 +68,7 @@ var _ = Describe("Flag behaviour", func() {
 			Logger(logger).
 			Name("my_flag").
 			Process("my_process").
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		message := err.Error()
 		Expect(message).To(ContainSubstring("database"))
@@ -86,7 +81,7 @@ var _ = Describe("Flag behaviour", func() {
 			Logger(logger).
 			Handle(dbHandle).
 			Process("my_process").
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		message := err.Error()
 		Expect(message).To(ContainSubstring("name"))
@@ -98,7 +93,7 @@ var _ = Describe("Flag behaviour", func() {
 			Logger(logger).
 			Handle(dbHandle).
 			Name("my_flag").
-			Build(ctx)
+			Build()
 		Expect(err).To(HaveOccurred())
 		message := err.Error()
 		Expect(message).To(ContainSubstring("process"))
@@ -112,7 +107,7 @@ var _ = Describe("Flag behaviour", func() {
 			Handle(dbHandle).
 			Name("my_flag").
 			Process("my_process").
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = flag.Close()
@@ -144,7 +139,7 @@ var _ = Describe("Flag behaviour", func() {
 			Handle(dbHandle).
 			Name("my_flag").
 			Process("my_process").
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = flag.Close()
@@ -165,7 +160,7 @@ var _ = Describe("Flag behaviour", func() {
 				Name("my_flag").
 				Process("my_process").
 				Interval(200 * time.Millisecond).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -214,7 +209,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("my_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -273,7 +268,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("my_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -321,7 +316,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("my_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -370,7 +365,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("my_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -397,7 +392,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("first_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 
 			// Give the first process some time to get hold of the flag and then check
@@ -413,7 +408,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("second_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = second.Close()
@@ -450,7 +445,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("first_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = first.Close()
@@ -470,7 +465,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("second_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = second.Close()
@@ -505,7 +500,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("my_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = flag.Close()
@@ -548,7 +543,7 @@ var _ = Describe("Flag behaviour", func() {
 				Process("my_process").
 				Interval(200 * time.Millisecond).
 				Jitter(0).
-				Build(ctx)
+				Build()
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = flag.Close()
@@ -587,15 +582,11 @@ var _ = Describe("Flag behaviour", func() {
 })
 
 var _ = Describe("Flag metrics enabled", func() {
-	var ctx context.Context
 	var dbObject *Database
 	var dbHandle *sql.DB
 	var metricsServer *MetricsServer
 
 	BeforeEach(func() {
-		// Create a context:
-		ctx = context.Background()
-
 		// Create a database:
 		dbObject = dbServer.MakeDatabase()
 		dbHandle = dbObject.MakeHandle()
@@ -623,7 +614,7 @@ var _ = Describe("Flag metrics enabled", func() {
 			Jitter(0).
 			MetricsSubsystem("my").
 			MetricsRegisterer(metricsServer.Registry()).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = first.Close()
@@ -644,7 +635,7 @@ var _ = Describe("Flag metrics enabled", func() {
 			Jitter(0).
 			MetricsSubsystem("my").
 			MetricsRegisterer(metricsServer.Registry()).
-			Build(ctx)
+			Build()
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = second.Close()
