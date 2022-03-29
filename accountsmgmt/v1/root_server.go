@@ -38,6 +38,11 @@ type Server interface {
 	// Reference to the resource that manages the collection of accounts.
 	Accounts() AccountsServer
 
+	// CloudResources returns the target 'cloud_resources' resource.
+	//
+	// Reference to the resource that manages the collection of cloud resources.
+	CloudResources() CloudResourcesServer
+
 	// ClusterAuthorizations returns the target 'cluster_authorizations' resource.
 	//
 	// Reference to the resource that manages cluster authorizations.
@@ -168,6 +173,13 @@ func Dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 			return
 		}
 		dispatchAccounts(w, r, target, segments[1:])
+	case "cloud_resources":
+		target := server.CloudResources()
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchCloudResources(w, r, target, segments[1:])
 	case "cluster_authorizations":
 		target := server.ClusterAuthorizations()
 		if target == nil {
