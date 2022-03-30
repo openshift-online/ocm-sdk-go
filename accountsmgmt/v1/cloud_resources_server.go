@@ -30,10 +30,68 @@ import (
 // CloudResourcesServer represents the interface the manages the 'cloud_resources' resource.
 type CloudResourcesServer interface {
 
+	// Add handles a request for the 'add' method.
+	//
+	// Creates a new cloud resource
+	Add(ctx context.Context, request *CloudResourcesAddServerRequest, response *CloudResourcesAddServerResponse) error
+
 	// List handles a request for the 'list' method.
 	//
 	// Retrieves the list of cloud resources.
 	List(ctx context.Context, request *CloudResourcesListServerRequest, response *CloudResourcesListServerResponse) error
+
+	// CloudResource returns the target 'cloud_resource' server for the given identifier.
+	//
+	// Reference to the service that manages a specific cloud resource.
+	CloudResource(id string) CloudResourceServer
+}
+
+// CloudResourcesAddServerRequest is the request for the 'add' method.
+type CloudResourcesAddServerRequest struct {
+	body *CloudResource
+}
+
+// Body returns the value of the 'body' parameter.
+//
+//
+func (r *CloudResourcesAddServerRequest) Body() *CloudResource {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *CloudResourcesAddServerRequest) GetBody() (value *CloudResource, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
+}
+
+// CloudResourcesAddServerResponse is the response for the 'add' method.
+type CloudResourcesAddServerResponse struct {
+	status int
+	err    *errors.Error
+	body   *CloudResource
+}
+
+// Body sets the value of the 'body' parameter.
+//
+//
+func (r *CloudResourcesAddServerResponse) Body(value *CloudResource) *CloudResourcesAddServerResponse {
+	r.body = value
+	return r
+}
+
+// Status sets the status code.
+func (r *CloudResourcesAddServerResponse) Status(value int) *CloudResourcesAddServerResponse {
+	r.status = value
+	return r
 }
 
 // CloudResourcesListServerRequest is the request for the 'list' method.
@@ -178,6 +236,9 @@ func (r *CloudResourcesListServerResponse) Status(value int) *CloudResourcesList
 func dispatchCloudResources(w http.ResponseWriter, r *http.Request, server CloudResourcesServer, segments []string) {
 	if len(segments) == 0 {
 		switch r.Method {
+		case "POST":
+			adaptCloudResourcesAddRequest(w, r, server)
+			return
 		case "GET":
 			adaptCloudResourcesListRequest(w, r, server)
 			return
@@ -188,7 +249,46 @@ func dispatchCloudResources(w http.ResponseWriter, r *http.Request, server Cloud
 	}
 	switch segments[0] {
 	default:
-		errors.SendNotFound(w, r)
+		target := server.CloudResource(segments[0])
+		if target == nil {
+			errors.SendNotFound(w, r)
+			return
+		}
+		dispatchCloudResource(w, r, target, segments[1:])
+	}
+}
+
+// adaptCloudResourcesAddRequest translates the given HTTP request into a call to
+// the corresponding method of the given server. Then it translates the
+// results returned by that method into an HTTP response.
+func adaptCloudResourcesAddRequest(w http.ResponseWriter, r *http.Request, server CloudResourcesServer) {
+	request := &CloudResourcesAddServerRequest{}
+	err := readCloudResourcesAddRequest(request, r)
+	if err != nil {
+		glog.Errorf(
+			"Can't read request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	response := &CloudResourcesAddServerResponse{}
+	response.status = 201
+	err = server.Add(r.Context(), request, response)
+	if err != nil {
+		glog.Errorf(
+			"Can't process request for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
+		errors.SendInternalServerError(w, r)
+		return
+	}
+	err = writeCloudResourcesAddResponse(response, w)
+	if err != nil {
+		glog.Errorf(
+			"Can't write response for method '%s' and path '%s': %v",
+			r.Method, r.URL.Path, err,
+		)
 		return
 	}
 }

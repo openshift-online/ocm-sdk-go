@@ -32,7 +32,9 @@ var pathTreeData = `{
             }
           }
         },
-        "cloud_resources": null,
+        "cloud_resources": {
+          "-": null
+        },
         "cluster_authorizations": null,
         "cluster_registrations": null,
         "current_access": {
