@@ -21,10 +21,13 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"path"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
@@ -48,6 +51,16 @@ func NewCloudResourcesClient(transport http.RoundTripper, path string) *CloudRes
 	}
 }
 
+// Add creates a request for the 'add' method.
+//
+// Creates a new cloud resource
+func (c *CloudResourcesClient) Add() *CloudResourcesAddRequest {
+	return &CloudResourcesAddRequest{
+		transport: c.transport,
+		path:      c.path,
+	}
+}
+
 // List creates a request for the 'list' method.
 //
 // Retrieves the list of cloud resources.
@@ -56,6 +69,165 @@ func (c *CloudResourcesClient) List() *CloudResourcesListRequest {
 		transport: c.transport,
 		path:      c.path,
 	}
+}
+
+// CloudResource returns the target 'cloud_resource' resource for the given identifier.
+//
+// Reference to the service that manages a specific cloud resource.
+func (c *CloudResourcesClient) CloudResource(id string) *CloudResourceClient {
+	return NewCloudResourceClient(
+		c.transport,
+		path.Join(c.path, id),
+	)
+}
+
+// CloudResourcesAddRequest is the request for the 'add' method.
+type CloudResourcesAddRequest struct {
+	transport http.RoundTripper
+	path      string
+	query     url.Values
+	header    http.Header
+	body      *CloudResource
+}
+
+// Parameter adds a query parameter.
+func (r *CloudResourcesAddRequest) Parameter(name string, value interface{}) *CloudResourcesAddRequest {
+	helpers.AddValue(&r.query, name, value)
+	return r
+}
+
+// Header adds a request header.
+func (r *CloudResourcesAddRequest) Header(name string, value interface{}) *CloudResourcesAddRequest {
+	helpers.AddHeader(&r.header, name, value)
+	return r
+}
+
+// Impersonate wraps requests on behalf of another user.
+// Note: Services that do not support this feature may silently ignore this call.
+func (r *CloudResourcesAddRequest) Impersonate(user string) *CloudResourcesAddRequest {
+	helpers.AddImpersonationHeader(&r.header, user)
+	return r
+}
+
+// Body sets the value of the 'body' parameter.
+//
+//
+func (r *CloudResourcesAddRequest) Body(value *CloudResource) *CloudResourcesAddRequest {
+	r.body = value
+	return r
+}
+
+// Send sends this request, waits for the response, and returns it.
+//
+// This is a potentially lengthy operation, as it requires network communication.
+// Consider using a context and the SendContext method.
+func (r *CloudResourcesAddRequest) Send() (result *CloudResourcesAddResponse, err error) {
+	return r.SendContext(context.Background())
+}
+
+// SendContext sends this request, waits for the response, and returns it.
+func (r *CloudResourcesAddRequest) SendContext(ctx context.Context) (result *CloudResourcesAddResponse, err error) {
+	query := helpers.CopyQuery(r.query)
+	header := helpers.CopyHeader(r.header)
+	buffer := &bytes.Buffer{}
+	err = writeCloudResourcesAddRequest(r, buffer)
+	if err != nil {
+		return
+	}
+	uri := &url.URL{
+		Path:     r.path,
+		RawQuery: query.Encode(),
+	}
+	request := &http.Request{
+		Method: "POST",
+		URL:    uri,
+		Header: header,
+		Body:   ioutil.NopCloser(buffer),
+	}
+	if ctx != nil {
+		request = request.WithContext(ctx)
+	}
+	response, err := r.transport.RoundTrip(request)
+	if err != nil {
+		return
+	}
+	defer response.Body.Close()
+	result = &CloudResourcesAddResponse{}
+	result.status = response.StatusCode
+	result.header = response.Header
+	reader := bufio.NewReader(response.Body)
+	_, err = reader.Peek(1)
+	if err == io.EOF {
+		err = nil
+		return
+	}
+	if result.status >= 400 {
+		result.err, err = errors.UnmarshalErrorStatus(reader, result.status)
+		if err != nil {
+			return
+		}
+		err = result.err
+		return
+	}
+	err = readCloudResourcesAddResponse(result, reader)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// CloudResourcesAddResponse is the response for the 'add' method.
+type CloudResourcesAddResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+	body   *CloudResource
+}
+
+// Status returns the response status code.
+func (r *CloudResourcesAddResponse) Status() int {
+	if r == nil {
+		return 0
+	}
+	return r.status
+}
+
+// Header returns header of the response.
+func (r *CloudResourcesAddResponse) Header() http.Header {
+	if r == nil {
+		return nil
+	}
+	return r.header
+}
+
+// Error returns the response error.
+func (r *CloudResourcesAddResponse) Error() *errors.Error {
+	if r == nil {
+		return nil
+	}
+	return r.err
+}
+
+// Body returns the value of the 'body' parameter.
+//
+//
+func (r *CloudResourcesAddResponse) Body() *CloudResource {
+	if r == nil {
+		return nil
+	}
+	return r.body
+}
+
+// GetBody returns the value of the 'body' parameter and
+// a flag indicating if the parameter has a value.
+//
+//
+func (r *CloudResourcesAddResponse) GetBody() (value *CloudResource, ok bool) {
+	ok = r != nil && r.body != nil
+	if ok {
+		value = r.body
+	}
+	return
 }
 
 // CloudResourcesListRequest is the request for the 'list' method.

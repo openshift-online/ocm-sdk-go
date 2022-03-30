@@ -26,6 +26,22 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
+func readCloudResourcesAddRequest(request *CloudResourcesAddServerRequest, r *http.Request) error {
+	var err error
+	request.body, err = UnmarshalCloudResource(r.Body)
+	return err
+}
+func writeCloudResourcesAddRequest(request *CloudResourcesAddRequest, writer io.Writer) error {
+	return MarshalCloudResource(request.body, writer)
+}
+func readCloudResourcesAddResponse(response *CloudResourcesAddResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalCloudResource(reader)
+	return err
+}
+func writeCloudResourcesAddResponse(response *CloudResourcesAddServerResponse, w http.ResponseWriter) error {
+	return MarshalCloudResource(response.body, w)
+}
 func readCloudResourcesListRequest(request *CloudResourcesListServerRequest, r *http.Request) error {
 	var err error
 	query := r.URL.Query()

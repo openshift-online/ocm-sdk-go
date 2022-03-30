@@ -24,22 +24,6 @@ import (
 	"net/http"
 )
 
-func readCloudResourceAddRequest(request *CloudResourceAddServerRequest, r *http.Request) error {
-	var err error
-	request.body, err = UnmarshalCloudResource(r.Body)
-	return err
-}
-func writeCloudResourceAddRequest(request *CloudResourceAddRequest, writer io.Writer) error {
-	return MarshalCloudResource(request.body, writer)
-}
-func readCloudResourceAddResponse(response *CloudResourceAddResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalCloudResource(reader)
-	return err
-}
-func writeCloudResourceAddResponse(response *CloudResourceAddServerResponse, w http.ResponseWriter) error {
-	return MarshalCloudResource(response.body, w)
-}
 func readCloudResourceDeleteRequest(request *CloudResourceDeleteServerRequest, r *http.Request) error {
 	return nil
 }
