@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.254 Mar 30 2022
+
+- Update to model 0.1.185:
+  - Fixes to Cloud Resources endpoints.
+
 ## 0.1.253 Mar 29 2022
 
 - Update to model 0.1.184:
