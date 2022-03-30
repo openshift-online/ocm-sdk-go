@@ -9523,6 +9523,10 @@
             "description": "Contains the configuration for Hive",
             "$ref": "#/components/schemas/ServerConfig"
           },
+          "management_cluster": {
+            "description": "Contains the name of the managment cluster for Hypershift clusters that are assigned to this shard.\nThis field is populated by OCM, and must not be overwritten via API.",
+            "type": "string"
+          },
           "region": {
             "description": "Contains the cloud-provider region in which the provisioner spins up the cluster",
             "$ref": "#/components/schemas/CloudRegion"

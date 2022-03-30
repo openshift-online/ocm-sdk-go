@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.255 Mar 30 2022
+
+- Update to model 0.0.186:
+  - Add ManagementCluster to ProvisionShard
+
+
 ## 0.1.254 Mar 30 2022
 
 - Update to model 0.0.185:
