@@ -18,7 +18,7 @@
 export CGO_ENABLED=0
 
 # Details of the model to use:
-model_version:=v0.0.186
+model_version:=v0.0.187
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
@@ -55,6 +55,7 @@ generate: model metamodel
 		jobqueue \
 		servicelogs \
 		servicemgmt \
+		webrca \
 		openapi
 	metamodel generate go \
 		--model=model/model \

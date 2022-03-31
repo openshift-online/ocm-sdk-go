@@ -87,4 +87,6 @@ jobs:
           authorizations \
           clustersmgmt \
           jobqueue \
-          servicelogs
+          servicelogs \
+          servicemgmt \
+          webrca

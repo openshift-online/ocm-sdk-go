@@ -337,6 +337,30 @@ var pathTreeData = `{
           "-": null
         }
       }
+    },
+    "web_rca": {
+      "v1": {
+        "incidents": {
+          "-": {
+            "events": {
+              "-": {
+                "attachments": {
+                  "-": null
+                }
+              }
+            },
+            "follow_ups": {
+              "-": null
+            },
+            "notifications": {
+              "-": null
+            }
+          }
+        },
+        "users": {
+          "-": null
+        }
+      }
     }
   }
 }

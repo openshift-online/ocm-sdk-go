@@ -31,6 +31,7 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/servicelogs"
 	"github.com/openshift-online/ocm-sdk-go/servicemgmt"
 	"github.com/openshift-online/ocm-sdk-go/statusboard"
+	"github.com/openshift-online/ocm-sdk-go/webrca"
 )
 
 // Server is the interface of the top level server.
@@ -56,6 +57,9 @@ type Server interface {
 
 	// StatusBoard returns the server for service 'status_board'.
 	StatusBoard() statusboard.Server
+
+	// WebRca returns the server for service 'web_rca'.
+	WebRca() webrca.Server
 }
 
 // Dispatch navigates the servers tree till it finds one that matches the given set
@@ -123,6 +127,13 @@ func dispatch(w http.ResponseWriter, r *http.Request, server Server, segments []
 				return
 			}
 			statusboard.Dispatch(w, r, service, segments[1:])
+		case "web_rca":
+			service := server.WebRca()
+			if service == nil {
+				errors.SendNotFound(w, r)
+				return
+			}
+			webrca.Dispatch(w, r, service, segments[1:])
 		default:
 			errors.SendNotFound(w, r)
 			return
