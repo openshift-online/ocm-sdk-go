@@ -41,7 +41,7 @@ func main() {
 
 	defer connection.Close()
 
-	collection := connection.WebRca().V1().Incidents()
+	collection := connection.WebRCA().V1().Incidents()
 
 	size := 10
 	page := 1

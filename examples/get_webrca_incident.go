@@ -54,7 +54,7 @@ func main() {
 	defer connection.Close()
 
 	// Get the client for the resource that manages the collection of incidents:
-	collection := connection.WebRca().V1().Incidents()
+	collection := connection.WebRCA().V1().Incidents()
 
 	// Get the client for the resource that manages the incident that we are looking for. Note
 	// that this will not send any request to the server yet, so it will succeed even if that

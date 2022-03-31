@@ -54,7 +54,7 @@ func main() {
 	defer connection.Close()
 
 	// Get the client for the resource that manages the collection of users:
-	collection := connection.WebRca().V1().Users()
+	collection := connection.WebRCA().V1().Users()
 
 	// Get the client for the resource that manages the user that we are looking for. Note
 	// that this will not send any request to the server yet, so it will succeed even if that

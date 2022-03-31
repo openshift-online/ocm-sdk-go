@@ -58,7 +58,7 @@ func main() {
 	event_id := "61ac5f1d-c425-48b2-b87a-dc5ef2dfe192"
 
 	// Get the client for the resource that manages the collection of incidents:
-	incidents_collection := connection.WebRca().V1().Incidents()
+	incidents_collection := connection.WebRCA().V1().Incidents()
 	events_collection := incidents_collection.Incident(incident_id).Events()
 
 	// Get the client for the resource that manages the incident that we are looking for. Note

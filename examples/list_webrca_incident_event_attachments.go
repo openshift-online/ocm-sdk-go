@@ -45,7 +45,7 @@ func main() {
 	incident_id := "1d42c885-32d9-4f92-a58c-fbb434668d17"
 	event_id := "6b64cdc6-7ca9-41f2-8088-2ee4fa243806"
 
-	collection := connection.WebRca().V1().Incidents().Incident(incident_id).Events().Event(event_id).Attachments()
+	collection := connection.WebRCA().V1().Incidents().Incident(incident_id).Events().Event(event_id).Attachments()
 
 	size := 10
 	page := 1
