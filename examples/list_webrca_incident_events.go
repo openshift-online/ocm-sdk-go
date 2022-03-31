@@ -42,7 +42,7 @@ func main() {
 	defer connection.Close()
 
 	incident_id := "0d6fcdde-e9d8-4dc4-beb0-67ed975d71b7" // Adjust as needed
-	collection := connection.WebRca().V1().Incidents().Incident(incident_id).Events()
+	collection := connection.WebRCA().V1().Incidents().Incident(incident_id).Events()
 
 	size := 10
 	page := 1

@@ -56,7 +56,7 @@ func main() {
 	defer connection.Close()
 
 	// Get the client for the resource that manages the collection of products:
-	collection := connection.WebRca().V1().Users()
+	collection := connection.WebRCA().V1().Users()
 
 	// Retrieve the list of products using pages of ten items, till we get a page that has less
 	// items than requests, as that marks the end of the collection:
