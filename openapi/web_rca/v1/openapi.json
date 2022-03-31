@@ -1,0 +1,1908 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1",
+    "title": "web_rca",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "contact": {
+      "name": "OCM Feedback",
+      "email": "ocm-feedback@redhat.com"
+    }
+  },
+  "servers": [
+    {
+      "description": "Production",
+      "url": "https://api.openshift.com"
+    },
+    {
+      "description": "Stage",
+      "url": "https://api.stage.openshift.com"
+    }
+  ],
+  "paths": {
+    "/api/web_rca/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Incident"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Incident"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of incidents.",
+        "parameters": [
+          {
+            "name": "creator_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "incident_commander_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "incident_name",
+            "description": "in Status String - TODO: This causes problems, figure out why",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mine",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "on_call_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "participant_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "public_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "responsible_manager_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Incident"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}": {
+      "delete": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Incident"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Incident"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Incident"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/events": {
+      "get": {
+        "description": "Retrieves the list of events",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "event_type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "note",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "show_system_events",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Event"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/events/{event_id}": {
+      "delete": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/events/{event_id}/attachments": {
+      "get": {
+        "description": "Retrieves the list of attachments",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Attachment"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/events/{event_id}/attachments/{attachment_id}": {
+      "delete": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attachment_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attachment_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attachment_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Attachment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/follow_ups": {
+      "get": {
+        "description": "Retrieves the list of follow-ups",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "follow_up_status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FollowUp"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/follow_ups/{follow_up_id}": {
+      "delete": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "follow_up_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "follow_up_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUp"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "follow_up_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUp"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUp"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/notifications": {
+      "get": {
+        "description": "Retrieves the list of notifications",
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "checked",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Notification"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/incidents/{incident_id}/notifications/{notification_id}": {
+      "delete": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "notification_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "notification_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "incident_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "notification_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/users": {
+      "get": {
+        "description": "Retrieves the list of users.",
+        "parameters": [
+          {
+            "name": "order_by",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web_rca/v1/users/{user_id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
+      "Attachment": {
+        "description": "Definition of a Web RCA attachment.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Attachment' if this is a complete object or 'AttachmentLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "content_type": {
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/User"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "event": {
+            "$ref": "#/components/schemas/Event"
+          },
+          "file_size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Escalation": {
+        "description": "Definition of a Web RCA escalation.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Escalation' if this is a complete object or 'EscalationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Event": {
+        "description": "Definition of a Web RCA event.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Event' if this is a complete object or 'EventLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/User"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "escalation": {
+            "$ref": "#/components/schemas/Escalation"
+          },
+          "event_type": {
+            "type": "string"
+          },
+          "external_reference_url": {
+            "type": "string"
+          },
+          "follow_up": {
+            "$ref": "#/components/schemas/FollowUp"
+          },
+          "follow_up_change": {
+            "$ref": "#/components/schemas/FollowUpChange"
+          },
+          "handoff": {
+            "$ref": "#/components/schemas/Handoff"
+          },
+          "incident": {
+            "$ref": "#/components/schemas/Incident"
+          },
+          "note": {
+            "type": "string"
+          },
+          "status_change": {
+            "$ref": "#/components/schemas/StatusChange"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FollowUp": {
+        "description": "Definition of a Web RCA event.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'FollowUp' if this is a complete object or 'FollowUpLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "done": {
+            "type": "boolean"
+          },
+          "follow_up_type": {
+            "type": "string"
+          },
+          "incident": {
+            "$ref": "#/components/schemas/Incident"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "url": {
+            "type": "string"
+          },
+          "worked_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FollowUpChange": {
+        "description": "Definition of a Web RCA event.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'FollowUpChange' if this is a complete object or 'FollowUpChangeLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "follow_up": {
+            "$ref": "#/components/schemas/FollowUp"
+          },
+          "status": {
+            "type": "object"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Handoff": {
+        "description": "Definition of a Web RCA handoff.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Handoff' if this is a complete object or 'HandoffLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "handoff_from": {
+            "$ref": "#/components/schemas/User"
+          },
+          "handoff_to": {
+            "$ref": "#/components/schemas/User"
+          },
+          "handoff_type": {
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Incident": {
+        "description": "Definition of a Web RCA incident.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Incident' if this is a complete object or 'IncidentLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "creator_id": {
+            "type": "string"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          },
+          "external_coordination": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "incident_id": {
+            "type": "string"
+          },
+          "incident_type": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "primary_team": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "worked_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Notification": {
+        "description": "Definition of a Web RCA notification.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Notification' if this is a complete object or 'NotificationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "checked": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "incident": {
+            "$ref": "#/components/schemas/Incident"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Product": {
+        "description": "Definition of a Web RCA product.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Product' if this is a complete object or 'ProductLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "product_id": {
+            "description": "The product ID from status board",
+            "type": "string"
+          },
+          "product_name": {
+            "description": "The name of the product from status-board.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "StatusChange": {
+        "description": "Definition of a Web RCA event.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'StatusChange' if this is a complete object or 'StatusChangeLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "object"
+          },
+          "status_id": {
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "description": "Definition of a Web RCA user.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'User' if this is a complete object or 'UserLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Object creation timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_at": {
+            "description": "Object deletion timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "email": {
+            "type": "string"
+          },
+          "from_auth": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Object modification timestamp.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will always be 'Error'",
+            "type": "string"
+          },
+          "id": {
+            "description": "Numeric identifier of the error.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "code": {
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Human readable description of the error.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Extra information about the error.",
+            "type": "object",
+            "additionalProperties": "true"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": [
+        
+      ]
+    }
+  ]
+}
