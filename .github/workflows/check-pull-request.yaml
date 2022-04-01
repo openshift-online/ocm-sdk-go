@@ -45,7 +45,7 @@ jobs:
         go install github.com/onsi/ginkgo/v2/ginkgo@v2.1.1
 
     - name: Run the tests
-      run: make tests
+      run: make tests ginkgo_flags="--skip-package leadership,retry"
 
     - name: Build the examples
       run: make examples
