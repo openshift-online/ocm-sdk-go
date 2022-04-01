@@ -103,7 +103,6 @@
           },
           {
             "name": "incident_name",
-            "description": "in Status String - TODO: This causes problems, figure out why",
             "in": "query",
             "schema": {
               "type": "string"
@@ -172,6 +171,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],

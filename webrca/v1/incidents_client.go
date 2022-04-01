@@ -248,6 +248,7 @@ type IncidentsListRequest struct {
 	publicId             *string
 	responsibleManagerId *string
 	size                 *int
+	status_              *string
 }
 
 // Parameter adds a query parameter.
@@ -287,7 +288,7 @@ func (r *IncidentsListRequest) IncidentCommanderId(value string) *IncidentsListR
 
 // IncidentName sets the value of the 'incident_name' parameter.
 //
-// in Status String - TODO: This causes problems, figure out why
+//
 func (r *IncidentsListRequest) IncidentName(value string) *IncidentsListRequest {
 	r.incidentName = &value
 	return r
@@ -365,6 +366,14 @@ func (r *IncidentsListRequest) Size(value int) *IncidentsListRequest {
 	return r
 }
 
+// Status sets the value of the 'status' parameter.
+//
+//
+func (r *IncidentsListRequest) Status(value string) *IncidentsListRequest {
+	r.status_ = &value
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -411,6 +420,9 @@ func (r *IncidentsListRequest) SendContext(ctx context.Context) (result *Inciden
 	}
 	if r.size != nil {
 		helpers.AddValue(&query, "size", *r.size)
+	}
+	if r.status_ != nil {
+		helpers.AddValue(&query, "status", *r.status_)
 	}
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
