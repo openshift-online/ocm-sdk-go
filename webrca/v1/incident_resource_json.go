@@ -19,24 +19,12 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
-import (
-	"io"
-	"net/http"
-)
+import "io"
 
-func readIncidentDeleteRequest(request *IncidentDeleteServerRequest, r *http.Request) error {
-	return nil
-}
 func writeIncidentDeleteRequest(request *IncidentDeleteRequest, writer io.Writer) error {
 	return nil
 }
 func readIncidentDeleteResponse(response *IncidentDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeIncidentDeleteResponse(response *IncidentDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
-func readIncidentGetRequest(request *IncidentGetServerRequest, r *http.Request) error {
 	return nil
 }
 func writeIncidentGetRequest(request *IncidentGetRequest, writer io.Writer) error {
@@ -47,14 +35,6 @@ func readIncidentGetResponse(response *IncidentGetResponse, reader io.Reader) er
 	response.body, err = UnmarshalIncident(reader)
 	return err
 }
-func writeIncidentGetResponse(response *IncidentGetServerResponse, w http.ResponseWriter) error {
-	return MarshalIncident(response.body, w)
-}
-func readIncidentUpdateRequest(request *IncidentUpdateServerRequest, r *http.Request) error {
-	var err error
-	request.body, err = UnmarshalIncident(r.Body)
-	return err
-}
 func writeIncidentUpdateRequest(request *IncidentUpdateRequest, writer io.Writer) error {
 	return MarshalIncident(request.body, writer)
 }
@@ -62,7 +42,4 @@ func readIncidentUpdateResponse(response *IncidentUpdateResponse, reader io.Read
 	var err error
 	response.body, err = UnmarshalIncident(reader)
 	return err
-}
-func writeIncidentUpdateResponse(response *IncidentUpdateServerResponse, w http.ResponseWriter) error {
-	return MarshalIncident(response.body, w)
 }

@@ -19,24 +19,12 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
-import (
-	"io"
-	"net/http"
-)
+import "io"
 
-func readNotificationDeleteRequest(request *NotificationDeleteServerRequest, r *http.Request) error {
-	return nil
-}
 func writeNotificationDeleteRequest(request *NotificationDeleteRequest, writer io.Writer) error {
 	return nil
 }
 func readNotificationDeleteResponse(response *NotificationDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeNotificationDeleteResponse(response *NotificationDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
-func readNotificationGetRequest(request *NotificationGetServerRequest, r *http.Request) error {
 	return nil
 }
 func writeNotificationGetRequest(request *NotificationGetRequest, writer io.Writer) error {
@@ -47,14 +35,6 @@ func readNotificationGetResponse(response *NotificationGetResponse, reader io.Re
 	response.body, err = UnmarshalNotification(reader)
 	return err
 }
-func writeNotificationGetResponse(response *NotificationGetServerResponse, w http.ResponseWriter) error {
-	return MarshalNotification(response.body, w)
-}
-func readNotificationUpdateRequest(request *NotificationUpdateServerRequest, r *http.Request) error {
-	var err error
-	request.body, err = UnmarshalNotification(r.Body)
-	return err
-}
 func writeNotificationUpdateRequest(request *NotificationUpdateRequest, writer io.Writer) error {
 	return MarshalNotification(request.body, writer)
 }
@@ -62,7 +42,4 @@ func readNotificationUpdateResponse(response *NotificationUpdateResponse, reader
 	var err error
 	response.body, err = UnmarshalNotification(reader)
 	return err
-}
-func writeNotificationUpdateResponse(response *NotificationUpdateServerResponse, w http.ResponseWriter) error {
-	return MarshalNotification(response.body, w)
 }

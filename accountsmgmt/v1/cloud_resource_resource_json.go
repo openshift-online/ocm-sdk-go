@@ -19,24 +19,12 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-import (
-	"io"
-	"net/http"
-)
+import "io"
 
-func readCloudResourceDeleteRequest(request *CloudResourceDeleteServerRequest, r *http.Request) error {
-	return nil
-}
 func writeCloudResourceDeleteRequest(request *CloudResourceDeleteRequest, writer io.Writer) error {
 	return nil
 }
 func readCloudResourceDeleteResponse(response *CloudResourceDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeCloudResourceDeleteResponse(response *CloudResourceDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
-func readCloudResourceGetRequest(request *CloudResourceGetServerRequest, r *http.Request) error {
 	return nil
 }
 func writeCloudResourceGetRequest(request *CloudResourceGetRequest, writer io.Writer) error {
@@ -47,14 +35,6 @@ func readCloudResourceGetResponse(response *CloudResourceGetResponse, reader io.
 	response.body, err = UnmarshalCloudResource(reader)
 	return err
 }
-func writeCloudResourceGetResponse(response *CloudResourceGetServerResponse, w http.ResponseWriter) error {
-	return MarshalCloudResource(response.body, w)
-}
-func readCloudResourceUpdateRequest(request *CloudResourceUpdateServerRequest, r *http.Request) error {
-	var err error
-	request.body, err = UnmarshalCloudResource(r.Body)
-	return err
-}
 func writeCloudResourceUpdateRequest(request *CloudResourceUpdateRequest, writer io.Writer) error {
 	return MarshalCloudResource(request.body, writer)
 }
@@ -62,7 +42,4 @@ func readCloudResourceUpdateResponse(response *CloudResourceUpdateResponse, read
 	var err error
 	response.body, err = UnmarshalCloudResource(reader)
 	return err
-}
-func writeCloudResourceUpdateResponse(response *CloudResourceUpdateServerResponse, w http.ResponseWriter) error {
-	return MarshalCloudResource(response.body, w)
 }

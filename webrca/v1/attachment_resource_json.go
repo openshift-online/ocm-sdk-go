@@ -19,24 +19,12 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
-import (
-	"io"
-	"net/http"
-)
+import "io"
 
-func readAttachmentDeleteRequest(request *AttachmentDeleteServerRequest, r *http.Request) error {
-	return nil
-}
 func writeAttachmentDeleteRequest(request *AttachmentDeleteRequest, writer io.Writer) error {
 	return nil
 }
 func readAttachmentDeleteResponse(response *AttachmentDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAttachmentDeleteResponse(response *AttachmentDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
-func readAttachmentGetRequest(request *AttachmentGetServerRequest, r *http.Request) error {
 	return nil
 }
 func writeAttachmentGetRequest(request *AttachmentGetRequest, writer io.Writer) error {
@@ -47,14 +35,6 @@ func readAttachmentGetResponse(response *AttachmentGetResponse, reader io.Reader
 	response.body, err = UnmarshalAttachment(reader)
 	return err
 }
-func writeAttachmentGetResponse(response *AttachmentGetServerResponse, w http.ResponseWriter) error {
-	return MarshalAttachment(response.body, w)
-}
-func readAttachmentUpdateRequest(request *AttachmentUpdateServerRequest, r *http.Request) error {
-	var err error
-	request.body, err = UnmarshalAttachment(r.Body)
-	return err
-}
 func writeAttachmentUpdateRequest(request *AttachmentUpdateRequest, writer io.Writer) error {
 	return MarshalAttachment(request.body, writer)
 }
@@ -62,7 +42,4 @@ func readAttachmentUpdateResponse(response *AttachmentUpdateResponse, reader io.
 	var err error
 	response.body, err = UnmarshalAttachment(reader)
 	return err
-}
-func writeAttachmentUpdateResponse(response *AttachmentUpdateServerResponse, w http.ResponseWriter) error {
-	return MarshalAttachment(response.body, w)
 }
