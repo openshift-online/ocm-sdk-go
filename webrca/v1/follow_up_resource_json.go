@@ -19,24 +19,12 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
-import (
-	"io"
-	"net/http"
-)
+import "io"
 
-func readFollowUpDeleteRequest(request *FollowUpDeleteServerRequest, r *http.Request) error {
-	return nil
-}
 func writeFollowUpDeleteRequest(request *FollowUpDeleteRequest, writer io.Writer) error {
 	return nil
 }
 func readFollowUpDeleteResponse(response *FollowUpDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeFollowUpDeleteResponse(response *FollowUpDeleteServerResponse, w http.ResponseWriter) error {
-	return nil
-}
-func readFollowUpGetRequest(request *FollowUpGetServerRequest, r *http.Request) error {
 	return nil
 }
 func writeFollowUpGetRequest(request *FollowUpGetRequest, writer io.Writer) error {
@@ -47,14 +35,6 @@ func readFollowUpGetResponse(response *FollowUpGetResponse, reader io.Reader) er
 	response.body, err = UnmarshalFollowUp(reader)
 	return err
 }
-func writeFollowUpGetResponse(response *FollowUpGetServerResponse, w http.ResponseWriter) error {
-	return MarshalFollowUp(response.body, w)
-}
-func readFollowUpUpdateRequest(request *FollowUpUpdateServerRequest, r *http.Request) error {
-	var err error
-	request.body, err = UnmarshalFollowUp(r.Body)
-	return err
-}
 func writeFollowUpUpdateRequest(request *FollowUpUpdateRequest, writer io.Writer) error {
 	return MarshalFollowUp(request.body, writer)
 }
@@ -62,7 +42,4 @@ func readFollowUpUpdateResponse(response *FollowUpUpdateResponse, reader io.Read
 	var err error
 	response.body, err = UnmarshalFollowUp(reader)
 	return err
-}
-func writeFollowUpUpdateResponse(response *FollowUpUpdateServerResponse, w http.ResponseWriter) error {
-	return MarshalFollowUp(response.body, w)
 }
