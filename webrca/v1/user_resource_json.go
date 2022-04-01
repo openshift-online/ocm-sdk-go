@@ -19,14 +19,8 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
-import (
-	"io"
-	"net/http"
-)
+import "io"
 
-func readUserGetRequest(request *UserGetServerRequest, r *http.Request) error {
-	return nil
-}
 func writeUserGetRequest(request *UserGetRequest, writer io.Writer) error {
 	return nil
 }
@@ -34,7 +28,4 @@ func readUserGetResponse(response *UserGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalUser(reader)
 	return err
-}
-func writeUserGetResponse(response *UserGetServerResponse, w http.ResponseWriter) error {
-	return MarshalUser(response.body, w)
 }
