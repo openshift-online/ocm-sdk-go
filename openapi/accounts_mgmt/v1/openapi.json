@@ -5104,6 +5104,35 @@
           }
         }
       },
+      "QuotaRules": {
+        "properties": {
+          "availability_zone": {
+            "type": "string"
+          },
+          "billing_model": {
+            "type": "string"
+          },
+          "byoc": {
+            "type": "string"
+          },
+          "cloud": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "product": {
+            "type": "string"
+          },
+          "quota_id": {
+            "type": "string"
+          }
+        }
+      },
       "Registry": {
         "properties": {
           "kind": {

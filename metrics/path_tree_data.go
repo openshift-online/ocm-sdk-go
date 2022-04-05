@@ -302,6 +302,9 @@ var pathTreeData = `{
             }
           }
         },
+        "errors": {
+          "-": null
+        },
         "peer_dependencies": {
           "-": null
         },
@@ -340,6 +343,9 @@ var pathTreeData = `{
     },
     "web_rca": {
       "v1": {
+        "errors": {
+          "-": null
+        },
         "incidents": {
           "-": {
             "events": {

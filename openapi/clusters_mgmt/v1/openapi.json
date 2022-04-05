@@ -9543,6 +9543,10 @@
           "https_proxy": {
             "description": "HTTPSProxy is the URL of the proxy for HTTPS requests.",
             "type": "string"
+          },
+          "no_proxy": {
+            "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
+            "type": "string"
           }
         }
       },
