@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.258 Apr 5 2022
+
+- Update to model 0.0.189:
+  - Added QuotaRules to ocm-sdk-go
+  - Added no_proxy field to the proxy project
+  - Added errors resource.
+  - Added errors support for status-board.
+
 ## 0.1.257 Apr 1 2022
 
 - Add `web-rca` examples.
