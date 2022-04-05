@@ -50,6 +50,16 @@ func (c *Client) Get() *MetadataRequest {
 	}
 }
 
+// Errors returns the target 'errors' resource.
+//
+//
+func (c *Client) Errors() *ErrorsClient {
+	return NewErrorsClient(
+		c.transport,
+		path.Join(c.path, "errors"),
+	)
+}
+
 // Incidents returns the target 'incidents' resource.
 //
 //
