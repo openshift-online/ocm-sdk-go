@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.259 Apr 8 2022
+
+- Update to model 0.0.180:
+  - Fix JSON names of identity provider types.
+  - Add enable minor version upgrades flag to upgrade policy.
+
 ## 0.1.258 Apr 5 2022
 
 - Update to model 0.0.189:
