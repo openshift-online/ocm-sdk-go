@@ -8951,12 +8951,12 @@
         "description": "Type of identity provider.",
         "type": "string",
         "enum": [
-          "ldap",
-          "github",
-          "gitlab",
-          "google",
-          "htpasswd",
-          "open_id"
+          "LDAPIdentityProvider",
+          "GithubIdentityProvider",
+          "GitlabIdentityProvider",
+          "GoogleIdentityProvider",
+          "HTPasswdIdentityProvider",
+          "OpenIDIdentityProvider"
         ]
       },
       "Ingress": {
@@ -9700,6 +9700,10 @@
           "cluster_id": {
             "description": "Cluster ID this upgrade policy is defined for.",
             "type": "string"
+          },
+          "enable_minor_version_upgrades": {
+            "description": "Indicates if minor version upgrades are allowed for automatic upgrades (for manual it's always allowed).",
+            "type": "boolean"
           },
           "next_run": {
             "description": "Next time the upgrade should run.",
