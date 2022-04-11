@@ -3,9 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.260 Apr 11 2022
+
+- Update to model 0.0.191:
+  - Fix JSON representation of log severity.
+
 ## 0.1.259 Apr 8 2022
 
-- Update to model 0.0.180:
+- Update to model 0.0.190:
   - Fix JSON names of identity provider types.
   - Add enable minor version upgrades flag to upgrade policy.
 
