@@ -403,11 +403,11 @@
       "Severity": {
         "type": "string",
         "enum": [
-          "debug",
-          "error",
-          "fatal",
-          "info",
-          "warning"
+          "Debug",
+          "Error",
+          "Fatal",
+          "Info",
+          "Warning"
         ]
       },
       "Error": {
