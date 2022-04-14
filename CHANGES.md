@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.262 Apr 14 2022
+
+- Update to model 0.0.194:
+  - Added availability zone fields to managed service cluster struct.
+
 ## 0.1.261 Apr 14 2022
 
 - Update to model 0.0.193:
