@@ -816,6 +816,21 @@
             }
           },
           {
+            "name": "full_names",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit_scope",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "schema": {
@@ -2195,6 +2210,21 @@
             }
           },
           {
+            "name": "full_names",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit_scope",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "schema": {
@@ -2491,6 +2521,21 @@
           },
           {
             "name": "created_before",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "full_names",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit_scope",
             "in": "query",
             "schema": {
               "type": "string",
@@ -2981,6 +3026,21 @@
             }
           },
           {
+            "name": "full_names",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit_scope",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "schema": {
@@ -3226,6 +3286,21 @@
             }
           },
           {
+            "name": "full_names",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit_scope",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "schema": {
@@ -3443,6 +3518,21 @@
           },
           {
             "name": "created_before",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "full_names",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit_scope",
             "in": "query",
             "schema": {
               "type": "string",

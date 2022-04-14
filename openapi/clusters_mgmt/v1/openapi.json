@@ -7464,6 +7464,10 @@
             "description": "URL of the location where OIDC configuration and keys are available",
             "type": "string"
           },
+          "auto_mode": {
+            "description": "Auto creation mode for cluster - OCM will create the operator roles and OIDC provider. false by default.",
+            "type": "boolean"
+          },
           "external_id": {
             "description": "Optional unique identifier when assuming role in another account",
             "type": "string"
@@ -7478,6 +7482,14 @@
             "items": {
               "$ref": "#/components/schemas/OperatorIAMRole"
             }
+          },
+          "operator_role_prefix": {
+            "description": "Optional user provided prefix for operator roles.",
+            "type": "string"
+          },
+          "permission_boundary": {
+            "description": "Optional user provided permission boundary.",
+            "type": "string"
           },
           "role_arn": {
             "description": "ARN of the AWS role to assume when installing the cluster",
@@ -8261,6 +8273,13 @@
               "$ref": "#/components/schemas/IdentityProvider"
             }
           },
+          "inflight_checks": {
+            "description": "List of inflight checks on this cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InflightCheck"
+            }
+          },
           "ingresses": {
             "description": "List of ingresses on this cluster.",
             "type": "array",
@@ -8602,6 +8621,7 @@
           "resuming",
           "uninstalling",
           "unknown",
+          "validating",
           "waiting"
         ]
       },
@@ -8635,6 +8655,11 @@
           "description": {
             "description": "Detailed description of the cluster status.",
             "type": "string"
+          },
+          "limited_support_reason_count": {
+            "description": "Limited Support Reason Count",
+            "type": "integer",
+            "format": "int32"
           },
           "provision_error_code": {
             "description": "Provisioning Error Code",
@@ -8957,6 +8982,63 @@
           "GoogleIdentityProvider",
           "HTPasswdIdentityProvider",
           "OpenIDIdentityProvider"
+        ]
+      },
+      "InflightCheck": {
+        "description": "Representation of check running before the cluster is provisioned.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'InflightCheck' if this is a complete object or 'InflightCheckLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details regarding the state of the inflight check.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "ended_at": {
+            "description": "The time the check finished running.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "description": "The name of the inflight check.",
+            "type": "string"
+          },
+          "restarts": {
+            "description": "The number of times the inflight check restarted.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "started_at": {
+            "description": "The time the check started running.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "description": "State of the inflight check.",
+            "$ref": "#/components/schemas/InflightCheckState"
+          }
+        }
+      },
+      "InflightCheckState": {
+        "description": "State of an inflight check.",
+        "type": "string",
+        "enum": [
+          "failed",
+          "passed",
+          "pending",
+          "running"
         ]
       },
       "Ingress": {
