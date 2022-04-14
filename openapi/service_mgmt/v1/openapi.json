@@ -363,8 +363,15 @@
           "id": {
             "type": "string"
           },
+          "multi_az": {
+            "description": "Flag indicating if the cluster should be created with nodes in\ndifferent availability zones or all the nodes in a single one\nrandomly selected.",
+            "type": "boolean"
+          },
           "name": {
             "type": "string"
+          },
+          "nodes": {
+            "$ref": "#/components/schemas/ClusterNodes"
           },
           "properties": {
             "type": "object",
@@ -377,6 +384,16 @@
           },
           "state": {
             "type": "string"
+          }
+        }
+      },
+      "ClusterNodes": {
+        "properties": {
+          "availability_zones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
