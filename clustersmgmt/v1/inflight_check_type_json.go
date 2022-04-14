@@ -21,15 +21,17 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"io"
+	"sort"
+	"time"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalClusterStatus writes a value of the 'cluster_status' type to the given writer.
-func MarshalClusterStatus(object *ClusterStatus, writer io.Writer) error {
+// MarshalInflightCheck writes a value of the 'inflight_check' type to the given writer.
+func MarshalInflightCheck(object *InflightCheck, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeClusterStatus(object, stream)
+	writeInflightCheck(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,15 +39,15 @@ func MarshalClusterStatus(object *ClusterStatus, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeClusterStatus writes a value of the 'cluster_status' type to the given stream.
-func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
+// writeInflightCheck writes a value of the 'inflight_check' type to the given stream.
+func writeInflightCheck(object *InflightCheck, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
 	if object.bitmap_&1 != 0 {
-		stream.WriteString(ClusterStatusLinkKind)
+		stream.WriteString(InflightCheckLinkKind)
 	} else {
-		stream.WriteString(ClusterStatusKind)
+		stream.WriteString(InflightCheckKind)
 	}
 	count++
 	if object.bitmap_&2 != 0 {
@@ -65,13 +67,33 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		count++
 	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0
+	present_ = object.bitmap_&8 != 0 && object.details != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("dns_ready")
-		stream.WriteBool(object.dnsReady)
+		stream.WriteObjectField("details")
+		if object.details != nil {
+			stream.WriteObjectStart()
+			keys := make([]string, len(object.details))
+			i := 0
+			for key := range object.details {
+				keys[i] = key
+				i++
+			}
+			sort.Strings(keys)
+			for i, key := range keys {
+				if i > 0 {
+					stream.WriteMore()
+				}
+				item := object.details[key]
+				stream.WriteObjectField(key)
+				stream.WriteString(item)
+			}
+			stream.WriteObjectEnd()
+		} else {
+			stream.WriteNil()
+		}
 		count++
 	}
 	present_ = object.bitmap_&16 != 0
@@ -79,8 +101,8 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("oidc_ready")
-		stream.WriteBool(object.oidcReady)
+		stream.WriteObjectField("ended_at")
+		stream.WriteString((object.endedAt).Format(time.RFC3339))
 		count++
 	}
 	present_ = object.bitmap_&32 != 0
@@ -88,8 +110,8 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("configuration_mode")
-		stream.WriteString(string(object.configurationMode))
+		stream.WriteObjectField("name")
+		stream.WriteString(object.name)
 		count++
 	}
 	present_ = object.bitmap_&64 != 0
@@ -97,8 +119,8 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("description")
-		stream.WriteString(object.description)
+		stream.WriteObjectField("restarts")
+		stream.WriteInt(object.restarts)
 		count++
 	}
 	present_ = object.bitmap_&128 != 0
@@ -106,29 +128,11 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("limited_support_reason_count")
-		stream.WriteInt(object.limitedSupportReasonCount)
+		stream.WriteObjectField("started_at")
+		stream.WriteString((object.startedAt).Format(time.RFC3339))
 		count++
 	}
 	present_ = object.bitmap_&256 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("provision_error_code")
-		stream.WriteString(object.provisionErrorCode)
-		count++
-	}
-	present_ = object.bitmap_&512 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("provision_error_message")
-		stream.WriteString(object.provisionErrorMessage)
-		count++
-	}
-	present_ = object.bitmap_&1024 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -139,21 +143,21 @@ func writeClusterStatus(object *ClusterStatus, stream *jsoniter.Stream) {
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalClusterStatus reads a value of the 'cluster_status' type from the given
+// UnmarshalInflightCheck reads a value of the 'inflight_check' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalClusterStatus(source interface{}) (object *ClusterStatus, err error) {
+func UnmarshalInflightCheck(source interface{}) (object *InflightCheck, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readClusterStatus(iterator)
+	object = readInflightCheck(iterator)
 	err = iterator.Error
 	return
 }
 
-// readClusterStatus reads a value of the 'cluster_status' type from the given iterator.
-func readClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
-	object := &ClusterStatus{}
+// readInflightCheck reads a value of the 'inflight_check' type from the given iterator.
+func readInflightCheck(iterator *jsoniter.Iterator) *InflightCheck {
+	object := &InflightCheck{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
@@ -162,7 +166,7 @@ func readClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			if value == ClusterStatusLinkKind {
+			if value == InflightCheckLinkKind {
 				object.bitmap_ |= 1
 			}
 		case "id":
@@ -171,40 +175,47 @@ func readClusterStatus(iterator *jsoniter.Iterator) *ClusterStatus {
 		case "href":
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
-		case "dns_ready":
-			value := iterator.ReadBool()
-			object.dnsReady = value
+		case "details":
+			value := map[string]string{}
+			for {
+				key := iterator.ReadObject()
+				if key == "" {
+					break
+				}
+				item := iterator.ReadString()
+				value[key] = item
+			}
+			object.details = value
 			object.bitmap_ |= 8
-		case "oidc_ready":
-			value := iterator.ReadBool()
-			object.oidcReady = value
-			object.bitmap_ |= 16
-		case "configuration_mode":
+		case "ended_at":
 			text := iterator.ReadString()
-			value := ClusterConfigurationMode(text)
-			object.configurationMode = value
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.endedAt = value
+			object.bitmap_ |= 16
+		case "name":
+			value := iterator.ReadString()
+			object.name = value
 			object.bitmap_ |= 32
-		case "description":
-			value := iterator.ReadString()
-			object.description = value
-			object.bitmap_ |= 64
-		case "limited_support_reason_count":
+		case "restarts":
 			value := iterator.ReadInt()
-			object.limitedSupportReasonCount = value
+			object.restarts = value
+			object.bitmap_ |= 64
+		case "started_at":
+			text := iterator.ReadString()
+			value, err := time.Parse(time.RFC3339, text)
+			if err != nil {
+				iterator.ReportError("", err.Error())
+			}
+			object.startedAt = value
 			object.bitmap_ |= 128
-		case "provision_error_code":
-			value := iterator.ReadString()
-			object.provisionErrorCode = value
-			object.bitmap_ |= 256
-		case "provision_error_message":
-			value := iterator.ReadString()
-			object.provisionErrorMessage = value
-			object.bitmap_ |= 512
 		case "state":
 			text := iterator.ReadString()
-			value := ClusterState(text)
+			value := InflightCheckState(text)
 			object.state = value
-			object.bitmap_ |= 1024
+			object.bitmap_ |= 256
 		default:
 			iterator.ReadAny()
 		}
