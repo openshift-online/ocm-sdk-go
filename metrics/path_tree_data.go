@@ -181,7 +181,8 @@ var pathTreeData = `{
             "identity_providers": {
               "-": {
                 "htpasswd_users": {
-                  "-": null
+                  "-": null,
+                  "import": null
                 }
               }
             },
