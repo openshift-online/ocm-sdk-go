@@ -7806,10 +7806,6 @@
               "$ref": "#/components/schemas/AddOnInstallationParameter"
             }
           },
-          "role_arn": {
-            "description": "Role ARN used to authenticate the addon operator",
-            "type": "string"
-          },
           "state": {
             "description": "Overall state of the add-on installation.",
             "$ref": "#/components/schemas/AddOnInstallationState"
@@ -8591,6 +8587,13 @@
             "description": "Number of master nodes of the cluster.",
             "type": "integer",
             "format": "int32"
+          },
+          "security_group_filters": {
+            "description": "List of security groups to be applied to nodes (Optional)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MachinePoolSecurityGroupFilter"
+            }
           },
           "total": {
             "description": "Total number of nodes of the cluster.",
@@ -9393,6 +9396,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "security_group_filters": {
+            "description": "List of security groups to be applied to MachinePool (Optional)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MachinePoolSecurityGroupFilter"
+            }
+          },
           "taints": {
             "description": "The taints set on the Nodes created.",
             "type": "array",
@@ -9426,6 +9436,17 @@
             "description": "The minimum number of replicas for the machine pool.",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "MachinePoolSecurityGroupFilter": {
+        "description": "Security Group Filter object, containing name of the filter tag and value of the filter tag",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
           }
         }
       },
