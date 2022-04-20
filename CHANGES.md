@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.264
+- Update to model 0.0.196:
+  - Added Machine Pool Security Group Filters for Machine Pools and Cluster Nodes
+  - Drop RoleARN from AddOnInstallation
+
 ## 0.1.263 Apr 19 2022
 
 - Update to model 0.0.195:
