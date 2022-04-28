@@ -20,11 +20,8 @@ import (
 	"bytes"
 	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"net"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 
 	"github.com/google/uuid"
@@ -38,9 +35,6 @@ import (
 // DatabaseServer knows how to start a PostgreSQL database server inside a container, and how to
 // create databases to be used for tests.
 type DatabaseServer struct {
-	// Temporary directory for database configuration:
-	tmp string
-
 	// Name of the tool used to create containers (podman or docker):
 	tool string
 
@@ -70,9 +64,6 @@ type Database struct {
 	name     string
 	user     string
 	password string
-
-	// List of database handles created, so we don't forget to close them:
-	handles []*sql.DB
 }
 
 // MakeDatabaseServer creates a new database server.
@@ -89,35 +80,17 @@ func MakeDatabaseServer() *DatabaseServer {
 	// Generate a random password for the database admnistrator:
 	password := uuid.NewString()
 
-	// Create a temporary directory for the database configuration file. Note that we need to
-	// explicitly change the permissions of this directory so that everybody can read and
-	// execute. That is necessary because the database server needs that permission and it runs
-	// with user 26 which most probably won't match our user or group.
-	tmp, err := ioutil.TempDir("", "test-*.d")
-	Expect(err).ToNot(HaveOccurred())
-	err = os.Chmod(tmp, 0755) // #nosec G302
-	Expect(err).ToNot(HaveOccurred())
-
-	// Create the database configuration file. Like the directory this needs to be readable for
-	// the user of the database server.
-	confFile := filepath.Join(tmp, "db.conf")
-	confText := `
-		log_destination = 'stderr'
-		log_statement = 'all'
-		logging_collector = off
-	`
-	err = ioutil.WriteFile(confFile, []byte(confText), 0644)
-	Expect(err).ToNot(HaveOccurred())
-
 	// Start the database server:
 	runOut := &bytes.Buffer{}
 	runCmd := exec.Command(
 		tool, "run",
-		"--env", "POSTGRESQL_ADMIN_PASSWORD="+password,
-		"--volume", tmp+":/opt/app-root/src/postgresql-cfg:Z",
+		"--env", "POSTGRES_PASSWORD="+password,
 		"--publish", "5432",
 		"--detach",
-		"docker.io/centos/postgresql-12-centos8:latest",
+		"docker.io/postgres:14",
+		"-c", "log_destination=stderr",
+		"-c", "log_statement=all",
+		"-c", "logging_collector=off",
 	) // #nosec G204
 	runCmd.Stdout = runOut
 	runCmd.Stderr = GinkgoWriter
@@ -153,7 +126,6 @@ func MakeDatabaseServer() *DatabaseServer {
 
 	// Create and populate the object:
 	return &DatabaseServer{
-		tmp:       tmp,
 		tool:      tool,
 		container: container,
 		host:      host,
@@ -183,10 +155,6 @@ func (s *DatabaseServer) Close() {
 	killCmd.Stdout = GinkgoWriter
 	killCmd.Stderr = GinkgoWriter
 	err = killCmd.Run()
-	Expect(err).ToNot(HaveOccurred())
-
-	// Delete the temporary directories:
-	err = os.RemoveAll(s.tmp)
 	Expect(err).ToNot(HaveOccurred())
 }
 
@@ -230,17 +198,12 @@ func (s *DatabaseServer) MakeDatabase() *Database {
 
 // MakeHandle creates a new database handle for this database.
 func (d *Database) MakeHandle() *sql.DB {
-	// Create the new handle:
 	url := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
 		d.user, d.password, d.server.host, d.server.port, d.name,
 	)
 	handle, err := sql.Open("pgx", url)
 	Expect(err).ToNot(HaveOccurred())
-
-	// Remember to close it:
-	d.handles = append(d.handles, handle)
-
 	return handle
 }
 
@@ -248,14 +211,9 @@ func (d *Database) MakeHandle() *sql.DB {
 func (d *Database) Close() {
 	var err error
 
-	// Close all the handles:
-	for _, handle := range d.handles {
-		_ = handle.Close() // #nosec G104
-	}
-
 	// Drop the database:
 	_, err = d.server.handle.Exec(fmt.Sprintf(
-		`drop database if exists %s`,
+		`drop database if exists %s with (force)`,
 		d.name,
 	))
 	Expect(err).ToNot(HaveOccurred())
