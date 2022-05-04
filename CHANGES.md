@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.265
+- Update to model 0.0.197:
+  - Change inflight check type Details field to Interface
+
+
 ## 0.1.264
 - Update to model 0.0.196:
   - Added Machine Pool Security Group Filters for Machine Pools and Cluster Nodes

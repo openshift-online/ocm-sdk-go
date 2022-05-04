@@ -287,6 +287,10 @@
             "description": "AWS account identifier.",
             "type": "string"
           },
+          "private_link": {
+            "description": "For PrivateLink-enabled clusters",
+            "type": "boolean"
+          },
           "secret_access_key": {
             "description": "AWS secret access key.",
             "type": "string"
@@ -350,6 +354,9 @@
       "Cluster": {
         "description": "This represents the parameters needed by Managed Service to create a cluster.",
         "properties": {
+          "api": {
+            "$ref": "#/components/schemas/ClusterAPI"
+          },
           "aws": {
             "$ref": "#/components/schemas/AWS"
           },
@@ -387,6 +394,15 @@
           }
         }
       },
+      "ClusterAPI": {
+        "description": "Information about the API of a cluster.",
+        "properties": {
+          "listening": {
+            "description": "The listening method of the API server.",
+            "$ref": "#/components/schemas/ListeningMethod"
+          }
+        }
+      },
       "ClusterNodes": {
         "properties": {
           "availability_zones": {
@@ -409,6 +425,14 @@
             "type": "string"
           }
         }
+      },
+      "ListeningMethod": {
+        "description": "Cluster components listening method.",
+        "type": "string",
+        "enum": [
+          "external",
+          "internal"
+        ]
       },
       "ManagedService": {
         "description": "Represents data about a running Managed Service.",
