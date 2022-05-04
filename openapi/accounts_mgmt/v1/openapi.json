@@ -4660,6 +4660,10 @@
             "$ref": "#/components/schemas/Organization"
           },
           "rhit_account_id": {
+            "description": "RhitAccountID will be deprecated in favor of RhitWebUserId",
+            "type": "string"
+          },
+          "rhit_web_user_id": {
             "type": "string"
           },
           "service_account": {

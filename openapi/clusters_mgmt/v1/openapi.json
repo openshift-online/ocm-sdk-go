@@ -9115,10 +9115,7 @@
           },
           "details": {
             "description": "Details regarding the state of the inflight check.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "type": "object"
           },
           "ended_at": {
             "description": "The time the check finished running.",
