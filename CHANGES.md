@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.266
+- Update to model 0.0.198:
+  - Add cred request to api model
+  - Add AWSRegionMachineTypes endpoint to api model
+- windows: Update certificates
+
+
 ## 0.1.265
 - Update to model 0.0.197:
   - Change inflight check type Details field to Interface
