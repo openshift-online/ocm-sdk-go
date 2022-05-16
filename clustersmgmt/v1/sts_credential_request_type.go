@@ -25,7 +25,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 type STSCredentialRequest struct {
 	bitmap_  uint32
 	name     string
-	operator []*STSOperator
+	operator *STSOperator
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -60,7 +60,7 @@ func (o *STSCredentialRequest) GetName() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Operator Details
-func (o *STSCredentialRequest) Operator() []*STSOperator {
+func (o *STSCredentialRequest) Operator() *STSOperator {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.operator
 	}
@@ -71,7 +71,7 @@ func (o *STSCredentialRequest) Operator() []*STSOperator {
 // a flag indicating if the attribute has a value.
 //
 // Operator Details
-func (o *STSCredentialRequest) GetOperator() (value []*STSOperator, ok bool) {
+func (o *STSCredentialRequest) GetOperator() (value *STSOperator, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.operator

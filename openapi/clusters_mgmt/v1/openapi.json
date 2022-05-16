@@ -7756,10 +7756,7 @@
           },
           "operator": {
             "description": "Operator Details",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/STSOperator"
-            }
+            "$ref": "#/components/schemas/STSOperator"
           }
         }
       },
@@ -7782,7 +7779,7 @@
             "description": "Operator Namespace",
             "type": "string"
           },
-          "service_account_names": {
+          "service_accounts": {
             "description": "Service Accounts",
             "type": "array",
             "items": {
