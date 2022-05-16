@@ -57,7 +57,7 @@ func writeSTSCredentialRequest(object *STSCredentialRequest, stream *jsoniter.St
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("operator")
-		writeSTSOperatorList(object.operator, stream)
+		writeSTSOperator(object.operator, stream)
 	}
 	stream.WriteObjectEnd()
 }
@@ -88,7 +88,7 @@ func readSTSCredentialRequest(iterator *jsoniter.Iterator) *STSCredentialRequest
 			object.name = value
 			object.bitmap_ |= 1
 		case "operator":
-			value := readSTSOperatorList(iterator)
+			value := readSTSOperator(iterator)
 			object.operator = value
 			object.bitmap_ |= 2
 		default:
