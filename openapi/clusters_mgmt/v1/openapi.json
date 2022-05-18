@@ -8541,6 +8541,10 @@
             "description": "HealthState indicates the overall health state of the cluster.",
             "$ref": "#/components/schemas/ClusterHealthState"
           },
+          "hypershift": {
+            "description": "HyperShift configuration.",
+            "$ref": "#/components/schemas/HyperShift"
+          },
           "identity_providers": {
             "description": "Link to the collection of identity providers of the cluster.",
             "type": "array",
@@ -9204,6 +9208,15 @@
             "items": {
               "$ref": "#/components/schemas/User"
             }
+          }
+        }
+      },
+      "HyperShift": {
+        "description": "HyperShift configuration.",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should be creating using _HyperShift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
+            "type": "boolean"
           }
         }
       },
