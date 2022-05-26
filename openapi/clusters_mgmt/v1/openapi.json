@@ -9799,6 +9799,13 @@
               "type": "string"
             }
           },
+          "groups": {
+            "description": "List of claims to use as the group name.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "name": {
             "description": "List of claims to use as the display name.",
             "type": "array",
