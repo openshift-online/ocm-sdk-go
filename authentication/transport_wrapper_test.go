@@ -1256,6 +1256,57 @@ var _ = Describe("Tokens", func() {
 			Expect(returnedAccess).To(Equal(validAccess))
 			Expect(returnedRefresh).To(Equal(validRefresh))
 		})
+
+		It("Uses client credentials grant with basic authentication and opaque refresh token", func() {
+			// Generate the tokens:
+			expiredAccess := MakeTokenString("Bearer", -5*time.Minute)
+			validAccess := MakeTokenString("Bearer", 5*time.Minute)
+			opaqueRefresh := "a.bb.ccc.dddd.eeeee"
+
+			// Configure the server so that it returns a expired access token for the
+			// first request, and then a valid access token for the second request. In
+			// both cases the client should be using the client credentials grant with
+			// basic authentication.
+			server.AppendHandlers(
+				CombineHandlers(
+					VerifyClientCredentialsGrant("myclient", "mysecret"),
+					RespondWithAccessToken(expiredAccess),
+				),
+				CombineHandlers(
+					VerifyClientCredentialsGrant("myclient", "mysecret"),
+					RespondWithAccessToken(validAccess),
+				),
+			)
+
+			// Create the wrapper:
+			wrapper, err := NewTransportWrapper().
+				Logger(logger).
+				TokenURL(server.URL()).
+				TrustedCA(ca).
+				Client("myclient", "mysecret").
+				Tokens(expiredAccess, opaqueRefresh).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			defer func() {
+				err = wrapper.Close()
+				Expect(err).ToNot(HaveOccurred())
+			}()
+
+			// Force the initial token request. This will return an expired access token
+			// and a valid refresh token, that way when we get the tokens again the
+			// wrapper should send another request, but using the client credentials
+			// grant and ignoring the refresh token.
+			returnedAccess, returnedRefresh, err := wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(expiredAccess))
+			Expect(returnedRefresh).To(Equal(opaqueRefresh))
+
+			// Force another request:
+			returnedAccess, returnedRefresh, err = wrapper.Tokens(ctx)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(returnedAccess).To(Equal(validAccess))
+			Expect(returnedRefresh).To(Equal(opaqueRefresh))
+		})
 	})
 
 	Describe("Retry for getting access token", func() {
@@ -1445,9 +1496,9 @@ func VerifyClientCredentialsGrant(id, secret string) http.HandlerFunc {
 	return CombineHandlers(
 		VerifyRequest(http.MethodPost, "/"),
 		VerifyContentType("application/x-www-form-urlencoded"),
+		VerifyBasicAuth(id, secret),
 		VerifyFormKV("grant_type", "client_credentials"),
 		VerifyFormKV("client_id", id),
-		VerifyFormKV("client_secret", secret),
 	)
 }
 
