@@ -4714,6 +4714,16 @@
           }
         }
       },
+      "CloudAccount": {
+        "properties": {
+          "cloud_account_id": {
+            "type": "string"
+          },
+          "cloud_provider_id": {
+            "type": "string"
+          }
+        }
+      },
       "CloudResource": {
         "properties": {
           "kind": {
@@ -5089,6 +5099,12 @@
           "allowed": {
             "type": "integer",
             "format": "int32"
+          },
+          "cloud_accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CloudAccount"
+            }
           },
           "consumed": {
             "type": "integer",
@@ -5475,6 +5491,9 @@
           },
           "href": {
             "description": "Self link.",
+            "type": "string"
+          },
+          "billing_marketplace_account": {
             "type": "string"
           },
           "capabilities": {
