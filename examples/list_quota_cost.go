@@ -41,11 +41,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Create the connection, and remember to close it:
 	token := os.Getenv("OCM_TOKEN")
+
+	const url = "https://api.openshift.com" // use "https://api.stage.openshift.com" for stage
+
+	// Create the connection, and remember to close it:
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
+		URL(url).
 		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
@@ -53,14 +57,19 @@ func main() {
 	}
 	defer connection.Close()
 
-	organizationId := "" // update with your own organizationId
+	// we need to get the organizationID before calling the quota cost endpoint
+	accountResp, err := connection.AccountsMgmt().V1().CurrentAccount().Get().Send()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't retrieve current account: %s\n", err)
+		os.Exit(1)
+	}
+	organizationId := accountResp.Body().Organization().ID()
 
 	// Get the client for the resource that manages the collection of quota cost:
 	collection := connection.AccountsMgmt().V1().Organizations().Organization(organizationId).QuotaCost()
 
-	// Search quota cost items where quota_id starts with 'add-on':
-	response, err := collection.List().
-		Search("quota_id like 'add-on%'").
+	// List quota cost items and their related cloud accounts:
+	response, err := collection.List().Parameter("fetchCloudAccounts", true).
 		SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't retrieve quota cost list for organization %s: %s\n", organizationId, err)
@@ -68,8 +77,9 @@ func main() {
 	}
 
 	// Prints quota cost items that were found in the previous step:
+	fmt.Printf("id,allowed,consumed,number_of_accounts\n")
 	response.Items().Each(func(quota *amv1.QuotaCost) bool {
-		fmt.Printf("%s - %d - %d\n", quota.QuotaID(), quota.Allowed(), quota.Consumed())
+		fmt.Printf("%s,%d,%d,%d\n", quota.QuotaID(), quota.Allowed(), quota.Consumed(), len(quota.CloudAccounts()))
 		return true
 	})
 
