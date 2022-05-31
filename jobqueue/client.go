@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/jobqueue/v1"
+	v1 "github.com/renan-campos/ocm-sdk-go/jobqueue/v1"
 )
 
 // Client is the client for service 'job_queue'.

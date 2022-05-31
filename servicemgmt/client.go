@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/servicemgmt/v1"
+	v1 "github.com/renan-campos/ocm-sdk-go/servicemgmt/v1"
 )
 
 // Client is the client for service 'service_mgmt'.
