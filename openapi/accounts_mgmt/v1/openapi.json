@@ -4694,6 +4694,9 @@
         "type": "string",
         "enum": [
           "marketplace",
+          "marketplace-aws",
+          "marketplace-rhm",
+          "marketplace-azure",
           "standard"
         ]
       },
