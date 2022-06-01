@@ -7420,10 +7420,6 @@
             "description": "Volume size in Gib.",
             "type": "integer",
             "format": "int32"
-          },
-          "type": {
-            "description": "Volume Type\n\nPossible values are: 'io1', 'gp2', 'st1', 'sc1', 'standard'",
-            "type": "string"
           }
         }
       },
