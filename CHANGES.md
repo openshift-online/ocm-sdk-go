@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.272
+- Update to model 0.0.204:
+  - Remove volume type from flavour
+  - Add Network Configuration for Managed Services
+
 ## 0.1.271
 - Update to model 0.0.203:
   - Add `MarketplaceAWS`, `MarketplaceAzure`, `MarketplaceRHM` billing models.

@@ -377,6 +377,9 @@
           "name": {
             "type": "string"
           },
+          "network": {
+            "$ref": "#/components/schemas/Network"
+          },
           "nodes": {
             "$ref": "#/components/schemas/ClusterNodes"
           },
@@ -480,6 +483,32 @@
           "updated_at": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "Network": {
+        "description": "Network configuration of a cluster.",
+        "properties": {
+          "host_prefix": {
+            "description": "Network host prefix which is defaulted to `23` if not specified.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "machine_cidr": {
+            "description": "IP address block from which to assign machine IP addresses, for example `10.0.0.0/16`.",
+            "type": "string"
+          },
+          "pod_cidr": {
+            "description": "IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.",
+            "type": "string"
+          },
+          "service_cidr": {
+            "description": "IP address block from which to assign service IP addresses, for example `172.30.0.0/16`.",
+            "type": "string"
+          },
+          "type": {
+            "description": "The main controller responsible for rendering the core networking components.",
+            "type": "string"
           }
         }
       },
