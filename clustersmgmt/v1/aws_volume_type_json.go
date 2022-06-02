@@ -58,15 +58,6 @@ func writeAWSVolume(object *AWSVolume, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("size")
 		stream.WriteInt(object.size)
-		count++
-	}
-	present_ = object.bitmap_&4 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("type")
-		stream.WriteString(object.type_)
 	}
 	stream.WriteObjectEnd()
 }
@@ -100,10 +91,6 @@ func readAWSVolume(iterator *jsoniter.Iterator) *AWSVolume {
 			value := iterator.ReadInt()
 			object.size = value
 			object.bitmap_ |= 2
-		case "type":
-			value := iterator.ReadString()
-			object.type_ = value
-			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}
