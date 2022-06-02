@@ -26,7 +26,6 @@ type AWSVolume struct {
 	bitmap_ uint32
 	iops    int
 	size    int
-	type_   string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -76,33 +75,6 @@ func (o *AWSVolume) GetSize() (value int, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.size
-	}
-	return
-}
-
-// Type returns the value of the 'type' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// Volume Type
-//
-// Possible values are: 'io1', 'gp2', 'st1', 'sc1', 'standard'
-func (o *AWSVolume) Type() string {
-	if o != nil && o.bitmap_&4 != 0 {
-		return o.type_
-	}
-	return ""
-}
-
-// GetType returns the value of the 'type' attribute and
-// a flag indicating if the attribute has a value.
-//
-// Volume Type
-//
-// Possible values are: 'io1', 'gp2', 'st1', 'sc1', 'standard'
-func (o *AWSVolume) GetType() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&4 != 0
-	if ok {
-		value = o.type_
 	}
 	return
 }
