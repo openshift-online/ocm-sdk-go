@@ -5275,6 +5275,9 @@
           "availability_zone_type": {
             "type": "string"
           },
+          "billing_marketplace_account": {
+            "type": "string"
+          },
           "billing_model": {
             "$ref": "#/components/schemas/BillingModel"
           },
