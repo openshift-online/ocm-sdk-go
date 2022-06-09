@@ -629,6 +629,13 @@
             "description": "Action that will be performed on the resource.",
             "type": "string"
           },
+          "exclude_subscription_statuses": {
+            "description": "Subscriptions with these statuses will be excluded from results.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionStatus"
+            }
+          },
           "reduce_cluster_list": {
             "description": "If true, in the case when all subscriptions in organization are permitted, response will *not* include\nthese subscriptions' ID, but organization only.",
             "type": "boolean"
@@ -776,6 +783,17 @@
             "type": "string"
           }
         }
+      },
+      "SubscriptionStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "archived",
+          "deprovisioned",
+          "disconnected",
+          "reserved",
+          "stale"
+        ]
       },
       "TermsReviewRequest": {
         "description": "Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]\nreview requests.",

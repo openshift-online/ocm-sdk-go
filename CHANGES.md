@@ -5,7 +5,8 @@ SDK.
 
 ## 0.1.274
 - Update to model 0.0.206:
-  - - Add `ExcludeSubscriptionStatuses` field to ResourceReview type.
+  - Add `ExcludeSubscriptionStatuses` field to ResourceReview type.
+  - Add `dry_run` flag to ClusterDeleteRequest type.
 
 ## 0.1.273
 - Update to model 0.0.205:

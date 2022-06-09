@@ -1531,6 +1531,14 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "dry_run",
+            "description": "Dry run flag is used to check if the operation can be completed, but won't delete.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
