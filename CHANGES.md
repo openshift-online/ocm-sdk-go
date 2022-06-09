@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.274
+- Update to model 0.0.206:
+  - Add `ExcludeSubscriptionStatuses` field to ResourceReview type.
+  - Add `dry_run` flag to ClusterDeleteRequest type.
+
 ## 0.1.273
 - Update to model 0.0.205:
   - Add `BillingMarketplaceAccount` field to ReservedResource type.
