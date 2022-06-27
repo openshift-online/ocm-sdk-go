@@ -9609,6 +9609,13 @@
               "$ref": "#/components/schemas/MachinePoolSecurityGroupFilter"
             }
           },
+          "subnets": {
+            "description": "The subnets upon which the nodes are created.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "taints": {
             "description": "The taints set on the Nodes created.",
             "type": "array",
