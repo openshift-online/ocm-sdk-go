@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.276
+- Update to model 0.0.208:
+  - Add `delete` method to registryCredentials type.
+
 ## 0.1.275
 - Update to model 0.0.207:
   - Add `Subnets` field to machinePool type.
