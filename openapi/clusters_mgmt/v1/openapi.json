@@ -8080,6 +8080,10 @@
             "description": "Indicates if this parameter can be edited after creation.",
             "type": "boolean"
           },
+          "editable_direction": {
+            "description": "Restricts if the parameter can be upscaled/downscaled\nExpected values are \"up\", \"down\", or \"\" (no restriction).",
+            "type": "string"
+          },
           "enabled": {
             "description": "Indicates if this parameter is enabled for the add-on.",
             "type": "boolean"
@@ -8119,6 +8123,11 @@
           "name": {
             "description": "Name of the add-on parameter option.",
             "type": "string"
+          },
+          "rank": {
+            "description": "Rank of option to be used in cases where editable direction should be restricted.",
+            "type": "integer",
+            "format": "int32"
           },
           "requirements": {
             "description": "List of add-on requirements for this parameter option.",

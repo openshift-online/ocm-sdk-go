@@ -2534,6 +2534,33 @@
       }
     },
     "/api/accounts_mgmt/v1/registry_credentials/{registry_credential_id}": {
+      "delete": {
+        "description": "Delete the registry credential",
+        "parameters": [
+          {
+            "name": "registry_credential_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "description": "Retrieves the details of the registry credential.",
         "parameters": [
