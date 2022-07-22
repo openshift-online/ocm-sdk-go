@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.277
+- Update to model 0.0.209:
+  - Add `capabilities` field to account type.
+
 ## 0.1.276
 - Update to model 0.0.208:
   - Add `delete` method to registryCredentials type.
