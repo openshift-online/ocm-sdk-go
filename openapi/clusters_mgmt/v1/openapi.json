@@ -9523,7 +9523,7 @@
             "type": "string"
           },
           "details": {
-            "description": "URL with a link to a detailed description of the reason.",
+            "description": "A detailed description of the reason.",
             "type": "string"
           },
           "summary": {
