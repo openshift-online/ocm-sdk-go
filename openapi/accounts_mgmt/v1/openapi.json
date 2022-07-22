@@ -4664,6 +4664,12 @@
           "banned": {
             "type": "boolean"
           },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            }
+          },
           "created_at": {
             "type": "string",
             "format": "date-time"
