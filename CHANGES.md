@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.278
+- Update to model 0.0.211:
+  - Remove `DisplayName` field from Cluster model.
+  - Add API for adding and removing a provision shard.
+
 ## 0.1.277
 - Update to model 0.0.209:
   - Add `capabilities` field to account type.
