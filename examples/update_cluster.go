@@ -63,7 +63,7 @@ func main() {
 
 	// Prepare the patch to send:
 	patch, err := cmv1.NewCluster().
-		DisplayName("My cluster").
+		Name("My cluster").
 		Build()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't create cluster patch: %v\n", err)
