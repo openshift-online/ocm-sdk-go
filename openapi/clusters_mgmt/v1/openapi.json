@@ -8996,6 +8996,7 @@
         "type": "string",
         "enum": [
           "error",
+          "finalizing_installation",
           "hibernating",
           "installing",
           "pending",
@@ -10057,6 +10058,10 @@
           "region": {
             "description": "Contains the cloud-provider region in which the provisioner spins up the cluster",
             "$ref": "#/components/schemas/CloudRegion"
+          },
+          "status": {
+            "description": "Status of the provision shard. Possible values: active/maintenance/offline.",
+            "type": "string"
           }
         }
       },

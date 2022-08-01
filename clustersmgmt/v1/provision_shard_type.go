@@ -46,6 +46,7 @@ type ProvisionShard struct {
 	hiveConfig               *ServerConfig
 	managementCluster        string
 	region                   *CloudRegion
+	status                   string
 }
 
 // Kind returns the name of the type of the object.
@@ -287,6 +288,29 @@ func (o *ProvisionShard) GetRegion() (value *CloudRegion, ok bool) {
 	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
 		value = o.region
+	}
+	return
+}
+
+// Status returns the value of the 'status' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Status of the provision shard. Possible values: active/maintenance/offline.
+func (o *ProvisionShard) Status() string {
+	if o != nil && o.bitmap_&2048 != 0 {
+		return o.status
+	}
+	return ""
+}
+
+// GetStatus returns the value of the 'status' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Status of the provision shard. Possible values: active/maintenance/offline.
+func (o *ProvisionShard) GetStatus() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&2048 != 0
+	if ok {
+		value = o.status
 	}
 	return
 }

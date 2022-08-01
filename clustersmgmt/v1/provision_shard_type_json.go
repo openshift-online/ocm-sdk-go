@@ -135,6 +135,15 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		}
 		stream.WriteObjectField("region")
 		writeCloudRegion(object.region, stream)
+		count++
+	}
+	present_ = object.bitmap_&2048 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("status")
+		stream.WriteString(object.status)
 	}
 	stream.WriteObjectEnd()
 }
@@ -203,6 +212,10 @@ func readProvisionShard(iterator *jsoniter.Iterator) *ProvisionShard {
 			value := readCloudRegion(iterator)
 			object.region = value
 			object.bitmap_ |= 1024
+		case "status":
+			value := iterator.ReadString()
+			object.status = value
+			object.bitmap_ |= 2048
 		default:
 			iterator.ReadAny()
 		}

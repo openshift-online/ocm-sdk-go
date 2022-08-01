@@ -25,6 +25,8 @@ type ClusterState string
 const (
 	// Error during installation.
 	ClusterStateError ClusterState = "error"
+	// The cluster is installed and being prepared for use.
+	ClusterStateFinalizingInstallation ClusterState = "finalizing_installation"
 	// The cluster will consume marginal cloud provider infrastructure but will be counted for quota.
 	ClusterStateHibernating ClusterState = "hibernating"
 	// The cluster is still being installed.
