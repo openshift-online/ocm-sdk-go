@@ -34,6 +34,7 @@ type ProvisionShardBuilder struct {
 	hiveConfig               *ServerConfigBuilder
 	managementCluster        string
 	region                   *CloudRegionBuilder
+	status                   string
 }
 
 // NewProvisionShard creates a new builder of 'provision_shard' objects.
@@ -158,6 +159,15 @@ func (b *ProvisionShardBuilder) Region(value *CloudRegionBuilder) *ProvisionShar
 	return b
 }
 
+// Status sets the value of the 'status' attribute to the given value.
+//
+//
+func (b *ProvisionShardBuilder) Status(value string) *ProvisionShardBuilder {
+	b.status = value
+	b.bitmap_ |= 2048
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuilder {
 	if object == nil {
@@ -194,6 +204,7 @@ func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuil
 	} else {
 		b.region = nil
 	}
+	b.status = object.status
 	return b
 }
 
@@ -236,5 +247,6 @@ func (b *ProvisionShardBuilder) Build() (object *ProvisionShard, err error) {
 			return
 		}
 	}
+	object.status = b.status
 	return
 }
