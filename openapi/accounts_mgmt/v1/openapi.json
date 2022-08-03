@@ -414,6 +414,133 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/accounts/{account_id}/labels/{label_id}": {
+      "delete": {
+        "description": "Deletes the account label.",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the label.",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the account label.",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Label"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/accounts/{account_id}/labels/{labels_id}": {
       "delete": {
         "description": "Deletes the account label.",
@@ -1550,6 +1677,133 @@
                       "format": "int32"
                     }
                   }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accounts_mgmt/v1/organizations/{organization_id}/labels/{label_id}": {
+      "delete": {
+        "description": "Deletes the account label.",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the label.",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the account label.",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Label"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
                 }
               }
             }
@@ -3626,6 +3880,112 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/subscriptions/labels/{label_id}": {
+      "delete": {
+        "description": "Deletes the account label.",
+        "parameters": [
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the label.",
+        "parameters": [
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the account label.",
+        "parameters": [
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Label"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/subscriptions/labels/{labels_id}": {
       "delete": {
         "description": "Deletes the account label.",
@@ -3942,6 +4302,133 @@
                       "format": "int32"
                     }
                   }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/labels/{label_id}": {
+      "delete": {
+        "description": "Deletes the account label.",
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the label.",
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the account label.",
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Label"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
                 }
               }
             }
