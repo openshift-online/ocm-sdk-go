@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.281
+- Update to model 0.0.214:
+  - Add locator `label` to Generic Labels resource. 
+
 ## 0.1.280
 - Update to model 0.0.213:
   - Add update function to provision shard API. 
