@@ -24,6 +24,8 @@ model_url:=https://github.com/openshift-online/ocm-api-model.git
 # Details of the metamodel to use:
 metamodel_version:=v0.0.54
 
+goimports_model:=v0.0.0-20200518194103-259583f2d8a9
+
 # Additional flags to pass to the `ginkgo` command. This is used in the GitHub
 # actions environment to skip tests that are sensitive to the speed of the
 # machine: the leadership flag and retry tests.
@@ -50,7 +52,7 @@ lint:
 	golangci-lint run
 
 .PHONY: generate
-generate: model metamodel
+generate: model metamodel goimports
 	rm -rf \
 		accountsmgmt \
 		authorizations \
@@ -86,6 +88,10 @@ model:
 .PHONY: metamodel
 metamodel:
 	go install github.com/openshift-online/ocm-api-metamodel/cmd/metamodel@$(metamodel_version)
+
+.PHONY: goimports
+goimports:
+	go install golang.org/x/tools/cmd/goimports@$(goimports_model)
 
 .PHONY: clean
 clean:
