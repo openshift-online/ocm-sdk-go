@@ -32,6 +32,7 @@ type ProvisionShardBuilder struct {
 	gcpProjectOperator       *ServerConfigBuilder
 	cloudProvider            *CloudProviderBuilder
 	hiveConfig               *ServerConfigBuilder
+	hypershiftConfig         *ServerConfigBuilder
 	managementCluster        string
 	region                   *CloudRegionBuilder
 	status                   string
@@ -137,12 +138,25 @@ func (b *ProvisionShardBuilder) HiveConfig(value *ServerConfigBuilder) *Provisio
 	return b
 }
 
+// HypershiftConfig sets the value of the 'hypershift_config' attribute to the given value.
+//
+// Representation of a server config
+func (b *ProvisionShardBuilder) HypershiftConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
+	b.hypershiftConfig = value
+	if value != nil {
+		b.bitmap_ |= 512
+	} else {
+		b.bitmap_ &^= 512
+	}
+	return b
+}
+
 // ManagementCluster sets the value of the 'management_cluster' attribute to the given value.
 //
 //
 func (b *ProvisionShardBuilder) ManagementCluster(value string) *ProvisionShardBuilder {
 	b.managementCluster = value
-	b.bitmap_ |= 512
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -152,9 +166,9 @@ func (b *ProvisionShardBuilder) ManagementCluster(value string) *ProvisionShardB
 func (b *ProvisionShardBuilder) Region(value *CloudRegionBuilder) *ProvisionShardBuilder {
 	b.region = value
 	if value != nil {
-		b.bitmap_ |= 1024
+		b.bitmap_ |= 2048
 	} else {
-		b.bitmap_ &^= 1024
+		b.bitmap_ &^= 2048
 	}
 	return b
 }
@@ -164,7 +178,7 @@ func (b *ProvisionShardBuilder) Region(value *CloudRegionBuilder) *ProvisionShar
 //
 func (b *ProvisionShardBuilder) Status(value string) *ProvisionShardBuilder {
 	b.status = value
-	b.bitmap_ |= 2048
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -197,6 +211,11 @@ func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuil
 		b.hiveConfig = NewServerConfig().Copy(object.hiveConfig)
 	} else {
 		b.hiveConfig = nil
+	}
+	if object.hypershiftConfig != nil {
+		b.hypershiftConfig = NewServerConfig().Copy(object.hypershiftConfig)
+	} else {
+		b.hypershiftConfig = nil
 	}
 	b.managementCluster = object.managementCluster
 	if object.region != nil {
@@ -236,6 +255,12 @@ func (b *ProvisionShardBuilder) Build() (object *ProvisionShard, err error) {
 	}
 	if b.hiveConfig != nil {
 		object.hiveConfig, err = b.hiveConfig.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.hypershiftConfig != nil {
+		object.hypershiftConfig, err = b.hypershiftConfig.Build()
 		if err != nil {
 			return
 		}
