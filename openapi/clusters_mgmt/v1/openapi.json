@@ -10113,27 +10113,31 @@
             "type": "string"
           },
           "aws_account_operator_config": {
-            "description": "Contains the configuration for the AWS account operator",
+            "description": "Contains the configuration for the AWS account operator.",
             "$ref": "#/components/schemas/ServerConfig"
           },
           "aws_base_domain": {
-            "description": "Contains the AWS base domain",
+            "description": "Contains the AWS base domain.",
             "type": "string"
           },
           "gcp_base_domain": {
-            "description": "Contains the GCP base domain",
+            "description": "Contains the GCP base domain.",
             "type": "string"
           },
           "gcp_project_operator": {
-            "description": "Contains the configuration for the GCP project operator",
+            "description": "Contains the configuration for the GCP project operator.",
             "$ref": "#/components/schemas/ServerConfig"
           },
           "cloud_provider": {
-            "description": "Contains the cloud provider name",
+            "description": "Contains the cloud provider name.",
             "$ref": "#/components/schemas/CloudProvider"
           },
           "hive_config": {
-            "description": "Contains the configuration for Hive",
+            "description": "Contains the configuration for Hive.",
+            "$ref": "#/components/schemas/ServerConfig"
+          },
+          "hypershift_config": {
+            "description": "Contains the configuration for Hypershift.",
             "$ref": "#/components/schemas/ServerConfig"
           },
           "management_cluster": {
@@ -10141,7 +10145,7 @@
             "type": "string"
           },
           "region": {
-            "description": "Contains the cloud-provider region in which the provisioner spins up the cluster",
+            "description": "Contains the cloud-provider region in which the provisioner spins up the cluster.",
             "$ref": "#/components/schemas/CloudRegion"
           },
           "status": {
