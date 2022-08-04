@@ -18,7 +18,7 @@
 export CGO_ENABLED=0
 
 # Details of the model to use:
-model_version:=v0.0.215
+model_version:=v0.0.216
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
@@ -64,6 +64,7 @@ generate: model metamodel goimports
 		servicemgmt \
 		statusboard \
 		webrca \
+		osdfleetmgmt \
 		openapi
 	metamodel generate go \
 		--model=model/model \

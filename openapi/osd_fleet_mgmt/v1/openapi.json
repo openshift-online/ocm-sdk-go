@@ -1,0 +1,600 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1",
+    "title": "osd_fleet_mgmt",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "contact": {
+      "name": "OCM Feedback",
+      "email": "ocm-feedback@redhat.com"
+    }
+  },
+  "servers": [
+    {
+      "description": "Production",
+      "url": "https://api.openshift.com"
+    },
+    {
+      "description": "Stage",
+      "url": "https://api.stage.openshift.com"
+    }
+  ],
+  "paths": {
+    "/api/osd_fleet_mgmt/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/osd_fleet_mgmt/v1/management_clusters": {
+      "get": {
+        "description": "Retrieves the list of service clusters.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of clusters.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ManagementCluster"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/osd_fleet_mgmt/v1/management_clusters/{management_cluster_id}": {
+      "delete": {
+        "description": "Deletes the service cluster.",
+        "parameters": [
+          {
+            "name": "management_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the cluster.",
+        "parameters": [
+          {
+            "name": "management_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementCluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Updates the service cluster.",
+        "parameters": [
+          {
+            "name": "management_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagementClusterRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementCluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/osd_fleet_mgmt/v1/service_clusters": {
+      "get": {
+        "description": "Retrieves the list of service clusters.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of clusters.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ServiceCluster"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/osd_fleet_mgmt/v1/service_clusters/{service_cluster_id}": {
+      "delete": {
+        "description": "Deletes the service cluster.",
+        "parameters": [
+          {
+            "name": "service_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the cluster.",
+        "parameters": [
+          {
+            "name": "service_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Updates the service cluster.",
+        "parameters": [
+          {
+            "name": "service_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceClusterRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
+      "DNS": {
+        "description": "DNS settings of the cluster.",
+        "properties": {
+          "base_domain": {
+            "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the name of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n```http\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n```json\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).",
+            "type": "string"
+          }
+        }
+      },
+      "ClusterManagementReference": {
+        "description": "Cluster Mgmt reference settings of the cluster.",
+        "properties": {
+          "cluster_id": {
+            "description": "Cluster Mgmt ID ",
+            "type": "string"
+          },
+          "href": {
+            "description": "Reference link to external cluster_mgmt service based on ClusterId field\nClusterId is not the name of the field used by the external cluster_mgmt service",
+            "type": "string"
+          }
+        }
+      },
+      "ManagementCluster": {
+        "description": "Definition of an _OpenShift_ cluster.\n\nThe `cloud_provider` attribute is a reference to the cloud provider. When a\ncluster is retrieved it will be a link to the cloud provider, containing only\nthe kind, id and href attributes:\n\n```json\n{\n  \"cloud_provider\": {\n    \"kind\": \"CloudProviderLink\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/cloud_providers/123\"\n  }\n}\n```\n\nWhen a cluster is created this is optional, and if used it should contain the\nidentifier of the cloud provider to use:\n\n```json\n{\n  \"cloud_provider\": {\n    \"id\": \"123\",\n  }\n}\n```\n\nIf not included, then the cluster will be created using the default cloud\nprovider, which is currently Amazon Web Services.\n\nThe region attribute is mandatory when a cluster is created.\n\nThe `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`\nattributes are mandatory when creation a cluster with your own Amazon Web\nServices account.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ManagementCluster' if this is a complete object or 'ManagementClusterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "dns": {
+            "description": "DNS settings of the cluster.",
+            "$ref": "#/components/schemas/DNS"
+          },
+          "cloud_provider": {
+            "description": "Cloud provider where the cluster is installed.",
+            "type": "string"
+          },
+          "cluster_management_reference": {
+            "description": "Cluster mgmt reference",
+            "$ref": "#/components/schemas/ClusterManagementReference"
+          },
+          "parent": {
+            "description": "Service cluster handling the management cluster",
+            "$ref": "#/components/schemas/ManagementClusterParent"
+          },
+          "region": {
+            "description": "Cloud provider region where the cluster is installed.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Status of cluster",
+            "type": "string"
+          }
+        }
+      },
+      "ManagementClusterParent": {
+        "description": "Cluster Mgmt reference settings of the cluster.",
+        "properties": {
+          "cluster_id": {
+            "description": "Parent Cluster ID ",
+            "type": "string"
+          },
+          "href": {
+            "description": "Reference link to internal parent cluster",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Kind of internal parent cluster",
+            "type": "string"
+          }
+        }
+      },
+      "ManagementClusterRequestPayload": {
+        "properties": {
+          "service_cluster_id_service_cluster_id_service_cluster_id_service_cluster_id_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ServiceCluster": {
+        "description": "Definition of an _OpenShift_ cluster.\n\nThe `cloud_provider` attribute is a reference to the cloud provider. When a\ncluster is retrieved it will be a link to the cloud provider, containing only\nthe kind, id and href attributes:\n\n```json\n{\n  \"cloud_provider\": {\n    \"kind\": \"CloudProviderLink\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/cloud_providers/123\"\n  }\n}\n```\n\nWhen a cluster is created this is optional, and if used it should contain the\nidentifier of the cloud provider to use:\n\n```json\n{\n  \"cloud_provider\": {\n    \"id\": \"123\",\n  }\n}\n```\n\nIf not included, then the cluster will be created using the default cloud\nprovider, which is currently Amazon Web Services.\n\nThe region attribute is mandatory when a cluster is created.\n\nThe `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`\nattributes are mandatory when creation a cluster with your own Amazon Web\nServices account.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ServiceCluster' if this is a complete object or 'ServiceClusterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "dns": {
+            "description": "DNS settings of the cluster.",
+            "$ref": "#/components/schemas/DNS"
+          },
+          "cloud_provider": {
+            "description": "Cloud provider where the cluster is installed.",
+            "type": "string"
+          },
+          "cluster_management_reference": {
+            "description": "Cluster mgmt reference",
+            "$ref": "#/components/schemas/ClusterManagementReference"
+          },
+          "region": {
+            "description": "Cloud provider region where the cluster is installed.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Status of cluster",
+            "type": "string"
+          }
+        }
+      },
+      "ServiceClusterRequestPayload": {
+        "properties": {
+          "cloud_provider": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will always be 'Error'",
+            "type": "string"
+          },
+          "id": {
+            "description": "Numeric identifier of the error.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "code": {
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Human readable description of the error.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Extra information about the error.",
+            "type": "object",
+            "additionalProperties": "true"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": [
+        
+      ]
+    }
+  ]
+}

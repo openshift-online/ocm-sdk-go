@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.283
+- Update to model 0.0.216:
+  - Add support for OSD Fleet Manager API.
+
 ## 0.1.282
 - Update to model 0.0.215:
   - Add hypershift config to provision shard API.
