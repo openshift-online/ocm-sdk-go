@@ -80,7 +80,12 @@ func contentSummary(mediaType string, response *http.Response) (summary string, 
 	if strings.EqualFold(mediaType, "text/html") && len(runes) > limit {
 		var sanitizer = htmlsanitizer.NewHTMLSanitizer()
 		sanitizer.AllowList = nil
-		content := html.UnescapeString(sanitizer.SanitizeString(string(body)))
+		var sanitizedString string
+		sanitizedString, err = sanitizer.SanitizeString(string(body))
+		if err != nil {
+			return
+		}
+		content := html.UnescapeString(sanitizedString)
 		content = wsRegex.ReplaceAllString(strings.TrimSpace(content), " ")
 		runes = []rune(content)
 	}
