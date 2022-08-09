@@ -27,7 +27,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/sym01/htmlsanitizer"
 )
 
 var wsRegex = regexp.MustCompile(`\s+`)
@@ -78,7 +78,14 @@ func contentSummary(mediaType string, response *http.Response) (summary string, 
 	limit := 250
 	runes := []rune(string(body))
 	if strings.EqualFold(mediaType, "text/html") && len(runes) > limit {
-		content := html.UnescapeString(bluemonday.StrictPolicy().Sanitize(string(body)))
+		var sanitizer = htmlsanitizer.NewHTMLSanitizer()
+		sanitizer.AllowList = nil
+		var sanitizedString string
+		sanitizedString, err = sanitizer.SanitizeString(string(body))
+		if err != nil {
+			return
+		}
+		content := html.UnescapeString(sanitizedString)
 		content = wsRegex.ReplaceAllString(strings.TrimSpace(content), " ")
 		runes = []rune(content)
 	}
