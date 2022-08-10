@@ -20,6 +20,7 @@ package internal
 
 import (
 	"fmt"
+	"html"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -84,8 +85,8 @@ func contentSummary(mediaType string, response *http.Response) (summary string, 
 		if err != nil {
 			return
 		}
-		//content := html.UnescapeString(sanitizedString)
-		content := wsRegex.ReplaceAllString(strings.TrimSpace(sanitizedString), " ")
+		content := html.UnescapeString(sanitizedString)
+		content = wsRegex.ReplaceAllString(strings.TrimSpace(content), " ")
 		runes = []rune(content)
 	}
 	if len(runes) > limit {
