@@ -65,13 +65,13 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		count++
 	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0 && object.awsAccountOperatorConfig != nil
+	present_ = object.bitmap_&8 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("aws_account_operator_config")
-		writeServerConfig(object.awsAccountOperatorConfig, stream)
+		stream.WriteString(object.awsAccountOperatorConfig)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0
@@ -92,13 +92,13 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		stream.WriteString(object.gcpBaseDomain)
 		count++
 	}
-	present_ = object.bitmap_&64 != 0 && object.gcpProjectOperator != nil
+	present_ = object.bitmap_&64 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("gcp_project_operator")
-		writeServerConfig(object.gcpProjectOperator, stream)
+		stream.WriteString(object.gcpProjectOperator)
 		count++
 	}
 	present_ = object.bitmap_&128 != 0 && object.cloudProvider != nil
@@ -110,22 +110,22 @@ func writeProvisionShard(object *ProvisionShard, stream *jsoniter.Stream) {
 		writeCloudProvider(object.cloudProvider, stream)
 		count++
 	}
-	present_ = object.bitmap_&256 != 0 && object.hiveConfig != nil
+	present_ = object.bitmap_&256 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("hive_config")
-		writeServerConfig(object.hiveConfig, stream)
+		stream.WriteString(object.hiveConfig)
 		count++
 	}
-	present_ = object.bitmap_&512 != 0 && object.hypershiftConfig != nil
+	present_ = object.bitmap_&512 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("hypershift_config")
-		writeServerConfig(object.hypershiftConfig, stream)
+		stream.WriteString(object.hypershiftConfig)
 		count++
 	}
 	present_ = object.bitmap_&1024 != 0
@@ -190,7 +190,7 @@ func readProvisionShard(iterator *jsoniter.Iterator) *ProvisionShard {
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
 		case "aws_account_operator_config":
-			value := readServerConfig(iterator)
+			value := iterator.ReadString()
 			object.awsAccountOperatorConfig = value
 			object.bitmap_ |= 8
 		case "aws_base_domain":
@@ -202,7 +202,7 @@ func readProvisionShard(iterator *jsoniter.Iterator) *ProvisionShard {
 			object.gcpBaseDomain = value
 			object.bitmap_ |= 32
 		case "gcp_project_operator":
-			value := readServerConfig(iterator)
+			value := iterator.ReadString()
 			object.gcpProjectOperator = value
 			object.bitmap_ |= 64
 		case "cloud_provider":
@@ -210,11 +210,11 @@ func readProvisionShard(iterator *jsoniter.Iterator) *ProvisionShard {
 			object.cloudProvider = value
 			object.bitmap_ |= 128
 		case "hive_config":
-			value := readServerConfig(iterator)
+			value := iterator.ReadString()
 			object.hiveConfig = value
 			object.bitmap_ |= 256
 		case "hypershift_config":
-			value := readServerConfig(iterator)
+			value := iterator.ReadString()
 			object.hypershiftConfig = value
 			object.bitmap_ |= 512
 		case "management_cluster":
