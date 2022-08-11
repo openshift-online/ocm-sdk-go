@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.283
+- Update to model 0.0.217:
+  - Change provision shard to include kube client configurations.
+  - Add GCP volume size to flavour API.
+  - Add fleet manager related structures and API.
+
 ## 0.1.282
 - Update to model 0.0.215:
   - Add hypershift config to provision shard API.

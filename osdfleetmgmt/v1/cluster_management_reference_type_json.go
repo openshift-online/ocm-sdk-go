@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 import (
 	"io"
@@ -26,10 +26,10 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalServerConfig writes a value of the 'server_config' type to the given writer.
-func MarshalServerConfig(object *ServerConfig, writer io.Writer) error {
+// MarshalClusterManagementReference writes a value of the 'cluster_management_reference' type to the given writer.
+func MarshalClusterManagementReference(object *ClusterManagementReference, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeServerConfig(object, stream)
+	writeClusterManagementReference(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,81 +37,60 @@ func MarshalServerConfig(object *ServerConfig, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeServerConfig writes a value of the 'server_config' type to the given stream.
-func writeServerConfig(object *ServerConfig, stream *jsoniter.Stream) {
+// writeClusterManagementReference writes a value of the 'cluster_management_reference' type to the given stream.
+func writeClusterManagementReference(object *ClusterManagementReference, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	stream.WriteObjectField("kind")
-	if object.bitmap_&1 != 0 {
-		stream.WriteString(ServerConfigLinkKind)
-	} else {
-		stream.WriteString(ServerConfigKind)
-	}
-	count++
-	if object.bitmap_&2 != 0 {
+	var present_ bool
+	present_ = object.bitmap_&1 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("id")
-		stream.WriteString(object.id)
+		stream.WriteObjectField("cluster_id")
+		stream.WriteString(object.clusterId)
 		count++
 	}
-	if object.bitmap_&4 != 0 {
+	present_ = object.bitmap_&2 != 0
+	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("href")
 		stream.WriteString(object.href)
-		count++
-	}
-	var present_ bool
-	present_ = object.bitmap_&8 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("server")
-		stream.WriteString(object.server)
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalServerConfig reads a value of the 'server_config' type from the given
+// UnmarshalClusterManagementReference reads a value of the 'cluster_management_reference' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalServerConfig(source interface{}) (object *ServerConfig, err error) {
+func UnmarshalClusterManagementReference(source interface{}) (object *ClusterManagementReference, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readServerConfig(iterator)
+	object = readClusterManagementReference(iterator)
 	err = iterator.Error
 	return
 }
 
-// readServerConfig reads a value of the 'server_config' type from the given iterator.
-func readServerConfig(iterator *jsoniter.Iterator) *ServerConfig {
-	object := &ServerConfig{}
+// readClusterManagementReference reads a value of the 'cluster_management_reference' type from the given iterator.
+func readClusterManagementReference(iterator *jsoniter.Iterator) *ClusterManagementReference {
+	object := &ClusterManagementReference{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
 			break
 		}
 		switch field {
-		case "kind":
+		case "cluster_id":
 			value := iterator.ReadString()
-			if value == ServerConfigLinkKind {
-				object.bitmap_ |= 1
-			}
-		case "id":
-			object.id = iterator.ReadString()
-			object.bitmap_ |= 2
+			object.clusterId = value
+			object.bitmap_ |= 1
 		case "href":
-			object.href = iterator.ReadString()
-			object.bitmap_ |= 4
-		case "server":
 			value := iterator.ReadString()
-			object.server = value
-			object.bitmap_ |= 8
+			object.href = value
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}
