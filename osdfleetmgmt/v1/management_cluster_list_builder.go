@@ -17,55 +17,55 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
-// ServerConfigListBuilder contains the data and logic needed to build
-// 'server_config' objects.
-type ServerConfigListBuilder struct {
-	items []*ServerConfigBuilder
+// ManagementClusterListBuilder contains the data and logic needed to build
+// 'management_cluster' objects.
+type ManagementClusterListBuilder struct {
+	items []*ManagementClusterBuilder
 }
 
-// NewServerConfigList creates a new builder of 'server_config' objects.
-func NewServerConfigList() *ServerConfigListBuilder {
-	return new(ServerConfigListBuilder)
+// NewManagementClusterList creates a new builder of 'management_cluster' objects.
+func NewManagementClusterList() *ManagementClusterListBuilder {
+	return new(ManagementClusterListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *ServerConfigListBuilder) Items(values ...*ServerConfigBuilder) *ServerConfigListBuilder {
-	b.items = make([]*ServerConfigBuilder, len(values))
+func (b *ManagementClusterListBuilder) Items(values ...*ManagementClusterBuilder) *ManagementClusterListBuilder {
+	b.items = make([]*ManagementClusterBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
 // Empty returns true if the list is empty.
-func (b *ServerConfigListBuilder) Empty() bool {
+func (b *ManagementClusterListBuilder) Empty() bool {
 	return b == nil || len(b.items) == 0
 }
 
 // Copy copies the items of the given list into this builder, discarding any previous items.
-func (b *ServerConfigListBuilder) Copy(list *ServerConfigList) *ServerConfigListBuilder {
+func (b *ManagementClusterListBuilder) Copy(list *ManagementClusterList) *ManagementClusterListBuilder {
 	if list == nil || list.items == nil {
 		b.items = nil
 	} else {
-		b.items = make([]*ServerConfigBuilder, len(list.items))
+		b.items = make([]*ManagementClusterBuilder, len(list.items))
 		for i, v := range list.items {
-			b.items[i] = NewServerConfig().Copy(v)
+			b.items[i] = NewManagementCluster().Copy(v)
 		}
 	}
 	return b
 }
 
-// Build creates a list of 'server_config' objects using the
+// Build creates a list of 'management_cluster' objects using the
 // configuration stored in the builder.
-func (b *ServerConfigListBuilder) Build() (list *ServerConfigList, err error) {
-	items := make([]*ServerConfig, len(b.items))
+func (b *ManagementClusterListBuilder) Build() (list *ManagementClusterList, err error) {
+	items := make([]*ManagementCluster, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(ServerConfigList)
+	list = new(ManagementClusterList)
 	list.items = items
 	return
 }

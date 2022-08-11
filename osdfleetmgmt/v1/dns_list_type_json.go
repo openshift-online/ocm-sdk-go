@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 import (
 	"io"
@@ -26,11 +26,11 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalServerConfigList writes a list of values of the 'server_config' type to
+// MarshalDNSList writes a list of values of the 'DNS' type to
 // the given writer.
-func MarshalServerConfigList(list []*ServerConfig, writer io.Writer) error {
+func MarshalDNSList(list []*DNS, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeServerConfigList(list, stream)
+	writeDNSList(list, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -38,37 +38,37 @@ func MarshalServerConfigList(list []*ServerConfig, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeServerConfigList writes a list of value of the 'server_config' type to
+// writeDNSList writes a list of value of the 'DNS' type to
 // the given stream.
-func writeServerConfigList(list []*ServerConfig, stream *jsoniter.Stream) {
+func writeDNSList(list []*DNS, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeServerConfig(value, stream)
+		writeDNS(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalServerConfigList reads a list of values of the 'server_config' type
+// UnmarshalDNSList reads a list of values of the 'DNS' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalServerConfigList(source interface{}) (items []*ServerConfig, err error) {
+func UnmarshalDNSList(source interface{}) (items []*DNS, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readServerConfigList(iterator)
+	items = readDNSList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readServerConfigList reads list of values of the ''server_config' type from
+// readDNSList reads list of values of the ''DNS' type from
 // the given iterator.
-func readServerConfigList(iterator *jsoniter.Iterator) []*ServerConfig {
-	list := []*ServerConfig{}
+func readDNSList(iterator *jsoniter.Iterator) []*DNS {
+	list := []*DNS{}
 	for iterator.ReadArray() {
-		item := readServerConfig(iterator)
+		item := readDNS(iterator)
 		list = append(list, item)
 	}
 	return list

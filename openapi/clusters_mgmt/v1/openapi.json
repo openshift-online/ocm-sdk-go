@@ -7747,9 +7747,21 @@
             "description": "GCP default instance type for the infra volume.",
             "type": "string"
           },
+          "infra_volume": {
+            "description": "Infra volume specification.",
+            "$ref": "#/components/schemas/GCPVolume"
+          },
           "master_instance_type": {
             "description": "GCP default instance type for the master volume.",
             "type": "string"
+          },
+          "master_volume": {
+            "description": "Master volume specification.",
+            "$ref": "#/components/schemas/GCPVolume"
+          },
+          "worker_volume": {
+            "description": "Worker volume specification.",
+            "$ref": "#/components/schemas/GCPVolume"
           }
         }
       },
@@ -7767,6 +7779,16 @@
           "control_plane_subnet": {
             "description": "Control plane subnet used by the cluster.",
             "type": "string"
+          }
+        }
+      },
+      "GCPVolume": {
+        "description": "Holds settings for an GCP storage volume.",
+        "properties": {
+          "size": {
+            "description": "Volume size in Gib.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -10113,8 +10135,8 @@
             "type": "string"
           },
           "aws_account_operator_config": {
-            "description": "Contains the configuration for the AWS account operator.",
-            "$ref": "#/components/schemas/ServerConfig"
+            "description": "Contains the kube client configuration for the AWS account operator.",
+            "type": "string"
           },
           "aws_base_domain": {
             "description": "Contains the AWS base domain.",
@@ -10125,20 +10147,20 @@
             "type": "string"
           },
           "gcp_project_operator": {
-            "description": "Contains the configuration for the GCP project operator.",
-            "$ref": "#/components/schemas/ServerConfig"
+            "description": "Contains the kube client configuration for the GCP project operator.",
+            "type": "string"
           },
           "cloud_provider": {
             "description": "Contains the cloud provider name.",
             "$ref": "#/components/schemas/CloudProvider"
           },
           "hive_config": {
-            "description": "Contains the configuration for Hive.",
-            "$ref": "#/components/schemas/ServerConfig"
+            "description": "Contains the kube client configuration for Hive.",
+            "type": "string"
           },
           "hypershift_config": {
-            "description": "Contains the configuration for Hypershift.",
-            "$ref": "#/components/schemas/ServerConfig"
+            "description": "Contains the kube client configuration for Hypershift.",
+            "type": "string"
           },
           "management_cluster": {
             "description": "Contains the name of the management cluster for Hypershift clusters that are assigned to this shard.\nThis field is populated by OCM, and must not be overwritten via API.",
@@ -10167,27 +10189,6 @@
           },
           "no_proxy": {
             "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
-            "type": "string"
-          }
-        }
-      },
-      "ServerConfig": {
-        "description": "Representation of a server config",
-        "properties": {
-          "kind": {
-            "description": "Indicates the type of this object. Will be 'ServerConfig' if this is a complete object or 'ServerConfigLink' if it is just a link.",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique identifier of the object.",
-            "type": "string"
-          },
-          "href": {
-            "description": "Self link.",
-            "type": "string"
-          },
-          "server": {
-            "description": "The URL of the server",
             "type": "string"
           }
         }
