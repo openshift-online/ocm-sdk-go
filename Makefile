@@ -47,7 +47,7 @@ fmt:
 .PHONY: lint
 lint:
 	golangci-lint --version
-	golangci-lint run
+	golangci-lint run --concurrency=1
 
 .PHONY: generate
 generate: model metamodel
