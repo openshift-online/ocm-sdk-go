@@ -26,13 +26,13 @@ type ProvisionShardBuilder struct {
 	bitmap_                  uint32
 	id                       string
 	href                     string
-	awsAccountOperatorConfig string
+	awsAccountOperatorConfig *ServerConfigBuilder
 	awsBaseDomain            string
 	gcpBaseDomain            string
-	gcpProjectOperator       string
+	gcpProjectOperator       *ServerConfigBuilder
 	cloudProvider            *CloudProviderBuilder
-	hiveConfig               string
-	hypershiftConfig         string
+	hiveConfig               *ServerConfigBuilder
+	hypershiftConfig         *ServerConfigBuilder
 	managementCluster        string
 	region                   *CloudRegionBuilder
 	status                   string
@@ -70,10 +70,14 @@ func (b *ProvisionShardBuilder) Empty() bool {
 
 // AWSAccountOperatorConfig sets the value of the 'AWS_account_operator_config' attribute to the given value.
 //
-//
-func (b *ProvisionShardBuilder) AWSAccountOperatorConfig(value string) *ProvisionShardBuilder {
+// Representation of a server config
+func (b *ProvisionShardBuilder) AWSAccountOperatorConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.awsAccountOperatorConfig = value
-	b.bitmap_ |= 8
+	if value != nil {
+		b.bitmap_ |= 8
+	} else {
+		b.bitmap_ &^= 8
+	}
 	return b
 }
 
@@ -97,10 +101,14 @@ func (b *ProvisionShardBuilder) GCPBaseDomain(value string) *ProvisionShardBuild
 
 // GCPProjectOperator sets the value of the 'GCP_project_operator' attribute to the given value.
 //
-//
-func (b *ProvisionShardBuilder) GCPProjectOperator(value string) *ProvisionShardBuilder {
+// Representation of a server config
+func (b *ProvisionShardBuilder) GCPProjectOperator(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.gcpProjectOperator = value
-	b.bitmap_ |= 64
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -119,19 +127,27 @@ func (b *ProvisionShardBuilder) CloudProvider(value *CloudProviderBuilder) *Prov
 
 // HiveConfig sets the value of the 'hive_config' attribute to the given value.
 //
-//
-func (b *ProvisionShardBuilder) HiveConfig(value string) *ProvisionShardBuilder {
+// Representation of a server config
+func (b *ProvisionShardBuilder) HiveConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.hiveConfig = value
-	b.bitmap_ |= 256
+	if value != nil {
+		b.bitmap_ |= 256
+	} else {
+		b.bitmap_ &^= 256
+	}
 	return b
 }
 
 // HypershiftConfig sets the value of the 'hypershift_config' attribute to the given value.
 //
-//
-func (b *ProvisionShardBuilder) HypershiftConfig(value string) *ProvisionShardBuilder {
+// Representation of a server config
+func (b *ProvisionShardBuilder) HypershiftConfig(value *ServerConfigBuilder) *ProvisionShardBuilder {
 	b.hypershiftConfig = value
-	b.bitmap_ |= 512
+	if value != nil {
+		b.bitmap_ |= 512
+	} else {
+		b.bitmap_ &^= 512
+	}
 	return b
 }
 
@@ -174,17 +190,33 @@ func (b *ProvisionShardBuilder) Copy(object *ProvisionShard) *ProvisionShardBuil
 	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.awsAccountOperatorConfig = object.awsAccountOperatorConfig
+	if object.awsAccountOperatorConfig != nil {
+		b.awsAccountOperatorConfig = NewServerConfig().Copy(object.awsAccountOperatorConfig)
+	} else {
+		b.awsAccountOperatorConfig = nil
+	}
 	b.awsBaseDomain = object.awsBaseDomain
 	b.gcpBaseDomain = object.gcpBaseDomain
-	b.gcpProjectOperator = object.gcpProjectOperator
+	if object.gcpProjectOperator != nil {
+		b.gcpProjectOperator = NewServerConfig().Copy(object.gcpProjectOperator)
+	} else {
+		b.gcpProjectOperator = nil
+	}
 	if object.cloudProvider != nil {
 		b.cloudProvider = NewCloudProvider().Copy(object.cloudProvider)
 	} else {
 		b.cloudProvider = nil
 	}
-	b.hiveConfig = object.hiveConfig
-	b.hypershiftConfig = object.hypershiftConfig
+	if object.hiveConfig != nil {
+		b.hiveConfig = NewServerConfig().Copy(object.hiveConfig)
+	} else {
+		b.hiveConfig = nil
+	}
+	if object.hypershiftConfig != nil {
+		b.hypershiftConfig = NewServerConfig().Copy(object.hypershiftConfig)
+	} else {
+		b.hypershiftConfig = nil
+	}
 	b.managementCluster = object.managementCluster
 	if object.region != nil {
 		b.region = NewCloudRegion().Copy(object.region)
@@ -201,18 +233,38 @@ func (b *ProvisionShardBuilder) Build() (object *ProvisionShard, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.bitmap_ = b.bitmap_
-	object.awsAccountOperatorConfig = b.awsAccountOperatorConfig
+	if b.awsAccountOperatorConfig != nil {
+		object.awsAccountOperatorConfig, err = b.awsAccountOperatorConfig.Build()
+		if err != nil {
+			return
+		}
+	}
 	object.awsBaseDomain = b.awsBaseDomain
 	object.gcpBaseDomain = b.gcpBaseDomain
-	object.gcpProjectOperator = b.gcpProjectOperator
+	if b.gcpProjectOperator != nil {
+		object.gcpProjectOperator, err = b.gcpProjectOperator.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.cloudProvider != nil {
 		object.cloudProvider, err = b.cloudProvider.Build()
 		if err != nil {
 			return
 		}
 	}
-	object.hiveConfig = b.hiveConfig
-	object.hypershiftConfig = b.hypershiftConfig
+	if b.hiveConfig != nil {
+		object.hiveConfig, err = b.hiveConfig.Build()
+		if err != nil {
+			return
+		}
+	}
+	if b.hypershiftConfig != nil {
+		object.hypershiftConfig, err = b.hypershiftConfig.Build()
+		if err != nil {
+			return
+		}
+	}
 	object.managementCluster = b.managementCluster
 	if b.region != nil {
 		object.region, err = b.region.Build()
