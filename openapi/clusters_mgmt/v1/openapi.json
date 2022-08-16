@@ -10135,8 +10135,8 @@
             "type": "string"
           },
           "aws_account_operator_config": {
-            "description": "Contains the kube client configuration for the AWS account operator.",
-            "type": "string"
+            "description": "Contains the configuration for the AWS account operator.",
+            "$ref": "#/components/schemas/ServerConfig"
           },
           "aws_base_domain": {
             "description": "Contains the AWS base domain.",
@@ -10147,20 +10147,20 @@
             "type": "string"
           },
           "gcp_project_operator": {
-            "description": "Contains the kube client configuration for the GCP project operator.",
-            "type": "string"
+            "description": "Contains the configuration for the GCP project operator.",
+            "$ref": "#/components/schemas/ServerConfig"
           },
           "cloud_provider": {
             "description": "Contains the cloud provider name.",
             "$ref": "#/components/schemas/CloudProvider"
           },
           "hive_config": {
-            "description": "Contains the kube client configuration for Hive.",
-            "type": "string"
+            "description": "Contains the configuration for Hive.",
+            "$ref": "#/components/schemas/ServerConfig"
           },
           "hypershift_config": {
-            "description": "Contains the kube client configuration for Hypershift.",
-            "type": "string"
+            "description": "Contains the configuration for Hypershift.",
+            "$ref": "#/components/schemas/ServerConfig"
           },
           "management_cluster": {
             "description": "Contains the name of the management cluster for Hypershift clusters that are assigned to this shard.\nThis field is populated by OCM, and must not be overwritten via API.",
@@ -10189,6 +10189,31 @@
           },
           "no_proxy": {
             "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
+            "type": "string"
+          }
+        }
+      },
+      "ServerConfig": {
+        "description": "Representation of a server config",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ServerConfig' if this is a complete object or 'ServerConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "kubeconfig": {
+            "description": "The kubeconfig of the server",
+            "type": "string"
+          },
+          "server": {
+            "description": "The URL of the server",
             "type": "string"
           }
         }

@@ -38,13 +38,13 @@ type ProvisionShard struct {
 	bitmap_                  uint32
 	id                       string
 	href                     string
-	awsAccountOperatorConfig string
+	awsAccountOperatorConfig *ServerConfig
 	awsBaseDomain            string
 	gcpBaseDomain            string
-	gcpProjectOperator       string
+	gcpProjectOperator       *ServerConfig
 	cloudProvider            *CloudProvider
-	hiveConfig               string
-	hypershiftConfig         string
+	hiveConfig               *ServerConfig
+	hypershiftConfig         *ServerConfig
 	managementCluster        string
 	region                   *CloudRegion
 	status                   string
@@ -110,19 +110,19 @@ func (o *ProvisionShard) Empty() bool {
 // AWSAccountOperatorConfig returns the value of the 'AWS_account_operator_config' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Contains the kube client configuration for the AWS account operator.
-func (o *ProvisionShard) AWSAccountOperatorConfig() string {
+// Contains the configuration for the AWS account operator.
+func (o *ProvisionShard) AWSAccountOperatorConfig() *ServerConfig {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.awsAccountOperatorConfig
 	}
-	return ""
+	return nil
 }
 
 // GetAWSAccountOperatorConfig returns the value of the 'AWS_account_operator_config' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Contains the kube client configuration for the AWS account operator.
-func (o *ProvisionShard) GetAWSAccountOperatorConfig() (value string, ok bool) {
+// Contains the configuration for the AWS account operator.
+func (o *ProvisionShard) GetAWSAccountOperatorConfig() (value *ServerConfig, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.awsAccountOperatorConfig
@@ -179,19 +179,19 @@ func (o *ProvisionShard) GetGCPBaseDomain() (value string, ok bool) {
 // GCPProjectOperator returns the value of the 'GCP_project_operator' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Contains the kube client configuration for the GCP project operator.
-func (o *ProvisionShard) GCPProjectOperator() string {
+// Contains the configuration for the GCP project operator.
+func (o *ProvisionShard) GCPProjectOperator() *ServerConfig {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.gcpProjectOperator
 	}
-	return ""
+	return nil
 }
 
 // GetGCPProjectOperator returns the value of the 'GCP_project_operator' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Contains the kube client configuration for the GCP project operator.
-func (o *ProvisionShard) GetGCPProjectOperator() (value string, ok bool) {
+// Contains the configuration for the GCP project operator.
+func (o *ProvisionShard) GetGCPProjectOperator() (value *ServerConfig, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.gcpProjectOperator
@@ -225,19 +225,19 @@ func (o *ProvisionShard) GetCloudProvider() (value *CloudProvider, ok bool) {
 // HiveConfig returns the value of the 'hive_config' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Contains the kube client configuration for Hive.
-func (o *ProvisionShard) HiveConfig() string {
+// Contains the configuration for Hive.
+func (o *ProvisionShard) HiveConfig() *ServerConfig {
 	if o != nil && o.bitmap_&256 != 0 {
 		return o.hiveConfig
 	}
-	return ""
+	return nil
 }
 
 // GetHiveConfig returns the value of the 'hive_config' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Contains the kube client configuration for Hive.
-func (o *ProvisionShard) GetHiveConfig() (value string, ok bool) {
+// Contains the configuration for Hive.
+func (o *ProvisionShard) GetHiveConfig() (value *ServerConfig, ok bool) {
 	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
 		value = o.hiveConfig
@@ -248,19 +248,19 @@ func (o *ProvisionShard) GetHiveConfig() (value string, ok bool) {
 // HypershiftConfig returns the value of the 'hypershift_config' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Contains the kube client configuration for Hypershift.
-func (o *ProvisionShard) HypershiftConfig() string {
+// Contains the configuration for Hypershift.
+func (o *ProvisionShard) HypershiftConfig() *ServerConfig {
 	if o != nil && o.bitmap_&512 != 0 {
 		return o.hypershiftConfig
 	}
-	return ""
+	return nil
 }
 
 // GetHypershiftConfig returns the value of the 'hypershift_config' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Contains the kube client configuration for Hypershift.
-func (o *ProvisionShard) GetHypershiftConfig() (value string, ok bool) {
+// Contains the configuration for Hypershift.
+func (o *ProvisionShard) GetHypershiftConfig() (value *ServerConfig, ok bool) {
 	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.hypershiftConfig
