@@ -8178,6 +8178,10 @@
             "description": "Link to the installed version of this add-on.",
             "$ref": "#/components/schemas/AddOnVersion"
           },
+          "billing": {
+            "description": "Billing details for add-on installation resource ",
+            "$ref": "#/components/schemas/AddOnInstallationBilling"
+          },
           "cluster": {
             "description": "ID used to identify the cluster that this add-on is attached to.",
             "$ref": "#/components/schemas/Cluster"
@@ -8210,6 +8214,31 @@
             "description": "Date and time when the add-on installation information was last updated.",
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "AddOnInstallationBilling": {
+        "description": "Representation of an add-on installation billing.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnInstallationBilling' if this is a complete object or 'AddOnInstallationBillingLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "billing_marketplace_account": {
+            "description": "Account ID for billing market place",
+            "type": "string"
+          },
+          "billing_model": {
+            "description": "Billing Model for addon resources",
+            "$ref": "#/components/schemas/BillingModel"
           }
         }
       },
