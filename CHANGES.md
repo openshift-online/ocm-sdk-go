@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.285
+- Update to model 0.0.219:
+  - Add billing model to addon installations
+
 ## 0.1.284
 - Update to model 0.0.218:
   - Change provision shard to include kube client configurations and server URL.
