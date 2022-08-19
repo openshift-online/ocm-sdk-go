@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.286
+- Update to model 0.0.220:
+  - Add `ManagedBy` property in RoleBinding type 
+
 ## 0.1.285
 - Update to model 0.0.219:
   - Add billing model to addon installations
