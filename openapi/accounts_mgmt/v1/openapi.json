@@ -5948,6 +5948,9 @@
             "type": "string",
             "format": "date-time"
           },
+          "managed_by": {
+            "type": "string"
+          },
           "organization": {
             "$ref": "#/components/schemas/Organization"
           },
