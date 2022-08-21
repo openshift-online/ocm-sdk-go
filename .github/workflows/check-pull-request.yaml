@@ -60,7 +60,7 @@ jobs:
     - name: Run the linter
       uses: golangci/golangci-lint-action@v2
       with:
-        version: v1.45.2
+        version: v1.48.0
         skip-pkg-cache: true
         skip-build-cache: true
 
