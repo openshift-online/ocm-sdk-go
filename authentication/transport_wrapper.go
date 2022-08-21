@@ -485,9 +485,7 @@ func (b *TransportWrapperBuilder) Build(ctx context.Context) (result *TransportW
 		scopes = DefaultScopes
 	} else {
 		scopes = make([]string, len(b.scopes))
-		for i := range b.scopes {
-			scopes[i] = b.scopes[i]
-		}
+		copy(scopes, b.scopes)
 	}
 
 	// Create the client selector:
