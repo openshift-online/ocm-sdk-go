@@ -20,7 +20,6 @@ package metrics
 
 import (
 	"io"
-	"io/ioutil"
 	"net/http"
 
 	. "github.com/onsi/ginkgo/v2/dsl/core"  // nolint
@@ -88,7 +87,7 @@ var _ = Describe("Metrics", func() {
 			err = response.Body.Close()
 			Expect(err).ToNot(HaveOccurred())
 		}()
-		_, err = io.Copy(ioutil.Discard, response.Body)
+		_, err = io.Copy(io.Discard, response.Body)
 		Expect(err).ToNot(HaveOccurred())
 	}
 

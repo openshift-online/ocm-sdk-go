@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"reflect"
 	"strings"
@@ -123,14 +123,14 @@ func (m *jqMatcher) pretty(object interface{}) string {
 func VerifyJQ(filter string, expected interface{}) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Read the body completely:
-		body, err := ioutil.ReadAll(r.Body)
+		body, err := io.ReadAll(r.Body)
 		Expect(err).ToNot(HaveOccurred())
 		err = r.Body.Close()
 		Expect(err).ToNot(HaveOccurred())
 
 		// Replace the body with a buffer so that other calls to this same method, or to
 		// other verification methods will also be able to work with it.
-		r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+		r.Body = io.NopCloser(bytes.NewBuffer(body))
 
 		// Parse the body as JSON and verify that it matches the filter:
 		var data interface{}

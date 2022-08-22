@@ -50,6 +50,20 @@ jobs:
     - name: Build the examples
       run: make examples
 
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the source
+      uses: actions/checkout@v2
+
+    - name: Run the linter
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: v1.48.0
+        skip-pkg-cache: true
+        skip-build-cache: true
+
   generate:
     name: Generate
     runs-on: ubuntu-latest

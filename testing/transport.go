@@ -17,7 +17,7 @@ limitations under the License.
 package testing
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -51,7 +51,7 @@ func TextTransport(code int, body string) http.RoundTripper {
 	return TransportFunc(func(request *http.Request) (response *http.Response, err error) {
 		response = &http.Response{
 			StatusCode: code,
-			Body:       ioutil.NopCloser(strings.NewReader(body)),
+			Body:       io.NopCloser(strings.NewReader(body)),
 			Header: http.Header{
 				"Content-Type": []string{"plain/text"},
 			},
@@ -65,7 +65,7 @@ func JSONTransport(code int, body string) http.RoundTripper {
 	return TransportFunc(func(request *http.Request) (response *http.Response, err error) {
 		response = &http.Response{
 			StatusCode: code,
-			Body:       ioutil.NopCloser(strings.NewReader(body)),
+			Body:       io.NopCloser(strings.NewReader(body)),
 			Header: http.Header{
 				"Content-Type": []string{"application/json"},
 			},

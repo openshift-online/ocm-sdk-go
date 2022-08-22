@@ -19,7 +19,6 @@ limitations under the License.
 package configuration
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -86,7 +85,7 @@ var _ = Describe("Object", func() {
 
 		It("Can be loaded from file", func() {
 			// Create a temporary file containing the configuration:
-			tmp, err := ioutil.TempFile("", "*.test.yaml")
+			tmp, err := os.CreateTemp("", "*.test.yaml")
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = os.Remove(tmp.Name())
@@ -202,17 +201,17 @@ var _ = Describe("Object", func() {
 
 		It("Can be loaded from directory", func() {
 			// Create a temporary directory containing two configuration files:
-			tmp, err := ioutil.TempDir("", "*.test.d")
+			tmp, err := os.MkdirTemp("", "*.test.d")
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = os.RemoveAll(tmp)
 				Expect(err).ToNot(HaveOccurred())
 			}()
 			first := filepath.Join(tmp, "my.yaml")
-			err = ioutil.WriteFile(first, []byte("mykey: myvalue"), 0600)
+			err = os.WriteFile(first, []byte("mykey: myvalue"), 0600)
 			Expect(err).ToNot(HaveOccurred())
 			second := filepath.Join(tmp, "your.yaml")
-			err = ioutil.WriteFile(second, []byte("yourkey: yourvalue"), 0600)
+			err = os.WriteFile(second, []byte("yourkey: yourvalue"), 0600)
 
 			// Load the configuration:
 			object, err := New().
@@ -234,17 +233,17 @@ var _ = Describe("Object", func() {
 
 		It("Honours order of files in directory", func() {
 			// Create a temporary directory containing two configuration files:
-			tmp, err := ioutil.TempDir("", "*.test.d")
+			tmp, err := os.MkdirTemp("", "*.test.d")
 			Expect(err).ToNot(HaveOccurred())
 			defer func() {
 				err = os.RemoveAll(tmp)
 				Expect(err).ToNot(HaveOccurred())
 			}()
 			first := filepath.Join(tmp, "0.yaml")
-			err = ioutil.WriteFile(first, []byte("mykey: firstvalue"), 0600)
+			err = os.WriteFile(first, []byte("mykey: firstvalue"), 0600)
 			Expect(err).ToNot(HaveOccurred())
 			second := filepath.Join(tmp, "1.yaml")
-			err = ioutil.WriteFile(second, []byte("mykey: secondvalue"), 0600)
+			err = os.WriteFile(second, []byte("mykey: secondvalue"), 0600)
 
 			// Load the configuration:
 			object, err := New().
@@ -416,7 +415,7 @@ var _ = Describe("Object", func() {
 
 				// Create a temporary directory to contain the temporary files:
 				var tmp string
-				tmp, err = ioutil.TempDir("", "*.test")
+				tmp, err = os.MkdirTemp("", "*.test")
 				Expect(err).ToNot(HaveOccurred())
 				defer func() {
 					err = os.RemoveAll(tmp)
@@ -426,7 +425,7 @@ var _ = Describe("Object", func() {
 				// Create the files into the temporary directory:
 				for name, content := range files {
 					path := filepath.Join(tmp, name)
-					err = ioutil.WriteFile(path, []byte(content), 0600)
+					err = os.WriteFile(path, []byte(content), 0600)
 					Expect(err).ToNot(HaveOccurred())
 				}
 
@@ -932,7 +931,7 @@ var _ = Describe("Object", func() {
 
 		It("Reports location of error for known source name", func() {
 			// Create a temporary file containing the configuration:
-			tmp, err := ioutil.TempFile("", "*.test.yaml")
+			tmp, err := os.CreateTemp("", "*.test.yaml")
 			Expect(err).ToNot(HaveOccurred())
 			name := tmp.Name()
 			defer func() {
@@ -956,7 +955,7 @@ var _ = Describe("Object", func() {
 
 		It("Reports location of error for included file", func() {
 			// Create the a temporary file containing the text to be included:
-			tmp, err := ioutil.TempFile("", "*.test.yaml")
+			tmp, err := os.CreateTemp("", "*.test.yaml")
 			Expect(err).ToNot(HaveOccurred())
 			name := tmp.Name()
 			defer func() {
