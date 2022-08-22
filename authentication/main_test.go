@@ -17,7 +17,6 @@ limitations under the License.
 package authentication
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -45,7 +44,7 @@ var _ = BeforeSuite(func() {
 
 	// Create a temporary file containing the JSON web key set:
 	keysBytes = DefaultJWKS()
-	keysFD, err := ioutil.TempFile("", "jwks-*.json")
+	keysFD, err := os.CreateTemp("", "jwks-*.json")
 	Expect(err).ToNot(HaveOccurred())
 	_, err = keysFD.Write(keysBytes)
 	Expect(err).ToNot(HaveOccurred())

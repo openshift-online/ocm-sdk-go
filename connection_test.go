@@ -20,7 +20,6 @@ package sdk
 
 import (
 	"context"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -341,15 +340,15 @@ var _ = Describe("Connection", func() {
 
 	It("Can be configured with a YAML string", func() {
 		// Create temporary files for the trusted CAs:
-		tmp, err := ioutil.TempDir("", "*.test.cas")
+		tmp, err := os.MkdirTemp("", "*.test.cas")
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = os.RemoveAll(tmp)
 			Expect(err).ToNot(HaveOccurred())
 		}()
-		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
-		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create the YAML configuration string:
@@ -425,15 +424,15 @@ var _ = Describe("Connection", func() {
 
 	It("Can be configured with a YAML file", func() {
 		// Create temporary files for the trusted CAs:
-		tmp, err := ioutil.TempDir("", "*.test.cas")
+		tmp, err := os.MkdirTemp("", "*.test.cas")
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = os.RemoveAll(tmp)
 			Expect(err).ToNot(HaveOccurred())
 		}()
-		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
-		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create a temporary YAML file containing the configuration:
@@ -468,7 +467,7 @@ var _ = Describe("Connection", func() {
 			"AccessToken", fileAccess,
 			"RefreshToken", fileRefresh,
 		)
-		file, err := ioutil.TempFile("", "*.yaml")
+		file, err := os.CreateTemp("", "*.yaml")
 		Expect(err).ToNot(HaveOccurred())
 		path := file.Name()
 		defer func() {
@@ -520,15 +519,15 @@ var _ = Describe("Connection", func() {
 
 	It("Method calls after load override configuration file", func() {
 		// Create temporary files for the trusted CAs:
-		tmp, err := ioutil.TempDir("", "*.test.cas")
+		tmp, err := os.MkdirTemp("", "*.test.cas")
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = os.RemoveAll(tmp)
 			Expect(err).ToNot(HaveOccurred())
 		}()
-		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
-		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create a temporary YAML file containing the configuration:
@@ -563,7 +562,7 @@ var _ = Describe("Connection", func() {
 			"AccessToken", fileAccess,
 			"RefreshToken", fileRefresh,
 		)
-		file, err := ioutil.TempFile("", "*.yaml")
+		file, err := os.CreateTemp("", "*.yaml")
 		Expect(err).ToNot(HaveOccurred())
 		path := file.Name()
 		defer func() {
@@ -631,15 +630,15 @@ var _ = Describe("Connection", func() {
 
 	It("Method calls before load don't override configuration file", func() {
 		// Create temporary files for the trusted CAs:
-		tmp, err := ioutil.TempDir("", "*.test.cas")
+		tmp, err := os.MkdirTemp("", "*.test.cas")
 		Expect(err).ToNot(HaveOccurred())
 		defer func() {
 			err = os.RemoveAll(tmp)
 			Expect(err).ToNot(HaveOccurred())
 		}()
-		err = ioutil.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "myca.pem"), mycaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
-		err = ioutil.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
+		err = os.WriteFile(filepath.Join(tmp, "yourca.pem"), yourcaPEM, 0600)
 		Expect(err).ToNot(HaveOccurred())
 
 		// Create a temporary YAML file containing the configuration:
@@ -674,7 +673,7 @@ var _ = Describe("Connection", func() {
 			"AccessToken", fileAccess,
 			"RefreshToken", fileRefresh,
 		)
-		file, err := ioutil.TempFile("", "*.yaml")
+		file, err := os.CreateTemp("", "*.yaml")
 		Expect(err).ToNot(HaveOccurred())
 		path := file.Name()
 		defer func() {

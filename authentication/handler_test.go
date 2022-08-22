@@ -19,7 +19,6 @@ limitations under the License.
 package authentication
 
 import (
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -1016,7 +1015,7 @@ var _ = Describe("Handler", func() {
 
 	It("Accepts token if ACL is empty", func() {
 		// Prepare the ACL:
-		acl, err := ioutil.TempFile("", "acl-*.yml")
+		acl, err := os.CreateTemp("", "acl-*.yml")
 		Expect(err).ToNot(HaveOccurred())
 		_, err = acl.WriteString("")
 		Expect(err).ToNot(HaveOccurred())
@@ -1056,7 +1055,7 @@ var _ = Describe("Handler", func() {
 
 	It("Accepts token that matches first ACL item", func() {
 		// Prepare the ACL:
-		acl, err := ioutil.TempFile("", "acl-*.yml")
+		acl, err := os.CreateTemp("", "acl-*.yml")
 		Expect(err).ToNot(HaveOccurred())
 		_, err = acl.WriteString(`
                         - claim: email
@@ -1105,7 +1104,7 @@ var _ = Describe("Handler", func() {
 
 	It("Accepts token that matches second ACL item", func() {
 		// Prepare the ACL:
-		acl, err := ioutil.TempFile("", "acl-*.yml")
+		acl, err := os.CreateTemp("", "acl-*.yml")
 		Expect(err).ToNot(HaveOccurred())
 		_, err = acl.WriteString(`
                         - claim: email
@@ -1154,7 +1153,7 @@ var _ = Describe("Handler", func() {
 
 	It("Accepts token that matches second ACL file", func() {
 		// Prepare the first ACL:
-		firstACL, err := ioutil.TempFile("", "acl-*.yml")
+		firstACL, err := os.CreateTemp("", "acl-*.yml")
 		Expect(err).ToNot(HaveOccurred())
 		_, err = firstACL.WriteString(`
                         - claim: email
@@ -1169,7 +1168,7 @@ var _ = Describe("Handler", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		// Prepare the second ACL:
-		secondACL, err := ioutil.TempFile("", "acl-*.yml")
+		secondACL, err := os.CreateTemp("", "acl-*.yml")
 		Expect(err).ToNot(HaveOccurred())
 		_, err = secondACL.WriteString(`
                         - claim: sub
@@ -1217,7 +1216,7 @@ var _ = Describe("Handler", func() {
 
 	It("Rejects token that doesn't match the ACL", func() {
 		// Prepare the ACL:
-		acl, err := ioutil.TempFile("", "acl-*.yml")
+		acl, err := os.CreateTemp("", "acl-*.yml")
 		Expect(err).ToNot(HaveOccurred())
 		_, err = acl.WriteString(`
                         - claim: email

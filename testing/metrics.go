@@ -19,7 +19,7 @@ limitations under the License.
 package testing
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -64,7 +64,7 @@ func (s *MetricsServer) Metrics() []string {
 		err = response.Body.Close()
 		Expect(err).ToNot(HaveOccurred())
 	}()
-	data, err := ioutil.ReadAll(response.Body)
+	data, err := io.ReadAll(response.Body)
 	Expect(err).ToNot(HaveOccurred())
 	return strings.Split(string(data), "\n")
 }

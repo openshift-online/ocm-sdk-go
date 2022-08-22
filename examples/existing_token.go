@@ -22,7 +22,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
@@ -45,12 +44,12 @@ func main() {
 
 	// Get the tokens, maybe receiving it from some other part of the application, or reading
 	// them from a file where they have been previously saved:
-	accessToken, err := ioutil.ReadFile("access.token")
+	accessToken, err := os.ReadFile("access.token")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't read access token: %v\n", err)
 		os.Exit(1)
 	}
-	refreshToken, err := ioutil.ReadFile("refresh.token")
+	refreshToken, err := os.ReadFile("refresh.token")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't read refresh token: %v\n", err)
 		os.Exit(1)
