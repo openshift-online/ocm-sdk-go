@@ -23,12 +23,12 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"io/ioutil"
 	"log"
 	"math/big"
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -58,7 +58,7 @@ func MakeTCPServer() *ghttp.Server {
 // resposible for removing the directory once it is no longer needed.
 func MakeUnixServer() (server *ghttp.Server, socket string) {
 	// Create a temporary directory for the Unix sockets:
-	sockets, err := ioutil.TempDir("", "sockets")
+	sockets, err := os.MkdirTemp("", "sockets")
 	Expect(err).ToNot(HaveOccurred())
 	socket = filepath.Join(sockets, "server.socket")
 
@@ -105,7 +105,7 @@ func MakeTCPTLSServer() (server *ghttp.Server, ca string) {
 // files.
 func MakeUnixTLSServer() (server *ghttp.Server, ca, socket string) {
 	// Create a temporary directory for the Unix sockets:
-	sockets, err := ioutil.TempDir("", "sockets")
+	sockets, err := os.MkdirTemp("", "sockets")
 	Expect(err).ToNot(HaveOccurred())
 	socket = filepath.Join(sockets, "server.socket")
 
@@ -155,7 +155,7 @@ func MakeTCPH2CServer() *ghttp.Server {
 // directory, and the caller is resposible for removing the directory once it is no longer needed.
 func MakeUnixH2CServer() (server *ghttp.Server, socket string) {
 	// Create a temporary directory for the Unix sockets:
-	sockets, err := ioutil.TempDir("", "sockets")
+	sockets, err := os.MkdirTemp("", "sockets")
 	Expect(err).ToNot(HaveOccurred())
 	socket = filepath.Join(sockets, "server.socket")
 
@@ -215,7 +215,7 @@ func fetchCACertificate(network, address string) string {
 	Expect(buffer).ToNot(BeNil())
 
 	// Store the CA certificate in a temporary file:
-	file, err := ioutil.TempFile("", "*.test.ca")
+	file, err := os.CreateTemp("", "*.test.ca")
 	Expect(err).ToNot(HaveOccurred())
 	_, err = file.Write(buffer)
 	Expect(err).ToNot(HaveOccurred())

@@ -21,7 +21,7 @@ package retry
 import (
 	"context"
 	"crypto/tls"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"net/url"
@@ -211,7 +211,7 @@ var _ = Describe("Server error", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
-			body, err := ioutil.ReadAll(response.Body)
+			body, err := io.ReadAll(response.Body)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(body).To(MatchJSON(`{ "ok": true }`))
 		})
@@ -250,7 +250,7 @@ var _ = Describe("Server error", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
-			body, err := ioutil.ReadAll(response.Body)
+			body, err := io.ReadAll(response.Body)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(body).To(MatchJSON(`{ "ok": true }`))
 		})
@@ -285,7 +285,7 @@ var _ = Describe("Server error", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
-			body, err := ioutil.ReadAll(response.Body)
+			body, err := io.ReadAll(response.Body)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(body).To(MatchJSON(`{ "ok": true }`))
 		})
@@ -324,7 +324,7 @@ var _ = Describe("Server error", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
-			body, err := ioutil.ReadAll(response.Body)
+			body, err := io.ReadAll(response.Body)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(body).To(MatchJSON(`{ "ok": true }`))
 		})
@@ -362,7 +362,7 @@ var _ = Describe("Server error", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusServiceUnavailable))
-			body, err := ioutil.ReadAll(response.Body)
+			body, err := io.ReadAll(response.Body)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(string(body)).To(Equal(`ko`))
 		})
@@ -398,7 +398,7 @@ var _ = Describe("Server error", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusTooManyRequests))
-			body, err := ioutil.ReadAll(response.Body)
+			body, err := io.ReadAll(response.Body)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(body).To(MatchJSON(`{ "ok": false }`))
 		})
@@ -475,7 +475,7 @@ var _ = Describe("Protocol error", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(response).ToNot(BeNil())
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
-			body, err := ioutil.ReadAll(response.Body)
+			body, err := io.ReadAll(response.Body)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(body).To(MatchJSON("{}"))
 		})
@@ -699,7 +699,7 @@ var _ = It("Tolerates connection reset by peer", func() {
 	Expect(err).ToNot(HaveOccurred())
 	Expect(response).ToNot(BeNil())
 	Expect(response.StatusCode).To(Equal(http.StatusOK))
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	Expect(err).ToNot(HaveOccurred())
 	Expect(body).To(MatchJSON("{}"))
 })
@@ -733,7 +733,7 @@ var _ = It("Doesn't change request body object", func() {
 	}
 
 	// Send the request:
-	body := ioutil.NopCloser(strings.NewReader(`{}`))
+	body := io.NopCloser(strings.NewReader(`{}`))
 	addr, err := url.Parse(server.URL())
 	Expect(err).ToNot(HaveOccurred())
 	request := &http.Request{
@@ -812,7 +812,7 @@ var _ = It("Tolerates unepected EOF", func() {
 	Expect(err).ToNot(HaveOccurred())
 	Expect(response).ToNot(BeNil())
 	Expect(response.StatusCode).To(Equal(http.StatusOK))
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	Expect(err).ToNot(HaveOccurred())
 	Expect(body).To(MatchJSON("{}"))
 })
