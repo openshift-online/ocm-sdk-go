@@ -364,6 +364,11 @@
             "description": "DisplayName is the name of the cluster for display purposes.\nIt can contain spaces.",
             "type": "string"
           },
+          "expiration_timestamp": {
+            "description": "Date and time when the cluster will be automatically deleted, using the format defined in\n[RFC3339](https://www.ietf.org/rfc/rfc3339.txt). ",
+            "type": "string",
+            "format": "date-time"
+          },
           "href": {
             "type": "string"
           },
