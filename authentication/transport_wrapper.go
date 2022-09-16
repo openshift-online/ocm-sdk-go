@@ -38,8 +38,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/openshift-online/ocm-sdk-go/internal"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/renan-campos/ocm-sdk-go/internal"
+	"github.com/renan-campos/ocm-sdk-go/logging"
 )
 
 // Default values:

@@ -28,7 +28,7 @@ import (
 
 	"github.com/onsi/gomega/ghttp"
 
-	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+	. "github.com/renan-campos/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Alternative URLs", func() {

@@ -30,7 +30,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/renan-campos/ocm-sdk-go/logging"
 )
 
 // Default configuration:

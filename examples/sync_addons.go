@@ -25,9 +25,9 @@ import (
 	"fmt"
 	"os"
 
-	sdk "github.com/openshift-online/ocm-sdk-go"
-	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	sdk "github.com/renan-campos/ocm-sdk-go"
+	cmv1 "github.com/renan-campos/ocm-sdk-go/clustersmgmt/v1"
+	"github.com/renan-campos/ocm-sdk-go/logging"
 )
 
 func main() {

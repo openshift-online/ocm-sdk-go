@@ -17,13 +17,13 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package webrca // github.com/openshift-online/ocm-sdk-go/webrca
+package webrca // github.com/renan-campos/ocm-sdk-go/webrca
 
 import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/webrca/v1"
+	v1 "github.com/renan-campos/ocm-sdk-go/webrca/v1"
 )
 
 // Client is the client for service 'web_rca'.

@@ -1,13 +1,13 @@
-module github.com/openshift-online/ocm-sdk-go/examples
+module github.com/renan-campos/ocm-sdk-go/examples
 
 go 1.17
 
 // We don't want to use the latest released versio of the SDK, but exactly the same version that
 // is in the parent directory.
-replace github.com/openshift-online/ocm-sdk-go => ../
+replace github.com/renan-campos/ocm-sdk-go => ../
 
 require (
-	github.com/openshift-online/ocm-sdk-go v0.0.0-00010101000000-000000000000
+	github.com/renan-campos/ocm-sdk-go v0.0.0-00010101000000-000000000000
 	github.com/prometheus/client_golang v1.12.1
 	k8s.io/api v0.23.6
 	k8s.io/apimachinery v0.23.6

@@ -18,8 +18,8 @@
 export CGO_ENABLED=0
 
 # Details of the model to use:
-model_version:=v0.0.223
-model_url:=https://github.com/openshift-online/ocm-api-model.git
+model_version:=SDA-6825
+model_url:=https://github.com/renan-campos/ocm-api-model.git
 
 # Details of the metamodel to use:
 metamodel_version:=v0.0.56
@@ -65,7 +65,7 @@ generate: model metamodel
 		openapi
 	metamodel generate go \
 		--model=model/model \
-		--base=github.com/openshift-online/ocm-sdk-go \
+		--base=github.com/renan-campos/ocm-sdk-go \
 		--output=.
 	metamodel generate openapi \
 		--model=model/model \

@@ -17,14 +17,14 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
+package v1 // github.com/renan-campos/ocm-sdk-go/webrca/v1
 
 import (
 	"io"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/renan-campos/ocm-sdk-go/helpers"
 )
 
 // MarshalStatusChange writes a value of the 'status_change' type to the given writer.

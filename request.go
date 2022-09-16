@@ -25,7 +25,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/openshift-online/ocm-sdk-go/internal"
+	"github.com/renan-campos/ocm-sdk-go/internal"
 )
 
 // Request contains the information and logic needed to perform an HTTP request.

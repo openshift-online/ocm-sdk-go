@@ -17,25 +17,30 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/servicemgmt/v1
+package v1 // github.com/renan-campos/ocm-sdk-go/servicemgmt/v1
+
+import (
+	time "time"
+)
 
 // ClusterBuilder contains the data and logic needed to build 'cluster' objects.
 //
 // This represents the parameters needed by Managed Service to create a cluster.
 type ClusterBuilder struct {
-	bitmap_     uint32
-	api         *ClusterAPIBuilder
-	aws         *AWSBuilder
-	displayName string
-	href        string
-	id          string
-	name        string
-	network     *NetworkBuilder
-	nodes       *ClusterNodesBuilder
-	properties  map[string]string
-	region      *CloudRegionBuilder
-	state       string
-	multiAZ     bool
+	bitmap_             uint32
+	api                 *ClusterAPIBuilder
+	aws                 *AWSBuilder
+	displayName         string
+	expirationTimestamp time.Time
+	href                string
+	id                  string
+	name                string
+	network             *NetworkBuilder
+	nodes               *ClusterNodesBuilder
+	properties          map[string]string
+	region              *CloudRegionBuilder
+	state               string
+	multiAZ             bool
 }
 
 // NewCluster creates a new builder of 'cluster' objects.
@@ -83,12 +88,21 @@ func (b *ClusterBuilder) DisplayName(value string) *ClusterBuilder {
 	return b
 }
 
+// ExpirationTimestamp sets the value of the 'expiration_timestamp' attribute to the given value.
+//
+//
+func (b *ClusterBuilder) ExpirationTimestamp(value time.Time) *ClusterBuilder {
+	b.expirationTimestamp = value
+	b.bitmap_ |= 8
+	return b
+}
+
 // Href sets the value of the 'href' attribute to the given value.
 //
 //
 func (b *ClusterBuilder) Href(value string) *ClusterBuilder {
 	b.href = value
-	b.bitmap_ |= 8
+	b.bitmap_ |= 16
 	return b
 }
 
@@ -97,7 +111,7 @@ func (b *ClusterBuilder) Href(value string) *ClusterBuilder {
 //
 func (b *ClusterBuilder) Id(value string) *ClusterBuilder {
 	b.id = value
-	b.bitmap_ |= 16
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -106,7 +120,7 @@ func (b *ClusterBuilder) Id(value string) *ClusterBuilder {
 //
 func (b *ClusterBuilder) MultiAZ(value bool) *ClusterBuilder {
 	b.multiAZ = value
-	b.bitmap_ |= 32
+	b.bitmap_ |= 64
 	return b
 }
 
@@ -115,7 +129,7 @@ func (b *ClusterBuilder) MultiAZ(value bool) *ClusterBuilder {
 //
 func (b *ClusterBuilder) Name(value string) *ClusterBuilder {
 	b.name = value
-	b.bitmap_ |= 64
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -125,9 +139,9 @@ func (b *ClusterBuilder) Name(value string) *ClusterBuilder {
 func (b *ClusterBuilder) Network(value *NetworkBuilder) *ClusterBuilder {
 	b.network = value
 	if value != nil {
-		b.bitmap_ |= 128
+		b.bitmap_ |= 256
 	} else {
-		b.bitmap_ &^= 128
+		b.bitmap_ &^= 256
 	}
 	return b
 }
@@ -138,9 +152,9 @@ func (b *ClusterBuilder) Network(value *NetworkBuilder) *ClusterBuilder {
 func (b *ClusterBuilder) Nodes(value *ClusterNodesBuilder) *ClusterBuilder {
 	b.nodes = value
 	if value != nil {
-		b.bitmap_ |= 256
+		b.bitmap_ |= 512
 	} else {
-		b.bitmap_ &^= 256
+		b.bitmap_ &^= 512
 	}
 	return b
 }
@@ -151,9 +165,9 @@ func (b *ClusterBuilder) Nodes(value *ClusterNodesBuilder) *ClusterBuilder {
 func (b *ClusterBuilder) Properties(value map[string]string) *ClusterBuilder {
 	b.properties = value
 	if value != nil {
-		b.bitmap_ |= 512
+		b.bitmap_ |= 1024
 	} else {
-		b.bitmap_ &^= 512
+		b.bitmap_ &^= 1024
 	}
 	return b
 }
@@ -164,9 +178,9 @@ func (b *ClusterBuilder) Properties(value map[string]string) *ClusterBuilder {
 func (b *ClusterBuilder) Region(value *CloudRegionBuilder) *ClusterBuilder {
 	b.region = value
 	if value != nil {
-		b.bitmap_ |= 1024
+		b.bitmap_ |= 2048
 	} else {
-		b.bitmap_ &^= 1024
+		b.bitmap_ &^= 2048
 	}
 	return b
 }
@@ -176,7 +190,7 @@ func (b *ClusterBuilder) Region(value *CloudRegionBuilder) *ClusterBuilder {
 //
 func (b *ClusterBuilder) State(value string) *ClusterBuilder {
 	b.state = value
-	b.bitmap_ |= 2048
+	b.bitmap_ |= 4096
 	return b
 }
 
@@ -197,6 +211,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.aws = nil
 	}
 	b.displayName = object.displayName
+	b.expirationTimestamp = object.expirationTimestamp
 	b.href = object.href
 	b.id = object.id
 	b.multiAZ = object.multiAZ
@@ -245,6 +260,7 @@ func (b *ClusterBuilder) Build() (object *Cluster, err error) {
 		}
 	}
 	object.displayName = b.displayName
+	object.expirationTimestamp = b.expirationTimestamp
 	object.href = b.href
 	object.id = b.id
 	object.multiAZ = b.multiAZ

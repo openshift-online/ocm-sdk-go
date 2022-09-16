@@ -27,7 +27,7 @@ import (
 	. "github.com/onsi/gomega"              // nolint
 	. "github.com/onsi/gomega/ghttp"        // nolint
 
-	. "github.com/openshift-online/ocm-sdk-go/testing"
+	. "github.com/renan-campos/ocm-sdk-go/testing"
 )
 
 var _ = Describe("Create", func() {

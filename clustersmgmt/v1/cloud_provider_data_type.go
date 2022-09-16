@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1 // github.com/renan-campos/ocm-sdk-go/clustersmgmt/v1
 
 // CloudProviderData represents the values of the 'cloud_provider_data' type.
 //
