@@ -17,13 +17,13 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package jobqueue // github.com/openshift-online/ocm-sdk-go/jobqueue
+package jobqueue // github.com/renan-campos/ocm-sdk-go/jobqueue
 
 import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/jobqueue/v1"
+	v1 "github.com/renan-campos/ocm-sdk-go/jobqueue/v1"
 )
 
 // Client is the client for service 'job_queue'.

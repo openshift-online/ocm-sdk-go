@@ -20,7 +20,7 @@ import (
 	"log"
 	"testing"
 
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/renan-campos/ocm-sdk-go/logging"
 
 	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
 	. "github.com/onsi/gomega"             // nolint

@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
+package v1 // github.com/renan-campos/ocm-sdk-go/osdfleetmgmt/v1
 
 // ClusterManagementReferenceBuilder contains the data and logic needed to build 'cluster_management_reference' objects.
 //

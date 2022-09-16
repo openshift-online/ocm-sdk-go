@@ -23,9 +23,9 @@ import (
 	"fmt"
 	"os"
 
-	sdk "github.com/openshift-online/ocm-sdk-go"
-	"github.com/openshift-online/ocm-sdk-go/logging"
-	sb "github.com/openshift-online/ocm-sdk-go/statusboard/v1"
+	sdk "github.com/renan-campos/ocm-sdk-go"
+	"github.com/renan-campos/ocm-sdk-go/logging"
+	sb "github.com/renan-campos/ocm-sdk-go/statusboard/v1"
 )
 
 func main() {

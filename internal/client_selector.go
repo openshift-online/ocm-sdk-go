@@ -32,7 +32,7 @@ import (
 
 	"golang.org/x/net/http2"
 
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	"github.com/renan-campos/ocm-sdk-go/logging"
 )
 
 // ClientSelectorBuilder contains the information and logic needed to create an HTTP client

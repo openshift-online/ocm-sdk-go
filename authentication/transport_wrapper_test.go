@@ -34,7 +34,7 @@ import (
 	. "github.com/onsi/ginkgo/v2/dsl/core"             // nolint
 	. "github.com/onsi/gomega"                         // nolint
 	. "github.com/onsi/gomega/ghttp"                   // nolint
-	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+	. "github.com/renan-campos/ocm-sdk-go/testing" // nolint
 )
 
 var _ = Describe("Tokens", func() {

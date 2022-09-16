@@ -24,8 +24,8 @@ import (
 	"net/http"
 	"os"
 
-	sdk "github.com/openshift-online/ocm-sdk-go"
-	"github.com/openshift-online/ocm-sdk-go/logging"
+	sdk "github.com/renan-campos/ocm-sdk-go"
+	"github.com/renan-campos/ocm-sdk-go/logging"
 )
 
 type LoggingTransport struct {

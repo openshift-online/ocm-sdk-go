@@ -525,7 +525,7 @@ development and build workflows:
 ## 0.1.199 Aug 10 2021
 
 Changes in this release are mainly intended to simplify packaging of the SDK in
-Fedora, see [issue #421](https://github.com/openshift-online/ocm-sdk-go/issues/421)
+Fedora, see [issue #421](https://github.com/renan-campos/ocm-sdk-go/issues/421)
 for details.
 
 - Use `golang-jwt/jwt` instead of `dgrijalva/jwt-go`.
@@ -735,7 +735,7 @@ interface, as all implementations now require a `Fatal` method to be implemented
 ## 0.1.165 Mar 22 2021
 
 - Fix wrong TLS server name (issue
-  [356](https://github.com/openshift-online/ocm-sdk-go/issues/356)).
+  [356](https://github.com/renan-campos/ocm-sdk-go/issues/356)).
 
 ## 0.1.164 Mar 17 2021
 
@@ -1256,7 +1256,7 @@ case so that they contain a summary of the content.
   operation identifier is '456': My reason
   ```
 
-  This addresses issue [150](https://github.com/openshift-online/ocm-sdk-go/issues/150).
+  This addresses issue [150](https://github.com/renan-campos/ocm-sdk-go/issues/150).
 
 ## 0.1.88 Feb 20 2020
 
@@ -1663,7 +1663,7 @@ case so that they contain a summary of the content.
 
 ## 0.1.30 Aug 27 2019
 
-- Renamed package to `github.com/openshift-online/ocm-sdk-go`.
+- Renamed package to `github.com/renan-campos/ocm-sdk-go`.
 
 ## 0.1.29 Aug 26 2019
 

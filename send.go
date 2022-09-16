@@ -25,7 +25,7 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/openshift-online/ocm-sdk-go/internal"
+	"github.com/renan-campos/ocm-sdk-go/internal"
 )
 
 // RoundTrip is the implementation of the http.RoundTripper interface.

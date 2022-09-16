@@ -17,14 +17,14 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/servicemgmt/v1
+package v1 // github.com/renan-campos/ocm-sdk-go/servicemgmt/v1
 
 import (
 	"io"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/renan-campos/ocm-sdk-go/helpers"
 )
 
 // MarshalDateList writes a list of values of the 'date' type to

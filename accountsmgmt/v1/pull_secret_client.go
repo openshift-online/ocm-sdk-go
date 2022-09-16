@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/renan-campos/ocm-sdk-go/accountsmgmt/v1
 
 import (
 	"bufio"
@@ -26,8 +26,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/openshift-online/ocm-sdk-go/errors"
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"github.com/renan-campos/ocm-sdk-go/errors"
+	"github.com/renan-campos/ocm-sdk-go/helpers"
 )
 
 // PullSecretClient is the client of the 'pull_secret' resource.

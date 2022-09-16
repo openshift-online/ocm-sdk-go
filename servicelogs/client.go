@@ -17,13 +17,13 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package servicelogs // github.com/openshift-online/ocm-sdk-go/servicelogs
+package servicelogs // github.com/renan-campos/ocm-sdk-go/servicelogs
 
 import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/servicelogs/v1"
+	v1 "github.com/renan-campos/ocm-sdk-go/servicelogs/v1"
 )
 
 // Client is the client for service 'service_logs'.

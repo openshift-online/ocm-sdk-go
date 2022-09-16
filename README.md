@@ -1,6 +1,6 @@
 # OCM SDK
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/openshift-online/ocm-sdk-go.svg)](https://pkg.go.dev/github.com/openshift-online/ocm-sdk-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/renan-campos/ocm-sdk-go.svg)](https://pkg.go.dev/github.com/renan-campos/ocm-sdk-go)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This project contains a Go library that simplifies the use of the _OCM_
@@ -8,7 +8,7 @@ API, available in `api.openshift.com`.
 
 ## Usage
 
-To use it import the `github.com/openshift-online/ocm-sdk-go` package, and then
+To use it import the `github.com/renan-campos/ocm-sdk-go` package, and then
 use it to send requests to the API.
 
 Note that the name of the directory is `ocm-sdk-go` but the name of the package
@@ -24,8 +24,8 @@ import (
         "fmt"
         "os"
 
-        sdk "github.com/openshift-online/ocm-sdk-go"
-	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+        sdk "github.com/renan-campos/ocm-sdk-go"
+	cmv1 "github.com/renan-campos/ocm-sdk-go/clustersmgmt/v1"
 )
 
 func main() {
@@ -133,7 +133,7 @@ the clients for the services that are part of the API:
 
 ```go
 import (
-	"github.com/openshift-online/ocm-sdk-go"
+	"github.com/renan-campos/ocm-sdk-go"
 )
 
 // Create the connection:
