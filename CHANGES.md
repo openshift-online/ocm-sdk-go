@@ -3,9 +3,6 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-## 0.1.288
-- Add OSD FM client service in `connection.go` as it was forgotted when bumping to model 0.0.216
-
 ## 0.1.287
 - Update to model 0.0.223:
   - Add Version property to CloudProviderData model.
