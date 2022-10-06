@@ -977,7 +977,7 @@ func (c *Connection) ClustersMgmt() *clustersmgmt.Client {
 // OSDFleetMgmt returns the client for the OSD management service.
 func (c *Connection) OSDFleetMgmt() *osdfleetmgmt.Client {
 
-	return osdfleetmgmt.NewClient(c, "/api/osd_fleet_mgmt/v1/fleets/hypershift/")
+	return osdfleetmgmt.NewClient(c, "/api/osd_fleet_mgmt")
 }
 
 // Authorizations returns the client for the authorizations service.
