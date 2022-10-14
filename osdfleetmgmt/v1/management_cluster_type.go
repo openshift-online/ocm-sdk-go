@@ -209,7 +209,7 @@ func (o *ManagementCluster) GetClusterManagementReference() (value *ClusterManag
 // Parent returns the value of the 'parent' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Service cluster handling the management cluster
+// Management cluster handling the management cluster
 func (o *ManagementCluster) Parent() *ManagementClusterParent {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.parent
@@ -220,7 +220,7 @@ func (o *ManagementCluster) Parent() *ManagementClusterParent {
 // GetParent returns the value of the 'parent' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Service cluster handling the management cluster
+// Management cluster handling the management cluster
 func (o *ManagementCluster) GetParent() (value *ManagementClusterParent, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {

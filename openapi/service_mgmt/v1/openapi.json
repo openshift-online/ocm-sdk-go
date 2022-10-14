@@ -462,6 +462,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "expired_at": {
+            "type": "string",
+            "format": "date-time"
+          },
           "parameters": {
             "type": "array",
             "items": {

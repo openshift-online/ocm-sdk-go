@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"bufio"
@@ -32,19 +32,19 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// ManagementClusterClient is the client of the 'management_cluster' resource.
+// ManifestClient is the client of the 'manifest' resource.
 //
-// Manages a specific management cluster.
-type ManagementClusterClient struct {
+// Manages a specific Manifest.
+type ManifestClient struct {
 	transport http.RoundTripper
 	path      string
 }
 
-// NewManagementClusterClient creates a new client for the 'management_cluster'
+// NewManifestClient creates a new client for the 'manifest'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewManagementClusterClient(transport http.RoundTripper, path string) *ManagementClusterClient {
-	return &ManagementClusterClient{
+func NewManifestClient(transport http.RoundTripper, path string) *ManifestClient {
+	return &ManifestClient{
 		transport: transport,
 		path:      path,
 	}
@@ -52,9 +52,9 @@ func NewManagementClusterClient(transport http.RoundTripper, path string) *Manag
 
 // Delete creates a request for the 'delete' method.
 //
-// Deletes the management cluster.
-func (c *ManagementClusterClient) Delete() *ManagementClusterDeleteRequest {
-	return &ManagementClusterDeleteRequest{
+// Deletes the manifest.
+func (c *ManifestClient) Delete() *ManifestDeleteRequest {
+	return &ManifestDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -62,53 +62,53 @@ func (c *ManagementClusterClient) Delete() *ManagementClusterDeleteRequest {
 
 // Get creates a request for the 'get' method.
 //
-// Retrieves the details of the management cluster.
-func (c *ManagementClusterClient) Get() *ManagementClusterGetRequest {
-	return &ManagementClusterGetRequest{
+// Retrieves the details of the manifest.
+func (c *ManifestClient) Get() *ManifestGetRequest {
+	return &ManifestGetRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
 }
 
-// Post creates a request for the 'post' method.
+// Update creates a request for the 'update' method.
 //
-// Updates the management cluster.
-func (c *ManagementClusterClient) Post() *ManagementClusterPostRequest {
-	return &ManagementClusterPostRequest{
+// Update the manifest.
+func (c *ManifestClient) Update() *ManifestUpdateRequest {
+	return &ManifestUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
 }
 
-// ManagementClusterPollRequest is the request for the Poll method.
-type ManagementClusterPollRequest struct {
-	request    *ManagementClusterGetRequest
+// ManifestPollRequest is the request for the Poll method.
+type ManifestPollRequest struct {
+	request    *ManifestGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *ManagementClusterPollRequest) Parameter(name string, value interface{}) *ManagementClusterPollRequest {
+func (r *ManifestPollRequest) Parameter(name string, value interface{}) *ManifestPollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *ManagementClusterPollRequest) Header(name string, value interface{}) *ManagementClusterPollRequest {
+func (r *ManifestPollRequest) Header(name string, value interface{}) *ManifestPollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *ManagementClusterPollRequest) Interval(value time.Duration) *ManagementClusterPollRequest {
+func (r *ManifestPollRequest) Interval(value time.Duration) *ManifestPollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *ManagementClusterPollRequest) Status(value int) *ManagementClusterPollRequest {
+func (r *ManifestPollRequest) Status(value int) *ManifestPollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -116,9 +116,9 @@ func (r *ManagementClusterPollRequest) Status(value int) *ManagementClusterPollR
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *ManagementClusterPollRequest) Predicate(value func(*ManagementClusterGetResponse) bool) *ManagementClusterPollRequest {
+func (r *ManifestPollRequest) Predicate(value func(*ManifestGetResponse) bool) *ManifestPollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*ManagementClusterGetResponse))
+		return value(response.(*ManifestGetResponse))
 	})
 	return r
 }
@@ -128,11 +128,11 @@ func (r *ManagementClusterPollRequest) Predicate(value func(*ManagementClusterGe
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ManagementClusterPollRequest) StartContext(ctx context.Context) (response *ManagementClusterPollResponse, err error) {
+func (r *ManifestPollRequest) StartContext(ctx context.Context) (response *ManifestPollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &ManagementClusterPollResponse{
-			response: result.(*ManagementClusterGetResponse),
+		response = &ManifestPollResponse{
+			response: result.(*ManifestGetResponse),
 		}
 	}
 	return
@@ -140,7 +140,7 @@ func (r *ManagementClusterPollRequest) StartContext(ctx context.Context) (respon
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *ManagementClusterPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *ManifestPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -149,13 +149,13 @@ func (r *ManagementClusterPollRequest) task(ctx context.Context) (status int, re
 	return
 }
 
-// ManagementClusterPollResponse is the response for the Poll method.
-type ManagementClusterPollResponse struct {
-	response *ManagementClusterGetResponse
+// ManifestPollResponse is the response for the Poll method.
+type ManifestPollResponse struct {
+	response *ManifestGetResponse
 }
 
 // Status returns the response status code.
-func (r *ManagementClusterPollResponse) Status() int {
+func (r *ManifestPollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -163,7 +163,7 @@ func (r *ManagementClusterPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ManagementClusterPollResponse) Header() http.Header {
+func (r *ManifestPollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -171,7 +171,7 @@ func (r *ManagementClusterPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ManagementClusterPollResponse) Error() *errors.Error {
+func (r *ManifestPollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -181,7 +181,7 @@ func (r *ManagementClusterPollResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *ManagementClusterPollResponse) Body() *ManagementCluster {
+func (r *ManifestPollResponse) Body() *Manifest {
 	return r.response.Body()
 }
 
@@ -189,20 +189,20 @@ func (r *ManagementClusterPollResponse) Body() *ManagementCluster {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ManagementClusterPollResponse) GetBody() (value *ManagementCluster, ok bool) {
+func (r *ManifestPollResponse) GetBody() (value *Manifest, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *ManagementClusterClient) Poll() *ManagementClusterPollRequest {
-	return &ManagementClusterPollRequest{
+func (c *ManifestClient) Poll() *ManifestPollRequest {
+	return &ManifestPollRequest{
 		request: c.Get(),
 	}
 }
 
-// ManagementClusterDeleteRequest is the request for the 'delete' method.
-type ManagementClusterDeleteRequest struct {
+// ManifestDeleteRequest is the request for the 'delete' method.
+type ManifestDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -210,20 +210,20 @@ type ManagementClusterDeleteRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *ManagementClusterDeleteRequest) Parameter(name string, value interface{}) *ManagementClusterDeleteRequest {
+func (r *ManifestDeleteRequest) Parameter(name string, value interface{}) *ManifestDeleteRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ManagementClusterDeleteRequest) Header(name string, value interface{}) *ManagementClusterDeleteRequest {
+func (r *ManifestDeleteRequest) Header(name string, value interface{}) *ManifestDeleteRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *ManagementClusterDeleteRequest) Impersonate(user string) *ManagementClusterDeleteRequest {
+func (r *ManifestDeleteRequest) Impersonate(user string) *ManifestDeleteRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
@@ -232,12 +232,12 @@ func (r *ManagementClusterDeleteRequest) Impersonate(user string) *ManagementClu
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ManagementClusterDeleteRequest) Send() (result *ManagementClusterDeleteResponse, err error) {
+func (r *ManifestDeleteRequest) Send() (result *ManifestDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ManagementClusterDeleteRequest) SendContext(ctx context.Context) (result *ManagementClusterDeleteResponse, err error) {
+func (r *ManifestDeleteRequest) SendContext(ctx context.Context) (result *ManifestDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -257,7 +257,7 @@ func (r *ManagementClusterDeleteRequest) SendContext(ctx context.Context) (resul
 		return
 	}
 	defer response.Body.Close()
-	result = &ManagementClusterDeleteResponse{}
+	result = &ManifestDeleteResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -277,15 +277,15 @@ func (r *ManagementClusterDeleteRequest) SendContext(ctx context.Context) (resul
 	return
 }
 
-// ManagementClusterDeleteResponse is the response for the 'delete' method.
-type ManagementClusterDeleteResponse struct {
+// ManifestDeleteResponse is the response for the 'delete' method.
+type ManifestDeleteResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
 }
 
 // Status returns the response status code.
-func (r *ManagementClusterDeleteResponse) Status() int {
+func (r *ManifestDeleteResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -293,7 +293,7 @@ func (r *ManagementClusterDeleteResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ManagementClusterDeleteResponse) Header() http.Header {
+func (r *ManifestDeleteResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -301,15 +301,15 @@ func (r *ManagementClusterDeleteResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ManagementClusterDeleteResponse) Error() *errors.Error {
+func (r *ManifestDeleteResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// ManagementClusterGetRequest is the request for the 'get' method.
-type ManagementClusterGetRequest struct {
+// ManifestGetRequest is the request for the 'get' method.
+type ManifestGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -317,20 +317,20 @@ type ManagementClusterGetRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *ManagementClusterGetRequest) Parameter(name string, value interface{}) *ManagementClusterGetRequest {
+func (r *ManifestGetRequest) Parameter(name string, value interface{}) *ManifestGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ManagementClusterGetRequest) Header(name string, value interface{}) *ManagementClusterGetRequest {
+func (r *ManifestGetRequest) Header(name string, value interface{}) *ManifestGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *ManagementClusterGetRequest) Impersonate(user string) *ManagementClusterGetRequest {
+func (r *ManifestGetRequest) Impersonate(user string) *ManifestGetRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
@@ -339,12 +339,12 @@ func (r *ManagementClusterGetRequest) Impersonate(user string) *ManagementCluste
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ManagementClusterGetRequest) Send() (result *ManagementClusterGetResponse, err error) {
+func (r *ManifestGetRequest) Send() (result *ManifestGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ManagementClusterGetRequest) SendContext(ctx context.Context) (result *ManagementClusterGetResponse, err error) {
+func (r *ManifestGetRequest) SendContext(ctx context.Context) (result *ManifestGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -364,7 +364,7 @@ func (r *ManagementClusterGetRequest) SendContext(ctx context.Context) (result *
 		return
 	}
 	defer response.Body.Close()
-	result = &ManagementClusterGetResponse{}
+	result = &ManifestGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -381,23 +381,23 @@ func (r *ManagementClusterGetRequest) SendContext(ctx context.Context) (result *
 		err = result.err
 		return
 	}
-	err = readManagementClusterGetResponse(result, reader)
+	err = readManifestGetResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// ManagementClusterGetResponse is the response for the 'get' method.
-type ManagementClusterGetResponse struct {
+// ManifestGetResponse is the response for the 'get' method.
+type ManifestGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *ManagementCluster
+	body   *Manifest
 }
 
 // Status returns the response status code.
-func (r *ManagementClusterGetResponse) Status() int {
+func (r *ManifestGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -405,7 +405,7 @@ func (r *ManagementClusterGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ManagementClusterGetResponse) Header() http.Header {
+func (r *ManifestGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -413,7 +413,7 @@ func (r *ManagementClusterGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ManagementClusterGetResponse) Error() *errors.Error {
+func (r *ManifestGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -423,7 +423,7 @@ func (r *ManagementClusterGetResponse) Error() *errors.Error {
 // Body returns the value of the 'body' parameter.
 //
 //
-func (r *ManagementClusterGetResponse) Body() *ManagementCluster {
+func (r *ManifestGetResponse) Body() *Manifest {
 	if r == nil {
 		return nil
 	}
@@ -434,7 +434,7 @@ func (r *ManagementClusterGetResponse) Body() *ManagementCluster {
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ManagementClusterGetResponse) GetBody() (value *ManagementCluster, ok bool) {
+func (r *ManifestGetResponse) GetBody() (value *Manifest, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -442,39 +442,39 @@ func (r *ManagementClusterGetResponse) GetBody() (value *ManagementCluster, ok b
 	return
 }
 
-// ManagementClusterPostRequest is the request for the 'post' method.
-type ManagementClusterPostRequest struct {
+// ManifestUpdateRequest is the request for the 'update' method.
+type ManifestUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
 	header    http.Header
-	request   *ManagementClusterRequestPayload
+	body      *Manifest
 }
 
 // Parameter adds a query parameter.
-func (r *ManagementClusterPostRequest) Parameter(name string, value interface{}) *ManagementClusterPostRequest {
+func (r *ManifestUpdateRequest) Parameter(name string, value interface{}) *ManifestUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ManagementClusterPostRequest) Header(name string, value interface{}) *ManagementClusterPostRequest {
+func (r *ManifestUpdateRequest) Header(name string, value interface{}) *ManifestUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *ManagementClusterPostRequest) Impersonate(user string) *ManagementClusterPostRequest {
+func (r *ManifestUpdateRequest) Impersonate(user string) *ManifestUpdateRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
-// Request sets the value of the 'request' parameter.
+// Body sets the value of the 'body' parameter.
 //
 //
-func (r *ManagementClusterPostRequest) Request(value *ManagementClusterRequestPayload) *ManagementClusterPostRequest {
-	r.request = value
+func (r *ManifestUpdateRequest) Body(value *Manifest) *ManifestUpdateRequest {
+	r.body = value
 	return r
 }
 
@@ -482,16 +482,16 @@ func (r *ManagementClusterPostRequest) Request(value *ManagementClusterRequestPa
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ManagementClusterPostRequest) Send() (result *ManagementClusterPostResponse, err error) {
+func (r *ManifestUpdateRequest) Send() (result *ManifestUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ManagementClusterPostRequest) SendContext(ctx context.Context) (result *ManagementClusterPostResponse, err error) {
+func (r *ManifestUpdateRequest) SendContext(ctx context.Context) (result *ManifestUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
-	err = writeManagementClusterPostRequest(r, buffer)
+	err = writeManifestUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -500,7 +500,7 @@ func (r *ManagementClusterPostRequest) SendContext(ctx context.Context) (result 
 		RawQuery: query.Encode(),
 	}
 	request := &http.Request{
-		Method: "POST",
+		Method: "PATCH",
 		URL:    uri,
 		Header: header,
 		Body:   io.NopCloser(buffer),
@@ -513,7 +513,7 @@ func (r *ManagementClusterPostRequest) SendContext(ctx context.Context) (result 
 		return
 	}
 	defer response.Body.Close()
-	result = &ManagementClusterPostResponse{}
+	result = &ManifestUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -530,23 +530,23 @@ func (r *ManagementClusterPostRequest) SendContext(ctx context.Context) (result 
 		err = result.err
 		return
 	}
-	err = readManagementClusterPostResponse(result, reader)
+	err = readManifestUpdateResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// ManagementClusterPostResponse is the response for the 'post' method.
-type ManagementClusterPostResponse struct {
-	status   int
-	header   http.Header
-	err      *errors.Error
-	response *ManagementCluster
+// ManifestUpdateResponse is the response for the 'update' method.
+type ManifestUpdateResponse struct {
+	status int
+	header http.Header
+	err    *errors.Error
+	body   *Manifest
 }
 
 // Status returns the response status code.
-func (r *ManagementClusterPostResponse) Status() int {
+func (r *ManifestUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -554,7 +554,7 @@ func (r *ManagementClusterPostResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ManagementClusterPostResponse) Header() http.Header {
+func (r *ManifestUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -562,31 +562,31 @@ func (r *ManagementClusterPostResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ManagementClusterPostResponse) Error() *errors.Error {
+func (r *ManifestUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// Response returns the value of the 'response' parameter.
+// Body returns the value of the 'body' parameter.
 //
 //
-func (r *ManagementClusterPostResponse) Response() *ManagementCluster {
+func (r *ManifestUpdateResponse) Body() *Manifest {
 	if r == nil {
 		return nil
 	}
-	return r.response
+	return r.body
 }
 
-// GetResponse returns the value of the 'response' parameter and
+// GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
 //
 //
-func (r *ManagementClusterPostResponse) GetResponse() (value *ManagementCluster, ok bool) {
-	ok = r != nil && r.response != nil
+func (r *ManifestUpdateResponse) GetBody() (value *Manifest, ok bool) {
+	ok = r != nil && r.body != nil
 	if ok {
-		value = r.response
+		value = r.body
 	}
 	return
 }
