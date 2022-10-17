@@ -21,7 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 // ManagementClusterParentBuilder contains the data and logic needed to build 'management_cluster_parent' objects.
 //
-// Cluster Mgmt reference settings of the cluster.
+// ManagementClusterParent reference settings of the cluster.
 type ManagementClusterParentBuilder struct {
 	bitmap_   uint32
 	clusterId string

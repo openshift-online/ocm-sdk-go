@@ -135,7 +135,7 @@ func (b *ManagementClusterBuilder) ClusterManagementReference(value *ClusterMana
 
 // Parent sets the value of the 'parent' attribute to the given value.
 //
-// Cluster Mgmt reference settings of the cluster.
+// ManagementClusterParent reference settings of the cluster.
 func (b *ManagementClusterBuilder) Parent(value *ManagementClusterParentBuilder) *ManagementClusterBuilder {
 	b.parent = value
 	if value != nil {

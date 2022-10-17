@@ -2655,6 +2655,254 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/external_configuration/manifests": {
+      "post": {
+        "description": "Adds a new manifest to a cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Manifest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Manifest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of manifests.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of Manifests.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Manifest"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/external_configuration/manifests/{manifest_id}": {
+      "delete": {
+        "description": "Deletes the manifest.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "manifest_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the manifest.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "manifest_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Manifest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update the manifest.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "manifest_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Manifest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Manifest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/external_configuration/syncsets": {
       "post": {
         "description": "Adds a new syncset to the cluster.",
@@ -3431,6 +3679,42 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/hypershift": {
+      "get": {
+        "description": "Retrieves the Hypershift details for a single cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HypershiftConfig"
                 }
               }
             }
@@ -6907,6 +7191,14 @@
             }
           },
           {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nclusters with a name starting with `my` in the `us-east-1` region the value\nshould be:\n\n```sql\nname like 'my%' and region.id = 'us-east-1'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nprovision shards that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "size",
             "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
@@ -8540,6 +8832,9 @@
         "type": "string",
         "enum": [
           "marketplace",
+          "marketplace-aws",
+          "marketplace-rhm",
+          "marketplace-azure",
           "standard"
         ]
       },
@@ -8780,8 +9075,8 @@
             "$ref": "#/components/schemas/ClusterHealthState"
           },
           "hypershift": {
-            "description": "HyperShift configuration.",
-            "$ref": "#/components/schemas/HyperShift"
+            "description": "Hypershift configuration.",
+            "$ref": "#/components/schemas/Hypershift"
           },
           "identity_providers": {
             "description": "Link to the collection of identity providers of the cluster.",
@@ -9304,6 +9599,13 @@
               "$ref": "#/components/schemas/Label"
             }
           },
+          "manifests": {
+            "description": "list of manifest externally configured for a hosted cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Manifest"
+            }
+          },
           "syncsets": {
             "description": "list of syncsets externally configured on the cluster.",
             "type": "array",
@@ -9457,12 +9759,25 @@
           }
         }
       },
-      "HyperShift": {
-        "description": "HyperShift configuration.",
+      "Hypershift": {
+        "description": "Hypershift configuration.",
         "properties": {
           "enabled": {
-            "description": "Boolean flag indicating if the cluster should be creating using _HyperShift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
+            "description": "Boolean flag indicating if the cluster should be creating using _Hypershift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
             "type": "boolean"
+          }
+        }
+      },
+      "HypershiftConfig": {
+        "description": "Hypershift configuration.",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should be creating using _Hypershift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
+            "type": "boolean"
+          },
+          "management_cluster": {
+            "description": "Contains the name of the current management cluster for this Hypershift cluster.\nEmpty for non Hypershift clusters.",
+            "type": "string"
           }
         }
       },
@@ -9979,6 +10294,30 @@
           "enabled": {
             "description": "Indicates whether the cluster belongs to a managed service\nThis should only be set by the \"Managed Service\" service.\nclusters with this set can only be modified by the \"Managed Service\" service.",
             "type": "boolean"
+          }
+        }
+      },
+      "Manifest": {
+        "description": "Representation of a manifestwork.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Manifest' if this is a complete object or 'ManifestLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "workloads": {
+            "description": "List of k8s objects to deploy on a hosted cluster.",
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
           }
         }
       },

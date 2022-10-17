@@ -33,7 +33,7 @@ import (
 
 // ManagementClustersClient is the client of the 'management_clusters' resource.
 //
-// Manages the collection of clusters.
+// Manages the collection of management clusters.
 type ManagementClustersClient struct {
 	transport http.RoundTripper
 	path      string
@@ -51,7 +51,7 @@ func NewManagementClustersClient(transport http.RoundTripper, path string) *Mana
 
 // List creates a request for the 'list' method.
 //
-// Retrieves the list of service clusters.
+// Retrieves the list of management clusters.
 func (c *ManagementClustersClient) List() *ManagementClustersListRequest {
 	return &ManagementClustersListRequest{
 		transport: c.transport,
@@ -61,7 +61,7 @@ func (c *ManagementClustersClient) List() *ManagementClustersListRequest {
 
 // ManagementCluster returns the target 'management_cluster' resource for the given identifier.
 //
-// Returns a reference to the service that manages an specific service cluster.
+// Returns a reference to the resource that manages an specific maangement cluster.
 func (c *ManagementClustersClient) ManagementCluster(id string) *ManagementClusterClient {
 	return NewManagementClusterClient(
 		c.transport,
@@ -210,7 +210,7 @@ func (r *ManagementClustersListResponse) Error() *errors.Error {
 
 // Items returns the value of the 'items' parameter.
 //
-// Retrieved list of clusters.
+// Retrieved a list of management clusters.
 func (r *ManagementClustersListResponse) Items() *ManagementClusterList {
 	if r == nil {
 		return nil
@@ -221,7 +221,7 @@ func (r *ManagementClustersListResponse) Items() *ManagementClusterList {
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Retrieved list of clusters.
+// Retrieved a list of management clusters.
 func (r *ManagementClustersListResponse) GetItems() (value *ManagementClusterList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {

@@ -21,7 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 // ManagementClusterParent represents the values of the 'management_cluster_parent' type.
 //
-// Cluster Mgmt reference settings of the cluster.
+// ManagementClusterParent reference settings of the cluster.
 type ManagementClusterParent struct {
 	bitmap_   uint32
 	clusterId string

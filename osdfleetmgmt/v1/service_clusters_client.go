@@ -33,7 +33,7 @@ import (
 
 // ServiceClustersClient is the client of the 'service_clusters' resource.
 //
-// Manages the collection of clusters.
+// Manages the collection of service clusters.
 type ServiceClustersClient struct {
 	transport http.RoundTripper
 	path      string
@@ -61,7 +61,7 @@ func (c *ServiceClustersClient) List() *ServiceClustersListRequest {
 
 // ServiceCluster returns the target 'service_cluster' resource for the given identifier.
 //
-// Returns a reference to the service that manages an specific service cluster.
+// Returns a reference to the resource that manages a specific service cluster.
 func (c *ServiceClustersClient) ServiceCluster(id string) *ServiceClusterClient {
 	return NewServiceClusterClient(
 		c.transport,
@@ -210,7 +210,7 @@ func (r *ServiceClustersListResponse) Error() *errors.Error {
 
 // Items returns the value of the 'items' parameter.
 //
-// Retrieved list of clusters.
+// Retrieved a list of service clusters.
 func (r *ServiceClustersListResponse) Items() *ServiceClusterList {
 	if r == nil {
 		return nil
@@ -221,7 +221,7 @@ func (r *ServiceClustersListResponse) Items() *ServiceClusterList {
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
 //
-// Retrieved list of clusters.
+// Retrieved a list of service clusters.
 func (r *ServiceClustersListResponse) GetItems() (value *ServiceClusterList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
