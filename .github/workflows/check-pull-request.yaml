@@ -91,4 +91,5 @@ jobs:
           jobqueue \
           servicelogs \
           servicemgmt \
+          osdfleetmgmt \
           webrca

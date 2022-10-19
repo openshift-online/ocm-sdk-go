@@ -62,6 +62,7 @@ generate: model metamodel
 		servicemgmt \
 		statusboard \
 		webrca \
+		osdfleetmgmt \
 		openapi
 	metamodel generate go \
 		--model=model/model \
