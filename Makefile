@@ -53,6 +53,7 @@ lint:
 generate: model metamodel
 	rm -rf \
 		accountsmgmt \
+		addonsmgmt \
 		authorizations \
 		clustersmgmt \
 		errors \

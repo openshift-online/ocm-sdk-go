@@ -31,6 +31,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/openshift-online/ocm-sdk-go/accountsmgmt"
+	"github.com/openshift-online/ocm-sdk-go/addonsmgmt"
 	"github.com/openshift-online/ocm-sdk-go/authentication"
 	"github.com/openshift-online/ocm-sdk-go/authorizations"
 	"github.com/openshift-online/ocm-sdk-go/clustersmgmt"
@@ -967,6 +968,11 @@ func (c *Connection) AlternativeURLs() map[string]string {
 // AccountsMgmt returns the client for the accounts management service.
 func (c *Connection) AccountsMgmt() *accountsmgmt.Client {
 	return accountsmgmt.NewClient(c, "/api/accounts_mgmt")
+}
+
+// AccountsMgmt returns the client for the accounts management service.
+func (c *Connection) AddonsMgmt() *addonsmgmt.Client {
+	return addonsmgmt.NewClient(c, "/api/addons_mgmt")
 }
 
 // ClustersMgmt returns the client for the clusters management service.

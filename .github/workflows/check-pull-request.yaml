@@ -86,6 +86,7 @@ jobs:
       run: |
         git diff --exit-code \
           accountsmgmt \
+          addonsmgmt \
           authorizations \
           clustersmgmt \
           jobqueue \
