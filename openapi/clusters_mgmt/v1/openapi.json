@@ -8028,6 +8028,27 @@
           }
         }
       },
+      "GCPEncryptionKey": {
+        "description": "GCP Encryption Key for CCS clusters.",
+        "properties": {
+          "kms_key_service_account": {
+            "description": "Service account used to access the KMS key",
+            "type": "string"
+          },
+          "key_location": {
+            "description": "Location of the encryption key ring",
+            "type": "string"
+          },
+          "key_name": {
+            "description": "Name of the encryption key",
+            "type": "string"
+          },
+          "key_ring": {
+            "description": "Name of the key ring the encryption key is located on",
+            "type": "string"
+          }
+        }
+      },
       "GCPFlavour": {
         "description": "Specification for different classes of nodes inside a flavour.",
         "properties": {
@@ -9005,6 +9026,10 @@
           "gcp": {
             "description": "Google cloud platform settings of the cluster.",
             "$ref": "#/components/schemas/GCP"
+          },
+          "gcp_encryption_key": {
+            "description": "Key used for encryption of GCP cluster nodes.",
+            "$ref": "#/components/schemas/GCPEncryptionKey"
           },
           "gcp_network": {
             "description": "GCP Network.",

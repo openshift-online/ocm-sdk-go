@@ -1,0 +1,1133 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1",
+    "title": "addons_mgmt",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "contact": {
+      "name": "OCM Feedback",
+      "email": "ocm-feedback@redhat.com"
+    }
+  },
+  "servers": [
+    {
+      "description": "Production",
+      "url": "https://api.openshift.com"
+    },
+    {
+      "description": "Stage",
+      "url": "https://api.stage.openshift.com"
+    }
+  ],
+  "paths": {
+    "/api/addons_mgmt/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/addons_mgmt/v1/addons": {
+      "post": {
+        "description": "Create a new addon and add it to the collection of addons.",
+        "parameters": [
+          {
+            "name": "dryRun",
+            "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Addon"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Addon"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of addons.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the addon instead of\nthe names of the columns of a table. For example, in order to sort the addons\ndescending by name the value should be:\n\n```sql\nname desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the addon instead of\nthe names of the columns of a table. For example, in order to retrieve all the\naddons with a name starting with `my` the value should be:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the addons\nthat the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of add-ons.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Addon"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/addons_mgmt/v1/addons/{addon_id}": {
+      "delete": {
+        "description": "Deletes the addon.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the addon.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Addon"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the addon.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dryRun",
+            "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Addon"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Addon"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/addons_mgmt/v1/addons/{addon_id}/versions": {
+      "post": {
+        "description": "Create a new addon version and add it to the collection of addons.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dryRun",
+            "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonVersion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonVersion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of addon versions.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the addon instead of\nthe names of the columns of a table. For example, in order to sort the addon\nversions descending by id the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the addon version instead\nof the names of the columns of a table. For example, in order to retrieve all the\naddon versions with an id starting with `0.1` the value should be:\n\n```sql\nid like '0.1.%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the addon\nversions that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of addon versions.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AddonVersion"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/addons_mgmt/v1/addons/{addon_id}/versions/{version_id}": {
+      "delete": {
+        "description": "Deletes the addon version.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the addon version.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonVersion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the addon version.",
+        "parameters": [
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dryRun",
+            "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonVersion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonVersion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
+      "AdditionalCatalogSource": {
+        "description": "Representation of an addon catalog source object used by addon versions.",
+        "properties": {
+          "id": {
+            "description": "ID of the additional catalog source",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates is this additional catalog source is enabled for the addon",
+            "type": "boolean"
+          },
+          "image": {
+            "description": "Image of the additional catalog source.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the additional catalog source.",
+            "type": "string"
+          }
+        }
+      },
+      "Addon": {
+        "description": "Representation of an addon that can be installed in a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Addon' if this is a complete object or 'AddonLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "config": {
+            "description": "Additional configs to be used by the addon once its installed in the cluster.",
+            "$ref": "#/components/schemas/AddonConfig"
+          },
+          "credentials_requests": {
+            "description": "List of credentials requests to authenticate operators to access cloud resources.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CredentialRequest"
+            }
+          },
+          "description": {
+            "description": "Description of the addon.",
+            "type": "string"
+          },
+          "docs_link": {
+            "description": "Link to documentation about the addon.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates if this addon can be added to clusters.",
+            "type": "boolean"
+          },
+          "has_external_resources": {
+            "description": "Indicates if this addon has external resources associated with it",
+            "type": "boolean"
+          },
+          "hidden": {
+            "description": "Indicates if this addon is hidden.",
+            "type": "boolean"
+          },
+          "icon": {
+            "description": "Base64-encoded icon representing an addon. The icon should be in PNG format.",
+            "type": "string"
+          },
+          "install_mode": {
+            "description": "The mode in which the addon is deployed.",
+            "$ref": "#/components/schemas/AddonInstallMode"
+          },
+          "label": {
+            "description": "Label used to attach to a cluster deployment when addon is installed.",
+            "type": "string"
+          },
+          "managed_service": {
+            "description": "Indicates if addon is part of a managed service",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the addon.",
+            "type": "string"
+          },
+          "namespaces": {
+            "description": "List of namespaces associated with this addon.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonNamespace"
+            }
+          },
+          "operator_name": {
+            "description": "The name of the operator installed by this addon.",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "List of parameters for this addon.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonParameter"
+            }
+          },
+          "requirements": {
+            "description": "List of requirements for this addon.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonRequirement"
+            }
+          },
+          "resource_cost": {
+            "description": "Used to determine how many units of quota an addon consumes per resource name.",
+            "type": "number",
+            "format": "float"
+          },
+          "resource_name": {
+            "description": "Used to determine from where to reserve quota for this addon.",
+            "type": "string"
+          },
+          "sub_operators": {
+            "description": "List of sub operators for this addon.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonSubOperator"
+            }
+          },
+          "target_namespace": {
+            "description": "The namespace in which the addon CRD exists.",
+            "type": "string"
+          },
+          "version": {
+            "description": "Link to the current default version of this addon.",
+            "$ref": "#/components/schemas/AddonVersion"
+          }
+        }
+      },
+      "AddonConfig": {
+        "description": "Representation of an addon config.\nThe attributes under it are to be used by the addon once its installed in the cluster.",
+        "properties": {
+          "environment_variables": {
+            "description": "List of environment variables for the addon",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonEnvironmentVariable"
+            }
+          },
+          "secret_propagations": {
+            "description": "List of secret propagations for the addon",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonSecretPropagation"
+            }
+          }
+        }
+      },
+      "AddonEnvironmentVariable": {
+        "description": "Representation of an addon env object.",
+        "properties": {
+          "enabled": {
+            "description": "Indicates is this environment variable is enabled for the addon",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the env object.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the env object.",
+            "type": "string"
+          }
+        }
+      },
+      "AddonInstallMode": {
+        "description": "Representation of an addon InstallMode field.",
+        "type": "string",
+        "enum": [
+          "all_namespaces",
+          "own_namespace"
+        ]
+      },
+      "AddonNamespace": {
+        "description": "Representation of an addon namespace object.",
+        "properties": {
+          "annotations": {
+            "description": "Annotations to be included in the addon namespace",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "enabled": {
+            "description": "Enabled shows if this namespace object is in use",
+            "type": "boolean"
+          },
+          "labels": {
+            "description": "Labels to be included in the addon namespace",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "description": "Name of the namespace",
+            "type": "string"
+          }
+        }
+      },
+      "AddonParameter": {
+        "description": "Representation of an addon parameter.",
+        "properties": {
+          "id": {
+            "description": "ID for this addon parameter",
+            "type": "string"
+          },
+          "conditions": {
+            "description": "Conditions in which this parameter is valid for",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonRequirement"
+            }
+          },
+          "default_value": {
+            "description": "Indicates the value default for the addon parameter.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the addon parameter.",
+            "type": "string"
+          },
+          "editable": {
+            "description": "Indicates if this parameter can be edited after creation.",
+            "type": "boolean"
+          },
+          "editable_direction": {
+            "description": "Restricts if the parameter can be upscaled/downscaled\nExpected values are \"up\", \"down\", or \"\" (no restriction).",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates if this parameter is enabled for the addon.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the addon parameter.",
+            "type": "string"
+          },
+          "options": {
+            "description": "List of options for the addon parameter value.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonParameterOption"
+            }
+          },
+          "required": {
+            "description": "Indicates if this parameter is required by the addon.",
+            "type": "boolean"
+          },
+          "validation": {
+            "description": "Validation rule for the addon parameter.",
+            "type": "string"
+          },
+          "validation_err_msg": {
+            "description": "Error message to return should the parameter be invalid.",
+            "type": "string"
+          },
+          "value_type": {
+            "description": "Type of value of the addon parameter.",
+            "$ref": "#/components/schemas/AddonParameterValueType"
+          }
+        }
+      },
+      "AddonParameterOption": {
+        "description": "Representation of an addon parameter option.",
+        "properties": {
+          "name": {
+            "description": "Name of the addon parameter option.",
+            "type": "string"
+          },
+          "rank": {
+            "description": "Rank of option to be used in cases where editable direction should be restricted.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "requirements": {
+            "description": "List of addon requirements for this parameter option.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonRequirement"
+            }
+          },
+          "value": {
+            "description": "Value of the addon parameter option.",
+            "type": "string"
+          }
+        }
+      },
+      "AddonParameterValueType": {
+        "description": "Representation of the value type for this specific addon parameter",
+        "type": "string",
+        "enum": [
+          "cidr",
+          "boolean",
+          "number",
+          "resource",
+          "resource_requirement",
+          "string"
+        ]
+      },
+      "AddonRequirement": {
+        "description": "Representation of an addon requirement.",
+        "properties": {
+          "id": {
+            "description": "ID of the addon requirement.",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data for the addon requirement.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "enabled": {
+            "description": "Indicates if this requirement is enabled for the addon.",
+            "type": "boolean"
+          },
+          "resource": {
+            "description": "Type of resource of the addon requirement.",
+            "$ref": "#/components/schemas/AddonRequirementResource"
+          },
+          "status": {
+            "description": "Optional cluster specific status for the addon.",
+            "$ref": "#/components/schemas/AddonRequirementStatus"
+          }
+        }
+      },
+      "AddonRequirementResource": {
+        "description": "Addon requirement resource type",
+        "type": "string",
+        "enum": [
+          "addon",
+          "cluster",
+          "machine_pool"
+        ]
+      },
+      "AddonRequirementStatus": {
+        "description": "Representation of an addon requirement status.",
+        "properties": {
+          "error_msgs": {
+            "description": "Error messages detailing reasons for unfulfilled requirements.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fulfilled": {
+            "description": "Indicates if this requirement is fulfilled.",
+            "type": "boolean"
+          }
+        }
+      },
+      "AddonSecretPropagation": {
+        "description": "Representation of an addon secret propagation",
+        "properties": {
+          "id": {
+            "description": "ID of the secret propagation",
+            "type": "string"
+          },
+          "destination_secret": {
+            "description": "DestinationSecret is location of the secret to be added",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates is this secret propagation is enabled for the addon",
+            "type": "boolean"
+          },
+          "source_secret": {
+            "description": "SourceSecret is location of the source secret",
+            "type": "string"
+          }
+        }
+      },
+      "AddonSubOperator": {
+        "description": "Representation of an addon sub operator. A sub operator is an operator\nwho's life cycle is controlled by the addon umbrella operator.",
+        "properties": {
+          "enabled": {
+            "description": "Indicates if the sub operator is enabled for the addon",
+            "type": "boolean"
+          },
+          "operator_name": {
+            "description": "Name of the addon sub operator",
+            "type": "string"
+          },
+          "operator_namespace": {
+            "description": "Namespace of the addon sub operator",
+            "type": "string"
+          }
+        }
+      },
+      "AddonVersion": {
+        "description": "Representation of an addon version.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddonVersion' if this is a complete object or 'AddonVersionLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "additional_catalog_sources": {
+            "description": "Additional catalog sources associated with this addon version",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalCatalogSource"
+            }
+          },
+          "available_upgrades": {
+            "description": "AvailableUpgrades is the list of versions this version can be upgraded to.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "channel": {
+            "description": "The specific addon catalog source channel of packages",
+            "type": "string"
+          },
+          "config": {
+            "description": "Additional configs to be used by the addon once its installed in the cluster.",
+            "$ref": "#/components/schemas/AddonConfig"
+          },
+          "enabled": {
+            "description": "Indicates if this addon version can be added to clusters.",
+            "type": "boolean"
+          },
+          "parameters": {
+            "description": "List of parameters for this addon version.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonParameter"
+            }
+          },
+          "pull_secret_name": {
+            "description": "The pull secret name used for this addon version.",
+            "type": "string"
+          },
+          "requirements": {
+            "description": "List of requirements for this addon version.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonRequirement"
+            }
+          },
+          "source_image": {
+            "description": "The catalog source image for this addon version.",
+            "type": "string"
+          },
+          "sub_operators": {
+            "description": "List of sub operators for this addon version.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonSubOperator"
+            }
+          }
+        }
+      },
+      "CredentialRequest": {
+        "description": "Contains the necessary attributes to allow each operator to access the necessary AWS resources",
+        "properties": {
+          "name": {
+            "description": "Name of the credentials secret used to access cloud resources",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "Namespace where the credentials secret lives in the cluster",
+            "type": "string"
+          },
+          "policy_permissions": {
+            "description": "List of policy permissions needed to access cloud resources",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "service_account": {
+            "description": "Service account name to use when authenticating",
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will always be 'Error'",
+            "type": "string"
+          },
+          "id": {
+            "description": "Numeric identifier of the error.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "code": {
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Human readable description of the error.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Extra information about the error.",
+            "type": "object",
+            "additionalProperties": "true"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": [
+        
+      ]
+    }
+  ]
+}
