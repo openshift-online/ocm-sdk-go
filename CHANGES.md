@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.291
+- Update to model 0.0.230
+  - Add creation timestamp and modification timestamp to provision shard
+  - Add pull secret for addon version
+  - Add addon secret props for addon version config
+  - Add additional catalog sources for addon version
+  - Add addon parameter condition
+
 ## 0.1.290
 - Update to model 0.0.229
   - Add Addon Management models
