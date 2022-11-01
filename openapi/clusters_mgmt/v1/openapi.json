@@ -8432,6 +8432,13 @@
             "items": {
               "$ref": "#/components/schemas/AddOnEnvironmentVariable"
             }
+          },
+          "secret_propagations": {
+            "description": "List of secret propagations for the addon",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnSecretPropagation"
+            }
           }
         }
       },
@@ -8606,6 +8613,13 @@
             "description": "Link to add-on.",
             "$ref": "#/components/schemas/AddOn"
           },
+          "conditions": {
+            "description": "Conditions in which this parameter is valid for",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnRequirement"
+            }
+          },
           "default_value": {
             "description": "Indicates the value default for the add-on parameter.",
             "type": "string"
@@ -8724,6 +8738,27 @@
           }
         }
       },
+      "AddOnSecretPropagation": {
+        "description": "Representation of an addon secret propagation",
+        "properties": {
+          "id": {
+            "description": "ID of the secret propagation",
+            "type": "string"
+          },
+          "destination_secret": {
+            "description": "DestinationSecret is location of the secret to be added",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates is this secret propagation is enabled for the addon",
+            "type": "boolean"
+          },
+          "source_secret": {
+            "description": "SourceSecret is location of the source secret",
+            "type": "string"
+          }
+        }
+      },
       "AddOnSubOperator": {
         "description": "Representation of an add-on sub operator. A sub operator is an operator\nwho's life cycle is controlled by the add-on umbrella operator. ",
         "properties": {
@@ -8756,6 +8791,13 @@
             "description": "Self link.",
             "type": "string"
           },
+          "additional_catalog_sources": {
+            "description": "Additional catalog sources associated with this addon version",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalCatalogSource"
+            }
+          },
           "available_upgrades": {
             "description": "AvailableUpgrades is the list of versions this version can be upgraded to.",
             "type": "array",
@@ -8782,6 +8824,10 @@
               "$ref": "#/components/schemas/AddOnParameter"
             }
           },
+          "pull_secret_name": {
+            "description": "The pull secret name used for this addon version.",
+            "type": "string"
+          },
           "requirements": {
             "description": "List of requirements for this add-on version.",
             "type": "array",
@@ -8799,6 +8845,27 @@
             "items": {
               "$ref": "#/components/schemas/AddOnSubOperator"
             }
+          }
+        }
+      },
+      "AdditionalCatalogSource": {
+        "description": "Representation of an addon catalog source object used by addon versions.",
+        "properties": {
+          "id": {
+            "description": "ID of the additional catalog source",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates is this additional catalog source is enabled for the addon",
+            "type": "boolean"
+          },
+          "image": {
+            "description": "Image of the additional catalog source.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the additional catalog source.",
+            "type": "string"
           }
         }
       },
@@ -10559,6 +10626,11 @@
             "description": "Contains the cloud provider name.",
             "$ref": "#/components/schemas/CloudProvider"
           },
+          "creation_timestamp": {
+            "description": "Date and time when the provision shard was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
           "hive_config": {
             "description": "Contains the configuration for Hive.",
             "$ref": "#/components/schemas/ServerConfig"
@@ -10566,6 +10638,11 @@
           "hypershift_config": {
             "description": "Contains the configuration for Hypershift.",
             "$ref": "#/components/schemas/ServerConfig"
+          },
+          "last_update_timestamp": {
+            "description": "Date and time when the provision shard was last updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
           },
           "management_cluster": {
             "description": "Contains the name of the management cluster for Hypershift clusters that are assigned to this shard.\nThis field is populated by OCM, and must not be overwritten via API.",
