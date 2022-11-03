@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.292
+- Update to model 0.0.231
+  - Add `AvailabilityZone` property to CloudProviderData model.
+  - Add `Public` property to Subnetwork model.
+
 ## 0.1.291
 - Update to model 0.0.230
   - Add creation timestamp and modification timestamp to provision shard
