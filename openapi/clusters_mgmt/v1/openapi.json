@@ -8989,6 +8989,10 @@
             "description": "Google cloud platform settings.",
             "$ref": "#/components/schemas/GCP"
           },
+          "availability_zone": {
+            "description": "Availability zone",
+            "type": "string"
+          },
           "key_location": {
             "description": "Key location",
             "type": "string"
@@ -10746,6 +10750,10 @@
           "name": {
             "description": "Name of the subnet according to its `Name` tag on AWS",
             "type": "string"
+          },
+          "public": {
+            "description": "Whether it is a public subnet",
+            "type": "boolean"
           },
           "subnet_id": {
             "description": "The subnet id to be used while installing a cluster",
