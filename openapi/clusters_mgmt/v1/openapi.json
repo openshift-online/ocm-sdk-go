@@ -8989,9 +8989,12 @@
             "description": "Google cloud platform settings.",
             "$ref": "#/components/schemas/GCP"
           },
-          "availability_zone": {
+          "availability_zones": {
             "description": "Availability zone",
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "key_location": {
             "description": "Key location",
