@@ -9049,6 +9049,10 @@
             "description": "Human friendly identifier of the region, for example `us-east-1`.\n\nNOTE: Currently for all cloud providers and all regions `id` and `name` have exactly\nthe same values.",
             "type": "string"
           },
+          "supports_hypershift": {
+            "description": "'true' if the region is supported for Hypershift deployments, 'false' otherwise.",
+            "type": "boolean"
+          },
           "supports_multi_az": {
             "description": "Whether the region supports multiple availability zones.",
             "type": "boolean"
