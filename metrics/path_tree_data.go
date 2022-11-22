@@ -32,6 +32,7 @@ var pathTreeData = `{
             }
           }
         },
+        "capabilities": null,
         "cloud_resources": {
           "-": null
         },
