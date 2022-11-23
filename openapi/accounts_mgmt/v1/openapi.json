@@ -5563,6 +5563,9 @@
             "description": "Self link.",
             "type": "string"
           },
+          "account_id": {
+            "type": "string"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time"
@@ -5571,6 +5574,18 @@
             "type": "boolean"
           },
           "key": {
+            "type": "string"
+          },
+          "managed_by": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "subscription_id": {
+            "type": "string"
+          },
+          "type": {
             "type": "string"
           },
           "updated_at": {
