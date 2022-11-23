@@ -2,6 +2,15 @@
 
 This document describes the relevant changes between releases of the OCM API
 SDK.
+## 0.1.296
+- Update to model 0.0.236
+  - Add extra fields to label model:
+    - Type
+    - ManagedBy
+    - AccountID
+    - SubscriptionID
+    - OrganizationID
+
 ## 0.1.295
 - Update to model 0.0.235
   - Add `capabilities` resource model.
