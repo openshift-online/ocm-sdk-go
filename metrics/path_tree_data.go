@@ -224,6 +224,9 @@ var pathTreeData = `{
               "nodes": null,
               "socket_total_by_node_roles_os": null
             },
+            "node_pools": {
+              "-": null
+            },
             "product": null,
             "provision_shard": null,
             "resources": {

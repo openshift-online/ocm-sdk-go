@@ -2,6 +2,12 @@
 
 This document describes the relevant changes between releases of the OCM API
 SDK.
+
+## 0.1.297
+- Update to model 0.0.237
+  - Add `NodePool` resource types.
+  - Add `NodePools` locator to `Cluster` type.
+
 ## 0.1.296
 - Update to model 0.0.236
   - Add extra fields to label model:
