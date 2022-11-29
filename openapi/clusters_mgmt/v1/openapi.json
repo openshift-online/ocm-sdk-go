@@ -10768,7 +10768,7 @@
           },
           "aws": {
             "description": "AWS specific parameters (Optional).",
-            "$ref": "#/components/schemas/AWSMachinePool"
+            "$ref": "#/components/schemas/AWSNodePool"
           },
           "auto_repair": {
             "description": "Specifies whether health checks should be enabled for machines in the NodePool.",

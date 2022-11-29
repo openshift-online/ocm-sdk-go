@@ -26,7 +26,7 @@ type NodePoolBuilder struct {
 	bitmap_          uint32
 	id               string
 	href             string
-	aws              *AWSMachinePoolBuilder
+	aws              *AWSNodePoolBuilder
 	autoscaling      *NodePoolAutoscalingBuilder
 	availabilityZone string
 	cluster          *ClusterBuilder
@@ -68,8 +68,8 @@ func (b *NodePoolBuilder) Empty() bool {
 
 // AWS sets the value of the 'AWS' attribute to the given value.
 //
-// Representation of aws machine pool specific parameters.
-func (b *NodePoolBuilder) AWS(value *AWSMachinePoolBuilder) *NodePoolBuilder {
+// Representation of aws node pool specific parameters.
+func (b *NodePoolBuilder) AWS(value *AWSNodePoolBuilder) *NodePoolBuilder {
 	b.aws = value
 	if value != nil {
 		b.bitmap_ |= 8
@@ -193,7 +193,7 @@ func (b *NodePoolBuilder) Copy(object *NodePool) *NodePoolBuilder {
 	b.id = object.id
 	b.href = object.href
 	if object.aws != nil {
-		b.aws = NewAWSMachinePool().Copy(object.aws)
+		b.aws = NewAWSNodePool().Copy(object.aws)
 	} else {
 		b.aws = nil
 	}
