@@ -71,7 +71,7 @@ func writeNodePool(object *NodePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("aws")
-		writeAWSMachinePool(object.aws, stream)
+		writeAWSNodePool(object.aws, stream)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0
@@ -172,7 +172,7 @@ func readNodePool(iterator *jsoniter.Iterator) *NodePool {
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
 		case "aws":
-			value := readAWSMachinePool(iterator)
+			value := readAWSNodePool(iterator)
 			object.aws = value
 			object.bitmap_ |= 8
 		case "auto_repair":

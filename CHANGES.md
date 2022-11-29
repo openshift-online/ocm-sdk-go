@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.298
+- Update to model 0.0.238
+  - `NodePool` fixes. 
+
 ## 0.1.297
 - Update to model 0.0.237
   - Add `NodePool` resource types.

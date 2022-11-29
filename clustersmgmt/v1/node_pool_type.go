@@ -38,7 +38,7 @@ type NodePool struct {
 	bitmap_          uint32
 	id               string
 	href             string
-	aws              *AWSMachinePool
+	aws              *AWSNodePool
 	autoscaling      *NodePoolAutoscaling
 	availabilityZone string
 	cluster          *Cluster
@@ -109,7 +109,7 @@ func (o *NodePool) Empty() bool {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // AWS specific parameters (Optional).
-func (o *NodePool) AWS() *AWSMachinePool {
+func (o *NodePool) AWS() *AWSNodePool {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.aws
 	}
@@ -120,7 +120,7 @@ func (o *NodePool) AWS() *AWSMachinePool {
 // a flag indicating if the attribute has a value.
 //
 // AWS specific parameters (Optional).
-func (o *NodePool) GetAWS() (value *AWSMachinePool, ok bool) {
+func (o *NodePool) GetAWS() (value *AWSNodePool, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.aws
