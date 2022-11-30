@@ -23,11 +23,11 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 //
 // Representation of a autoscaling in a node pool.
 type NodePoolAutoscalingBuilder struct {
-	bitmap_ uint32
-	id      string
-	href    string
-	max     int
-	min     int
+	bitmap_    uint32
+	id         string
+	href       string
+	maxReplica int
+	minReplica int
 }
 
 // NewNodePoolAutoscaling creates a new builder of 'node_pool_autoscaling' objects.
@@ -60,20 +60,20 @@ func (b *NodePoolAutoscalingBuilder) Empty() bool {
 	return b == nil || b.bitmap_&^1 == 0
 }
 
-// Max sets the value of the 'max' attribute to the given value.
+// MaxReplica sets the value of the 'max_replica' attribute to the given value.
 //
 //
-func (b *NodePoolAutoscalingBuilder) Max(value int) *NodePoolAutoscalingBuilder {
-	b.max = value
+func (b *NodePoolAutoscalingBuilder) MaxReplica(value int) *NodePoolAutoscalingBuilder {
+	b.maxReplica = value
 	b.bitmap_ |= 8
 	return b
 }
 
-// Min sets the value of the 'min' attribute to the given value.
+// MinReplica sets the value of the 'min_replica' attribute to the given value.
 //
 //
-func (b *NodePoolAutoscalingBuilder) Min(value int) *NodePoolAutoscalingBuilder {
-	b.min = value
+func (b *NodePoolAutoscalingBuilder) MinReplica(value int) *NodePoolAutoscalingBuilder {
+	b.minReplica = value
 	b.bitmap_ |= 16
 	return b
 }
@@ -86,8 +86,8 @@ func (b *NodePoolAutoscalingBuilder) Copy(object *NodePoolAutoscaling) *NodePool
 	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	b.max = object.max
-	b.min = object.min
+	b.maxReplica = object.maxReplica
+	b.minReplica = object.minReplica
 	return b
 }
 
@@ -97,7 +97,7 @@ func (b *NodePoolAutoscalingBuilder) Build() (object *NodePoolAutoscaling, err e
 	object.id = b.id
 	object.href = b.href
 	object.bitmap_ = b.bitmap_
-	object.max = b.max
-	object.min = b.min
+	object.maxReplica = b.maxReplica
+	object.minReplica = b.minReplica
 	return
 }

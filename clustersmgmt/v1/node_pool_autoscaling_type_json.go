@@ -70,8 +70,8 @@ func writeNodePoolAutoscaling(object *NodePoolAutoscaling, stream *jsoniter.Stre
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("max")
-		stream.WriteInt(object.max)
+		stream.WriteObjectField("max_replica")
+		stream.WriteInt(object.maxReplica)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0
@@ -79,8 +79,8 @@ func writeNodePoolAutoscaling(object *NodePoolAutoscaling, stream *jsoniter.Stre
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("min")
-		stream.WriteInt(object.min)
+		stream.WriteObjectField("min_replica")
+		stream.WriteInt(object.minReplica)
 	}
 	stream.WriteObjectEnd()
 }
@@ -117,13 +117,13 @@ func readNodePoolAutoscaling(iterator *jsoniter.Iterator) *NodePoolAutoscaling {
 		case "href":
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
-		case "max":
+		case "max_replica":
 			value := iterator.ReadInt()
-			object.max = value
+			object.maxReplica = value
 			object.bitmap_ |= 8
-		case "min":
+		case "min_replica":
 			value := iterator.ReadInt()
-			object.min = value
+			object.minReplica = value
 			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()

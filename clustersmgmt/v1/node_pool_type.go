@@ -38,11 +38,10 @@ type NodePool struct {
 	bitmap_          uint32
 	id               string
 	href             string
-	aws              *AWSNodePool
+	awsNodePool      *AWSNodePool
 	autoscaling      *NodePoolAutoscaling
 	availabilityZone string
 	cluster          *Cluster
-	instanceType     string
 	replicas         int
 	subnet           string
 	autoRepair       bool
@@ -105,25 +104,25 @@ func (o *NodePool) Empty() bool {
 	return o == nil || o.bitmap_&^1 == 0
 }
 
-// AWS returns the value of the 'AWS' attribute, or
+// AWSNodePool returns the value of the 'AWS_node_pool' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // AWS specific parameters (Optional).
-func (o *NodePool) AWS() *AWSNodePool {
+func (o *NodePool) AWSNodePool() *AWSNodePool {
 	if o != nil && o.bitmap_&8 != 0 {
-		return o.aws
+		return o.awsNodePool
 	}
 	return nil
 }
 
-// GetAWS returns the value of the 'AWS' attribute and
+// GetAWSNodePool returns the value of the 'AWS_node_pool' attribute and
 // a flag indicating if the attribute has a value.
 //
 // AWS specific parameters (Optional).
-func (o *NodePool) GetAWS() (value *AWSNodePool, ok bool) {
+func (o *NodePool) GetAWSNodePool() (value *AWSNodePool, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = o.aws
+		value = o.awsNodePool
 	}
 	return
 }
@@ -222,36 +221,13 @@ func (o *NodePool) GetCluster() (value *Cluster, ok bool) {
 	return
 }
 
-// InstanceType returns the value of the 'instance_type' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// The instance type of Nodes to create.
-func (o *NodePool) InstanceType() string {
-	if o != nil && o.bitmap_&256 != 0 {
-		return o.instanceType
-	}
-	return ""
-}
-
-// GetInstanceType returns the value of the 'instance_type' attribute and
-// a flag indicating if the attribute has a value.
-//
-// The instance type of Nodes to create.
-func (o *NodePool) GetInstanceType() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&256 != 0
-	if ok {
-		value = o.instanceType
-	}
-	return
-}
-
 // Replicas returns the value of the 'replicas' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *NodePool) Replicas() int {
-	if o != nil && o.bitmap_&512 != 0 {
+	if o != nil && o.bitmap_&256 != 0 {
 		return o.replicas
 	}
 	return 0
@@ -263,7 +239,7 @@ func (o *NodePool) Replicas() int {
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *NodePool) GetReplicas() (value int, ok bool) {
-	ok = o != nil && o.bitmap_&512 != 0
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
 		value = o.replicas
 	}
@@ -275,7 +251,7 @@ func (o *NodePool) GetReplicas() (value int, ok bool) {
 //
 // The subnet upon which the nodes are created.
 func (o *NodePool) Subnet() string {
-	if o != nil && o.bitmap_&1024 != 0 {
+	if o != nil && o.bitmap_&512 != 0 {
 		return o.subnet
 	}
 	return ""
@@ -286,7 +262,7 @@ func (o *NodePool) Subnet() string {
 //
 // The subnet upon which the nodes are created.
 func (o *NodePool) GetSubnet() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&1024 != 0
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.subnet
 	}
