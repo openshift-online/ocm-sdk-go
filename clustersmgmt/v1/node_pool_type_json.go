@@ -65,13 +65,13 @@ func writeNodePool(object *NodePool, stream *jsoniter.Stream) {
 		count++
 	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0 && object.aws != nil
+	present_ = object.bitmap_&8 != 0 && object.awsNodePool != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("aws")
-		writeAWSNodePool(object.aws, stream)
+		stream.WriteObjectField("aws_node_pool")
+		writeAWSNodePool(object.awsNodePool, stream)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0
@@ -115,20 +115,11 @@ func writeNodePool(object *NodePool, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("instance_type")
-		stream.WriteString(object.instanceType)
-		count++
-	}
-	present_ = object.bitmap_&512 != 0
-	if present_ {
-		if count > 0 {
-			stream.WriteMore()
-		}
 		stream.WriteObjectField("replicas")
 		stream.WriteInt(object.replicas)
 		count++
 	}
-	present_ = object.bitmap_&1024 != 0
+	present_ = object.bitmap_&512 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -171,9 +162,9 @@ func readNodePool(iterator *jsoniter.Iterator) *NodePool {
 		case "href":
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
-		case "aws":
+		case "aws_node_pool":
 			value := readAWSNodePool(iterator)
-			object.aws = value
+			object.awsNodePool = value
 			object.bitmap_ |= 8
 		case "auto_repair":
 			value := iterator.ReadBool()
@@ -191,18 +182,14 @@ func readNodePool(iterator *jsoniter.Iterator) *NodePool {
 			value := readCluster(iterator)
 			object.cluster = value
 			object.bitmap_ |= 128
-		case "instance_type":
-			value := iterator.ReadString()
-			object.instanceType = value
-			object.bitmap_ |= 256
 		case "replicas":
 			value := iterator.ReadInt()
 			object.replicas = value
-			object.bitmap_ |= 512
+			object.bitmap_ |= 256
 		case "subnet":
 			value := iterator.ReadString()
 			object.subnet = value
-			object.bitmap_ |= 1024
+			object.bitmap_ |= 512
 		default:
 			iterator.ReadAny()
 		}

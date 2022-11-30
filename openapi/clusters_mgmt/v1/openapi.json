@@ -10766,7 +10766,7 @@
             "description": "Self link.",
             "type": "string"
           },
-          "aws": {
+          "aws_node_pool": {
             "description": "AWS specific parameters (Optional).",
             "$ref": "#/components/schemas/AWSNodePool"
           },
@@ -10785,10 +10785,6 @@
           "cluster": {
             "description": "ID used to identify the cluster that this nodepool is attached to.",
             "$ref": "#/components/schemas/Cluster"
-          },
-          "instance_type": {
-            "description": "The instance type of Nodes to create.",
-            "type": "string"
           },
           "replicas": {
             "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.",
@@ -10816,12 +10812,12 @@
             "description": "Self link.",
             "type": "string"
           },
-          "max": {
+          "max_replica": {
             "description": "The maximum number of replicas for the node pool.",
             "type": "integer",
             "format": "int32"
           },
-          "min": {
+          "min_replica": {
             "description": "The minimum number of replicas for the node pool.",
             "type": "integer",
             "format": "int32"

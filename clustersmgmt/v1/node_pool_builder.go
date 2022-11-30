@@ -26,11 +26,10 @@ type NodePoolBuilder struct {
 	bitmap_          uint32
 	id               string
 	href             string
-	aws              *AWSNodePoolBuilder
+	awsNodePool      *AWSNodePoolBuilder
 	autoscaling      *NodePoolAutoscalingBuilder
 	availabilityZone string
 	cluster          *ClusterBuilder
-	instanceType     string
 	replicas         int
 	subnet           string
 	autoRepair       bool
@@ -66,11 +65,11 @@ func (b *NodePoolBuilder) Empty() bool {
 	return b == nil || b.bitmap_&^1 == 0
 }
 
-// AWS sets the value of the 'AWS' attribute to the given value.
+// AWSNodePool sets the value of the 'AWS_node_pool' attribute to the given value.
 //
 // Representation of aws node pool specific parameters.
-func (b *NodePoolBuilder) AWS(value *AWSNodePoolBuilder) *NodePoolBuilder {
-	b.aws = value
+func (b *NodePoolBuilder) AWSNodePool(value *AWSNodePoolBuilder) *NodePoolBuilder {
+	b.awsNodePool = value
 	if value != nil {
 		b.bitmap_ |= 8
 	} else {
@@ -157,21 +156,12 @@ func (b *NodePoolBuilder) Cluster(value *ClusterBuilder) *NodePoolBuilder {
 	return b
 }
 
-// InstanceType sets the value of the 'instance_type' attribute to the given value.
-//
-//
-func (b *NodePoolBuilder) InstanceType(value string) *NodePoolBuilder {
-	b.instanceType = value
-	b.bitmap_ |= 256
-	return b
-}
-
 // Replicas sets the value of the 'replicas' attribute to the given value.
 //
 //
 func (b *NodePoolBuilder) Replicas(value int) *NodePoolBuilder {
 	b.replicas = value
-	b.bitmap_ |= 512
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -180,7 +170,7 @@ func (b *NodePoolBuilder) Replicas(value int) *NodePoolBuilder {
 //
 func (b *NodePoolBuilder) Subnet(value string) *NodePoolBuilder {
 	b.subnet = value
-	b.bitmap_ |= 1024
+	b.bitmap_ |= 512
 	return b
 }
 
@@ -192,10 +182,10 @@ func (b *NodePoolBuilder) Copy(object *NodePool) *NodePoolBuilder {
 	b.bitmap_ = object.bitmap_
 	b.id = object.id
 	b.href = object.href
-	if object.aws != nil {
-		b.aws = NewAWSNodePool().Copy(object.aws)
+	if object.awsNodePool != nil {
+		b.awsNodePool = NewAWSNodePool().Copy(object.awsNodePool)
 	} else {
-		b.aws = nil
+		b.awsNodePool = nil
 	}
 	b.autoRepair = object.autoRepair
 	if object.autoscaling != nil {
@@ -209,7 +199,6 @@ func (b *NodePoolBuilder) Copy(object *NodePool) *NodePoolBuilder {
 	} else {
 		b.cluster = nil
 	}
-	b.instanceType = object.instanceType
 	b.replicas = object.replicas
 	b.subnet = object.subnet
 	return b
@@ -221,8 +210,8 @@ func (b *NodePoolBuilder) Build() (object *NodePool, err error) {
 	object.id = b.id
 	object.href = b.href
 	object.bitmap_ = b.bitmap_
-	if b.aws != nil {
-		object.aws, err = b.aws.Build()
+	if b.awsNodePool != nil {
+		object.awsNodePool, err = b.awsNodePool.Build()
 		if err != nil {
 			return
 		}
@@ -241,7 +230,6 @@ func (b *NodePoolBuilder) Build() (object *NodePool, err error) {
 			return
 		}
 	}
-	object.instanceType = b.instanceType
 	object.replicas = b.replicas
 	object.subnet = b.subnet
 	return

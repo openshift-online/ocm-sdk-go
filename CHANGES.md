@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.299 
+- Update to model 0.0.239
+  - Fixes for `NodePoolAutoScaling` and `AWSNodePool`.
+
 ## 0.1.298
 - Update to model 0.0.238
   - `NodePool` fixes. 

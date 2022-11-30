@@ -35,11 +35,11 @@ const NodePoolAutoscalingNilKind = "NodePoolAutoscalingNil"
 //
 // Representation of a autoscaling in a node pool.
 type NodePoolAutoscaling struct {
-	bitmap_ uint32
-	id      string
-	href    string
-	max     int
-	min     int
+	bitmap_    uint32
+	id         string
+	href       string
+	maxReplica int
+	minReplica int
 }
 
 // Kind returns the name of the type of the object.
@@ -99,48 +99,48 @@ func (o *NodePoolAutoscaling) Empty() bool {
 	return o == nil || o.bitmap_&^1 == 0
 }
 
-// Max returns the value of the 'max' attribute, or
+// MaxReplica returns the value of the 'max_replica' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // The maximum number of replicas for the node pool.
-func (o *NodePoolAutoscaling) Max() int {
+func (o *NodePoolAutoscaling) MaxReplica() int {
 	if o != nil && o.bitmap_&8 != 0 {
-		return o.max
+		return o.maxReplica
 	}
 	return 0
 }
 
-// GetMax returns the value of the 'max' attribute and
+// GetMaxReplica returns the value of the 'max_replica' attribute and
 // a flag indicating if the attribute has a value.
 //
 // The maximum number of replicas for the node pool.
-func (o *NodePoolAutoscaling) GetMax() (value int, ok bool) {
+func (o *NodePoolAutoscaling) GetMaxReplica() (value int, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
-		value = o.max
+		value = o.maxReplica
 	}
 	return
 }
 
-// Min returns the value of the 'min' attribute, or
+// MinReplica returns the value of the 'min_replica' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // The minimum number of replicas for the node pool.
-func (o *NodePoolAutoscaling) Min() int {
+func (o *NodePoolAutoscaling) MinReplica() int {
 	if o != nil && o.bitmap_&16 != 0 {
-		return o.min
+		return o.minReplica
 	}
 	return 0
 }
 
-// GetMin returns the value of the 'min' attribute and
+// GetMinReplica returns the value of the 'min_replica' attribute and
 // a flag indicating if the attribute has a value.
 //
 // The minimum number of replicas for the node pool.
-func (o *NodePoolAutoscaling) GetMin() (value int, ok bool) {
+func (o *NodePoolAutoscaling) GetMinReplica() (value int, ok bool) {
 	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
-		value = o.min
+		value = o.minReplica
 	}
 	return
 }
