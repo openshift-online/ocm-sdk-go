@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.300
+- Update PR check to include go v1.19
+- Update goimports to v0.4.0
+- Update to model v0.0.240
+  - Fix `AddonConfig` on `AddonConfigType` resource model.
+
 ## 0.1.299 
 - Update to model 0.0.239
   - Fixes for `NodePoolAutoScaling` and `AWSNodePool`.
