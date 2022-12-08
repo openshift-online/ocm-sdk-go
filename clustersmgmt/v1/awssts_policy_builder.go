@@ -40,8 +40,6 @@ func (b *AWSSTSPolicyBuilder) Empty() bool {
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
-//
-//
 func (b *AWSSTSPolicyBuilder) ID(value string) *AWSSTSPolicyBuilder {
 	b.id = value
 	b.bitmap_ |= 1
@@ -49,8 +47,6 @@ func (b *AWSSTSPolicyBuilder) ID(value string) *AWSSTSPolicyBuilder {
 }
 
 // Details sets the value of the 'details' attribute to the given value.
-//
-//
 func (b *AWSSTSPolicyBuilder) Details(value string) *AWSSTSPolicyBuilder {
 	b.details = value
 	b.bitmap_ |= 2
@@ -58,8 +54,6 @@ func (b *AWSSTSPolicyBuilder) Details(value string) *AWSSTSPolicyBuilder {
 }
 
 // Type sets the value of the 'type' attribute to the given value.
-//
-//
 func (b *AWSSTSPolicyBuilder) Type(value string) *AWSSTSPolicyBuilder {
 	b.type_ = value
 	b.bitmap_ |= 4
