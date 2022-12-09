@@ -728,14 +728,14 @@
       "AddonConfig": {
         "description": "Representation of an addon config.\nThe attributes under it are to be used by the addon once its installed in the cluster.",
         "properties": {
-          "environment_variables": {
+          "add_on_environment_variables": {
             "description": "List of environment variables for the addon",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AddonEnvironmentVariable"
             }
           },
-          "secret_propagations": {
+          "add_on_secret_propagations": {
             "description": "List of secret propagations for the addon",
             "type": "array",
             "items": {
