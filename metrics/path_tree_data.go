@@ -42,6 +42,7 @@ var pathTreeData = `{
           "-": null
         },
         "current_account": null,
+        "deleted_subscriptions": null,
         "feature_toggles": {
           "-": {
             "query": null
@@ -113,6 +114,13 @@ var pathTreeData = `{
         "addons": {
           "-": {
             "versions": {
+              "-": null
+            }
+          }
+        },
+        "clusters": {
+          "-": {
+            "status": {
               "-": null
             }
           }
