@@ -574,6 +574,262 @@
           }
         }
       }
+    },
+    "/api/addons_mgmt/v1/clusters/{cluster_id}/status": {
+      "post": {
+        "description": "Create a new addon status and add it to the collection of addons statuses.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of addon statuses for a cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "description": "If the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of addon status conditions",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AddonStatus"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection regardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/addons_mgmt/v1/clusters/{cluster_id}/status/{addon_id}": {
+      "delete": {
+        "description": "Deletes the addon version.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the addon version.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the addon version.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -969,6 +1225,76 @@
             "type": "string"
           }
         }
+      },
+      "AddonStatus": {
+        "description": "Representation of an addon status.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddonStatus' if this is a complete object or 'AddonStatusLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "addon_id": {
+            "description": "ID of the addon whose status belongs to.",
+            "type": "string"
+          },
+          "correlation_id": {
+            "description": "Identifier for co-relating current AddonCR revision and reported status.",
+            "type": "string"
+          },
+          "status_conditions": {
+            "description": "List of reported addon status conditions",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonStatusCondition"
+            }
+          }
+        }
+      },
+      "AddonStatusCondition": {
+        "description": "Representation of an addon status condition type.",
+        "properties": {
+          "reason": {
+            "description": "Reason for the condition",
+            "type": "string"
+          },
+          "status_type": {
+            "description": "Type of the reported addon status condition",
+            "$ref": "#/components/schemas/AddonStatusConditionType"
+          },
+          "status_value": {
+            "description": "Value of the reported addon status condition",
+            "$ref": "#/components/schemas/AddonStatusConditionValue"
+          }
+        }
+      },
+      "AddonStatusConditionType": {
+        "description": "Representation of an addon status condition type field.",
+        "type": "string",
+        "enum": [
+          "available",
+          "degraded",
+          "healthy",
+          "installed",
+          "paused",
+          "upgrading"
+        ]
+      },
+      "AddonStatusConditionValue": {
+        "description": "Representation of an addon status condition value field.",
+        "type": "string",
+        "enum": [
+          "false",
+          "true",
+          "unknown"
+        ]
       },
       "AddonSubOperator": {
         "description": "Representation of an addon sub operator. A sub operator is an operator\nwho's life cycle is controlled by the addon umbrella operator.",

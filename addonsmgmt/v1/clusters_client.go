@@ -24,46 +24,30 @@ import (
 	"path"
 )
 
-// Client is the client of the 'root' resource.
+// ClustersClient is the client of the 'clusters' resource.
 //
-// Root of the tree of resources of the Addons Management.
-type Client struct {
+// Manages a list of clusters.
+type ClustersClient struct {
 	transport http.RoundTripper
 	path      string
 }
 
-// NewClient creates a new client for the 'root'
+// NewClustersClient creates a new client for the 'clusters'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClient(transport http.RoundTripper, path string) *Client {
-	return &Client{
+func NewClustersClient(transport http.RoundTripper, path string) *ClustersClient {
+	return &ClustersClient{
 		transport: transport,
 		path:      path,
 	}
 }
 
-// Creates a new request for the method that retrieves the metadata.
-func (c *Client) Get() *MetadataRequest {
-	return &MetadataRequest{
-		transport: c.transport,
-		path:      c.path,
-	}
-}
-
-// Addons returns the target 'addons' resource.
+// Cluster returns the target 'cluster' resource for the given identifier.
 //
-// Reference to the resource that manages the collection of Addons.
-func (c *Client) Addons() *AddonsClient {
-	return NewAddonsClient(
+// Reference to the specific cluster which an addon can be installed on
+func (c *ClustersClient) Cluster(id string) *ClusterClient {
+	return NewClusterClient(
 		c.transport,
-		path.Join(c.path, "addons"),
-	)
-}
-
-// Clusters returns the target 'clusters' resource.
-func (c *Client) Clusters() *ClustersClient {
-	return NewClustersClient(
-		c.transport,
-		path.Join(c.path, "clusters"),
+		path.Join(c.path, id),
 	)
 }
