@@ -8,6 +8,7 @@ SDK.
   - Add `DeletedSubscriptions`
   - Add `AddonCluster`
   - Add `AddonStatus`
+  
 ## 0.1.300
 - Update PR check to include go v1.19
 - Update goimports to v0.4.0
