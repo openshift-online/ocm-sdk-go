@@ -7269,6 +7269,42 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/machine_types/{machine_type_id}": {
+      "get": {
+        "description": "Retrieves the details of the machine type.",
+        "parameters": [
+          {
+            "name": "machine_type_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MachineType"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/products": {
       "get": {
         "description": "Retrieves the list of products.",
@@ -8507,6 +8543,10 @@
             "description": "Auto creation mode for cluster - OCM will create the operator roles and OIDC provider. false by default.",
             "type": "boolean"
           },
+          "bound_service_account_signing_key": {
+            "description": "Private key used to sign the service account token and allow cluster resources to authenticate against the cloud provider",
+            "type": "string"
+          },
           "external_id": {
             "description": "Optional unique identifier when assuming role in another account",
             "type": "string"
@@ -8596,6 +8636,20 @@
             "description": "Self link.",
             "type": "string"
           },
+          "common_annotations": {
+            "description": "Common annotations to be applied to all resources created by this addon.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "common_labels": {
+            "description": "Common labels to be applied to all resources created by this addon.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "config": {
             "description": "Additional configs to be used by the addon once its installed in the cluster.",
             "$ref": "#/components/schemas/AddOnConfig"
@@ -8646,6 +8700,13 @@
           "name": {
             "description": "Name of the add-on.",
             "type": "string"
+          },
+          "namespaces": {
+            "description": "Namespaces which are required by this addon.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnNamespace"
+            }
           },
           "operator_name": {
             "description": "The name of the operator installed by this add-on.",
@@ -8873,6 +8934,40 @@
           "pending",
           "ready"
         ]
+      },
+      "AddOnNamespace": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnNamespace' if this is a complete object or 'AddOnNamespaceLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "annotations": {
+            "description": "Annotations to be applied to this namespace.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "labels": {
+            "description": "Labels to be applied to this namespace.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "description": "Name of the namespace.",
+            "type": "string"
+          }
+        }
       },
       "AddOnParameter": {
         "description": "Representation of an add-on parameter.",
