@@ -266,7 +266,9 @@ var pathTreeData = `{
         "limited_support_reason_templates": {
           "-": null
         },
-        "machine_types": null,
+        "machine_types": {
+          "-": null
+        },
         "products": {
           "-": null
         },
