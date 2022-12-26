@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.303
+- Update to model v0.0.244
+  - Add `ARN` attribute to the `AWSSTSPolicy` model.
+
 ## 0.1.302
 - Update to model v0.0.243
   - Add `BoundServiceAccountSigningKey` attribute to the `Sts` model.

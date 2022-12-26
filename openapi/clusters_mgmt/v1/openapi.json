@@ -8216,6 +8216,10 @@
       "AWSSTSPolicy": {
         "description": "Representation of an sts policies for rosa cluster",
         "properties": {
+          "arn": {
+            "description": "The ARN of the managed policy",
+            "type": "string"
+          },
           "id": {
             "description": "Policy ID",
             "type": "string"
