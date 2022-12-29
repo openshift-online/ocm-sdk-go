@@ -8547,8 +8547,12 @@
             "description": "Auto creation mode for cluster - OCM will create the operator roles and OIDC provider. false by default.",
             "type": "boolean"
           },
+          "bound_service_account_key_kms_id": {
+            "description": "Kms Id for the bound service account signing key.",
+            "type": "string"
+          },
           "bound_service_account_signing_key": {
-            "description": "Private key used to sign the service account token and allow cluster resources to authenticate against the cloud provider",
+            "description": "Private key used to sign the service account token and allow cluster resources to authenticate against the cloud provider.",
             "type": "string"
           },
           "external_id": {
