@@ -72,4 +72,19 @@ func main() {
 		fmt.Printf("%s - %s\n", capability.Name(), capability.Value())
 		return true
 	})
+
+	// Search capabilities
+	response, err = collection.List().Search("name like 'Organization%'").
+		SendContext(ctx)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't retrieve capabilities: %s\n", err)
+		os.Exit(1)
+	}
+
+	// Display the capabilities:
+	response.Items().Each(func(capability *v1.Capability) bool {
+		fmt.Printf("%s - %s\n", capability.Name(), capability.Value())
+		return true
+	})
+
 }
