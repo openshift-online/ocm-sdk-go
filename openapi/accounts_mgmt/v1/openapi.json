@@ -682,6 +682,14 @@
             }
           },
           {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the organization\ninstead of the names of the columns of a table. For example, in order to\nretrieve organizations with name starting with my:\n\n```sql\nname like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "size",
             "description": "Maximum number of items that will be contained in the returned page.",
             "in": "query",
