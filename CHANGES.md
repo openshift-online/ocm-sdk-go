@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.305
+- Update to model v0.0.246
+  - Add Search to `Capabilities` resource
+
 ## 0.1.304
 - Update to model v0.0.245
   - Add `BoundServiceAccountKeyKmsId` attribute to the `Sts` model.
