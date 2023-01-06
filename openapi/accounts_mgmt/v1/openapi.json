@@ -5690,10 +5690,7 @@
             "type": "boolean"
           },
           "metrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SubscriptionMetrics"
-            }
+            "type": "string"
           },
           "organization_id": {
             "type": "string"
