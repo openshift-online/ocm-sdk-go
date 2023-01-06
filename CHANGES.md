@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.306
+- Update to model v0.0.247
+  - Corrected `Metrics` type on `DeletedSubscription`
+
 ## 0.1.305
 - Update to model v0.0.246
   - Add Search to `Capabilities` resource
