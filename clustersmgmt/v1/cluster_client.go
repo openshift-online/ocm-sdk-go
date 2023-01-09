@@ -919,6 +919,7 @@ type ClusterUpdateRequest struct {
 	query     url.Values
 	header    http.Header
 	body      *Cluster
+	dryRun    *bool
 }
 
 // Parameter adds a query parameter.
@@ -943,6 +944,14 @@ func (r *ClusterUpdateRequest) Impersonate(user string) *ClusterUpdateRequest {
 // Body sets the value of the 'body' parameter.
 func (r *ClusterUpdateRequest) Body(value *Cluster) *ClusterUpdateRequest {
 	r.body = value
+	return r
+}
+
+// DryRun sets the value of the 'dry_run' parameter.
+//
+// Dry run flag is used to check if the operation can be completed, but won't update.
+func (r *ClusterUpdateRequest) DryRun(value bool) *ClusterUpdateRequest {
+	r.dryRun = &value
 	return r
 }
 
