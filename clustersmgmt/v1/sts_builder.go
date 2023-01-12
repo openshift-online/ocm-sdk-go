@@ -35,6 +35,7 @@ type STSBuilder struct {
 	roleARN                       string
 	supportRoleARN                string
 	autoMode                      bool
+	enabled                       bool
 }
 
 // NewSTS creates a new builder of 'STS' objects.
@@ -75,10 +76,17 @@ func (b *STSBuilder) BoundServiceAccountSigningKey(value string) *STSBuilder {
 	return b
 }
 
+// Enabled sets the value of the 'enabled' attribute to the given value.
+func (b *STSBuilder) Enabled(value bool) *STSBuilder {
+	b.enabled = value
+	b.bitmap_ |= 16
+	return b
+}
+
 // ExternalID sets the value of the 'external_ID' attribute to the given value.
 func (b *STSBuilder) ExternalID(value string) *STSBuilder {
 	b.externalID = value
-	b.bitmap_ |= 16
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -88,9 +96,9 @@ func (b *STSBuilder) ExternalID(value string) *STSBuilder {
 func (b *STSBuilder) InstanceIAMRoles(value *InstanceIAMRolesBuilder) *STSBuilder {
 	b.instanceIAMRoles = value
 	if value != nil {
-		b.bitmap_ |= 32
+		b.bitmap_ |= 64
 	} else {
-		b.bitmap_ &^= 32
+		b.bitmap_ &^= 64
 	}
 	return b
 }
@@ -99,35 +107,35 @@ func (b *STSBuilder) InstanceIAMRoles(value *InstanceIAMRolesBuilder) *STSBuilde
 func (b *STSBuilder) OperatorIAMRoles(values ...*OperatorIAMRoleBuilder) *STSBuilder {
 	b.operatorIAMRoles = make([]*OperatorIAMRoleBuilder, len(values))
 	copy(b.operatorIAMRoles, values)
-	b.bitmap_ |= 64
+	b.bitmap_ |= 128
 	return b
 }
 
 // OperatorRolePrefix sets the value of the 'operator_role_prefix' attribute to the given value.
 func (b *STSBuilder) OperatorRolePrefix(value string) *STSBuilder {
 	b.operatorRolePrefix = value
-	b.bitmap_ |= 128
+	b.bitmap_ |= 256
 	return b
 }
 
 // PermissionBoundary sets the value of the 'permission_boundary' attribute to the given value.
 func (b *STSBuilder) PermissionBoundary(value string) *STSBuilder {
 	b.permissionBoundary = value
-	b.bitmap_ |= 256
+	b.bitmap_ |= 512
 	return b
 }
 
 // RoleARN sets the value of the 'role_ARN' attribute to the given value.
 func (b *STSBuilder) RoleARN(value string) *STSBuilder {
 	b.roleARN = value
-	b.bitmap_ |= 512
+	b.bitmap_ |= 1024
 	return b
 }
 
 // SupportRoleARN sets the value of the 'support_role_ARN' attribute to the given value.
 func (b *STSBuilder) SupportRoleARN(value string) *STSBuilder {
 	b.supportRoleARN = value
-	b.bitmap_ |= 1024
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -141,6 +149,7 @@ func (b *STSBuilder) Copy(object *STS) *STSBuilder {
 	b.autoMode = object.autoMode
 	b.boundServiceAccountKeyKmsId = object.boundServiceAccountKeyKmsId
 	b.boundServiceAccountSigningKey = object.boundServiceAccountSigningKey
+	b.enabled = object.enabled
 	b.externalID = object.externalID
 	if object.instanceIAMRoles != nil {
 		b.instanceIAMRoles = NewInstanceIAMRoles().Copy(object.instanceIAMRoles)
@@ -170,6 +179,7 @@ func (b *STSBuilder) Build() (object *STS, err error) {
 	object.autoMode = b.autoMode
 	object.boundServiceAccountKeyKmsId = b.boundServiceAccountKeyKmsId
 	object.boundServiceAccountSigningKey = b.boundServiceAccountSigningKey
+	object.enabled = b.enabled
 	object.externalID = b.externalID
 	if b.instanceIAMRoles != nil {
 		object.instanceIAMRoles, err = b.instanceIAMRoles.Build()
