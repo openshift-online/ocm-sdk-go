@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.307
+- Update to model v0.0.248
+  - Add `AwsEtcdEncryption` type model and reference from `AWS`.
+  - Add `Enabled` attribute to `STS` model.
+
 ## 0.1.306
 - Update to model v0.0.247
   - Corrected `Metrics` type on `DeletedSubscription`
