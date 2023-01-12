@@ -7984,6 +7984,10 @@
             "description": "AWS account identifier.",
             "type": "string"
           },
+          "etcd_encryption": {
+            "description": "Related etcd encryption configuration",
+            "$ref": "#/components/schemas/AwsEtcdEncryption"
+          },
           "private_link": {
             "description": "Sets cluster to be inaccessible externally.",
             "type": "boolean"
@@ -8554,6 +8558,10 @@
           "bound_service_account_signing_key": {
             "description": "Private key used to sign the service account token and allow cluster resources to authenticate against the cloud provider.",
             "type": "string"
+          },
+          "enabled": {
+            "description": "If STS is enabled or disabled",
+            "type": "boolean"
           },
           "external_id": {
             "description": "Optional unique identifier when assuming role in another account",
@@ -9295,6 +9303,15 @@
             "items": {
               "$ref": "#/components/schemas/AlertInfo"
             }
+          }
+        }
+      },
+      "AwsEtcdEncryption": {
+        "description": "Contains the necessary attributes to support etcd encryption for AWS based clusters.",
+        "properties": {
+          "kms_key_arn": {
+            "description": "ARN of the KMS to be used for the etcd encryption",
+            "type": "string"
           }
         }
       },
