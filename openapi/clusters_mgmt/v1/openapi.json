@@ -8555,6 +8555,10 @@
             "description": "Kms Id for the bound service account signing key.",
             "type": "string"
           },
+          "bound_service_account_key_secret_arn": {
+            "description": "Secrets Manager ARN for the bound service account signing key.",
+            "type": "string"
+          },
           "bound_service_account_signing_key": {
             "description": "Private key used to sign the service account token and allow cluster resources to authenticate against the cloud provider.",
             "type": "string"
