@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.309
+- Update to model v0.0.250
+  - Add `Addon Inquiries API` to `addons_mgmt` 
+
 ## 0.1.308
 - Update to model v0.0.249
   - Add `BoundServiceAccountKeySecretArn` attribute to the `Sts` model.
