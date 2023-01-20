@@ -9993,6 +9993,11 @@
             "description": "Configuration mode",
             "$ref": "#/components/schemas/ClusterConfigurationMode"
           },
+          "current_compute": {
+            "description": "Current Replicas available for a Hosted Cluster",
+            "type": "integer",
+            "format": "int32"
+          },
           "description": {
             "description": "Detailed description of the cluster status.",
             "type": "string"
@@ -10915,6 +10920,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "status": {
+            "description": "NodePool status.",
+            "$ref": "#/components/schemas/NodePoolStatus"
+          },
           "subnet": {
             "description": "The subnet upon which the nodes are created.",
             "type": "string"
@@ -10945,6 +10954,32 @@
             "description": "The minimum number of replicas for the node pool.",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "NodePoolStatus": {
+        "description": "Representation of the status of a node pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePoolStatus' if this is a complete object or 'NodePoolStatusLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "current_replicas": {
+            "description": "The current number of replicas for the node pool.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "description": "Adds additional information about the NodePool status when the node pool doesn't reach the desired replicas.",
+            "type": "string"
           }
         }
       },
