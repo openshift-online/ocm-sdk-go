@@ -8551,18 +8551,6 @@
             "description": "Auto creation mode for cluster - OCM will create the operator roles and OIDC provider. false by default.",
             "type": "boolean"
           },
-          "bound_service_account_key_kms_id": {
-            "description": "Kms Id for the bound service account signing key.",
-            "type": "string"
-          },
-          "bound_service_account_key_secret_arn": {
-            "description": "Secrets Manager ARN for the bound service account signing key.",
-            "type": "string"
-          },
-          "bound_service_account_signing_key": {
-            "description": "Private key used to sign the service account token and allow cluster resources to authenticate against the cloud provider.",
-            "type": "string"
-          },
           "enabled": {
             "description": "If STS is enabled or disabled",
             "type": "boolean"
@@ -8574,6 +8562,10 @@
           "instance_iam_roles": {
             "description": "Instance IAM roles to use for the instance profiles of the master and worker instances",
             "$ref": "#/components/schemas/InstanceIAMRoles"
+          },
+          "oidc_private_key_secret_arn": {
+            "description": "Secrets Manager ARN for the OIDC private key key.",
+            "type": "string"
           },
           "operator_iam_roles": {
             "description": "List of roles necessary to access the AWS resources of the various operators used during installation",
