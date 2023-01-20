@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.310
+- Update to model v0.0.251
+  - Update `NodePool` with status attributes
+  - Added `current_compute` attribute in `ClusterStatus` for hosted clusters.
+  - Added missing variable to `addon environment variable` for addons mgmt
+
 ## 0.1.309
 - Update to model v0.0.250
   - Add `Addon Inquiries API` to `addons_mgmt` 
