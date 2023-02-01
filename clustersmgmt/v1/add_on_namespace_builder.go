@@ -20,8 +20,6 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // AddOnNamespaceBuilder contains the data and logic needed to build 'add_on_namespace' objects.
-//
-//
 type AddOnNamespaceBuilder struct {
 	bitmap_     uint32
 	id          string
@@ -62,8 +60,6 @@ func (b *AddOnNamespaceBuilder) Empty() bool {
 }
 
 // Annotations sets the value of the 'annotations' attribute to the given value.
-//
-//
 func (b *AddOnNamespaceBuilder) Annotations(value map[string]string) *AddOnNamespaceBuilder {
 	b.annotations = value
 	if value != nil {
@@ -75,8 +71,6 @@ func (b *AddOnNamespaceBuilder) Annotations(value map[string]string) *AddOnNames
 }
 
 // Labels sets the value of the 'labels' attribute to the given value.
-//
-//
 func (b *AddOnNamespaceBuilder) Labels(value map[string]string) *AddOnNamespaceBuilder {
 	b.labels = value
 	if value != nil {
@@ -88,8 +82,6 @@ func (b *AddOnNamespaceBuilder) Labels(value map[string]string) *AddOnNamespaceB
 }
 
 // Name sets the value of the 'name' attribute to the given value.
-//
-//
 func (b *AddOnNamespaceBuilder) Name(value string) *AddOnNamespaceBuilder {
 	b.name = value
 	b.bitmap_ |= 32

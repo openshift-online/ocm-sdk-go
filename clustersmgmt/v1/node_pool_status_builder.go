@@ -61,8 +61,6 @@ func (b *NodePoolStatusBuilder) Empty() bool {
 }
 
 // CurrentReplicas sets the value of the 'current_replicas' attribute to the given value.
-//
-//
 func (b *NodePoolStatusBuilder) CurrentReplicas(value int) *NodePoolStatusBuilder {
 	b.currentReplicas = value
 	b.bitmap_ |= 8
@@ -70,8 +68,6 @@ func (b *NodePoolStatusBuilder) CurrentReplicas(value int) *NodePoolStatusBuilde
 }
 
 // Message sets the value of the 'message' attribute to the given value.
-//
-//
 func (b *NodePoolStatusBuilder) Message(value string) *NodePoolStatusBuilder {
 	b.message = value
 	b.bitmap_ |= 16

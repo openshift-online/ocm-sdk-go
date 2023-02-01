@@ -32,8 +32,6 @@ const AddOnNamespaceLinkKind = "AddOnNamespaceLink"
 const AddOnNamespaceNilKind = "AddOnNamespaceNil"
 
 // AddOnNamespace represents the values of the 'add_on_namespace' type.
-//
-//
 type AddOnNamespace struct {
 	bitmap_     uint32
 	id          string

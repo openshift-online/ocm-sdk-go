@@ -40,8 +40,6 @@ func (b *AddonStatusConditionBuilder) Empty() bool {
 }
 
 // Reason sets the value of the 'reason' attribute to the given value.
-//
-//
 func (b *AddonStatusConditionBuilder) Reason(value string) *AddonStatusConditionBuilder {
 	b.reason = value
 	b.bitmap_ |= 1

@@ -41,8 +41,6 @@ func (b *AddonEnvironmentVariableBuilder) Empty() bool {
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
-//
-//
 func (b *AddonEnvironmentVariableBuilder) ID(value string) *AddonEnvironmentVariableBuilder {
 	b.id = value
 	b.bitmap_ |= 1
@@ -50,8 +48,6 @@ func (b *AddonEnvironmentVariableBuilder) ID(value string) *AddonEnvironmentVari
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
-//
-//
 func (b *AddonEnvironmentVariableBuilder) Enabled(value bool) *AddonEnvironmentVariableBuilder {
 	b.enabled = value
 	b.bitmap_ |= 2
@@ -59,8 +55,6 @@ func (b *AddonEnvironmentVariableBuilder) Enabled(value bool) *AddonEnvironmentV
 }
 
 // Name sets the value of the 'name' attribute to the given value.
-//
-//
 func (b *AddonEnvironmentVariableBuilder) Name(value string) *AddonEnvironmentVariableBuilder {
 	b.name = value
 	b.bitmap_ |= 4
@@ -68,8 +62,6 @@ func (b *AddonEnvironmentVariableBuilder) Name(value string) *AddonEnvironmentVa
 }
 
 // Value sets the value of the 'value' attribute to the given value.
-//
-//
 func (b *AddonEnvironmentVariableBuilder) Value(value string) *AddonEnvironmentVariableBuilder {
 	b.value = value
 	b.bitmap_ |= 8

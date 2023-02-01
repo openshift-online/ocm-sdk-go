@@ -48,8 +48,6 @@ func (b *STSBuilder) Empty() bool {
 }
 
 // OIDCEndpointURL sets the value of the 'OIDC_endpoint_URL' attribute to the given value.
-//
-//
 func (b *STSBuilder) OIDCEndpointURL(value string) *STSBuilder {
 	b.oidcEndpointURL = value
 	b.bitmap_ |= 1
@@ -57,8 +55,6 @@ func (b *STSBuilder) OIDCEndpointURL(value string) *STSBuilder {
 }
 
 // AutoMode sets the value of the 'auto_mode' attribute to the given value.
-//
-//
 func (b *STSBuilder) AutoMode(value bool) *STSBuilder {
 	b.autoMode = value
 	b.bitmap_ |= 2
@@ -66,8 +62,6 @@ func (b *STSBuilder) AutoMode(value bool) *STSBuilder {
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
-//
-//
 func (b *STSBuilder) Enabled(value bool) *STSBuilder {
 	b.enabled = value
 	b.bitmap_ |= 4
@@ -75,8 +69,6 @@ func (b *STSBuilder) Enabled(value bool) *STSBuilder {
 }
 
 // ExternalID sets the value of the 'external_ID' attribute to the given value.
-//
-//
 func (b *STSBuilder) ExternalID(value string) *STSBuilder {
 	b.externalID = value
 	b.bitmap_ |= 8
@@ -97,8 +89,6 @@ func (b *STSBuilder) InstanceIAMRoles(value *InstanceIAMRolesBuilder) *STSBuilde
 }
 
 // OidcPrivateKeySecretArn sets the value of the 'oidc_private_key_secret_arn' attribute to the given value.
-//
-//
 func (b *STSBuilder) OidcPrivateKeySecretArn(value string) *STSBuilder {
 	b.oidcPrivateKeySecretArn = value
 	b.bitmap_ |= 32
@@ -106,8 +96,6 @@ func (b *STSBuilder) OidcPrivateKeySecretArn(value string) *STSBuilder {
 }
 
 // OperatorIAMRoles sets the value of the 'operator_IAM_roles' attribute to the given values.
-//
-//
 func (b *STSBuilder) OperatorIAMRoles(values ...*OperatorIAMRoleBuilder) *STSBuilder {
 	b.operatorIAMRoles = make([]*OperatorIAMRoleBuilder, len(values))
 	copy(b.operatorIAMRoles, values)
@@ -116,8 +104,6 @@ func (b *STSBuilder) OperatorIAMRoles(values ...*OperatorIAMRoleBuilder) *STSBui
 }
 
 // OperatorRolePrefix sets the value of the 'operator_role_prefix' attribute to the given value.
-//
-//
 func (b *STSBuilder) OperatorRolePrefix(value string) *STSBuilder {
 	b.operatorRolePrefix = value
 	b.bitmap_ |= 128
@@ -125,8 +111,6 @@ func (b *STSBuilder) OperatorRolePrefix(value string) *STSBuilder {
 }
 
 // PermissionBoundary sets the value of the 'permission_boundary' attribute to the given value.
-//
-//
 func (b *STSBuilder) PermissionBoundary(value string) *STSBuilder {
 	b.permissionBoundary = value
 	b.bitmap_ |= 256
@@ -134,8 +118,6 @@ func (b *STSBuilder) PermissionBoundary(value string) *STSBuilder {
 }
 
 // RoleARN sets the value of the 'role_ARN' attribute to the given value.
-//
-//
 func (b *STSBuilder) RoleARN(value string) *STSBuilder {
 	b.roleARN = value
 	b.bitmap_ |= 512
@@ -143,8 +125,6 @@ func (b *STSBuilder) RoleARN(value string) *STSBuilder {
 }
 
 // SupportRoleARN sets the value of the 'support_role_ARN' attribute to the given value.
-//
-//
 func (b *STSBuilder) SupportRoleARN(value string) *STSBuilder {
 	b.supportRoleARN = value
 	b.bitmap_ |= 1024

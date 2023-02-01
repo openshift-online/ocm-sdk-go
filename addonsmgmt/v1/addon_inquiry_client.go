@@ -50,8 +50,6 @@ func NewAddonInquiryClient(transport http.RoundTripper, path string) *AddonInqui
 }
 
 // Get creates a request for the 'get' method.
-//
-//
 func (c *AddonInquiryClient) Get() *AddonInquiryGetRequest {
 	return &AddonInquiryGetRequest{
 		transport: c.transport,
@@ -158,16 +156,12 @@ func (r *AddonInquiryPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-//
-//
 func (r *AddonInquiryPollResponse) Body() *Addon {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-//
-//
 func (r *AddonInquiryPollResponse) GetBody() (value *Addon, ok bool) {
 	return r.response.GetBody()
 }
@@ -293,8 +287,6 @@ func (r *AddonInquiryGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-//
-//
 func (r *AddonInquiryGetResponse) Body() *Addon {
 	if r == nil {
 		return nil
@@ -304,8 +296,6 @@ func (r *AddonInquiryGetResponse) Body() *Addon {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-//
-//
 func (r *AddonInquiryGetResponse) GetBody() (value *Addon, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

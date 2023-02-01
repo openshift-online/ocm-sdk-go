@@ -63,7 +63,7 @@ func UnmarshalAddonStatusConditionTypeList(source interface{}) (items []AddonSta
 	return
 }
 
-// readAddonStatusConditionTypeList reads list of values of the ''addon_status_condition_type' type from
+// readAddonStatusConditionTypeList reads list of values of the ”addon_status_condition_type' type from
 // the given iterator.
 func readAddonStatusConditionTypeList(iterator *jsoniter.Iterator) []AddonStatusConditionType {
 	list := []AddonStatusConditionType{}
