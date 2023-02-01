@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.274
+- Update to metamodel 0.0.57
+
 ## 0.1.273
 - Update to model 0.0.205:
   - Add `BillingMarketplaceAccount` field to ReservedResource type.

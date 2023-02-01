@@ -123,7 +123,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -333,7 +334,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -359,7 +361,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -392,7 +395,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -437,7 +441,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "created_after",
@@ -552,14 +557,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "event_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -585,14 +592,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "event_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -625,14 +634,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "event_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -677,14 +688,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "event_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -755,21 +768,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "event_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "attachment_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -795,21 +811,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "event_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "attachment_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -842,21 +861,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "event_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "attachment_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -901,7 +923,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "created_after",
@@ -1002,14 +1025,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "follow_up_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1035,14 +1060,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "follow_up_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1075,14 +1102,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "follow_up_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1127,7 +1156,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "checked",
@@ -1205,14 +1235,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "notification_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1238,14 +1270,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "notification_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1278,14 +1312,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "notification_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1401,7 +1437,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2014,7 +2051,7 @@
           "details": {
             "description": "Extra information about the error.",
             "type": "object",
-            "additionalProperties": "true"
+            "additionalProperties": true
           }
         }
       }
