@@ -60,6 +60,8 @@ func (b *SyncsetBuilder) Empty() bool {
 }
 
 // Resources sets the value of the 'resources' attribute to the given values.
+//
+//
 func (b *SyncsetBuilder) Resources(values ...interface{}) *SyncsetBuilder {
 	b.resources = make([]interface{}, len(values))
 	copy(b.resources, values)

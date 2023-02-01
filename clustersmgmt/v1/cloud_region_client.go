@@ -158,12 +158,16 @@ func (r *CloudRegionPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CloudRegionPollResponse) Body() *CloudRegion {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CloudRegionPollResponse) GetBody() (value *CloudRegion, ok bool) {
 	return r.response.GetBody()
 }
@@ -289,6 +293,8 @@ func (r *CloudRegionGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CloudRegionGetResponse) Body() *CloudRegion {
 	if r == nil {
 		return nil
@@ -298,6 +304,8 @@ func (r *CloudRegionGetResponse) Body() *CloudRegion {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CloudRegionGetResponse) GetBody() (value *CloudRegion, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

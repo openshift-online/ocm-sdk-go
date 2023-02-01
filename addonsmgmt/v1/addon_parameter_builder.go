@@ -50,6 +50,8 @@ func (b *AddonParameterBuilder) Empty() bool {
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) ID(value string) *AddonParameterBuilder {
 	b.id = value
 	b.bitmap_ |= 1
@@ -57,6 +59,8 @@ func (b *AddonParameterBuilder) ID(value string) *AddonParameterBuilder {
 }
 
 // Conditions sets the value of the 'conditions' attribute to the given values.
+//
+//
 func (b *AddonParameterBuilder) Conditions(values ...*AddonRequirementBuilder) *AddonParameterBuilder {
 	b.conditions = make([]*AddonRequirementBuilder, len(values))
 	copy(b.conditions, values)
@@ -65,6 +69,8 @@ func (b *AddonParameterBuilder) Conditions(values ...*AddonRequirementBuilder) *
 }
 
 // DefaultValue sets the value of the 'default_value' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) DefaultValue(value string) *AddonParameterBuilder {
 	b.defaultValue = value
 	b.bitmap_ |= 4
@@ -72,6 +78,8 @@ func (b *AddonParameterBuilder) DefaultValue(value string) *AddonParameterBuilde
 }
 
 // Description sets the value of the 'description' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) Description(value string) *AddonParameterBuilder {
 	b.description = value
 	b.bitmap_ |= 8
@@ -79,6 +87,8 @@ func (b *AddonParameterBuilder) Description(value string) *AddonParameterBuilder
 }
 
 // Editable sets the value of the 'editable' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) Editable(value bool) *AddonParameterBuilder {
 	b.editable = value
 	b.bitmap_ |= 16
@@ -86,6 +96,8 @@ func (b *AddonParameterBuilder) Editable(value bool) *AddonParameterBuilder {
 }
 
 // EditableDirection sets the value of the 'editable_direction' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) EditableDirection(value string) *AddonParameterBuilder {
 	b.editableDirection = value
 	b.bitmap_ |= 32
@@ -93,6 +105,8 @@ func (b *AddonParameterBuilder) EditableDirection(value string) *AddonParameterB
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) Enabled(value bool) *AddonParameterBuilder {
 	b.enabled = value
 	b.bitmap_ |= 64
@@ -100,6 +114,8 @@ func (b *AddonParameterBuilder) Enabled(value bool) *AddonParameterBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) Name(value string) *AddonParameterBuilder {
 	b.name = value
 	b.bitmap_ |= 128
@@ -107,6 +123,8 @@ func (b *AddonParameterBuilder) Name(value string) *AddonParameterBuilder {
 }
 
 // Options sets the value of the 'options' attribute to the given values.
+//
+//
 func (b *AddonParameterBuilder) Options(values ...*AddonParameterOptionBuilder) *AddonParameterBuilder {
 	b.options = make([]*AddonParameterOptionBuilder, len(values))
 	copy(b.options, values)
@@ -115,6 +133,8 @@ func (b *AddonParameterBuilder) Options(values ...*AddonParameterOptionBuilder) 
 }
 
 // Required sets the value of the 'required' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) Required(value bool) *AddonParameterBuilder {
 	b.required = value
 	b.bitmap_ |= 512
@@ -122,6 +142,8 @@ func (b *AddonParameterBuilder) Required(value bool) *AddonParameterBuilder {
 }
 
 // Validation sets the value of the 'validation' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) Validation(value string) *AddonParameterBuilder {
 	b.validation = value
 	b.bitmap_ |= 1024
@@ -129,6 +151,8 @@ func (b *AddonParameterBuilder) Validation(value string) *AddonParameterBuilder 
 }
 
 // ValidationErrMsg sets the value of the 'validation_err_msg' attribute to the given value.
+//
+//
 func (b *AddonParameterBuilder) ValidationErrMsg(value string) *AddonParameterBuilder {
 	b.validationErrMsg = value
 	b.bitmap_ |= 2048

@@ -62,6 +62,8 @@ func (b *AddonStatusBuilder) Empty() bool {
 }
 
 // AddonId sets the value of the 'addon_id' attribute to the given value.
+//
+//
 func (b *AddonStatusBuilder) AddonId(value string) *AddonStatusBuilder {
 	b.addonId = value
 	b.bitmap_ |= 8
@@ -69,6 +71,8 @@ func (b *AddonStatusBuilder) AddonId(value string) *AddonStatusBuilder {
 }
 
 // CorrelationID sets the value of the 'correlation_ID' attribute to the given value.
+//
+//
 func (b *AddonStatusBuilder) CorrelationID(value string) *AddonStatusBuilder {
 	b.correlationID = value
 	b.bitmap_ |= 16
@@ -76,6 +80,8 @@ func (b *AddonStatusBuilder) CorrelationID(value string) *AddonStatusBuilder {
 }
 
 // StatusConditions sets the value of the 'status_conditions' attribute to the given values.
+//
+//
 func (b *AddonStatusBuilder) StatusConditions(values ...*AddonStatusConditionBuilder) *AddonStatusBuilder {
 	b.statusConditions = make([]*AddonStatusConditionBuilder, len(values))
 	copy(b.statusConditions, values)

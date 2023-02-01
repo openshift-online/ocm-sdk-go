@@ -24,6 +24,8 @@ import (
 )
 
 // LogEntryBuilder contains the data and logic needed to build 'log_entry' objects.
+//
+//
 type LogEntryBuilder struct {
 	bitmap_        uint32
 	id             string
@@ -72,6 +74,8 @@ func (b *LogEntryBuilder) Empty() bool {
 }
 
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) ClusterID(value string) *LogEntryBuilder {
 	b.clusterID = value
 	b.bitmap_ |= 8
@@ -79,6 +83,8 @@ func (b *LogEntryBuilder) ClusterID(value string) *LogEntryBuilder {
 }
 
 // ClusterUUID sets the value of the 'cluster_UUID' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) ClusterUUID(value string) *LogEntryBuilder {
 	b.clusterUUID = value
 	b.bitmap_ |= 16
@@ -86,6 +92,8 @@ func (b *LogEntryBuilder) ClusterUUID(value string) *LogEntryBuilder {
 }
 
 // Description sets the value of the 'description' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) Description(value string) *LogEntryBuilder {
 	b.description = value
 	b.bitmap_ |= 32
@@ -93,6 +101,8 @@ func (b *LogEntryBuilder) Description(value string) *LogEntryBuilder {
 }
 
 // EventStreamID sets the value of the 'event_stream_ID' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) EventStreamID(value string) *LogEntryBuilder {
 	b.eventStreamID = value
 	b.bitmap_ |= 64
@@ -100,6 +110,8 @@ func (b *LogEntryBuilder) EventStreamID(value string) *LogEntryBuilder {
 }
 
 // InternalOnly sets the value of the 'internal_only' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) InternalOnly(value bool) *LogEntryBuilder {
 	b.internalOnly = value
 	b.bitmap_ |= 128
@@ -107,6 +119,8 @@ func (b *LogEntryBuilder) InternalOnly(value bool) *LogEntryBuilder {
 }
 
 // ServiceName sets the value of the 'service_name' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
 	b.serviceName = value
 	b.bitmap_ |= 256
@@ -114,6 +128,8 @@ func (b *LogEntryBuilder) ServiceName(value string) *LogEntryBuilder {
 }
 
 // Severity sets the value of the 'severity' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) Severity(value Severity) *LogEntryBuilder {
 	b.severity = value
 	b.bitmap_ |= 512
@@ -121,6 +137,8 @@ func (b *LogEntryBuilder) Severity(value Severity) *LogEntryBuilder {
 }
 
 // SubscriptionID sets the value of the 'subscription_ID' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) SubscriptionID(value string) *LogEntryBuilder {
 	b.subscriptionID = value
 	b.bitmap_ |= 1024
@@ -128,6 +146,8 @@ func (b *LogEntryBuilder) SubscriptionID(value string) *LogEntryBuilder {
 }
 
 // Summary sets the value of the 'summary' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) Summary(value string) *LogEntryBuilder {
 	b.summary = value
 	b.bitmap_ |= 2048
@@ -135,6 +155,8 @@ func (b *LogEntryBuilder) Summary(value string) *LogEntryBuilder {
 }
 
 // Timestamp sets the value of the 'timestamp' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) Timestamp(value time.Time) *LogEntryBuilder {
 	b.timestamp = value
 	b.bitmap_ |= 4096
@@ -142,6 +164,8 @@ func (b *LogEntryBuilder) Timestamp(value time.Time) *LogEntryBuilder {
 }
 
 // Username sets the value of the 'username' attribute to the given value.
+//
+//
 func (b *LogEntryBuilder) Username(value string) *LogEntryBuilder {
 	b.username = value
 	b.bitmap_ |= 8192

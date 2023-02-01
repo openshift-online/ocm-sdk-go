@@ -60,6 +60,8 @@ func (b *ManifestBuilder) Empty() bool {
 }
 
 // Workloads sets the value of the 'workloads' attribute to the given values.
+//
+//
 func (b *ManifestBuilder) Workloads(values ...interface{}) *ManifestBuilder {
 	b.workloads = make([]interface{}, len(values))
 	copy(b.workloads, values)

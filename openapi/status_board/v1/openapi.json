@@ -163,7 +163,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -189,7 +190,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -222,7 +224,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -378,7 +381,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -404,7 +408,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -437,7 +442,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -481,7 +487,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -524,7 +531,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "fullname",
@@ -616,14 +624,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -649,14 +659,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -689,14 +701,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -740,14 +754,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -790,14 +806,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "created_after",
@@ -906,21 +924,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -946,21 +967,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -993,21 +1017,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1116,7 +1143,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1256,7 +1284,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1282,7 +1311,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1315,7 +1345,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1471,7 +1502,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1497,7 +1529,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1530,7 +1563,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1574,7 +1608,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1617,7 +1652,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "fullname",
@@ -1702,14 +1738,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1735,14 +1773,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1775,14 +1815,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1826,14 +1868,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1876,14 +1920,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "fullname",
@@ -1975,21 +2021,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2015,21 +2064,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2062,21 +2114,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2120,21 +2175,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2177,21 +2235,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "created_after",
@@ -2300,28 +2361,32 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2347,28 +2412,32 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2401,28 +2470,32 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "application_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "service_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2466,7 +2539,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2509,7 +2583,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "created_after",
@@ -2618,14 +2693,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2651,14 +2728,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2691,14 +2770,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2861,7 +2942,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2887,7 +2969,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2920,7 +3003,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2964,7 +3048,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3007,7 +3092,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "created_after",
@@ -3116,14 +3202,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3149,14 +3237,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3189,14 +3279,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "status_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3376,7 +3468,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3402,7 +3495,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3435,7 +3529,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3615,7 +3710,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3641,7 +3737,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3674,7 +3771,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4218,7 +4316,7 @@
           "details": {
             "description": "Extra information about the error.",
             "type": "object",
-            "additionalProperties": "true"
+            "additionalProperties": true
           }
         }
       }

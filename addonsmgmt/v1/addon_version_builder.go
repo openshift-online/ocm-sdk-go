@@ -69,6 +69,8 @@ func (b *AddonVersionBuilder) Empty() bool {
 }
 
 // AdditionalCatalogSources sets the value of the 'additional_catalog_sources' attribute to the given values.
+//
+//
 func (b *AddonVersionBuilder) AdditionalCatalogSources(values ...*AdditionalCatalogSourceBuilder) *AddonVersionBuilder {
 	b.additionalCatalogSources = make([]*AdditionalCatalogSourceBuilder, len(values))
 	copy(b.additionalCatalogSources, values)
@@ -77,6 +79,8 @@ func (b *AddonVersionBuilder) AdditionalCatalogSources(values ...*AdditionalCata
 }
 
 // AvailableUpgrades sets the value of the 'available_upgrades' attribute to the given values.
+//
+//
 func (b *AddonVersionBuilder) AvailableUpgrades(values ...string) *AddonVersionBuilder {
 	b.availableUpgrades = make([]string, len(values))
 	copy(b.availableUpgrades, values)
@@ -85,6 +89,8 @@ func (b *AddonVersionBuilder) AvailableUpgrades(values ...string) *AddonVersionB
 }
 
 // Channel sets the value of the 'channel' attribute to the given value.
+//
+//
 func (b *AddonVersionBuilder) Channel(value string) *AddonVersionBuilder {
 	b.channel = value
 	b.bitmap_ |= 32
@@ -106,6 +112,8 @@ func (b *AddonVersionBuilder) Config(value *AddonConfigBuilder) *AddonVersionBui
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *AddonVersionBuilder) Enabled(value bool) *AddonVersionBuilder {
 	b.enabled = value
 	b.bitmap_ |= 128
@@ -113,6 +121,8 @@ func (b *AddonVersionBuilder) Enabled(value bool) *AddonVersionBuilder {
 }
 
 // Parameters sets the value of the 'parameters' attribute to the given values.
+//
+//
 func (b *AddonVersionBuilder) Parameters(values ...*AddonParameterBuilder) *AddonVersionBuilder {
 	b.parameters = make([]*AddonParameterBuilder, len(values))
 	copy(b.parameters, values)
@@ -121,6 +131,8 @@ func (b *AddonVersionBuilder) Parameters(values ...*AddonParameterBuilder) *Addo
 }
 
 // PullSecretName sets the value of the 'pull_secret_name' attribute to the given value.
+//
+//
 func (b *AddonVersionBuilder) PullSecretName(value string) *AddonVersionBuilder {
 	b.pullSecretName = value
 	b.bitmap_ |= 512
@@ -128,6 +140,8 @@ func (b *AddonVersionBuilder) PullSecretName(value string) *AddonVersionBuilder 
 }
 
 // Requirements sets the value of the 'requirements' attribute to the given values.
+//
+//
 func (b *AddonVersionBuilder) Requirements(values ...*AddonRequirementBuilder) *AddonVersionBuilder {
 	b.requirements = make([]*AddonRequirementBuilder, len(values))
 	copy(b.requirements, values)
@@ -136,6 +150,8 @@ func (b *AddonVersionBuilder) Requirements(values ...*AddonRequirementBuilder) *
 }
 
 // SourceImage sets the value of the 'source_image' attribute to the given value.
+//
+//
 func (b *AddonVersionBuilder) SourceImage(value string) *AddonVersionBuilder {
 	b.sourceImage = value
 	b.bitmap_ |= 2048
@@ -143,6 +159,8 @@ func (b *AddonVersionBuilder) SourceImage(value string) *AddonVersionBuilder {
 }
 
 // SubOperators sets the value of the 'sub_operators' attribute to the given values.
+//
+//
 func (b *AddonVersionBuilder) SubOperators(values ...*AddonSubOperatorBuilder) *AddonVersionBuilder {
 	b.subOperators = make([]*AddonSubOperatorBuilder, len(values))
 	copy(b.subOperators, values)

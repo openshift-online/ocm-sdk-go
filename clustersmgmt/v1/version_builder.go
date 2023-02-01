@@ -71,6 +71,8 @@ func (b *VersionBuilder) Empty() bool {
 }
 
 // ROSAEnabled sets the value of the 'ROSA_enabled' attribute to the given value.
+//
+//
 func (b *VersionBuilder) ROSAEnabled(value bool) *VersionBuilder {
 	b.rosaEnabled = value
 	b.bitmap_ |= 8
@@ -78,6 +80,8 @@ func (b *VersionBuilder) ROSAEnabled(value bool) *VersionBuilder {
 }
 
 // AvailableUpgrades sets the value of the 'available_upgrades' attribute to the given values.
+//
+//
 func (b *VersionBuilder) AvailableUpgrades(values ...string) *VersionBuilder {
 	b.availableUpgrades = make([]string, len(values))
 	copy(b.availableUpgrades, values)
@@ -86,6 +90,8 @@ func (b *VersionBuilder) AvailableUpgrades(values ...string) *VersionBuilder {
 }
 
 // ChannelGroup sets the value of the 'channel_group' attribute to the given value.
+//
+//
 func (b *VersionBuilder) ChannelGroup(value string) *VersionBuilder {
 	b.channelGroup = value
 	b.bitmap_ |= 32
@@ -93,6 +99,8 @@ func (b *VersionBuilder) ChannelGroup(value string) *VersionBuilder {
 }
 
 // Default sets the value of the 'default' attribute to the given value.
+//
+//
 func (b *VersionBuilder) Default(value bool) *VersionBuilder {
 	b.default_ = value
 	b.bitmap_ |= 64
@@ -100,6 +108,8 @@ func (b *VersionBuilder) Default(value bool) *VersionBuilder {
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
 	b.enabled = value
 	b.bitmap_ |= 128
@@ -107,6 +117,8 @@ func (b *VersionBuilder) Enabled(value bool) *VersionBuilder {
 }
 
 // EndOfLifeTimestamp sets the value of the 'end_of_life_timestamp' attribute to the given value.
+//
+//
 func (b *VersionBuilder) EndOfLifeTimestamp(value time.Time) *VersionBuilder {
 	b.endOfLifeTimestamp = value
 	b.bitmap_ |= 256
@@ -114,6 +126,8 @@ func (b *VersionBuilder) EndOfLifeTimestamp(value time.Time) *VersionBuilder {
 }
 
 // RawID sets the value of the 'raw_ID' attribute to the given value.
+//
+//
 func (b *VersionBuilder) RawID(value string) *VersionBuilder {
 	b.rawID = value
 	b.bitmap_ |= 512
@@ -121,6 +135,8 @@ func (b *VersionBuilder) RawID(value string) *VersionBuilder {
 }
 
 // ReleaseImage sets the value of the 'release_image' attribute to the given value.
+//
+//
 func (b *VersionBuilder) ReleaseImage(value string) *VersionBuilder {
 	b.releaseImage = value
 	b.bitmap_ |= 1024

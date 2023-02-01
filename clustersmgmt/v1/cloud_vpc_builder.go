@@ -41,6 +41,8 @@ func (b *CloudVPCBuilder) Empty() bool {
 }
 
 // AWSSubnets sets the value of the 'AWS_subnets' attribute to the given values.
+//
+//
 func (b *CloudVPCBuilder) AWSSubnets(values ...*SubnetworkBuilder) *CloudVPCBuilder {
 	b.awsSubnets = make([]*SubnetworkBuilder, len(values))
 	copy(b.awsSubnets, values)
@@ -49,6 +51,8 @@ func (b *CloudVPCBuilder) AWSSubnets(values ...*SubnetworkBuilder) *CloudVPCBuil
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
+//
+//
 func (b *CloudVPCBuilder) ID(value string) *CloudVPCBuilder {
 	b.id = value
 	b.bitmap_ |= 2
@@ -56,6 +60,8 @@ func (b *CloudVPCBuilder) ID(value string) *CloudVPCBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *CloudVPCBuilder) Name(value string) *CloudVPCBuilder {
 	b.name = value
 	b.bitmap_ |= 4
@@ -63,6 +69,8 @@ func (b *CloudVPCBuilder) Name(value string) *CloudVPCBuilder {
 }
 
 // Subnets sets the value of the 'subnets' attribute to the given values.
+//
+//
 func (b *CloudVPCBuilder) Subnets(values ...string) *CloudVPCBuilder {
 	b.subnets = make([]string, len(values))
 	copy(b.subnets, values)

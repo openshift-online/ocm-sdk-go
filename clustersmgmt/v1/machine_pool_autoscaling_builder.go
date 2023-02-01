@@ -61,6 +61,8 @@ func (b *MachinePoolAutoscalingBuilder) Empty() bool {
 }
 
 // MaxReplicas sets the value of the 'max_replicas' attribute to the given value.
+//
+//
 func (b *MachinePoolAutoscalingBuilder) MaxReplicas(value int) *MachinePoolAutoscalingBuilder {
 	b.maxReplicas = value
 	b.bitmap_ |= 8
@@ -68,6 +70,8 @@ func (b *MachinePoolAutoscalingBuilder) MaxReplicas(value int) *MachinePoolAutos
 }
 
 // MinReplicas sets the value of the 'min_replicas' attribute to the given value.
+//
+//
 func (b *MachinePoolAutoscalingBuilder) MinReplicas(value int) *MachinePoolAutoscalingBuilder {
 	b.minReplicas = value
 	b.bitmap_ |= 16

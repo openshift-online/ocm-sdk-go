@@ -70,6 +70,8 @@ func (b *UpgradePolicyBuilder) Empty() bool {
 }
 
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
 func (b *UpgradePolicyBuilder) ClusterID(value string) *UpgradePolicyBuilder {
 	b.clusterID = value
 	b.bitmap_ |= 8
@@ -77,6 +79,8 @@ func (b *UpgradePolicyBuilder) ClusterID(value string) *UpgradePolicyBuilder {
 }
 
 // EnableMinorVersionUpgrades sets the value of the 'enable_minor_version_upgrades' attribute to the given value.
+//
+//
 func (b *UpgradePolicyBuilder) EnableMinorVersionUpgrades(value bool) *UpgradePolicyBuilder {
 	b.enableMinorVersionUpgrades = value
 	b.bitmap_ |= 16
@@ -84,6 +88,8 @@ func (b *UpgradePolicyBuilder) EnableMinorVersionUpgrades(value bool) *UpgradePo
 }
 
 // NextRun sets the value of the 'next_run' attribute to the given value.
+//
+//
 func (b *UpgradePolicyBuilder) NextRun(value time.Time) *UpgradePolicyBuilder {
 	b.nextRun = value
 	b.bitmap_ |= 32
@@ -91,6 +97,8 @@ func (b *UpgradePolicyBuilder) NextRun(value time.Time) *UpgradePolicyBuilder {
 }
 
 // Schedule sets the value of the 'schedule' attribute to the given value.
+//
+//
 func (b *UpgradePolicyBuilder) Schedule(value string) *UpgradePolicyBuilder {
 	b.schedule = value
 	b.bitmap_ |= 64
@@ -98,6 +106,8 @@ func (b *UpgradePolicyBuilder) Schedule(value string) *UpgradePolicyBuilder {
 }
 
 // ScheduleType sets the value of the 'schedule_type' attribute to the given value.
+//
+//
 func (b *UpgradePolicyBuilder) ScheduleType(value string) *UpgradePolicyBuilder {
 	b.scheduleType = value
 	b.bitmap_ |= 128
@@ -105,6 +115,8 @@ func (b *UpgradePolicyBuilder) ScheduleType(value string) *UpgradePolicyBuilder 
 }
 
 // UpgradeType sets the value of the 'upgrade_type' attribute to the given value.
+//
+//
 func (b *UpgradePolicyBuilder) UpgradeType(value string) *UpgradePolicyBuilder {
 	b.upgradeType = value
 	b.bitmap_ |= 256
@@ -112,6 +124,8 @@ func (b *UpgradePolicyBuilder) UpgradeType(value string) *UpgradePolicyBuilder {
 }
 
 // Version sets the value of the 'version' attribute to the given value.
+//
+//
 func (b *UpgradePolicyBuilder) Version(value string) *UpgradePolicyBuilder {
 	b.version = value
 	b.bitmap_ |= 512

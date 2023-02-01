@@ -180,7 +180,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -207,7 +208,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -243,7 +245,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -437,7 +440,7 @@
           "details": {
             "description": "Extra information about the error.",
             "type": "object",
-            "additionalProperties": "true"
+            "additionalProperties": true
           }
         }
       }

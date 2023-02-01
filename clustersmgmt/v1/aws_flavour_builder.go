@@ -43,6 +43,8 @@ func (b *AWSFlavourBuilder) Empty() bool {
 }
 
 // ComputeInstanceType sets the value of the 'compute_instance_type' attribute to the given value.
+//
+//
 func (b *AWSFlavourBuilder) ComputeInstanceType(value string) *AWSFlavourBuilder {
 	b.computeInstanceType = value
 	b.bitmap_ |= 1
@@ -50,6 +52,8 @@ func (b *AWSFlavourBuilder) ComputeInstanceType(value string) *AWSFlavourBuilder
 }
 
 // InfraInstanceType sets the value of the 'infra_instance_type' attribute to the given value.
+//
+//
 func (b *AWSFlavourBuilder) InfraInstanceType(value string) *AWSFlavourBuilder {
 	b.infraInstanceType = value
 	b.bitmap_ |= 2
@@ -70,6 +74,8 @@ func (b *AWSFlavourBuilder) InfraVolume(value *AWSVolumeBuilder) *AWSFlavourBuil
 }
 
 // MasterInstanceType sets the value of the 'master_instance_type' attribute to the given value.
+//
+//
 func (b *AWSFlavourBuilder) MasterInstanceType(value string) *AWSFlavourBuilder {
 	b.masterInstanceType = value
 	b.bitmap_ |= 8

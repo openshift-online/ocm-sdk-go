@@ -35,6 +35,8 @@ func (o *MachinePoolSecurityGroupFilter) Empty() bool {
 
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *MachinePoolSecurityGroupFilter) Name() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.name
@@ -44,6 +46,8 @@ func (o *MachinePoolSecurityGroupFilter) Name() string {
 
 // GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *MachinePoolSecurityGroupFilter) GetName() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -54,6 +58,8 @@ func (o *MachinePoolSecurityGroupFilter) GetName() (value string, ok bool) {
 
 // Value returns the value of the 'value' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *MachinePoolSecurityGroupFilter) Value() string {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.value
@@ -63,6 +69,8 @@ func (o *MachinePoolSecurityGroupFilter) Value() string {
 
 // GetValue returns the value of the 'value' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *MachinePoolSecurityGroupFilter) GetValue() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {

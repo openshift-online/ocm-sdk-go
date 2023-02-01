@@ -120,28 +120,24 @@ func (b *AddOnInstallationBuilder) Billing(value *AddOnInstallationBillingBuilde
 // the kind, id and href attributes:
 //
 // ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "kind": "CloudProviderLink",
-//	    "id": "123",
-//	    "href": "/api/clusters_mgmt/v1/cloud_providers/123"
-//	  }
-//	}
-//
+// {
+//   "cloud_provider": {
+//     "kind": "CloudProviderLink",
+//     "id": "123",
+//     "href": "/api/clusters_mgmt/v1/cloud_providers/123"
+//   }
+// }
 // ```
 //
 // When a cluster is created this is optional, and if used it should contain the
 // identifier of the cloud provider to use:
 //
 // ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "id": "123",
-//	  }
-//	}
-//
+// {
+//   "cloud_provider": {
+//     "id": "123",
+//   }
+// }
 // ```
 //
 // If not included, then the cluster will be created using the default cloud
@@ -163,6 +159,8 @@ func (b *AddOnInstallationBuilder) Cluster(value *ClusterBuilder) *AddOnInstalla
 }
 
 // CreationTimestamp sets the value of the 'creation_timestamp' attribute to the given value.
+//
+//
 func (b *AddOnInstallationBuilder) CreationTimestamp(value time.Time) *AddOnInstallationBuilder {
 	b.creationTimestamp = value
 	b.bitmap_ |= 128
@@ -170,6 +168,8 @@ func (b *AddOnInstallationBuilder) CreationTimestamp(value time.Time) *AddOnInst
 }
 
 // OperatorVersion sets the value of the 'operator_version' attribute to the given value.
+//
+//
 func (b *AddOnInstallationBuilder) OperatorVersion(value string) *AddOnInstallationBuilder {
 	b.operatorVersion = value
 	b.bitmap_ |= 256
@@ -177,6 +177,8 @@ func (b *AddOnInstallationBuilder) OperatorVersion(value string) *AddOnInstallat
 }
 
 // Parameters sets the value of the 'parameters' attribute to the given values.
+//
+//
 func (b *AddOnInstallationBuilder) Parameters(value *AddOnInstallationParameterListBuilder) *AddOnInstallationBuilder {
 	b.parameters = value
 	b.bitmap_ |= 512
@@ -193,6 +195,8 @@ func (b *AddOnInstallationBuilder) State(value AddOnInstallationState) *AddOnIns
 }
 
 // StateDescription sets the value of the 'state_description' attribute to the given value.
+//
+//
 func (b *AddOnInstallationBuilder) StateDescription(value string) *AddOnInstallationBuilder {
 	b.stateDescription = value
 	b.bitmap_ |= 2048
@@ -200,6 +204,8 @@ func (b *AddOnInstallationBuilder) StateDescription(value string) *AddOnInstalla
 }
 
 // UpdatedTimestamp sets the value of the 'updated_timestamp' attribute to the given value.
+//
+//
 func (b *AddOnInstallationBuilder) UpdatedTimestamp(value time.Time) *AddOnInstallationBuilder {
 	b.updatedTimestamp = value
 	b.bitmap_ |= 4096

@@ -51,6 +51,8 @@ func NewApplicationDependenciesClient(transport http.RoundTripper, path string) 
 }
 
 // Add creates a request for the 'add' method.
+//
+//
 func (c *ApplicationDependenciesClient) Add() *ApplicationDependenciesAddRequest {
 	return &ApplicationDependenciesAddRequest{
 		transport: c.transport,
@@ -69,6 +71,8 @@ func (c *ApplicationDependenciesClient) List() *ApplicationDependenciesListReque
 }
 
 // ApplicationDependency returns the target 'application_dependency' resource for the given identifier.
+//
+//
 func (c *ApplicationDependenciesClient) ApplicationDependency(id string) *ApplicationDependencyClient {
 	return NewApplicationDependencyClient(
 		c.transport,
@@ -105,6 +109,8 @@ func (r *ApplicationDependenciesAddRequest) Impersonate(user string) *Applicatio
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *ApplicationDependenciesAddRequest) Body(value *ApplicationDependency) *ApplicationDependenciesAddRequest {
 	r.body = value
 	return r
@@ -202,6 +208,8 @@ func (r *ApplicationDependenciesAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ApplicationDependenciesAddResponse) Body() *ApplicationDependency {
 	if r == nil {
 		return nil
@@ -211,6 +219,8 @@ func (r *ApplicationDependenciesAddResponse) Body() *ApplicationDependency {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ApplicationDependenciesAddResponse) GetBody() (value *ApplicationDependency, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -250,18 +260,24 @@ func (r *ApplicationDependenciesListRequest) Impersonate(user string) *Applicati
 }
 
 // OrderBy sets the value of the 'order_by' parameter.
+//
+//
 func (r *ApplicationDependenciesListRequest) OrderBy(value string) *ApplicationDependenciesListRequest {
 	r.orderBy = &value
 	return r
 }
 
 // Page sets the value of the 'page' parameter.
+//
+//
 func (r *ApplicationDependenciesListRequest) Page(value int) *ApplicationDependenciesListRequest {
 	r.page = &value
 	return r
 }
 
 // Size sets the value of the 'size' parameter.
+//
+//
 func (r *ApplicationDependenciesListRequest) Size(value int) *ApplicationDependenciesListRequest {
 	r.size = &value
 	return r
@@ -365,6 +381,8 @@ func (r *ApplicationDependenciesListResponse) Error() *errors.Error {
 }
 
 // Items returns the value of the 'items' parameter.
+//
+//
 func (r *ApplicationDependenciesListResponse) Items() *ApplicationDependencyList {
 	if r == nil {
 		return nil
@@ -374,6 +392,8 @@ func (r *ApplicationDependenciesListResponse) Items() *ApplicationDependencyList
 
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ApplicationDependenciesListResponse) GetItems() (value *ApplicationDependencyList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
@@ -383,6 +403,8 @@ func (r *ApplicationDependenciesListResponse) GetItems() (value *ApplicationDepe
 }
 
 // Page returns the value of the 'page' parameter.
+//
+//
 func (r *ApplicationDependenciesListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
@@ -392,6 +414,8 @@ func (r *ApplicationDependenciesListResponse) Page() int {
 
 // GetPage returns the value of the 'page' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ApplicationDependenciesListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
@@ -401,6 +425,8 @@ func (r *ApplicationDependenciesListResponse) GetPage() (value int, ok bool) {
 }
 
 // Size returns the value of the 'size' parameter.
+//
+//
 func (r *ApplicationDependenciesListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
@@ -410,6 +436,8 @@ func (r *ApplicationDependenciesListResponse) Size() int {
 
 // GetSize returns the value of the 'size' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ApplicationDependenciesListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
@@ -419,6 +447,8 @@ func (r *ApplicationDependenciesListResponse) GetSize() (value int, ok bool) {
 }
 
 // Total returns the value of the 'total' parameter.
+//
+//
 func (r *ApplicationDependenciesListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
@@ -428,6 +458,8 @@ func (r *ApplicationDependenciesListResponse) Total() int {
 
 // GetTotal returns the value of the 'total' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ApplicationDependenciesListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {

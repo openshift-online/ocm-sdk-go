@@ -109,6 +109,8 @@ func (r *CloudResourcesAddRequest) Impersonate(user string) *CloudResourcesAddRe
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *CloudResourcesAddRequest) Body(value *CloudResource) *CloudResourcesAddRequest {
 	r.body = value
 	return r
@@ -206,6 +208,8 @@ func (r *CloudResourcesAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CloudResourcesAddResponse) Body() *CloudResource {
 	if r == nil {
 		return nil
@@ -215,6 +219,8 @@ func (r *CloudResourcesAddResponse) Body() *CloudResource {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CloudResourcesAddResponse) GetBody() (value *CloudResource, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

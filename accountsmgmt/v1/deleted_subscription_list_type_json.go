@@ -63,7 +63,7 @@ func UnmarshalDeletedSubscriptionList(source interface{}) (items []*DeletedSubsc
 	return
 }
 
-// readDeletedSubscriptionList reads list of values of the ”deleted_subscription' type from
+// readDeletedSubscriptionList reads list of values of the ''deleted_subscription' type from
 // the given iterator.
 func readDeletedSubscriptionList(iterator *jsoniter.Iterator) []*DeletedSubscription {
 	list := []*DeletedSubscription{}

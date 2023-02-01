@@ -51,6 +51,8 @@ func NewIncidentsClient(transport http.RoundTripper, path string) *IncidentsClie
 }
 
 // Add creates a request for the 'add' method.
+//
+//
 func (c *IncidentsClient) Add() *IncidentsAddRequest {
 	return &IncidentsAddRequest{
 		transport: c.transport,
@@ -69,6 +71,8 @@ func (c *IncidentsClient) List() *IncidentsListRequest {
 }
 
 // Incident returns the target 'incident' resource for the given identifier.
+//
+//
 func (c *IncidentsClient) Incident(id string) *IncidentClient {
 	return NewIncidentClient(
 		c.transport,
@@ -105,6 +109,8 @@ func (r *IncidentsAddRequest) Impersonate(user string) *IncidentsAddRequest {
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *IncidentsAddRequest) Body(value *Incident) *IncidentsAddRequest {
 	r.body = value
 	return r
@@ -202,6 +208,8 @@ func (r *IncidentsAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *IncidentsAddResponse) Body() *Incident {
 	if r == nil {
 		return nil
@@ -211,6 +219,8 @@ func (r *IncidentsAddResponse) Body() *Incident {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentsAddResponse) GetBody() (value *Incident, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -260,78 +270,104 @@ func (r *IncidentsListRequest) Impersonate(user string) *IncidentsListRequest {
 }
 
 // CreatorId sets the value of the 'creator_id' parameter.
+//
+//
 func (r *IncidentsListRequest) CreatorId(value string) *IncidentsListRequest {
 	r.creatorId = &value
 	return r
 }
 
 // IncidentCommanderId sets the value of the 'incident_commander_id' parameter.
+//
+//
 func (r *IncidentsListRequest) IncidentCommanderId(value string) *IncidentsListRequest {
 	r.incidentCommanderId = &value
 	return r
 }
 
 // IncidentName sets the value of the 'incident_name' parameter.
+//
+//
 func (r *IncidentsListRequest) IncidentName(value string) *IncidentsListRequest {
 	r.incidentName = &value
 	return r
 }
 
 // Mine sets the value of the 'mine' parameter.
+//
+//
 func (r *IncidentsListRequest) Mine(value bool) *IncidentsListRequest {
 	r.mine = &value
 	return r
 }
 
 // OnCallId sets the value of the 'on_call_id' parameter.
+//
+//
 func (r *IncidentsListRequest) OnCallId(value string) *IncidentsListRequest {
 	r.onCallId = &value
 	return r
 }
 
 // OrderBy sets the value of the 'order_by' parameter.
+//
+//
 func (r *IncidentsListRequest) OrderBy(value string) *IncidentsListRequest {
 	r.orderBy = &value
 	return r
 }
 
 // Page sets the value of the 'page' parameter.
+//
+//
 func (r *IncidentsListRequest) Page(value int) *IncidentsListRequest {
 	r.page = &value
 	return r
 }
 
 // ParticipantId sets the value of the 'participant_id' parameter.
+//
+//
 func (r *IncidentsListRequest) ParticipantId(value string) *IncidentsListRequest {
 	r.participantId = &value
 	return r
 }
 
 // ProductId sets the value of the 'product_id' parameter.
+//
+//
 func (r *IncidentsListRequest) ProductId(value string) *IncidentsListRequest {
 	r.productId = &value
 	return r
 }
 
 // PublicId sets the value of the 'public_id' parameter.
+//
+//
 func (r *IncidentsListRequest) PublicId(value string) *IncidentsListRequest {
 	r.publicId = &value
 	return r
 }
 
 // ResponsibleManagerId sets the value of the 'responsible_manager_id' parameter.
+//
+//
 func (r *IncidentsListRequest) ResponsibleManagerId(value string) *IncidentsListRequest {
 	r.responsibleManagerId = &value
 	return r
 }
 
 // Size sets the value of the 'size' parameter.
+//
+//
 func (r *IncidentsListRequest) Size(value int) *IncidentsListRequest {
 	r.size = &value
 	return r
 }
 
 // Status sets the value of the 'status' parameter.
+//
+//
 func (r *IncidentsListRequest) Status(value string) *IncidentsListRequest {
 	r.status_ = &value
 	return r
@@ -465,6 +501,8 @@ func (r *IncidentsListResponse) Error() *errors.Error {
 }
 
 // Items returns the value of the 'items' parameter.
+//
+//
 func (r *IncidentsListResponse) Items() *IncidentList {
 	if r == nil {
 		return nil
@@ -474,6 +512,8 @@ func (r *IncidentsListResponse) Items() *IncidentList {
 
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentsListResponse) GetItems() (value *IncidentList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
@@ -483,6 +523,8 @@ func (r *IncidentsListResponse) GetItems() (value *IncidentList, ok bool) {
 }
 
 // Page returns the value of the 'page' parameter.
+//
+//
 func (r *IncidentsListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
@@ -492,6 +534,8 @@ func (r *IncidentsListResponse) Page() int {
 
 // GetPage returns the value of the 'page' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentsListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
@@ -501,6 +545,8 @@ func (r *IncidentsListResponse) GetPage() (value int, ok bool) {
 }
 
 // Size returns the value of the 'size' parameter.
+//
+//
 func (r *IncidentsListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
@@ -510,6 +556,8 @@ func (r *IncidentsListResponse) Size() int {
 
 // GetSize returns the value of the 'size' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentsListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
@@ -519,6 +567,8 @@ func (r *IncidentsListResponse) GetSize() (value int, ok bool) {
 }
 
 // Total returns the value of the 'total' parameter.
+//
+//
 func (r *IncidentsListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
@@ -528,6 +578,8 @@ func (r *IncidentsListResponse) Total() int {
 
 // GetTotal returns the value of the 'total' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentsListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {

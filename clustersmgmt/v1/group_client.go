@@ -169,12 +169,16 @@ func (r *GroupPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *GroupPollResponse) Body() *Group {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *GroupPollResponse) GetBody() (value *Group, ok bool) {
 	return r.response.GetBody()
 }
@@ -300,6 +304,8 @@ func (r *GroupGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *GroupGetResponse) Body() *Group {
 	if r == nil {
 		return nil
@@ -309,6 +315,8 @@ func (r *GroupGetResponse) Body() *Group {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *GroupGetResponse) GetBody() (value *Group, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

@@ -51,6 +51,8 @@ func NewServiceDependencyClient(transport http.RoundTripper, path string) *Servi
 }
 
 // Delete creates a request for the 'delete' method.
+//
+//
 func (c *ServiceDependencyClient) Delete() *ServiceDependencyDeleteRequest {
 	return &ServiceDependencyDeleteRequest{
 		transport: c.transport,
@@ -59,6 +61,8 @@ func (c *ServiceDependencyClient) Delete() *ServiceDependencyDeleteRequest {
 }
 
 // Get creates a request for the 'get' method.
+//
+//
 func (c *ServiceDependencyClient) Get() *ServiceDependencyGetRequest {
 	return &ServiceDependencyGetRequest{
 		transport: c.transport,
@@ -67,6 +71,8 @@ func (c *ServiceDependencyClient) Get() *ServiceDependencyGetRequest {
 }
 
 // Update creates a request for the 'update' method.
+//
+//
 func (c *ServiceDependencyClient) Update() *ServiceDependencyUpdateRequest {
 	return &ServiceDependencyUpdateRequest{
 		transport: c.transport,
@@ -173,12 +179,16 @@ func (r *ServiceDependencyPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ServiceDependencyPollResponse) Body() *ServiceDependency {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ServiceDependencyPollResponse) GetBody() (value *ServiceDependency, ok bool) {
 	return r.response.GetBody()
 }
@@ -411,6 +421,8 @@ func (r *ServiceDependencyGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ServiceDependencyGetResponse) Body() *ServiceDependency {
 	if r == nil {
 		return nil
@@ -420,6 +432,8 @@ func (r *ServiceDependencyGetResponse) Body() *ServiceDependency {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ServiceDependencyGetResponse) GetBody() (value *ServiceDependency, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -457,6 +471,8 @@ func (r *ServiceDependencyUpdateRequest) Impersonate(user string) *ServiceDepend
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *ServiceDependencyUpdateRequest) Body(value *ServiceDependency) *ServiceDependencyUpdateRequest {
 	r.body = value
 	return r
@@ -554,6 +570,8 @@ func (r *ServiceDependencyUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ServiceDependencyUpdateResponse) Body() *ServiceDependency {
 	if r == nil {
 		return nil
@@ -563,6 +581,8 @@ func (r *ServiceDependencyUpdateResponse) Body() *ServiceDependency {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ServiceDependencyUpdateResponse) GetBody() (value *ServiceDependency, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
