@@ -180,7 +180,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -207,7 +208,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -241,7 +243,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -286,7 +289,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -329,7 +333,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -423,14 +428,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -457,14 +464,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -498,14 +507,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -636,7 +647,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1157,7 +1169,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1193,7 +1206,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -1280,7 +1294,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -1358,14 +1373,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "region_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1522,7 +1539,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "deprovision",
@@ -1565,7 +1583,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1599,7 +1618,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1644,7 +1664,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1673,7 +1694,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1701,7 +1723,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -1794,14 +1817,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addon_inquiry_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1837,7 +1862,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1880,7 +1906,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -1974,14 +2001,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addoninstallation_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2008,14 +2037,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addoninstallation_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2049,14 +2080,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addoninstallation_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2101,7 +2134,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2144,7 +2178,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -2238,14 +2273,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "aws_infrastructure_access_role_grant_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2272,14 +2309,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "aws_infrastructure_access_role_grant_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2315,7 +2354,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2344,7 +2384,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2380,7 +2421,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2416,7 +2458,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2459,7 +2502,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -2537,14 +2581,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "label_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2571,14 +2617,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "label_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2612,14 +2660,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "label_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2664,7 +2714,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2707,7 +2758,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -2785,14 +2837,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "manifest_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2819,14 +2873,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "manifest_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -2860,14 +2916,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "manifest_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2912,7 +2970,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -2955,7 +3014,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -3033,14 +3093,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "syncset_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3067,14 +3129,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "syncset_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3108,14 +3172,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "syncset_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3160,7 +3226,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3203,7 +3270,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -3281,14 +3349,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_gate_agreement_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3315,14 +3385,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_gate_agreement_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3358,7 +3430,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -3436,14 +3509,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "group_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3479,14 +3554,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "group_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3529,14 +3606,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "group_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -3614,21 +3693,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "group_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "user_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3655,21 +3737,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "group_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "user_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3705,7 +3790,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3741,7 +3827,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3784,7 +3871,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -3862,14 +3950,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3896,14 +3986,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -3937,14 +4029,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -3989,14 +4083,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4039,14 +4135,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -4124,14 +4222,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4219,21 +4319,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "htpasswd_user_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -4260,21 +4363,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "htpasswd_user_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -4308,21 +4414,24 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "identity_provider_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "htpasswd_user_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4367,7 +4476,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4410,7 +4520,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -4486,7 +4597,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4537,14 +4649,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "ingress_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -4571,14 +4685,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "ingress_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -4612,14 +4728,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "ingress_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4664,7 +4782,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -4707,7 +4826,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -4785,14 +4905,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "limited_support_reason_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -4819,14 +4941,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "limited_support_reason_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -4862,7 +4986,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -4940,7 +5065,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "offset",
@@ -4994,7 +5120,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "offset",
@@ -5048,7 +5175,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -5091,7 +5219,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -5169,14 +5298,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "machine_pool_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5203,14 +5334,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "machine_pool_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5244,14 +5377,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "machine_pool_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -5295,7 +5430,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5330,7 +5466,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5366,7 +5503,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5401,7 +5539,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5437,7 +5576,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5473,7 +5613,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -5516,7 +5657,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -5594,14 +5736,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "node_pool_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5628,14 +5772,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "node_pool_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5669,14 +5815,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "node_pool_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -5721,7 +5869,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5757,7 +5906,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5784,7 +5934,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5818,7 +5969,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -5863,7 +6015,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5899,7 +6052,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5934,7 +6088,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -5970,7 +6125,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -6013,7 +6169,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -6091,14 +6248,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "operator_iam_role_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -6127,7 +6286,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -6170,7 +6330,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "page",
@@ -6248,14 +6409,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "upgrade_policy_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -6282,14 +6445,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "upgrade_policy_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -6323,14 +6488,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "upgrade_policy_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -6375,14 +6542,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "upgrade_policy_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -6416,14 +6585,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "upgrade_policy_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -6685,7 +6856,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -6719,7 +6891,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -7155,7 +7328,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -7278,7 +7452,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -7401,7 +7576,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -7549,7 +7725,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -7576,7 +7753,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -7610,7 +7788,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -7776,7 +7955,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -7803,7 +7983,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -7926,7 +8107,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -11608,7 +11790,7 @@
           "details": {
             "description": "Extra information about the error.",
             "type": "object",
-            "additionalProperties": "true"
+            "additionalProperties": true
           }
         }
       }

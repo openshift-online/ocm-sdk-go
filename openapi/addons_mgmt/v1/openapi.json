@@ -190,7 +190,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -217,7 +218,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -251,7 +253,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "dryRun",
@@ -304,7 +307,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "dryRun",
@@ -355,7 +359,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -449,14 +454,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -483,14 +490,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -524,14 +533,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "version_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "dryRun",
@@ -583,7 +594,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -676,14 +688,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addon_inquiry_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -719,7 +733,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -762,7 +777,8 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "order",
@@ -848,14 +864,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addon_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -882,14 +900,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addon_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -923,14 +943,16 @@
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           },
           {
             "name": "addon_id",
             "in": "path",
             "schema": {
               "type": "string"
-            }
+            },
+            "required": true
           }
         ],
         "requestBody": {
@@ -1575,7 +1597,7 @@
           "details": {
             "description": "Extra information about the error.",
             "type": "object",
-            "additionalProperties": "true"
+            "additionalProperties": true
           }
         }
       }

@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.312
+- Update to metamodel 0.0.57
+
 ## 0.1.311
 - Update to model v0.0.252
   - Update `STS` resource attributes
