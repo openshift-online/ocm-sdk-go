@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.313
+- Update to model v0.0.253
+  - Update Permission resource attributes
+    * Rename ResourceType to Resource
+
 ## 0.1.312
 - Update to metamodel 0.0.57
 
