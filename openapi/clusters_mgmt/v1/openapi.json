@@ -2125,6 +2125,255 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws/private_link_configuration": {
+      "get": {
+        "description": "Retrieves the details of the configuration for the Private Link.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateLinkConfiguration"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws/private_link_configuration/principals": {
+      "post": {
+        "description": "Adds a new principal for the Private Link.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrivateLinkPrincipal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateLinkPrincipal"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of principals.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof an SQL statement, but using the names of the attributes of the role binding\ninstead of the names of the columns of a table. For example, in order to\nretrieve role bindings with role_id AuthenticatedUser:\n\n```sql\nrole_id = 'AuthenticatedUser'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nitems that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of principals.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PrivateLinkPrincipal"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws/private_link_configuration/principals/{principal_id}": {
+      "delete": {
+        "description": "Deletes the principal.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "principal_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the principal.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "principal_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateLinkPrincipal"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws_infrastructure_access_role_grants": {
       "post": {
         "description": "Create a new AWS infrastructure access role grant and add it to the collection of\nAWS infrastructure access role grants on the cluster.",
@@ -8174,6 +8423,10 @@
             "description": "Sets cluster to be inaccessible externally.",
             "type": "boolean"
           },
+          "private_link_configuration": {
+            "description": "Manages additional configuration for Private Links.",
+            "$ref": "#/components/schemas/PrivateLinkClusterConfiguration"
+          },
           "secret_access_key": {
             "description": "AWS secret access key.",
             "type": "string"
@@ -11271,6 +11524,71 @@
           "service_account": {
             "description": "Service account name to use when authenticating",
             "type": "string"
+          }
+        }
+      },
+      "PrivateLinkClusterConfiguration": {
+        "description": "Manages the configuration for the Private Links.",
+        "properties": {
+          "principals": {
+            "description": "List of additional principals for the Private Link",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PrivateLinkPrincipal"
+            }
+          }
+        }
+      },
+      "PrivateLinkConfiguration": {
+        "description": "Manages the configuration for the Private Links.",
+        "properties": {
+          "principals": {
+            "description": "List of additional principals for the Private Link",
+            "$ref": "#/components/schemas/PrivateLinkPrincipals"
+          }
+        }
+      },
+      "PrivateLinkPrincipal": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'PrivateLinkPrincipal' if this is a complete object or 'PrivateLinkPrincipalLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "principal": {
+            "description": "ARN for a principal that is allowed for this Private Link.",
+            "type": "string"
+          }
+        }
+      },
+      "PrivateLinkPrincipals": {
+        "description": "Contains a list of principals for the Private Link.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'PrivateLinkPrincipals' if this is a complete object or 'PrivateLinkPrincipalsLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "principals": {
+            "description": "List of additional principals for the Private Link",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PrivateLinkPrincipal"
+            }
           }
         }
       },

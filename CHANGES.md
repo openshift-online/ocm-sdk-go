@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.314
+- Update to model v0.0.254
+  - Add `PrivateLinkConfiguration` type with related endpoints
+
 ## 0.1.313
 - Update to model v0.0.253
   - Update Permission resource attributes
