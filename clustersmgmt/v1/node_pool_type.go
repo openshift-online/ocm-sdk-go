@@ -45,6 +45,7 @@ type NodePool struct {
 	replicas         int
 	status           *NodePoolStatus
 	subnet           string
+	version          *Version
 	autoRepair       bool
 }
 
@@ -202,7 +203,7 @@ func (o *NodePool) GetAvailabilityZone() (value string, ok bool) {
 // Cluster returns the value of the 'cluster' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// ID used to identify the cluster that this nodepool is attached to.
+// ID used to identify the cluster that this node pool is attached to.
 func (o *NodePool) Cluster() *Cluster {
 	if o != nil && o.bitmap_&128 != 0 {
 		return o.cluster
@@ -213,7 +214,7 @@ func (o *NodePool) Cluster() *Cluster {
 // GetCluster returns the value of the 'cluster' attribute and
 // a flag indicating if the attribute has a value.
 //
-// ID used to identify the cluster that this nodepool is attached to.
+// ID used to identify the cluster that this node pool is attached to.
 func (o *NodePool) GetCluster() (value *Cluster, ok bool) {
 	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
@@ -289,6 +290,29 @@ func (o *NodePool) GetSubnet() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
 		value = o.subnet
+	}
+	return
+}
+
+// Version returns the value of the 'version' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Version of the node pool.
+func (o *NodePool) Version() *Version {
+	if o != nil && o.bitmap_&2048 != 0 {
+		return o.version
+	}
+	return nil
+}
+
+// GetVersion returns the value of the 'version' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Version of the node pool.
+func (o *NodePool) GetVersion() (value *Version, ok bool) {
+	ok = o != nil && o.bitmap_&2048 != 0
+	if ok {
+		value = o.version
 	}
 	return
 }

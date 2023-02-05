@@ -11339,7 +11339,7 @@
             "type": "string"
           },
           "cluster": {
-            "description": "ID used to identify the cluster that this nodepool is attached to.",
+            "description": "ID used to identify the cluster that this node pool is attached to.",
             "$ref": "#/components/schemas/Cluster"
           },
           "replicas": {
@@ -11354,6 +11354,10 @@
           "subnet": {
             "description": "The subnet upon which the nodes are created.",
             "type": "string"
+          },
+          "version": {
+            "description": "Version of the node pool.",
+            "$ref": "#/components/schemas/Version"
           }
         }
       },
