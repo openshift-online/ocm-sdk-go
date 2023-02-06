@@ -229,7 +229,7 @@ func (o *LogEntry) GetInternalOnly() (value bool, ok bool) {
 // LogType returns the value of the 'log_type' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Type of the service log entry
+// Type of the service log entry.
 func (o *LogEntry) LogType() string {
 	if o != nil && o.bitmap_&256 != 0 {
 		return o.logType
@@ -240,7 +240,7 @@ func (o *LogEntry) LogType() string {
 // GetLogType returns the value of the 'log_type' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Type of the service log entry
+// Type of the service log entry.
 func (o *LogEntry) GetLogType() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
