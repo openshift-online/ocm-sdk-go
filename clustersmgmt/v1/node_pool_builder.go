@@ -33,6 +33,7 @@ type NodePoolBuilder struct {
 	replicas         int
 	status           *NodePoolStatusBuilder
 	subnet           string
+	version          *VersionBuilder
 	autoRepair       bool
 }
 
@@ -184,6 +185,19 @@ func (b *NodePoolBuilder) Subnet(value string) *NodePoolBuilder {
 	return b
 }
 
+// Version sets the value of the 'version' attribute to the given value.
+//
+// Representation of an _OpenShift_ version.
+func (b *NodePoolBuilder) Version(value *VersionBuilder) *NodePoolBuilder {
+	b.version = value
+	if value != nil {
+		b.bitmap_ |= 2048
+	} else {
+		b.bitmap_ &^= 2048
+	}
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *NodePoolBuilder) Copy(object *NodePool) *NodePoolBuilder {
 	if object == nil {
@@ -216,6 +230,11 @@ func (b *NodePoolBuilder) Copy(object *NodePool) *NodePoolBuilder {
 		b.status = nil
 	}
 	b.subnet = object.subnet
+	if object.version != nil {
+		b.version = NewVersion().Copy(object.version)
+	} else {
+		b.version = nil
+	}
 	return b
 }
 
@@ -253,5 +272,11 @@ func (b *NodePoolBuilder) Build() (object *NodePool, err error) {
 		}
 	}
 	object.subnet = b.subnet
+	if b.version != nil {
+		object.version, err = b.version.Build()
+		if err != nil {
+			return
+		}
+	}
 	return
 }
