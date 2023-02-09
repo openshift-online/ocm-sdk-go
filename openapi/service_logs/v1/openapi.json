@@ -377,6 +377,10 @@
             "description": "A flag that indicates whether the log entry should be internal/private only.",
             "type": "boolean"
           },
+          "log_type": {
+            "description": "Type of the service log entry.",
+            "$ref": "#/components/schemas/LogType"
+          },
           "service_name": {
             "description": "The name of the service who created the log.",
             "type": "string"
@@ -402,6 +406,17 @@
             "type": "string"
           }
         }
+      },
+      "LogType": {
+        "description": "Representation of the log type field used in cluster log type model.",
+        "type": "string",
+        "enum": [
+          "clustercreate-details",
+          "clustercreate-high-level",
+          "clusterremove-details",
+          "clusterremove-high-level",
+          "cluster-state-updates"
+        ]
       },
       "Severity": {
         "type": "string",

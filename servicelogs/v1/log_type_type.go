@@ -17,22 +17,20 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/addonsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/servicelogs/v1
 
-// AddonStatusConditionType represents the values of the 'addon_status_condition_type' enumerated type.
-type AddonStatusConditionType string
+// LogType represents the values of the 'log_type' enumerated type.
+type LogType string
 
 const (
 	//
-	AddonStatusConditionTypeAvailable AddonStatusConditionType = "Available"
+	LogTypeClusterCreateDetails LogType = "clustercreate-details"
 	//
-	AddonStatusConditionTypeDegraded AddonStatusConditionType = "Degraded"
+	LogTypeClusterCreateHighLevel LogType = "clustercreate-high-level"
 	//
-	AddonStatusConditionTypeHealthy AddonStatusConditionType = "Healthy"
+	LogTypeClusterRemoveDetails LogType = "clusterremove-details"
 	//
-	AddonStatusConditionTypeInstalled AddonStatusConditionType = "Installed"
+	LogTypeClusterRemoveHighLevel LogType = "clusterremove-high-level"
 	//
-	AddonStatusConditionTypePaused AddonStatusConditionType = "Paused"
-	//
-	AddonStatusConditionTypeUpgrading AddonStatusConditionType = "Upgrading"
+	LogTypeClusterStateUpdates LogType = "cluster-state-updates"
 )
