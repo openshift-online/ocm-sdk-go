@@ -1440,21 +1440,21 @@
         "description": "Representation of an addon status condition type field.",
         "type": "string",
         "enum": [
-          "available",
-          "degraded",
-          "healthy",
-          "installed",
-          "paused",
-          "upgrading"
+          "Available",
+          "Degraded",
+          "Healthy",
+          "Installed",
+          "Paused",
+          "Upgrading"
         ]
       },
       "AddonStatusConditionValue": {
         "description": "Representation of an addon status condition value field.",
         "type": "string",
         "enum": [
-          "false",
-          "true",
-          "unknown"
+          "False",
+          "True",
+          "Unknown"
         ]
       },
       "AddonSubOperator": {
