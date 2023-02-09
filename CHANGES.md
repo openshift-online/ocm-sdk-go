@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.316
+- Update to model v0.0.256
+  - Add `LogType` field to Cluster Log type model
+  - Fix Addon status type and value constants
+
 ## 0.1.315
 - Update to model v0.0.255
   - Add `Version` field to node pool
