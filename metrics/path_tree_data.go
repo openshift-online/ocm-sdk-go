@@ -176,6 +176,11 @@ var pathTreeData = `{
             "addon_inquiries": {
               "-": null
             },
+            "addon_upgrade_policies": {
+              "-": {
+                "state": null
+              }
+            },
             "addons": {
               "-": null
             },

@@ -18,7 +18,7 @@
 export CGO_ENABLED=0
 
 # Details of the model to use:
-model_version:=v0.0.256
+model_version:=v0.0.257
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:

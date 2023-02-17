@@ -1853,6 +1853,359 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/addon_upgrade_policies": {
+      "post": {
+        "description": "Adds a new addon upgrade policy to the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonUpgradePolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of addon upgrade policies.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of addon upgrade policy.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AddonUpgradePolicy"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/addon_upgrade_policies/{addon_upgrade_policy_id}": {
+      "delete": {
+        "description": "Deletes the addon upgrade policy.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the addon upgrade policy.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update the addon upgrade policy.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonUpgradePolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/addon_upgrade_policies/{addon_upgrade_policy_id}/state": {
+      "get": {
+        "description": "Retrieves the details of the upgrade policy state.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonUpgradePolicyState"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update the upgrade policy state.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonUpgradePolicyState"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonUpgradePolicyState"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/addons": {
       "post": {
         "description": "Create a new add-on installation and add it to the collection of add-on installations on the cluster.",
@@ -9691,6 +10044,77 @@
           }
         }
       },
+      "AddonUpgradePolicy": {
+        "description": "Representation of an upgrade policy that can be set for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddonUpgradePolicy' if this is a complete object or 'AddonUpgradePolicyLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "addon_id": {
+            "description": "Addon ID this upgrade policy is defined for",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Cluster ID this upgrade policy is defined for.",
+            "type": "string"
+          },
+          "next_run": {
+            "description": "Next time the upgrade should run.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "schedule": {
+            "description": "Schedule cron expression that defines automatic upgrade scheduling.",
+            "type": "string"
+          },
+          "schedule_type": {
+            "description": "Schedule type can be either \"manual\" (single execution) or \"automatic\" (re-occurring).",
+            "type": "string"
+          },
+          "upgrade_type": {
+            "description": "Upgrade type specify the type of the upgrade. Must be \"ADDON\".",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version is the desired upgrade version.",
+            "type": "string"
+          }
+        }
+      },
+      "AddonUpgradePolicyState": {
+        "description": "Representation of an addon upgrade policy state that that is set for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddonUpgradePolicyState' if this is a complete object or 'AddonUpgradePolicyStateLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the state.",
+            "type": "string"
+          },
+          "value": {
+            "description": "State value can be 'pending', 'scheduled', 'cancelled', 'started', 'delayed',\n'failed' or 'completed'.",
+            "$ref": "#/components/schemas/UpgradePolicyStateValue"
+          }
+        }
+      },
       "AdminCredentials": {
         "description": "Temporary administrator credentials generated during the installation of the\ncluster.",
         "properties": {
@@ -9756,6 +10180,15 @@
           "marketplace-azure",
           "standard"
         ]
+      },
+      "ByoOidc": {
+        "description": "ByoOidc configuration.",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should be creating using _ByoOidc_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `byo-oidc` feature toggle enabled.",
+            "type": "boolean"
+          }
+        }
       },
       "CloudVPC": {
         "description": "Description of a cloud provider virtual private cloud.",
@@ -9958,6 +10391,10 @@
           "billing_model": {
             "description": "Billing model for cluster resources.",
             "$ref": "#/components/schemas/BillingModel"
+          },
+          "byo_oidc": {
+            "description": "Contains information about BYO OIDC.",
+            "$ref": "#/components/schemas/ByoOidc"
           },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.",
@@ -11342,6 +11779,13 @@
             "description": "ID used to identify the cluster that this node pool is attached to.",
             "$ref": "#/components/schemas/Cluster"
           },
+          "labels": {
+            "description": "The labels set on the Nodes created.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "replicas": {
             "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.",
             "type": "integer",
@@ -11354,6 +11798,13 @@
           "subnet": {
             "description": "The subnet upon which the nodes are created.",
             "type": "string"
+          },
+          "taints": {
+            "description": "The taints set on the Nodes created.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Taint"
+            }
           },
           "version": {
             "description": "Version of the node pool.",

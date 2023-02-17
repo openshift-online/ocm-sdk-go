@@ -139,6 +139,16 @@ func (c *ClusterClient) AddonInquiries() *AddonInquiriesClient {
 	)
 }
 
+// AddonUpgradePolicies returns the target 'addon_upgrade_policies' resource.
+//
+// Reference to the resource that manages the collection of addon upgrade policies defined for this cluster.
+func (c *ClusterClient) AddonUpgradePolicies() *AddonUpgradePoliciesClient {
+	return NewAddonUpgradePoliciesClient(
+		c.transport,
+		path.Join(c.path, "addon_upgrade_policies"),
+	)
+}
+
 // Addons returns the target 'add_on_installations' resource.
 //
 // Reference to the resource that manages the collection of add-ons installed on this cluster.
