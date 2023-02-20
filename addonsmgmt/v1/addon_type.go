@@ -38,6 +38,8 @@ type Addon struct {
 	bitmap_              uint32
 	id                   string
 	href                 string
+	commonAnnotations    map[string]string
+	commonLabels         map[string]string
 	config               *AddonConfig
 	credentialsRequests  []*CredentialRequest
 	description          string
