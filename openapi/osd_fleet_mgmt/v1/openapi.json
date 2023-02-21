@@ -471,6 +471,10 @@
             "description": "Cluster mgmt reference",
             "$ref": "#/components/schemas/ClusterManagementReference"
           },
+          "name": {
+            "description": "Cluster name",
+            "type": "string"
+          },
           "parent": {
             "description": "Management cluster handling the management cluster",
             "$ref": "#/components/schemas/ManagementClusterParent"
@@ -498,6 +502,10 @@
           },
           "kind": {
             "description": "Kind of internal parent cluster",
+            "type": "string"
+          },
+          "name": {
+            "description": "Parent Cluster Name",
             "type": "string"
           }
         }
@@ -535,6 +543,10 @@
           "cluster_management_reference": {
             "description": "Cluster mgmt reference",
             "$ref": "#/components/schemas/ClusterManagementReference"
+          },
+          "name": {
+            "description": "Cluster name",
+            "type": "string"
           },
           "region": {
             "description": "Cloud provider region where the cluster is installed.",

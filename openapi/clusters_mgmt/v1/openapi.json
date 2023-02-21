@@ -10663,7 +10663,7 @@
         "description": "Counts of different classes of nodes inside a cluster.",
         "properties": {
           "autoscale_compute": {
-            "description": "Details for auto-scaling the compute machine pool.\nCompute and AutoscaleCompute cannot be used together.    ",
+            "description": "Details for auto-scaling the compute machine pool.\nCompute and AutoscaleCompute cannot be used together.",
             "$ref": "#/components/schemas/MachinePoolAutoscaling"
           },
           "availability_zones": {
@@ -10674,7 +10674,7 @@
             }
           },
           "compute": {
-            "description": "Number of compute nodes of the cluster.\nCompute and AutoscaleCompute cannot be used together.    ",
+            "description": "Number of compute nodes of the cluster.\nCompute and AutoscaleCompute cannot be used together.",
             "type": "integer",
             "format": "int32"
           },
@@ -10694,13 +10694,21 @@
             "type": "integer",
             "format": "int32"
           },
+          "infra_machine_type": {
+            "description": "The infra machine type to use, for example `r5.xlarge` (Optional).",
+            "$ref": "#/components/schemas/MachineType"
+          },
           "master": {
             "description": "Number of master nodes of the cluster.",
             "type": "integer",
             "format": "int32"
           },
+          "master_machine_type": {
+            "description": "The master machine type to use, for example `r5.xlarge` (Optional).",
+            "$ref": "#/components/schemas/MachineType"
+          },
           "security_group_filters": {
-            "description": "List of security groups to be applied to nodes (Optional)",
+            "description": "List of security groups to be applied to nodes (Optional).",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MachinePoolSecurityGroupFilter"
