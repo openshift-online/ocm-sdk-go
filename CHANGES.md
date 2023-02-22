@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.320
+- Update to model v0.0.261
+  - Add `commonAnnotations` and `commonLabels` to addons
+- Update to Addon structs and openapi.json for supporting 
+  - `commonAnnotations`
+  - `commonLabels`
+
 ## 0.1.319
 - Update to model v0.0.260
   - Add `ManagedPolicies` field to the `STS` type model.
