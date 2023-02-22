@@ -1036,6 +1036,20 @@
             "description": "Self link.",
             "type": "string"
           },
+          "common_annotations": {
+            "description": "Common Annotations for this addon.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "common_labels": {
+            "description": "Common Labels for this addon.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "config": {
             "description": "Additional configs to be used by the addon once its installed in the cluster.",
             "$ref": "#/components/schemas/AddonConfig"
