@@ -9351,6 +9351,10 @@
             "description": "Instance IAM roles to use for the instance profiles of the master and worker instances",
             "$ref": "#/components/schemas/InstanceIAMRoles"
           },
+          "managed_policies": {
+            "description": "If true, cluster account and operator roles have managed policies attached.",
+            "type": "boolean"
+          },
           "oidc_private_key_secret_arn": {
             "description": "Secrets Manager ARN for the OIDC private key key.",
             "type": "string"
