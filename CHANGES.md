@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.321
+- Update model to v0.0.262
+  - Add `Control Plane Upgrade Scheduler` endpoints.
+
 ## 0.1.320
 - Update to model v0.0.261
   - Add `commonAnnotations` and `commonLabels` to addons
