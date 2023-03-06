@@ -169,7 +169,6 @@ func (b *HandlerWrapperBuilder) Build() (result *HandlerWrapper, err error) {
 		registered, ok := err.(prometheus.AlreadyRegisteredError)
 		if ok {
 			requestCount = registered.ExistingCollector.(*prometheus.CounterVec)
-			err = nil
 		} else {
 			return
 		}
