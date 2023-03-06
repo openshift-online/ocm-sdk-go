@@ -53,13 +53,18 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        MEMORY_LIMIT: ["8G"]
     steps:
     - name: Checkout the source
       uses: actions/checkout@v2
 
     - name: Run the linter
       uses: golangci/golangci-lint-action@v2
+      env:
+        MEMORY_LIMIT: ${{ matrix.MEMORY_LIMIT }}
       with:
         version: v1.48.0
         skip-pkg-cache: true
