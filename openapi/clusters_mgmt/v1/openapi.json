@@ -12778,6 +12778,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "hypershift_enabled": {
+            "description": "HypershiftEnabled indicates whether this version can be used to create Hypershift clusters.",
+            "type": "boolean"
+          },
           "raw_id": {
             "description": "RawID is the id of the version - without channel group and prefix.",
             "type": "string"
