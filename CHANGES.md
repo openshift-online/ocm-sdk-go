@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.322
+- Update model to v0.0.263
+  - Add `HypershiftEnabled` boolean to `Version` Type model.
+
 ## 0.1.321
 - Update model to v0.0.262
   - Add `Control Plane Upgrade Scheduler` endpoints.
