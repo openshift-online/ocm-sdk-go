@@ -12986,8 +12986,8 @@
             "type": "string",
             "format": "date-time"
           },
-          "hypershift_enabled": {
-            "description": "HypershiftEnabled indicates whether this version can be used to create Hypershift clusters.",
+          "hosted_control_plane_enabled": {
+            "description": "HostedControlPlaneEnabled indicates whether this version can be used to create HCP clusters.",
             "type": "boolean"
           },
           "raw_id": {
