@@ -54,11 +54,10 @@ func main() {
 	defer connection.Close()
 
 	// Get the client for the resource that manages the collection of clusters:
-	client := connection.ClustersMgmt().V1().HostedOidcConfigs()
+	client := connection.ClustersMgmt().V1().OidcConfigs()
 
-	oidcConfig, err := cmv1.NewHostedOidcConfig().
-		InstallerRoleArn("arn:aws:iam::.../ManagedOpenShift-Installer-Role").
-		OidcPrivateKeySecretArn("arn:aws:secretsmanager:xxx").Build()
+	//Registers a Managed oidc configuration
+	oidcConfig, err := cmv1.NewOidcConfig().Managed(true).Build()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't create host oidc config description: %v\n", err)
 		os.Exit(1)
@@ -72,9 +71,11 @@ func main() {
 
 	// Print the result:
 	oidcConfig = addResponse.Body()
-	fmt.Printf("%s\n", oidcConfig.OidcEndpointUrl())
-	fmt.Printf("%s\n", oidcConfig.OidcPrivateKeySecretArn())
 	fmt.Printf("%s\n", oidcConfig.ID())
+	fmt.Printf("%s\n", oidcConfig.IssuerUrl())
+	fmt.Printf("%s\n", oidcConfig.SecretArn())
+	fmt.Printf("%v\n", oidcConfig.Managed())
+	fmt.Printf("%v\n", oidcConfig.Reusable())
 
 	listResponse, err := client.List().SendContext(ctx)
 	if err != nil {
@@ -84,17 +85,17 @@ func main() {
 
 	fmt.Printf("%d", listResponse.Total())
 
-	getResponse, err := client.HostedOidcConfig(listResponse.Items().Get(0).ID()).Get().SendContext(ctx)
+	getResponse, err := client.OidcConfig(listResponse.Items().Get(0).ID()).Get().SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't get hosted oidc configs: %v\n", err)
 		os.Exit(1)
 	}
 	oidcConfig = getResponse.Body()
-	fmt.Printf("%s\n", oidcConfig.OidcEndpointUrl())
-	fmt.Printf("%s\n", oidcConfig.OidcPrivateKeySecretArn())
 	fmt.Printf("%s\n", oidcConfig.ID())
+	fmt.Printf("%s\n", oidcConfig.IssuerUrl())
+	fmt.Printf("%s\n", oidcConfig.SecretArn())
 
-	_, err = client.HostedOidcConfig(oidcConfig.ID()).Delete().SendContext(ctx)
+	_, err = client.OidcConfig(oidcConfig.ID()).Delete().SendContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't delete hosted oidc configs: %v\n", err)
 		os.Exit(1)
