@@ -8106,176 +8106,6 @@
         }
       }
     },
-    "/api/clusters_mgmt/v1/hosted_oidc_configs": {
-      "post": {
-        "description": "Creates a hosting under Red Hat's S3 bucket for byo oidc configuration",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/HostedOidcConfig"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HostedOidcConfig"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "Retrieves the list of hosted oidc configs.",
-        "parameters": [
-          {
-            "name": "page",
-            "description": "Index of the requested page, where one corresponds to the first page.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "size",
-            "description": "Number of items contained in the returned page.",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "description": "Retrieved list of identity providers.",
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/HostedOidcConfig"
-                      }
-                    },
-                    "page": {
-                      "description": "Index of the requested page, where one corresponds to the first page.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "size": {
-                      "description": "Number of items contained in the returned page.",
-                      "type": "integer",
-                      "format": "int32"
-                    },
-                    "total": {
-                      "description": "Total number of items of the collection.",
-                      "type": "integer",
-                      "format": "int32"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/clusters_mgmt/v1/hosted_oidc_configs/{hosted_oidc_config_id}": {
-      "delete": {
-        "description": "Deletes the HostedOidcConfig.",
-        "parameters": [
-          {
-            "name": "hosted_oidc_config_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success."
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "Retrieves the details of a HostedOidcConfig",
-        "parameters": [
-          {
-            "name": "hosted_oidc_config_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HostedOidcConfig"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/clusters_mgmt/v1/limited_support_reason_templates": {
       "get": {
         "description": "Retrieves the list of templates.",
@@ -8491,6 +8321,220 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MachineType"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/oidc_configs": {
+      "post": {
+        "description": "Creates a hosting under Red Hat's S3 bucket for byo oidc configuration",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OidcConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidcConfig"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of oidc configs.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of identity providers.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OidcConfig"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/oidc_configs/{oidc_config_id}": {
+      "delete": {
+        "description": "Deletes the OidcConfig.",
+        "parameters": [
+          {
+            "name": "oidc_config_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of an OidcConfig.",
+        "parameters": [
+          {
+            "name": "oidc_config_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidcConfig"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates attributes of an OidcConfig.",
+        "parameters": [
+          {
+            "name": "oidc_config_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OidcConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidcConfig"
                 }
               }
             }
@@ -11640,44 +11684,6 @@
           }
         }
       },
-      "HostedOidcConfig": {
-        "description": "Contains the necessary attributes to support oidc configuration hosting under Red Hat.",
-        "properties": {
-          "href": {
-            "description": "HREF for the hosted oidc config, filled in response.",
-            "type": "string"
-          },
-          "id": {
-            "description": "ID for the hosted oidc config, filled in response.",
-            "type": "string"
-          },
-          "creation_timestamp": {
-            "description": "Creation timestamp, filled in response.",
-            "type": "string",
-            "format": "date-time"
-          },
-          "installer_role_arn": {
-            "description": "ARN of the AWS role to assume when installing the cluster, supplied in request.",
-            "type": "string"
-          },
-          "oidc_endpoint_url": {
-            "description": "Oidc endpoint URL, filled in response base on secret arn for the private key.",
-            "type": "string"
-          },
-          "oidc_folder_name": {
-            "description": "Name for the oidc folder, filled in response based on secret arn private key.",
-            "type": "string"
-          },
-          "oidc_private_key_secret_arn": {
-            "description": "Secrets Manager ARN for the OIDC private key key, supplied in request.",
-            "type": "string"
-          },
-          "organization_id": {
-            "description": "Organization ID, filled in response respecting token provided.",
-            "type": "string"
-          }
-        }
-      },
       "Hypershift": {
         "description": "Hypershift configuration.",
         "properties": {
@@ -12418,6 +12424,58 @@
             "items": {
               "$ref": "#/components/schemas/NodeInfo"
             }
+          }
+        }
+      },
+      "OidcConfig": {
+        "description": "Contains the necessary attributes to support oidc configuration hosting under Red Hat or registering a Customer's byo oidc config.",
+        "properties": {
+          "href": {
+            "description": "HREF for the oidc config, filled in response.",
+            "type": "string"
+          },
+          "id": {
+            "description": "ID for the oidc config, filled in response.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Creation timestamp, filled in response.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "installer_role_arn": {
+            "description": "ARN of the AWS role to assume when installing the cluster as to reveal the secret, supplied in request. It is only to be used in Unmanaged Oidc Config.",
+            "type": "string"
+          },
+          "issuer_url": {
+            "description": "Issuer URL, filled in response when Managed and supplied in Unmanaged.",
+            "type": "string"
+          },
+          "last_update_timestamp": {
+            "description": "Last update timestamp, filled when patching a valid attribute of this oidc config.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_used_timestamp": {
+            "description": "Last used timestamp, filled by the latest cluster that used this oidc config.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "managed": {
+            "description": "Indicates whether it is Managed or Unmanaged (Customer hosted).",
+            "type": "boolean"
+          },
+          "organization_id": {
+            "description": "Organization ID, filled in response respecting token provided.",
+            "type": "string"
+          },
+          "reusable": {
+            "description": "Indicates whether the Oidc Config can be reused.",
+            "type": "boolean"
+          },
+          "secret_arn": {
+            "description": "Secrets Manager ARN for the OIDC private key, supplied in request. It is only to be used in Unmanaged Oidc Config.",
+            "type": "string"
           }
         }
       },
