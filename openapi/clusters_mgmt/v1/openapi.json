@@ -9825,9 +9825,9 @@
             "description": "If true, cluster account and operator roles have managed policies attached.",
             "type": "boolean"
           },
-          "oidc_config_id": {
-            "description": "Registered Oidc Config ID, if available holds information related to the oidc config",
-            "type": "string"
+          "oidc_config": {
+            "description": "Registered Oidc Config, if available holds information related to the oidc config",
+            "$ref": "#/components/schemas/OidcConfig"
           },
           "operator_iam_roles": {
             "description": "List of roles necessary to access the AWS resources of the various operators used during installation",

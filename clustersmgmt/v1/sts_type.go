@@ -27,7 +27,7 @@ type STS struct {
 	oidcEndpointURL    string
 	externalID         string
 	instanceIAMRoles   *InstanceIAMRoles
-	oidcConfigId       string
+	oidcConfig         *OidcConfig
 	operatorIAMRoles   []*OperatorIAMRole
 	operatorRolePrefix string
 	permissionBoundary string
@@ -181,25 +181,25 @@ func (o *STS) GetManagedPolicies() (value bool, ok bool) {
 	return
 }
 
-// OidcConfigId returns the value of the 'oidc_config_id' attribute, or
+// OidcConfig returns the value of the 'oidc_config' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Registered Oidc Config ID, if available holds information related to the oidc config
-func (o *STS) OidcConfigId() string {
+// Registered Oidc Config, if available holds information related to the oidc config
+func (o *STS) OidcConfig() *OidcConfig {
 	if o != nil && o.bitmap_&64 != 0 {
-		return o.oidcConfigId
+		return o.oidcConfig
 	}
-	return ""
+	return nil
 }
 
-// GetOidcConfigId returns the value of the 'oidc_config_id' attribute and
+// GetOidcConfig returns the value of the 'oidc_config' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Registered Oidc Config ID, if available holds information related to the oidc config
-func (o *STS) GetOidcConfigId() (value string, ok bool) {
+// Registered Oidc Config, if available holds information related to the oidc config
+func (o *STS) GetOidcConfig() (value *OidcConfig, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
-		value = o.oidcConfigId
+		value = o.oidcConfig
 	}
 	return
 }
