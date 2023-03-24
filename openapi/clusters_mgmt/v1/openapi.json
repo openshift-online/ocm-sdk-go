@@ -9825,8 +9825,8 @@
             "description": "If true, cluster account and operator roles have managed policies attached.",
             "type": "boolean"
           },
-          "oidc_private_key_secret_arn": {
-            "description": "Secrets Manager ARN for the OIDC private key key.",
+          "oidc_config_id": {
+            "description": "Registered Oidc Config ID, if available holds information related to the oidc config",
             "type": "string"
           },
           "operator_iam_roles": {
