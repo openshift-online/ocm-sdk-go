@@ -27,7 +27,7 @@ type STSBuilder struct {
 	oidcEndpointURL    string
 	externalID         string
 	instanceIAMRoles   *InstanceIAMRolesBuilder
-	oidcConfigId       string
+	oidcConfig         *OidcConfigBuilder
 	operatorIAMRoles   []*OperatorIAMRoleBuilder
 	operatorRolePrefix string
 	permissionBoundary string
@@ -96,10 +96,16 @@ func (b *STSBuilder) ManagedPolicies(value bool) *STSBuilder {
 	return b
 }
 
-// OidcConfigId sets the value of the 'oidc_config_id' attribute to the given value.
-func (b *STSBuilder) OidcConfigId(value string) *STSBuilder {
-	b.oidcConfigId = value
-	b.bitmap_ |= 64
+// OidcConfig sets the value of the 'oidc_config' attribute to the given value.
+//
+// Contains the necessary attributes to support oidc configuration hosting under Red Hat or registering a Customer's byo oidc config.
+func (b *STSBuilder) OidcConfig(value *OidcConfigBuilder) *STSBuilder {
+	b.oidcConfig = value
+	if value != nil {
+		b.bitmap_ |= 64
+	} else {
+		b.bitmap_ &^= 64
+	}
 	return b
 }
 
@@ -155,7 +161,11 @@ func (b *STSBuilder) Copy(object *STS) *STSBuilder {
 		b.instanceIAMRoles = nil
 	}
 	b.managedPolicies = object.managedPolicies
-	b.oidcConfigId = object.oidcConfigId
+	if object.oidcConfig != nil {
+		b.oidcConfig = NewOidcConfig().Copy(object.oidcConfig)
+	} else {
+		b.oidcConfig = nil
+	}
 	if object.operatorIAMRoles != nil {
 		b.operatorIAMRoles = make([]*OperatorIAMRoleBuilder, len(object.operatorIAMRoles))
 		for i, v := range object.operatorIAMRoles {
@@ -186,7 +196,12 @@ func (b *STSBuilder) Build() (object *STS, err error) {
 		}
 	}
 	object.managedPolicies = b.managedPolicies
-	object.oidcConfigId = b.oidcConfigId
+	if b.oidcConfig != nil {
+		object.oidcConfig, err = b.oidcConfig.Build()
+		if err != nil {
+			return
+		}
+	}
 	if b.operatorIAMRoles != nil {
 		object.operatorIAMRoles = make([]*OperatorIAMRole, len(b.operatorIAMRoles))
 		for i, v := range b.operatorIAMRoles {

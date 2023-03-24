@@ -96,13 +96,13 @@ func writeSTS(object *STS, stream *jsoniter.Stream) {
 		stream.WriteBool(object.managedPolicies)
 		count++
 	}
-	present_ = object.bitmap_&64 != 0
+	present_ = object.bitmap_&64 != 0 && object.oidcConfig != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("oidc_config_id")
-		stream.WriteString(object.oidcConfigId)
+		stream.WriteObjectField("oidc_config")
+		writeOidcConfig(object.oidcConfig, stream)
 		count++
 	}
 	present_ = object.bitmap_&128 != 0 && object.operatorIAMRoles != nil
@@ -197,9 +197,9 @@ func readSTS(iterator *jsoniter.Iterator) *STS {
 			value := iterator.ReadBool()
 			object.managedPolicies = value
 			object.bitmap_ |= 32
-		case "oidc_config_id":
-			value := iterator.ReadString()
-			object.oidcConfigId = value
+		case "oidc_config":
+			value := readOidcConfig(iterator)
+			object.oidcConfig = value
 			object.bitmap_ |= 64
 		case "operator_iam_roles":
 			value := readOperatorIAMRoleList(iterator)
