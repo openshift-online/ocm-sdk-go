@@ -101,8 +101,8 @@ func writeSTS(object *STS, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("oidc_private_key_secret_arn")
-		stream.WriteString(object.oidcPrivateKeySecretArn)
+		stream.WriteObjectField("oidc_config_id")
+		stream.WriteString(object.oidcConfigId)
 		count++
 	}
 	present_ = object.bitmap_&128 != 0 && object.operatorIAMRoles != nil
@@ -197,9 +197,9 @@ func readSTS(iterator *jsoniter.Iterator) *STS {
 			value := iterator.ReadBool()
 			object.managedPolicies = value
 			object.bitmap_ |= 32
-		case "oidc_private_key_secret_arn":
+		case "oidc_config_id":
 			value := iterator.ReadString()
-			object.oidcPrivateKeySecretArn = value
+			object.oidcConfigId = value
 			object.bitmap_ |= 64
 		case "operator_iam_roles":
 			value := readOperatorIAMRoleList(iterator)
