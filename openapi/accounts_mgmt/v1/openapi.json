@@ -6020,6 +6020,53 @@
           }
         }
       },
+      "QuotaAuthorizationRequest": {
+        "properties": {
+          "account_username": {
+            "type": "string"
+          },
+          "availability_zone": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "product_category": {
+            "type": "string"
+          },
+          "quota_version": {
+            "type": "string"
+          },
+          "reserve": {
+            "type": "boolean"
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReservedResource"
+            }
+          }
+        }
+      },
+      "QuotaAuthorizationResponse": {
+        "properties": {
+          "allowed": {
+            "type": "boolean"
+          },
+          "excess_resources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReservedResource"
+            }
+          },
+          "subscription": {
+            "$ref": "#/components/schemas/Subscription"
+          }
+        }
+      },
       "QuotaCost": {
         "properties": {
           "allowed": {
