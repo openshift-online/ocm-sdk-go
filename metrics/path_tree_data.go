@@ -68,6 +68,7 @@ var pathTreeData = `{
         "pull_secrets": {
           "-": null
         },
+        "quota_authorizations": null,
         "registries": {
           "-": null
         },
