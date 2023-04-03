@@ -349,7 +349,8 @@ var pathTreeData = `{
     "service_mgmt": {
       "v1": {
         "services": {
-          "-": null
+          "-": null,
+          "version_inquiry": null
         }
       }
     },

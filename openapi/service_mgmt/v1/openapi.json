@@ -155,6 +155,42 @@
         }
       }
     },
+    "/api/service_mgmt/v1/services/version_inquiry": {
+      "post": {
+        "description": "Returns the Openshift version a service of this type will use.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionInquiryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInquiryResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/service_mgmt/v1/services/{service_id}": {
       "delete": {
         "description": "Deletes the Managed Service",
@@ -560,6 +596,20 @@
             "type": "string"
           },
           "state": {
+            "type": "string"
+          }
+        }
+      },
+      "VersionInquiryRequest": {
+        "properties": {
+          "service_type": {
+            "type": "string"
+          }
+        }
+      },
+      "VersionInquiryResponse": {
+        "properties": {
+          "version": {
             "type": "string"
           }
         }
