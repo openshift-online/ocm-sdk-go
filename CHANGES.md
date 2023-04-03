@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.331
+- Update model to v0.0.272
+  - adding quota version
+
 ## 0.1.330
 - Update model to v0.0.271
   - Adding `version_inquiry` endpoint to Managed Services.
