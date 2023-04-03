@@ -6130,6 +6130,9 @@
             "items": {
               "$ref": "#/components/schemas/RelatedResource"
             }
+          },
+          "version": {
+            "type": "string"
           }
         }
       },
