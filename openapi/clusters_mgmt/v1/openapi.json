@@ -10196,10 +10196,6 @@
             "description": "Billing details for add-on installation resource ",
             "$ref": "#/components/schemas/AddOnInstallationBilling"
           },
-          "cluster": {
-            "description": "ID used to identify the cluster that this add-on is attached to.",
-            "$ref": "#/components/schemas/Cluster"
-          },
           "creation_timestamp": {
             "description": "Date and time when the add-on was initially installed in the cluster.",
             "type": "string",
@@ -11954,10 +11950,6 @@
             "description": "DNS Name of the ingress.",
             "type": "string"
           },
-          "cluster": {
-            "description": "ID used to identify the cluster that this ingress is attached to. ",
-            "$ref": "#/components/schemas/Cluster"
-          },
           "default": {
             "description": "Indicates if this is the default ingress.",
             "type": "boolean"
@@ -12155,10 +12147,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "cluster": {
-            "description": "ID used to identify the cluster that this machinepool is attached to.",
-            "$ref": "#/components/schemas/Cluster"
           },
           "instance_type": {
             "description": "The instance type of Nodes to create.",
@@ -12408,10 +12396,6 @@
           "availability_zone": {
             "description": "The availability zone upon which the node is created.",
             "type": "string"
-          },
-          "cluster": {
-            "description": "ID used to identify the cluster that this node pool is attached to.",
-            "$ref": "#/components/schemas/Cluster"
           },
           "labels": {
             "description": "The labels set on the Nodes created.",

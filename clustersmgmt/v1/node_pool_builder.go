@@ -29,7 +29,6 @@ type NodePoolBuilder struct {
 	awsNodePool      *AWSNodePoolBuilder
 	autoscaling      *NodePoolAutoscalingBuilder
 	availabilityZone string
-	cluster          *ClusterBuilder
 	labels           map[string]string
 	replicas         int
 	status           *NodePoolStatusBuilder
@@ -109,49 +108,9 @@ func (b *NodePoolBuilder) AvailabilityZone(value string) *NodePoolBuilder {
 	return b
 }
 
-// Cluster sets the value of the 'cluster' attribute to the given value.
-//
-// Definition of an _OpenShift_ cluster.
-//
-// The `cloud_provider` attribute is a reference to the cloud provider. When a
-// cluster is retrieved it will be a link to the cloud provider, containing only
-// the kind, id and href attributes:
-//
-// ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "kind": "CloudProviderLink",
-//	    "id": "123",
-//	    "href": "/api/clusters_mgmt/v1/cloud_providers/123"
-//	  }
-//	}
-//
-// ```
-//
-// When a cluster is created this is optional, and if used it should contain the
-// identifier of the cloud provider to use:
-//
-// ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "id": "123",
-//	  }
-//	}
-//
-// ```
-//
-// If not included, then the cluster will be created using the default cloud
-// provider, which is currently Amazon Web Services.
-//
-// The region attribute is mandatory when a cluster is created.
-//
-// The `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`
-// attributes are mandatory when creation a cluster with your own Amazon Web
-// Services account.
-func (b *NodePoolBuilder) Cluster(value *ClusterBuilder) *NodePoolBuilder {
-	b.cluster = value
+// Labels sets the value of the 'labels' attribute to the given value.
+func (b *NodePoolBuilder) Labels(value map[string]string) *NodePoolBuilder {
+	b.labels = value
 	if value != nil {
 		b.bitmap_ |= 128
 	} else {
@@ -160,21 +119,10 @@ func (b *NodePoolBuilder) Cluster(value *ClusterBuilder) *NodePoolBuilder {
 	return b
 }
 
-// Labels sets the value of the 'labels' attribute to the given value.
-func (b *NodePoolBuilder) Labels(value map[string]string) *NodePoolBuilder {
-	b.labels = value
-	if value != nil {
-		b.bitmap_ |= 256
-	} else {
-		b.bitmap_ &^= 256
-	}
-	return b
-}
-
 // Replicas sets the value of the 'replicas' attribute to the given value.
 func (b *NodePoolBuilder) Replicas(value int) *NodePoolBuilder {
 	b.replicas = value
-	b.bitmap_ |= 512
+	b.bitmap_ |= 256
 	return b
 }
 
@@ -184,9 +132,9 @@ func (b *NodePoolBuilder) Replicas(value int) *NodePoolBuilder {
 func (b *NodePoolBuilder) Status(value *NodePoolStatusBuilder) *NodePoolBuilder {
 	b.status = value
 	if value != nil {
-		b.bitmap_ |= 1024
+		b.bitmap_ |= 512
 	} else {
-		b.bitmap_ &^= 1024
+		b.bitmap_ &^= 512
 	}
 	return b
 }
@@ -194,7 +142,7 @@ func (b *NodePoolBuilder) Status(value *NodePoolStatusBuilder) *NodePoolBuilder 
 // Subnet sets the value of the 'subnet' attribute to the given value.
 func (b *NodePoolBuilder) Subnet(value string) *NodePoolBuilder {
 	b.subnet = value
-	b.bitmap_ |= 2048
+	b.bitmap_ |= 1024
 	return b
 }
 
@@ -202,7 +150,7 @@ func (b *NodePoolBuilder) Subnet(value string) *NodePoolBuilder {
 func (b *NodePoolBuilder) Taints(values ...*TaintBuilder) *NodePoolBuilder {
 	b.taints = make([]*TaintBuilder, len(values))
 	copy(b.taints, values)
-	b.bitmap_ |= 4096
+	b.bitmap_ |= 2048
 	return b
 }
 
@@ -212,9 +160,9 @@ func (b *NodePoolBuilder) Taints(values ...*TaintBuilder) *NodePoolBuilder {
 func (b *NodePoolBuilder) Version(value *VersionBuilder) *NodePoolBuilder {
 	b.version = value
 	if value != nil {
-		b.bitmap_ |= 8192
+		b.bitmap_ |= 4096
 	} else {
-		b.bitmap_ &^= 8192
+		b.bitmap_ &^= 4096
 	}
 	return b
 }
@@ -239,11 +187,6 @@ func (b *NodePoolBuilder) Copy(object *NodePool) *NodePoolBuilder {
 		b.autoscaling = nil
 	}
 	b.availabilityZone = object.availabilityZone
-	if object.cluster != nil {
-		b.cluster = NewCluster().Copy(object.cluster)
-	} else {
-		b.cluster = nil
-	}
 	if len(object.labels) > 0 {
 		b.labels = map[string]string{}
 		for k, v := range object.labels {
@@ -295,12 +238,6 @@ func (b *NodePoolBuilder) Build() (object *NodePool, err error) {
 		}
 	}
 	object.availabilityZone = b.availabilityZone
-	if b.cluster != nil {
-		object.cluster, err = b.cluster.Build()
-		if err != nil {
-			return
-		}
-	}
 	if b.labels != nil {
 		object.labels = make(map[string]string)
 		for k, v := range b.labels {
