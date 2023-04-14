@@ -41,7 +41,6 @@ type NodePool struct {
 	awsNodePool      *AWSNodePool
 	autoscaling      *NodePoolAutoscaling
 	availabilityZone string
-	cluster          *Cluster
 	labels           map[string]string
 	replicas         int
 	status           *NodePoolStatus
@@ -202,35 +201,12 @@ func (o *NodePool) GetAvailabilityZone() (value string, ok bool) {
 	return
 }
 
-// Cluster returns the value of the 'cluster' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// ID used to identify the cluster that this node pool is attached to.
-func (o *NodePool) Cluster() *Cluster {
-	if o != nil && o.bitmap_&128 != 0 {
-		return o.cluster
-	}
-	return nil
-}
-
-// GetCluster returns the value of the 'cluster' attribute and
-// a flag indicating if the attribute has a value.
-//
-// ID used to identify the cluster that this node pool is attached to.
-func (o *NodePool) GetCluster() (value *Cluster, ok bool) {
-	ok = o != nil && o.bitmap_&128 != 0
-	if ok {
-		value = o.cluster
-	}
-	return
-}
-
 // Labels returns the value of the 'labels' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // The labels set on the Nodes created.
 func (o *NodePool) Labels() map[string]string {
-	if o != nil && o.bitmap_&256 != 0 {
+	if o != nil && o.bitmap_&128 != 0 {
 		return o.labels
 	}
 	return nil
@@ -241,7 +217,7 @@ func (o *NodePool) Labels() map[string]string {
 //
 // The labels set on the Nodes created.
 func (o *NodePool) GetLabels() (value map[string]string, ok bool) {
-	ok = o != nil && o.bitmap_&256 != 0
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.labels
 	}
@@ -254,7 +230,7 @@ func (o *NodePool) GetLabels() (value map[string]string, ok bool) {
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *NodePool) Replicas() int {
-	if o != nil && o.bitmap_&512 != 0 {
+	if o != nil && o.bitmap_&256 != 0 {
 		return o.replicas
 	}
 	return 0
@@ -266,7 +242,7 @@ func (o *NodePool) Replicas() int {
 // The number of Machines (and Nodes) to create.
 // Replicas and autoscaling cannot be used together.
 func (o *NodePool) GetReplicas() (value int, ok bool) {
-	ok = o != nil && o.bitmap_&512 != 0
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
 		value = o.replicas
 	}
@@ -278,7 +254,7 @@ func (o *NodePool) GetReplicas() (value int, ok bool) {
 //
 // NodePool status.
 func (o *NodePool) Status() *NodePoolStatus {
-	if o != nil && o.bitmap_&1024 != 0 {
+	if o != nil && o.bitmap_&512 != 0 {
 		return o.status
 	}
 	return nil
@@ -289,7 +265,7 @@ func (o *NodePool) Status() *NodePoolStatus {
 //
 // NodePool status.
 func (o *NodePool) GetStatus() (value *NodePoolStatus, ok bool) {
-	ok = o != nil && o.bitmap_&1024 != 0
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.status
 	}
@@ -301,7 +277,7 @@ func (o *NodePool) GetStatus() (value *NodePoolStatus, ok bool) {
 //
 // The subnet upon which the nodes are created.
 func (o *NodePool) Subnet() string {
-	if o != nil && o.bitmap_&2048 != 0 {
+	if o != nil && o.bitmap_&1024 != 0 {
 		return o.subnet
 	}
 	return ""
@@ -312,7 +288,7 @@ func (o *NodePool) Subnet() string {
 //
 // The subnet upon which the nodes are created.
 func (o *NodePool) GetSubnet() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2048 != 0
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
 		value = o.subnet
 	}
@@ -324,7 +300,7 @@ func (o *NodePool) GetSubnet() (value string, ok bool) {
 //
 // The taints set on the Nodes created.
 func (o *NodePool) Taints() []*Taint {
-	if o != nil && o.bitmap_&4096 != 0 {
+	if o != nil && o.bitmap_&2048 != 0 {
 		return o.taints
 	}
 	return nil
@@ -335,7 +311,7 @@ func (o *NodePool) Taints() []*Taint {
 //
 // The taints set on the Nodes created.
 func (o *NodePool) GetTaints() (value []*Taint, ok bool) {
-	ok = o != nil && o.bitmap_&4096 != 0
+	ok = o != nil && o.bitmap_&2048 != 0
 	if ok {
 		value = o.taints
 	}
@@ -347,7 +323,7 @@ func (o *NodePool) GetTaints() (value []*Taint, ok bool) {
 //
 // Version of the node pool.
 func (o *NodePool) Version() *Version {
-	if o != nil && o.bitmap_&8192 != 0 {
+	if o != nil && o.bitmap_&4096 != 0 {
 		return o.version
 	}
 	return nil
@@ -358,7 +334,7 @@ func (o *NodePool) Version() *Version {
 //
 // Version of the node pool.
 func (o *NodePool) GetVersion() (value *Version, ok bool) {
-	ok = o != nil && o.bitmap_&8192 != 0
+	ok = o != nil && o.bitmap_&4096 != 0
 	if ok {
 		value = o.version
 	}
