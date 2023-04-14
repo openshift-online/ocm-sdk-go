@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.332
+- Update model version v0.0.273
+  - update metamodel version 0.0.57
+  - remove circular dependencies from clusters mgmt
+
 ## 0.1.331
 - Update model to v0.0.272
   - adding quota version
