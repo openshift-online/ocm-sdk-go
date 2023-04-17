@@ -294,6 +294,9 @@ var pathTreeData = `{
         "oidc_configs": {
           "-": null
         },
+        "pending_delete_clusters": {
+          "-": null
+        },
         "products": {
           "-": null
         },

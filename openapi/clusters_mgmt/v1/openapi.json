@@ -8631,6 +8631,174 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/pending_delete_clusters": {
+      "get": {
+        "description": "Retrieves the list of pending delete clusters.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the pending delete cluster instead of\nthe names of the columns of a table. For example, in order to sort the pending delete clusters\ndescending by creation timestamp (i.e. their deletion time) the value should be:\n\n```sql\ncreation_timestamp desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the pending delete cluster instead of\nthe names of the columns of a table. For example, in order to retrieve all the\npending delete clusters with creation time later than 2023-03-01T00:00:00Z the following is required:\n\n```sql\ncreation_timestamp > '2023-03-01T00:00:00Z'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\npending delete clusters that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of pending delete clusters.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PendingDeleteCluster"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/pending_delete_clusters/{pending_delete_cluster_id}": {
+      "get": {
+        "description": "Retrieves the details of the pending delete cluster.",
+        "parameters": [
+          {
+            "name": "pending_delete_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingDeleteCluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the pending delete cluster entry.",
+        "parameters": [
+          {
+            "name": "pending_delete_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PendingDeleteCluster"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingDeleteCluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/products": {
       "get": {
         "description": "Retrieves the list of products.",
@@ -10821,6 +10989,13 @@
             "description": "Region",
             "$ref": "#/components/schemas/CloudRegion"
           },
+          "subnets": {
+            "description": "Subnets",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "version": {
             "description": "Openshift version",
             "$ref": "#/components/schemas/Version"
@@ -12649,6 +12824,36 @@
           "service_account": {
             "description": "Service account name to use when authenticating",
             "type": "string"
+          }
+        }
+      },
+      "PendingDeleteCluster": {
+        "description": "Represents a pending delete entry for a specific cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'PendingDeleteCluster' if this is a complete object or 'PendingDeleteClusterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "best_effort": {
+            "description": "Flag indicating if the cluster deletion should be best-effort mode or not.",
+            "type": "boolean"
+          },
+          "cluster": {
+            "description": "Cluster is the details of the cluster that is pending deletion.",
+            "$ref": "#/components/schemas/Cluster"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the cluster was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
