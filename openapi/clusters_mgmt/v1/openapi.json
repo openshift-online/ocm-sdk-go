@@ -10821,6 +10821,13 @@
             "description": "Region",
             "$ref": "#/components/schemas/CloudRegion"
           },
+          "subnets": {
+            "description": "Subnets",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "version": {
             "description": "Openshift version",
             "$ref": "#/components/schemas/Version"

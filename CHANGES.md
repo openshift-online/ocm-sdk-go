@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.333
+- Update model version to v0.0.274
+  - Add `Subnets` field to `CloudProviderInquiries` struct.
+
 ## 0.1.332
 - Update model version v0.0.273
   - update metamodel version 0.0.57
