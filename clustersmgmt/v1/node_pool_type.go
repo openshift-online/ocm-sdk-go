@@ -46,6 +46,7 @@ type NodePool struct {
 	status           *NodePoolStatus
 	subnet           string
 	taints           []*Taint
+	tuningConfigs    []string
 	version          *Version
 	autoRepair       bool
 }
@@ -318,12 +319,35 @@ func (o *NodePool) GetTaints() (value []*Taint, ok bool) {
 	return
 }
 
+// TuningConfigs returns the value of the 'tuning_configs' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// The names of the tuning configs for this node pool.
+func (o *NodePool) TuningConfigs() []string {
+	if o != nil && o.bitmap_&4096 != 0 {
+		return o.tuningConfigs
+	}
+	return nil
+}
+
+// GetTuningConfigs returns the value of the 'tuning_configs' attribute and
+// a flag indicating if the attribute has a value.
+//
+// The names of the tuning configs for this node pool.
+func (o *NodePool) GetTuningConfigs() (value []string, ok bool) {
+	ok = o != nil && o.bitmap_&4096 != 0
+	if ok {
+		value = o.tuningConfigs
+	}
+	return
+}
+
 // Version returns the value of the 'version' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Version of the node pool.
 func (o *NodePool) Version() *Version {
-	if o != nil && o.bitmap_&4096 != 0 {
+	if o != nil && o.bitmap_&8192 != 0 {
 		return o.version
 	}
 	return nil
@@ -334,7 +358,7 @@ func (o *NodePool) Version() *Version {
 //
 // Version of the node pool.
 func (o *NodePool) GetVersion() (value *Version, ok bool) {
-	ok = o != nil && o.bitmap_&4096 != 0
+	ok = o != nil && o.bitmap_&8192 != 0
 	if ok {
 		value = o.version
 	}

@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"bufio"
@@ -26,34 +26,35 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// AccountClient is the client of the 'account' resource.
+// TuningConfigClient is the client of the 'tuning_config' resource.
 //
-// Manages a specific account.
-type AccountClient struct {
+// Manages a specific tuning config.
+type TuningConfigClient struct {
 	transport http.RoundTripper
 	path      string
 }
 
-// NewAccountClient creates a new client for the 'account'
+// NewTuningConfigClient creates a new client for the 'tuning_config'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewAccountClient(transport http.RoundTripper, path string) *AccountClient {
-	return &AccountClient{
+func NewTuningConfigClient(transport http.RoundTripper, path string) *TuningConfigClient {
+	return &TuningConfigClient{
 		transport: transport,
 		path:      path,
 	}
 }
 
 // Delete creates a request for the 'delete' method.
-func (c *AccountClient) Delete() *AccountDeleteRequest {
-	return &AccountDeleteRequest{
+//
+// Deletes the tuning config.
+func (c *TuningConfigClient) Delete() *TuningConfigDeleteRequest {
+	return &TuningConfigDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -61,9 +62,9 @@ func (c *AccountClient) Delete() *AccountDeleteRequest {
 
 // Get creates a request for the 'get' method.
 //
-// Retrieves the details of the account.
-func (c *AccountClient) Get() *AccountGetRequest {
-	return &AccountGetRequest{
+// Retrieves the details of the tuning config.
+func (c *TuningConfigClient) Get() *TuningConfigGetRequest {
+	return &TuningConfigGetRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -71,53 +72,43 @@ func (c *AccountClient) Get() *AccountGetRequest {
 
 // Update creates a request for the 'update' method.
 //
-// Updates the account.
-func (c *AccountClient) Update() *AccountUpdateRequest {
-	return &AccountUpdateRequest{
+// Updates the tuning config.
+func (c *TuningConfigClient) Update() *TuningConfigUpdateRequest {
+	return &TuningConfigUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
 }
 
-// Labels returns the target 'generic_labels' resource.
-//
-// Reference to the list of labels of a specific account.
-func (c *AccountClient) Labels() *GenericLabelsClient {
-	return NewGenericLabelsClient(
-		c.transport,
-		path.Join(c.path, "labels"),
-	)
-}
-
-// AccountPollRequest is the request for the Poll method.
-type AccountPollRequest struct {
-	request    *AccountGetRequest
+// TuningConfigPollRequest is the request for the Poll method.
+type TuningConfigPollRequest struct {
+	request    *TuningConfigGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *AccountPollRequest) Parameter(name string, value interface{}) *AccountPollRequest {
+func (r *TuningConfigPollRequest) Parameter(name string, value interface{}) *TuningConfigPollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *AccountPollRequest) Header(name string, value interface{}) *AccountPollRequest {
+func (r *TuningConfigPollRequest) Header(name string, value interface{}) *TuningConfigPollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *AccountPollRequest) Interval(value time.Duration) *AccountPollRequest {
+func (r *TuningConfigPollRequest) Interval(value time.Duration) *TuningConfigPollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *AccountPollRequest) Status(value int) *AccountPollRequest {
+func (r *TuningConfigPollRequest) Status(value int) *TuningConfigPollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -125,9 +116,9 @@ func (r *AccountPollRequest) Status(value int) *AccountPollRequest {
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *AccountPollRequest) Predicate(value func(*AccountGetResponse) bool) *AccountPollRequest {
+func (r *TuningConfigPollRequest) Predicate(value func(*TuningConfigGetResponse) bool) *TuningConfigPollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*AccountGetResponse))
+		return value(response.(*TuningConfigGetResponse))
 	})
 	return r
 }
@@ -137,11 +128,11 @@ func (r *AccountPollRequest) Predicate(value func(*AccountGetResponse) bool) *Ac
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *AccountPollRequest) StartContext(ctx context.Context) (response *AccountPollResponse, err error) {
+func (r *TuningConfigPollRequest) StartContext(ctx context.Context) (response *TuningConfigPollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &AccountPollResponse{
-			response: result.(*AccountGetResponse),
+		response = &TuningConfigPollResponse{
+			response: result.(*TuningConfigGetResponse),
 		}
 	}
 	return
@@ -149,7 +140,7 @@ func (r *AccountPollRequest) StartContext(ctx context.Context) (response *Accoun
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *AccountPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *TuningConfigPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -158,13 +149,13 @@ func (r *AccountPollRequest) task(ctx context.Context) (status int, result inter
 	return
 }
 
-// AccountPollResponse is the response for the Poll method.
-type AccountPollResponse struct {
-	response *AccountGetResponse
+// TuningConfigPollResponse is the response for the Poll method.
+type TuningConfigPollResponse struct {
+	response *TuningConfigGetResponse
 }
 
 // Status returns the response status code.
-func (r *AccountPollResponse) Status() int {
+func (r *TuningConfigPollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -172,7 +163,7 @@ func (r *AccountPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *AccountPollResponse) Header() http.Header {
+func (r *TuningConfigPollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -180,7 +171,7 @@ func (r *AccountPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *AccountPollResponse) Error() *errors.Error {
+func (r *TuningConfigPollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -188,26 +179,26 @@ func (r *AccountPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-func (r *AccountPollResponse) Body() *Account {
+func (r *TuningConfigPollResponse) Body() *TuningConfig {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-func (r *AccountPollResponse) GetBody() (value *Account, ok bool) {
+func (r *TuningConfigPollResponse) GetBody() (value *TuningConfig, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *AccountClient) Poll() *AccountPollRequest {
-	return &AccountPollRequest{
+func (c *TuningConfigClient) Poll() *TuningConfigPollRequest {
+	return &TuningConfigPollRequest{
 		request: c.Get(),
 	}
 }
 
-// AccountDeleteRequest is the request for the 'delete' method.
-type AccountDeleteRequest struct {
+// TuningConfigDeleteRequest is the request for the 'delete' method.
+type TuningConfigDeleteRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -215,20 +206,20 @@ type AccountDeleteRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *AccountDeleteRequest) Parameter(name string, value interface{}) *AccountDeleteRequest {
+func (r *TuningConfigDeleteRequest) Parameter(name string, value interface{}) *TuningConfigDeleteRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *AccountDeleteRequest) Header(name string, value interface{}) *AccountDeleteRequest {
+func (r *TuningConfigDeleteRequest) Header(name string, value interface{}) *TuningConfigDeleteRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *AccountDeleteRequest) Impersonate(user string) *AccountDeleteRequest {
+func (r *TuningConfigDeleteRequest) Impersonate(user string) *TuningConfigDeleteRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
@@ -237,12 +228,12 @@ func (r *AccountDeleteRequest) Impersonate(user string) *AccountDeleteRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *AccountDeleteRequest) Send() (result *AccountDeleteResponse, err error) {
+func (r *TuningConfigDeleteRequest) Send() (result *TuningConfigDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *AccountDeleteRequest) SendContext(ctx context.Context) (result *AccountDeleteResponse, err error) {
+func (r *TuningConfigDeleteRequest) SendContext(ctx context.Context) (result *TuningConfigDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -262,7 +253,7 @@ func (r *AccountDeleteRequest) SendContext(ctx context.Context) (result *Account
 		return
 	}
 	defer response.Body.Close()
-	result = &AccountDeleteResponse{}
+	result = &TuningConfigDeleteResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -282,15 +273,15 @@ func (r *AccountDeleteRequest) SendContext(ctx context.Context) (result *Account
 	return
 }
 
-// AccountDeleteResponse is the response for the 'delete' method.
-type AccountDeleteResponse struct {
+// TuningConfigDeleteResponse is the response for the 'delete' method.
+type TuningConfigDeleteResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
 }
 
 // Status returns the response status code.
-func (r *AccountDeleteResponse) Status() int {
+func (r *TuningConfigDeleteResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -298,7 +289,7 @@ func (r *AccountDeleteResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *AccountDeleteResponse) Header() http.Header {
+func (r *TuningConfigDeleteResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -306,15 +297,15 @@ func (r *AccountDeleteResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *AccountDeleteResponse) Error() *errors.Error {
+func (r *TuningConfigDeleteResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// AccountGetRequest is the request for the 'get' method.
-type AccountGetRequest struct {
+// TuningConfigGetRequest is the request for the 'get' method.
+type TuningConfigGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -322,20 +313,20 @@ type AccountGetRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *AccountGetRequest) Parameter(name string, value interface{}) *AccountGetRequest {
+func (r *TuningConfigGetRequest) Parameter(name string, value interface{}) *TuningConfigGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *AccountGetRequest) Header(name string, value interface{}) *AccountGetRequest {
+func (r *TuningConfigGetRequest) Header(name string, value interface{}) *TuningConfigGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *AccountGetRequest) Impersonate(user string) *AccountGetRequest {
+func (r *TuningConfigGetRequest) Impersonate(user string) *TuningConfigGetRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
@@ -344,12 +335,12 @@ func (r *AccountGetRequest) Impersonate(user string) *AccountGetRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *AccountGetRequest) Send() (result *AccountGetResponse, err error) {
+func (r *TuningConfigGetRequest) Send() (result *TuningConfigGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *AccountGetRequest) SendContext(ctx context.Context) (result *AccountGetResponse, err error) {
+func (r *TuningConfigGetRequest) SendContext(ctx context.Context) (result *TuningConfigGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -369,7 +360,7 @@ func (r *AccountGetRequest) SendContext(ctx context.Context) (result *AccountGet
 		return
 	}
 	defer response.Body.Close()
-	result = &AccountGetResponse{}
+	result = &TuningConfigGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -386,23 +377,23 @@ func (r *AccountGetRequest) SendContext(ctx context.Context) (result *AccountGet
 		err = result.err
 		return
 	}
-	err = readAccountGetResponse(result, reader)
+	err = readTuningConfigGetResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// AccountGetResponse is the response for the 'get' method.
-type AccountGetResponse struct {
+// TuningConfigGetResponse is the response for the 'get' method.
+type TuningConfigGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Account
+	body   *TuningConfig
 }
 
 // Status returns the response status code.
-func (r *AccountGetResponse) Status() int {
+func (r *TuningConfigGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -410,7 +401,7 @@ func (r *AccountGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *AccountGetResponse) Header() http.Header {
+func (r *TuningConfigGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -418,7 +409,7 @@ func (r *AccountGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *AccountGetResponse) Error() *errors.Error {
+func (r *TuningConfigGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -426,7 +417,7 @@ func (r *AccountGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-func (r *AccountGetResponse) Body() *Account {
+func (r *TuningConfigGetResponse) Body() *TuningConfig {
 	if r == nil {
 		return nil
 	}
@@ -435,7 +426,7 @@ func (r *AccountGetResponse) Body() *Account {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-func (r *AccountGetResponse) GetBody() (value *Account, ok bool) {
+func (r *TuningConfigGetResponse) GetBody() (value *TuningConfig, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -443,36 +434,36 @@ func (r *AccountGetResponse) GetBody() (value *Account, ok bool) {
 	return
 }
 
-// AccountUpdateRequest is the request for the 'update' method.
-type AccountUpdateRequest struct {
+// TuningConfigUpdateRequest is the request for the 'update' method.
+type TuningConfigUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
 	header    http.Header
-	body      *Account
+	body      *TuningConfig
 }
 
 // Parameter adds a query parameter.
-func (r *AccountUpdateRequest) Parameter(name string, value interface{}) *AccountUpdateRequest {
+func (r *TuningConfigUpdateRequest) Parameter(name string, value interface{}) *TuningConfigUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *AccountUpdateRequest) Header(name string, value interface{}) *AccountUpdateRequest {
+func (r *TuningConfigUpdateRequest) Header(name string, value interface{}) *TuningConfigUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *AccountUpdateRequest) Impersonate(user string) *AccountUpdateRequest {
+func (r *TuningConfigUpdateRequest) Impersonate(user string) *TuningConfigUpdateRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
 // Body sets the value of the 'body' parameter.
-func (r *AccountUpdateRequest) Body(value *Account) *AccountUpdateRequest {
+func (r *TuningConfigUpdateRequest) Body(value *TuningConfig) *TuningConfigUpdateRequest {
 	r.body = value
 	return r
 }
@@ -481,16 +472,16 @@ func (r *AccountUpdateRequest) Body(value *Account) *AccountUpdateRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *AccountUpdateRequest) Send() (result *AccountUpdateResponse, err error) {
+func (r *TuningConfigUpdateRequest) Send() (result *TuningConfigUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *AccountUpdateRequest) SendContext(ctx context.Context) (result *AccountUpdateResponse, err error) {
+func (r *TuningConfigUpdateRequest) SendContext(ctx context.Context) (result *TuningConfigUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
-	err = writeAccountUpdateRequest(r, buffer)
+	err = writeTuningConfigUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -512,7 +503,7 @@ func (r *AccountUpdateRequest) SendContext(ctx context.Context) (result *Account
 		return
 	}
 	defer response.Body.Close()
-	result = &AccountUpdateResponse{}
+	result = &TuningConfigUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -529,23 +520,23 @@ func (r *AccountUpdateRequest) SendContext(ctx context.Context) (result *Account
 		err = result.err
 		return
 	}
-	err = readAccountUpdateResponse(result, reader)
+	err = readTuningConfigUpdateResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// AccountUpdateResponse is the response for the 'update' method.
-type AccountUpdateResponse struct {
+// TuningConfigUpdateResponse is the response for the 'update' method.
+type TuningConfigUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Account
+	body   *TuningConfig
 }
 
 // Status returns the response status code.
-func (r *AccountUpdateResponse) Status() int {
+func (r *TuningConfigUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -553,7 +544,7 @@ func (r *AccountUpdateResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *AccountUpdateResponse) Header() http.Header {
+func (r *TuningConfigUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -561,7 +552,7 @@ func (r *AccountUpdateResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *AccountUpdateResponse) Error() *errors.Error {
+func (r *TuningConfigUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -569,7 +560,7 @@ func (r *AccountUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-func (r *AccountUpdateResponse) Body() *Account {
+func (r *TuningConfigUpdateResponse) Body() *TuningConfig {
 	if r == nil {
 		return nil
 	}
@@ -578,7 +569,7 @@ func (r *AccountUpdateResponse) Body() *Account {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-func (r *AccountUpdateResponse) GetBody() (value *Account, ok bool) {
+func (r *TuningConfigUpdateResponse) GetBody() (value *TuningConfig, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body

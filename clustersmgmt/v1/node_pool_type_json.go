@@ -167,7 +167,16 @@ func writeNodePool(object *NodePool, stream *jsoniter.Stream) {
 		writeTaintList(object.taints, stream)
 		count++
 	}
-	present_ = object.bitmap_&4096 != 0 && object.version != nil
+	present_ = object.bitmap_&4096 != 0 && object.tuningConfigs != nil
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("tuning_configs")
+		writeStringList(object.tuningConfigs, stream)
+		count++
+	}
+	present_ = object.bitmap_&8192 != 0 && object.version != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -254,10 +263,14 @@ func readNodePool(iterator *jsoniter.Iterator) *NodePool {
 			value := readTaintList(iterator)
 			object.taints = value
 			object.bitmap_ |= 2048
+		case "tuning_configs":
+			value := readStringList(iterator)
+			object.tuningConfigs = value
+			object.bitmap_ |= 4096
 		case "version":
 			value := readVersion(iterator)
 			object.version = value
-			object.bitmap_ |= 4096
+			object.bitmap_ |= 8192
 		default:
 			iterator.ReadAny()
 		}

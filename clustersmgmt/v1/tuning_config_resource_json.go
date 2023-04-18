@@ -17,29 +17,29 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeAccountDeleteRequest(request *AccountDeleteRequest, writer io.Writer) error {
+func writeTuningConfigDeleteRequest(request *TuningConfigDeleteRequest, writer io.Writer) error {
 	return nil
 }
-func readAccountDeleteResponse(response *AccountDeleteResponse, reader io.Reader) error {
+func readTuningConfigDeleteResponse(response *TuningConfigDeleteResponse, reader io.Reader) error {
 	return nil
 }
-func writeAccountGetRequest(request *AccountGetRequest, writer io.Writer) error {
+func writeTuningConfigGetRequest(request *TuningConfigGetRequest, writer io.Writer) error {
 	return nil
 }
-func readAccountGetResponse(response *AccountGetResponse, reader io.Reader) error {
+func readTuningConfigGetResponse(response *TuningConfigGetResponse, reader io.Reader) error {
 	var err error
-	response.body, err = UnmarshalAccount(reader)
+	response.body, err = UnmarshalTuningConfig(reader)
 	return err
 }
-func writeAccountUpdateRequest(request *AccountUpdateRequest, writer io.Writer) error {
-	return MarshalAccount(request.body, writer)
+func writeTuningConfigUpdateRequest(request *TuningConfigUpdateRequest, writer io.Writer) error {
+	return MarshalTuningConfig(request.body, writer)
 }
-func readAccountUpdateResponse(response *AccountUpdateResponse, reader io.Reader) error {
+func readTuningConfigUpdateResponse(response *TuningConfigUpdateResponse, reader io.Reader) error {
 	var err error
-	response.body, err = UnmarshalAccount(reader)
+	response.body, err = UnmarshalTuningConfig(reader)
 	return err
 }

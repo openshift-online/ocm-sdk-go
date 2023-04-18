@@ -34,6 +34,7 @@ type NodePoolBuilder struct {
 	status           *NodePoolStatusBuilder
 	subnet           string
 	taints           []*TaintBuilder
+	tuningConfigs    []string
 	version          *VersionBuilder
 	autoRepair       bool
 }
@@ -154,15 +155,23 @@ func (b *NodePoolBuilder) Taints(values ...*TaintBuilder) *NodePoolBuilder {
 	return b
 }
 
+// TuningConfigs sets the value of the 'tuning_configs' attribute to the given values.
+func (b *NodePoolBuilder) TuningConfigs(values ...string) *NodePoolBuilder {
+	b.tuningConfigs = make([]string, len(values))
+	copy(b.tuningConfigs, values)
+	b.bitmap_ |= 4096
+	return b
+}
+
 // Version sets the value of the 'version' attribute to the given value.
 //
 // Representation of an _OpenShift_ version.
 func (b *NodePoolBuilder) Version(value *VersionBuilder) *NodePoolBuilder {
 	b.version = value
 	if value != nil {
-		b.bitmap_ |= 4096
+		b.bitmap_ |= 8192
 	} else {
-		b.bitmap_ &^= 4096
+		b.bitmap_ &^= 8192
 	}
 	return b
 }
@@ -209,6 +218,12 @@ func (b *NodePoolBuilder) Copy(object *NodePool) *NodePoolBuilder {
 		}
 	} else {
 		b.taints = nil
+	}
+	if object.tuningConfigs != nil {
+		b.tuningConfigs = make([]string, len(object.tuningConfigs))
+		copy(b.tuningConfigs, object.tuningConfigs)
+	} else {
+		b.tuningConfigs = nil
 	}
 	if object.version != nil {
 		b.version = NewVersion().Copy(object.version)
@@ -260,6 +275,10 @@ func (b *NodePoolBuilder) Build() (object *NodePool, err error) {
 				return
 			}
 		}
+	}
+	if b.tuningConfigs != nil {
+		object.tuningConfigs = make([]string, len(b.tuningConfigs))
+		copy(object.tuningConfigs, b.tuningConfigs)
 	}
 	if b.version != nil {
 		object.version, err = b.version.Build()
