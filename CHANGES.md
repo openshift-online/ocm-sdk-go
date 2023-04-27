@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.337
+- Windows: Update CA
+
 ## 0.1.336
 - Update model version v0.0.279
   - Add `AuditLog` to `AWS` resource.
