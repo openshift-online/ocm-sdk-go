@@ -179,12 +179,16 @@ func (r *MachinePoolPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *MachinePoolPollResponse) Body() *MachinePool {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *MachinePoolPollResponse) GetBody() (value *MachinePool, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *MachinePoolGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *MachinePoolGetResponse) Body() *MachinePool {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *MachinePoolGetResponse) Body() *MachinePool {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *MachinePoolGetResponse) GetBody() (value *MachinePool, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *MachinePoolUpdateRequest) Impersonate(user string) *MachinePoolUpdateRe
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *MachinePoolUpdateRequest) Body(value *MachinePool) *MachinePoolUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *MachinePoolUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *MachinePoolUpdateResponse) Body() *MachinePool {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *MachinePoolUpdateResponse) Body() *MachinePool {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *MachinePoolUpdateResponse) GetBody() (value *MachinePool, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

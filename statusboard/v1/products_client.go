@@ -51,6 +51,8 @@ func NewProductsClient(transport http.RoundTripper, path string) *ProductsClient
 }
 
 // Add creates a request for the 'add' method.
+//
+//
 func (c *ProductsClient) Add() *ProductsAddRequest {
 	return &ProductsAddRequest{
 		transport: c.transport,
@@ -69,6 +71,8 @@ func (c *ProductsClient) List() *ProductsListRequest {
 }
 
 // Product returns the target 'product' resource for the given identifier.
+//
+//
 func (c *ProductsClient) Product(id string) *ProductClient {
 	return NewProductClient(
 		c.transport,
@@ -105,6 +109,8 @@ func (r *ProductsAddRequest) Impersonate(user string) *ProductsAddRequest {
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *ProductsAddRequest) Body(value *Product) *ProductsAddRequest {
 	r.body = value
 	return r
@@ -202,6 +208,8 @@ func (r *ProductsAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ProductsAddResponse) Body() *Product {
 	if r == nil {
 		return nil
@@ -211,6 +219,8 @@ func (r *ProductsAddResponse) Body() *Product {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ProductsAddResponse) GetBody() (value *Product, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -251,24 +261,32 @@ func (r *ProductsListRequest) Impersonate(user string) *ProductsListRequest {
 }
 
 // Fullname sets the value of the 'fullname' parameter.
+//
+//
 func (r *ProductsListRequest) Fullname(value string) *ProductsListRequest {
 	r.fullname = &value
 	return r
 }
 
 // OrderBy sets the value of the 'order_by' parameter.
+//
+//
 func (r *ProductsListRequest) OrderBy(value string) *ProductsListRequest {
 	r.orderBy = &value
 	return r
 }
 
 // Page sets the value of the 'page' parameter.
+//
+//
 func (r *ProductsListRequest) Page(value int) *ProductsListRequest {
 	r.page = &value
 	return r
 }
 
 // Size sets the value of the 'size' parameter.
+//
+//
 func (r *ProductsListRequest) Size(value int) *ProductsListRequest {
 	r.size = &value
 	return r
@@ -375,6 +393,8 @@ func (r *ProductsListResponse) Error() *errors.Error {
 }
 
 // Items returns the value of the 'items' parameter.
+//
+//
 func (r *ProductsListResponse) Items() *ProductList {
 	if r == nil {
 		return nil
@@ -384,6 +404,8 @@ func (r *ProductsListResponse) Items() *ProductList {
 
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ProductsListResponse) GetItems() (value *ProductList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
@@ -393,6 +415,8 @@ func (r *ProductsListResponse) GetItems() (value *ProductList, ok bool) {
 }
 
 // Page returns the value of the 'page' parameter.
+//
+//
 func (r *ProductsListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
@@ -402,6 +426,8 @@ func (r *ProductsListResponse) Page() int {
 
 // GetPage returns the value of the 'page' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ProductsListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
@@ -411,6 +437,8 @@ func (r *ProductsListResponse) GetPage() (value int, ok bool) {
 }
 
 // Size returns the value of the 'size' parameter.
+//
+//
 func (r *ProductsListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
@@ -420,6 +448,8 @@ func (r *ProductsListResponse) Size() int {
 
 // GetSize returns the value of the 'size' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ProductsListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
@@ -429,6 +459,8 @@ func (r *ProductsListResponse) GetSize() (value int, ok bool) {
 }
 
 // Total returns the value of the 'total' parameter.
+//
+//
 func (r *ProductsListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
@@ -438,6 +470,8 @@ func (r *ProductsListResponse) Total() int {
 
 // GetTotal returns the value of the 'total' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ProductsListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {

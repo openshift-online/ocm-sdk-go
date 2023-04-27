@@ -24,6 +24,8 @@ import (
 )
 
 // ClusterUpgradeBuilder contains the data and logic needed to build 'cluster_upgrade' objects.
+//
+//
 type ClusterUpgradeBuilder struct {
 	bitmap_          uint32
 	state            string
@@ -43,6 +45,8 @@ func (b *ClusterUpgradeBuilder) Empty() bool {
 }
 
 // Available sets the value of the 'available' attribute to the given value.
+//
+//
 func (b *ClusterUpgradeBuilder) Available(value bool) *ClusterUpgradeBuilder {
 	b.available = value
 	b.bitmap_ |= 1
@@ -50,6 +54,8 @@ func (b *ClusterUpgradeBuilder) Available(value bool) *ClusterUpgradeBuilder {
 }
 
 // State sets the value of the 'state' attribute to the given value.
+//
+//
 func (b *ClusterUpgradeBuilder) State(value string) *ClusterUpgradeBuilder {
 	b.state = value
 	b.bitmap_ |= 2
@@ -57,6 +63,8 @@ func (b *ClusterUpgradeBuilder) State(value string) *ClusterUpgradeBuilder {
 }
 
 // UpdatedTimestamp sets the value of the 'updated_timestamp' attribute to the given value.
+//
+//
 func (b *ClusterUpgradeBuilder) UpdatedTimestamp(value time.Time) *ClusterUpgradeBuilder {
 	b.updatedTimestamp = value
 	b.bitmap_ |= 4
@@ -64,6 +72,8 @@ func (b *ClusterUpgradeBuilder) UpdatedTimestamp(value time.Time) *ClusterUpgrad
 }
 
 // Version sets the value of the 'version' attribute to the given value.
+//
+//
 func (b *ClusterUpgradeBuilder) Version(value string) *ClusterUpgradeBuilder {
 	b.version = value
 	b.bitmap_ |= 8

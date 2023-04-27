@@ -40,6 +40,8 @@ func (b *GoogleIdentityProviderBuilder) Empty() bool {
 }
 
 // ClientID sets the value of the 'client_ID' attribute to the given value.
+//
+//
 func (b *GoogleIdentityProviderBuilder) ClientID(value string) *GoogleIdentityProviderBuilder {
 	b.clientID = value
 	b.bitmap_ |= 1
@@ -47,6 +49,8 @@ func (b *GoogleIdentityProviderBuilder) ClientID(value string) *GoogleIdentityPr
 }
 
 // ClientSecret sets the value of the 'client_secret' attribute to the given value.
+//
+//
 func (b *GoogleIdentityProviderBuilder) ClientSecret(value string) *GoogleIdentityProviderBuilder {
 	b.clientSecret = value
 	b.bitmap_ |= 2
@@ -54,6 +58,8 @@ func (b *GoogleIdentityProviderBuilder) ClientSecret(value string) *GoogleIdenti
 }
 
 // HostedDomain sets the value of the 'hosted_domain' attribute to the given value.
+//
+//
 func (b *GoogleIdentityProviderBuilder) HostedDomain(value string) *GoogleIdentityProviderBuilder {
 	b.hostedDomain = value
 	b.bitmap_ |= 4

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/servicemgmt/v1
 
 // VersionInquiryRequestBuilder contains the data and logic needed to build 'version_inquiry_request' objects.
+//
+//
 type VersionInquiryRequestBuilder struct {
 	bitmap_     uint32
 	serviceType string
@@ -36,6 +38,8 @@ func (b *VersionInquiryRequestBuilder) Empty() bool {
 }
 
 // ServiceType sets the value of the 'service_type' attribute to the given value.
+//
+//
 func (b *VersionInquiryRequestBuilder) ServiceType(value string) *VersionInquiryRequestBuilder {
 	b.serviceType = value
 	b.bitmap_ |= 1

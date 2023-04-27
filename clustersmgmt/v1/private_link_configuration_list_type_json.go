@@ -63,7 +63,7 @@ func UnmarshalPrivateLinkConfigurationList(source interface{}) (items []*Private
 	return
 }
 
-// readPrivateLinkConfigurationList reads list of values of the ”private_link_configuration' type from
+// readPrivateLinkConfigurationList reads list of values of the ''private_link_configuration' type from
 // the given iterator.
 func readPrivateLinkConfigurationList(iterator *jsoniter.Iterator) []*PrivateLinkConfiguration {
 	list := []*PrivateLinkConfiguration{}

@@ -70,6 +70,8 @@ func (b *AddonUpgradePolicyBuilder) Empty() bool {
 }
 
 // AddonID sets the value of the 'addon_ID' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyBuilder) AddonID(value string) *AddonUpgradePolicyBuilder {
 	b.addonID = value
 	b.bitmap_ |= 8
@@ -77,6 +79,8 @@ func (b *AddonUpgradePolicyBuilder) AddonID(value string) *AddonUpgradePolicyBui
 }
 
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyBuilder) ClusterID(value string) *AddonUpgradePolicyBuilder {
 	b.clusterID = value
 	b.bitmap_ |= 16
@@ -84,6 +88,8 @@ func (b *AddonUpgradePolicyBuilder) ClusterID(value string) *AddonUpgradePolicyB
 }
 
 // NextRun sets the value of the 'next_run' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyBuilder) NextRun(value time.Time) *AddonUpgradePolicyBuilder {
 	b.nextRun = value
 	b.bitmap_ |= 32
@@ -91,6 +97,8 @@ func (b *AddonUpgradePolicyBuilder) NextRun(value time.Time) *AddonUpgradePolicy
 }
 
 // Schedule sets the value of the 'schedule' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyBuilder) Schedule(value string) *AddonUpgradePolicyBuilder {
 	b.schedule = value
 	b.bitmap_ |= 64
@@ -98,6 +106,8 @@ func (b *AddonUpgradePolicyBuilder) Schedule(value string) *AddonUpgradePolicyBu
 }
 
 // ScheduleType sets the value of the 'schedule_type' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyBuilder) ScheduleType(value string) *AddonUpgradePolicyBuilder {
 	b.scheduleType = value
 	b.bitmap_ |= 128
@@ -105,6 +115,8 @@ func (b *AddonUpgradePolicyBuilder) ScheduleType(value string) *AddonUpgradePoli
 }
 
 // UpgradeType sets the value of the 'upgrade_type' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyBuilder) UpgradeType(value string) *AddonUpgradePolicyBuilder {
 	b.upgradeType = value
 	b.bitmap_ |= 256
@@ -112,6 +124,8 @@ func (b *AddonUpgradePolicyBuilder) UpgradeType(value string) *AddonUpgradePolic
 }
 
 // Version sets the value of the 'version' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyBuilder) Version(value string) *AddonUpgradePolicyBuilder {
 	b.version = value
 	b.bitmap_ |= 512

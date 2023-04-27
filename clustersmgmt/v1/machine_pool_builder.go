@@ -94,6 +94,8 @@ func (b *MachinePoolBuilder) Autoscaling(value *MachinePoolAutoscalingBuilder) *
 }
 
 // AvailabilityZones sets the value of the 'availability_zones' attribute to the given values.
+//
+//
 func (b *MachinePoolBuilder) AvailabilityZones(values ...string) *MachinePoolBuilder {
 	b.availabilityZones = make([]string, len(values))
 	copy(b.availabilityZones, values)
@@ -102,6 +104,8 @@ func (b *MachinePoolBuilder) AvailabilityZones(values ...string) *MachinePoolBui
 }
 
 // InstanceType sets the value of the 'instance_type' attribute to the given value.
+//
+//
 func (b *MachinePoolBuilder) InstanceType(value string) *MachinePoolBuilder {
 	b.instanceType = value
 	b.bitmap_ |= 64
@@ -109,6 +113,8 @@ func (b *MachinePoolBuilder) InstanceType(value string) *MachinePoolBuilder {
 }
 
 // Labels sets the value of the 'labels' attribute to the given value.
+//
+//
 func (b *MachinePoolBuilder) Labels(value map[string]string) *MachinePoolBuilder {
 	b.labels = value
 	if value != nil {
@@ -120,6 +126,8 @@ func (b *MachinePoolBuilder) Labels(value map[string]string) *MachinePoolBuilder
 }
 
 // Replicas sets the value of the 'replicas' attribute to the given value.
+//
+//
 func (b *MachinePoolBuilder) Replicas(value int) *MachinePoolBuilder {
 	b.replicas = value
 	b.bitmap_ |= 256
@@ -127,6 +135,8 @@ func (b *MachinePoolBuilder) Replicas(value int) *MachinePoolBuilder {
 }
 
 // SecurityGroupFilters sets the value of the 'security_group_filters' attribute to the given values.
+//
+//
 func (b *MachinePoolBuilder) SecurityGroupFilters(values ...*MachinePoolSecurityGroupFilterBuilder) *MachinePoolBuilder {
 	b.securityGroupFilters = make([]*MachinePoolSecurityGroupFilterBuilder, len(values))
 	copy(b.securityGroupFilters, values)
@@ -135,6 +145,8 @@ func (b *MachinePoolBuilder) SecurityGroupFilters(values ...*MachinePoolSecurity
 }
 
 // Subnets sets the value of the 'subnets' attribute to the given values.
+//
+//
 func (b *MachinePoolBuilder) Subnets(values ...string) *MachinePoolBuilder {
 	b.subnets = make([]string, len(values))
 	copy(b.subnets, values)
@@ -143,6 +155,8 @@ func (b *MachinePoolBuilder) Subnets(values ...string) *MachinePoolBuilder {
 }
 
 // Taints sets the value of the 'taints' attribute to the given values.
+//
+//
 func (b *MachinePoolBuilder) Taints(values ...*TaintBuilder) *MachinePoolBuilder {
 	b.taints = make([]*TaintBuilder, len(values))
 	copy(b.taints, values)

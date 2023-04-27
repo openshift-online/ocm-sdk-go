@@ -47,6 +47,8 @@ func (b *SubscriptionNotifyBuilder) Empty() bool {
 }
 
 // BccAddress sets the value of the 'bcc_address' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) BccAddress(value string) *SubscriptionNotifyBuilder {
 	b.bccAddress = value
 	b.bitmap_ |= 1
@@ -54,6 +56,8 @@ func (b *SubscriptionNotifyBuilder) BccAddress(value string) *SubscriptionNotify
 }
 
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) ClusterID(value string) *SubscriptionNotifyBuilder {
 	b.clusterID = value
 	b.bitmap_ |= 2
@@ -61,6 +65,8 @@ func (b *SubscriptionNotifyBuilder) ClusterID(value string) *SubscriptionNotifyB
 }
 
 // ClusterUUID sets the value of the 'cluster_UUID' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) ClusterUUID(value string) *SubscriptionNotifyBuilder {
 	b.clusterUUID = value
 	b.bitmap_ |= 4
@@ -68,6 +74,8 @@ func (b *SubscriptionNotifyBuilder) ClusterUUID(value string) *SubscriptionNotif
 }
 
 // IncludeRedHatAssociates sets the value of the 'include_red_hat_associates' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) IncludeRedHatAssociates(value bool) *SubscriptionNotifyBuilder {
 	b.includeRedHatAssociates = value
 	b.bitmap_ |= 8
@@ -75,6 +83,8 @@ func (b *SubscriptionNotifyBuilder) IncludeRedHatAssociates(value bool) *Subscri
 }
 
 // InternalOnly sets the value of the 'internal_only' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) InternalOnly(value bool) *SubscriptionNotifyBuilder {
 	b.internalOnly = value
 	b.bitmap_ |= 16
@@ -82,6 +92,8 @@ func (b *SubscriptionNotifyBuilder) InternalOnly(value bool) *SubscriptionNotify
 }
 
 // Subject sets the value of the 'subject' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) Subject(value string) *SubscriptionNotifyBuilder {
 	b.subject = value
 	b.bitmap_ |= 32
@@ -89,6 +101,8 @@ func (b *SubscriptionNotifyBuilder) Subject(value string) *SubscriptionNotifyBui
 }
 
 // SubscriptionID sets the value of the 'subscription_ID' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) SubscriptionID(value string) *SubscriptionNotifyBuilder {
 	b.subscriptionID = value
 	b.bitmap_ |= 64
@@ -96,6 +110,8 @@ func (b *SubscriptionNotifyBuilder) SubscriptionID(value string) *SubscriptionNo
 }
 
 // TemplateName sets the value of the 'template_name' attribute to the given value.
+//
+//
 func (b *SubscriptionNotifyBuilder) TemplateName(value string) *SubscriptionNotifyBuilder {
 	b.templateName = value
 	b.bitmap_ |= 128
@@ -103,6 +119,8 @@ func (b *SubscriptionNotifyBuilder) TemplateName(value string) *SubscriptionNoti
 }
 
 // TemplateParameters sets the value of the 'template_parameters' attribute to the given values.
+//
+//
 func (b *SubscriptionNotifyBuilder) TemplateParameters(values ...*TemplateParameterBuilder) *SubscriptionNotifyBuilder {
 	b.templateParameters = make([]*TemplateParameterBuilder, len(values))
 	copy(b.templateParameters, values)

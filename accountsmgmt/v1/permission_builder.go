@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 // PermissionBuilder contains the data and logic needed to build 'permission' objects.
+//
+//
 type PermissionBuilder struct {
 	bitmap_  uint32
 	id       string
@@ -68,6 +70,8 @@ func (b *PermissionBuilder) Action(value Action) *PermissionBuilder {
 }
 
 // Resource sets the value of the 'resource' attribute to the given value.
+//
+//
 func (b *PermissionBuilder) Resource(value string) *PermissionBuilder {
 	b.resource = value
 	b.bitmap_ |= 16

@@ -179,12 +179,16 @@ func (r *ManifestPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ManifestPollResponse) Body() *Manifest {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ManifestPollResponse) GetBody() (value *Manifest, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *ManifestGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ManifestGetResponse) Body() *Manifest {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *ManifestGetResponse) Body() *Manifest {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ManifestGetResponse) GetBody() (value *Manifest, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *ManifestUpdateRequest) Impersonate(user string) *ManifestUpdateRequest 
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *ManifestUpdateRequest) Body(value *Manifest) *ManifestUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *ManifestUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ManifestUpdateResponse) Body() *Manifest {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *ManifestUpdateResponse) Body() *Manifest {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ManifestUpdateResponse) GetBody() (value *Manifest, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

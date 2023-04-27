@@ -71,6 +71,8 @@ func (c *PrivateLinkPrincipalsClient) List() *PrivateLinkPrincipalsListRequest {
 }
 
 // Principal returns the target 'private_link_principal' resource for the given identifier.
+//
+//
 func (c *PrivateLinkPrincipalsClient) Principal(id string) *PrivateLinkPrincipalClient {
 	return NewPrivateLinkPrincipalClient(
 		c.transport,

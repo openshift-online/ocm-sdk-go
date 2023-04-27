@@ -169,12 +169,16 @@ func (r *PendingDeleteClusterPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *PendingDeleteClusterPollResponse) Body() *PendingDeleteCluster {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *PendingDeleteClusterPollResponse) GetBody() (value *PendingDeleteCluster, ok bool) {
 	return r.response.GetBody()
 }
@@ -300,6 +304,8 @@ func (r *PendingDeleteClusterGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *PendingDeleteClusterGetResponse) Body() *PendingDeleteCluster {
 	if r == nil {
 		return nil
@@ -309,6 +315,8 @@ func (r *PendingDeleteClusterGetResponse) Body() *PendingDeleteCluster {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *PendingDeleteClusterGetResponse) GetBody() (value *PendingDeleteCluster, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -346,6 +354,8 @@ func (r *PendingDeleteClusterUpdateRequest) Impersonate(user string) *PendingDel
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *PendingDeleteClusterUpdateRequest) Body(value *PendingDeleteCluster) *PendingDeleteClusterUpdateRequest {
 	r.body = value
 	return r
@@ -443,6 +453,8 @@ func (r *PendingDeleteClusterUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *PendingDeleteClusterUpdateResponse) Body() *PendingDeleteCluster {
 	if r == nil {
 		return nil
@@ -452,6 +464,8 @@ func (r *PendingDeleteClusterUpdateResponse) Body() *PendingDeleteCluster {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *PendingDeleteClusterUpdateResponse) GetBody() (value *PendingDeleteCluster, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

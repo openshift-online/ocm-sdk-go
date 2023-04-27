@@ -60,6 +60,8 @@ func (c *UsersClient) List() *UsersListRequest {
 }
 
 // User returns the target 'user' resource for the given identifier.
+//
+//
 func (c *UsersClient) User(id string) *UserClient {
 	return NewUserClient(
 		c.transport,
@@ -98,18 +100,24 @@ func (r *UsersListRequest) Impersonate(user string) *UsersListRequest {
 }
 
 // OrderBy sets the value of the 'order_by' parameter.
+//
+//
 func (r *UsersListRequest) OrderBy(value string) *UsersListRequest {
 	r.orderBy = &value
 	return r
 }
 
 // Page sets the value of the 'page' parameter.
+//
+//
 func (r *UsersListRequest) Page(value int) *UsersListRequest {
 	r.page = &value
 	return r
 }
 
 // Size sets the value of the 'size' parameter.
+//
+//
 func (r *UsersListRequest) Size(value int) *UsersListRequest {
 	r.size = &value
 	return r
@@ -213,6 +221,8 @@ func (r *UsersListResponse) Error() *errors.Error {
 }
 
 // Items returns the value of the 'items' parameter.
+//
+//
 func (r *UsersListResponse) Items() *UserList {
 	if r == nil {
 		return nil
@@ -222,6 +232,8 @@ func (r *UsersListResponse) Items() *UserList {
 
 // GetItems returns the value of the 'items' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *UsersListResponse) GetItems() (value *UserList, ok bool) {
 	ok = r != nil && r.items != nil
 	if ok {
@@ -231,6 +243,8 @@ func (r *UsersListResponse) GetItems() (value *UserList, ok bool) {
 }
 
 // Page returns the value of the 'page' parameter.
+//
+//
 func (r *UsersListResponse) Page() int {
 	if r != nil && r.page != nil {
 		return *r.page
@@ -240,6 +254,8 @@ func (r *UsersListResponse) Page() int {
 
 // GetPage returns the value of the 'page' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *UsersListResponse) GetPage() (value int, ok bool) {
 	ok = r != nil && r.page != nil
 	if ok {
@@ -249,6 +265,8 @@ func (r *UsersListResponse) GetPage() (value int, ok bool) {
 }
 
 // Size returns the value of the 'size' parameter.
+//
+//
 func (r *UsersListResponse) Size() int {
 	if r != nil && r.size != nil {
 		return *r.size
@@ -258,6 +276,8 @@ func (r *UsersListResponse) Size() int {
 
 // GetSize returns the value of the 'size' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *UsersListResponse) GetSize() (value int, ok bool) {
 	ok = r != nil && r.size != nil
 	if ok {
@@ -267,6 +287,8 @@ func (r *UsersListResponse) GetSize() (value int, ok bool) {
 }
 
 // Total returns the value of the 'total' parameter.
+//
+//
 func (r *UsersListResponse) Total() int {
 	if r != nil && r.total != nil {
 		return *r.total
@@ -276,6 +298,8 @@ func (r *UsersListResponse) Total() int {
 
 // GetTotal returns the value of the 'total' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *UsersListResponse) GetTotal() (value int, ok bool) {
 	ok = r != nil && r.total != nil
 	if ok {

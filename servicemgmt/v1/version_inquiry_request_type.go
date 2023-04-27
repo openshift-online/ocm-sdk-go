@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/servicemgmt/v1
 
 // VersionInquiryRequest represents the values of the 'version_inquiry_request' type.
+//
+//
 type VersionInquiryRequest struct {
 	bitmap_     uint32
 	serviceType string
@@ -32,6 +34,8 @@ func (o *VersionInquiryRequest) Empty() bool {
 
 // ServiceType returns the value of the 'service_type' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *VersionInquiryRequest) ServiceType() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.serviceType
@@ -41,6 +45,8 @@ func (o *VersionInquiryRequest) ServiceType() string {
 
 // GetServiceType returns the value of the 'service_type' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *VersionInquiryRequest) GetServiceType() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {

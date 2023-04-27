@@ -6457,6 +6457,9 @@
           "account_id": {
             "type": "string"
           },
+          "account_group_id": {
+            "type": "string"
+          },
           "config_managed": {
             "type": "boolean"
           },

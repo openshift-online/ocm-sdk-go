@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.336
+- Update model version v0.0.280
+  - Added account_group_id to role_binding
+
 ## 0.1.337
 - Windows: Update CA
 

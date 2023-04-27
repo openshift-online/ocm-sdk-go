@@ -116,6 +116,8 @@ func (o *FollowUp) Empty() bool {
 
 // Archived returns the value of the 'archived' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Archived() bool {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.archived
@@ -125,6 +127,8 @@ func (o *FollowUp) Archived() bool {
 
 // GetArchived returns the value of the 'archived' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetArchived() (value bool, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
@@ -181,6 +185,8 @@ func (o *FollowUp) GetDeletedAt() (value time.Time, ok bool) {
 
 // Done returns the value of the 'done' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Done() bool {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.done
@@ -190,6 +196,8 @@ func (o *FollowUp) Done() bool {
 
 // GetDone returns the value of the 'done' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetDone() (value bool, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
@@ -200,6 +208,8 @@ func (o *FollowUp) GetDone() (value bool, ok bool) {
 
 // FollowUpType returns the value of the 'follow_up_type' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) FollowUpType() string {
 	if o != nil && o.bitmap_&128 != 0 {
 		return o.followUpType
@@ -209,6 +219,8 @@ func (o *FollowUp) FollowUpType() string {
 
 // GetFollowUpType returns the value of the 'follow_up_type' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetFollowUpType() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
@@ -219,6 +231,8 @@ func (o *FollowUp) GetFollowUpType() (value string, ok bool) {
 
 // Incident returns the value of the 'incident' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Incident() *Incident {
 	if o != nil && o.bitmap_&256 != 0 {
 		return o.incident
@@ -228,6 +242,8 @@ func (o *FollowUp) Incident() *Incident {
 
 // GetIncident returns the value of the 'incident' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetIncident() (value *Incident, ok bool) {
 	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
@@ -238,6 +254,8 @@ func (o *FollowUp) GetIncident() (value *Incident, ok bool) {
 
 // Owner returns the value of the 'owner' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Owner() string {
 	if o != nil && o.bitmap_&512 != 0 {
 		return o.owner
@@ -247,6 +265,8 @@ func (o *FollowUp) Owner() string {
 
 // GetOwner returns the value of the 'owner' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetOwner() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
@@ -257,6 +277,8 @@ func (o *FollowUp) GetOwner() (value string, ok bool) {
 
 // Priority returns the value of the 'priority' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Priority() string {
 	if o != nil && o.bitmap_&1024 != 0 {
 		return o.priority
@@ -266,6 +288,8 @@ func (o *FollowUp) Priority() string {
 
 // GetPriority returns the value of the 'priority' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetPriority() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
@@ -276,6 +300,8 @@ func (o *FollowUp) GetPriority() (value string, ok bool) {
 
 // Status returns the value of the 'status' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Status() string {
 	if o != nil && o.bitmap_&2048 != 0 {
 		return o.status
@@ -285,6 +311,8 @@ func (o *FollowUp) Status() string {
 
 // GetStatus returns the value of the 'status' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetStatus() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2048 != 0
 	if ok {
@@ -295,6 +323,8 @@ func (o *FollowUp) GetStatus() (value string, ok bool) {
 
 // Title returns the value of the 'title' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Title() string {
 	if o != nil && o.bitmap_&4096 != 0 {
 		return o.title
@@ -304,6 +334,8 @@ func (o *FollowUp) Title() string {
 
 // GetTitle returns the value of the 'title' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetTitle() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&4096 != 0
 	if ok {
@@ -337,6 +369,8 @@ func (o *FollowUp) GetUpdatedAt() (value time.Time, ok bool) {
 
 // Url returns the value of the 'url' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) Url() string {
 	if o != nil && o.bitmap_&16384 != 0 {
 		return o.url
@@ -346,6 +380,8 @@ func (o *FollowUp) Url() string {
 
 // GetUrl returns the value of the 'url' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetUrl() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&16384 != 0
 	if ok {
@@ -356,6 +392,8 @@ func (o *FollowUp) GetUrl() (value string, ok bool) {
 
 // WorkedAt returns the value of the 'worked_at' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *FollowUp) WorkedAt() time.Time {
 	if o != nil && o.bitmap_&32768 != 0 {
 		return o.workedAt
@@ -365,6 +403,8 @@ func (o *FollowUp) WorkedAt() time.Time {
 
 // GetWorkedAt returns the value of the 'worked_at' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *FollowUp) GetWorkedAt() (value time.Time, ok bool) {
 	ok = o != nil && o.bitmap_&32768 != 0
 	if ok {

@@ -40,6 +40,8 @@ func (b *GCPNetworkBuilder) Empty() bool {
 }
 
 // VPCName sets the value of the 'VPC_name' attribute to the given value.
+//
+//
 func (b *GCPNetworkBuilder) VPCName(value string) *GCPNetworkBuilder {
 	b.vpcName = value
 	b.bitmap_ |= 1
@@ -47,6 +49,8 @@ func (b *GCPNetworkBuilder) VPCName(value string) *GCPNetworkBuilder {
 }
 
 // ComputeSubnet sets the value of the 'compute_subnet' attribute to the given value.
+//
+//
 func (b *GCPNetworkBuilder) ComputeSubnet(value string) *GCPNetworkBuilder {
 	b.computeSubnet = value
 	b.bitmap_ |= 2
@@ -54,6 +58,8 @@ func (b *GCPNetworkBuilder) ComputeSubnet(value string) *GCPNetworkBuilder {
 }
 
 // ControlPlaneSubnet sets the value of the 'control_plane_subnet' attribute to the given value.
+//
+//
 func (b *GCPNetworkBuilder) ControlPlaneSubnet(value string) *GCPNetworkBuilder {
 	b.controlPlaneSubnet = value
 	b.bitmap_ |= 4

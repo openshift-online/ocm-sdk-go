@@ -85,6 +85,8 @@ func (b *AddOnParameterBuilder) Addon(value *AddOnBuilder) *AddOnParameterBuilde
 }
 
 // Conditions sets the value of the 'conditions' attribute to the given values.
+//
+//
 func (b *AddOnParameterBuilder) Conditions(values ...*AddOnRequirementBuilder) *AddOnParameterBuilder {
 	b.conditions = make([]*AddOnRequirementBuilder, len(values))
 	copy(b.conditions, values)
@@ -93,6 +95,8 @@ func (b *AddOnParameterBuilder) Conditions(values ...*AddOnRequirementBuilder) *
 }
 
 // DefaultValue sets the value of the 'default_value' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) DefaultValue(value string) *AddOnParameterBuilder {
 	b.defaultValue = value
 	b.bitmap_ |= 32
@@ -100,6 +104,8 @@ func (b *AddOnParameterBuilder) DefaultValue(value string) *AddOnParameterBuilde
 }
 
 // Description sets the value of the 'description' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) Description(value string) *AddOnParameterBuilder {
 	b.description = value
 	b.bitmap_ |= 64
@@ -107,6 +113,8 @@ func (b *AddOnParameterBuilder) Description(value string) *AddOnParameterBuilder
 }
 
 // Editable sets the value of the 'editable' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) Editable(value bool) *AddOnParameterBuilder {
 	b.editable = value
 	b.bitmap_ |= 128
@@ -114,6 +122,8 @@ func (b *AddOnParameterBuilder) Editable(value bool) *AddOnParameterBuilder {
 }
 
 // EditableDirection sets the value of the 'editable_direction' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) EditableDirection(value string) *AddOnParameterBuilder {
 	b.editableDirection = value
 	b.bitmap_ |= 256
@@ -121,6 +131,8 @@ func (b *AddOnParameterBuilder) EditableDirection(value string) *AddOnParameterB
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) Enabled(value bool) *AddOnParameterBuilder {
 	b.enabled = value
 	b.bitmap_ |= 512
@@ -128,6 +140,8 @@ func (b *AddOnParameterBuilder) Enabled(value bool) *AddOnParameterBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) Name(value string) *AddOnParameterBuilder {
 	b.name = value
 	b.bitmap_ |= 1024
@@ -135,6 +149,8 @@ func (b *AddOnParameterBuilder) Name(value string) *AddOnParameterBuilder {
 }
 
 // Options sets the value of the 'options' attribute to the given values.
+//
+//
 func (b *AddOnParameterBuilder) Options(values ...*AddOnParameterOptionBuilder) *AddOnParameterBuilder {
 	b.options = make([]*AddOnParameterOptionBuilder, len(values))
 	copy(b.options, values)
@@ -143,6 +159,8 @@ func (b *AddOnParameterBuilder) Options(values ...*AddOnParameterOptionBuilder) 
 }
 
 // Required sets the value of the 'required' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) Required(value bool) *AddOnParameterBuilder {
 	b.required = value
 	b.bitmap_ |= 4096
@@ -150,6 +168,8 @@ func (b *AddOnParameterBuilder) Required(value bool) *AddOnParameterBuilder {
 }
 
 // Validation sets the value of the 'validation' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) Validation(value string) *AddOnParameterBuilder {
 	b.validation = value
 	b.bitmap_ |= 8192
@@ -157,6 +177,8 @@ func (b *AddOnParameterBuilder) Validation(value string) *AddOnParameterBuilder 
 }
 
 // ValidationErrMsg sets the value of the 'validation_err_msg' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) ValidationErrMsg(value string) *AddOnParameterBuilder {
 	b.validationErrMsg = value
 	b.bitmap_ |= 16384
@@ -164,6 +186,8 @@ func (b *AddOnParameterBuilder) ValidationErrMsg(value string) *AddOnParameterBu
 }
 
 // ValueType sets the value of the 'value_type' attribute to the given value.
+//
+//
 func (b *AddOnParameterBuilder) ValueType(value string) *AddOnParameterBuilder {
 	b.valueType = value
 	b.bitmap_ |= 32768

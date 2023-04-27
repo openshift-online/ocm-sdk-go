@@ -71,6 +71,8 @@ func (b *CloudProviderDataBuilder) GCP(value *GCPBuilder) *CloudProviderDataBuil
 }
 
 // AvailabilityZones sets the value of the 'availability_zones' attribute to the given values.
+//
+//
 func (b *CloudProviderDataBuilder) AvailabilityZones(values ...string) *CloudProviderDataBuilder {
 	b.availabilityZones = make([]string, len(values))
 	copy(b.availabilityZones, values)
@@ -79,6 +81,8 @@ func (b *CloudProviderDataBuilder) AvailabilityZones(values ...string) *CloudPro
 }
 
 // KeyLocation sets the value of the 'key_location' attribute to the given value.
+//
+//
 func (b *CloudProviderDataBuilder) KeyLocation(value string) *CloudProviderDataBuilder {
 	b.keyLocation = value
 	b.bitmap_ |= 8
@@ -86,6 +90,8 @@ func (b *CloudProviderDataBuilder) KeyLocation(value string) *CloudProviderDataB
 }
 
 // KeyRingName sets the value of the 'key_ring_name' attribute to the given value.
+//
+//
 func (b *CloudProviderDataBuilder) KeyRingName(value string) *CloudProviderDataBuilder {
 	b.keyRingName = value
 	b.bitmap_ |= 16
@@ -106,6 +112,8 @@ func (b *CloudProviderDataBuilder) Region(value *CloudRegionBuilder) *CloudProvi
 }
 
 // Subnets sets the value of the 'subnets' attribute to the given values.
+//
+//
 func (b *CloudProviderDataBuilder) Subnets(values ...string) *CloudProviderDataBuilder {
 	b.subnets = make([]string, len(values))
 	copy(b.subnets, values)

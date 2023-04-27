@@ -63,7 +63,7 @@ func UnmarshalAwsEtcdEncryptionList(source interface{}) (items []*AwsEtcdEncrypt
 	return
 }
 
-// readAwsEtcdEncryptionList reads list of values of the ”aws_etcd_encryption' type from
+// readAwsEtcdEncryptionList reads list of values of the ''aws_etcd_encryption' type from
 // the given iterator.
 func readAwsEtcdEncryptionList(iterator *jsoniter.Iterator) []*AwsEtcdEncryption {
 	list := []*AwsEtcdEncryption{}

@@ -24,12 +24,15 @@ import (
 )
 
 // RoleBindingBuilder contains the data and logic needed to build 'role_binding' objects.
+//
+//
 type RoleBindingBuilder struct {
 	bitmap_        uint32
 	id             string
 	href           string
 	account        *AccountBuilder
 	accountID      string
+	accountGroupID string
 	createdAt      time.Time
 	managedBy      string
 	organization   *OrganizationBuilder
@@ -74,6 +77,8 @@ func (b *RoleBindingBuilder) Empty() bool {
 }
 
 // Account sets the value of the 'account' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) Account(value *AccountBuilder) *RoleBindingBuilder {
 	b.account = value
 	if value != nil {
@@ -85,98 +90,131 @@ func (b *RoleBindingBuilder) Account(value *AccountBuilder) *RoleBindingBuilder 
 }
 
 // AccountID sets the value of the 'account_ID' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) AccountID(value string) *RoleBindingBuilder {
 	b.accountID = value
 	b.bitmap_ |= 16
 	return b
 }
 
-// ConfigManaged sets the value of the 'config_managed' attribute to the given value.
-func (b *RoleBindingBuilder) ConfigManaged(value bool) *RoleBindingBuilder {
-	b.configManaged = value
+// AccountGroupID sets the value of the 'account_group_ID' attribute to the given value.
+//
+//
+func (b *RoleBindingBuilder) AccountGroupID(value string) *RoleBindingBuilder {
+	b.accountGroupID = value
 	b.bitmap_ |= 32
 	return b
 }
 
-// CreatedAt sets the value of the 'created_at' attribute to the given value.
-func (b *RoleBindingBuilder) CreatedAt(value time.Time) *RoleBindingBuilder {
-	b.createdAt = value
+// ConfigManaged sets the value of the 'config_managed' attribute to the given value.
+//
+//
+func (b *RoleBindingBuilder) ConfigManaged(value bool) *RoleBindingBuilder {
+	b.configManaged = value
 	b.bitmap_ |= 64
 	return b
 }
 
-// ManagedBy sets the value of the 'managed_by' attribute to the given value.
-func (b *RoleBindingBuilder) ManagedBy(value string) *RoleBindingBuilder {
-	b.managedBy = value
+// CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
+func (b *RoleBindingBuilder) CreatedAt(value time.Time) *RoleBindingBuilder {
+	b.createdAt = value
 	b.bitmap_ |= 128
 	return b
 }
 
+// ManagedBy sets the value of the 'managed_by' attribute to the given value.
+//
+//
+func (b *RoleBindingBuilder) ManagedBy(value string) *RoleBindingBuilder {
+	b.managedBy = value
+	b.bitmap_ |= 256
+	return b
+}
+
 // Organization sets the value of the 'organization' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) Organization(value *OrganizationBuilder) *RoleBindingBuilder {
 	b.organization = value
 	if value != nil {
-		b.bitmap_ |= 256
+		b.bitmap_ |= 512
 	} else {
-		b.bitmap_ &^= 256
+		b.bitmap_ &^= 512
 	}
 	return b
 }
 
 // OrganizationID sets the value of the 'organization_ID' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) OrganizationID(value string) *RoleBindingBuilder {
 	b.organizationID = value
-	b.bitmap_ |= 512
+	b.bitmap_ |= 1024
 	return b
 }
 
 // Role sets the value of the 'role' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) Role(value *RoleBuilder) *RoleBindingBuilder {
 	b.role = value
 	if value != nil {
-		b.bitmap_ |= 1024
+		b.bitmap_ |= 2048
 	} else {
-		b.bitmap_ &^= 1024
+		b.bitmap_ &^= 2048
 	}
 	return b
 }
 
 // RoleID sets the value of the 'role_ID' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) RoleID(value string) *RoleBindingBuilder {
 	b.roleID = value
-	b.bitmap_ |= 2048
+	b.bitmap_ |= 4096
 	return b
 }
 
 // Subscription sets the value of the 'subscription' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) Subscription(value *SubscriptionBuilder) *RoleBindingBuilder {
 	b.subscription = value
 	if value != nil {
-		b.bitmap_ |= 4096
+		b.bitmap_ |= 8192
 	} else {
-		b.bitmap_ &^= 4096
+		b.bitmap_ &^= 8192
 	}
 	return b
 }
 
 // SubscriptionID sets the value of the 'subscription_ID' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) SubscriptionID(value string) *RoleBindingBuilder {
 	b.subscriptionID = value
-	b.bitmap_ |= 8192
-	return b
-}
-
-// Type sets the value of the 'type' attribute to the given value.
-func (b *RoleBindingBuilder) Type(value string) *RoleBindingBuilder {
-	b.type_ = value
 	b.bitmap_ |= 16384
 	return b
 }
 
+// Type sets the value of the 'type' attribute to the given value.
+//
+//
+func (b *RoleBindingBuilder) Type(value string) *RoleBindingBuilder {
+	b.type_ = value
+	b.bitmap_ |= 32768
+	return b
+}
+
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *RoleBindingBuilder) UpdatedAt(value time.Time) *RoleBindingBuilder {
 	b.updatedAt = value
-	b.bitmap_ |= 32768
+	b.bitmap_ |= 65536
 	return b
 }
 
@@ -194,6 +232,7 @@ func (b *RoleBindingBuilder) Copy(object *RoleBinding) *RoleBindingBuilder {
 		b.account = nil
 	}
 	b.accountID = object.accountID
+	b.accountGroupID = object.accountGroupID
 	b.configManaged = object.configManaged
 	b.createdAt = object.createdAt
 	b.managedBy = object.managedBy
@@ -233,6 +272,7 @@ func (b *RoleBindingBuilder) Build() (object *RoleBinding, err error) {
 		}
 	}
 	object.accountID = b.accountID
+	object.accountGroupID = b.accountGroupID
 	object.configManaged = b.configManaged
 	object.createdAt = b.createdAt
 	object.managedBy = b.managedBy

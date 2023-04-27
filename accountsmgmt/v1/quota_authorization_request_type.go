@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 // QuotaAuthorizationRequest represents the values of the 'quota_authorization_request' type.
+//
+//
 type QuotaAuthorizationRequest struct {
 	bitmap_          uint32
 	accountUsername  string
@@ -39,6 +41,8 @@ func (o *QuotaAuthorizationRequest) Empty() bool {
 
 // AccountUsername returns the value of the 'account_username' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) AccountUsername() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.accountUsername
@@ -48,6 +52,8 @@ func (o *QuotaAuthorizationRequest) AccountUsername() string {
 
 // GetAccountUsername returns the value of the 'account_username' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetAccountUsername() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -58,6 +64,8 @@ func (o *QuotaAuthorizationRequest) GetAccountUsername() (value string, ok bool)
 
 // AvailabilityZone returns the value of the 'availability_zone' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) AvailabilityZone() string {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.availabilityZone
@@ -67,6 +75,8 @@ func (o *QuotaAuthorizationRequest) AvailabilityZone() string {
 
 // GetAvailabilityZone returns the value of the 'availability_zone' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetAvailabilityZone() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
@@ -77,6 +87,8 @@ func (o *QuotaAuthorizationRequest) GetAvailabilityZone() (value string, ok bool
 
 // DisplayName returns the value of the 'display_name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) DisplayName() string {
 	if o != nil && o.bitmap_&4 != 0 {
 		return o.displayName
@@ -86,6 +98,8 @@ func (o *QuotaAuthorizationRequest) DisplayName() string {
 
 // GetDisplayName returns the value of the 'display_name' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetDisplayName() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
@@ -96,6 +110,8 @@ func (o *QuotaAuthorizationRequest) GetDisplayName() (value string, ok bool) {
 
 // ProductID returns the value of the 'product_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) ProductID() string {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.productID
@@ -105,6 +121,8 @@ func (o *QuotaAuthorizationRequest) ProductID() string {
 
 // GetProductID returns the value of the 'product_ID' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetProductID() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
@@ -115,6 +133,8 @@ func (o *QuotaAuthorizationRequest) GetProductID() (value string, ok bool) {
 
 // ProductCategory returns the value of the 'product_category' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) ProductCategory() string {
 	if o != nil && o.bitmap_&16 != 0 {
 		return o.productCategory
@@ -124,6 +144,8 @@ func (o *QuotaAuthorizationRequest) ProductCategory() string {
 
 // GetProductCategory returns the value of the 'product_category' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetProductCategory() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
@@ -134,6 +156,8 @@ func (o *QuotaAuthorizationRequest) GetProductCategory() (value string, ok bool)
 
 // QuotaVersion returns the value of the 'quota_version' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) QuotaVersion() string {
 	if o != nil && o.bitmap_&32 != 0 {
 		return o.quotaVersion
@@ -143,6 +167,8 @@ func (o *QuotaAuthorizationRequest) QuotaVersion() string {
 
 // GetQuotaVersion returns the value of the 'quota_version' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetQuotaVersion() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
@@ -153,6 +179,8 @@ func (o *QuotaAuthorizationRequest) GetQuotaVersion() (value string, ok bool) {
 
 // Reserve returns the value of the 'reserve' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) Reserve() bool {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.reserve
@@ -162,6 +190,8 @@ func (o *QuotaAuthorizationRequest) Reserve() bool {
 
 // GetReserve returns the value of the 'reserve' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetReserve() (value bool, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
@@ -172,6 +202,8 @@ func (o *QuotaAuthorizationRequest) GetReserve() (value bool, ok bool) {
 
 // Resources returns the value of the 'resources' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *QuotaAuthorizationRequest) Resources() []*ReservedResource {
 	if o != nil && o.bitmap_&128 != 0 {
 		return o.resources
@@ -181,6 +213,8 @@ func (o *QuotaAuthorizationRequest) Resources() []*ReservedResource {
 
 // GetResources returns the value of the 'resources' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *QuotaAuthorizationRequest) GetResources() (value []*ReservedResource, ok bool) {
 	ok = o != nil && o.bitmap_&128 != 0
 	if ok {

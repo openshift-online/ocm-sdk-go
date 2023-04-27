@@ -41,6 +41,8 @@ func (b *AddonNamespaceBuilder) Empty() bool {
 }
 
 // Annotations sets the value of the 'annotations' attribute to the given value.
+//
+//
 func (b *AddonNamespaceBuilder) Annotations(value map[string]string) *AddonNamespaceBuilder {
 	b.annotations = value
 	if value != nil {
@@ -52,6 +54,8 @@ func (b *AddonNamespaceBuilder) Annotations(value map[string]string) *AddonNames
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *AddonNamespaceBuilder) Enabled(value bool) *AddonNamespaceBuilder {
 	b.enabled = value
 	b.bitmap_ |= 2
@@ -59,6 +63,8 @@ func (b *AddonNamespaceBuilder) Enabled(value bool) *AddonNamespaceBuilder {
 }
 
 // Labels sets the value of the 'labels' attribute to the given value.
+//
+//
 func (b *AddonNamespaceBuilder) Labels(value map[string]string) *AddonNamespaceBuilder {
 	b.labels = value
 	if value != nil {
@@ -70,6 +76,8 @@ func (b *AddonNamespaceBuilder) Labels(value map[string]string) *AddonNamespaceB
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *AddonNamespaceBuilder) Name(value string) *AddonNamespaceBuilder {
 	b.name = value
 	b.bitmap_ |= 8

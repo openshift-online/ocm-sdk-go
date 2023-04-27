@@ -63,7 +63,7 @@ func UnmarshalPendingDeleteClusterList(source interface{}) (items []*PendingDele
 	return
 }
 
-// readPendingDeleteClusterList reads list of values of the ”pending_delete_cluster' type from
+// readPendingDeleteClusterList reads list of values of the ''pending_delete_cluster' type from
 // the given iterator.
 func readPendingDeleteClusterList(iterator *jsoniter.Iterator) []*PendingDeleteCluster {
 	list := []*PendingDeleteCluster{}

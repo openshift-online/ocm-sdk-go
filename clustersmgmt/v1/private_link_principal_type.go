@@ -32,6 +32,8 @@ const PrivateLinkPrincipalLinkKind = "PrivateLinkPrincipalLink"
 const PrivateLinkPrincipalNilKind = "PrivateLinkPrincipalNil"
 
 // PrivateLinkPrincipal represents the values of the 'private_link_principal' type.
+//
+//
 type PrivateLinkPrincipal struct {
 	bitmap_   uint32
 	id        string

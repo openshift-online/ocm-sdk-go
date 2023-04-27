@@ -61,6 +61,8 @@ func (c *PrivateLinkConfigurationClient) Get() *PrivateLinkConfigurationGetReque
 }
 
 // Principals returns the target 'private_link_principals' resource.
+//
+//
 func (c *PrivateLinkConfigurationClient) Principals() *PrivateLinkPrincipalsClient {
 	return NewPrivateLinkPrincipalsClient(
 		c.transport,
@@ -167,12 +169,16 @@ func (r *PrivateLinkConfigurationPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *PrivateLinkConfigurationPollResponse) Body() *PrivateLinkConfiguration {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *PrivateLinkConfigurationPollResponse) GetBody() (value *PrivateLinkConfiguration, ok bool) {
 	return r.response.GetBody()
 }
@@ -298,6 +304,8 @@ func (r *PrivateLinkConfigurationGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *PrivateLinkConfigurationGetResponse) Body() *PrivateLinkConfiguration {
 	if r == nil {
 		return nil
@@ -307,6 +315,8 @@ func (r *PrivateLinkConfigurationGetResponse) Body() *PrivateLinkConfiguration {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *PrivateLinkConfigurationGetResponse) GetBody() (value *PrivateLinkConfiguration, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

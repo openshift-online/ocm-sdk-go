@@ -82,6 +82,8 @@ func (b *AddOnBuilder) Empty() bool {
 }
 
 // CommonAnnotations sets the value of the 'common_annotations' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) CommonAnnotations(value map[string]string) *AddOnBuilder {
 	b.commonAnnotations = value
 	if value != nil {
@@ -93,6 +95,8 @@ func (b *AddOnBuilder) CommonAnnotations(value map[string]string) *AddOnBuilder 
 }
 
 // CommonLabels sets the value of the 'common_labels' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) CommonLabels(value map[string]string) *AddOnBuilder {
 	b.commonLabels = value
 	if value != nil {
@@ -118,6 +122,8 @@ func (b *AddOnBuilder) Config(value *AddOnConfigBuilder) *AddOnBuilder {
 }
 
 // CredentialsRequests sets the value of the 'credentials_requests' attribute to the given values.
+//
+//
 func (b *AddOnBuilder) CredentialsRequests(values ...*CredentialRequestBuilder) *AddOnBuilder {
 	b.credentialsRequests = make([]*CredentialRequestBuilder, len(values))
 	copy(b.credentialsRequests, values)
@@ -126,6 +132,8 @@ func (b *AddOnBuilder) CredentialsRequests(values ...*CredentialRequestBuilder) 
 }
 
 // Description sets the value of the 'description' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) Description(value string) *AddOnBuilder {
 	b.description = value
 	b.bitmap_ |= 128
@@ -133,6 +141,8 @@ func (b *AddOnBuilder) Description(value string) *AddOnBuilder {
 }
 
 // DocsLink sets the value of the 'docs_link' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) DocsLink(value string) *AddOnBuilder {
 	b.docsLink = value
 	b.bitmap_ |= 256
@@ -140,6 +150,8 @@ func (b *AddOnBuilder) DocsLink(value string) *AddOnBuilder {
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) Enabled(value bool) *AddOnBuilder {
 	b.enabled = value
 	b.bitmap_ |= 512
@@ -147,6 +159,8 @@ func (b *AddOnBuilder) Enabled(value bool) *AddOnBuilder {
 }
 
 // HasExternalResources sets the value of the 'has_external_resources' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) HasExternalResources(value bool) *AddOnBuilder {
 	b.hasExternalResources = value
 	b.bitmap_ |= 1024
@@ -154,6 +168,8 @@ func (b *AddOnBuilder) HasExternalResources(value bool) *AddOnBuilder {
 }
 
 // Hidden sets the value of the 'hidden' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) Hidden(value bool) *AddOnBuilder {
 	b.hidden = value
 	b.bitmap_ |= 2048
@@ -161,6 +177,8 @@ func (b *AddOnBuilder) Hidden(value bool) *AddOnBuilder {
 }
 
 // Icon sets the value of the 'icon' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) Icon(value string) *AddOnBuilder {
 	b.icon = value
 	b.bitmap_ |= 4096
@@ -177,6 +195,8 @@ func (b *AddOnBuilder) InstallMode(value AddOnInstallMode) *AddOnBuilder {
 }
 
 // Label sets the value of the 'label' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) Label(value string) *AddOnBuilder {
 	b.label = value
 	b.bitmap_ |= 16384
@@ -184,6 +204,8 @@ func (b *AddOnBuilder) Label(value string) *AddOnBuilder {
 }
 
 // ManagedService sets the value of the 'managed_service' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) ManagedService(value bool) *AddOnBuilder {
 	b.managedService = value
 	b.bitmap_ |= 32768
@@ -191,6 +213,8 @@ func (b *AddOnBuilder) ManagedService(value bool) *AddOnBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) Name(value string) *AddOnBuilder {
 	b.name = value
 	b.bitmap_ |= 65536
@@ -198,6 +222,8 @@ func (b *AddOnBuilder) Name(value string) *AddOnBuilder {
 }
 
 // Namespaces sets the value of the 'namespaces' attribute to the given values.
+//
+//
 func (b *AddOnBuilder) Namespaces(values ...*AddOnNamespaceBuilder) *AddOnBuilder {
 	b.namespaces = make([]*AddOnNamespaceBuilder, len(values))
 	copy(b.namespaces, values)
@@ -206,6 +232,8 @@ func (b *AddOnBuilder) Namespaces(values ...*AddOnNamespaceBuilder) *AddOnBuilde
 }
 
 // OperatorName sets the value of the 'operator_name' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) OperatorName(value string) *AddOnBuilder {
 	b.operatorName = value
 	b.bitmap_ |= 262144
@@ -213,6 +241,8 @@ func (b *AddOnBuilder) OperatorName(value string) *AddOnBuilder {
 }
 
 // Parameters sets the value of the 'parameters' attribute to the given values.
+//
+//
 func (b *AddOnBuilder) Parameters(value *AddOnParameterListBuilder) *AddOnBuilder {
 	b.parameters = value
 	b.bitmap_ |= 524288
@@ -220,6 +250,8 @@ func (b *AddOnBuilder) Parameters(value *AddOnParameterListBuilder) *AddOnBuilde
 }
 
 // Requirements sets the value of the 'requirements' attribute to the given values.
+//
+//
 func (b *AddOnBuilder) Requirements(values ...*AddOnRequirementBuilder) *AddOnBuilder {
 	b.requirements = make([]*AddOnRequirementBuilder, len(values))
 	copy(b.requirements, values)
@@ -228,6 +260,8 @@ func (b *AddOnBuilder) Requirements(values ...*AddOnRequirementBuilder) *AddOnBu
 }
 
 // ResourceCost sets the value of the 'resource_cost' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) ResourceCost(value float64) *AddOnBuilder {
 	b.resourceCost = value
 	b.bitmap_ |= 2097152
@@ -235,6 +269,8 @@ func (b *AddOnBuilder) ResourceCost(value float64) *AddOnBuilder {
 }
 
 // ResourceName sets the value of the 'resource_name' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
 	b.resourceName = value
 	b.bitmap_ |= 4194304
@@ -242,6 +278,8 @@ func (b *AddOnBuilder) ResourceName(value string) *AddOnBuilder {
 }
 
 // SubOperators sets the value of the 'sub_operators' attribute to the given values.
+//
+//
 func (b *AddOnBuilder) SubOperators(values ...*AddOnSubOperatorBuilder) *AddOnBuilder {
 	b.subOperators = make([]*AddOnSubOperatorBuilder, len(values))
 	copy(b.subOperators, values)
@@ -250,6 +288,8 @@ func (b *AddOnBuilder) SubOperators(values ...*AddOnSubOperatorBuilder) *AddOnBu
 }
 
 // TargetNamespace sets the value of the 'target_namespace' attribute to the given value.
+//
+//
 func (b *AddOnBuilder) TargetNamespace(value string) *AddOnBuilder {
 	b.targetNamespace = value
 	b.bitmap_ |= 16777216

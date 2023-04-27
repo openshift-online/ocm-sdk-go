@@ -50,6 +50,8 @@ func NewErrorClient(transport http.RoundTripper, path string) *ErrorClient {
 }
 
 // Get creates a request for the 'get' method.
+//
+//
 func (c *ErrorClient) Get() *ErrorGetRequest {
 	return &ErrorGetRequest{
 		transport: c.transport,
@@ -156,12 +158,16 @@ func (r *ErrorPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ErrorPollResponse) Body() *Error {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ErrorPollResponse) GetBody() (value *Error, ok bool) {
 	return r.response.GetBody()
 }
@@ -287,6 +293,8 @@ func (r *ErrorGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ErrorGetResponse) Body() *Error {
 	if r == nil {
 		return nil
@@ -296,6 +304,8 @@ func (r *ErrorGetResponse) Body() *Error {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ErrorGetResponse) GetBody() (value *Error, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

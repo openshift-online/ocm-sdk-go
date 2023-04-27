@@ -84,6 +84,8 @@ func (b *ApplicationDependencyBuilder) Application(value *ApplicationBuilder) *A
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *ApplicationDependencyBuilder) CreatedAt(value time.Time) *ApplicationDependencyBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 16
@@ -91,6 +93,8 @@ func (b *ApplicationDependencyBuilder) CreatedAt(value time.Time) *ApplicationDe
 }
 
 // Metadata sets the value of the 'metadata' attribute to the given value.
+//
+//
 func (b *ApplicationDependencyBuilder) Metadata(value interface{}) *ApplicationDependencyBuilder {
 	b.metadata = value
 	b.bitmap_ |= 32
@@ -98,6 +102,8 @@ func (b *ApplicationDependencyBuilder) Metadata(value interface{}) *ApplicationD
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *ApplicationDependencyBuilder) Name(value string) *ApplicationDependencyBuilder {
 	b.name = value
 	b.bitmap_ |= 64
@@ -105,6 +111,8 @@ func (b *ApplicationDependencyBuilder) Name(value string) *ApplicationDependency
 }
 
 // Owners sets the value of the 'owners' attribute to the given values.
+//
+//
 func (b *ApplicationDependencyBuilder) Owners(values ...*OwnerBuilder) *ApplicationDependencyBuilder {
 	b.owners = make([]*OwnerBuilder, len(values))
 	copy(b.owners, values)
@@ -126,6 +134,8 @@ func (b *ApplicationDependencyBuilder) Service(value *ServiceBuilder) *Applicati
 }
 
 // Type sets the value of the 'type' attribute to the given value.
+//
+//
 func (b *ApplicationDependencyBuilder) Type(value string) *ApplicationDependencyBuilder {
 	b.type_ = value
 	b.bitmap_ |= 512
@@ -133,6 +143,8 @@ func (b *ApplicationDependencyBuilder) Type(value string) *ApplicationDependency
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *ApplicationDependencyBuilder) UpdatedAt(value time.Time) *ApplicationDependencyBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 1024

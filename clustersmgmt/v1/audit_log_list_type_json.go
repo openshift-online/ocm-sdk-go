@@ -63,7 +63,7 @@ func UnmarshalAuditLogList(source interface{}) (items []*AuditLog, err error) {
 	return
 }
 
-// readAuditLogList reads list of values of the ”audit_log' type from
+// readAuditLogList reads list of values of the ''audit_log' type from
 // the given iterator.
 func readAuditLogList(iterator *jsoniter.Iterator) []*AuditLog {
 	list := []*AuditLog{}

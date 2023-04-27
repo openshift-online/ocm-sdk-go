@@ -52,6 +52,8 @@ func NewAccountClient(transport http.RoundTripper, path string) *AccountClient {
 }
 
 // Delete creates a request for the 'delete' method.
+//
+//
 func (c *AccountClient) Delete() *AccountDeleteRequest {
 	return &AccountDeleteRequest{
 		transport: c.transport,
@@ -188,12 +190,16 @@ func (r *AccountPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AccountPollResponse) Body() *Account {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AccountPollResponse) GetBody() (value *Account, ok bool) {
 	return r.response.GetBody()
 }
@@ -426,6 +432,8 @@ func (r *AccountGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AccountGetResponse) Body() *Account {
 	if r == nil {
 		return nil
@@ -435,6 +443,8 @@ func (r *AccountGetResponse) Body() *Account {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AccountGetResponse) GetBody() (value *Account, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -472,6 +482,8 @@ func (r *AccountUpdateRequest) Impersonate(user string) *AccountUpdateRequest {
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *AccountUpdateRequest) Body(value *Account) *AccountUpdateRequest {
 	r.body = value
 	return r
@@ -569,6 +581,8 @@ func (r *AccountUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AccountUpdateResponse) Body() *Account {
 	if r == nil {
 		return nil
@@ -578,6 +592,8 @@ func (r *AccountUpdateResponse) Body() *Account {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AccountUpdateResponse) GetBody() (value *Account, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

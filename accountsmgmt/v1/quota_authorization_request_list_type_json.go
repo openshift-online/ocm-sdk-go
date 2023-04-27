@@ -63,7 +63,7 @@ func UnmarshalQuotaAuthorizationRequestList(source interface{}) (items []*QuotaA
 	return
 }
 
-// readQuotaAuthorizationRequestList reads list of values of the ”quota_authorization_request' type from
+// readQuotaAuthorizationRequestList reads list of values of the ''quota_authorization_request' type from
 // the given iterator.
 func readQuotaAuthorizationRequestList(iterator *jsoniter.Iterator) []*QuotaAuthorizationRequest {
 	list := []*QuotaAuthorizationRequest{}

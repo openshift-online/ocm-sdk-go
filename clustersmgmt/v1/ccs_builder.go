@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // CCSBuilder contains the data and logic needed to build 'CCS' objects.
+//
+//
 type CCSBuilder struct {
 	bitmap_          uint32
 	id               string
@@ -59,6 +61,8 @@ func (b *CCSBuilder) Empty() bool {
 }
 
 // DisableSCPChecks sets the value of the 'disable_SCP_checks' attribute to the given value.
+//
+//
 func (b *CCSBuilder) DisableSCPChecks(value bool) *CCSBuilder {
 	b.disableSCPChecks = value
 	b.bitmap_ |= 8
@@ -66,6 +70,8 @@ func (b *CCSBuilder) DisableSCPChecks(value bool) *CCSBuilder {
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *CCSBuilder) Enabled(value bool) *CCSBuilder {
 	b.enabled = value
 	b.bitmap_ |= 16

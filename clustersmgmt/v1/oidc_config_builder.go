@@ -52,6 +52,8 @@ func (b *OidcConfigBuilder) Empty() bool {
 }
 
 // HREF sets the value of the 'HREF' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) HREF(value string) *OidcConfigBuilder {
 	b.href = value
 	b.bitmap_ |= 1
@@ -59,6 +61,8 @@ func (b *OidcConfigBuilder) HREF(value string) *OidcConfigBuilder {
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) ID(value string) *OidcConfigBuilder {
 	b.id = value
 	b.bitmap_ |= 2
@@ -66,6 +70,8 @@ func (b *OidcConfigBuilder) ID(value string) *OidcConfigBuilder {
 }
 
 // CreationTimestamp sets the value of the 'creation_timestamp' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) CreationTimestamp(value time.Time) *OidcConfigBuilder {
 	b.creationTimestamp = value
 	b.bitmap_ |= 4
@@ -73,6 +79,8 @@ func (b *OidcConfigBuilder) CreationTimestamp(value time.Time) *OidcConfigBuilde
 }
 
 // InstallerRoleArn sets the value of the 'installer_role_arn' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) InstallerRoleArn(value string) *OidcConfigBuilder {
 	b.installerRoleArn = value
 	b.bitmap_ |= 8
@@ -80,6 +88,8 @@ func (b *OidcConfigBuilder) InstallerRoleArn(value string) *OidcConfigBuilder {
 }
 
 // IssuerUrl sets the value of the 'issuer_url' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) IssuerUrl(value string) *OidcConfigBuilder {
 	b.issuerUrl = value
 	b.bitmap_ |= 16
@@ -87,6 +97,8 @@ func (b *OidcConfigBuilder) IssuerUrl(value string) *OidcConfigBuilder {
 }
 
 // LastUpdateTimestamp sets the value of the 'last_update_timestamp' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) LastUpdateTimestamp(value time.Time) *OidcConfigBuilder {
 	b.lastUpdateTimestamp = value
 	b.bitmap_ |= 32
@@ -94,6 +106,8 @@ func (b *OidcConfigBuilder) LastUpdateTimestamp(value time.Time) *OidcConfigBuil
 }
 
 // LastUsedTimestamp sets the value of the 'last_used_timestamp' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) LastUsedTimestamp(value time.Time) *OidcConfigBuilder {
 	b.lastUsedTimestamp = value
 	b.bitmap_ |= 64
@@ -101,6 +115,8 @@ func (b *OidcConfigBuilder) LastUsedTimestamp(value time.Time) *OidcConfigBuilde
 }
 
 // Managed sets the value of the 'managed' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) Managed(value bool) *OidcConfigBuilder {
 	b.managed = value
 	b.bitmap_ |= 128
@@ -108,6 +124,8 @@ func (b *OidcConfigBuilder) Managed(value bool) *OidcConfigBuilder {
 }
 
 // OrganizationId sets the value of the 'organization_id' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) OrganizationId(value string) *OidcConfigBuilder {
 	b.organizationId = value
 	b.bitmap_ |= 256
@@ -115,6 +133,8 @@ func (b *OidcConfigBuilder) OrganizationId(value string) *OidcConfigBuilder {
 }
 
 // Reusable sets the value of the 'reusable' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) Reusable(value bool) *OidcConfigBuilder {
 	b.reusable = value
 	b.bitmap_ |= 512
@@ -122,6 +142,8 @@ func (b *OidcConfigBuilder) Reusable(value bool) *OidcConfigBuilder {
 }
 
 // SecretArn sets the value of the 'secret_arn' attribute to the given value.
+//
+//
 func (b *OidcConfigBuilder) SecretArn(value string) *OidcConfigBuilder {
 	b.secretArn = value
 	b.bitmap_ |= 1024
