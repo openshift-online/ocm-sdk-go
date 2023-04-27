@@ -9865,6 +9865,10 @@
             "description": "AWS account identifier.",
             "type": "string"
           },
+          "audit_log": {
+            "description": "Audit log forwarding configuration",
+            "$ref": "#/components/schemas/AuditLog"
+          },
           "billing_account_id": {
             "description": "BillingAccountID is the account used for billing subscriptions purchased via the marketplace",
             "type": "string"
@@ -11259,6 +11263,15 @@
             "items": {
               "$ref": "#/components/schemas/AlertInfo"
             }
+          }
+        }
+      },
+      "AuditLog": {
+        "description": "Contains the necessary attributes to support audit log forwarding",
+        "properties": {
+          "role_arn": {
+            "description": "ARN of the CloudWatch audit log forwarding role",
+            "type": "string"
           }
         }
       },
