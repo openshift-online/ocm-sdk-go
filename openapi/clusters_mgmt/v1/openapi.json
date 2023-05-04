@@ -9877,6 +9877,10 @@
             "description": "Related etcd encryption configuration",
             "$ref": "#/components/schemas/AwsEtcdEncryption"
           },
+          "http_tokens_state": {
+            "description": "Which HttpTokensState to use for metadata service interaction options for EC2 instances",
+            "$ref": "#/components/schemas/HttpTokenState"
+          },
           "private_link": {
             "description": "Sets cluster to be inaccessible externally.",
             "type": "boolean"
@@ -12343,6 +12347,14 @@
             }
           }
         }
+      },
+      "HttpTokenState": {
+        "description": "Which HttpTokensState to use for metadata service interaction options for EC2 instances",
+        "type": "string",
+        "enum": [
+          "optional",
+          "required"
+        ]
       },
       "Hypershift": {
         "description": "Hypershift configuration.",
