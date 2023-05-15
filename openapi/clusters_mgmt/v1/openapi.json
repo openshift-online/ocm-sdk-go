@@ -12852,6 +12852,10 @@
             "description": "Human friendly identifier of the machine type, for example `r5.xlarge - Memory Optimized`.",
             "type": "string"
           },
+          "root_volume": {
+            "description": "The machine root volume capabilities.",
+            "$ref": "#/components/schemas/MachineTypeRootVolume"
+          },
           "size": {
             "description": "The size of the machine type.",
             "$ref": "#/components/schemas/MachineTypeSize"
@@ -12867,6 +12871,19 @@
           "general_purpose",
           "memory_optimized"
         ]
+      },
+      "MachineTypeRootVolume": {
+        "description": "Machine type root volume.",
+        "properties": {
+          "aws": {
+            "description": "AWS volume specification",
+            "$ref": "#/components/schemas/AWSVolume"
+          },
+          "gcp": {
+            "description": "GCP Volume specification",
+            "$ref": "#/components/schemas/GCPVolume"
+          }
+        }
       },
       "MachineTypeSize": {
         "description": "Machine type size.",
