@@ -22,7 +22,7 @@ model_version:=v0.0.282
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=v0.0.57
+metamodel_version:=v0.0.58
 
 # Additional flags to pass to the `ginkgo` command. This is used in the GitHub
 # actions environment to skip tests that are sensitive to the speed of the
