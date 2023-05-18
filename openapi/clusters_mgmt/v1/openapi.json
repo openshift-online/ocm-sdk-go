@@ -9873,13 +9873,13 @@
             "description": "BillingAccountID is the account used for billing subscriptions purchased via the marketplace",
             "type": "string"
           },
+          "ec_2_metadata_http_tokens": {
+            "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
+            "$ref": "#/components/schemas/Ec2MetadataHttpTokens"
+          },
           "etcd_encryption": {
             "description": "Related etcd encryption configuration",
             "$ref": "#/components/schemas/AwsEtcdEncryption"
-          },
-          "http_tokens_state": {
-            "description": "Which HttpTokensState to use for metadata service interaction options for EC2 instances",
-            "$ref": "#/components/schemas/HttpTokenState"
           },
           "private_link": {
             "description": "Sets cluster to be inaccessible externally.",
@@ -12122,6 +12122,14 @@
           "manual"
         ]
       },
+      "Ec2MetadataHttpTokens": {
+        "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
+        "type": "string",
+        "enum": [
+          "optional",
+          "required"
+        ]
+      },
       "EncryptionKey": {
         "description": "Description of a cloud provider encryption key.",
         "properties": {
@@ -12347,14 +12355,6 @@
             }
           }
         }
-      },
-      "HttpTokenState": {
-        "description": "Which HttpTokensState to use for metadata service interaction options for EC2 instances",
-        "type": "string",
-        "enum": [
-          "optional",
-          "required"
-        ]
       },
       "Hypershift": {
         "description": "Hypershift configuration.",
