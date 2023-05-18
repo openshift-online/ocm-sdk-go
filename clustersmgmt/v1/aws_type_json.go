@@ -102,7 +102,7 @@ func writeAWS(object *AWS, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("ec_2_metadata_http_tokens")
+		stream.WriteObjectField("ec2_metadata_http_tokens")
 		stream.WriteString(string(object.ec2MetadataHttpTokens))
 		count++
 	}
@@ -227,7 +227,7 @@ func readAWS(iterator *jsoniter.Iterator) *AWS {
 			value := iterator.ReadString()
 			object.billingAccountID = value
 			object.bitmap_ |= 32
-		case "ec_2_metadata_http_tokens":
+		case "ec2_metadata_http_tokens":
 			text := iterator.ReadString()
 			value := Ec2MetadataHttpTokens(text)
 			object.ec2MetadataHttpTokens = value
