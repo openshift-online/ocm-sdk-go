@@ -26,11 +26,11 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalHttpTokenStateList writes a list of values of the 'http_token_state' type to
+// MarshalEc2MetadataHttpTokensList writes a list of values of the 'ec_2_metadata_http_tokens' type to
 // the given writer.
-func MarshalHttpTokenStateList(list []HttpTokenState, writer io.Writer) error {
+func MarshalEc2MetadataHttpTokensList(list []Ec2MetadataHttpTokens, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeHttpTokenStateList(list, stream)
+	writeEc2MetadataHttpTokensList(list, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -38,9 +38,9 @@ func MarshalHttpTokenStateList(list []HttpTokenState, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeHttpTokenStateList writes a list of value of the 'http_token_state' type to
+// writeEc2MetadataHttpTokensList writes a list of value of the 'ec_2_metadata_http_tokens' type to
 // the given stream.
-func writeHttpTokenStateList(list []HttpTokenState, stream *jsoniter.Stream) {
+func writeEc2MetadataHttpTokensList(list []Ec2MetadataHttpTokens, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
@@ -51,25 +51,25 @@ func writeHttpTokenStateList(list []HttpTokenState, stream *jsoniter.Stream) {
 	stream.WriteArrayEnd()
 }
 
-// UnmarshalHttpTokenStateList reads a list of values of the 'http_token_state' type
+// UnmarshalEc2MetadataHttpTokensList reads a list of values of the 'ec_2_metadata_http_tokens' type
 // from the given source, which can be a slice of bytes, a string or a reader.
-func UnmarshalHttpTokenStateList(source interface{}) (items []HttpTokenState, err error) {
+func UnmarshalEc2MetadataHttpTokensList(source interface{}) (items []Ec2MetadataHttpTokens, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	items = readHttpTokenStateList(iterator)
+	items = readEc2MetadataHttpTokensList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readHttpTokenStateList reads list of values of the ”http_token_state' type from
+// readEc2MetadataHttpTokensList reads list of values of the ”ec_2_metadata_http_tokens' type from
 // the given iterator.
-func readHttpTokenStateList(iterator *jsoniter.Iterator) []HttpTokenState {
-	list := []HttpTokenState{}
+func readEc2MetadataHttpTokensList(iterator *jsoniter.Iterator) []Ec2MetadataHttpTokens {
+	list := []Ec2MetadataHttpTokens{}
 	for iterator.ReadArray() {
 		text := iterator.ReadString()
-		item := HttpTokenState(text)
+		item := Ec2MetadataHttpTokens(text)
 		list = append(list, item)
 	}
 	return list
