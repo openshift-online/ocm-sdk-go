@@ -4,6 +4,9 @@ This document describes the relevant changes between releases of the OCM API
 SDK.
 
 ## 0.1.341
+- Update model version v0.0.284
+
+## 0.1.341
 - Update model version v0.0.282
   - Changing parameter name from HttpTokensState to Ec2MetadataHttpTokens
 
