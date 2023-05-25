@@ -2,6 +2,10 @@
 
 This document describes the relevant changes between releases of the OCM API
 SDK.
+## 0.1.342
+- Update model version v0.0.285
+  - Changed DNS Domain from Class to a Struct.
+  - Change dns domain type to class and remove ID.
 
 ## 0.1.341
 - Update model version v0.0.282
