@@ -1286,6 +1286,50 @@
       }
     },
     "/api/clusters_mgmt/v1/cloud_providers/{cloud_provider_id}/regions": {
+      "post": {
+        "description": "Adds a cloud region to the database.",
+        "parameters": [
+          {
+            "name": "cloud_provider_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudRegion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CloudRegion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "description": "Retrieves the list of regions of the cloud provider.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of regions\nof the provider.",
         "parameters": [
@@ -1365,6 +1409,42 @@
       }
     },
     "/api/clusters_mgmt/v1/cloud_providers/{cloud_provider_id}/regions/{region_id}": {
+      "delete": {
+        "description": "Deletes the region.",
+        "parameters": [
+          {
+            "name": "cloud_provider_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "region_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "description": "Retrieves the details of the region.",
         "parameters": [
@@ -1385,6 +1465,58 @@
             "required": true
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CloudRegion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the region.",
+        "parameters": [
+          {
+            "name": "cloud_provider_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "region_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudRegion"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success.",
@@ -10500,6 +10632,36 @@
           }
         }
       },
+      "DNSDomain": {
+        "description": "Contains the properties of a DNS domain.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'DNSDomain' if this is a complete object or 'DNSDomainLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_link": {
+            "description": "Link to the cluster that is registered with the DNS domain (optional).",
+            "$ref": "#/components/schemas/ClusterLink"
+          },
+          "organization_link": {
+            "description": "Link to the organization that reserved the DNS domain.",
+            "$ref": "#/components/schemas/OrganizationLink"
+          },
+          "reserved_at": {
+            "description": "Date and time when the DNS domain was reserved.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "GCP": {
         "description": "Google cloud platform settings of a cluster.",
         "properties": {
@@ -12084,6 +12246,19 @@
           "unknown"
         ]
       },
+      "ClusterLink": {
+        "description": "Definition of a cluster link.",
+        "properties": {
+          "href": {
+            "description": "HREF for the cluster, filled in response.",
+            "type": "string"
+          },
+          "id": {
+            "description": "The cluster's ID.",
+            "type": "string"
+          }
+        }
+      },
       "ClusterNodes": {
         "description": "Counts of different classes of nodes inside a cluster.",
         "properties": {
@@ -13616,6 +13791,19 @@
           },
           "service_account": {
             "description": "Service account name to use when authenticating",
+            "type": "string"
+          }
+        }
+      },
+      "OrganizationLink": {
+        "description": "Definition of an organization link.",
+        "properties": {
+          "href": {
+            "description": "HREF for the Organization, filled in response.",
+            "type": "string"
+          },
+          "id": {
+            "description": "The organization's ID.",
             "type": "string"
           }
         }
