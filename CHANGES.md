@@ -2,6 +2,10 @@
 
 This document describes the relevant changes between releases of the OCM API
 SDK.
+## 0.1.344
+- Update model version v0.0.287
+  - Add Htpasswd to Cluster
+
 ## 0.1.343
 - Update model version v0.0.286
   - Add MachineTypeRootVolume to MachinePool
