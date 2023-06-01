@@ -12032,6 +12032,10 @@
             "description": "HealthState indicates the overall health state of the cluster.",
             "$ref": "#/components/schemas/ClusterHealthState"
           },
+          "htpasswd": {
+            "description": "Details for `htpasswd` identity provider.",
+            "$ref": "#/components/schemas/HTPasswdIdentityProvider"
+          },
           "hypershift": {
             "description": "Hypershift configuration.",
             "$ref": "#/components/schemas/Hypershift"
