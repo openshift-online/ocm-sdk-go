@@ -13219,6 +13219,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "root_volume": {
+            "description": "The machine root volume capabilities.",
+            "$ref": "#/components/schemas/MachineTypeRootVolume"
+          },
           "security_group_filters": {
             "description": "List of security groups to be applied to MachinePool (Optional)",
             "type": "array",
