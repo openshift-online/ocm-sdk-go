@@ -230,6 +230,218 @@
         }
       }
     },
+    "/api/osd_fleet_mgmt/v1/management_clusters/{management_cluster_id}/labels": {
+      "get": {
+        "description": "Retrieves the list of labels.",
+        "parameters": [
+          {
+            "name": "management_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved a list of labels.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Label"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/osd_fleet_mgmt/v1/management_clusters/{management_cluster_id}/labels/{label_id}": {
+      "delete": {
+        "description": "Deletes the label.",
+        "parameters": [
+          {
+            "name": "management_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the cluster.",
+        "parameters": [
+          {
+            "name": "management_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates the label.",
+        "parameters": [
+          {
+            "name": "management_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabelRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/osd_fleet_mgmt/v1/service_clusters": {
       "get": {
         "description": "Retrieves the list of service clusters.",
@@ -409,6 +621,218 @@
           }
         }
       }
+    },
+    "/api/osd_fleet_mgmt/v1/service_clusters/{service_cluster_id}/labels": {
+      "get": {
+        "description": "Retrieves the list of labels.",
+        "parameters": [
+          {
+            "name": "service_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved a list of labels.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Label"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/osd_fleet_mgmt/v1/service_clusters/{service_cluster_id}/labels/{label_id}": {
+      "delete": {
+        "description": "Deletes the label.",
+        "parameters": [
+          {
+            "name": "service_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the cluster.",
+        "parameters": [
+          {
+            "name": "service_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates the label.",
+        "parameters": [
+          {
+            "name": "service_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "label_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabelRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Label"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -444,6 +868,46 @@
           }
         }
       },
+      "Label": {
+        "description": "label settings of the cluster.",
+        "properties": {
+          "id": {
+            "description": "Label ID associated to the OSD FM managed cluster",
+            "type": "string"
+          },
+          "key": {
+            "description": "Label key associated to the OSD FM managed cluster",
+            "type": "string"
+          },
+          "value": {
+            "description": "Label value associated to the OSD FM managed cluster",
+            "type": "string"
+          }
+        }
+      },
+      "LabelReference": {
+        "description": "label reference settings of the cluster.",
+        "properties": {
+          "href": {
+            "description": "link to the Label associated to the OSD FM managed cluster",
+            "type": "string"
+          },
+          "id": {
+            "description": "Id of the Label associated to the OSD FM managed cluster",
+            "type": "string"
+          }
+        }
+      },
+      "LabelRequestPayload": {
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
       "ManagementCluster": {
         "description": "Definition of an _OpenShift_ cluster.\n\nThe `cloud_provider` attribute is a reference to the cloud provider. When a\ncluster is retrieved it will be a link to the cloud provider, containing only\nthe kind, id and href attributes:\n\n```json\n{\n  \"cloud_provider\": {\n    \"kind\": \"CloudProviderLink\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/cloud_providers/123\"\n  }\n}\n```\n\nWhen a cluster is created this is optional, and if used it should contain the\nidentifier of the cloud provider to use:\n\n```json\n{\n  \"cloud_provider\": {\n    \"id\": \"123\",\n  }\n}\n```\n\nIf not included, then the cluster will be created using the default cloud\nprovider, which is currently Amazon Web Services.\n\nThe region attribute is mandatory when a cluster is created.\n\nThe `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`\nattributes are mandatory when creation a cluster with your own Amazon Web\nServices account.",
         "properties": {
@@ -471,21 +935,42 @@
             "description": "Cluster mgmt reference",
             "$ref": "#/components/schemas/ClusterManagementReference"
           },
+          "creation_timestamp": {
+            "description": "Creation timestamp of the cluster",
+            "type": "string",
+            "format": "date-time"
+          },
+          "labels_reference": {
+            "description": "Labels on management cluster",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LabelReference"
+            }
+          },
           "name": {
             "description": "Cluster name",
             "type": "string"
           },
           "parent": {
-            "description": "Management cluster handling the management cluster",
+            "description": "Service cluster handling the management cluster",
             "$ref": "#/components/schemas/ManagementClusterParent"
           },
           "region": {
             "description": "Cloud provider region where the cluster is installed.",
             "type": "string"
           },
+          "sector": {
+            "description": "Sector of cluster",
+            "type": "string"
+          },
           "status": {
             "description": "Status of cluster",
             "type": "string"
+          },
+          "update_timestamp": {
+            "description": "Update timestamp of the cluster",
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -517,6 +1002,19 @@
           }
         }
       },
+      "ProvisionShardsReference": {
+        "description": "Provision Shards Reference of the cluster.",
+        "properties": {
+          "href": {
+            "description": "link to the Provision Shards associated to the cluster",
+            "type": "string"
+          },
+          "id": {
+            "description": "Id of the Provision Shards associated to the Ocluster",
+            "type": "string"
+          }
+        }
+      },
       "ServiceCluster": {
         "description": "Definition of an _OpenShift_ cluster.\n\nThe `cloud_provider` attribute is a reference to the cloud provider. When a\ncluster is retrieved it will be a link to the cloud provider, containing only\nthe kind, id and href attributes:\n\n```json\n{\n  \"cloud_provider\": {\n    \"kind\": \"CloudProviderLink\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/cloud_providers/123\"\n  }\n}\n```\n\nWhen a cluster is created this is optional, and if used it should contain the\nidentifier of the cloud provider to use:\n\n```json\n{\n  \"cloud_provider\": {\n    \"id\": \"123\",\n  }\n}\n```\n\nIf not included, then the cluster will be created using the default cloud\nprovider, which is currently Amazon Web Services.\n\nThe region attribute is mandatory when a cluster is created.\n\nThe `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`\nattributes are mandatory when creation a cluster with your own Amazon Web\nServices account.",
         "properties": {
@@ -544,12 +1042,27 @@
             "description": "Cluster mgmt reference",
             "$ref": "#/components/schemas/ClusterManagementReference"
           },
+          "labels_reference": {
+            "description": "Labels refrences on service cluster",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LabelReference"
+            }
+          },
           "name": {
             "description": "Cluster name",
             "type": "string"
           },
+          "provision_shards_reference": {
+            "description": "Provision shard reference for the service cluster",
+            "$ref": "#/components/schemas/ProvisionShardsReference"
+          },
           "region": {
             "description": "Cloud provider region where the cluster is installed.",
+            "type": "string"
+          },
+          "sector": {
+            "description": "Sector of cluster",
             "type": "string"
           },
           "status": {
