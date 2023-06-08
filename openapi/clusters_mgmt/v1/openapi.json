@@ -11103,19 +11103,6 @@
           }
         }
       },
-      "SSHCredentials": {
-        "description": "SSH key pair of a cluster.",
-        "properties": {
-          "private_key": {
-            "description": "SSH private key of the cluster.",
-            "type": "string"
-          },
-          "public_key": {
-            "description": "SSH public key of the cluster.",
-            "type": "string"
-          }
-        }
-      },
       "STS": {
         "description": "Contains the necessary attributes to support role-based authentication on AWS.",
         "properties": {
@@ -12427,14 +12414,6 @@
             "description": "Self link.",
             "type": "string"
           },
-          "ssh": {
-            "description": "SSH key pair of the cluster.",
-            "$ref": "#/components/schemas/SSHCredentials"
-          },
-          "admin": {
-            "description": "Temporary administrator credentials generated during the installation\nof the cluster.",
-            "$ref": "#/components/schemas/AdminCredentials"
-          },
           "kubeconfig": {
             "description": "Administrator _kubeconfig_ file for the cluster.",
             "type": "string"
@@ -13238,6 +13217,10 @@
             "description": "Listening method of the ingress",
             "$ref": "#/components/schemas/ListeningMethod"
           },
+          "load_balancer_type": {
+            "description": "Load Balancer type of the ingress",
+            "$ref": "#/components/schemas/LoadBalancerFlavor"
+          },
           "route_selectors": {
             "description": "A set of labels for the ingress. ",
             "type": "object",
@@ -13375,6 +13358,14 @@
         "enum": [
           "external",
           "internal"
+        ]
+      },
+      "LoadBalancerFlavor": {
+        "description": "Type of node received via telemetry.",
+        "type": "string",
+        "enum": [
+          "classic",
+          "nlb"
         ]
       },
       "Log": {
