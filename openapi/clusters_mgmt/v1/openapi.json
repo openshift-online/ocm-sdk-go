@@ -12493,6 +12493,10 @@
             "description": "The compute machine type to use, for example `r5.xlarge`.",
             "$ref": "#/components/schemas/MachineType"
           },
+          "compute_root_volume": {
+            "description": "The compute machine root volume capabilities.",
+            "$ref": "#/components/schemas/RootVolume"
+          },
           "infra": {
             "description": "Number of infrastructure nodes of the cluster.",
             "type": "integer",
@@ -13409,7 +13413,7 @@
             "$ref": "#/components/schemas/AWSMachinePool"
           },
           "autoscaling": {
-            "description": "Details for auto-scaling the machine pool.\nReplicas and autoscaling cannot be used together.    ",
+            "description": "Details for auto-scaling the machine pool.\nReplicas and autoscaling cannot be used together.",
             "$ref": "#/components/schemas/MachinePoolAutoscaling"
           },
           "availability_zones": {
@@ -13431,13 +13435,13 @@
             }
           },
           "replicas": {
-            "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.    ",
+            "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.",
             "type": "integer",
             "format": "int32"
           },
           "root_volume": {
             "description": "The machine root volume capabilities.",
-            "$ref": "#/components/schemas/MachineTypeRootVolume"
+            "$ref": "#/components/schemas/RootVolume"
           },
           "security_group_filters": {
             "description": "List of security groups to be applied to MachinePool (Optional)",
@@ -13543,10 +13547,6 @@
             "description": "Human friendly identifier of the machine type, for example `r5.xlarge - Memory Optimized`.",
             "type": "string"
           },
-          "root_volume": {
-            "description": "The machine root volume capabilities.",
-            "$ref": "#/components/schemas/MachineTypeRootVolume"
-          },
           "size": {
             "description": "The size of the machine type.",
             "$ref": "#/components/schemas/MachineTypeSize"
@@ -13562,19 +13562,6 @@
           "general_purpose",
           "memory_optimized"
         ]
-      },
-      "MachineTypeRootVolume": {
-        "description": "Machine type root volume.",
-        "properties": {
-          "aws": {
-            "description": "AWS volume specification",
-            "$ref": "#/components/schemas/AWSVolume"
-          },
-          "gcp": {
-            "description": "GCP Volume specification",
-            "$ref": "#/components/schemas/GCPVolume"
-          }
-        }
       },
       "MachineTypeSize": {
         "description": "Machine type size.",
@@ -14225,6 +14212,19 @@
           "no_proxy": {
             "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
             "type": "string"
+          }
+        }
+      },
+      "RootVolume": {
+        "description": "Root volume capabilities.",
+        "properties": {
+          "aws": {
+            "description": "AWS volume specification",
+            "$ref": "#/components/schemas/AWSVolume"
+          },
+          "gcp": {
+            "description": "GCP Volume specification",
+            "$ref": "#/components/schemas/GCPVolume"
           }
         }
       },

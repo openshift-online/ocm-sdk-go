@@ -5574,6 +5574,12 @@
           },
           "cloud_provider_id": {
             "type": "string"
+          },
+          "contracts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Contract"
+            }
           }
         }
       },
@@ -5778,6 +5784,34 @@
             "format": "date-time"
           },
           "version": {
+            "type": "string"
+          }
+        }
+      },
+      "Contract": {
+        "properties": {
+          "dimensions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContractDimension"
+            }
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ContractDimension": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
             "type": "string"
           }
         }
