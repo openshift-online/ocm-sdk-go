@@ -482,6 +482,10 @@
             "description": "Indicates which Organization the resource type belongs to",
             "type": "string"
           },
+          "reason": {
+            "description": "Defines further context for the value in allowed (if applicable)",
+            "type": "string"
+          },
           "resource_type": {
             "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values",
             "type": "string"
@@ -696,6 +700,10 @@
           },
           "organization_id": {
             "description": "Indicates which Organization the resource type belongs to",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Defines further context for the value in allowed (if applicable)",
             "type": "string"
           },
           "resource_type": {
