@@ -9446,9 +9446,82 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/network_verifications": {
+      "post": {
+        "description": "Creates an entry for a network verification for each subnet supplied setting then to initial state.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetworkVerification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkVerification"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/network_verifications/{network_verification_id}": {
+      "get": {
+        "description": "Retrieves the details of a subnet network verification.",
+        "parameters": [
+          {
+            "name": "network_verification_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubnetNetworkVerification"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/oidc_configs": {
       "post": {
-        "description": "Creates a hosting under Red Hat's S3 bucket for byo oidc configuration",
+        "description": "Creates a hosting under Red Hat's S3 bucket for byo oidc configuration.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -11030,6 +11103,10 @@
           "id": {
             "description": "ID for a secondary user in the _HTPasswd_ data file.",
             "type": "string"
+          },
+          "hash": {
+            "description": "Encryption status of the  password for a secondory user in the _HTPasswd_ data file.\ntrue indicates Password is a Hash",
+            "type": "boolean"
           },
           "password": {
             "description": "Password for a secondary user in the _HTPasswd_ data file.",
@@ -13631,6 +13708,26 @@
           }
         }
       },
+      "NetworkVerification": {
+        "properties": {
+          "cloud_provider_data": {
+            "description": "Cloud provider data to execute the network verification.",
+            "$ref": "#/components/schemas/CloudProviderData"
+          },
+          "items": {
+            "description": "Details about each subnet network verification.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubnetNetworkVerification"
+            }
+          },
+          "total": {
+            "description": "Amount of network verifier executions started.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "NodeInfo": {
         "description": "Provides information about a node from specific type in the cluster.",
         "properties": {
@@ -14286,6 +14383,33 @@
             "items": {
               "$ref": "#/components/schemas/SocketTotalNodeRoleOSMetricNode"
             }
+          }
+        }
+      },
+      "SubnetNetworkVerification": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'SubnetNetworkVerification' if this is a complete object or 'SubnetNetworkVerificationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Slice of failures that happened during a subnet network verification.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "state": {
+            "description": "State of the subnet network verification.",
+            "type": "string"
           }
         }
       },
