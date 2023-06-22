@@ -11104,12 +11104,12 @@
             "description": "ID for a secondary user in the _HTPasswd_ data file.",
             "type": "string"
           },
-          "hash": {
-            "description": "Encryption status of the  password for a secondory user in the _HTPasswd_ data file.\ntrue indicates Password is a Hash",
-            "type": "boolean"
+          "hashed_password": {
+            "description": "HTPasswd Hashed Password for a user in the _HTPasswd_ data file.\nThe value of this field is set as-is in the _HTPasswd_ data file for the HTPasswd IDP",
+            "type": "string"
           },
           "password": {
-            "description": "Password for a secondary user in the _HTPasswd_ data file.",
+            "description": "Password in plain-text for a  user in the _HTPasswd_ data file.\nThe value of this field is hashed before setting it in the  _HTPasswd_ data file for the HTPasswd IDP",
             "type": "string"
           },
           "username": {
@@ -12022,6 +12022,51 @@
           }
         }
       },
+      "AutoscalerResourceLimits": {
+        "properties": {
+          "cores": {
+            "description": "Minimum and maximum number of cores in cluster, in the format <min>:<max>.\nCluster autoscaler will not scale the cluster beyond these numbers.",
+            "$ref": "#/components/schemas/ResourceRange"
+          },
+          "max_nodes_total": {
+            "description": "Maximum number of nodes in all node groups.\nCluster autoscaler will not grow the cluster beyond this number.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "memory": {
+            "description": "Minimum and maximum number of gigabytes of memory in cluster, in the format <min>:<max>.\nCluster autoscaler will not scale the cluster beyond these numbers.",
+            "$ref": "#/components/schemas/ResourceRange"
+          }
+        }
+      },
+      "AutoscalerScaleDownConfig": {
+        "properties": {
+          "delay_after_add": {
+            "description": "How long after scale up that scale down evaluation resumes.",
+            "type": "string"
+          },
+          "delay_after_delete": {
+            "description": "How long after node deletion that scale down evaluation resumes, defaults to scan-interval.",
+            "type": "string"
+          },
+          "delay_after_failure": {
+            "description": "How long after scale down failure that scale down evaluation resumes.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Should cluster-autoscaler scale down the cluster.",
+            "type": "boolean"
+          },
+          "unneeded_time": {
+            "description": "How long a node should be unneeded before it is eligible for scale down.",
+            "type": "string"
+          },
+          "utilization_threshold": {
+            "description": "Node utilization level, defined as sum of requested resources divided by capacity, below which a node can be considered for scale down.",
+            "type": "string"
+          }
+        }
+      },
       "AwsEtcdEncryption": {
         "description": "Contains the necessary attributes to support etcd encryption for AWS based clusters.",
         "properties": {
@@ -12256,6 +12301,10 @@
               "$ref": "#/components/schemas/AddOnInstallation"
             }
           },
+          "autoscaler": {
+            "description": "Autoscaler.",
+            "$ref": "#/components/schemas/ClusterAutoscaler"
+          },
           "billing_model": {
             "description": "Billing model for cluster resources.",
             "$ref": "#/components/schemas/BillingModel"
@@ -12456,6 +12505,37 @@
           "listening": {
             "description": "The listening method of the API server.",
             "$ref": "#/components/schemas/ListeningMethod"
+          }
+        }
+      },
+      "ClusterAutoscaler": {
+        "description": "Cluster-wide autoscaling configuration.",
+        "properties": {
+          "balance_similar_node_groups": {
+            "description": "BalanceSimilarNodeGroups enables/disables the\n`--balance-similar-node-groups` cluster-autocaler feature.\nThis feature will automatically identify node groups with\nthe same instance type and the same set of labels and try\nto keep the respective sizes of those node groups balanced.",
+            "type": "boolean"
+          },
+          "log_verbosity": {
+            "description": "Sets the autoscaler log level.\nDefault value is 1, level 4 is recommended for DEBUGGING and level 6 will enable almost everything.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "max_pod_grace_period": {
+            "description": "Gives pods graceful termination time before scaling down.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "resource_limits": {
+            "description": "Constraints of autoscaling resources.",
+            "$ref": "#/components/schemas/AutoscalerResourceLimits"
+          },
+          "scale_down": {
+            "description": "Configuration of scale down operation.",
+            "$ref": "#/components/schemas/AutoscalerScaleDownConfig"
+          },
+          "skip_nodes_with_local_storage": {
+            "description": "Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.",
+            "type": "boolean"
           }
         }
       },
@@ -14309,6 +14389,18 @@
           "no_proxy": {
             "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
             "type": "string"
+          }
+        }
+      },
+      "ResourceRange": {
+        "properties": {
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "min": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

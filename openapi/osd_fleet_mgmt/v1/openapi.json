@@ -871,8 +871,16 @@
       "Label": {
         "description": "label settings of the cluster.",
         "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Label' if this is a complete object or 'LabelLink' if it is just a link.",
+            "type": "string"
+          },
           "id": {
-            "description": "Label ID associated to the OSD FM managed cluster",
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
             "type": "string"
           },
           "key": {
@@ -940,11 +948,11 @@
             "type": "string",
             "format": "date-time"
           },
-          "labels_reference": {
+          "labels": {
             "description": "Labels on management cluster",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LabelReference"
+              "$ref": "#/components/schemas/Label"
             }
           },
           "name": {
@@ -1002,8 +1010,8 @@
           }
         }
       },
-      "ProvisionShardsReference": {
-        "description": "Provision Shards Reference of the cluster.",
+      "ProvisionShardReference": {
+        "description": "Provision Shard Reference of the cluster.",
         "properties": {
           "href": {
             "description": "link to the Provision Shards associated to the cluster",
@@ -1042,20 +1050,20 @@
             "description": "Cluster mgmt reference",
             "$ref": "#/components/schemas/ClusterManagementReference"
           },
-          "labels_reference": {
-            "description": "Labels refrences on service cluster",
+          "labels": {
+            "description": "Labels on service cluster",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LabelReference"
+              "$ref": "#/components/schemas/Label"
             }
           },
           "name": {
             "description": "Cluster name",
             "type": "string"
           },
-          "provision_shards_reference": {
+          "provision_shard_reference": {
             "description": "Provision shard reference for the service cluster",
-            "$ref": "#/components/schemas/ProvisionShardsReference"
+            "$ref": "#/components/schemas/ProvisionShardReference"
           },
           "region": {
             "description": "Cloud provider region where the cluster is installed.",
@@ -1075,6 +1083,12 @@
         "properties": {
           "cloud_provider": {
             "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LabelRequestPayload"
+            }
           },
           "region": {
             "type": "string"
