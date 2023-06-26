@@ -10949,7 +10949,7 @@
             "description": "Link to the organization that reserved the DNS domain.",
             "$ref": "#/components/schemas/OrganizationLink"
           },
-          "reserved_at": {
+          "reserved_at_timestamp": {
             "description": "Date and time when the DNS domain was reserved.",
             "type": "string",
             "format": "date-time"
