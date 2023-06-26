@@ -224,6 +224,13 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "name": "delete_associated_resources",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
