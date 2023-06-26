@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.350
+- Update model to version v0.0.293
+  - Add `DeleteAssociatedResources` locator to account resource
+
 ## 0.1.349
 - Update model to version v0.0.293
   - Add label list to OSDFM cluster request payloads
