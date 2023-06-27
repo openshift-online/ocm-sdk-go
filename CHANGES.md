@@ -6,7 +6,7 @@ SDK.
 - Update model version v0.0.294
   - Add `DeleteAssociatedResources` locator to account resource
 - Update model version v0.0.295
-  - Update `ReverveAt` to `ReverveAtTimestamp` in dns domain type
+  - Update `ReservedAt` to `ReservedAtTimestamp` in dns domain type
 - Update metamodel version 0.0.59:
   - Honor`@http` annotation for query parameters
 
