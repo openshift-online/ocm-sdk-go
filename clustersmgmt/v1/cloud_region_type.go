@@ -45,6 +45,7 @@ type CloudRegion struct {
 	enabled            bool
 	supportsHypershift bool
 	supportsMultiAZ    bool
+	govCloud           bool
 }
 
 // Kind returns the name of the type of the object.
@@ -267,6 +268,29 @@ func (o *CloudRegion) GetSupportsMultiAZ() (value bool, ok bool) {
 	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.supportsMultiAZ
+	}
+	return
+}
+
+// GovCloud returns the value of the 'govCloud' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Whether the region allows AWS GovCloud.
+func (o *CloudRegion) GovCloud() bool {
+	if o != nil && o.bitmap_&64 != 0 {
+		return o.govCloud
+	}
+	return false
+}
+
+// GetGovCloud returns the value of the 'GovCloud' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Whether the region allows AWS GovCloud.
+func (o *CloudRegion) GetEnabled() (value bool, ok bool) {
+	ok = o != nil && o.bitmap_&64 != 0
+	if ok {
+		value = o.govCloud
 	}
 	return
 }

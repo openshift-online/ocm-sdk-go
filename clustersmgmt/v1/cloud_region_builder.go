@@ -33,6 +33,7 @@ type CloudRegionBuilder struct {
 	enabled            bool
 	supportsHypershift bool
 	supportsMultiAZ    bool
+	govCloud	       bool
 }
 
 // NewCloudRegion creates a new builder of 'cloud_region' objects.
@@ -120,6 +121,13 @@ func (b *CloudRegionBuilder) SupportsMultiAZ(value bool) *CloudRegionBuilder {
 	return b
 }
 
+// GovCloud sets the value of the 'govCloud' attribute to the given value.
+func (b *CloudRegionBuilder) GovCloud(value bool) *CloudRegionBuilder {
+	b.govCloud = value
+	b.bitmap_ |= 64
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *CloudRegionBuilder) Copy(object *CloudRegion) *CloudRegionBuilder {
 	if object == nil {
@@ -139,6 +147,7 @@ func (b *CloudRegionBuilder) Copy(object *CloudRegion) *CloudRegionBuilder {
 	b.name = object.name
 	b.supportsHypershift = object.supportsHypershift
 	b.supportsMultiAZ = object.supportsMultiAZ
+	b.govCloud = object.govCloud
 	return b
 }
 
@@ -160,5 +169,6 @@ func (b *CloudRegionBuilder) Build() (object *CloudRegion, err error) {
 	object.name = b.name
 	object.supportsHypershift = b.supportsHypershift
 	object.supportsMultiAZ = b.supportsMultiAZ
+	object.govCloud = b.govCloud
 	return
 }

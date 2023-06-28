@@ -127,6 +127,15 @@ func writeCloudRegion(object *CloudRegion, stream *jsoniter.Stream) {
 		stream.WriteObjectField("supports_multi_az")
 		stream.WriteBool(object.supportsMultiAZ)
 	}
+	present_ = object.bitmap_&64 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("govcloud")
+		stream.WriteBool(object.govCloud)
+		count++
+	}
 	stream.WriteObjectEnd()
 }
 
@@ -190,6 +199,10 @@ func readCloudRegion(iterator *jsoniter.Iterator) *CloudRegion {
 			value := iterator.ReadBool()
 			object.supportsMultiAZ = value
 			object.bitmap_ |= 512
+		case "govcloud":
+			value := iterator.ReadBool()
+			object.govCloud = value
+			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
 		}
