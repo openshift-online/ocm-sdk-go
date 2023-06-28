@@ -2,6 +2,11 @@
 
 This document describes the relevant changes between releases of the OCM API
 SDK.
+
+## 0.1.351
+- Update model version v0.0.296
+  - Add json annotation to `DeleteAssociatedResources` parameter in account resource
+
 ## 0.1.350
 - Update model version v0.0.294
   - Add `DeleteAssociatedResources` locator to account resource
