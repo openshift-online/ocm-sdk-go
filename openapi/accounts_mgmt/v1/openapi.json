@@ -226,7 +226,7 @@
             "required": true
           },
           {
-            "name": "delete_associated_resources",
+            "name": "deleteAssociatedResources",
             "in": "query",
             "schema": {
               "type": "boolean"
