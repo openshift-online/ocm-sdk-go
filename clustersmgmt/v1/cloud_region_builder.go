@@ -33,7 +33,7 @@ type CloudRegionBuilder struct {
 	enabled            bool
 	supportsHypershift bool
 	supportsMultiAZ    bool
-	govCloud	       bool
+	govCloud	   bool
 }
 
 // NewCloudRegion creates a new builder of 'cloud_region' objects.
