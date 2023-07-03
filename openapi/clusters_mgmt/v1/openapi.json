@@ -12858,6 +12858,15 @@
           }
         }
       },
+      "ClusterStsSupportRole": {
+        "description": "Isolated STS support role created per organization",
+        "properties": {
+          "role_arn": {
+            "description": "ARN of the support role created in the SRE jump account",
+            "type": "string"
+          }
+        }
+      },
       "ControlPlaneUpgradePolicy": {
         "description": "Representation of an upgrade policy that can be set for a cluster.",
         "properties": {
