@@ -116,7 +116,7 @@
         "description": "Retrieves the list of accounts.",
         "parameters": [
           {
-            "name": "fetchlabels_labels",
+            "name": "fetchLabels",
             "description": "If true, includes the labels on an account in the output. Could slow request response time.",
             "in": "query",
             "schema": {
@@ -1627,7 +1627,7 @@
         "description": "Retrieves a list of organizations.",
         "parameters": [
           {
-            "name": "fetchlabels_labels",
+            "name": "fetchLabels",
             "description": "If true, includes the labels on an organization in the output. Could slow request response time.",
             "in": "query",
             "schema": {
@@ -3928,7 +3928,7 @@
         "description": "Retrieves a list of subscriptions.",
         "parameters": [
           {
-            "name": "fetchaccounts_accounts",
+            "name": "fetchAccounts",
             "description": "If true, includes the account reference information in the output. Could slow request response time.",
             "in": "query",
             "schema": {
@@ -3936,7 +3936,7 @@
             }
           },
           {
-            "name": "fetchlabels_labels",
+            "name": "fetchLabels",
             "description": "If true, includes the labels on a subscription in the output. Could slow request response time.",
             "in": "query",
             "schema": {
