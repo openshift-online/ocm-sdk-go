@@ -3079,6 +3079,42 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/cluster_sts_support_role": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterStsSupportRole"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/clusterdeployment": {
       "delete": {
         "description": "Deletes the clusterdeployment.",
@@ -12858,6 +12894,15 @@
           }
         }
       },
+      "ClusterStsSupportRole": {
+        "description": "Isolated STS support role created per organization.",
+        "properties": {
+          "role_arn": {
+            "description": "ARN of the support role created in the SRE jump account.",
+            "type": "string"
+          }
+        }
+      },
       "ControlPlaneUpgradePolicy": {
         "description": "Representation of an upgrade policy that can be set for a cluster.",
         "properties": {
@@ -13370,9 +13415,24 @@
             "description": "DNS Name of the ingress.",
             "type": "string"
           },
+          "cluster_routes_hostname": {
+            "description": "Cluster routes hostname.",
+            "type": "string"
+          },
+          "cluster_routes_tls_secret_ref": {
+            "description": "Cluster routes TLS Secret reference.",
+            "type": "string"
+          },
           "default": {
             "description": "Indicates if this is the default ingress.",
             "type": "boolean"
+          },
+          "excluded_namespaces": {
+            "description": "A set of excluded namespaces for the ingress.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "listening": {
             "description": "Listening method of the ingress",
@@ -13382,12 +13442,20 @@
             "description": "Load Balancer type of the ingress",
             "$ref": "#/components/schemas/LoadBalancerFlavor"
           },
+          "route_namespace_ownership_policy": {
+            "description": "Namespace Ownership Policy for the ingress.",
+            "$ref": "#/components/schemas/NamespaceOwnershipPolicy"
+          },
           "route_selectors": {
             "description": "A set of labels for the ingress. ",
             "type": "object",
             "additionalProperties": {
               "type": "string"
             }
+          },
+          "route_wildcard_policy": {
+            "description": "Wildcard policy for the ingress.",
+            "$ref": "#/components/schemas/WildcardPolicy"
           }
         }
       },
@@ -13522,7 +13590,7 @@
         ]
       },
       "LoadBalancerFlavor": {
-        "description": "Type of node received via telemetry.",
+        "description": "Type of load balancer for AWS cloud provider parameters.",
         "type": "string",
         "enum": [
           "classic",
@@ -13761,6 +13829,14 @@
             }
           }
         }
+      },
+      "NamespaceOwnershipPolicy": {
+        "description": "Type of Namespace Ownership Policy.",
+        "type": "string",
+        "enum": [
+          "InterNamespaceAllowed",
+          "Strict"
+        ]
       },
       "Network": {
         "description": "Network configuration of a cluster.",
@@ -14856,6 +14932,14 @@
             "$ref": "#/components/schemas/VersionGate"
           }
         }
+      },
+      "WildcardPolicy": {
+        "description": "Type of wildcard policy.",
+        "type": "string",
+        "enum": [
+          "WildcardsAllowed",
+          "WildcardsDisallowed"
+        ]
       },
       "Error": {
         "type": "object",
