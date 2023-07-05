@@ -21,7 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // ClusterStsSupportRole represents the values of the 'cluster_sts_support_role' type.
 //
-// Isolated STS support role created per organization
+// Isolated STS support role created per organization.
 type ClusterStsSupportRole struct {
 	bitmap_ uint32
 	roleArn string
@@ -35,7 +35,7 @@ func (o *ClusterStsSupportRole) Empty() bool {
 // RoleArn returns the value of the 'role_arn' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// ARN of the support role created in the SRE jump account
+// ARN of the support role created in the SRE jump account.
 func (o *ClusterStsSupportRole) RoleArn() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.roleArn
@@ -46,7 +46,7 @@ func (o *ClusterStsSupportRole) RoleArn() string {
 // GetRoleArn returns the value of the 'role_arn' attribute and
 // a flag indicating if the attribute has a value.
 //
-// ARN of the support role created in the SRE jump account
+// ARN of the support role created in the SRE jump account.
 func (o *ClusterStsSupportRole) GetRoleArn() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {

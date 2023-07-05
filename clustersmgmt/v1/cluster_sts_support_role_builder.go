@@ -21,7 +21,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // ClusterStsSupportRoleBuilder contains the data and logic needed to build 'cluster_sts_support_role' objects.
 //
-// Isolated STS support role created per organization
+// Isolated STS support role created per organization.
 type ClusterStsSupportRoleBuilder struct {
 	bitmap_ uint32
 	roleArn string
