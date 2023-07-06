@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.352
+- Update model version v0.0.297
+  - Add managed ingress attributes
+  - Fix `fetchLabels` and `fetchAccounts` url parameter names
+  - Add `ClusterStsSupportRole` resource and type
+
 ## 0.1.351
 - Update model version v0.0.296
   - Add json annotation to `DeleteAssociatedResources` parameter in account resource
