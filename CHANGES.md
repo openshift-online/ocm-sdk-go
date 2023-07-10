@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.353
+- Prevent connection leak in retry wrapper
+
 ## 0.1.352
 - Update model version v0.0.297
   - Add managed ingress attributes
