@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.355
+- Update model version v0.0.300
+  - Add `UserDefined` in dns domain resource
+
 ## 0.1.354
 - Update model version v0.0.299
   - OCM-209 | feat: Add cluster autoscaler API resources
