@@ -137,7 +137,7 @@ func (r *AddonsAddRequest) Send() (result *AddonsAddResponse, err error) {
 func (r *AddonsAddRequest) SendContext(ctx context.Context) (result *AddonsAddResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.dryRun != nil {
-		helpers.AddValue(&query, "dryRun", *r.dryRun)
+		helpers.AddValue(&query, "dry_run", *r.dryRun)
 	}
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}

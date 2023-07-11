@@ -55,7 +55,7 @@
         "description": "Create a new addon and add it to the collection of addons.",
         "parameters": [
           {
-            "name": "dryRun",
+            "name": "dry_run",
             "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
             "in": "query",
             "schema": {
@@ -257,7 +257,7 @@
             "required": true
           },
           {
-            "name": "dryRun",
+            "name": "dry_run",
             "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
             "in": "query",
             "schema": {
@@ -311,7 +311,7 @@
             "required": true
           },
           {
-            "name": "dryRun",
+            "name": "dry_run",
             "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
             "in": "query",
             "schema": {
@@ -545,7 +545,7 @@
             "required": true
           },
           {
-            "name": "dryRun",
+            "name": "dry_run",
             "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
             "in": "query",
             "schema": {

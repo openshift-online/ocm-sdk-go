@@ -349,7 +349,7 @@ func (r *AccountsListRequest) Send() (result *AccountsListResponse, err error) {
 func (r *AccountsListRequest) SendContext(ctx context.Context) (result *AccountsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.fetchLabels != nil {
-		helpers.AddValue(&query, "fetchLabels", *r.fetchLabels)
+		helpers.AddValue(&query, "fetch_labels", *r.fetchLabels)
 	}
 	if r.fields != nil {
 		helpers.AddValue(&query, "fields", *r.fields)

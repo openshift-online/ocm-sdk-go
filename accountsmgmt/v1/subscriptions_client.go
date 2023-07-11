@@ -233,10 +233,10 @@ func (r *SubscriptionsListRequest) Send() (result *SubscriptionsListResponse, er
 func (r *SubscriptionsListRequest) SendContext(ctx context.Context) (result *SubscriptionsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.fetchAccounts != nil {
-		helpers.AddValue(&query, "fetchAccounts", *r.fetchAccounts)
+		helpers.AddValue(&query, "fetch_accounts", *r.fetchAccounts)
 	}
 	if r.fetchLabels != nil {
-		helpers.AddValue(&query, "fetchLabels", *r.fetchLabels)
+		helpers.AddValue(&query, "fetch_labels", *r.fetchLabels)
 	}
 	if r.fields != nil {
 		helpers.AddValue(&query, "fields", *r.fields)

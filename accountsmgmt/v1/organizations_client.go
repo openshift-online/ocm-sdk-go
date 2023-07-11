@@ -329,7 +329,7 @@ func (r *OrganizationsListRequest) Send() (result *OrganizationsListResponse, er
 func (r *OrganizationsListRequest) SendContext(ctx context.Context) (result *OrganizationsListResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	if r.fetchLabels != nil {
-		helpers.AddValue(&query, "fetchLabels", *r.fetchLabels)
+		helpers.AddValue(&query, "fetch_labels", *r.fetchLabels)
 	}
 	if r.fields != nil {
 		helpers.AddValue(&query, "fields", *r.fields)
