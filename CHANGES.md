@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.356
+- Update model version v0.0.301
+  - Update name for `ClusterStsSupportRole` resource and type to `StsSupportJumpRole`
+
 ## 0.1.355
 - Update model version v0.0.300
   - Add `UserDefined` in dns domain resource
