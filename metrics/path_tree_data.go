@@ -185,6 +185,7 @@ var pathTreeData = `{
             "addons": {
               "-": null
             },
+            "autoscaler": null,
             "aws": {
               "private_link_configuration": {
                 "principals": {
@@ -195,7 +196,6 @@ var pathTreeData = `{
             "aws_infrastructure_access_role_grants": {
               "-": null
             },
-            "cluster_sts_support_role": null,
             "clusterdeployment": null,
             "control_plane": {
               "upgrade_policies": {
@@ -275,6 +275,7 @@ var pathTreeData = `{
             "sts_operator_roles": {
               "-": null
             },
+            "sts_support_jump_role": null,
             "tuning_configs": {
               "-": null
             },
