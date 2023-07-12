@@ -159,26 +159,6 @@ func (c *ClusterClient) Addons() *AddOnInstallationsClient {
 	)
 }
 
-// Autoscaler returns the target 'autoscaler' resource.
-//
-// Reference to the resource that manages the cluster autoscaler.
-func (c *ClusterClient) Autoscaler() *AutoscalerClient {
-	return NewAutoscalerClient(
-		c.transport,
-		path.Join(c.path, "autoscaler"),
-	)
-}
-
-// Autoscaler returns the target 'autoscaler' resource.
-//
-// Reference to the resource that manages the cluster autoscaler.
-func (c *ClusterClient) Autoscaler() *AutoscalerClient {
-	return NewAutoscalerClient(
-		c.transport,
-		path.Join(c.path, "autoscaler"),
-	)
-}
-
 // Clusterdeployment returns the target 'clusterdeployment' resource.
 //
 // Reference to the resource that manages the cluster deployment.
