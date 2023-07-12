@@ -19,25 +19,11 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// ClusterAutoscalerKind is the name of the type used to represent objects
-// of type 'cluster_autoscaler'.
-const ClusterAutoscalerKind = "ClusterAutoscaler"
-
-// ClusterAutoscalerLinkKind is the name of the type used to represent links
-// to objects of type 'cluster_autoscaler'.
-const ClusterAutoscalerLinkKind = "ClusterAutoscalerLink"
-
-// ClusterAutoscalerNilKind is the name of the type used to nil references
-// to objects of type 'cluster_autoscaler'.
-const ClusterAutoscalerNilKind = "ClusterAutoscalerNil"
-
 // ClusterAutoscaler represents the values of the 'cluster_autoscaler' type.
 //
 // Cluster-wide autoscaling configuration.
 type ClusterAutoscaler struct {
 	bitmap_                   uint32
-	id                        string
-	href                      string
 	logVerbosity              int
 	maxPodGracePeriod         int
 	resourceLimits            *AutoscalerResourceLimits
@@ -46,73 +32,21 @@ type ClusterAutoscaler struct {
 	skipNodesWithLocalStorage bool
 }
 
-// Kind returns the name of the type of the object.
-func (o *ClusterAutoscaler) Kind() string {
-	if o == nil {
-		return ClusterAutoscalerNilKind
-	}
-	if o.bitmap_&1 != 0 {
-		return ClusterAutoscalerLinkKind
-	}
-	return ClusterAutoscalerKind
-}
-
-// Link returns true iif this is a link.
-func (o *ClusterAutoscaler) Link() bool {
-	return o != nil && o.bitmap_&1 != 0
-}
-
-// ID returns the identifier of the object.
-func (o *ClusterAutoscaler) ID() string {
-	if o != nil && o.bitmap_&2 != 0 {
-		return o.id
-	}
-	return ""
-}
-
-// GetID returns the identifier of the object and a flag indicating if the
-// identifier has a value.
-func (o *ClusterAutoscaler) GetID() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2 != 0
-	if ok {
-		value = o.id
-	}
-	return
-}
-
-// HREF returns the link to the object.
-func (o *ClusterAutoscaler) HREF() string {
-	if o != nil && o.bitmap_&4 != 0 {
-		return o.href
-	}
-	return ""
-}
-
-// GetHREF returns the link of the object and a flag indicating if the
-// link has a value.
-func (o *ClusterAutoscaler) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&4 != 0
-	if ok {
-		value = o.href
-	}
-	return
-}
-
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *ClusterAutoscaler) Empty() bool {
-	return o == nil || o.bitmap_&^1 == 0
+	return o == nil || o.bitmap_ == 0
 }
 
 // BalanceSimilarNodeGroups returns the value of the 'balance_similar_node_groups' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // BalanceSimilarNodeGroups enables/disables the
-// `--balance-similar-node-groups` cluster-autoscaler feature.
+// `--balance-similar-node-groups` cluster-autocaler feature.
 // This feature will automatically identify node groups with
 // the same instance type and the same set of labels and try
 // to keep the respective sizes of those node groups balanced.
 func (o *ClusterAutoscaler) BalanceSimilarNodeGroups() bool {
-	if o != nil && o.bitmap_&8 != 0 {
+	if o != nil && o.bitmap_&1 != 0 {
 		return o.balanceSimilarNodeGroups
 	}
 	return false
@@ -122,12 +56,12 @@ func (o *ClusterAutoscaler) BalanceSimilarNodeGroups() bool {
 // a flag indicating if the attribute has a value.
 //
 // BalanceSimilarNodeGroups enables/disables the
-// `--balance-similar-node-groups` cluster-autoscaler feature.
+// `--balance-similar-node-groups` cluster-autocaler feature.
 // This feature will automatically identify node groups with
 // the same instance type and the same set of labels and try
 // to keep the respective sizes of those node groups balanced.
 func (o *ClusterAutoscaler) GetBalanceSimilarNodeGroups() (value bool, ok bool) {
-	ok = o != nil && o.bitmap_&8 != 0
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.balanceSimilarNodeGroups
 	}
@@ -140,7 +74,7 @@ func (o *ClusterAutoscaler) GetBalanceSimilarNodeGroups() (value bool, ok bool) 
 // Sets the autoscaler log level.
 // Default value is 1, level 4 is recommended for DEBUGGING and level 6 will enable almost everything.
 func (o *ClusterAutoscaler) LogVerbosity() int {
-	if o != nil && o.bitmap_&16 != 0 {
+	if o != nil && o.bitmap_&2 != 0 {
 		return o.logVerbosity
 	}
 	return 0
@@ -152,7 +86,7 @@ func (o *ClusterAutoscaler) LogVerbosity() int {
 // Sets the autoscaler log level.
 // Default value is 1, level 4 is recommended for DEBUGGING and level 6 will enable almost everything.
 func (o *ClusterAutoscaler) GetLogVerbosity() (value int, ok bool) {
-	ok = o != nil && o.bitmap_&16 != 0
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.logVerbosity
 	}
@@ -164,7 +98,7 @@ func (o *ClusterAutoscaler) GetLogVerbosity() (value int, ok bool) {
 //
 // Gives pods graceful termination time before scaling down.
 func (o *ClusterAutoscaler) MaxPodGracePeriod() int {
-	if o != nil && o.bitmap_&32 != 0 {
+	if o != nil && o.bitmap_&4 != 0 {
 		return o.maxPodGracePeriod
 	}
 	return 0
@@ -175,7 +109,7 @@ func (o *ClusterAutoscaler) MaxPodGracePeriod() int {
 //
 // Gives pods graceful termination time before scaling down.
 func (o *ClusterAutoscaler) GetMaxPodGracePeriod() (value int, ok bool) {
-	ok = o != nil && o.bitmap_&32 != 0
+	ok = o != nil && o.bitmap_&4 != 0
 	if ok {
 		value = o.maxPodGracePeriod
 	}
@@ -187,7 +121,7 @@ func (o *ClusterAutoscaler) GetMaxPodGracePeriod() (value int, ok bool) {
 //
 // Constraints of autoscaling resources.
 func (o *ClusterAutoscaler) ResourceLimits() *AutoscalerResourceLimits {
-	if o != nil && o.bitmap_&64 != 0 {
+	if o != nil && o.bitmap_&8 != 0 {
 		return o.resourceLimits
 	}
 	return nil
@@ -198,7 +132,7 @@ func (o *ClusterAutoscaler) ResourceLimits() *AutoscalerResourceLimits {
 //
 // Constraints of autoscaling resources.
 func (o *ClusterAutoscaler) GetResourceLimits() (value *AutoscalerResourceLimits, ok bool) {
-	ok = o != nil && o.bitmap_&64 != 0
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.resourceLimits
 	}
@@ -210,7 +144,7 @@ func (o *ClusterAutoscaler) GetResourceLimits() (value *AutoscalerResourceLimits
 //
 // Configuration of scale down operation.
 func (o *ClusterAutoscaler) ScaleDown() *AutoscalerScaleDownConfig {
-	if o != nil && o.bitmap_&128 != 0 {
+	if o != nil && o.bitmap_&16 != 0 {
 		return o.scaleDown
 	}
 	return nil
@@ -221,7 +155,7 @@ func (o *ClusterAutoscaler) ScaleDown() *AutoscalerScaleDownConfig {
 //
 // Configuration of scale down operation.
 func (o *ClusterAutoscaler) GetScaleDown() (value *AutoscalerScaleDownConfig, ok bool) {
-	ok = o != nil && o.bitmap_&128 != 0
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.scaleDown
 	}
@@ -233,7 +167,7 @@ func (o *ClusterAutoscaler) GetScaleDown() (value *AutoscalerScaleDownConfig, ok
 //
 // Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.
 func (o *ClusterAutoscaler) SkipNodesWithLocalStorage() bool {
-	if o != nil && o.bitmap_&256 != 0 {
+	if o != nil && o.bitmap_&32 != 0 {
 		return o.skipNodesWithLocalStorage
 	}
 	return false
@@ -244,7 +178,7 @@ func (o *ClusterAutoscaler) SkipNodesWithLocalStorage() bool {
 //
 // Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.
 func (o *ClusterAutoscaler) GetSkipNodesWithLocalStorage() (value bool, ok bool) {
-	ok = o != nil && o.bitmap_&256 != 0
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.skipNodesWithLocalStorage
 	}
@@ -268,40 +202,6 @@ type ClusterAutoscalerList struct {
 	href  string
 	link  bool
 	items []*ClusterAutoscaler
-}
-
-// Kind returns the name of the type of the object.
-func (l *ClusterAutoscalerList) Kind() string {
-	if l == nil {
-		return ClusterAutoscalerListNilKind
-	}
-	if l.link {
-		return ClusterAutoscalerListLinkKind
-	}
-	return ClusterAutoscalerListKind
-}
-
-// Link returns true iif this is a link.
-func (l *ClusterAutoscalerList) Link() bool {
-	return l != nil && l.link
-}
-
-// HREF returns the link to the list.
-func (l *ClusterAutoscalerList) HREF() string {
-	if l != nil {
-		return l.href
-	}
-	return ""
-}
-
-// GetHREF returns the link of the list and a flag indicating if the
-// link has a value.
-func (l *ClusterAutoscalerList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != ""
-	if ok {
-		value = l.href
-	}
-	return
 }
 
 // Len returns the length of the list.

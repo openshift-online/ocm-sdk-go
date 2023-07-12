@@ -19,53 +19,53 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-// StsSupportJumpRoleListBuilder contains the data and logic needed to build
-// 'sts_support_jump_role' objects.
-type StsSupportJumpRoleListBuilder struct {
-	items []*StsSupportJumpRoleBuilder
+// ClusterStsSupportRoleListBuilder contains the data and logic needed to build
+// 'cluster_sts_support_role' objects.
+type ClusterStsSupportRoleListBuilder struct {
+	items []*ClusterStsSupportRoleBuilder
 }
 
-// NewStsSupportJumpRoleList creates a new builder of 'sts_support_jump_role' objects.
-func NewStsSupportJumpRoleList() *StsSupportJumpRoleListBuilder {
-	return new(StsSupportJumpRoleListBuilder)
+// NewClusterStsSupportRoleList creates a new builder of 'cluster_sts_support_role' objects.
+func NewClusterStsSupportRoleList() *ClusterStsSupportRoleListBuilder {
+	return new(ClusterStsSupportRoleListBuilder)
 }
 
 // Items sets the items of the list.
-func (b *StsSupportJumpRoleListBuilder) Items(values ...*StsSupportJumpRoleBuilder) *StsSupportJumpRoleListBuilder {
-	b.items = make([]*StsSupportJumpRoleBuilder, len(values))
+func (b *ClusterStsSupportRoleListBuilder) Items(values ...*ClusterStsSupportRoleBuilder) *ClusterStsSupportRoleListBuilder {
+	b.items = make([]*ClusterStsSupportRoleBuilder, len(values))
 	copy(b.items, values)
 	return b
 }
 
 // Empty returns true if the list is empty.
-func (b *StsSupportJumpRoleListBuilder) Empty() bool {
+func (b *ClusterStsSupportRoleListBuilder) Empty() bool {
 	return b == nil || len(b.items) == 0
 }
 
 // Copy copies the items of the given list into this builder, discarding any previous items.
-func (b *StsSupportJumpRoleListBuilder) Copy(list *StsSupportJumpRoleList) *StsSupportJumpRoleListBuilder {
+func (b *ClusterStsSupportRoleListBuilder) Copy(list *ClusterStsSupportRoleList) *ClusterStsSupportRoleListBuilder {
 	if list == nil || list.items == nil {
 		b.items = nil
 	} else {
-		b.items = make([]*StsSupportJumpRoleBuilder, len(list.items))
+		b.items = make([]*ClusterStsSupportRoleBuilder, len(list.items))
 		for i, v := range list.items {
-			b.items[i] = NewStsSupportJumpRole().Copy(v)
+			b.items[i] = NewClusterStsSupportRole().Copy(v)
 		}
 	}
 	return b
 }
 
-// Build creates a list of 'sts_support_jump_role' objects using the
+// Build creates a list of 'cluster_sts_support_role' objects using the
 // configuration stored in the builder.
-func (b *StsSupportJumpRoleListBuilder) Build() (list *StsSupportJumpRoleList, err error) {
-	items := make([]*StsSupportJumpRole, len(b.items))
+func (b *ClusterStsSupportRoleListBuilder) Build() (list *ClusterStsSupportRoleList, err error) {
+	items := make([]*ClusterStsSupportRole, len(b.items))
 	for i, item := range b.items {
 		items[i], err = item.Build()
 		if err != nil {
 			return
 		}
 	}
-	list = new(StsSupportJumpRoleList)
+	list = new(ClusterStsSupportRoleList)
 	list.items = items
 	return
 }

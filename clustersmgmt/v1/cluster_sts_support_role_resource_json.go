@@ -21,11 +21,11 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeStsSupportJumpRoleGetRequest(request *StsSupportJumpRoleGetRequest, writer io.Writer) error {
+func writeClusterStsSupportRoleGetRequest(request *ClusterStsSupportRoleGetRequest, writer io.Writer) error {
 	return nil
 }
-func readStsSupportJumpRoleGetResponse(response *StsSupportJumpRoleGetResponse, reader io.Reader) error {
+func readClusterStsSupportRoleGetResponse(response *ClusterStsSupportRoleGetResponse, reader io.Reader) error {
 	var err error
-	response.body, err = UnmarshalStsSupportJumpRole(reader)
+	response.body, err = UnmarshalClusterStsSupportRole(reader)
 	return err
 }
