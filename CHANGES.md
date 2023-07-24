@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.357
+- Update model version v0.0.303
+  - Add upgrade related constants.
+- Update model version v0.0.302
+  - Add property `MarketplaceGCP` to `billing_model_type` in `clusters_mgmt` and `accounts_mgmt`
+  - Document `GovCloud`, `KMSLocationID` and `KMSLocationName` fields to `CloudRegion`
+  - Document `fetchRegions=true` to `cloud_providers` 
+
 ## 0.1.356
 - Update model version v0.0.301
   - Update name for `ClusterStsSupportRole` resource and type to `StsSupportJumpRole`

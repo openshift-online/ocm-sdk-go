@@ -5552,6 +5552,7 @@
         "enum": [
           "marketplace",
           "marketplace-aws",
+          "marketplace-gcp",
           "marketplace-rhm",
           "marketplace-azure",
           "standard"
