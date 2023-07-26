@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.358
+- Update model version v0.0.304
+  - Add upgrade related constants also for `NodePoolUpgradePolicy`.
+  - Change DNS domain field names.
+
 ## 0.1.357
 - Update model version v0.0.303
   - Add upgrade related constants.
