@@ -11138,11 +11138,11 @@
             "description": "Self link.",
             "type": "string"
           },
-          "cluster_link": {
+          "cluster": {
             "description": "Link to the cluster that is registered with the DNS domain (optional).",
             "$ref": "#/components/schemas/ClusterLink"
           },
-          "organization_link": {
+          "organization": {
             "description": "Link to the organization that reserved the DNS domain.",
             "$ref": "#/components/schemas/OrganizationLink"
           },
@@ -14257,16 +14257,16 @@
             "type": "string"
           },
           "schedule_type": {
-            "description": "Schedule type can be either \"manual\" (single execution) or \"automatic\" (re-occurring).",
-            "type": "string"
+            "description": "Schedule type of the upgrade.",
+            "$ref": "#/components/schemas/ScheduleType"
           },
           "state": {
             "description": "State of the upgrade policy for the node pool.",
             "$ref": "#/components/schemas/UpgradePolicyState"
           },
           "upgrade_type": {
-            "description": "Upgrade type specify the type of the upgrade. Can only be \"NodePool\".",
-            "type": "string"
+            "description": "Upgrade type of the node pool.",
+            "$ref": "#/components/schemas/UpgradeType"
           },
           "version": {
             "description": "Version is the desired upgrade version.",
