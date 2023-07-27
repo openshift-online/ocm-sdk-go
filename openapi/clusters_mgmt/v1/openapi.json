@@ -12671,6 +12671,14 @@
             "description": "Version of _OpenShift_ installed in the cluster, for example `4.0.0-0.2`.\n\nWhen retrieving a cluster this will always be reported.\n\nWhen provisioning a cluster this will be ignored, as the version to\ndeploy will be determined internally.",
             "type": "string"
           },
+          "private_hosted_zone_id": {
+            "description": "ID of private hosted zone.",
+            "type": "string"
+          },
+          "private_hosted_zone_role_arn": {
+            "description": "Role ARN for private hosted zone.",
+            "type": "string"
+          },
           "product": {
             "description": "Link to the product type of this cluster.",
             "$ref": "#/components/schemas/Product"
@@ -14978,9 +14986,10 @@
         "description": "UpgradeType defines which type of upgrade should be used.",
         "type": "string",
         "enum": [
-          "osd",
-          "control_plane",
-          "node_pool"
+          "OSD",
+          "ADDON",
+          "ControlPlane",
+          "NodePool"
         ]
       },
       "User": {
