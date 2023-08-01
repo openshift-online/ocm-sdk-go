@@ -10800,6 +10800,14 @@
             "description": "Related etcd encryption configuration",
             "$ref": "#/components/schemas/AwsEtcdEncryption"
           },
+          "private_hosted_zone_id": {
+            "description": "ID of private hosted zone.",
+            "type": "string"
+          },
+          "private_hosted_zone_role_arn": {
+            "description": "Role ARN for private hosted zone.",
+            "type": "string"
+          },
           "private_link": {
             "description": "Sets cluster to be inaccessible externally.",
             "type": "boolean"
@@ -12669,14 +12677,6 @@
           },
           "openshift_version": {
             "description": "Version of _OpenShift_ installed in the cluster, for example `4.0.0-0.2`.\n\nWhen retrieving a cluster this will always be reported.\n\nWhen provisioning a cluster this will be ignored, as the version to\ndeploy will be determined internally.",
-            "type": "string"
-          },
-          "private_hosted_zone_id": {
-            "description": "ID of private hosted zone.",
-            "type": "string"
-          },
-          "private_hosted_zone_role_arn": {
-            "description": "Role ARN for private hosted zone.",
             "type": "string"
           },
           "product": {
