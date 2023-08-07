@@ -63,7 +63,7 @@ func UnmarshalClusterAutoscalerList(source interface{}) (items []*ClusterAutosca
 	return
 }
 
-// readClusterAutoscalerList reads list of values of the ”cluster_autoscaler' type from
+// readClusterAutoscalerList reads list of values of the ''cluster_autoscaler' type from
 // the given iterator.
 func readClusterAutoscalerList(iterator *jsoniter.Iterator) []*ClusterAutoscaler {
 	list := []*ClusterAutoscaler{}

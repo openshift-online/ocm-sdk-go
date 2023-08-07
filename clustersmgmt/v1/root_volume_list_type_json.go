@@ -63,7 +63,7 @@ func UnmarshalRootVolumeList(source interface{}) (items []*RootVolume, err error
 	return
 }
 
-// readRootVolumeList reads list of values of the ”root_volume' type from
+// readRootVolumeList reads list of values of the ''root_volume' type from
 // the given iterator.
 func readRootVolumeList(iterator *jsoniter.Iterator) []*RootVolume {
 	list := []*RootVolume{}

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // NetworkVerificationBuilder contains the data and logic needed to build 'network_verification' objects.
+//
+//
 type NetworkVerificationBuilder struct {
 	bitmap_           uint32
 	cloudProviderData *CloudProviderDataBuilder
@@ -51,6 +53,8 @@ func (b *NetworkVerificationBuilder) CloudProviderData(value *CloudProviderDataB
 }
 
 // Items sets the value of the 'items' attribute to the given values.
+//
+//
 func (b *NetworkVerificationBuilder) Items(values ...*SubnetNetworkVerificationBuilder) *NetworkVerificationBuilder {
 	b.items = make([]*SubnetNetworkVerificationBuilder, len(values))
 	copy(b.items, values)
@@ -59,6 +63,8 @@ func (b *NetworkVerificationBuilder) Items(values ...*SubnetNetworkVerificationB
 }
 
 // Total sets the value of the 'total' attribute to the given value.
+//
+//
 func (b *NetworkVerificationBuilder) Total(value int) *NetworkVerificationBuilder {
 	b.total = value
 	b.bitmap_ |= 4

@@ -39,6 +39,8 @@ func (b *ProvisionShardReferenceBuilder) Empty() bool {
 }
 
 // Href sets the value of the 'href' attribute to the given value.
+//
+//
 func (b *ProvisionShardReferenceBuilder) Href(value string) *ProvisionShardReferenceBuilder {
 	b.href = value
 	b.bitmap_ |= 1
@@ -46,6 +48,8 @@ func (b *ProvisionShardReferenceBuilder) Href(value string) *ProvisionShardRefer
 }
 
 // Id sets the value of the 'id' attribute to the given value.
+//
+//
 func (b *ProvisionShardReferenceBuilder) Id(value string) *ProvisionShardReferenceBuilder {
 	b.id = value
 	b.bitmap_ |= 2

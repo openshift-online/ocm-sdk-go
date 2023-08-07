@@ -42,6 +42,8 @@ func (b *OperatorIAMRoleBuilder) Empty() bool {
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
+//
+//
 func (b *OperatorIAMRoleBuilder) ID(value string) *OperatorIAMRoleBuilder {
 	b.id = value
 	b.bitmap_ |= 1
@@ -49,6 +51,8 @@ func (b *OperatorIAMRoleBuilder) ID(value string) *OperatorIAMRoleBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *OperatorIAMRoleBuilder) Name(value string) *OperatorIAMRoleBuilder {
 	b.name = value
 	b.bitmap_ |= 2
@@ -56,6 +60,8 @@ func (b *OperatorIAMRoleBuilder) Name(value string) *OperatorIAMRoleBuilder {
 }
 
 // Namespace sets the value of the 'namespace' attribute to the given value.
+//
+//
 func (b *OperatorIAMRoleBuilder) Namespace(value string) *OperatorIAMRoleBuilder {
 	b.namespace = value
 	b.bitmap_ |= 4
@@ -63,6 +69,8 @@ func (b *OperatorIAMRoleBuilder) Namespace(value string) *OperatorIAMRoleBuilder
 }
 
 // RoleARN sets the value of the 'role_ARN' attribute to the given value.
+//
+//
 func (b *OperatorIAMRoleBuilder) RoleARN(value string) *OperatorIAMRoleBuilder {
 	b.roleARN = value
 	b.bitmap_ |= 8
@@ -70,6 +78,8 @@ func (b *OperatorIAMRoleBuilder) RoleARN(value string) *OperatorIAMRoleBuilder {
 }
 
 // ServiceAccount sets the value of the 'service_account' attribute to the given value.
+//
+//
 func (b *OperatorIAMRoleBuilder) ServiceAccount(value string) *OperatorIAMRoleBuilder {
 	b.serviceAccount = value
 	b.bitmap_ |= 16

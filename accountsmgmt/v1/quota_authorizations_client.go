@@ -88,6 +88,8 @@ func (r *QuotaAuthorizationsPostRequest) Impersonate(user string) *QuotaAuthoriz
 }
 
 // Request sets the value of the 'request' parameter.
+//
+//
 func (r *QuotaAuthorizationsPostRequest) Request(value *QuotaAuthorizationRequest) *QuotaAuthorizationsPostRequest {
 	r.request = value
 	return r
@@ -185,6 +187,8 @@ func (r *QuotaAuthorizationsPostResponse) Error() *errors.Error {
 }
 
 // Response returns the value of the 'response' parameter.
+//
+//
 func (r *QuotaAuthorizationsPostResponse) Response() *QuotaAuthorizationResponse {
 	if r == nil {
 		return nil
@@ -194,6 +198,8 @@ func (r *QuotaAuthorizationsPostResponse) Response() *QuotaAuthorizationResponse
 
 // GetResponse returns the value of the 'response' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *QuotaAuthorizationsPostResponse) GetResponse() (value *QuotaAuthorizationResponse, ok bool) {
 	ok = r != nil && r.response != nil
 	if ok {

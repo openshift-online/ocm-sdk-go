@@ -39,6 +39,8 @@ func (b *InstanceIAMRolesBuilder) Empty() bool {
 }
 
 // MasterRoleARN sets the value of the 'master_role_ARN' attribute to the given value.
+//
+//
 func (b *InstanceIAMRolesBuilder) MasterRoleARN(value string) *InstanceIAMRolesBuilder {
 	b.masterRoleARN = value
 	b.bitmap_ |= 1
@@ -46,6 +48,8 @@ func (b *InstanceIAMRolesBuilder) MasterRoleARN(value string) *InstanceIAMRolesB
 }
 
 // WorkerRoleARN sets the value of the 'worker_role_ARN' attribute to the given value.
+//
+//
 func (b *InstanceIAMRolesBuilder) WorkerRoleARN(value string) *InstanceIAMRolesBuilder {
 	b.workerRoleARN = value
 	b.bitmap_ |= 2

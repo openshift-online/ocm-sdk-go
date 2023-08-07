@@ -69,6 +69,8 @@ func (b *ProductBuilder) Empty() bool {
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *ProductBuilder) CreatedAt(value time.Time) *ProductBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 8
@@ -76,6 +78,8 @@ func (b *ProductBuilder) CreatedAt(value time.Time) *ProductBuilder {
 }
 
 // Fullname sets the value of the 'fullname' attribute to the given value.
+//
+//
 func (b *ProductBuilder) Fullname(value string) *ProductBuilder {
 	b.fullname = value
 	b.bitmap_ |= 16
@@ -83,6 +87,8 @@ func (b *ProductBuilder) Fullname(value string) *ProductBuilder {
 }
 
 // Metadata sets the value of the 'metadata' attribute to the given value.
+//
+//
 func (b *ProductBuilder) Metadata(value interface{}) *ProductBuilder {
 	b.metadata = value
 	b.bitmap_ |= 32
@@ -90,6 +96,8 @@ func (b *ProductBuilder) Metadata(value interface{}) *ProductBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *ProductBuilder) Name(value string) *ProductBuilder {
 	b.name = value
 	b.bitmap_ |= 64
@@ -97,6 +105,8 @@ func (b *ProductBuilder) Name(value string) *ProductBuilder {
 }
 
 // Owners sets the value of the 'owners' attribute to the given values.
+//
+//
 func (b *ProductBuilder) Owners(values ...*OwnerBuilder) *ProductBuilder {
 	b.owners = make([]*OwnerBuilder, len(values))
 	copy(b.owners, values)
@@ -105,6 +115,8 @@ func (b *ProductBuilder) Owners(values ...*OwnerBuilder) *ProductBuilder {
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *ProductBuilder) UpdatedAt(value time.Time) *ProductBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 256

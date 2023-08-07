@@ -88,6 +88,8 @@ func (r *VersionInquiryPostRequest) Impersonate(user string) *VersionInquiryPost
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *VersionInquiryPostRequest) Body(value *VersionInquiryRequest) *VersionInquiryPostRequest {
 	r.body = value
 	return r
@@ -185,6 +187,8 @@ func (r *VersionInquiryPostResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *VersionInquiryPostResponse) Body() *VersionInquiryResponse {
 	if r == nil {
 		return nil
@@ -194,6 +198,8 @@ func (r *VersionInquiryPostResponse) Body() *VersionInquiryResponse {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *VersionInquiryPostResponse) GetBody() (value *VersionInquiryResponse, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

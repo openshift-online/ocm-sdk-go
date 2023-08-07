@@ -43,6 +43,8 @@ func (b *SelfAccessReviewRequestBuilder) Empty() bool {
 }
 
 // Action sets the value of the 'action' attribute to the given value.
+//
+//
 func (b *SelfAccessReviewRequestBuilder) Action(value string) *SelfAccessReviewRequestBuilder {
 	b.action = value
 	b.bitmap_ |= 1
@@ -50,6 +52,8 @@ func (b *SelfAccessReviewRequestBuilder) Action(value string) *SelfAccessReviewR
 }
 
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
 func (b *SelfAccessReviewRequestBuilder) ClusterID(value string) *SelfAccessReviewRequestBuilder {
 	b.clusterID = value
 	b.bitmap_ |= 2
@@ -57,6 +61,8 @@ func (b *SelfAccessReviewRequestBuilder) ClusterID(value string) *SelfAccessRevi
 }
 
 // ClusterUUID sets the value of the 'cluster_UUID' attribute to the given value.
+//
+//
 func (b *SelfAccessReviewRequestBuilder) ClusterUUID(value string) *SelfAccessReviewRequestBuilder {
 	b.clusterUUID = value
 	b.bitmap_ |= 4
@@ -64,6 +70,8 @@ func (b *SelfAccessReviewRequestBuilder) ClusterUUID(value string) *SelfAccessRe
 }
 
 // OrganizationID sets the value of the 'organization_ID' attribute to the given value.
+//
+//
 func (b *SelfAccessReviewRequestBuilder) OrganizationID(value string) *SelfAccessReviewRequestBuilder {
 	b.organizationID = value
 	b.bitmap_ |= 8
@@ -71,6 +79,8 @@ func (b *SelfAccessReviewRequestBuilder) OrganizationID(value string) *SelfAcces
 }
 
 // ResourceType sets the value of the 'resource_type' attribute to the given value.
+//
+//
 func (b *SelfAccessReviewRequestBuilder) ResourceType(value string) *SelfAccessReviewRequestBuilder {
 	b.resourceType = value
 	b.bitmap_ |= 16
@@ -78,6 +88,8 @@ func (b *SelfAccessReviewRequestBuilder) ResourceType(value string) *SelfAccessR
 }
 
 // SubscriptionID sets the value of the 'subscription_ID' attribute to the given value.
+//
+//
 func (b *SelfAccessReviewRequestBuilder) SubscriptionID(value string) *SelfAccessReviewRequestBuilder {
 	b.subscriptionID = value
 	b.bitmap_ |= 32

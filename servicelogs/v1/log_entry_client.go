@@ -168,12 +168,16 @@ func (r *LogEntryPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *LogEntryPollResponse) Body() *LogEntry {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *LogEntryPollResponse) GetBody() (value *LogEntry, ok bool) {
 	return r.response.GetBody()
 }
@@ -406,6 +410,8 @@ func (r *LogEntryGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *LogEntryGetResponse) Body() *LogEntry {
 	if r == nil {
 		return nil
@@ -415,6 +421,8 @@ func (r *LogEntryGetResponse) Body() *LogEntry {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *LogEntryGetResponse) GetBody() (value *LogEntry, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

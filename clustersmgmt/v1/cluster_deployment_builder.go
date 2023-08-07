@@ -60,6 +60,8 @@ func (b *ClusterDeploymentBuilder) Empty() bool {
 }
 
 // Content sets the value of the 'content' attribute to the given value.
+//
+//
 func (b *ClusterDeploymentBuilder) Content(value interface{}) *ClusterDeploymentBuilder {
 	b.content = value
 	b.bitmap_ |= 8

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // AutoscalerResourceLimits represents the values of the 'autoscaler_resource_limits' type.
+//
+//
 type AutoscalerResourceLimits struct {
 	bitmap_       uint32
 	cores         *ResourceRange

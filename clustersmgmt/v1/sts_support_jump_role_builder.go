@@ -38,6 +38,8 @@ func (b *StsSupportJumpRoleBuilder) Empty() bool {
 }
 
 // RoleArn sets the value of the 'role_arn' attribute to the given value.
+//
+//
 func (b *StsSupportJumpRoleBuilder) RoleArn(value string) *StsSupportJumpRoleBuilder {
 	b.roleArn = value
 	b.bitmap_ |= 1

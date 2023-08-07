@@ -51,6 +51,8 @@ func NewDeleteProtectionClient(transport http.RoundTripper, path string) *Delete
 }
 
 // Get creates a request for the 'get' method.
+//
+//
 func (c *DeleteProtectionClient) Get() *DeleteProtectionGetRequest {
 	return &DeleteProtectionGetRequest{
 		transport: c.transport,
@@ -59,6 +61,8 @@ func (c *DeleteProtectionClient) Get() *DeleteProtectionGetRequest {
 }
 
 // Update creates a request for the 'update' method.
+//
+//
 func (c *DeleteProtectionClient) Update() *DeleteProtectionUpdateRequest {
 	return &DeleteProtectionUpdateRequest{
 		transport: c.transport,
@@ -165,12 +169,16 @@ func (r *DeleteProtectionPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *DeleteProtectionPollResponse) Body() *DeleteProtection {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *DeleteProtectionPollResponse) GetBody() (value *DeleteProtection, ok bool) {
 	return r.response.GetBody()
 }
@@ -296,6 +304,8 @@ func (r *DeleteProtectionGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *DeleteProtectionGetResponse) Body() *DeleteProtection {
 	if r == nil {
 		return nil
@@ -305,6 +315,8 @@ func (r *DeleteProtectionGetResponse) Body() *DeleteProtection {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *DeleteProtectionGetResponse) GetBody() (value *DeleteProtection, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -342,6 +354,8 @@ func (r *DeleteProtectionUpdateRequest) Impersonate(user string) *DeleteProtecti
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *DeleteProtectionUpdateRequest) Body(value *DeleteProtection) *DeleteProtectionUpdateRequest {
 	r.body = value
 	return r
@@ -439,6 +453,8 @@ func (r *DeleteProtectionUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *DeleteProtectionUpdateResponse) Body() *DeleteProtection {
 	if r == nil {
 		return nil
@@ -448,6 +464,8 @@ func (r *DeleteProtectionUpdateResponse) Body() *DeleteProtection {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *DeleteProtectionUpdateResponse) GetBody() (value *DeleteProtection, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

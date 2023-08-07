@@ -28,28 +28,24 @@ package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 // the kind, id and href attributes:
 //
 // ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "kind": "CloudProviderLink",
-//	    "id": "123",
-//	    "href": "/api/clusters_mgmt/v1/cloud_providers/123"
-//	  }
-//	}
-//
+// {
+//   "cloud_provider": {
+//     "kind": "CloudProviderLink",
+//     "id": "123",
+//     "href": "/api/clusters_mgmt/v1/cloud_providers/123"
+//   }
+// }
 // ```
 //
 // When a cluster is created this is optional, and if used it should contain the
 // identifier of the cloud provider to use:
 //
 // ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "id": "123",
-//	  }
-//	}
-//
+// {
+//   "cloud_provider": {
+//     "id": "123",
+//   }
+// }
 // ```
 //
 // If not included, then the cluster will be created using the default cloud
@@ -119,6 +115,8 @@ func (b *ServiceClusterBuilder) DNS(value *DNSBuilder) *ServiceClusterBuilder {
 }
 
 // CloudProvider sets the value of the 'cloud_provider' attribute to the given value.
+//
+//
 func (b *ServiceClusterBuilder) CloudProvider(value string) *ServiceClusterBuilder {
 	b.cloudProvider = value
 	b.bitmap_ |= 16
@@ -139,6 +137,8 @@ func (b *ServiceClusterBuilder) ClusterManagementReference(value *ClusterManagem
 }
 
 // Labels sets the value of the 'labels' attribute to the given values.
+//
+//
 func (b *ServiceClusterBuilder) Labels(values ...*LabelBuilder) *ServiceClusterBuilder {
 	b.labels = make([]*LabelBuilder, len(values))
 	copy(b.labels, values)
@@ -147,6 +147,8 @@ func (b *ServiceClusterBuilder) Labels(values ...*LabelBuilder) *ServiceClusterB
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *ServiceClusterBuilder) Name(value string) *ServiceClusterBuilder {
 	b.name = value
 	b.bitmap_ |= 128
@@ -167,6 +169,8 @@ func (b *ServiceClusterBuilder) ProvisionShardReference(value *ProvisionShardRef
 }
 
 // Region sets the value of the 'region' attribute to the given value.
+//
+//
 func (b *ServiceClusterBuilder) Region(value string) *ServiceClusterBuilder {
 	b.region = value
 	b.bitmap_ |= 512
@@ -174,6 +178,8 @@ func (b *ServiceClusterBuilder) Region(value string) *ServiceClusterBuilder {
 }
 
 // Sector sets the value of the 'sector' attribute to the given value.
+//
+//
 func (b *ServiceClusterBuilder) Sector(value string) *ServiceClusterBuilder {
 	b.sector = value
 	b.bitmap_ |= 1024
@@ -181,6 +187,8 @@ func (b *ServiceClusterBuilder) Sector(value string) *ServiceClusterBuilder {
 }
 
 // Status sets the value of the 'status' attribute to the given value.
+//
+//
 func (b *ServiceClusterBuilder) Status(value string) *ServiceClusterBuilder {
 	b.status = value
 	b.bitmap_ |= 2048

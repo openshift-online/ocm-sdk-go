@@ -61,6 +61,8 @@ func (b *TuningConfigBuilder) Empty() bool {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *TuningConfigBuilder) Name(value string) *TuningConfigBuilder {
 	b.name = value
 	b.bitmap_ |= 8
@@ -68,6 +70,8 @@ func (b *TuningConfigBuilder) Name(value string) *TuningConfigBuilder {
 }
 
 // Spec sets the value of the 'spec' attribute to the given value.
+//
+//
 func (b *TuningConfigBuilder) Spec(value interface{}) *TuningConfigBuilder {
 	b.spec = value
 	b.bitmap_ |= 16

@@ -51,6 +51,8 @@ func NewFollowUpClient(transport http.RoundTripper, path string) *FollowUpClient
 }
 
 // Delete creates a request for the 'delete' method.
+//
+//
 func (c *FollowUpClient) Delete() *FollowUpDeleteRequest {
 	return &FollowUpDeleteRequest{
 		transport: c.transport,
@@ -59,6 +61,8 @@ func (c *FollowUpClient) Delete() *FollowUpDeleteRequest {
 }
 
 // Get creates a request for the 'get' method.
+//
+//
 func (c *FollowUpClient) Get() *FollowUpGetRequest {
 	return &FollowUpGetRequest{
 		transport: c.transport,
@@ -67,6 +71,8 @@ func (c *FollowUpClient) Get() *FollowUpGetRequest {
 }
 
 // Update creates a request for the 'update' method.
+//
+//
 func (c *FollowUpClient) Update() *FollowUpUpdateRequest {
 	return &FollowUpUpdateRequest{
 		transport: c.transport,
@@ -173,12 +179,16 @@ func (r *FollowUpPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *FollowUpPollResponse) Body() *FollowUp {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *FollowUpPollResponse) GetBody() (value *FollowUp, ok bool) {
 	return r.response.GetBody()
 }
@@ -411,6 +421,8 @@ func (r *FollowUpGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *FollowUpGetResponse) Body() *FollowUp {
 	if r == nil {
 		return nil
@@ -420,6 +432,8 @@ func (r *FollowUpGetResponse) Body() *FollowUp {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *FollowUpGetResponse) GetBody() (value *FollowUp, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -457,6 +471,8 @@ func (r *FollowUpUpdateRequest) Impersonate(user string) *FollowUpUpdateRequest 
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *FollowUpUpdateRequest) Body(value *FollowUp) *FollowUpUpdateRequest {
 	r.body = value
 	return r
@@ -554,6 +570,8 @@ func (r *FollowUpUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *FollowUpUpdateResponse) Body() *FollowUp {
 	if r == nil {
 		return nil
@@ -563,6 +581,8 @@ func (r *FollowUpUpdateResponse) Body() *FollowUp {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *FollowUpUpdateResponse) GetBody() (value *FollowUp, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // NetworkVerification represents the values of the 'network_verification' type.
+//
+//
 type NetworkVerification struct {
 	bitmap_           uint32
 	cloudProviderData *CloudProviderData

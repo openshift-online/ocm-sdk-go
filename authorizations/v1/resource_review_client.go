@@ -89,6 +89,8 @@ func (r *ResourceReviewPostRequest) Impersonate(user string) *ResourceReviewPost
 }
 
 // Request sets the value of the 'request' parameter.
+//
+//
 func (r *ResourceReviewPostRequest) Request(value *ResourceReviewRequest) *ResourceReviewPostRequest {
 	r.request = value
 	return r
@@ -186,6 +188,8 @@ func (r *ResourceReviewPostResponse) Error() *errors.Error {
 }
 
 // Review returns the value of the 'review' parameter.
+//
+//
 func (r *ResourceReviewPostResponse) Review() *ResourceReview {
 	if r == nil {
 		return nil
@@ -195,6 +199,8 @@ func (r *ResourceReviewPostResponse) Review() *ResourceReview {
 
 // GetReview returns the value of the 'review' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ResourceReviewPostResponse) GetReview() (value *ResourceReview, ok bool) {
 	ok = r != nil && r.review != nil
 	if ok {

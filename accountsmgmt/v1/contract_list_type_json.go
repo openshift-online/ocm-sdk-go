@@ -63,7 +63,7 @@ func UnmarshalContractList(source interface{}) (items []*Contract, err error) {
 	return
 }
 
-// readContractList reads list of values of the ”contract' type from
+// readContractList reads list of values of the ''contract' type from
 // the given iterator.
 func readContractList(iterator *jsoniter.Iterator) []*Contract {
 	list := []*Contract{}

@@ -84,6 +84,8 @@ func (b *ServiceDependencyBuilder) ChildService(value *ServiceBuilder) *ServiceD
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *ServiceDependencyBuilder) CreatedAt(value time.Time) *ServiceDependencyBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 16
@@ -91,6 +93,8 @@ func (b *ServiceDependencyBuilder) CreatedAt(value time.Time) *ServiceDependency
 }
 
 // Metadata sets the value of the 'metadata' attribute to the given value.
+//
+//
 func (b *ServiceDependencyBuilder) Metadata(value interface{}) *ServiceDependencyBuilder {
 	b.metadata = value
 	b.bitmap_ |= 32
@@ -98,6 +102,8 @@ func (b *ServiceDependencyBuilder) Metadata(value interface{}) *ServiceDependenc
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *ServiceDependencyBuilder) Name(value string) *ServiceDependencyBuilder {
 	b.name = value
 	b.bitmap_ |= 64
@@ -105,6 +111,8 @@ func (b *ServiceDependencyBuilder) Name(value string) *ServiceDependencyBuilder 
 }
 
 // Owners sets the value of the 'owners' attribute to the given values.
+//
+//
 func (b *ServiceDependencyBuilder) Owners(values ...*OwnerBuilder) *ServiceDependencyBuilder {
 	b.owners = make([]*OwnerBuilder, len(values))
 	copy(b.owners, values)
@@ -126,6 +134,8 @@ func (b *ServiceDependencyBuilder) ParentService(value *ServiceBuilder) *Service
 }
 
 // Type sets the value of the 'type' attribute to the given value.
+//
+//
 func (b *ServiceDependencyBuilder) Type(value string) *ServiceDependencyBuilder {
 	b.type_ = value
 	b.bitmap_ |= 512
@@ -133,6 +143,8 @@ func (b *ServiceDependencyBuilder) Type(value string) *ServiceDependencyBuilder 
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *ServiceDependencyBuilder) UpdatedAt(value time.Time) *ServiceDependencyBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 1024

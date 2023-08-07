@@ -63,7 +63,7 @@ func UnmarshalEc2MetadataHttpTokensList(source interface{}) (items []Ec2Metadata
 	return
 }
 
-// readEc2MetadataHttpTokensList reads list of values of the ”ec_2_metadata_http_tokens' type from
+// readEc2MetadataHttpTokensList reads list of values of the ''ec_2_metadata_http_tokens' type from
 // the given iterator.
 func readEc2MetadataHttpTokensList(iterator *jsoniter.Iterator) []Ec2MetadataHttpTokens {
 	list := []Ec2MetadataHttpTokens{}

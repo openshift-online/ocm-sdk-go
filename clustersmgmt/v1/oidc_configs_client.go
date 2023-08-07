@@ -109,6 +109,8 @@ func (r *OidcConfigsAddRequest) Impersonate(user string) *OidcConfigsAddRequest 
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *OidcConfigsAddRequest) Body(value *OidcConfig) *OidcConfigsAddRequest {
 	r.body = value
 	return r
@@ -206,6 +208,8 @@ func (r *OidcConfigsAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *OidcConfigsAddResponse) Body() *OidcConfig {
 	if r == nil {
 		return nil
@@ -215,6 +219,8 @@ func (r *OidcConfigsAddResponse) Body() *OidcConfig {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *OidcConfigsAddResponse) GetBody() (value *OidcConfig, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

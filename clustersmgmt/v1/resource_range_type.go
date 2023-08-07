@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // ResourceRange represents the values of the 'resource_range' type.
+//
+//
 type ResourceRange struct {
 	bitmap_ uint32
 	max     int
@@ -33,6 +35,8 @@ func (o *ResourceRange) Empty() bool {
 
 // Max returns the value of the 'max' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *ResourceRange) Max() int {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.max
@@ -42,6 +46,8 @@ func (o *ResourceRange) Max() int {
 
 // GetMax returns the value of the 'max' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *ResourceRange) GetMax() (value int, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -52,6 +58,8 @@ func (o *ResourceRange) GetMax() (value int, ok bool) {
 
 // Min returns the value of the 'min' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *ResourceRange) Min() int {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.min
@@ -61,6 +69,8 @@ func (o *ResourceRange) Min() int {
 
 // GetMin returns the value of the 'min' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *ResourceRange) GetMin() (value int, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {

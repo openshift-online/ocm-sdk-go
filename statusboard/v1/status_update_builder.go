@@ -24,6 +24,8 @@ import (
 )
 
 // StatusUpdateBuilder contains the data and logic needed to build 'status_update' objects.
+//
+//
 type StatusUpdateBuilder struct {
 	bitmap_     uint32
 	id          string
@@ -67,6 +69,8 @@ func (b *StatusUpdateBuilder) Empty() bool {
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *StatusUpdateBuilder) CreatedAt(value time.Time) *StatusUpdateBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 8
@@ -74,6 +78,8 @@ func (b *StatusUpdateBuilder) CreatedAt(value time.Time) *StatusUpdateBuilder {
 }
 
 // Metadata sets the value of the 'metadata' attribute to the given value.
+//
+//
 func (b *StatusUpdateBuilder) Metadata(value interface{}) *StatusUpdateBuilder {
 	b.metadata = value
 	b.bitmap_ |= 16
@@ -107,6 +113,8 @@ func (b *StatusUpdateBuilder) ServiceInfo(value *ServiceInfoBuilder) *StatusUpda
 }
 
 // Status sets the value of the 'status' attribute to the given value.
+//
+//
 func (b *StatusUpdateBuilder) Status(value string) *StatusUpdateBuilder {
 	b.status = value
 	b.bitmap_ |= 128
@@ -114,6 +122,8 @@ func (b *StatusUpdateBuilder) Status(value string) *StatusUpdateBuilder {
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *StatusUpdateBuilder) UpdatedAt(value time.Time) *StatusUpdateBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 256

@@ -63,7 +63,7 @@ func UnmarshalLabelRequestPayloadList(source interface{}) (items []*LabelRequest
 	return
 }
 
-// readLabelRequestPayloadList reads list of values of the ”label_request_payload' type from
+// readLabelRequestPayloadList reads list of values of the ''label_request_payload' type from
 // the given iterator.
 func readLabelRequestPayloadList(iterator *jsoniter.Iterator) []*LabelRequestPayload {
 	list := []*LabelRequestPayload{}

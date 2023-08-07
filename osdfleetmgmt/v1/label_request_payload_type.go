@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 // LabelRequestPayload represents the values of the 'label_request_payload' type.
+//
+//
 type LabelRequestPayload struct {
 	bitmap_ uint32
 	key     string
@@ -33,6 +35,8 @@ func (o *LabelRequestPayload) Empty() bool {
 
 // Key returns the value of the 'key' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *LabelRequestPayload) Key() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.key
@@ -42,6 +46,8 @@ func (o *LabelRequestPayload) Key() string {
 
 // GetKey returns the value of the 'key' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *LabelRequestPayload) GetKey() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -52,6 +58,8 @@ func (o *LabelRequestPayload) GetKey() (value string, ok bool) {
 
 // Value returns the value of the 'value' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *LabelRequestPayload) Value() string {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.value
@@ -61,6 +69,8 @@ func (o *LabelRequestPayload) Value() string {
 
 // GetValue returns the value of the 'value' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *LabelRequestPayload) GetValue() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {

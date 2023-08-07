@@ -61,6 +61,8 @@ func (b *AddonUpgradePolicyStateBuilder) Empty() bool {
 }
 
 // Description sets the value of the 'description' attribute to the given value.
+//
+//
 func (b *AddonUpgradePolicyStateBuilder) Description(value string) *AddonUpgradePolicyStateBuilder {
 	b.description = value
 	b.bitmap_ |= 8

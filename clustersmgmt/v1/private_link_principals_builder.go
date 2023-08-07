@@ -60,6 +60,8 @@ func (b *PrivateLinkPrincipalsBuilder) Empty() bool {
 }
 
 // Principals sets the value of the 'principals' attribute to the given values.
+//
+//
 func (b *PrivateLinkPrincipalsBuilder) Principals(values ...*PrivateLinkPrincipalBuilder) *PrivateLinkPrincipalsBuilder {
 	b.principals = make([]*PrivateLinkPrincipalBuilder, len(values))
 	copy(b.principals, values)

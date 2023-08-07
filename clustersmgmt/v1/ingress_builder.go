@@ -69,6 +69,8 @@ func (b *IngressBuilder) Empty() bool {
 }
 
 // DNSName sets the value of the 'DNS_name' attribute to the given value.
+//
+//
 func (b *IngressBuilder) DNSName(value string) *IngressBuilder {
 	b.dnsName = value
 	b.bitmap_ |= 8
@@ -76,6 +78,8 @@ func (b *IngressBuilder) DNSName(value string) *IngressBuilder {
 }
 
 // ClusterRoutesHostname sets the value of the 'cluster_routes_hostname' attribute to the given value.
+//
+//
 func (b *IngressBuilder) ClusterRoutesHostname(value string) *IngressBuilder {
 	b.clusterRoutesHostname = value
 	b.bitmap_ |= 16
@@ -83,6 +87,8 @@ func (b *IngressBuilder) ClusterRoutesHostname(value string) *IngressBuilder {
 }
 
 // ClusterRoutesTlsSecretRef sets the value of the 'cluster_routes_tls_secret_ref' attribute to the given value.
+//
+//
 func (b *IngressBuilder) ClusterRoutesTlsSecretRef(value string) *IngressBuilder {
 	b.clusterRoutesTlsSecretRef = value
 	b.bitmap_ |= 32
@@ -90,6 +96,8 @@ func (b *IngressBuilder) ClusterRoutesTlsSecretRef(value string) *IngressBuilder
 }
 
 // Default sets the value of the 'default' attribute to the given value.
+//
+//
 func (b *IngressBuilder) Default(value bool) *IngressBuilder {
 	b.default_ = value
 	b.bitmap_ |= 64
@@ -97,6 +105,8 @@ func (b *IngressBuilder) Default(value bool) *IngressBuilder {
 }
 
 // ExcludedNamespaces sets the value of the 'excluded_namespaces' attribute to the given values.
+//
+//
 func (b *IngressBuilder) ExcludedNamespaces(values ...string) *IngressBuilder {
 	b.excludedNamespaces = make([]string, len(values))
 	copy(b.excludedNamespaces, values)
@@ -132,6 +142,8 @@ func (b *IngressBuilder) RouteNamespaceOwnershipPolicy(value NamespaceOwnershipP
 }
 
 // RouteSelectors sets the value of the 'route_selectors' attribute to the given value.
+//
+//
 func (b *IngressBuilder) RouteSelectors(value map[string]string) *IngressBuilder {
 	b.routeSelectors = value
 	if value != nil {

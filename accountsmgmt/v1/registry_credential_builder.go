@@ -24,6 +24,8 @@ import (
 )
 
 // RegistryCredentialBuilder contains the data and logic needed to build 'registry_credential' objects.
+//
+//
 type RegistryCredentialBuilder struct {
 	bitmap_            uint32
 	id                 string
@@ -68,6 +70,8 @@ func (b *RegistryCredentialBuilder) Empty() bool {
 }
 
 // Account sets the value of the 'account' attribute to the given value.
+//
+//
 func (b *RegistryCredentialBuilder) Account(value *AccountBuilder) *RegistryCredentialBuilder {
 	b.account = value
 	if value != nil {
@@ -79,6 +83,8 @@ func (b *RegistryCredentialBuilder) Account(value *AccountBuilder) *RegistryCred
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *RegistryCredentialBuilder) CreatedAt(value time.Time) *RegistryCredentialBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 16
@@ -86,6 +92,8 @@ func (b *RegistryCredentialBuilder) CreatedAt(value time.Time) *RegistryCredenti
 }
 
 // ExternalResourceID sets the value of the 'external_resource_ID' attribute to the given value.
+//
+//
 func (b *RegistryCredentialBuilder) ExternalResourceID(value string) *RegistryCredentialBuilder {
 	b.externalResourceID = value
 	b.bitmap_ |= 32
@@ -93,6 +101,8 @@ func (b *RegistryCredentialBuilder) ExternalResourceID(value string) *RegistryCr
 }
 
 // Registry sets the value of the 'registry' attribute to the given value.
+//
+//
 func (b *RegistryCredentialBuilder) Registry(value *RegistryBuilder) *RegistryCredentialBuilder {
 	b.registry = value
 	if value != nil {
@@ -104,6 +114,8 @@ func (b *RegistryCredentialBuilder) Registry(value *RegistryBuilder) *RegistryCr
 }
 
 // Token sets the value of the 'token' attribute to the given value.
+//
+//
 func (b *RegistryCredentialBuilder) Token(value string) *RegistryCredentialBuilder {
 	b.token = value
 	b.bitmap_ |= 128
@@ -111,6 +123,8 @@ func (b *RegistryCredentialBuilder) Token(value string) *RegistryCredentialBuild
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *RegistryCredentialBuilder) UpdatedAt(value time.Time) *RegistryCredentialBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 256
@@ -118,6 +132,8 @@ func (b *RegistryCredentialBuilder) UpdatedAt(value time.Time) *RegistryCredenti
 }
 
 // Username sets the value of the 'username' attribute to the given value.
+//
+//
 func (b *RegistryCredentialBuilder) Username(value string) *RegistryCredentialBuilder {
 	b.username = value
 	b.bitmap_ |= 512

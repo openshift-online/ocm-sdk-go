@@ -82,6 +82,8 @@ func (b *AddonBuilder) Empty() bool {
 }
 
 // CommonAnnotations sets the value of the 'common_annotations' attribute to the given value.
+//
+//
 func (b *AddonBuilder) CommonAnnotations(value map[string]string) *AddonBuilder {
 	b.commonAnnotations = value
 	if value != nil {
@@ -93,6 +95,8 @@ func (b *AddonBuilder) CommonAnnotations(value map[string]string) *AddonBuilder 
 }
 
 // CommonLabels sets the value of the 'common_labels' attribute to the given value.
+//
+//
 func (b *AddonBuilder) CommonLabels(value map[string]string) *AddonBuilder {
 	b.commonLabels = value
 	if value != nil {
@@ -118,6 +122,8 @@ func (b *AddonBuilder) Config(value *AddonConfigBuilder) *AddonBuilder {
 }
 
 // CredentialsRequests sets the value of the 'credentials_requests' attribute to the given values.
+//
+//
 func (b *AddonBuilder) CredentialsRequests(values ...*CredentialRequestBuilder) *AddonBuilder {
 	b.credentialsRequests = make([]*CredentialRequestBuilder, len(values))
 	copy(b.credentialsRequests, values)
@@ -126,6 +132,8 @@ func (b *AddonBuilder) CredentialsRequests(values ...*CredentialRequestBuilder) 
 }
 
 // Description sets the value of the 'description' attribute to the given value.
+//
+//
 func (b *AddonBuilder) Description(value string) *AddonBuilder {
 	b.description = value
 	b.bitmap_ |= 128
@@ -133,6 +141,8 @@ func (b *AddonBuilder) Description(value string) *AddonBuilder {
 }
 
 // DocsLink sets the value of the 'docs_link' attribute to the given value.
+//
+//
 func (b *AddonBuilder) DocsLink(value string) *AddonBuilder {
 	b.docsLink = value
 	b.bitmap_ |= 256
@@ -140,6 +150,8 @@ func (b *AddonBuilder) DocsLink(value string) *AddonBuilder {
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *AddonBuilder) Enabled(value bool) *AddonBuilder {
 	b.enabled = value
 	b.bitmap_ |= 512
@@ -147,6 +159,8 @@ func (b *AddonBuilder) Enabled(value bool) *AddonBuilder {
 }
 
 // HasExternalResources sets the value of the 'has_external_resources' attribute to the given value.
+//
+//
 func (b *AddonBuilder) HasExternalResources(value bool) *AddonBuilder {
 	b.hasExternalResources = value
 	b.bitmap_ |= 1024
@@ -154,6 +168,8 @@ func (b *AddonBuilder) HasExternalResources(value bool) *AddonBuilder {
 }
 
 // Hidden sets the value of the 'hidden' attribute to the given value.
+//
+//
 func (b *AddonBuilder) Hidden(value bool) *AddonBuilder {
 	b.hidden = value
 	b.bitmap_ |= 2048
@@ -161,6 +177,8 @@ func (b *AddonBuilder) Hidden(value bool) *AddonBuilder {
 }
 
 // Icon sets the value of the 'icon' attribute to the given value.
+//
+//
 func (b *AddonBuilder) Icon(value string) *AddonBuilder {
 	b.icon = value
 	b.bitmap_ |= 4096
@@ -177,6 +195,8 @@ func (b *AddonBuilder) InstallMode(value AddonInstallMode) *AddonBuilder {
 }
 
 // Label sets the value of the 'label' attribute to the given value.
+//
+//
 func (b *AddonBuilder) Label(value string) *AddonBuilder {
 	b.label = value
 	b.bitmap_ |= 16384
@@ -184,6 +204,8 @@ func (b *AddonBuilder) Label(value string) *AddonBuilder {
 }
 
 // ManagedService sets the value of the 'managed_service' attribute to the given value.
+//
+//
 func (b *AddonBuilder) ManagedService(value bool) *AddonBuilder {
 	b.managedService = value
 	b.bitmap_ |= 32768
@@ -191,6 +213,8 @@ func (b *AddonBuilder) ManagedService(value bool) *AddonBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *AddonBuilder) Name(value string) *AddonBuilder {
 	b.name = value
 	b.bitmap_ |= 65536
@@ -198,6 +222,8 @@ func (b *AddonBuilder) Name(value string) *AddonBuilder {
 }
 
 // Namespaces sets the value of the 'namespaces' attribute to the given values.
+//
+//
 func (b *AddonBuilder) Namespaces(values ...*AddonNamespaceBuilder) *AddonBuilder {
 	b.namespaces = make([]*AddonNamespaceBuilder, len(values))
 	copy(b.namespaces, values)
@@ -206,6 +232,8 @@ func (b *AddonBuilder) Namespaces(values ...*AddonNamespaceBuilder) *AddonBuilde
 }
 
 // OperatorName sets the value of the 'operator_name' attribute to the given value.
+//
+//
 func (b *AddonBuilder) OperatorName(value string) *AddonBuilder {
 	b.operatorName = value
 	b.bitmap_ |= 262144
@@ -213,6 +241,8 @@ func (b *AddonBuilder) OperatorName(value string) *AddonBuilder {
 }
 
 // Parameters sets the value of the 'parameters' attribute to the given values.
+//
+//
 func (b *AddonBuilder) Parameters(values ...*AddonParameterBuilder) *AddonBuilder {
 	b.parameters = make([]*AddonParameterBuilder, len(values))
 	copy(b.parameters, values)
@@ -221,6 +251,8 @@ func (b *AddonBuilder) Parameters(values ...*AddonParameterBuilder) *AddonBuilde
 }
 
 // Requirements sets the value of the 'requirements' attribute to the given values.
+//
+//
 func (b *AddonBuilder) Requirements(values ...*AddonRequirementBuilder) *AddonBuilder {
 	b.requirements = make([]*AddonRequirementBuilder, len(values))
 	copy(b.requirements, values)
@@ -229,6 +261,8 @@ func (b *AddonBuilder) Requirements(values ...*AddonRequirementBuilder) *AddonBu
 }
 
 // ResourceCost sets the value of the 'resource_cost' attribute to the given value.
+//
+//
 func (b *AddonBuilder) ResourceCost(value float64) *AddonBuilder {
 	b.resourceCost = value
 	b.bitmap_ |= 2097152
@@ -236,6 +270,8 @@ func (b *AddonBuilder) ResourceCost(value float64) *AddonBuilder {
 }
 
 // ResourceName sets the value of the 'resource_name' attribute to the given value.
+//
+//
 func (b *AddonBuilder) ResourceName(value string) *AddonBuilder {
 	b.resourceName = value
 	b.bitmap_ |= 4194304
@@ -243,6 +279,8 @@ func (b *AddonBuilder) ResourceName(value string) *AddonBuilder {
 }
 
 // SubOperators sets the value of the 'sub_operators' attribute to the given values.
+//
+//
 func (b *AddonBuilder) SubOperators(values ...*AddonSubOperatorBuilder) *AddonBuilder {
 	b.subOperators = make([]*AddonSubOperatorBuilder, len(values))
 	copy(b.subOperators, values)
@@ -251,6 +289,8 @@ func (b *AddonBuilder) SubOperators(values ...*AddonSubOperatorBuilder) *AddonBu
 }
 
 // TargetNamespace sets the value of the 'target_namespace' attribute to the given value.
+//
+//
 func (b *AddonBuilder) TargetNamespace(value string) *AddonBuilder {
 	b.targetNamespace = value
 	b.bitmap_ |= 16777216

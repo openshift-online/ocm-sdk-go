@@ -189,12 +189,16 @@ func (r *AutoscalerPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AutoscalerPollResponse) Body() *ClusterAutoscaler {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AutoscalerPollResponse) GetBody() (value *ClusterAutoscaler, ok bool) {
 	return r.response.GetBody()
 }
@@ -427,6 +431,8 @@ func (r *AutoscalerGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AutoscalerGetResponse) Body() *ClusterAutoscaler {
 	if r == nil {
 		return nil
@@ -436,6 +442,8 @@ func (r *AutoscalerGetResponse) Body() *ClusterAutoscaler {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AutoscalerGetResponse) GetBody() (value *ClusterAutoscaler, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -473,6 +481,8 @@ func (r *AutoscalerPostRequest) Impersonate(user string) *AutoscalerPostRequest 
 }
 
 // Request sets the value of the 'request' parameter.
+//
+//
 func (r *AutoscalerPostRequest) Request(value *ClusterAutoscaler) *AutoscalerPostRequest {
 	r.request = value
 	return r
@@ -570,6 +580,8 @@ func (r *AutoscalerPostResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AutoscalerPostResponse) Body() *ClusterAutoscaler {
 	if r == nil {
 		return nil
@@ -579,6 +591,8 @@ func (r *AutoscalerPostResponse) Body() *ClusterAutoscaler {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AutoscalerPostResponse) GetBody() (value *ClusterAutoscaler, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -616,6 +630,8 @@ func (r *AutoscalerUpdateRequest) Impersonate(user string) *AutoscalerUpdateRequ
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *AutoscalerUpdateRequest) Body(value *ClusterAutoscaler) *AutoscalerUpdateRequest {
 	r.body = value
 	return r
@@ -713,6 +729,8 @@ func (r *AutoscalerUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AutoscalerUpdateResponse) Body() *ClusterAutoscaler {
 	if r == nil {
 		return nil
@@ -722,6 +740,8 @@ func (r *AutoscalerUpdateResponse) Body() *ClusterAutoscaler {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AutoscalerUpdateResponse) GetBody() (value *ClusterAutoscaler, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

@@ -39,6 +39,8 @@ func (b *ServiceInfoBuilder) Empty() bool {
 }
 
 // Fullname sets the value of the 'fullname' attribute to the given value.
+//
+//
 func (b *ServiceInfoBuilder) Fullname(value string) *ServiceInfoBuilder {
 	b.fullname = value
 	b.bitmap_ |= 1
@@ -46,6 +48,8 @@ func (b *ServiceInfoBuilder) Fullname(value string) *ServiceInfoBuilder {
 }
 
 // StatusType sets the value of the 'status_type' attribute to the given value.
+//
+//
 func (b *ServiceInfoBuilder) StatusType(value string) *ServiceInfoBuilder {
 	b.statusType = value
 	b.bitmap_ |= 2

@@ -38,6 +38,8 @@ func (b *AuditLogBuilder) Empty() bool {
 }
 
 // RoleArn sets the value of the 'role_arn' attribute to the given value.
+//
+//
 func (b *AuditLogBuilder) RoleArn(value string) *AuditLogBuilder {
 	b.roleArn = value
 	b.bitmap_ |= 1

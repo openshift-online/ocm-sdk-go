@@ -72,6 +72,8 @@ func (b *ManagedServiceBuilder) Empty() bool {
 }
 
 // Addon sets the value of the 'addon' attribute to the given value.
+//
+//
 func (b *ManagedServiceBuilder) Addon(value *StatefulObjectBuilder) *ManagedServiceBuilder {
 	b.addon = value
 	if value != nil {
@@ -96,6 +98,8 @@ func (b *ManagedServiceBuilder) Cluster(value *ClusterBuilder) *ManagedServiceBu
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *ManagedServiceBuilder) CreatedAt(value time.Time) *ManagedServiceBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 32
@@ -103,6 +107,8 @@ func (b *ManagedServiceBuilder) CreatedAt(value time.Time) *ManagedServiceBuilde
 }
 
 // ExpiredAt sets the value of the 'expired_at' attribute to the given value.
+//
+//
 func (b *ManagedServiceBuilder) ExpiredAt(value time.Time) *ManagedServiceBuilder {
 	b.expiredAt = value
 	b.bitmap_ |= 64
@@ -110,6 +116,8 @@ func (b *ManagedServiceBuilder) ExpiredAt(value time.Time) *ManagedServiceBuilde
 }
 
 // Parameters sets the value of the 'parameters' attribute to the given values.
+//
+//
 func (b *ManagedServiceBuilder) Parameters(values ...*ServiceParameterBuilder) *ManagedServiceBuilder {
 	b.parameters = make([]*ServiceParameterBuilder, len(values))
 	copy(b.parameters, values)
@@ -118,6 +126,8 @@ func (b *ManagedServiceBuilder) Parameters(values ...*ServiceParameterBuilder) *
 }
 
 // Resources sets the value of the 'resources' attribute to the given values.
+//
+//
 func (b *ManagedServiceBuilder) Resources(values ...*StatefulObjectBuilder) *ManagedServiceBuilder {
 	b.resources = make([]*StatefulObjectBuilder, len(values))
 	copy(b.resources, values)
@@ -126,6 +136,8 @@ func (b *ManagedServiceBuilder) Resources(values ...*StatefulObjectBuilder) *Man
 }
 
 // Service sets the value of the 'service' attribute to the given value.
+//
+//
 func (b *ManagedServiceBuilder) Service(value string) *ManagedServiceBuilder {
 	b.service = value
 	b.bitmap_ |= 512
@@ -133,6 +145,8 @@ func (b *ManagedServiceBuilder) Service(value string) *ManagedServiceBuilder {
 }
 
 // ServiceState sets the value of the 'service_state' attribute to the given value.
+//
+//
 func (b *ManagedServiceBuilder) ServiceState(value string) *ManagedServiceBuilder {
 	b.serviceState = value
 	b.bitmap_ |= 1024
@@ -140,6 +154,8 @@ func (b *ManagedServiceBuilder) ServiceState(value string) *ManagedServiceBuilde
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *ManagedServiceBuilder) UpdatedAt(value time.Time) *ManagedServiceBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 2048

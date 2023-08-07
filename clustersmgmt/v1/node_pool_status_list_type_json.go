@@ -63,7 +63,7 @@ func UnmarshalNodePoolStatusList(source interface{}) (items []*NodePoolStatus, e
 	return
 }
 
-// readNodePoolStatusList reads list of values of the ”node_pool_status' type from
+// readNodePoolStatusList reads list of values of the ''node_pool_status' type from
 // the given iterator.
 func readNodePoolStatusList(iterator *jsoniter.Iterator) []*NodePoolStatus {
 	list := []*NodePoolStatus{}

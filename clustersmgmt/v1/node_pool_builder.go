@@ -83,6 +83,8 @@ func (b *NodePoolBuilder) AWSNodePool(value *AWSNodePoolBuilder) *NodePoolBuilde
 }
 
 // AutoRepair sets the value of the 'auto_repair' attribute to the given value.
+//
+//
 func (b *NodePoolBuilder) AutoRepair(value bool) *NodePoolBuilder {
 	b.autoRepair = value
 	b.bitmap_ |= 16
@@ -103,6 +105,8 @@ func (b *NodePoolBuilder) Autoscaling(value *NodePoolAutoscalingBuilder) *NodePo
 }
 
 // AvailabilityZone sets the value of the 'availability_zone' attribute to the given value.
+//
+//
 func (b *NodePoolBuilder) AvailabilityZone(value string) *NodePoolBuilder {
 	b.availabilityZone = value
 	b.bitmap_ |= 64
@@ -110,6 +114,8 @@ func (b *NodePoolBuilder) AvailabilityZone(value string) *NodePoolBuilder {
 }
 
 // Labels sets the value of the 'labels' attribute to the given value.
+//
+//
 func (b *NodePoolBuilder) Labels(value map[string]string) *NodePoolBuilder {
 	b.labels = value
 	if value != nil {
@@ -121,6 +127,8 @@ func (b *NodePoolBuilder) Labels(value map[string]string) *NodePoolBuilder {
 }
 
 // Replicas sets the value of the 'replicas' attribute to the given value.
+//
+//
 func (b *NodePoolBuilder) Replicas(value int) *NodePoolBuilder {
 	b.replicas = value
 	b.bitmap_ |= 256
@@ -141,6 +149,8 @@ func (b *NodePoolBuilder) Status(value *NodePoolStatusBuilder) *NodePoolBuilder 
 }
 
 // Subnet sets the value of the 'subnet' attribute to the given value.
+//
+//
 func (b *NodePoolBuilder) Subnet(value string) *NodePoolBuilder {
 	b.subnet = value
 	b.bitmap_ |= 1024
@@ -148,6 +158,8 @@ func (b *NodePoolBuilder) Subnet(value string) *NodePoolBuilder {
 }
 
 // Taints sets the value of the 'taints' attribute to the given values.
+//
+//
 func (b *NodePoolBuilder) Taints(values ...*TaintBuilder) *NodePoolBuilder {
 	b.taints = make([]*TaintBuilder, len(values))
 	copy(b.taints, values)
@@ -156,6 +168,8 @@ func (b *NodePoolBuilder) Taints(values ...*TaintBuilder) *NodePoolBuilder {
 }
 
 // TuningConfigs sets the value of the 'tuning_configs' attribute to the given values.
+//
+//
 func (b *NodePoolBuilder) TuningConfigs(values ...string) *NodePoolBuilder {
 	b.tuningConfigs = make([]string, len(values))
 	copy(b.tuningConfigs, values)

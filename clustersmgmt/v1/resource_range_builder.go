@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // ResourceRangeBuilder contains the data and logic needed to build 'resource_range' objects.
+//
+//
 type ResourceRangeBuilder struct {
 	bitmap_ uint32
 	max     int
@@ -37,6 +39,8 @@ func (b *ResourceRangeBuilder) Empty() bool {
 }
 
 // Max sets the value of the 'max' attribute to the given value.
+//
+//
 func (b *ResourceRangeBuilder) Max(value int) *ResourceRangeBuilder {
 	b.max = value
 	b.bitmap_ |= 1
@@ -44,6 +48,8 @@ func (b *ResourceRangeBuilder) Max(value int) *ResourceRangeBuilder {
 }
 
 // Min sets the value of the 'min' attribute to the given value.
+//
+//
 func (b *ResourceRangeBuilder) Min(value int) *ResourceRangeBuilder {
 	b.min = value
 	b.bitmap_ |= 2

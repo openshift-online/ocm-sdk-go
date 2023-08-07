@@ -62,6 +62,8 @@ func (b *CloudProviderBuilder) Empty() bool {
 }
 
 // DisplayName sets the value of the 'display_name' attribute to the given value.
+//
+//
 func (b *CloudProviderBuilder) DisplayName(value string) *CloudProviderBuilder {
 	b.displayName = value
 	b.bitmap_ |= 8
@@ -69,6 +71,8 @@ func (b *CloudProviderBuilder) DisplayName(value string) *CloudProviderBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *CloudProviderBuilder) Name(value string) *CloudProviderBuilder {
 	b.name = value
 	b.bitmap_ |= 16
@@ -76,6 +80,8 @@ func (b *CloudProviderBuilder) Name(value string) *CloudProviderBuilder {
 }
 
 // Regions sets the value of the 'regions' attribute to the given values.
+//
+//
 func (b *CloudProviderBuilder) Regions(values ...*CloudRegionBuilder) *CloudProviderBuilder {
 	b.regions = make([]*CloudRegionBuilder, len(values))
 	copy(b.regions, values)

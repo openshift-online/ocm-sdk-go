@@ -51,6 +51,8 @@ func (c *Client) Get() *MetadataRequest {
 }
 
 // ApplicationDependencies returns the target 'application_dependencies' resource.
+//
+//
 func (c *Client) ApplicationDependencies() *ApplicationDependenciesClient {
 	return NewApplicationDependenciesClient(
 		c.transport,
@@ -59,6 +61,8 @@ func (c *Client) ApplicationDependencies() *ApplicationDependenciesClient {
 }
 
 // Applications returns the target 'applications' resource.
+//
+//
 func (c *Client) Applications() *ApplicationsClient {
 	return NewApplicationsClient(
 		c.transport,
@@ -67,6 +71,8 @@ func (c *Client) Applications() *ApplicationsClient {
 }
 
 // Errors returns the target 'errors' resource.
+//
+//
 func (c *Client) Errors() *ErrorsClient {
 	return NewErrorsClient(
 		c.transport,
@@ -75,6 +81,8 @@ func (c *Client) Errors() *ErrorsClient {
 }
 
 // PeerDependencies returns the target 'peer_dependencies' resource.
+//
+//
 func (c *Client) PeerDependencies() *PeerDependenciesClient {
 	return NewPeerDependenciesClient(
 		c.transport,
@@ -83,6 +91,8 @@ func (c *Client) PeerDependencies() *PeerDependenciesClient {
 }
 
 // Products returns the target 'products' resource.
+//
+//
 func (c *Client) Products() *ProductsClient {
 	return NewProductsClient(
 		c.transport,
@@ -91,6 +101,8 @@ func (c *Client) Products() *ProductsClient {
 }
 
 // Services returns the target 'services' resource.
+//
+//
 func (c *Client) Services() *ServicesClient {
 	return NewServicesClient(
 		c.transport,
@@ -99,6 +111,8 @@ func (c *Client) Services() *ServicesClient {
 }
 
 // StatusUpdates returns the target 'statuses' resource.
+//
+//
 func (c *Client) StatusUpdates() *StatusesClient {
 	return NewStatusesClient(
 		c.transport,
@@ -107,6 +121,8 @@ func (c *Client) StatusUpdates() *StatusesClient {
 }
 
 // Statuses returns the target 'statuses' resource.
+//
+//
 func (c *Client) Statuses() *StatusesClient {
 	return NewStatusesClient(
 		c.transport,

@@ -24,6 +24,8 @@ import (
 )
 
 // Contract represents the values of the 'contract' type.
+//
+//
 type Contract struct {
 	bitmap_    uint32
 	dimensions []*ContractDimension
@@ -38,6 +40,8 @@ func (o *Contract) Empty() bool {
 
 // Dimensions returns the value of the 'dimensions' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Contract) Dimensions() []*ContractDimension {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.dimensions
@@ -47,6 +51,8 @@ func (o *Contract) Dimensions() []*ContractDimension {
 
 // GetDimensions returns the value of the 'dimensions' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Contract) GetDimensions() (value []*ContractDimension, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -57,6 +63,8 @@ func (o *Contract) GetDimensions() (value []*ContractDimension, ok bool) {
 
 // EndDate returns the value of the 'end_date' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Contract) EndDate() time.Time {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.endDate
@@ -66,6 +74,8 @@ func (o *Contract) EndDate() time.Time {
 
 // GetEndDate returns the value of the 'end_date' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Contract) GetEndDate() (value time.Time, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
@@ -76,6 +86,8 @@ func (o *Contract) GetEndDate() (value time.Time, ok bool) {
 
 // StartDate returns the value of the 'start_date' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Contract) StartDate() time.Time {
 	if o != nil && o.bitmap_&4 != 0 {
 		return o.startDate
@@ -85,6 +97,8 @@ func (o *Contract) StartDate() time.Time {
 
 // GetStartDate returns the value of the 'start_date' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Contract) GetStartDate() (value time.Time, ok bool) {
 	ok = o != nil && o.bitmap_&4 != 0
 	if ok {

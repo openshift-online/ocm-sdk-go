@@ -88,6 +88,8 @@ func (r *NotifyAddRequest) Impersonate(user string) *NotifyAddRequest {
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *NotifyAddRequest) Body(value *SubscriptionNotify) *NotifyAddRequest {
 	r.body = value
 	return r
@@ -185,6 +187,8 @@ func (r *NotifyAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *NotifyAddResponse) Body() *SubscriptionNotify {
 	if r == nil {
 		return nil
@@ -194,6 +198,8 @@ func (r *NotifyAddResponse) Body() *SubscriptionNotify {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *NotifyAddResponse) GetBody() (value *SubscriptionNotify, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

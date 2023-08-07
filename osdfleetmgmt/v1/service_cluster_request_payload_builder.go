@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 // ServiceClusterRequestPayloadBuilder contains the data and logic needed to build 'service_cluster_request_payload' objects.
+//
+//
 type ServiceClusterRequestPayloadBuilder struct {
 	bitmap_       uint32
 	cloudProvider string
@@ -38,6 +40,8 @@ func (b *ServiceClusterRequestPayloadBuilder) Empty() bool {
 }
 
 // CloudProvider sets the value of the 'cloud_provider' attribute to the given value.
+//
+//
 func (b *ServiceClusterRequestPayloadBuilder) CloudProvider(value string) *ServiceClusterRequestPayloadBuilder {
 	b.cloudProvider = value
 	b.bitmap_ |= 1
@@ -45,6 +49,8 @@ func (b *ServiceClusterRequestPayloadBuilder) CloudProvider(value string) *Servi
 }
 
 // Labels sets the value of the 'labels' attribute to the given values.
+//
+//
 func (b *ServiceClusterRequestPayloadBuilder) Labels(values ...*LabelRequestPayloadBuilder) *ServiceClusterRequestPayloadBuilder {
 	b.labels = make([]*LabelRequestPayloadBuilder, len(values))
 	copy(b.labels, values)
@@ -53,6 +59,8 @@ func (b *ServiceClusterRequestPayloadBuilder) Labels(values ...*LabelRequestPayl
 }
 
 // Region sets the value of the 'region' attribute to the given value.
+//
+//
 func (b *ServiceClusterRequestPayloadBuilder) Region(value string) *ServiceClusterRequestPayloadBuilder {
 	b.region = value
 	b.bitmap_ |= 4

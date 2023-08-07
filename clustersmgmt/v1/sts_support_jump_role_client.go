@@ -50,6 +50,8 @@ func NewStsSupportJumpRoleClient(transport http.RoundTripper, path string) *StsS
 }
 
 // Get creates a request for the 'get' method.
+//
+//
 func (c *StsSupportJumpRoleClient) Get() *StsSupportJumpRoleGetRequest {
 	return &StsSupportJumpRoleGetRequest{
 		transport: c.transport,
@@ -156,12 +158,16 @@ func (r *StsSupportJumpRolePollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *StsSupportJumpRolePollResponse) Body() *StsSupportJumpRole {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *StsSupportJumpRolePollResponse) GetBody() (value *StsSupportJumpRole, ok bool) {
 	return r.response.GetBody()
 }
@@ -287,6 +293,8 @@ func (r *StsSupportJumpRoleGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *StsSupportJumpRoleGetResponse) Body() *StsSupportJumpRole {
 	if r == nil {
 		return nil
@@ -296,6 +304,8 @@ func (r *StsSupportJumpRoleGetResponse) Body() *StsSupportJumpRole {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *StsSupportJumpRoleGetResponse) GetBody() (value *StsSupportJumpRole, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

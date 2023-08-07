@@ -110,6 +110,8 @@ func (o *Notification) Empty() bool {
 
 // Checked returns the value of the 'checked' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Notification) Checked() bool {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.checked
@@ -119,6 +121,8 @@ func (o *Notification) Checked() bool {
 
 // GetChecked returns the value of the 'checked' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Notification) GetChecked() (value bool, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
@@ -175,6 +179,8 @@ func (o *Notification) GetDeletedAt() (value time.Time, ok bool) {
 
 // Incident returns the value of the 'incident' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Notification) Incident() *Incident {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.incident
@@ -184,6 +190,8 @@ func (o *Notification) Incident() *Incident {
 
 // GetIncident returns the value of the 'incident' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Notification) GetIncident() (value *Incident, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
@@ -194,6 +202,8 @@ func (o *Notification) GetIncident() (value *Incident, ok bool) {
 
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Notification) Name() string {
 	if o != nil && o.bitmap_&128 != 0 {
 		return o.name
@@ -203,6 +213,8 @@ func (o *Notification) Name() string {
 
 // GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Notification) GetName() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
@@ -213,6 +225,8 @@ func (o *Notification) GetName() (value string, ok bool) {
 
 // Rank returns the value of the 'rank' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Notification) Rank() int {
 	if o != nil && o.bitmap_&256 != 0 {
 		return o.rank
@@ -222,6 +236,8 @@ func (o *Notification) Rank() int {
 
 // GetRank returns the value of the 'rank' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Notification) GetRank() (value int, ok bool) {
 	ok = o != nil && o.bitmap_&256 != 0
 	if ok {

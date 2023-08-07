@@ -99,6 +99,8 @@ func (r *NetworkVerificationsAddRequest) Impersonate(user string) *NetworkVerifi
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *NetworkVerificationsAddRequest) Body(value *NetworkVerification) *NetworkVerificationsAddRequest {
 	r.body = value
 	return r
@@ -196,6 +198,8 @@ func (r *NetworkVerificationsAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *NetworkVerificationsAddResponse) Body() *NetworkVerification {
 	if r == nil {
 		return nil
@@ -205,6 +209,8 @@ func (r *NetworkVerificationsAddResponse) Body() *NetworkVerification {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *NetworkVerificationsAddResponse) GetBody() (value *NetworkVerification, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

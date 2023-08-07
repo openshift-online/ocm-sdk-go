@@ -81,6 +81,8 @@ func (c *ServicesClient) Service(id string) *ManagedServiceClient {
 }
 
 // VersionInquiry returns the target 'version_inquiry' resource.
+//
+//
 func (c *ServicesClient) VersionInquiry() *VersionInquiryClient {
 	return NewVersionInquiryClient(
 		c.transport,
@@ -117,6 +119,8 @@ func (r *ServicesAddRequest) Impersonate(user string) *ServicesAddRequest {
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *ServicesAddRequest) Body(value *ManagedService) *ServicesAddRequest {
 	r.body = value
 	return r
@@ -214,6 +218,8 @@ func (r *ServicesAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ServicesAddResponse) Body() *ManagedService {
 	if r == nil {
 		return nil
@@ -223,6 +229,8 @@ func (r *ServicesAddResponse) Body() *ManagedService {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ServicesAddResponse) GetBody() (value *ManagedService, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

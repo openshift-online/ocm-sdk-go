@@ -60,6 +60,8 @@ func (b *LogBuilder) Empty() bool {
 }
 
 // Content sets the value of the 'content' attribute to the given value.
+//
+//
 func (b *LogBuilder) Content(value string) *LogBuilder {
 	b.content = value
 	b.bitmap_ |= 8

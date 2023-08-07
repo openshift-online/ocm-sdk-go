@@ -63,7 +63,7 @@ func UnmarshalControlPlaneUpgradePolicyList(source interface{}) (items []*Contro
 	return
 }
 
-// readControlPlaneUpgradePolicyList reads list of values of the ”control_plane_upgrade_policy' type from
+// readControlPlaneUpgradePolicyList reads list of values of the ''control_plane_upgrade_policy' type from
 // the given iterator.
 func readControlPlaneUpgradePolicyList(iterator *jsoniter.Iterator) []*ControlPlaneUpgradePolicy {
 	list := []*ControlPlaneUpgradePolicy{}

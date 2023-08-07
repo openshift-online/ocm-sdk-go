@@ -63,7 +63,7 @@ func UnmarshalResourceRangeList(source interface{}) (items []*ResourceRange, err
 	return
 }
 
-// readResourceRangeList reads list of values of the ”resource_range' type from
+// readResourceRangeList reads list of values of the ''resource_range' type from
 // the given iterator.
 func readResourceRangeList(iterator *jsoniter.Iterator) []*ResourceRange {
 	list := []*ResourceRange{}

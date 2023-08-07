@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 // QuotaAuthorizationRequestBuilder contains the data and logic needed to build 'quota_authorization_request' objects.
+//
+//
 type QuotaAuthorizationRequestBuilder struct {
 	bitmap_          uint32
 	accountUsername  string
@@ -43,6 +45,8 @@ func (b *QuotaAuthorizationRequestBuilder) Empty() bool {
 }
 
 // AccountUsername sets the value of the 'account_username' attribute to the given value.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) AccountUsername(value string) *QuotaAuthorizationRequestBuilder {
 	b.accountUsername = value
 	b.bitmap_ |= 1
@@ -50,6 +54,8 @@ func (b *QuotaAuthorizationRequestBuilder) AccountUsername(value string) *QuotaA
 }
 
 // AvailabilityZone sets the value of the 'availability_zone' attribute to the given value.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) AvailabilityZone(value string) *QuotaAuthorizationRequestBuilder {
 	b.availabilityZone = value
 	b.bitmap_ |= 2
@@ -57,6 +63,8 @@ func (b *QuotaAuthorizationRequestBuilder) AvailabilityZone(value string) *Quota
 }
 
 // DisplayName sets the value of the 'display_name' attribute to the given value.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) DisplayName(value string) *QuotaAuthorizationRequestBuilder {
 	b.displayName = value
 	b.bitmap_ |= 4
@@ -64,6 +72,8 @@ func (b *QuotaAuthorizationRequestBuilder) DisplayName(value string) *QuotaAutho
 }
 
 // ProductID sets the value of the 'product_ID' attribute to the given value.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) ProductID(value string) *QuotaAuthorizationRequestBuilder {
 	b.productID = value
 	b.bitmap_ |= 8
@@ -71,6 +81,8 @@ func (b *QuotaAuthorizationRequestBuilder) ProductID(value string) *QuotaAuthori
 }
 
 // ProductCategory sets the value of the 'product_category' attribute to the given value.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) ProductCategory(value string) *QuotaAuthorizationRequestBuilder {
 	b.productCategory = value
 	b.bitmap_ |= 16
@@ -78,6 +90,8 @@ func (b *QuotaAuthorizationRequestBuilder) ProductCategory(value string) *QuotaA
 }
 
 // QuotaVersion sets the value of the 'quota_version' attribute to the given value.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) QuotaVersion(value string) *QuotaAuthorizationRequestBuilder {
 	b.quotaVersion = value
 	b.bitmap_ |= 32
@@ -85,6 +99,8 @@ func (b *QuotaAuthorizationRequestBuilder) QuotaVersion(value string) *QuotaAuth
 }
 
 // Reserve sets the value of the 'reserve' attribute to the given value.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) Reserve(value bool) *QuotaAuthorizationRequestBuilder {
 	b.reserve = value
 	b.bitmap_ |= 64
@@ -92,6 +108,8 @@ func (b *QuotaAuthorizationRequestBuilder) Reserve(value bool) *QuotaAuthorizati
 }
 
 // Resources sets the value of the 'resources' attribute to the given values.
+//
+//
 func (b *QuotaAuthorizationRequestBuilder) Resources(values ...*ReservedResourceBuilder) *QuotaAuthorizationRequestBuilder {
 	b.resources = make([]*ReservedResourceBuilder, len(values))
 	copy(b.resources, values)

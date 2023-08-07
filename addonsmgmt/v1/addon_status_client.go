@@ -179,12 +179,16 @@ func (r *AddonStatusPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonStatusPollResponse) Body() *AddonStatus {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonStatusPollResponse) GetBody() (value *AddonStatus, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *AddonStatusGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonStatusGetResponse) Body() *AddonStatus {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *AddonStatusGetResponse) Body() *AddonStatus {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonStatusGetResponse) GetBody() (value *AddonStatus, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *AddonStatusUpdateRequest) Impersonate(user string) *AddonStatusUpdateRe
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *AddonStatusUpdateRequest) Body(value *AddonStatus) *AddonStatusUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *AddonStatusUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonStatusUpdateResponse) Body() *AddonStatus {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *AddonStatusUpdateResponse) Body() *AddonStatus {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonStatusUpdateResponse) GetBody() (value *AddonStatus, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

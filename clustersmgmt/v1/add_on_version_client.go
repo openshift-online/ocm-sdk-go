@@ -179,12 +179,16 @@ func (r *AddOnVersionPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddOnVersionPollResponse) Body() *AddOnVersion {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddOnVersionPollResponse) GetBody() (value *AddOnVersion, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *AddOnVersionGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddOnVersionGetResponse) Body() *AddOnVersion {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *AddOnVersionGetResponse) Body() *AddOnVersion {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddOnVersionGetResponse) GetBody() (value *AddOnVersion, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *AddOnVersionUpdateRequest) Impersonate(user string) *AddOnVersionUpdate
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *AddOnVersionUpdateRequest) Body(value *AddOnVersion) *AddOnVersionUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *AddOnVersionUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddOnVersionUpdateResponse) Body() *AddOnVersion {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *AddOnVersionUpdateResponse) Body() *AddOnVersion {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddOnVersionUpdateResponse) GetBody() (value *AddOnVersion, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

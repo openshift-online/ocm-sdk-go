@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/servicemgmt/v1
 
 // VersionInquiryResponse represents the values of the 'version_inquiry_response' type.
+//
+//
 type VersionInquiryResponse struct {
 	bitmap_ uint32
 	version string
@@ -32,6 +34,8 @@ func (o *VersionInquiryResponse) Empty() bool {
 
 // Version returns the value of the 'version' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *VersionInquiryResponse) Version() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.version
@@ -41,6 +45,8 @@ func (o *VersionInquiryResponse) Version() string {
 
 // GetVersion returns the value of the 'version' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *VersionInquiryResponse) GetVersion() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {

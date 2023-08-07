@@ -63,7 +63,7 @@ func UnmarshalScheduleTypeList(source interface{}) (items []ScheduleType, err er
 	return
 }
 
-// readScheduleTypeList reads list of values of the ”schedule_type' type from
+// readScheduleTypeList reads list of values of the ''schedule_type' type from
 // the given iterator.
 func readScheduleTypeList(iterator *jsoniter.Iterator) []ScheduleType {
 	list := []ScheduleType{}

@@ -63,7 +63,7 @@ func UnmarshalNamespaceOwnershipPolicyList(source interface{}) (items []Namespac
 	return
 }
 
-// readNamespaceOwnershipPolicyList reads list of values of the ”namespace_ownership_policy' type from
+// readNamespaceOwnershipPolicyList reads list of values of the ''namespace_ownership_policy' type from
 // the given iterator.
 func readNamespaceOwnershipPolicyList(iterator *jsoniter.Iterator) []NamespaceOwnershipPolicy {
 	list := []NamespaceOwnershipPolicy{}

@@ -24,6 +24,8 @@ import (
 )
 
 // CloudResourceBuilder contains the data and logic needed to build 'cloud_resource' objects.
+//
+//
 type CloudResourceBuilder struct {
 	bitmap_        uint32
 	id             string
@@ -74,6 +76,8 @@ func (b *CloudResourceBuilder) Empty() bool {
 }
 
 // Active sets the value of the 'active' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) Active(value bool) *CloudResourceBuilder {
 	b.active = value
 	b.bitmap_ |= 8
@@ -81,6 +85,8 @@ func (b *CloudResourceBuilder) Active(value bool) *CloudResourceBuilder {
 }
 
 // Category sets the value of the 'category' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) Category(value string) *CloudResourceBuilder {
 	b.category = value
 	b.bitmap_ |= 16
@@ -88,6 +94,8 @@ func (b *CloudResourceBuilder) Category(value string) *CloudResourceBuilder {
 }
 
 // CategoryPretty sets the value of the 'category_pretty' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) CategoryPretty(value string) *CloudResourceBuilder {
 	b.categoryPretty = value
 	b.bitmap_ |= 32
@@ -95,6 +103,8 @@ func (b *CloudResourceBuilder) CategoryPretty(value string) *CloudResourceBuilde
 }
 
 // CloudProvider sets the value of the 'cloud_provider' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) CloudProvider(value string) *CloudResourceBuilder {
 	b.cloudProvider = value
 	b.bitmap_ |= 64
@@ -102,6 +112,8 @@ func (b *CloudResourceBuilder) CloudProvider(value string) *CloudResourceBuilder
 }
 
 // CpuCores sets the value of the 'cpu_cores' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) CpuCores(value int) *CloudResourceBuilder {
 	b.cpuCores = value
 	b.bitmap_ |= 128
@@ -109,6 +121,8 @@ func (b *CloudResourceBuilder) CpuCores(value int) *CloudResourceBuilder {
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) CreatedAt(value time.Time) *CloudResourceBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 256
@@ -116,6 +130,8 @@ func (b *CloudResourceBuilder) CreatedAt(value time.Time) *CloudResourceBuilder 
 }
 
 // GenericName sets the value of the 'generic_name' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) GenericName(value string) *CloudResourceBuilder {
 	b.genericName = value
 	b.bitmap_ |= 512
@@ -123,6 +139,8 @@ func (b *CloudResourceBuilder) GenericName(value string) *CloudResourceBuilder {
 }
 
 // Memory sets the value of the 'memory' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) Memory(value int) *CloudResourceBuilder {
 	b.memory = value
 	b.bitmap_ |= 1024
@@ -130,6 +148,8 @@ func (b *CloudResourceBuilder) Memory(value int) *CloudResourceBuilder {
 }
 
 // MemoryPretty sets the value of the 'memory_pretty' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) MemoryPretty(value string) *CloudResourceBuilder {
 	b.memoryPretty = value
 	b.bitmap_ |= 2048
@@ -137,6 +157,8 @@ func (b *CloudResourceBuilder) MemoryPretty(value string) *CloudResourceBuilder 
 }
 
 // NamePretty sets the value of the 'name_pretty' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) NamePretty(value string) *CloudResourceBuilder {
 	b.namePretty = value
 	b.bitmap_ |= 4096
@@ -144,6 +166,8 @@ func (b *CloudResourceBuilder) NamePretty(value string) *CloudResourceBuilder {
 }
 
 // ResourceType sets the value of the 'resource_type' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) ResourceType(value string) *CloudResourceBuilder {
 	b.resourceType = value
 	b.bitmap_ |= 8192
@@ -151,6 +175,8 @@ func (b *CloudResourceBuilder) ResourceType(value string) *CloudResourceBuilder 
 }
 
 // SizePretty sets the value of the 'size_pretty' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) SizePretty(value string) *CloudResourceBuilder {
 	b.sizePretty = value
 	b.bitmap_ |= 16384
@@ -158,6 +184,8 @@ func (b *CloudResourceBuilder) SizePretty(value string) *CloudResourceBuilder {
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *CloudResourceBuilder) UpdatedAt(value time.Time) *CloudResourceBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 32768

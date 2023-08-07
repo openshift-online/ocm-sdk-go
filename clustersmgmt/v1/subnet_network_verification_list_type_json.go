@@ -63,7 +63,7 @@ func UnmarshalSubnetNetworkVerificationList(source interface{}) (items []*Subnet
 	return
 }
 
-// readSubnetNetworkVerificationList reads list of values of the ”subnet_network_verification' type from
+// readSubnetNetworkVerificationList reads list of values of the ''subnet_network_verification' type from
 // the given iterator.
 func readSubnetNetworkVerificationList(iterator *jsoniter.Iterator) []*SubnetNetworkVerification {
 	list := []*SubnetNetworkVerification{}

@@ -179,12 +179,16 @@ func (r *OidcConfigPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *OidcConfigPollResponse) Body() *OidcConfig {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *OidcConfigPollResponse) GetBody() (value *OidcConfig, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *OidcConfigGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *OidcConfigGetResponse) Body() *OidcConfig {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *OidcConfigGetResponse) Body() *OidcConfig {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *OidcConfigGetResponse) GetBody() (value *OidcConfig, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *OidcConfigUpdateRequest) Impersonate(user string) *OidcConfigUpdateRequ
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *OidcConfigUpdateRequest) Body(value *OidcConfig) *OidcConfigUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *OidcConfigUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *OidcConfigUpdateResponse) Body() *OidcConfig {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *OidcConfigUpdateResponse) Body() *OidcConfig {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *OidcConfigUpdateResponse) GetBody() (value *OidcConfig, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

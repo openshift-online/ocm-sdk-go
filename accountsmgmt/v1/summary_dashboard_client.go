@@ -158,12 +158,16 @@ func (r *SummaryDashboardPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *SummaryDashboardPollResponse) Body() *SummaryDashboard {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *SummaryDashboardPollResponse) GetBody() (value *SummaryDashboard, ok bool) {
 	return r.response.GetBody()
 }
@@ -289,6 +293,8 @@ func (r *SummaryDashboardGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *SummaryDashboardGetResponse) Body() *SummaryDashboard {
 	if r == nil {
 		return nil
@@ -298,6 +304,8 @@ func (r *SummaryDashboardGetResponse) Body() *SummaryDashboard {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *SummaryDashboardGetResponse) GetBody() (value *SummaryDashboard, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

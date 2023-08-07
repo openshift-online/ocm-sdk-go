@@ -113,6 +113,8 @@ func (r *CloudRegionsAddRequest) Impersonate(user string) *CloudRegionsAddReques
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *CloudRegionsAddRequest) Body(value *CloudRegion) *CloudRegionsAddRequest {
 	r.body = value
 	return r
@@ -210,6 +212,8 @@ func (r *CloudRegionsAddResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CloudRegionsAddResponse) Body() *CloudRegion {
 	if r == nil {
 		return nil
@@ -219,6 +223,8 @@ func (r *CloudRegionsAddResponse) Body() *CloudRegion {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CloudRegionsAddResponse) GetBody() (value *CloudRegion, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
