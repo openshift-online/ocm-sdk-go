@@ -63,7 +63,7 @@ func UnmarshalAutoscalerResourceLimitsList(source interface{}) (items []*Autosca
 	return
 }
 
-// readAutoscalerResourceLimitsList reads list of values of the ”autoscaler_resource_limits' type from
+// readAutoscalerResourceLimitsList reads list of values of the ''autoscaler_resource_limits' type from
 // the given iterator.
 func readAutoscalerResourceLimitsList(iterator *jsoniter.Iterator) []*AutoscalerResourceLimits {
 	list := []*AutoscalerResourceLimits{}

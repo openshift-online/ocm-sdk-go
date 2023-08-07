@@ -88,6 +88,8 @@ func (r *FeatureReviewPostRequest) Impersonate(user string) *FeatureReviewPostRe
 }
 
 // Request sets the value of the 'request' parameter.
+//
+//
 func (r *FeatureReviewPostRequest) Request(value *FeatureReviewRequest) *FeatureReviewPostRequest {
 	r.request = value
 	return r
@@ -185,6 +187,8 @@ func (r *FeatureReviewPostResponse) Error() *errors.Error {
 }
 
 // Request returns the value of the 'request' parameter.
+//
+//
 func (r *FeatureReviewPostResponse) Request() *FeatureReviewResponse {
 	if r == nil {
 		return nil
@@ -194,6 +198,8 @@ func (r *FeatureReviewPostResponse) Request() *FeatureReviewResponse {
 
 // GetRequest returns the value of the 'request' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *FeatureReviewPostResponse) GetRequest() (value *FeatureReviewResponse, ok bool) {
 	ok = r != nil && r.request != nil
 	if ok {

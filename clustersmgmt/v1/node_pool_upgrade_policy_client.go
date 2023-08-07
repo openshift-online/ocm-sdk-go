@@ -179,12 +179,16 @@ func (r *NodePoolUpgradePolicyPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *NodePoolUpgradePolicyPollResponse) Body() *NodePoolUpgradePolicy {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *NodePoolUpgradePolicyPollResponse) GetBody() (value *NodePoolUpgradePolicy, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *NodePoolUpgradePolicyGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *NodePoolUpgradePolicyGetResponse) Body() *NodePoolUpgradePolicy {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *NodePoolUpgradePolicyGetResponse) Body() *NodePoolUpgradePolicy {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *NodePoolUpgradePolicyGetResponse) GetBody() (value *NodePoolUpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *NodePoolUpgradePolicyUpdateRequest) Impersonate(user string) *NodePoolU
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *NodePoolUpgradePolicyUpdateRequest) Body(value *NodePoolUpgradePolicy) *NodePoolUpgradePolicyUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *NodePoolUpgradePolicyUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *NodePoolUpgradePolicyUpdateResponse) Body() *NodePoolUpgradePolicy {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *NodePoolUpgradePolicyUpdateResponse) Body() *NodePoolUpgradePolicy {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *NodePoolUpgradePolicyUpdateResponse) GetBody() (value *NodePoolUpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

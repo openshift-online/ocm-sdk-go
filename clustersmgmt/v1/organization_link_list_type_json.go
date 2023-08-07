@@ -63,7 +63,7 @@ func UnmarshalOrganizationLinkList(source interface{}) (items []*OrganizationLin
 	return
 }
 
-// readOrganizationLinkList reads list of values of the ”organization_link' type from
+// readOrganizationLinkList reads list of values of the ''organization_link' type from
 // the given iterator.
 func readOrganizationLinkList(iterator *jsoniter.Iterator) []*OrganizationLink {
 	list := []*OrganizationLink{}

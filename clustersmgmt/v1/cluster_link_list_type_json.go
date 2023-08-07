@@ -63,7 +63,7 @@ func UnmarshalClusterLinkList(source interface{}) (items []*ClusterLink, err err
 	return
 }
 
-// readClusterLinkList reads list of values of the ”cluster_link' type from
+// readClusterLinkList reads list of values of the ''cluster_link' type from
 // the given iterator.
 func readClusterLinkList(iterator *jsoniter.Iterator) []*ClusterLink {
 	list := []*ClusterLink{}

@@ -63,7 +63,7 @@ func UnmarshalByoOidcList(source interface{}) (items []*ByoOidc, err error) {
 	return
 }
 
-// readByoOidcList reads list of values of the ”byo_oidc' type from
+// readByoOidcList reads list of values of the ''byo_oidc' type from
 // the given iterator.
 func readByoOidcList(iterator *jsoniter.Iterator) []*ByoOidc {
 	list := []*ByoOidc{}

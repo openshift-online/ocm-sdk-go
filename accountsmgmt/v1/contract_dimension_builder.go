@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 // ContractDimensionBuilder contains the data and logic needed to build 'contract_dimension' objects.
+//
+//
 type ContractDimensionBuilder struct {
 	bitmap_ uint32
 	name    string
@@ -37,6 +39,8 @@ func (b *ContractDimensionBuilder) Empty() bool {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *ContractDimensionBuilder) Name(value string) *ContractDimensionBuilder {
 	b.name = value
 	b.bitmap_ |= 1
@@ -44,6 +48,8 @@ func (b *ContractDimensionBuilder) Name(value string) *ContractDimensionBuilder 
 }
 
 // Value sets the value of the 'value' attribute to the given value.
+//
+//
 func (b *ContractDimensionBuilder) Value(value string) *ContractDimensionBuilder {
 	b.value = value
 	b.bitmap_ |= 2

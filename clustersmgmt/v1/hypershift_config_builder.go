@@ -39,6 +39,8 @@ func (b *HypershiftConfigBuilder) Empty() bool {
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *HypershiftConfigBuilder) Enabled(value bool) *HypershiftConfigBuilder {
 	b.enabled = value
 	b.bitmap_ |= 1
@@ -46,6 +48,8 @@ func (b *HypershiftConfigBuilder) Enabled(value bool) *HypershiftConfigBuilder {
 }
 
 // ManagementCluster sets the value of the 'management_cluster' attribute to the given value.
+//
+//
 func (b *HypershiftConfigBuilder) ManagementCluster(value string) *HypershiftConfigBuilder {
 	b.managementCluster = value
 	b.bitmap_ |= 2

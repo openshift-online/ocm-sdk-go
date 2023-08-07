@@ -39,6 +39,8 @@ func (b *NodeInfoBuilder) Empty() bool {
 }
 
 // Amount sets the value of the 'amount' attribute to the given value.
+//
+//
 func (b *NodeInfoBuilder) Amount(value int) *NodeInfoBuilder {
 	b.amount = value
 	b.bitmap_ |= 1

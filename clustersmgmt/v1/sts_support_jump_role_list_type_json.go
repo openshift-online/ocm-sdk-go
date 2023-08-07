@@ -63,7 +63,7 @@ func UnmarshalStsSupportJumpRoleList(source interface{}) (items []*StsSupportJum
 	return
 }
 
-// readStsSupportJumpRoleList reads list of values of the ”sts_support_jump_role' type from
+// readStsSupportJumpRoleList reads list of values of the ''sts_support_jump_role' type from
 // the given iterator.
 func readStsSupportJumpRoleList(iterator *jsoniter.Iterator) []*StsSupportJumpRole {
 	list := []*StsSupportJumpRole{}

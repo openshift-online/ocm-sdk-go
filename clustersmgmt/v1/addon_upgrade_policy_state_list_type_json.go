@@ -63,7 +63,7 @@ func UnmarshalAddonUpgradePolicyStateList(source interface{}) (items []*AddonUpg
 	return
 }
 
-// readAddonUpgradePolicyStateList reads list of values of the ”addon_upgrade_policy_state' type from
+// readAddonUpgradePolicyStateList reads list of values of the ''addon_upgrade_policy_state' type from
 // the given iterator.
 func readAddonUpgradePolicyStateList(iterator *jsoniter.Iterator) []*AddonUpgradePolicyState {
 	list := []*AddonUpgradePolicyState{}

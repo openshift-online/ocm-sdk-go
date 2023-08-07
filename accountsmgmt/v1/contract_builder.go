@@ -24,6 +24,8 @@ import (
 )
 
 // ContractBuilder contains the data and logic needed to build 'contract' objects.
+//
+//
 type ContractBuilder struct {
 	bitmap_    uint32
 	dimensions []*ContractDimensionBuilder
@@ -42,6 +44,8 @@ func (b *ContractBuilder) Empty() bool {
 }
 
 // Dimensions sets the value of the 'dimensions' attribute to the given values.
+//
+//
 func (b *ContractBuilder) Dimensions(values ...*ContractDimensionBuilder) *ContractBuilder {
 	b.dimensions = make([]*ContractDimensionBuilder, len(values))
 	copy(b.dimensions, values)
@@ -50,6 +54,8 @@ func (b *ContractBuilder) Dimensions(values ...*ContractDimensionBuilder) *Contr
 }
 
 // EndDate sets the value of the 'end_date' attribute to the given value.
+//
+//
 func (b *ContractBuilder) EndDate(value time.Time) *ContractBuilder {
 	b.endDate = value
 	b.bitmap_ |= 2
@@ -57,6 +63,8 @@ func (b *ContractBuilder) EndDate(value time.Time) *ContractBuilder {
 }
 
 // StartDate sets the value of the 'start_date' attribute to the given value.
+//
+//
 func (b *ContractBuilder) StartDate(value time.Time) *ContractBuilder {
 	b.startDate = value
 	b.bitmap_ |= 4

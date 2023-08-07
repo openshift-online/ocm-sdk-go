@@ -63,7 +63,7 @@ func UnmarshalAutoscalerScaleDownConfigList(source interface{}) (items []*Autosc
 	return
 }
 
-// readAutoscalerScaleDownConfigList reads list of values of the ”autoscaler_scale_down_config' type from
+// readAutoscalerScaleDownConfigList reads list of values of the ''autoscaler_scale_down_config' type from
 // the given iterator.
 func readAutoscalerScaleDownConfigList(iterator *jsoniter.Iterator) []*AutoscalerScaleDownConfig {
 	list := []*AutoscalerScaleDownConfig{}

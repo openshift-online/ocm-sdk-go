@@ -67,6 +67,8 @@ func (b *EscalationBuilder) Empty() bool {
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *EscalationBuilder) CreatedAt(value time.Time) *EscalationBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 8
@@ -74,6 +76,8 @@ func (b *EscalationBuilder) CreatedAt(value time.Time) *EscalationBuilder {
 }
 
 // DeletedAt sets the value of the 'deleted_at' attribute to the given value.
+//
+//
 func (b *EscalationBuilder) DeletedAt(value time.Time) *EscalationBuilder {
 	b.deletedAt = value
 	b.bitmap_ |= 16
@@ -81,6 +85,8 @@ func (b *EscalationBuilder) DeletedAt(value time.Time) *EscalationBuilder {
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *EscalationBuilder) UpdatedAt(value time.Time) *EscalationBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 32

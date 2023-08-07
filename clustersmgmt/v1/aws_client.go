@@ -43,6 +43,8 @@ func NewAWSClient(transport http.RoundTripper, path string) *AWSClient {
 }
 
 // PrivateLinkConfiguration returns the target 'private_link_configuration' resource.
+//
+//
 func (c *AWSClient) PrivateLinkConfiguration() *PrivateLinkConfigurationClient {
 	return NewPrivateLinkConfigurationClient(
 		c.transport,

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // PrivateLinkPrincipalBuilder contains the data and logic needed to build 'private_link_principal' objects.
+//
+//
 type PrivateLinkPrincipalBuilder struct {
 	bitmap_   uint32
 	id        string
@@ -58,6 +60,8 @@ func (b *PrivateLinkPrincipalBuilder) Empty() bool {
 }
 
 // Principal sets the value of the 'principal' attribute to the given value.
+//
+//
 func (b *PrivateLinkPrincipalBuilder) Principal(value string) *PrivateLinkPrincipalBuilder {
 	b.principal = value
 	b.bitmap_ |= 8

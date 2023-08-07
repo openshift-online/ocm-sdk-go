@@ -63,7 +63,7 @@ func UnmarshalUpgradeTypeList(source interface{}) (items []UpgradeType, err erro
 	return
 }
 
-// readUpgradeTypeList reads list of values of the ”upgrade_type' type from
+// readUpgradeTypeList reads list of values of the ''upgrade_type' type from
 // the given iterator.
 func readUpgradeTypeList(iterator *jsoniter.Iterator) []UpgradeType {
 	list := []UpgradeType{}

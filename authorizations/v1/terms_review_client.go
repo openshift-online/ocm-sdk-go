@@ -89,6 +89,8 @@ func (r *TermsReviewPostRequest) Impersonate(user string) *TermsReviewPostReques
 }
 
 // Request sets the value of the 'request' parameter.
+//
+//
 func (r *TermsReviewPostRequest) Request(value *TermsReviewRequest) *TermsReviewPostRequest {
 	r.request = value
 	return r
@@ -186,6 +188,8 @@ func (r *TermsReviewPostResponse) Error() *errors.Error {
 }
 
 // Response returns the value of the 'response' parameter.
+//
+//
 func (r *TermsReviewPostResponse) Response() *TermsReviewResponse {
 	if r == nil {
 		return nil
@@ -195,6 +199,8 @@ func (r *TermsReviewPostResponse) Response() *TermsReviewResponse {
 
 // GetResponse returns the value of the 'response' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *TermsReviewPostResponse) GetResponse() (value *TermsReviewResponse, ok bool) {
 	ok = r != nil && r.response != nil
 	if ok {

@@ -176,6 +176,8 @@ func (o *Escalation) GetUpdatedAt() (value time.Time, ok bool) {
 
 // User returns the value of the 'user' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Escalation) User() *User {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.user
@@ -185,6 +187,8 @@ func (o *Escalation) User() *User {
 
 // GetUser returns the value of the 'user' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Escalation) GetUser() (value *User, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {

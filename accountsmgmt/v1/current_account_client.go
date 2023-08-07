@@ -158,12 +158,16 @@ func (r *CurrentAccountPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CurrentAccountPollResponse) Body() *Account {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CurrentAccountPollResponse) GetBody() (value *Account, ok bool) {
 	return r.response.GetBody()
 }
@@ -289,6 +293,8 @@ func (r *CurrentAccountGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CurrentAccountGetResponse) Body() *Account {
 	if r == nil {
 		return nil
@@ -298,6 +304,8 @@ func (r *CurrentAccountGetResponse) Body() *Account {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CurrentAccountGetResponse) GetBody() (value *Account, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

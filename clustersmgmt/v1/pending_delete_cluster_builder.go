@@ -66,6 +66,8 @@ func (b *PendingDeleteClusterBuilder) Empty() bool {
 }
 
 // BestEffort sets the value of the 'best_effort' attribute to the given value.
+//
+//
 func (b *PendingDeleteClusterBuilder) BestEffort(value bool) *PendingDeleteClusterBuilder {
 	b.bestEffort = value
 	b.bitmap_ |= 8
@@ -81,28 +83,24 @@ func (b *PendingDeleteClusterBuilder) BestEffort(value bool) *PendingDeleteClust
 // the kind, id and href attributes:
 //
 // ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "kind": "CloudProviderLink",
-//	    "id": "123",
-//	    "href": "/api/clusters_mgmt/v1/cloud_providers/123"
-//	  }
-//	}
-//
+// {
+//   "cloud_provider": {
+//     "kind": "CloudProviderLink",
+//     "id": "123",
+//     "href": "/api/clusters_mgmt/v1/cloud_providers/123"
+//   }
+// }
 // ```
 //
 // When a cluster is created this is optional, and if used it should contain the
 // identifier of the cloud provider to use:
 //
 // ```json
-//
-//	{
-//	  "cloud_provider": {
-//	    "id": "123",
-//	  }
-//	}
-//
+// {
+//   "cloud_provider": {
+//     "id": "123",
+//   }
+// }
 // ```
 //
 // If not included, then the cluster will be created using the default cloud
@@ -124,6 +122,8 @@ func (b *PendingDeleteClusterBuilder) Cluster(value *ClusterBuilder) *PendingDel
 }
 
 // CreationTimestamp sets the value of the 'creation_timestamp' attribute to the given value.
+//
+//
 func (b *PendingDeleteClusterBuilder) CreationTimestamp(value time.Time) *PendingDeleteClusterBuilder {
 	b.creationTimestamp = value
 	b.bitmap_ |= 32

@@ -75,6 +75,8 @@ func (b *ClusterBuilder) AWS(value *AWSBuilder) *ClusterBuilder {
 }
 
 // DisplayName sets the value of the 'display_name' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) DisplayName(value string) *ClusterBuilder {
 	b.displayName = value
 	b.bitmap_ |= 4
@@ -82,6 +84,8 @@ func (b *ClusterBuilder) DisplayName(value string) *ClusterBuilder {
 }
 
 // Href sets the value of the 'href' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) Href(value string) *ClusterBuilder {
 	b.href = value
 	b.bitmap_ |= 8
@@ -89,6 +93,8 @@ func (b *ClusterBuilder) Href(value string) *ClusterBuilder {
 }
 
 // Id sets the value of the 'id' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) Id(value string) *ClusterBuilder {
 	b.id = value
 	b.bitmap_ |= 16
@@ -96,6 +102,8 @@ func (b *ClusterBuilder) Id(value string) *ClusterBuilder {
 }
 
 // MultiAZ sets the value of the 'multi_AZ' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) MultiAZ(value bool) *ClusterBuilder {
 	b.multiAZ = value
 	b.bitmap_ |= 32
@@ -103,6 +111,8 @@ func (b *ClusterBuilder) MultiAZ(value bool) *ClusterBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) Name(value string) *ClusterBuilder {
 	b.name = value
 	b.bitmap_ |= 64
@@ -123,6 +133,8 @@ func (b *ClusterBuilder) Network(value *NetworkBuilder) *ClusterBuilder {
 }
 
 // Nodes sets the value of the 'nodes' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) Nodes(value *ClusterNodesBuilder) *ClusterBuilder {
 	b.nodes = value
 	if value != nil {
@@ -134,6 +146,8 @@ func (b *ClusterBuilder) Nodes(value *ClusterNodesBuilder) *ClusterBuilder {
 }
 
 // Properties sets the value of the 'properties' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) Properties(value map[string]string) *ClusterBuilder {
 	b.properties = value
 	if value != nil {
@@ -158,6 +172,8 @@ func (b *ClusterBuilder) Region(value *CloudRegionBuilder) *ClusterBuilder {
 }
 
 // State sets the value of the 'state' attribute to the given value.
+//
+//
 func (b *ClusterBuilder) State(value string) *ClusterBuilder {
 	b.state = value
 	b.bitmap_ |= 2048

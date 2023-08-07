@@ -179,12 +179,16 @@ func (r *CloudResourcePollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CloudResourcePollResponse) Body() *CloudResource {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CloudResourcePollResponse) GetBody() (value *CloudResource, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *CloudResourceGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CloudResourceGetResponse) Body() *CloudResource {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *CloudResourceGetResponse) Body() *CloudResource {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CloudResourceGetResponse) GetBody() (value *CloudResource, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *CloudResourceUpdateRequest) Impersonate(user string) *CloudResourceUpda
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *CloudResourceUpdateRequest) Body(value *CloudResource) *CloudResourceUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *CloudResourceUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *CloudResourceUpdateResponse) Body() *CloudResource {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *CloudResourceUpdateResponse) Body() *CloudResource {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *CloudResourceUpdateResponse) GetBody() (value *CloudResource, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

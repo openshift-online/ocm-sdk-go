@@ -32,6 +32,8 @@ const SubnetNetworkVerificationLinkKind = "SubnetNetworkVerificationLink"
 const SubnetNetworkVerificationNilKind = "SubnetNetworkVerificationNil"
 
 // SubnetNetworkVerification represents the values of the 'subnet_network_verification' type.
+//
+//
 type SubnetNetworkVerification struct {
 	bitmap_ uint32
 	id      string

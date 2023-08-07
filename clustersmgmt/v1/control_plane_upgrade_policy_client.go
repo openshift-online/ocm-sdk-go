@@ -179,12 +179,16 @@ func (r *ControlPlaneUpgradePolicyPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ControlPlaneUpgradePolicyPollResponse) Body() *ControlPlaneUpgradePolicy {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ControlPlaneUpgradePolicyPollResponse) GetBody() (value *ControlPlaneUpgradePolicy, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *ControlPlaneUpgradePolicyGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ControlPlaneUpgradePolicyGetResponse) Body() *ControlPlaneUpgradePolicy {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *ControlPlaneUpgradePolicyGetResponse) Body() *ControlPlaneUpgradePolicy
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ControlPlaneUpgradePolicyGetResponse) GetBody() (value *ControlPlaneUpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *ControlPlaneUpgradePolicyUpdateRequest) Impersonate(user string) *Contr
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *ControlPlaneUpgradePolicyUpdateRequest) Body(value *ControlPlaneUpgradePolicy) *ControlPlaneUpgradePolicyUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *ControlPlaneUpgradePolicyUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *ControlPlaneUpgradePolicyUpdateResponse) Body() *ControlPlaneUpgradePolicy {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *ControlPlaneUpgradePolicyUpdateResponse) Body() *ControlPlaneUpgradePol
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *ControlPlaneUpgradePolicyUpdateResponse) GetBody() (value *ControlPlaneUpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

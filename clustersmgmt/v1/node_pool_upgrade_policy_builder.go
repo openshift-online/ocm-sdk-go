@@ -74,6 +74,8 @@ func (b *NodePoolUpgradePolicyBuilder) Empty() bool {
 }
 
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) ClusterID(value string) *NodePoolUpgradePolicyBuilder {
 	b.clusterID = value
 	b.bitmap_ |= 8
@@ -81,6 +83,8 @@ func (b *NodePoolUpgradePolicyBuilder) ClusterID(value string) *NodePoolUpgradeP
 }
 
 // CreationTimestamp sets the value of the 'creation_timestamp' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) CreationTimestamp(value time.Time) *NodePoolUpgradePolicyBuilder {
 	b.creationTimestamp = value
 	b.bitmap_ |= 16
@@ -88,6 +92,8 @@ func (b *NodePoolUpgradePolicyBuilder) CreationTimestamp(value time.Time) *NodeP
 }
 
 // EnableMinorVersionUpgrades sets the value of the 'enable_minor_version_upgrades' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) EnableMinorVersionUpgrades(value bool) *NodePoolUpgradePolicyBuilder {
 	b.enableMinorVersionUpgrades = value
 	b.bitmap_ |= 32
@@ -95,6 +101,8 @@ func (b *NodePoolUpgradePolicyBuilder) EnableMinorVersionUpgrades(value bool) *N
 }
 
 // LastUpdateTimestamp sets the value of the 'last_update_timestamp' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) LastUpdateTimestamp(value time.Time) *NodePoolUpgradePolicyBuilder {
 	b.lastUpdateTimestamp = value
 	b.bitmap_ |= 64
@@ -102,6 +110,8 @@ func (b *NodePoolUpgradePolicyBuilder) LastUpdateTimestamp(value time.Time) *Nod
 }
 
 // NextRun sets the value of the 'next_run' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) NextRun(value time.Time) *NodePoolUpgradePolicyBuilder {
 	b.nextRun = value
 	b.bitmap_ |= 128
@@ -109,6 +119,8 @@ func (b *NodePoolUpgradePolicyBuilder) NextRun(value time.Time) *NodePoolUpgrade
 }
 
 // NodePoolID sets the value of the 'node_pool_ID' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) NodePoolID(value string) *NodePoolUpgradePolicyBuilder {
 	b.nodePoolID = value
 	b.bitmap_ |= 256
@@ -116,6 +128,8 @@ func (b *NodePoolUpgradePolicyBuilder) NodePoolID(value string) *NodePoolUpgrade
 }
 
 // Schedule sets the value of the 'schedule' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) Schedule(value string) *NodePoolUpgradePolicyBuilder {
 	b.schedule = value
 	b.bitmap_ |= 512
@@ -154,6 +168,8 @@ func (b *NodePoolUpgradePolicyBuilder) UpgradeType(value UpgradeType) *NodePoolU
 }
 
 // Version sets the value of the 'version' attribute to the given value.
+//
+//
 func (b *NodePoolUpgradePolicyBuilder) Version(value string) *NodePoolUpgradePolicyBuilder {
 	b.version = value
 	b.bitmap_ |= 8192

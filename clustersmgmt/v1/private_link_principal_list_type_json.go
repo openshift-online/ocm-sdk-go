@@ -63,7 +63,7 @@ func UnmarshalPrivateLinkPrincipalList(source interface{}) (items []*PrivateLink
 	return
 }
 
-// readPrivateLinkPrincipalList reads list of values of the ”private_link_principal' type from
+// readPrivateLinkPrincipalList reads list of values of the ''private_link_principal' type from
 // the given iterator.
 func readPrivateLinkPrincipalList(iterator *jsoniter.Iterator) []*PrivateLinkPrincipal {
 	list := []*PrivateLinkPrincipal{}

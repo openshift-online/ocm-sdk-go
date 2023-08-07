@@ -41,6 +41,8 @@ func (b *CredentialRequestBuilder) Empty() bool {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *CredentialRequestBuilder) Name(value string) *CredentialRequestBuilder {
 	b.name = value
 	b.bitmap_ |= 1
@@ -48,6 +50,8 @@ func (b *CredentialRequestBuilder) Name(value string) *CredentialRequestBuilder 
 }
 
 // Namespace sets the value of the 'namespace' attribute to the given value.
+//
+//
 func (b *CredentialRequestBuilder) Namespace(value string) *CredentialRequestBuilder {
 	b.namespace = value
 	b.bitmap_ |= 2
@@ -55,6 +59,8 @@ func (b *CredentialRequestBuilder) Namespace(value string) *CredentialRequestBui
 }
 
 // PolicyPermissions sets the value of the 'policy_permissions' attribute to the given values.
+//
+//
 func (b *CredentialRequestBuilder) PolicyPermissions(values ...string) *CredentialRequestBuilder {
 	b.policyPermissions = make([]string, len(values))
 	copy(b.policyPermissions, values)
@@ -63,6 +69,8 @@ func (b *CredentialRequestBuilder) PolicyPermissions(values ...string) *Credenti
 }
 
 // ServiceAccount sets the value of the 'service_account' attribute to the given value.
+//
+//
 func (b *CredentialRequestBuilder) ServiceAccount(value string) *CredentialRequestBuilder {
 	b.serviceAccount = value
 	b.bitmap_ |= 8

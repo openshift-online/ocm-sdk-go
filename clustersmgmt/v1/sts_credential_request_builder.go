@@ -39,6 +39,8 @@ func (b *STSCredentialRequestBuilder) Empty() bool {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *STSCredentialRequestBuilder) Name(value string) *STSCredentialRequestBuilder {
 	b.name = value
 	b.bitmap_ |= 1

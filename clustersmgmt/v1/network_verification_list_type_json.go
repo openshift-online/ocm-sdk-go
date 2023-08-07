@@ -63,7 +63,7 @@ func UnmarshalNetworkVerificationList(source interface{}) (items []*NetworkVerif
 	return
 }
 
-// readNetworkVerificationList reads list of values of the ”network_verification' type from
+// readNetworkVerificationList reads list of values of the ''network_verification' type from
 // the given iterator.
 func readNetworkVerificationList(iterator *jsoniter.Iterator) []*NetworkVerification {
 	list := []*NetworkVerification{}

@@ -70,6 +70,8 @@ func (b *UserBuilder) Empty() bool {
 }
 
 // CreatedAt sets the value of the 'created_at' attribute to the given value.
+//
+//
 func (b *UserBuilder) CreatedAt(value time.Time) *UserBuilder {
 	b.createdAt = value
 	b.bitmap_ |= 8
@@ -77,6 +79,8 @@ func (b *UserBuilder) CreatedAt(value time.Time) *UserBuilder {
 }
 
 // DeletedAt sets the value of the 'deleted_at' attribute to the given value.
+//
+//
 func (b *UserBuilder) DeletedAt(value time.Time) *UserBuilder {
 	b.deletedAt = value
 	b.bitmap_ |= 16
@@ -84,6 +88,8 @@ func (b *UserBuilder) DeletedAt(value time.Time) *UserBuilder {
 }
 
 // Email sets the value of the 'email' attribute to the given value.
+//
+//
 func (b *UserBuilder) Email(value string) *UserBuilder {
 	b.email = value
 	b.bitmap_ |= 32
@@ -91,6 +97,8 @@ func (b *UserBuilder) Email(value string) *UserBuilder {
 }
 
 // FromAuth sets the value of the 'from_auth' attribute to the given value.
+//
+//
 func (b *UserBuilder) FromAuth(value bool) *UserBuilder {
 	b.fromAuth = value
 	b.bitmap_ |= 64
@@ -98,6 +106,8 @@ func (b *UserBuilder) FromAuth(value bool) *UserBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *UserBuilder) Name(value string) *UserBuilder {
 	b.name = value
 	b.bitmap_ |= 128
@@ -105,6 +115,8 @@ func (b *UserBuilder) Name(value string) *UserBuilder {
 }
 
 // UpdatedAt sets the value of the 'updated_at' attribute to the given value.
+//
+//
 func (b *UserBuilder) UpdatedAt(value time.Time) *UserBuilder {
 	b.updatedAt = value
 	b.bitmap_ |= 256
@@ -112,6 +124,8 @@ func (b *UserBuilder) UpdatedAt(value time.Time) *UserBuilder {
 }
 
 // Username sets the value of the 'username' attribute to the given value.
+//
+//
 func (b *UserBuilder) Username(value string) *UserBuilder {
 	b.username = value
 	b.bitmap_ |= 512

@@ -93,6 +93,8 @@ func (b *DNSDomainBuilder) Organization(value *OrganizationLinkBuilder) *DNSDoma
 }
 
 // ReservedAtTimestamp sets the value of the 'reserved_at_timestamp' attribute to the given value.
+//
+//
 func (b *DNSDomainBuilder) ReservedAtTimestamp(value time.Time) *DNSDomainBuilder {
 	b.reservedAtTimestamp = value
 	b.bitmap_ |= 32
@@ -100,6 +102,8 @@ func (b *DNSDomainBuilder) ReservedAtTimestamp(value time.Time) *DNSDomainBuilde
 }
 
 // UserDefined sets the value of the 'user_defined' attribute to the given value.
+//
+//
 func (b *DNSDomainBuilder) UserDefined(value bool) *DNSDomainBuilder {
 	b.userDefined = value
 	b.bitmap_ |= 64

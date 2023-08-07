@@ -63,7 +63,7 @@ func UnmarshalLabelReferenceList(source interface{}) (items []*LabelReference, e
 	return
 }
 
-// readLabelReferenceList reads list of values of the ”label_reference' type from
+// readLabelReferenceList reads list of values of the ''label_reference' type from
 // the given iterator.
 func readLabelReferenceList(iterator *jsoniter.Iterator) []*LabelReference {
 	list := []*LabelReference{}

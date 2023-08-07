@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // AutoscalerResourceLimitsBuilder contains the data and logic needed to build 'autoscaler_resource_limits' objects.
+//
+//
 type AutoscalerResourceLimitsBuilder struct {
 	bitmap_       uint32
 	cores         *ResourceRangeBuilder
@@ -38,6 +40,8 @@ func (b *AutoscalerResourceLimitsBuilder) Empty() bool {
 }
 
 // Cores sets the value of the 'cores' attribute to the given value.
+//
+//
 func (b *AutoscalerResourceLimitsBuilder) Cores(value *ResourceRangeBuilder) *AutoscalerResourceLimitsBuilder {
 	b.cores = value
 	if value != nil {
@@ -49,6 +53,8 @@ func (b *AutoscalerResourceLimitsBuilder) Cores(value *ResourceRangeBuilder) *Au
 }
 
 // MaxNodesTotal sets the value of the 'max_nodes_total' attribute to the given value.
+//
+//
 func (b *AutoscalerResourceLimitsBuilder) MaxNodesTotal(value int) *AutoscalerResourceLimitsBuilder {
 	b.maxNodesTotal = value
 	b.bitmap_ |= 2
@@ -56,6 +62,8 @@ func (b *AutoscalerResourceLimitsBuilder) MaxNodesTotal(value int) *AutoscalerRe
 }
 
 // Memory sets the value of the 'memory' attribute to the given value.
+//
+//
 func (b *AutoscalerResourceLimitsBuilder) Memory(value *ResourceRangeBuilder) *AutoscalerResourceLimitsBuilder {
 	b.memory = value
 	if value != nil {

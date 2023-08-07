@@ -63,7 +63,7 @@ func UnmarshalLoadBalancerFlavorList(source interface{}) (items []LoadBalancerFl
 	return
 }
 
-// readLoadBalancerFlavorList reads list of values of the ”load_balancer_flavor' type from
+// readLoadBalancerFlavorList reads list of values of the ''load_balancer_flavor' type from
 // the given iterator.
 func readLoadBalancerFlavorList(iterator *jsoniter.Iterator) []LoadBalancerFlavor {
 	list := []LoadBalancerFlavor{}

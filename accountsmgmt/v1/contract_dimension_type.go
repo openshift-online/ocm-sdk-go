@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 // ContractDimension represents the values of the 'contract_dimension' type.
+//
+//
 type ContractDimension struct {
 	bitmap_ uint32
 	name    string
@@ -33,6 +35,8 @@ func (o *ContractDimension) Empty() bool {
 
 // Name returns the value of the 'name' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *ContractDimension) Name() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.name
@@ -42,6 +46,8 @@ func (o *ContractDimension) Name() string {
 
 // GetName returns the value of the 'name' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *ContractDimension) GetName() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -52,6 +58,8 @@ func (o *ContractDimension) GetName() (value string, ok bool) {
 
 // Value returns the value of the 'value' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *ContractDimension) Value() string {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.value
@@ -61,6 +69,8 @@ func (o *ContractDimension) Value() string {
 
 // GetValue returns the value of the 'value' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *ContractDimension) GetValue() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {

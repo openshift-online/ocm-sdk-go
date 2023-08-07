@@ -179,12 +179,16 @@ func (r *DNSDomainPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *DNSDomainPollResponse) Body() *DNSDomain {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *DNSDomainPollResponse) GetBody() (value *DNSDomain, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *DNSDomainGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *DNSDomainGetResponse) Body() *DNSDomain {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *DNSDomainGetResponse) Body() *DNSDomain {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *DNSDomainGetResponse) GetBody() (value *DNSDomain, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *DNSDomainUpdateRequest) Impersonate(user string) *DNSDomainUpdateReques
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *DNSDomainUpdateRequest) Body(value *DNSDomain) *DNSDomainUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *DNSDomainUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *DNSDomainUpdateResponse) Body() *DNSDomain {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *DNSDomainUpdateResponse) Body() *DNSDomain {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *DNSDomainUpdateResponse) GetBody() (value *DNSDomain, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

@@ -179,12 +179,16 @@ func (r *LabelPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *LabelPollResponse) Body() *Label {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *LabelPollResponse) GetBody() (value *Label, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *LabelGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *LabelGetResponse) Body() *Label {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *LabelGetResponse) Body() *Label {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *LabelGetResponse) GetBody() (value *Label, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *LabelPostRequest) Impersonate(user string) *LabelPostRequest {
 }
 
 // Request sets the value of the 'request' parameter.
+//
+//
 func (r *LabelPostRequest) Request(value *LabelRequestPayload) *LabelPostRequest {
 	r.request = value
 	return r
@@ -560,6 +570,8 @@ func (r *LabelPostResponse) Error() *errors.Error {
 }
 
 // Response returns the value of the 'response' parameter.
+//
+//
 func (r *LabelPostResponse) Response() *Label {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *LabelPostResponse) Response() *Label {
 
 // GetResponse returns the value of the 'response' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *LabelPostResponse) GetResponse() (value *Label, ok bool) {
 	ok = r != nil && r.response != nil
 	if ok {

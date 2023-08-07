@@ -63,7 +63,7 @@ func UnmarshalDeleteProtectionList(source interface{}) (items []*DeleteProtectio
 	return
 }
 
-// readDeleteProtectionList reads list of values of the ”delete_protection' type from
+// readDeleteProtectionList reads list of values of the ''delete_protection' type from
 // the given iterator.
 func readDeleteProtectionList(iterator *jsoniter.Iterator) []*DeleteProtection {
 	list := []*DeleteProtection{}

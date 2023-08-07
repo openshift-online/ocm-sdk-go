@@ -63,7 +63,7 @@ func UnmarshalNodePoolUpgradePolicyList(source interface{}) (items []*NodePoolUp
 	return
 }
 
-// readNodePoolUpgradePolicyList reads list of values of the ”node_pool_upgrade_policy' type from
+// readNodePoolUpgradePolicyList reads list of values of the ''node_pool_upgrade_policy' type from
 // the given iterator.
 func readNodePoolUpgradePolicyList(iterator *jsoniter.Iterator) []*NodePoolUpgradePolicy {
 	list := []*NodePoolUpgradePolicy{}

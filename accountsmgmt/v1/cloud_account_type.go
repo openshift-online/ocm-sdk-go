@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 // CloudAccount represents the values of the 'cloud_account' type.
+//
+//
 type CloudAccount struct {
 	bitmap_         uint32
 	cloudAccountID  string
@@ -34,6 +36,8 @@ func (o *CloudAccount) Empty() bool {
 
 // CloudAccountID returns the value of the 'cloud_account_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *CloudAccount) CloudAccountID() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.cloudAccountID
@@ -43,6 +47,8 @@ func (o *CloudAccount) CloudAccountID() string {
 
 // GetCloudAccountID returns the value of the 'cloud_account_ID' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *CloudAccount) GetCloudAccountID() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -53,6 +59,8 @@ func (o *CloudAccount) GetCloudAccountID() (value string, ok bool) {
 
 // CloudProviderID returns the value of the 'cloud_provider_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *CloudAccount) CloudProviderID() string {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.cloudProviderID
@@ -62,6 +70,8 @@ func (o *CloudAccount) CloudProviderID() string {
 
 // GetCloudProviderID returns the value of the 'cloud_provider_ID' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *CloudAccount) GetCloudProviderID() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
@@ -72,6 +82,8 @@ func (o *CloudAccount) GetCloudProviderID() (value string, ok bool) {
 
 // Contracts returns the value of the 'contracts' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *CloudAccount) Contracts() []*Contract {
 	if o != nil && o.bitmap_&4 != 0 {
 		return o.contracts
@@ -81,6 +93,8 @@ func (o *CloudAccount) Contracts() []*Contract {
 
 // GetContracts returns the value of the 'contracts' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *CloudAccount) GetContracts() (value []*Contract, ok bool) {
 	ok = o != nil && o.bitmap_&4 != 0
 	if ok {

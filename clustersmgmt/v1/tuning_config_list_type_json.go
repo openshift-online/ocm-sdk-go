@@ -63,7 +63,7 @@ func UnmarshalTuningConfigList(source interface{}) (items []*TuningConfig, err e
 	return
 }
 
-// readTuningConfigList reads list of values of the ”tuning_config' type from
+// readTuningConfigList reads list of values of the ''tuning_config' type from
 // the given iterator.
 func readTuningConfigList(iterator *jsoniter.Iterator) []*TuningConfig {
 	list := []*TuningConfig{}

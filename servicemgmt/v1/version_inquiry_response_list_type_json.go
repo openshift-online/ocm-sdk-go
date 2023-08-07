@@ -63,7 +63,7 @@ func UnmarshalVersionInquiryResponseList(source interface{}) (items []*VersionIn
 	return
 }
 
-// readVersionInquiryResponseList reads list of values of the ”version_inquiry_response' type from
+// readVersionInquiryResponseList reads list of values of the ''version_inquiry_response' type from
 // the given iterator.
 func readVersionInquiryResponseList(iterator *jsoniter.Iterator) []*VersionInquiryResponse {
 	list := []*VersionInquiryResponse{}

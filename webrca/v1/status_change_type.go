@@ -154,6 +154,8 @@ func (o *StatusChange) GetDeletedAt() (value time.Time, ok bool) {
 
 // Status returns the value of the 'status' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *StatusChange) Status() interface{} {
 	if o != nil && o.bitmap_&32 != 0 {
 		return o.status
@@ -163,6 +165,8 @@ func (o *StatusChange) Status() interface{} {
 
 // GetStatus returns the value of the 'status' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *StatusChange) GetStatus() (value interface{}, ok bool) {
 	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
@@ -173,6 +177,8 @@ func (o *StatusChange) GetStatus() (value interface{}, ok bool) {
 
 // StatusId returns the value of the 'status_id' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *StatusChange) StatusId() string {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.statusId
@@ -182,6 +188,8 @@ func (o *StatusChange) StatusId() string {
 
 // GetStatusId returns the value of the 'status_id' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *StatusChange) GetStatusId() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {

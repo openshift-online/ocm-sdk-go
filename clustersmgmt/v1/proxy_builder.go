@@ -40,6 +40,8 @@ func (b *ProxyBuilder) Empty() bool {
 }
 
 // HTTPProxy sets the value of the 'HTTP_proxy' attribute to the given value.
+//
+//
 func (b *ProxyBuilder) HTTPProxy(value string) *ProxyBuilder {
 	b.httpProxy = value
 	b.bitmap_ |= 1
@@ -47,6 +49,8 @@ func (b *ProxyBuilder) HTTPProxy(value string) *ProxyBuilder {
 }
 
 // HTTPSProxy sets the value of the 'HTTPS_proxy' attribute to the given value.
+//
+//
 func (b *ProxyBuilder) HTTPSProxy(value string) *ProxyBuilder {
 	b.httpsProxy = value
 	b.bitmap_ |= 2
@@ -54,6 +58,8 @@ func (b *ProxyBuilder) HTTPSProxy(value string) *ProxyBuilder {
 }
 
 // NoProxy sets the value of the 'no_proxy' attribute to the given value.
+//
+//
 func (b *ProxyBuilder) NoProxy(value string) *ProxyBuilder {
 	b.noProxy = value
 	b.bitmap_ |= 4

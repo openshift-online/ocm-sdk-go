@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // SubnetNetworkVerificationBuilder contains the data and logic needed to build 'subnet_network_verification' objects.
+//
+//
 type SubnetNetworkVerificationBuilder struct {
 	bitmap_ uint32
 	id      string
@@ -59,6 +61,8 @@ func (b *SubnetNetworkVerificationBuilder) Empty() bool {
 }
 
 // Details sets the value of the 'details' attribute to the given values.
+//
+//
 func (b *SubnetNetworkVerificationBuilder) Details(values ...string) *SubnetNetworkVerificationBuilder {
 	b.details = make([]string, len(values))
 	copy(b.details, values)
@@ -67,6 +71,8 @@ func (b *SubnetNetworkVerificationBuilder) Details(values ...string) *SubnetNetw
 }
 
 // State sets the value of the 'state' attribute to the given value.
+//
+//
 func (b *SubnetNetworkVerificationBuilder) State(value string) *SubnetNetworkVerificationBuilder {
 	b.state = value
 	b.bitmap_ |= 16

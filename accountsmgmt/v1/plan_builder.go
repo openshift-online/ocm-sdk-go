@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 // PlanBuilder contains the data and logic needed to build 'plan' objects.
+//
+//
 type PlanBuilder struct {
 	bitmap_  uint32
 	id       string
@@ -60,6 +62,8 @@ func (b *PlanBuilder) Empty() bool {
 }
 
 // Category sets the value of the 'category' attribute to the given value.
+//
+//
 func (b *PlanBuilder) Category(value string) *PlanBuilder {
 	b.category = value
 	b.bitmap_ |= 8
@@ -67,6 +71,8 @@ func (b *PlanBuilder) Category(value string) *PlanBuilder {
 }
 
 // Name sets the value of the 'name' attribute to the given value.
+//
+//
 func (b *PlanBuilder) Name(value string) *PlanBuilder {
 	b.name = value
 	b.bitmap_ |= 16
@@ -74,6 +80,8 @@ func (b *PlanBuilder) Name(value string) *PlanBuilder {
 }
 
 // Type sets the value of the 'type' attribute to the given value.
+//
+//
 func (b *PlanBuilder) Type(value string) *PlanBuilder {
 	b.type_ = value
 	b.bitmap_ |= 32

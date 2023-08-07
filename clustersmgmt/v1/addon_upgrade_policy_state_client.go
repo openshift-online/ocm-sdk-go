@@ -169,12 +169,16 @@ func (r *AddonUpgradePolicyStatePollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyStatePollResponse) Body() *AddonUpgradePolicyState {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonUpgradePolicyStatePollResponse) GetBody() (value *AddonUpgradePolicyState, ok bool) {
 	return r.response.GetBody()
 }
@@ -300,6 +304,8 @@ func (r *AddonUpgradePolicyStateGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyStateGetResponse) Body() *AddonUpgradePolicyState {
 	if r == nil {
 		return nil
@@ -309,6 +315,8 @@ func (r *AddonUpgradePolicyStateGetResponse) Body() *AddonUpgradePolicyState {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonUpgradePolicyStateGetResponse) GetBody() (value *AddonUpgradePolicyState, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -346,6 +354,8 @@ func (r *AddonUpgradePolicyStateUpdateRequest) Impersonate(user string) *AddonUp
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyStateUpdateRequest) Body(value *AddonUpgradePolicyState) *AddonUpgradePolicyStateUpdateRequest {
 	r.body = value
 	return r
@@ -443,6 +453,8 @@ func (r *AddonUpgradePolicyStateUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyStateUpdateResponse) Body() *AddonUpgradePolicyState {
 	if r == nil {
 		return nil
@@ -452,6 +464,8 @@ func (r *AddonUpgradePolicyStateUpdateResponse) Body() *AddonUpgradePolicyState 
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonUpgradePolicyStateUpdateResponse) GetBody() (value *AddonUpgradePolicyState, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

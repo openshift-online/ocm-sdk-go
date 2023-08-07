@@ -65,6 +65,8 @@ func (b *ClusterAutoscalerBuilder) Empty() bool {
 }
 
 // BalanceSimilarNodeGroups sets the value of the 'balance_similar_node_groups' attribute to the given value.
+//
+//
 func (b *ClusterAutoscalerBuilder) BalanceSimilarNodeGroups(value bool) *ClusterAutoscalerBuilder {
 	b.balanceSimilarNodeGroups = value
 	b.bitmap_ |= 8
@@ -72,6 +74,8 @@ func (b *ClusterAutoscalerBuilder) BalanceSimilarNodeGroups(value bool) *Cluster
 }
 
 // LogVerbosity sets the value of the 'log_verbosity' attribute to the given value.
+//
+//
 func (b *ClusterAutoscalerBuilder) LogVerbosity(value int) *ClusterAutoscalerBuilder {
 	b.logVerbosity = value
 	b.bitmap_ |= 16
@@ -79,6 +83,8 @@ func (b *ClusterAutoscalerBuilder) LogVerbosity(value int) *ClusterAutoscalerBui
 }
 
 // MaxPodGracePeriod sets the value of the 'max_pod_grace_period' attribute to the given value.
+//
+//
 func (b *ClusterAutoscalerBuilder) MaxPodGracePeriod(value int) *ClusterAutoscalerBuilder {
 	b.maxPodGracePeriod = value
 	b.bitmap_ |= 32
@@ -86,6 +92,8 @@ func (b *ClusterAutoscalerBuilder) MaxPodGracePeriod(value int) *ClusterAutoscal
 }
 
 // ResourceLimits sets the value of the 'resource_limits' attribute to the given value.
+//
+//
 func (b *ClusterAutoscalerBuilder) ResourceLimits(value *AutoscalerResourceLimitsBuilder) *ClusterAutoscalerBuilder {
 	b.resourceLimits = value
 	if value != nil {
@@ -97,6 +105,8 @@ func (b *ClusterAutoscalerBuilder) ResourceLimits(value *AutoscalerResourceLimit
 }
 
 // ScaleDown sets the value of the 'scale_down' attribute to the given value.
+//
+//
 func (b *ClusterAutoscalerBuilder) ScaleDown(value *AutoscalerScaleDownConfigBuilder) *ClusterAutoscalerBuilder {
 	b.scaleDown = value
 	if value != nil {
@@ -108,6 +118,8 @@ func (b *ClusterAutoscalerBuilder) ScaleDown(value *AutoscalerScaleDownConfigBui
 }
 
 // SkipNodesWithLocalStorage sets the value of the 'skip_nodes_with_local_storage' attribute to the given value.
+//
+//
 func (b *ClusterAutoscalerBuilder) SkipNodesWithLocalStorage(value bool) *ClusterAutoscalerBuilder {
 	b.skipNodesWithLocalStorage = value
 	b.bitmap_ |= 256

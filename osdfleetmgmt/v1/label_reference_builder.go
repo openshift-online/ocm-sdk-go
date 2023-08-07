@@ -39,6 +39,8 @@ func (b *LabelReferenceBuilder) Empty() bool {
 }
 
 // Href sets the value of the 'href' attribute to the given value.
+//
+//
 func (b *LabelReferenceBuilder) Href(value string) *LabelReferenceBuilder {
 	b.href = value
 	b.bitmap_ |= 1
@@ -46,6 +48,8 @@ func (b *LabelReferenceBuilder) Href(value string) *LabelReferenceBuilder {
 }
 
 // Id sets the value of the 'id' attribute to the given value.
+//
+//
 func (b *LabelReferenceBuilder) Id(value string) *LabelReferenceBuilder {
 	b.id = value
 	b.bitmap_ |= 2

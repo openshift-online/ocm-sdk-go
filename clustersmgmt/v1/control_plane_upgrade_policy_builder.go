@@ -73,6 +73,8 @@ func (b *ControlPlaneUpgradePolicyBuilder) Empty() bool {
 }
 
 // ClusterID sets the value of the 'cluster_ID' attribute to the given value.
+//
+//
 func (b *ControlPlaneUpgradePolicyBuilder) ClusterID(value string) *ControlPlaneUpgradePolicyBuilder {
 	b.clusterID = value
 	b.bitmap_ |= 8
@@ -80,6 +82,8 @@ func (b *ControlPlaneUpgradePolicyBuilder) ClusterID(value string) *ControlPlane
 }
 
 // CreationTimestamp sets the value of the 'creation_timestamp' attribute to the given value.
+//
+//
 func (b *ControlPlaneUpgradePolicyBuilder) CreationTimestamp(value time.Time) *ControlPlaneUpgradePolicyBuilder {
 	b.creationTimestamp = value
 	b.bitmap_ |= 16
@@ -87,6 +91,8 @@ func (b *ControlPlaneUpgradePolicyBuilder) CreationTimestamp(value time.Time) *C
 }
 
 // EnableMinorVersionUpgrades sets the value of the 'enable_minor_version_upgrades' attribute to the given value.
+//
+//
 func (b *ControlPlaneUpgradePolicyBuilder) EnableMinorVersionUpgrades(value bool) *ControlPlaneUpgradePolicyBuilder {
 	b.enableMinorVersionUpgrades = value
 	b.bitmap_ |= 32
@@ -94,6 +100,8 @@ func (b *ControlPlaneUpgradePolicyBuilder) EnableMinorVersionUpgrades(value bool
 }
 
 // LastUpdateTimestamp sets the value of the 'last_update_timestamp' attribute to the given value.
+//
+//
 func (b *ControlPlaneUpgradePolicyBuilder) LastUpdateTimestamp(value time.Time) *ControlPlaneUpgradePolicyBuilder {
 	b.lastUpdateTimestamp = value
 	b.bitmap_ |= 64
@@ -101,6 +109,8 @@ func (b *ControlPlaneUpgradePolicyBuilder) LastUpdateTimestamp(value time.Time) 
 }
 
 // NextRun sets the value of the 'next_run' attribute to the given value.
+//
+//
 func (b *ControlPlaneUpgradePolicyBuilder) NextRun(value time.Time) *ControlPlaneUpgradePolicyBuilder {
 	b.nextRun = value
 	b.bitmap_ |= 128
@@ -108,6 +118,8 @@ func (b *ControlPlaneUpgradePolicyBuilder) NextRun(value time.Time) *ControlPlan
 }
 
 // Schedule sets the value of the 'schedule' attribute to the given value.
+//
+//
 func (b *ControlPlaneUpgradePolicyBuilder) Schedule(value string) *ControlPlaneUpgradePolicyBuilder {
 	b.schedule = value
 	b.bitmap_ |= 256
@@ -146,6 +158,8 @@ func (b *ControlPlaneUpgradePolicyBuilder) UpgradeType(value UpgradeType) *Contr
 }
 
 // Version sets the value of the 'version' attribute to the given value.
+//
+//
 func (b *ControlPlaneUpgradePolicyBuilder) Version(value string) *ControlPlaneUpgradePolicyBuilder {
 	b.version = value
 	b.bitmap_ |= 4096

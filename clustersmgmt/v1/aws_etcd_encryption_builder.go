@@ -38,6 +38,8 @@ func (b *AwsEtcdEncryptionBuilder) Empty() bool {
 }
 
 // KMSKeyARN sets the value of the 'KMS_key_ARN' attribute to the given value.
+//
+//
 func (b *AwsEtcdEncryptionBuilder) KMSKeyARN(value string) *AwsEtcdEncryptionBuilder {
 	b.kmsKeyARN = value
 	b.bitmap_ |= 1

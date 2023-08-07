@@ -155,6 +155,8 @@ func (o *Handoff) GetDeletedAt() (value time.Time, ok bool) {
 
 // HandoffFrom returns the value of the 'handoff_from' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Handoff) HandoffFrom() *User {
 	if o != nil && o.bitmap_&32 != 0 {
 		return o.handoffFrom
@@ -164,6 +166,8 @@ func (o *Handoff) HandoffFrom() *User {
 
 // GetHandoffFrom returns the value of the 'handoff_from' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Handoff) GetHandoffFrom() (value *User, ok bool) {
 	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
@@ -174,6 +178,8 @@ func (o *Handoff) GetHandoffFrom() (value *User, ok bool) {
 
 // HandoffTo returns the value of the 'handoff_to' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Handoff) HandoffTo() *User {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.handoffTo
@@ -183,6 +189,8 @@ func (o *Handoff) HandoffTo() *User {
 
 // GetHandoffTo returns the value of the 'handoff_to' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Handoff) GetHandoffTo() (value *User, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
@@ -193,6 +201,8 @@ func (o *Handoff) GetHandoffTo() (value *User, ok bool) {
 
 // HandoffType returns the value of the 'handoff_type' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *Handoff) HandoffType() string {
 	if o != nil && o.bitmap_&128 != 0 {
 		return o.handoffType
@@ -202,6 +212,8 @@ func (o *Handoff) HandoffType() string {
 
 // GetHandoffType returns the value of the 'handoff_type' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *Handoff) GetHandoffType() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&128 != 0
 	if ok {

@@ -63,7 +63,7 @@ func UnmarshalDNSDomainList(source interface{}) (items []*DNSDomain, err error) 
 	return
 }
 
-// readDNSDomainList reads list of values of the ”DNS_domain' type from
+// readDNSDomainList reads list of values of the ''DNS_domain' type from
 // the given iterator.
 func readDNSDomainList(iterator *jsoniter.Iterator) []*DNSDomain {
 	list := []*DNSDomain{}

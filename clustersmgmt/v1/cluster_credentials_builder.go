@@ -60,6 +60,8 @@ func (b *ClusterCredentialsBuilder) Empty() bool {
 }
 
 // Kubeconfig sets the value of the 'kubeconfig' attribute to the given value.
+//
+//
 func (b *ClusterCredentialsBuilder) Kubeconfig(value string) *ClusterCredentialsBuilder {
 	b.kubeconfig = value
 	b.bitmap_ |= 8

@@ -63,7 +63,7 @@ func UnmarshalWildcardPolicyList(source interface{}) (items []WildcardPolicy, er
 	return
 }
 
-// readWildcardPolicyList reads list of values of the ”wildcard_policy' type from
+// readWildcardPolicyList reads list of values of the ''wildcard_policy' type from
 // the given iterator.
 func readWildcardPolicyList(iterator *jsoniter.Iterator) []WildcardPolicy {
 	list := []WildcardPolicy{}

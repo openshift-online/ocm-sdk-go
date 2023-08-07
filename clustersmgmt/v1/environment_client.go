@@ -174,12 +174,16 @@ func (r *EnvironmentPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *EnvironmentPollResponse) Body() *Environment {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *EnvironmentPollResponse) GetBody() (value *Environment, ok bool) {
 	return r.response.GetBody()
 }
@@ -305,6 +309,8 @@ func (r *EnvironmentGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *EnvironmentGetResponse) Body() *Environment {
 	if r == nil {
 		return nil
@@ -314,6 +320,8 @@ func (r *EnvironmentGetResponse) Body() *Environment {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *EnvironmentGetResponse) GetBody() (value *Environment, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -351,6 +359,8 @@ func (r *EnvironmentUpdateRequest) Impersonate(user string) *EnvironmentUpdateRe
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *EnvironmentUpdateRequest) Body(value *Environment) *EnvironmentUpdateRequest {
 	r.body = value
 	return r
@@ -448,6 +458,8 @@ func (r *EnvironmentUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *EnvironmentUpdateResponse) Body() *Environment {
 	if r == nil {
 		return nil
@@ -457,6 +469,8 @@ func (r *EnvironmentUpdateResponse) Body() *Environment {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *EnvironmentUpdateResponse) GetBody() (value *Environment, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // HTPasswdUserBuilder contains the data and logic needed to build 'HT_passwd_user' objects.
+//
+//
 type HTPasswdUserBuilder struct {
 	bitmap_        uint32
 	id             string
@@ -39,6 +41,8 @@ func (b *HTPasswdUserBuilder) Empty() bool {
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
+//
+//
 func (b *HTPasswdUserBuilder) ID(value string) *HTPasswdUserBuilder {
 	b.id = value
 	b.bitmap_ |= 1
@@ -46,6 +50,8 @@ func (b *HTPasswdUserBuilder) ID(value string) *HTPasswdUserBuilder {
 }
 
 // HashedPassword sets the value of the 'hashed_password' attribute to the given value.
+//
+//
 func (b *HTPasswdUserBuilder) HashedPassword(value string) *HTPasswdUserBuilder {
 	b.hashedPassword = value
 	b.bitmap_ |= 2
@@ -53,6 +59,8 @@ func (b *HTPasswdUserBuilder) HashedPassword(value string) *HTPasswdUserBuilder 
 }
 
 // Password sets the value of the 'password' attribute to the given value.
+//
+//
 func (b *HTPasswdUserBuilder) Password(value string) *HTPasswdUserBuilder {
 	b.password = value
 	b.bitmap_ |= 4
@@ -60,6 +68,8 @@ func (b *HTPasswdUserBuilder) Password(value string) *HTPasswdUserBuilder {
 }
 
 // Username sets the value of the 'username' attribute to the given value.
+//
+//
 func (b *HTPasswdUserBuilder) Username(value string) *HTPasswdUserBuilder {
 	b.username = value
 	b.bitmap_ |= 8

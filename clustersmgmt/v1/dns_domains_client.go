@@ -61,6 +61,8 @@ func (c *DNSDomainsClient) Add() *DNSDomainsAddRequest {
 }
 
 // List creates a request for the 'list' method.
+//
+//
 func (c *DNSDomainsClient) List() *DNSDomainsListRequest {
 	return &DNSDomainsListRequest{
 		transport: c.transport,

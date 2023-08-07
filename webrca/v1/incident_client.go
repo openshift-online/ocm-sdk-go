@@ -52,6 +52,8 @@ func NewIncidentClient(transport http.RoundTripper, path string) *IncidentClient
 }
 
 // Delete creates a request for the 'delete' method.
+//
+//
 func (c *IncidentClient) Delete() *IncidentDeleteRequest {
 	return &IncidentDeleteRequest{
 		transport: c.transport,
@@ -60,6 +62,8 @@ func (c *IncidentClient) Delete() *IncidentDeleteRequest {
 }
 
 // Get creates a request for the 'get' method.
+//
+//
 func (c *IncidentClient) Get() *IncidentGetRequest {
 	return &IncidentGetRequest{
 		transport: c.transport,
@@ -68,6 +72,8 @@ func (c *IncidentClient) Get() *IncidentGetRequest {
 }
 
 // Update creates a request for the 'update' method.
+//
+//
 func (c *IncidentClient) Update() *IncidentUpdateRequest {
 	return &IncidentUpdateRequest{
 		transport: c.transport,
@@ -76,6 +82,8 @@ func (c *IncidentClient) Update() *IncidentUpdateRequest {
 }
 
 // Events returns the target 'events' resource.
+//
+//
 func (c *IncidentClient) Events() *EventsClient {
 	return NewEventsClient(
 		c.transport,
@@ -84,6 +92,8 @@ func (c *IncidentClient) Events() *EventsClient {
 }
 
 // FollowUps returns the target 'follow_ups' resource.
+//
+//
 func (c *IncidentClient) FollowUps() *FollowUpsClient {
 	return NewFollowUpsClient(
 		c.transport,
@@ -92,6 +102,8 @@ func (c *IncidentClient) FollowUps() *FollowUpsClient {
 }
 
 // Notifications returns the target 'notifications' resource.
+//
+//
 func (c *IncidentClient) Notifications() *NotificationsClient {
 	return NewNotificationsClient(
 		c.transport,
@@ -198,12 +210,16 @@ func (r *IncidentPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *IncidentPollResponse) Body() *Incident {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentPollResponse) GetBody() (value *Incident, ok bool) {
 	return r.response.GetBody()
 }
@@ -436,6 +452,8 @@ func (r *IncidentGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *IncidentGetResponse) Body() *Incident {
 	if r == nil {
 		return nil
@@ -445,6 +463,8 @@ func (r *IncidentGetResponse) Body() *Incident {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentGetResponse) GetBody() (value *Incident, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -482,6 +502,8 @@ func (r *IncidentUpdateRequest) Impersonate(user string) *IncidentUpdateRequest 
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *IncidentUpdateRequest) Body(value *Incident) *IncidentUpdateRequest {
 	r.body = value
 	return r
@@ -579,6 +601,8 @@ func (r *IncidentUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *IncidentUpdateResponse) Body() *Incident {
 	if r == nil {
 		return nil
@@ -588,6 +612,8 @@ func (r *IncidentUpdateResponse) Body() *Incident {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *IncidentUpdateResponse) GetBody() (value *Incident, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

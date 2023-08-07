@@ -51,6 +51,8 @@ func NewAddonInquiriesClient(transport http.RoundTripper, path string) *AddonInq
 }
 
 // List creates a request for the 'list' method.
+//
+//
 func (c *AddonInquiriesClient) List() *AddonInquiriesListRequest {
 	return &AddonInquiriesListRequest{
 		transport: c.transport,
@@ -59,6 +61,8 @@ func (c *AddonInquiriesClient) List() *AddonInquiriesListRequest {
 }
 
 // AddonInquiry returns the target 'addon_inquiry' resource for the given identifier.
+//
+//
 func (c *AddonInquiriesClient) AddonInquiry(id string) *AddonInquiryClient {
 	return NewAddonInquiryClient(
 		c.transport,

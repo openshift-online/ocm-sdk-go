@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 // LabelRequestPayloadBuilder contains the data and logic needed to build 'label_request_payload' objects.
+//
+//
 type LabelRequestPayloadBuilder struct {
 	bitmap_ uint32
 	key     string
@@ -37,6 +39,8 @@ func (b *LabelRequestPayloadBuilder) Empty() bool {
 }
 
 // Key sets the value of the 'key' attribute to the given value.
+//
+//
 func (b *LabelRequestPayloadBuilder) Key(value string) *LabelRequestPayloadBuilder {
 	b.key = value
 	b.bitmap_ |= 1
@@ -44,6 +48,8 @@ func (b *LabelRequestPayloadBuilder) Key(value string) *LabelRequestPayloadBuild
 }
 
 // Value sets the value of the 'value' attribute to the given value.
+//
+//
 func (b *LabelRequestPayloadBuilder) Value(value string) *LabelRequestPayloadBuilder {
 	b.value = value
 	b.bitmap_ |= 2

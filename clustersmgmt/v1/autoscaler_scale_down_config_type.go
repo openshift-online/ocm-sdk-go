@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 // AutoscalerScaleDownConfig represents the values of the 'autoscaler_scale_down_config' type.
+//
+//
 type AutoscalerScaleDownConfig struct {
 	bitmap_              uint32
 	delayAfterAdd        string

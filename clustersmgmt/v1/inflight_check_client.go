@@ -158,12 +158,16 @@ func (r *InflightCheckPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *InflightCheckPollResponse) Body() *InflightCheck {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *InflightCheckPollResponse) GetBody() (value *InflightCheck, ok bool) {
 	return r.response.GetBody()
 }
@@ -289,6 +293,8 @@ func (r *InflightCheckGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *InflightCheckGetResponse) Body() *InflightCheck {
 	if r == nil {
 		return nil
@@ -298,6 +304,8 @@ func (r *InflightCheckGetResponse) Body() *InflightCheck {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *InflightCheckGetResponse) GetBody() (value *InflightCheck, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

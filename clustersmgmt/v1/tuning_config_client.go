@@ -179,12 +179,16 @@ func (r *TuningConfigPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *TuningConfigPollResponse) Body() *TuningConfig {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *TuningConfigPollResponse) GetBody() (value *TuningConfig, ok bool) {
 	return r.response.GetBody()
 }
@@ -417,6 +421,8 @@ func (r *TuningConfigGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *TuningConfigGetResponse) Body() *TuningConfig {
 	if r == nil {
 		return nil
@@ -426,6 +432,8 @@ func (r *TuningConfigGetResponse) Body() *TuningConfig {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *TuningConfigGetResponse) GetBody() (value *TuningConfig, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -463,6 +471,8 @@ func (r *TuningConfigUpdateRequest) Impersonate(user string) *TuningConfigUpdate
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *TuningConfigUpdateRequest) Body(value *TuningConfig) *TuningConfigUpdateRequest {
 	r.body = value
 	return r
@@ -560,6 +570,8 @@ func (r *TuningConfigUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *TuningConfigUpdateResponse) Body() *TuningConfig {
 	if r == nil {
 		return nil
@@ -569,6 +581,8 @@ func (r *TuningConfigUpdateResponse) Body() *TuningConfig {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *TuningConfigUpdateResponse) GetBody() (value *TuningConfig, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

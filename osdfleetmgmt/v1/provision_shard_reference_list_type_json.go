@@ -63,7 +63,7 @@ func UnmarshalProvisionShardReferenceList(source interface{}) (items []*Provisio
 	return
 }
 
-// readProvisionShardReferenceList reads list of values of the ”provision_shard_reference' type from
+// readProvisionShardReferenceList reads list of values of the ''provision_shard_reference' type from
 // the given iterator.
 func readProvisionShardReferenceList(iterator *jsoniter.Iterator) []*ProvisionShardReference {
 	list := []*ProvisionShardReference{}

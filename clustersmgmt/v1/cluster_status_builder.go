@@ -68,6 +68,8 @@ func (b *ClusterStatusBuilder) Empty() bool {
 }
 
 // DNSReady sets the value of the 'DNS_ready' attribute to the given value.
+//
+//
 func (b *ClusterStatusBuilder) DNSReady(value bool) *ClusterStatusBuilder {
 	b.dnsReady = value
 	b.bitmap_ |= 8
@@ -75,6 +77,8 @@ func (b *ClusterStatusBuilder) DNSReady(value bool) *ClusterStatusBuilder {
 }
 
 // OIDCReady sets the value of the 'OIDC_ready' attribute to the given value.
+//
+//
 func (b *ClusterStatusBuilder) OIDCReady(value bool) *ClusterStatusBuilder {
 	b.oidcReady = value
 	b.bitmap_ |= 16
@@ -91,6 +95,8 @@ func (b *ClusterStatusBuilder) ConfigurationMode(value ClusterConfigurationMode)
 }
 
 // CurrentCompute sets the value of the 'current_compute' attribute to the given value.
+//
+//
 func (b *ClusterStatusBuilder) CurrentCompute(value int) *ClusterStatusBuilder {
 	b.currentCompute = value
 	b.bitmap_ |= 64
@@ -98,6 +104,8 @@ func (b *ClusterStatusBuilder) CurrentCompute(value int) *ClusterStatusBuilder {
 }
 
 // Description sets the value of the 'description' attribute to the given value.
+//
+//
 func (b *ClusterStatusBuilder) Description(value string) *ClusterStatusBuilder {
 	b.description = value
 	b.bitmap_ |= 128
@@ -105,6 +113,8 @@ func (b *ClusterStatusBuilder) Description(value string) *ClusterStatusBuilder {
 }
 
 // LimitedSupportReasonCount sets the value of the 'limited_support_reason_count' attribute to the given value.
+//
+//
 func (b *ClusterStatusBuilder) LimitedSupportReasonCount(value int) *ClusterStatusBuilder {
 	b.limitedSupportReasonCount = value
 	b.bitmap_ |= 256
@@ -112,6 +122,8 @@ func (b *ClusterStatusBuilder) LimitedSupportReasonCount(value int) *ClusterStat
 }
 
 // ProvisionErrorCode sets the value of the 'provision_error_code' attribute to the given value.
+//
+//
 func (b *ClusterStatusBuilder) ProvisionErrorCode(value string) *ClusterStatusBuilder {
 	b.provisionErrorCode = value
 	b.bitmap_ |= 512
@@ -119,6 +131,8 @@ func (b *ClusterStatusBuilder) ProvisionErrorCode(value string) *ClusterStatusBu
 }
 
 // ProvisionErrorMessage sets the value of the 'provision_error_message' attribute to the given value.
+//
+//
 func (b *ClusterStatusBuilder) ProvisionErrorMessage(value string) *ClusterStatusBuilder {
 	b.provisionErrorMessage = value
 	b.bitmap_ |= 1024

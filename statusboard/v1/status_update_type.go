@@ -36,6 +36,8 @@ const StatusUpdateLinkKind = "StatusUpdateLink"
 const StatusUpdateNilKind = "StatusUpdateNil"
 
 // StatusUpdate represents the values of the 'status_update' type.
+//
+//
 type StatusUpdate struct {
 	bitmap_     uint32
 	id          string

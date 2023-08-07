@@ -63,7 +63,7 @@ func UnmarshalContractDimensionList(source interface{}) (items []*ContractDimens
 	return
 }
 
-// readContractDimensionList reads list of values of the ”contract_dimension' type from
+// readContractDimensionList reads list of values of the ''contract_dimension' type from
 // the given iterator.
 func readContractDimensionList(iterator *jsoniter.Iterator) []*ContractDimension {
 	list := []*ContractDimension{}

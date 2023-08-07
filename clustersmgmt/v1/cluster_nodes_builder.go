@@ -62,6 +62,8 @@ func (b *ClusterNodesBuilder) AutoscaleCompute(value *MachinePoolAutoscalingBuil
 }
 
 // AvailabilityZones sets the value of the 'availability_zones' attribute to the given values.
+//
+//
 func (b *ClusterNodesBuilder) AvailabilityZones(values ...string) *ClusterNodesBuilder {
 	b.availabilityZones = make([]string, len(values))
 	copy(b.availabilityZones, values)
@@ -70,6 +72,8 @@ func (b *ClusterNodesBuilder) AvailabilityZones(values ...string) *ClusterNodesB
 }
 
 // Compute sets the value of the 'compute' attribute to the given value.
+//
+//
 func (b *ClusterNodesBuilder) Compute(value int) *ClusterNodesBuilder {
 	b.compute = value
 	b.bitmap_ |= 4
@@ -77,6 +81,8 @@ func (b *ClusterNodesBuilder) Compute(value int) *ClusterNodesBuilder {
 }
 
 // ComputeLabels sets the value of the 'compute_labels' attribute to the given value.
+//
+//
 func (b *ClusterNodesBuilder) ComputeLabels(value map[string]string) *ClusterNodesBuilder {
 	b.computeLabels = value
 	if value != nil {
@@ -114,6 +120,8 @@ func (b *ClusterNodesBuilder) ComputeRootVolume(value *RootVolumeBuilder) *Clust
 }
 
 // Infra sets the value of the 'infra' attribute to the given value.
+//
+//
 func (b *ClusterNodesBuilder) Infra(value int) *ClusterNodesBuilder {
 	b.infra = value
 	b.bitmap_ |= 64
@@ -134,6 +142,8 @@ func (b *ClusterNodesBuilder) InfraMachineType(value *MachineTypeBuilder) *Clust
 }
 
 // Master sets the value of the 'master' attribute to the given value.
+//
+//
 func (b *ClusterNodesBuilder) Master(value int) *ClusterNodesBuilder {
 	b.master = value
 	b.bitmap_ |= 256
@@ -154,6 +164,8 @@ func (b *ClusterNodesBuilder) MasterMachineType(value *MachineTypeBuilder) *Clus
 }
 
 // SecurityGroupFilters sets the value of the 'security_group_filters' attribute to the given values.
+//
+//
 func (b *ClusterNodesBuilder) SecurityGroupFilters(values ...*MachinePoolSecurityGroupFilterBuilder) *ClusterNodesBuilder {
 	b.securityGroupFilters = make([]*MachinePoolSecurityGroupFilterBuilder, len(values))
 	copy(b.securityGroupFilters, values)
@@ -162,6 +174,8 @@ func (b *ClusterNodesBuilder) SecurityGroupFilters(values ...*MachinePoolSecurit
 }
 
 // Total sets the value of the 'total' attribute to the given value.
+//
+//
 func (b *ClusterNodesBuilder) Total(value int) *ClusterNodesBuilder {
 	b.total = value
 	b.bitmap_ |= 2048

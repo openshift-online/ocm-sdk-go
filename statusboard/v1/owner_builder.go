@@ -61,6 +61,8 @@ func (b *OwnerBuilder) Empty() bool {
 }
 
 // Email sets the value of the 'email' attribute to the given value.
+//
+//
 func (b *OwnerBuilder) Email(value string) *OwnerBuilder {
 	b.email = value
 	b.bitmap_ |= 8
@@ -68,6 +70,8 @@ func (b *OwnerBuilder) Email(value string) *OwnerBuilder {
 }
 
 // Username sets the value of the 'username' attribute to the given value.
+//
+//
 func (b *OwnerBuilder) Username(value string) *OwnerBuilder {
 	b.username = value
 	b.bitmap_ |= 16

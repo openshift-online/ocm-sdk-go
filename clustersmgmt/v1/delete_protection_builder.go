@@ -38,6 +38,8 @@ func (b *DeleteProtectionBuilder) Empty() bool {
 }
 
 // Enabled sets the value of the 'enabled' attribute to the given value.
+//
+//
 func (b *DeleteProtectionBuilder) Enabled(value bool) *DeleteProtectionBuilder {
 	b.enabled = value
 	b.bitmap_ |= 1

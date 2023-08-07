@@ -39,6 +39,8 @@ func (b *OrganizationLinkBuilder) Empty() bool {
 }
 
 // HREF sets the value of the 'HREF' attribute to the given value.
+//
+//
 func (b *OrganizationLinkBuilder) HREF(value string) *OrganizationLinkBuilder {
 	b.href = value
 	b.bitmap_ |= 1
@@ -46,6 +48,8 @@ func (b *OrganizationLinkBuilder) HREF(value string) *OrganizationLinkBuilder {
 }
 
 // ID sets the value of the 'ID' attribute to the given value.
+//
+//
 func (b *OrganizationLinkBuilder) ID(value string) *OrganizationLinkBuilder {
 	b.id = value
 	b.bitmap_ |= 2

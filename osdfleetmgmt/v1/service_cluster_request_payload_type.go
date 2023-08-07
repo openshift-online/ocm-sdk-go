@@ -20,6 +20,8 @@ limitations under the License.
 package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 // ServiceClusterRequestPayload represents the values of the 'service_cluster_request_payload' type.
+//
+//
 type ServiceClusterRequestPayload struct {
 	bitmap_       uint32
 	cloudProvider string
@@ -34,6 +36,8 @@ func (o *ServiceClusterRequestPayload) Empty() bool {
 
 // CloudProvider returns the value of the 'cloud_provider' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *ServiceClusterRequestPayload) CloudProvider() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.cloudProvider
@@ -43,6 +47,8 @@ func (o *ServiceClusterRequestPayload) CloudProvider() string {
 
 // GetCloudProvider returns the value of the 'cloud_provider' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *ServiceClusterRequestPayload) GetCloudProvider() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
@@ -53,6 +59,8 @@ func (o *ServiceClusterRequestPayload) GetCloudProvider() (value string, ok bool
 
 // Labels returns the value of the 'labels' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *ServiceClusterRequestPayload) Labels() []*LabelRequestPayload {
 	if o != nil && o.bitmap_&2 != 0 {
 		return o.labels
@@ -62,6 +70,8 @@ func (o *ServiceClusterRequestPayload) Labels() []*LabelRequestPayload {
 
 // GetLabels returns the value of the 'labels' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *ServiceClusterRequestPayload) GetLabels() (value []*LabelRequestPayload, ok bool) {
 	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
@@ -72,6 +82,8 @@ func (o *ServiceClusterRequestPayload) GetLabels() (value []*LabelRequestPayload
 
 // Region returns the value of the 'region' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
+//
+//
 func (o *ServiceClusterRequestPayload) Region() string {
 	if o != nil && o.bitmap_&4 != 0 {
 		return o.region
@@ -81,6 +93,8 @@ func (o *ServiceClusterRequestPayload) Region() string {
 
 // GetRegion returns the value of the 'region' attribute and
 // a flag indicating if the attribute has a value.
+//
+//
 func (o *ServiceClusterRequestPayload) GetRegion() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&4 != 0
 	if ok {

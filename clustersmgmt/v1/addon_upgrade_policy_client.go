@@ -190,12 +190,16 @@ func (r *AddonUpgradePolicyPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyPollResponse) Body() *AddonUpgradePolicy {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonUpgradePolicyPollResponse) GetBody() (value *AddonUpgradePolicy, ok bool) {
 	return r.response.GetBody()
 }
@@ -428,6 +432,8 @@ func (r *AddonUpgradePolicyGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyGetResponse) Body() *AddonUpgradePolicy {
 	if r == nil {
 		return nil
@@ -437,6 +443,8 @@ func (r *AddonUpgradePolicyGetResponse) Body() *AddonUpgradePolicy {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonUpgradePolicyGetResponse) GetBody() (value *AddonUpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
@@ -474,6 +482,8 @@ func (r *AddonUpgradePolicyUpdateRequest) Impersonate(user string) *AddonUpgrade
 }
 
 // Body sets the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyUpdateRequest) Body(value *AddonUpgradePolicy) *AddonUpgradePolicyUpdateRequest {
 	r.body = value
 	return r
@@ -571,6 +581,8 @@ func (r *AddonUpgradePolicyUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
+//
+//
 func (r *AddonUpgradePolicyUpdateResponse) Body() *AddonUpgradePolicy {
 	if r == nil {
 		return nil
@@ -580,6 +592,8 @@ func (r *AddonUpgradePolicyUpdateResponse) Body() *AddonUpgradePolicy {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
+//
+//
 func (r *AddonUpgradePolicyUpdateResponse) GetBody() (value *AddonUpgradePolicy, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {

@@ -63,7 +63,7 @@ func UnmarshalOidcConfigList(source interface{}) (items []*OidcConfig, err error
 	return
 }
 
-// readOidcConfigList reads list of values of the ”oidc_config' type from
+// readOidcConfigList reads list of values of the ''oidc_config' type from
 // the given iterator.
 func readOidcConfigList(iterator *jsoniter.Iterator) []*OidcConfig {
 	list := []*OidcConfig{}
