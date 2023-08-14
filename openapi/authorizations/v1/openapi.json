@@ -459,39 +459,43 @@
         "description": "Representation of an access review response",
         "properties": {
           "account_username": {
-            "description": "Defines the username of the account of which access is being reviewed",
+            "description": "Defines the username of the account of which access is being reviewed.",
             "type": "string"
           },
           "action": {
-            "description": "Indicates the action, one of: [get,list,create,delete,update]",
+            "description": "Indicates the action, one of: [get,list,create,delete,update].",
             "type": "string"
           },
           "allowed": {
-            "description": "Defines whether the action on the specified resource type is allowed",
+            "description": "Defines whether the action on the specified resource type is allowed.",
             "type": "boolean"
           },
           "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to",
+            "description": "Indicates which Cluster (internal id) the resource type belongs to.",
             "type": "string"
           },
           "cluster_uuid": {
-            "description": "Indicates which Cluster (external id) the resource type belongs to",
+            "description": "Indicates which Cluster (external id) the resource type belongs to.",
             "type": "string"
           },
+          "is_ocm_internal": {
+            "description": "Defines whether an account is ocm internal.",
+            "type": "boolean"
+          },
           "organization_id": {
-            "description": "Indicates which Organization the resource type belongs to",
+            "description": "Indicates which Organization the resource type belongs to.",
             "type": "string"
           },
           "reason": {
-            "description": "Defines further context for the value in allowed (if applicable)",
+            "description": "Defines further context for the value in allowed (if applicable).",
             "type": "string"
           },
           "resource_type": {
-            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values",
+            "description": "Indicates the type of the resource an action would be taken on.\nSee uhc-account-manager/openapi/openapi.yaml for a list of possible values.",
             "type": "string"
           },
           "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to",
+            "description": "Indicates which Subscription the resource type belongs to.",
             "type": "string"
           }
         }
