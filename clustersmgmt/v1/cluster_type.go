@@ -468,6 +468,14 @@ func (o *Cluster) GetAutoscaler() (value *ClusterAutoscaler, ok bool) {
 	return
 }
 
+// DeleteAutoscaler does not return any values, but sets the cluster
+// autoscaler value as an empty object of type clusterAutoscaler.
+func (o *Cluster) DeleteAutoscaler() {
+	if o != nil && o.bitmap_&16384 != 0 {
+		o.autoscaler = &ClusterAutoscaler{}
+	}
+}
+
 // BillingModel returns the value of the 'billing_model' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
