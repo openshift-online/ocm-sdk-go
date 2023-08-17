@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.363
+  - Modify SelfAccessReview to return IsOCMInternal field
+
 ## 0.1.362
   - Redact aws access and secret access keys from debug logs
 
