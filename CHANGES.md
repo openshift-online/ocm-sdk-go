@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.364
+- Update model version v0.0.311
+  - Add a new resource to OSL clusters/cluster_log
+
 ## 0.1.363
   - Modify SelfAccessReview to return IsOCMInternal field
 
