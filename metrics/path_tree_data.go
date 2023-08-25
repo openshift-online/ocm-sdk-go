@@ -124,6 +124,9 @@ var pathTreeData = `{
             "addon_inquiries": {
               "-": null
             },
+            "addons": {
+              "-": null
+            },
             "status": {
               "-": null
             }
