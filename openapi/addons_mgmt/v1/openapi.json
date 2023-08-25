@@ -724,6 +724,278 @@
         }
       }
     },
+    "/api/addons_mgmt/v1/clusters/{cluster_id}/addons": {
+      "post": {
+        "description": "Create a new addon status and add it to the collection of addons installation.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonInstallation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonInstallation"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of addon installations for a cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "order",
+            "description": "If the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of addon installations",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AddonInstallation"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection regardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/addons_mgmt/v1/clusters/{cluster_id}/addons/{addon_id}": {
+      "delete": {
+        "description": "Deletes the addon installation.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the addon installation.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonInstallation"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the addon installation.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "addon_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "dryRun",
+            "description": "DryRun indicates the request body will not be persisted when dryRun=true. ",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonInstallation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddonInstallation"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/addons_mgmt/v1/clusters/{cluster_id}/status": {
       "post": {
         "description": "Create a new addon status and add it to the collection of addons statuses.",
@@ -1200,6 +1472,148 @@
           "own_namespace"
         ]
       },
+      "AddonInstallation": {
+        "description": "Representation of addon installation",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddonInstallation' if this is a complete object or 'AddonInstallationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "addon": {
+            "description": "Addon installed",
+            "$ref": "#/components/schemas/Addon"
+          },
+          "addon_version": {
+            "description": "Addon version of the addon",
+            "$ref": "#/components/schemas/AddonVersion"
+          },
+          "billing": {
+            "description": "Billing of addon installation.",
+            "$ref": "#/components/schemas/AddonInstallationBilling"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the add-on was initially installed in the cluster.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "csv_name": {
+            "description": "Current CSV installed on cluster",
+            "type": "string"
+          },
+          "deleted_timestamp": {
+            "description": "Date and time when the add-on installation deleted at.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "operator_version": {
+            "description": "Version of the operator installed by the add-on.",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "Parameters in the installation",
+            "$ref": "#/components/schemas/AddonInstallationParameters"
+          },
+          "state": {
+            "description": "Addon Installation State",
+            "$ref": "#/components/schemas/AddonInstallationState"
+          },
+          "state_description": {
+            "description": "Reason for the current State.",
+            "type": "string"
+          },
+          "subscription": {
+            "description": "Subscription for the addon installation",
+            "$ref": "#/components/schemas/ObjectReference"
+          },
+          "updated_timestamp": {
+            "description": "Date and time when the add-on installation information was last updated.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AddonInstallationBilling": {
+        "description": "Representation of an add-on installation billing.",
+        "properties": {
+          "billing_marketplace_account": {
+            "description": "Account ID for billing market place",
+            "type": "string"
+          },
+          "billing_model": {
+            "description": "Billing Model for addon resources",
+            "$ref": "#/components/schemas/BillingModel"
+          },
+          "href": {
+            "description": "Self link",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Indicates the type of this object",
+            "type": "string"
+          }
+        }
+      },
+      "AddonInstallationParameter": {
+        "description": "representation of addon installation parameter",
+        "properties": {
+          "href": {
+            "description": "Self link",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Indicates the type of this object",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the parameter",
+            "type": "string"
+          }
+        }
+      },
+      "AddonInstallationParameters": {
+        "description": "representation of addon installation parameter",
+        "properties": {
+          "items": {
+            "description": "list of addon installation parameters",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonInstallationParameter"
+            }
+          }
+        }
+      },
+      "AddonInstallationState": {
+        "description": "representation of addon installation state",
+        "type": "string",
+        "enum": [
+          "delete-failed",
+          "delete-pending",
+          "deleted",
+          "deleting",
+          "failed",
+          "installing",
+          "pending",
+          "ready",
+          "undefined",
+          "upgrading"
+        ]
+      },
       "AddonNamespace": {
         "description": "Representation of an addon namespace object.",
         "properties": {
@@ -1233,6 +1647,9 @@
           "id": {
             "description": "ID for this addon parameter",
             "type": "string"
+          },
+          "addon": {
+            "$ref": "#/components/schemas/Addon"
           },
           "conditions": {
             "description": "Conditions in which this parameter is valid for",
@@ -1271,6 +1688,11 @@
             "items": {
               "$ref": "#/components/schemas/AddonParameterOption"
             }
+          },
+          "order": {
+            "description": "Indicates the weight of the AddonParameter which would be used by sort order",
+            "type": "integer",
+            "format": "int32"
           },
           "required": {
             "description": "Indicates if this parameter is required by the addon.",
@@ -1430,12 +1852,20 @@
             "items": {
               "$ref": "#/components/schemas/AddonStatusCondition"
             }
+          },
+          "version": {
+            "description": "Version of the addon reporting the status",
+            "type": "string"
           }
         }
       },
       "AddonStatusCondition": {
         "description": "Representation of an addon status condition type.",
         "properties": {
+          "message": {
+            "description": "Message for the condition",
+            "type": "string"
+          },
           "reason": {
             "description": "Reason for the condition",
             "type": "string"
@@ -1456,10 +1886,13 @@
         "enum": [
           "Available",
           "Degraded",
+          "DeleteTimeout",
           "Healthy",
           "Installed",
           "Paused",
-          "Upgrading"
+          "ReadyToBeDeleted",
+          "UpgradeStarted",
+          "UpgradeSucceeded"
         ]
       },
       "AddonStatusConditionValue": {
@@ -1474,6 +1907,9 @@
       "AddonSubOperator": {
         "description": "Representation of an addon sub operator. A sub operator is an operator\nwho's life cycle is controlled by the addon umbrella operator.",
         "properties": {
+          "addon": {
+            "$ref": "#/components/schemas/Addon"
+          },
           "enabled": {
             "description": "Indicates if the sub operator is enabled for the addon",
             "type": "boolean"
@@ -1529,6 +1965,14 @@
             "description": "Indicates if this addon version can be added to clusters.",
             "type": "boolean"
           },
+          "metrics_federation": {
+            "description": "Configuration parameters to be injected in the ServiceMonitor used for federation.",
+            "$ref": "#/components/schemas/MetricsFederation"
+          },
+          "monitoring_stack": {
+            "description": "Configuration parameters which will determine the underlying configuration of the MonitoringStack CR. ",
+            "$ref": "#/components/schemas/MonitoringStack"
+          },
           "parameters": {
             "description": "List of parameters for this addon version.",
             "type": "array",
@@ -1560,6 +2004,17 @@
           }
         }
       },
+      "BillingModel": {
+        "description": "Representation of an billing model field.",
+        "type": "string",
+        "enum": [
+          "marketplace",
+          "marketplace-aws",
+          "marketplace-azure",
+          "marketplace-rhm",
+          "standard"
+        ]
+      },
       "CredentialRequest": {
         "description": "Contains the necessary attributes to allow each operator to access the necessary AWS resources",
         "properties": {
@@ -1580,6 +2035,89 @@
           },
           "service_account": {
             "description": "Service account name to use when authenticating",
+            "type": "string"
+          }
+        }
+      },
+      "MetricsFederation": {
+        "description": "Representation of Metrics Federation",
+        "properties": {
+          "match_labels": {
+            "description": "List of labels used to discover the prometheus server(s) to be federated.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "match_names": {
+            "description": "List of series names to federate from the prometheus server.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "namespace": {
+            "description": "Namespace where the prometheus server is running.",
+            "type": "string"
+          },
+          "port_name": {
+            "description": "Indicates the name of the service port fronting the prometheus server.",
+            "type": "string"
+          }
+        }
+      },
+      "MonitoringStack": {
+        "description": "Representation of Monitoring Stack",
+        "properties": {
+          "enabled": {
+            "description": "Indicates if the monitoring stack can be added to clusters for the addon.",
+            "type": "boolean"
+          },
+          "resources": {
+            "description": "Indicates the resources for the monitoring stack",
+            "$ref": "#/components/schemas/MonitoringStackResources"
+          }
+        }
+      },
+      "MonitoringStackResource": {
+        "description": "Representation of Monitoring Stack Resource",
+        "properties": {
+          "cpu": {
+            "description": "Indicates the CPU resource for monitoring stack.",
+            "type": "string"
+          },
+          "memory": {
+            "description": "Indicates the memory resource for monitoring stack.",
+            "type": "string"
+          }
+        }
+      },
+      "MonitoringStackResources": {
+        "description": "Representation of Monitoring Stack Resources",
+        "properties": {
+          "limits": {
+            "description": "Indicates the limit of resource for monitoring stack.",
+            "$ref": "#/components/schemas/MonitoringStackResource"
+          },
+          "requests": {
+            "description": "Indicates the requested amount of resource for monitoring stack.",
+            "$ref": "#/components/schemas/MonitoringStackResource"
+          }
+        }
+      },
+      "ObjectReference": {
+        "description": "representation of object reference/subscription",
+        "properties": {
+          "href": {
+            "description": "Self Link",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Indicates the type of this object.",
             "type": "string"
           }
         }
