@@ -37,6 +37,7 @@ type NodePoolBuilder struct {
 	tuningConfigs    []string
 	version          *VersionBuilder
 	autoRepair       bool
+	instanceType     string
 }
 
 // NewNodePool creates a new builder of 'node_pool' objects.
@@ -152,6 +153,13 @@ func (b *NodePoolBuilder) Taints(values ...*TaintBuilder) *NodePoolBuilder {
 	b.taints = make([]*TaintBuilder, len(values))
 	copy(b.taints, values)
 	b.bitmap_ |= 2048
+	return b
+}
+
+// InstanceType sets the value of the 'instance_type' attribute to the given value.
+func (b *NodePoolBuilder) InstanceType(value string) *NodePoolBuilder {
+	b.instanceType = value
+	b.bitmap_ |= 128
 	return b
 }
 
@@ -288,3 +296,4 @@ func (b *NodePoolBuilder) Build() (object *NodePool, err error) {
 	}
 	return
 }
+
