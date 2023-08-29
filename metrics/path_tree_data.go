@@ -32,6 +32,9 @@ var pathTreeData = `{
             }
           }
         },
+        "billing_models": {
+          "-": null
+        },
         "capabilities": null,
         "cloud_resources": {
           "-": null
