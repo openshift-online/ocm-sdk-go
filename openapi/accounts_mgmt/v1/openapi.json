@@ -718,6 +718,114 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/billing_models": {
+      "get": {
+        "description": "Retrieves a list of BillingModels.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieve list of Billing Models.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BillingModelItem"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection, regardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accounts_mgmt/v1/billing_models/{billing_model_id}": {
+      "get": {
+        "description": "Retrieves the details of the billing model",
+        "parameters": [
+          {
+            "name": "billing_model_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingModelItem"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/capabilities": {
       "get": {
         "description": "Retrieves a list of Capabilities.",
@@ -5557,6 +5665,27 @@
           "marketplace-azure",
           "standard"
         ]
+      },
+      "BillingModelItem": {
+        "description": "BillingModelItem that represents a billing model (defined in pkg/api/billing_types.go). Using BillingModelItem to keep backwards compatibility as we already have a BillingModel enum defined.",
+        "properties": {
+          "href": {
+            "description": "HREF for the billing model",
+            "type": "string"
+          },
+          "id": {
+            "description": "Id for the BillingModel.",
+            "type": "string"
+          },
+          "marketplace": {
+            "description": "Indicates the marketplace of the billing model. e.g. gcp, aws, etc.",
+            "type": "string"
+          },
+          "model": {
+            "description": "Model type of the BillingModel. e.g. standard, marketplace, marketplace-aws, etc.",
+            "type": "string"
+          }
+        }
       },
       "Capability": {
         "description": "Capability model that represents internal labels with a key that matches a set list defined in AMS (defined in pkg/api/capability_types.go).",
