@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.365
+- Update model version v0.0.312
+  - Added support for `AddonInstallations` endpoints for `addons_mgmt`.
+  - Updated APIs for `AddonStatus`, `AddonStatusCondition`, `AddonSubOperator` and `AddonVersion`.
+
 ## 0.1.364
 - Update model version v0.0.311
   - Add a new resource to OSL clusters/cluster_log
