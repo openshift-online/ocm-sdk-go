@@ -4,8 +4,9 @@ This document describes the relevant changes between releases of the OCM API
 SDK.
 
 ## 0.1.366
-- Update model version v0.0.313
+- Update model version v0.0.314
   - Add new resources and a type for `BillingModelItem`
+  - Revert "adding name field to Account type"
 
 ## 0.1.365
 - Update model version v0.0.312
