@@ -25,6 +25,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 type BillingModelItem struct {
 	bitmap_     uint32
 	href        string
+	description string
+	displayName string
 	id          string
 	marketplace string
 	model       string
@@ -58,12 +60,58 @@ func (o *BillingModelItem) GetHREF() (value string, ok bool) {
 	return
 }
 
+// Description returns the value of the 'description' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Single line description of the billing model for better understanding.
+func (o *BillingModelItem) Description() string {
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.description
+	}
+	return ""
+}
+
+// GetDescription returns the value of the 'description' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Single line description of the billing model for better understanding.
+func (o *BillingModelItem) GetDescription() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&2 != 0
+	if ok {
+		value = o.description
+	}
+	return
+}
+
+// DisplayName returns the value of the 'display_name' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// User friendly display name of the billing model.
+func (o *BillingModelItem) DisplayName() string {
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.displayName
+	}
+	return ""
+}
+
+// GetDisplayName returns the value of the 'display_name' attribute and
+// a flag indicating if the attribute has a value.
+//
+// User friendly display name of the billing model.
+func (o *BillingModelItem) GetDisplayName() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&4 != 0
+	if ok {
+		value = o.displayName
+	}
+	return
+}
+
 // Id returns the value of the 'id' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Id for the BillingModel.
 func (o *BillingModelItem) Id() string {
-	if o != nil && o.bitmap_&2 != 0 {
+	if o != nil && o.bitmap_&8 != 0 {
 		return o.id
 	}
 	return ""
@@ -74,7 +122,7 @@ func (o *BillingModelItem) Id() string {
 //
 // Id for the BillingModel.
 func (o *BillingModelItem) GetId() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2 != 0
+	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.id
 	}
@@ -86,7 +134,7 @@ func (o *BillingModelItem) GetId() (value string, ok bool) {
 //
 // Indicates the marketplace of the billing model. e.g. gcp, aws, etc.
 func (o *BillingModelItem) Marketplace() string {
-	if o != nil && o.bitmap_&4 != 0 {
+	if o != nil && o.bitmap_&16 != 0 {
 		return o.marketplace
 	}
 	return ""
@@ -97,7 +145,7 @@ func (o *BillingModelItem) Marketplace() string {
 //
 // Indicates the marketplace of the billing model. e.g. gcp, aws, etc.
 func (o *BillingModelItem) GetMarketplace() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&4 != 0
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.marketplace
 	}
@@ -109,7 +157,7 @@ func (o *BillingModelItem) GetMarketplace() (value string, ok bool) {
 //
 // Model type of the BillingModel. e.g. standard, marketplace, marketplace-aws, etc.
 func (o *BillingModelItem) Model() string {
-	if o != nil && o.bitmap_&8 != 0 {
+	if o != nil && o.bitmap_&32 != 0 {
 		return o.model
 	}
 	return ""
@@ -120,7 +168,7 @@ func (o *BillingModelItem) Model() string {
 //
 // Model type of the BillingModel. e.g. standard, marketplace, marketplace-aws, etc.
 func (o *BillingModelItem) GetModel() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&8 != 0
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.model
 	}

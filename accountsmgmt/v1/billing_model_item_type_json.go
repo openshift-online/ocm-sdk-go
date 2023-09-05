@@ -56,11 +56,29 @@ func writeBillingModelItem(object *BillingModelItem, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
+		stream.WriteObjectField("description")
+		stream.WriteString(object.description)
+		count++
+	}
+	present_ = object.bitmap_&4 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("display_name")
+		stream.WriteString(object.displayName)
+		count++
+	}
+	present_ = object.bitmap_&8 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
 		stream.WriteObjectField("id")
 		stream.WriteString(object.id)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0
+	present_ = object.bitmap_&16 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -69,7 +87,7 @@ func writeBillingModelItem(object *BillingModelItem, stream *jsoniter.Stream) {
 		stream.WriteString(object.marketplace)
 		count++
 	}
-	present_ = object.bitmap_&8 != 0
+	present_ = object.bitmap_&32 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -105,18 +123,26 @@ func readBillingModelItem(iterator *jsoniter.Iterator) *BillingModelItem {
 			value := iterator.ReadString()
 			object.href = value
 			object.bitmap_ |= 1
+		case "description":
+			value := iterator.ReadString()
+			object.description = value
+			object.bitmap_ |= 2
+		case "display_name":
+			value := iterator.ReadString()
+			object.displayName = value
+			object.bitmap_ |= 4
 		case "id":
 			value := iterator.ReadString()
 			object.id = value
-			object.bitmap_ |= 2
+			object.bitmap_ |= 8
 		case "marketplace":
 			value := iterator.ReadString()
 			object.marketplace = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 16
 		case "model":
 			value := iterator.ReadString()
 			object.model = value
-			object.bitmap_ |= 8
+			object.bitmap_ |= 32
 		default:
 			iterator.ReadAny()
 		}
