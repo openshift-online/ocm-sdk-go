@@ -25,6 +25,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 type BillingModelItemBuilder struct {
 	bitmap_     uint32
 	href        string
+	description string
+	displayName string
 	id          string
 	marketplace string
 	model       string
@@ -47,24 +49,38 @@ func (b *BillingModelItemBuilder) HREF(value string) *BillingModelItemBuilder {
 	return b
 }
 
+// Description sets the value of the 'description' attribute to the given value.
+func (b *BillingModelItemBuilder) Description(value string) *BillingModelItemBuilder {
+	b.description = value
+	b.bitmap_ |= 2
+	return b
+}
+
+// DisplayName sets the value of the 'display_name' attribute to the given value.
+func (b *BillingModelItemBuilder) DisplayName(value string) *BillingModelItemBuilder {
+	b.displayName = value
+	b.bitmap_ |= 4
+	return b
+}
+
 // Id sets the value of the 'id' attribute to the given value.
 func (b *BillingModelItemBuilder) Id(value string) *BillingModelItemBuilder {
 	b.id = value
-	b.bitmap_ |= 2
+	b.bitmap_ |= 8
 	return b
 }
 
 // Marketplace sets the value of the 'marketplace' attribute to the given value.
 func (b *BillingModelItemBuilder) Marketplace(value string) *BillingModelItemBuilder {
 	b.marketplace = value
-	b.bitmap_ |= 4
+	b.bitmap_ |= 16
 	return b
 }
 
 // Model sets the value of the 'model' attribute to the given value.
 func (b *BillingModelItemBuilder) Model(value string) *BillingModelItemBuilder {
 	b.model = value
-	b.bitmap_ |= 8
+	b.bitmap_ |= 32
 	return b
 }
 
@@ -75,6 +91,8 @@ func (b *BillingModelItemBuilder) Copy(object *BillingModelItem) *BillingModelIt
 	}
 	b.bitmap_ = object.bitmap_
 	b.href = object.href
+	b.description = object.description
+	b.displayName = object.displayName
 	b.id = object.id
 	b.marketplace = object.marketplace
 	b.model = object.model
@@ -86,6 +104,8 @@ func (b *BillingModelItemBuilder) Build() (object *BillingModelItem, err error) 
 	object = new(BillingModelItem)
 	object.bitmap_ = b.bitmap_
 	object.href = b.href
+	object.description = b.description
+	object.displayName = b.displayName
 	object.id = b.id
 	object.marketplace = b.marketplace
 	object.model = b.model

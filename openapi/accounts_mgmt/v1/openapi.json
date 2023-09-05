@@ -5673,6 +5673,14 @@
             "description": "HREF for the billing model",
             "type": "string"
           },
+          "description": {
+            "description": "Single line description of the billing model for better understanding.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "User friendly display name of the billing model.",
+            "type": "string"
+          },
           "id": {
             "description": "Id for the BillingModel.",
             "type": "string"
