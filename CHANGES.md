@@ -5,6 +5,8 @@ SDK.
 
 ## 0.1.367
 - Windows: Update SSO CA
+- Update model version v0.0.315
+  - Add DisplayName and Description properties to `BillingModelItem`
 
 ## 0.1.366
 - Update model version v0.0.314
