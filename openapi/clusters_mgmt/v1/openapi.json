@@ -10443,6 +10443,114 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/trusted_ip_addresses": {
+      "get": {
+        "description": "Retrieves the list of trusted ip addresses.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of trusted ip addresses.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TrustedIp"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/trusted_ip_addresses/{trusted_ip_id}": {
+      "get": {
+        "description": "Retrieves the trusted ip adresses.",
+        "parameters": [
+          {
+            "name": "trusted_ip_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrustedIp"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/version_gates": {
       "post": {
         "description": "Adds a new version gate",
@@ -14912,6 +15020,27 @@
           "value": {
             "description": "The value for the taint.",
             "type": "string"
+          }
+        }
+      },
+      "TrustedIp": {
+        "description": "Representation of a trusted ip address in clusterdeployment.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'TrustedIp' if this is a complete object or 'TrustedIpLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "the boolean set to show if the ip is enabled",
+            "type": "boolean"
           }
         }
       },
