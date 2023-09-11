@@ -44,5 +44,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(billingModelResoponse.Body().Id())
+	fmt.Println(billingModelResoponse.Body().ID())
 }

@@ -10873,6 +10873,35 @@
           }
         }
       },
+      "AMIOverride": {
+        "description": "AMIOverride specifies what Amazon Machine Image should be used for a particular product and region.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AMIOverride' if this is a complete object or 'AMIOverrideLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "ami": {
+            "description": "AMI is the id of the Amazon Machine Image.",
+            "type": "string"
+          },
+          "product": {
+            "description": "Link to the product type.",
+            "$ref": "#/components/schemas/Product"
+          },
+          "region": {
+            "description": "Link to the cloud provider region.",
+            "$ref": "#/components/schemas/CloudRegion"
+          }
+        }
+      },
       "AWS": {
         "description": "_Amazon Web Services_ specific settings of a cluster.",
         "properties": {
@@ -11365,6 +11394,39 @@
           "worker_volume": {
             "description": "Worker volume specification.",
             "$ref": "#/components/schemas/GCPVolume"
+          }
+        }
+      },
+      "GCPImageOverride": {
+        "description": "GcpImageOverride specifies what a GCP VM Image should be used for a particular product and billing model",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'GCPImageOverride' if this is a complete object or 'GCPImageOverrideLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "billing_model": {
+            "description": "Link to the billing model.",
+            "$ref": "#/components/schemas/BillingModelItem"
+          },
+          "image_id": {
+            "description": "ImageID is the id of the Google Cloud Platform image.",
+            "type": "string"
+          },
+          "product": {
+            "description": "Link to the product type.",
+            "$ref": "#/components/schemas/Product"
+          },
+          "project_id": {
+            "description": "ProjectID is the id of the Google Cloud Platform project that hosts the image.",
+            "type": "string"
           }
         }
       },
@@ -12426,6 +12488,39 @@
           "marketplace-azure",
           "standard"
         ]
+      },
+      "BillingModelItem": {
+        "description": "BillingModelItem represents a billing model",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'BillingModelItem' if this is a complete object or 'BillingModelItemLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "billing_model_type": {
+            "description": "BillingModelType is the type of the BillingModel. e.g. standard, marketplace.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Single line description of the billing model.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "User friendly display name of the billing model.",
+            "type": "string"
+          },
+          "marketplace": {
+            "description": "Indicates the marketplace of the billing model. e.g. gcp, aws, etc.",
+            "type": "string"
+          }
+        }
       },
       "ByoOidc": {
         "description": "ByoOidc configuration.",
@@ -13691,6 +13786,35 @@
           "HTPasswdIdentityProvider",
           "OpenIDIdentityProvider"
         ]
+      },
+      "ImageOverrides": {
+        "description": "ImageOverrides holds the lists of available images per cloud provider.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ImageOverrides' if this is a complete object or 'ImageOverridesLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "aws": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AMIOverride"
+            }
+          },
+          "gcp": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GCPImageOverride"
+            }
+          }
+        }
       },
       "InflightCheck": {
         "description": "Representation of check running before the cluster is provisioned.",
@@ -15259,12 +15383,16 @@
             "description": "HostedControlPlaneEnabled indicates whether this version can be used to create HCP clusters.",
             "type": "boolean"
           },
+          "image_overrides": {
+            "description": "ImageOverrides contains the lists of images per cloud provider.",
+            "$ref": "#/components/schemas/ImageOverrides"
+          },
           "raw_id": {
             "description": "RawID is the id of the version - without channel group and prefix.",
             "type": "string"
           },
           "release_image": {
-            "description": "ReleaseImage contains the URI of Openshift release image",
+            "description": "ReleaseImage contains the URI of Openshift release image.",
             "type": "string"
           }
         }
