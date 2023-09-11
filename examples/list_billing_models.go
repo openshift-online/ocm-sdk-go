@@ -1,4 +1,4 @@
-// This example shows how to retrieve the collection of capabilities.
+// This example shows how to retrieve the collection of billing models.
 
 package main
 
@@ -38,14 +38,14 @@ func main() {
 	defer connection.Close()
 
 	billingModelsResource := connection.AccountsMgmt().V1().BillingModels()
-	billingModelsResoponse, err := billingModelsResource.List().Send()
+	billingModelsResponse, err := billingModelsResource.List().Send()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't retrieve billing models: %s\n", err)
 		os.Exit(1)
 	}
 
-	billingModelsResoponse.Items().Each(func(l *v1.BillingModelItem) bool {
-		fmt.Println(l.Id())
+	billingModelsResponse.Items().Each(func(l *v1.BillingModelItem) bool {
+		fmt.Printf("%s,%s\n", l.ID(), l.DisplayName())
 		return true
 	})
 

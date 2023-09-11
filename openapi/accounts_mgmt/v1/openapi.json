@@ -5667,30 +5667,34 @@
         ]
       },
       "BillingModelItem": {
-        "description": "BillingModelItem that represents a billing model (defined in pkg/api/billing_types.go). Using BillingModelItem to keep backwards compatibility as we already have a BillingModel enum defined.",
+        "description": "BillingModelItem represents a billing model",
         "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'BillingModelItem' if this is a complete object or 'BillingModelItemLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
           "href": {
-            "description": "HREF for the billing model",
+            "description": "Self link.",
+            "type": "string"
+          },
+          "billing_model_type": {
+            "description": "BillingModelType is the type of the BillingModel. e.g. standard, marketplace.",
             "type": "string"
           },
           "description": {
-            "description": "Single line description of the billing model for better understanding.",
+            "description": "Single line description of the billing model.",
             "type": "string"
           },
           "display_name": {
             "description": "User friendly display name of the billing model.",
             "type": "string"
           },
-          "id": {
-            "description": "Id for the BillingModel.",
-            "type": "string"
-          },
           "marketplace": {
             "description": "Indicates the marketplace of the billing model. e.g. gcp, aws, etc.",
-            "type": "string"
-          },
-          "model": {
-            "description": "Model type of the BillingModel. e.g. standard, marketplace, marketplace-aws, etc.",
             "type": "string"
           }
         }
