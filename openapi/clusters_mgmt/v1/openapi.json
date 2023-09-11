@@ -12332,18 +12332,22 @@
         "description": "Description of a cloud provider virtual private cloud.",
         "properties": {
           "aws_subnets": {
-            "description": "List of subnetworks",
+            "description": "List of AWS subnetworks with details.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Subnetwork"
             }
           },
+          "cidr_block": {
+            "description": "CIDR block of the virtual private cloud.",
+            "type": "string"
+          },
           "id": {
-            "description": "ID of virtual private cloud",
+            "description": "ID of virtual private cloud.",
             "type": "string"
           },
           "name": {
-            "description": "Name of virtual private cloud according to its `Name` tag on AWS",
+            "description": "Name of virtual private cloud according to its `Name` tag on AWS.",
             "type": "string"
           },
           "subnets": {
@@ -14689,6 +14693,12 @@
           }
         }
       },
+      "ProvisionShardTopology": {
+        "type": "string",
+        "enum": [
+          "dedicated"
+        ]
+      },
       "Proxy": {
         "description": "Proxy configuration of a cluster.",
         "properties": {
@@ -14755,12 +14765,16 @@
             "type": "string"
           },
           "kubeconfig": {
-            "description": "The kubeconfig of the server",
+            "description": "The kubeconfig of the server.",
             "type": "string"
           },
           "server": {
-            "description": "The URL of the server",
+            "description": "The URL of the server.",
             "type": "string"
+          },
+          "topology": {
+            "description": "The topology of a provision shard (Optional).",
+            "$ref": "#/components/schemas/ProvisionShardTopology"
           }
         }
       },
@@ -14839,20 +14853,24 @@
       "Subnetwork": {
         "description": "AWS subnetwork object to be used while installing a cluster",
         "properties": {
+          "cidr_block": {
+            "description": "The CIDR Block of the subnet.",
+            "type": "string"
+          },
           "availability_zone": {
-            "description": "The availability zone to which the subnet is related",
+            "description": "The availability zone to which the subnet is related.",
             "type": "string"
           },
           "name": {
-            "description": "Name of the subnet according to its `Name` tag on AWS",
+            "description": "Name of the subnet according to its `Name` tag on AWS.",
             "type": "string"
           },
           "public": {
-            "description": "Whether it is a public subnet",
+            "description": "Whether or not it is a public subnet.",
             "type": "boolean"
           },
           "subnet_id": {
-            "description": "The subnet id to be used while installing a cluster",
+            "description": "The subnet ID to be used while installing a cluster.",
             "type": "string"
           }
         }
