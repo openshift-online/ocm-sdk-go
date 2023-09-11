@@ -1,4 +1,4 @@
-// This example shows how to retrieve the collection of capabilities.
+// This example shows how to retrieve the collection of billing models.
 
 package main
 
@@ -45,7 +45,7 @@ func main() {
 	}
 
 	billingModelsResoponse.Items().Each(func(l *v1.BillingModelItem) bool {
-		fmt.Println(l.Id())
+		fmt.Printf("%s,%s\n", l.ID(), l.DisplayName())
 		return true
 	})
 

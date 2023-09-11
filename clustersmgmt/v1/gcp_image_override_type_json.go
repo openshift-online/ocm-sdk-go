@@ -17,7 +17,7 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
+package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import (
 	"io"
@@ -26,10 +26,10 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// MarshalBillingModelItem writes a value of the 'billing_model_item' type to the given writer.
-func MarshalBillingModelItem(object *BillingModelItem, writer io.Writer) error {
+// MarshalGCPImageOverride writes a value of the 'GCP_image_override' type to the given writer.
+func MarshalGCPImageOverride(object *GCPImageOverride, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeBillingModelItem(object, stream)
+	writeGCPImageOverride(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,15 +37,15 @@ func MarshalBillingModelItem(object *BillingModelItem, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeBillingModelItem writes a value of the 'billing_model_item' type to the given stream.
-func writeBillingModelItem(object *BillingModelItem, stream *jsoniter.Stream) {
+// writeGCPImageOverride writes a value of the 'GCP_image_override' type to the given stream.
+func writeGCPImageOverride(object *GCPImageOverride, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
 	if object.bitmap_&1 != 0 {
-		stream.WriteString(BillingModelItemLinkKind)
+		stream.WriteString(GCPImageOverrideLinkKind)
 	} else {
-		stream.WriteString(BillingModelItemKind)
+		stream.WriteString(GCPImageOverrideKind)
 	}
 	count++
 	if object.bitmap_&2 != 0 {
@@ -65,13 +65,13 @@ func writeBillingModelItem(object *BillingModelItem, stream *jsoniter.Stream) {
 		count++
 	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0
+	present_ = object.bitmap_&8 != 0 && object.billingModel != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("billing_model_type")
-		stream.WriteString(object.billingModelType)
+		stream.WriteObjectField("billing_model")
+		writeBillingModelItem(object.billingModel, stream)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0
@@ -79,17 +79,17 @@ func writeBillingModelItem(object *BillingModelItem, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("description")
-		stream.WriteString(object.description)
+		stream.WriteObjectField("image_id")
+		stream.WriteString(object.imageID)
 		count++
 	}
-	present_ = object.bitmap_&32 != 0
+	present_ = object.bitmap_&32 != 0 && object.product != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("display_name")
-		stream.WriteString(object.displayName)
+		stream.WriteObjectField("product")
+		writeProduct(object.product, stream)
 		count++
 	}
 	present_ = object.bitmap_&64 != 0
@@ -97,27 +97,27 @@ func writeBillingModelItem(object *BillingModelItem, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("marketplace")
-		stream.WriteString(object.marketplace)
+		stream.WriteObjectField("project_id")
+		stream.WriteString(object.projectID)
 	}
 	stream.WriteObjectEnd()
 }
 
-// UnmarshalBillingModelItem reads a value of the 'billing_model_item' type from the given
+// UnmarshalGCPImageOverride reads a value of the 'GCP_image_override' type from the given
 // source, which can be an slice of bytes, a string or a reader.
-func UnmarshalBillingModelItem(source interface{}) (object *BillingModelItem, err error) {
+func UnmarshalGCPImageOverride(source interface{}) (object *GCPImageOverride, err error) {
 	iterator, err := helpers.NewIterator(source)
 	if err != nil {
 		return
 	}
-	object = readBillingModelItem(iterator)
+	object = readGCPImageOverride(iterator)
 	err = iterator.Error
 	return
 }
 
-// readBillingModelItem reads a value of the 'billing_model_item' type from the given iterator.
-func readBillingModelItem(iterator *jsoniter.Iterator) *BillingModelItem {
-	object := &BillingModelItem{}
+// readGCPImageOverride reads a value of the 'GCP_image_override' type from the given iterator.
+func readGCPImageOverride(iterator *jsoniter.Iterator) *GCPImageOverride {
+	object := &GCPImageOverride{}
 	for {
 		field := iterator.ReadObject()
 		if field == "" {
@@ -126,7 +126,7 @@ func readBillingModelItem(iterator *jsoniter.Iterator) *BillingModelItem {
 		switch field {
 		case "kind":
 			value := iterator.ReadString()
-			if value == BillingModelItemLinkKind {
+			if value == GCPImageOverrideLinkKind {
 				object.bitmap_ |= 1
 			}
 		case "id":
@@ -135,21 +135,21 @@ func readBillingModelItem(iterator *jsoniter.Iterator) *BillingModelItem {
 		case "href":
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
-		case "billing_model_type":
-			value := iterator.ReadString()
-			object.billingModelType = value
+		case "billing_model":
+			value := readBillingModelItem(iterator)
+			object.billingModel = value
 			object.bitmap_ |= 8
-		case "description":
+		case "image_id":
 			value := iterator.ReadString()
-			object.description = value
+			object.imageID = value
 			object.bitmap_ |= 16
-		case "display_name":
-			value := iterator.ReadString()
-			object.displayName = value
+		case "product":
+			value := readProduct(iterator)
+			object.product = value
 			object.bitmap_ |= 32
-		case "marketplace":
+		case "project_id":
 			value := iterator.ReadString()
-			object.marketplace = value
+			object.projectID = value
 			object.bitmap_ |= 64
 		default:
 			iterator.ReadAny()
