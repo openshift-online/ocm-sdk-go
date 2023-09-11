@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.369
+- Updated model version v0.0.317
+  - Add new resource and a type for `TrustedIps`  
 ## 0.1.367
 - Windows: Update SSO CA
 - Update model version v0.0.315
