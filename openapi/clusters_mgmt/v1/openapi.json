@@ -11004,6 +11004,13 @@
             "description": "AWS account identifier.",
             "type": "string"
           },
+          "additional_compute_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added to default worker (compute) machine pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "audit_log": {
             "description": "Audit log forwarding configuration",
             "$ref": "#/components/schemas/AuditLog"
@@ -11185,6 +11192,13 @@
           "href": {
             "description": "Self link.",
             "type": "string"
+          },
+          "additional_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added machine pool. Note that machine pools can only be worker node at the time.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "spot_market_options": {
             "description": "Use spot instances on this machine pool to reduce cost.",
@@ -11719,7 +11733,7 @@
             "type": "boolean"
           },
           "oidc_config": {
-            "description": "Registered Oidc Config, if available holds information related to the oidc config",
+            "description": "Registered Oidc Config, if available holds information related to the oidc config.",
             "$ref": "#/components/schemas/OidcConfig"
           },
           "operator_iam_roles": {
@@ -12662,6 +12676,13 @@
       "CloudVPC": {
         "description": "Description of a cloud provider virtual private cloud.",
         "properties": {
+          "aws_security_groups": {
+            "description": "List of AWS security groups with details.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SecurityGroup"
+            }
+          },
           "aws_subnets": {
             "description": "List of AWS subnetworks with details.",
             "type": "array",
@@ -12680,6 +12701,10 @@
           "name": {
             "description": "Name of virtual private cloud according to its `Name` tag on AWS.",
             "type": "string"
+          },
+          "red_hat_managed": {
+            "description": "If the resource is RH managed.",
+            "type": "boolean"
           },
           "subnets": {
             "description": "List of subnets used by the virtual private cloud.",
@@ -15109,6 +15134,23 @@
           "manual"
         ]
       },
+      "SecurityGroup": {
+        "description": "AWS security group object",
+        "properties": {
+          "id": {
+            "description": "The security group ID.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the security group according to its `Name` tag on AWS.",
+            "type": "string"
+          },
+          "red_hat_managed": {
+            "description": "If the resource is RH managed.",
+            "type": "boolean"
+          }
+        }
+      },
       "ServerConfig": {
         "description": "Representation of a server config",
         "properties": {
@@ -15227,6 +15269,10 @@
           },
           "public": {
             "description": "Whether or not it is a public subnet.",
+            "type": "boolean"
+          },
+          "red_hat_managed": {
+            "description": "If the resource is RH managed.",
             "type": "boolean"
           },
           "subnet_id": {

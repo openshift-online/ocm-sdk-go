@@ -29,6 +29,7 @@ type Subnetwork struct {
 	name             string
 	subnetID         string
 	public           bool
+	redHatManaged    bool
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -128,12 +129,35 @@ func (o *Subnetwork) GetPublic() (value bool, ok bool) {
 	return
 }
 
+// RedHatManaged returns the value of the 'red_hat_managed' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// If the resource is RH managed.
+func (o *Subnetwork) RedHatManaged() bool {
+	if o != nil && o.bitmap_&16 != 0 {
+		return o.redHatManaged
+	}
+	return false
+}
+
+// GetRedHatManaged returns the value of the 'red_hat_managed' attribute and
+// a flag indicating if the attribute has a value.
+//
+// If the resource is RH managed.
+func (o *Subnetwork) GetRedHatManaged() (value bool, ok bool) {
+	ok = o != nil && o.bitmap_&16 != 0
+	if ok {
+		value = o.redHatManaged
+	}
+	return
+}
+
 // SubnetID returns the value of the 'subnet_ID' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
 // The subnet ID to be used while installing a cluster.
 func (o *Subnetwork) SubnetID() string {
-	if o != nil && o.bitmap_&16 != 0 {
+	if o != nil && o.bitmap_&32 != 0 {
 		return o.subnetID
 	}
 	return ""
@@ -144,7 +168,7 @@ func (o *Subnetwork) SubnetID() string {
 //
 // The subnet ID to be used while installing a cluster.
 func (o *Subnetwork) GetSubnetID() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&16 != 0
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.subnetID
 	}
