@@ -15525,6 +15525,10 @@
             "description": "Self link.",
             "type": "string"
           },
+          "gcp_marketplace_enabled": {
+            "description": "GCPMarketplaceEnabled indicates if this version can be used to create GCP Marketplace clusters.",
+            "type": "boolean"
+          },
           "rosa_enabled": {
             "description": "ROSAEnabled indicates whether this version can be used to create ROSA clusters.",
             "type": "boolean"
