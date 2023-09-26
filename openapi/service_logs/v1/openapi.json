@@ -468,6 +468,15 @@
             "description": "External cluster ID.",
             "type": "string"
           },
+          "created_at": {
+            "description": "The time at which the cluster log was created.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "description": "The name of the user who created the cluster log.",
+            "type": "string"
+          },
           "description": {
             "description": "Full description of the log entry content (supports Markdown format as well).",
             "type": "string"
