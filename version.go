@@ -18,4 +18,4 @@ limitations under the License.
 
 package sdk
 
-const Version = "0.1.371"
+const Version = "0.1.372"
