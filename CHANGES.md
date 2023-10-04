@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.373
+- Update model version to v0.0.325
+  - Add `OrganizationId` to `FeatureReviewRequest` type
+
 ## 0.1.372
 - Update model version to v0.0.324
   - Add `CreatedAt` to `LogEntry` type
