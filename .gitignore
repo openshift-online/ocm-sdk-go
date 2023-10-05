@@ -2,10 +2,12 @@
 /.idea/
 /.vscode/
 /examples/*
-/metamodel
 /model/
 /vendor/
 !/examples/*.go
 !/examples/*.yaml
 !/examples/go.mod
 !/examples/go.sum
+
+# Local bin directory
+bin
