@@ -565,6 +565,10 @@
           "feature": {
             "description": "Indicates the feature which can be toggled",
             "type": "string"
+          },
+          "organization_id": {
+            "description": "Defines the organisation id of the account of which access is being reviewed",
+            "type": "string"
           }
         }
       },
