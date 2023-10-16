@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.374
+- Update model version v0.0.326
+  - Add `BackplaneURL` to `Environment` type
+
 ## 0.1.373
 - Update model version to v0.0.325
   - Add `OrganizationId` to `FeatureReviewRequest` type
