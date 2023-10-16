@@ -13633,6 +13633,10 @@
       "Environment": {
         "description": "Description of an environment",
         "properties": {
+          "backplane_url": {
+            "description": "the backplane url for the environment",
+            "type": "string"
+          },
           "last_limited_support_check": {
             "description": "last time that the worker checked for limited support clusters",
             "type": "string",
