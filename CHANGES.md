@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.375
+- Update model version v0.0.327
+  - Add `BestEffort` to method `Delete` in `Cluster`
+
 ## 0.1.374
 - Update model version v0.0.326
   - Add `BackplaneURL` to `Environment` type

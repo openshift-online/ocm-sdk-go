@@ -1766,6 +1766,14 @@
             "required": true
           },
           {
+            "name": "best_effort",
+            "description": "BestEffort flag is used to check if the cluster deletion should be best-effort mode or not.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "deprovision",
             "description": "If false it will only delete from OCM but not the actual cluster resources.\nfalse is only allowed for OCP clusters. true by default.",
             "in": "query",
