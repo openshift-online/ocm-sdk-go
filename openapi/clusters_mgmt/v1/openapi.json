@@ -14545,6 +14545,10 @@
             "description": "Cloud provider data to execute the network verification.",
             "$ref": "#/components/schemas/CloudProviderData"
           },
+          "cluster_id": {
+            "description": "Cluster ID needed to execute the network verification.",
+            "type": "string"
+          },
           "items": {
             "description": "Details about each subnet network verification.",
             "type": "array",
