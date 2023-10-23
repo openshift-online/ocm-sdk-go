@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.377
+- Update model version v0.0.329
+  - Add get `ClusterId` to `network_verification_type` resource
+
 ## 0.1.376
 - Update model version v0.0.328
   - Add get `VPC` to `Cluster` resource
