@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+
+## 0.1.380
+- Update model version v0.0.331
+  - Add `Search` method to `status_board` `products_resource`, `applications_resource`, and `services_resource` models
+
 ## 0.1.379
 - Require Go 1.21
 
