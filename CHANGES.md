@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.378
+- Update model version v0.0.330
+  - Add `Update` method to `HypershiftConfig` resource
+
 ## 0.1.377
 - Update model version v0.0.329
   - Add get `ClusterId` to `network_verification_type` resource
