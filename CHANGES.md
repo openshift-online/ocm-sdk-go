@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.379
+- Require Go 1.21
+
 ## 0.1.378
 - Update model version v0.0.330
   - Add `Update` method to `HypershiftConfig` resource
