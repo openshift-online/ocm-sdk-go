@@ -11099,6 +11099,20 @@
               "type": "string"
             }
           },
+          "additional_control_plane_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added to default control plane machine pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additional_infra_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added to default infra machine pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "audit_log": {
             "description": "Audit log forwarding configuration",
             "$ref": "#/components/schemas/AuditLog"
