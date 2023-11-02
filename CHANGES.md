@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.382
+- Update model version to v0.0.334
+  - Add `Search` method to `status board` `status updates`
+
 ## 0.1.381
 - Update model version to v0.0.333
   - Add `/api/clusters_mgmt/v1/clusters/{id}/kubelet_config` endpoint
