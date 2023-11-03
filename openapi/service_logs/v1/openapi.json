@@ -481,6 +481,13 @@
             "description": "Full description of the log entry content (supports Markdown format as well).",
             "type": "string"
           },
+          "doc_references": {
+            "description": "The list of documentation references (i.e links) contained in the event.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "event_stream_id": {
             "description": "Log custom event id for a simple search of related cluster logs.",
             "type": "string"
