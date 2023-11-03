@@ -15538,6 +15538,13 @@
           "state": {
             "description": "State of the subnet network verification.",
             "type": "string"
+          },
+          "tags": {
+            "description": "Tags supplied to the network verifier for this subnet.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
