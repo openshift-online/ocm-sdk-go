@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.383
+- Update model version to v0.0.336
+  - Added `security` field to Cluster Service GCP field
+
 ## 0.1.382
 - Update model version to v0.0.335
   - Add `doc_references` field in `LogEntry`
