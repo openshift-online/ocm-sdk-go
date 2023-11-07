@@ -11734,6 +11734,10 @@
             "description": "GCP project identifier.",
             "type": "string"
           },
+          "security": {
+            "description": "GCP Security Settings",
+            "$ref": "#/components/schemas/GcpSecurity"
+          },
           "token_uri": {
             "description": "GCP token uri",
             "type": "string"
@@ -13998,6 +14002,15 @@
             "description": "Number of master nodes of the cluster.",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "GcpSecurity": {
+        "description": "Google cloud platform security settings of a cluster.",
+        "properties": {
+          "secure_boot": {
+            "description": "Determines if Shielded VM feature \"Secure Boot\" should be set for the nodes of the cluster.",
+            "type": "boolean"
           }
         }
       },
