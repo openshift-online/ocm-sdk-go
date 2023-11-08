@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.384
+- Updated client for `KubeletConfig` to align `post` and `update` function signatures
+
 ## 0.1.383
 - Update model version to v0.0.336
   - Added `security` field to Cluster Service GCP field
