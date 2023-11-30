@@ -42,9 +42,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	// START:
 	// USE CASE 1:
-	// 		You do not have the desired region ID and need to query the global region to find URL
+	// You do not have the desired region ID and need to query the global region to find URL
 
 	// Create the global connection
 	token := os.Getenv("OCM_TOKEN")
