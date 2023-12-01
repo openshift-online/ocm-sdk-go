@@ -1386,10 +1386,7 @@
           },
           "parameters": {
             "description": "List of parameters for this addon.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AddonParameter"
-            }
+            "$ref": "#/components/schemas/AddonParameters"
           },
           "requirements": {
             "description": "List of requirements for this addon.",
@@ -1512,6 +1509,10 @@
             "description": "Date and time when the add-on installation deleted at.",
             "type": "string",
             "format": "date-time"
+          },
+          "desired_version": {
+            "description": "Version of the next scheduled upgrade",
+            "type": "string"
           },
           "operator_version": {
             "description": "Version of the operator installed by the add-on.",
@@ -1749,6 +1750,18 @@
           "string"
         ]
       },
+      "AddonParameters": {
+        "description": "Representation of AddonParameters",
+        "properties": {
+          "items": {
+            "description": "List of addon parameters",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonParameter"
+            }
+          }
+        }
+      },
       "AddonRequirement": {
         "description": "Representation of an addon requirement.",
         "properties": {
@@ -1973,12 +1986,13 @@
             "description": "Configuration parameters which will determine the underlying configuration of the MonitoringStack CR. ",
             "$ref": "#/components/schemas/MonitoringStack"
           },
+          "package_image": {
+            "description": "The url for the package image",
+            "type": "string"
+          },
           "parameters": {
             "description": "List of parameters for this addon version.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AddonParameter"
-            }
+            "$ref": "#/components/schemas/AddonParameters"
           },
           "pull_secret_name": {
             "description": "The pull secret name used for this addon version.",
@@ -2001,6 +2015,10 @@
             "items": {
               "$ref": "#/components/schemas/AddonSubOperator"
             }
+          },
+          "upgrade_plans_created": {
+            "description": "Indicates if upgrade plans have been created for this addon version",
+            "type": "boolean"
           }
         }
       },
