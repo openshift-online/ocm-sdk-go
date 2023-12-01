@@ -15446,6 +15446,10 @@
               "$ref": "#/components/schemas/SubnetNetworkVerification"
             }
           },
+          "platform": {
+            "description": "Platform needed to execute the network verification.",
+            "$ref": "#/components/schemas/Platform"
+          },
           "total": {
             "description": "Amount of network verifier executions started.",
             "type": "integer",
@@ -15866,6 +15870,15 @@
             "format": "date-time"
           }
         }
+      },
+      "Platform": {
+        "description": "Representation of an platform type field.",
+        "type": "string",
+        "enum": [
+          "aws",
+          "gcp",
+          "hostedcluster"
+        ]
       },
       "PrivateLinkClusterConfiguration": {
         "description": "Manages the configuration for the Private Links.",
