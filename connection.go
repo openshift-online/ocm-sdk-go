@@ -241,6 +241,9 @@ func (b *ConnectionBuilder) Region(region string) *ConnectionBuilder {
 	if b.err != nil {
 		return b
 	}
+	if region == "" {
+		return b.AlternativeURL("", DefaultURL)
+	}
 	return b.AlternativeURL("", fmt.Sprintf(FormattedDefaultRegionURL, region))
 }
 
