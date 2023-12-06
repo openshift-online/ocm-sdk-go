@@ -105,7 +105,7 @@ func writeAWSNodePool(object *AWSNodePool, stream *jsoniter.Stream) {
 				}
 				item := object.tags[key]
 				stream.WriteObjectField(key)
-				stream.WriteString(item)
+				stream.WriteString(*item)
 			}
 			stream.WriteObjectEnd()
 		} else {
@@ -156,14 +156,14 @@ func readAWSNodePool(iterator *jsoniter.Iterator) *AWSNodePool {
 			object.instanceType = value
 			object.bitmap_ |= 16
 		case "tags":
-			value := map[string]string{}
+			value := map[string]*string{}
 			for {
 				key := iterator.ReadObject()
 				if key == "" {
 					break
 				}
 				item := iterator.ReadString()
-				value[key] = item
+				value[key] = &item
 			}
 			object.tags = value
 			object.bitmap_ |= 32

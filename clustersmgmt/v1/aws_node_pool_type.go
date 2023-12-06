@@ -40,7 +40,7 @@ type AWSNodePool struct {
 	href            string
 	instanceProfile string
 	instanceType    string
-	tags            map[string]string
+	tags            map[string]*string
 }
 
 // Kind returns the name of the type of the object.
@@ -150,7 +150,7 @@ func (o *AWSNodePool) GetInstanceType() (value string, ok bool) {
 // the zero value of the type if the attribute doesn't have a value.
 //
 // Optional keys and values that the installer will add as tags to all AWS resources it creates
-func (o *AWSNodePool) Tags() map[string]string {
+func (o *AWSNodePool) Tags() map[string]*string {
 	if o != nil && o.bitmap_&32 != 0 {
 		return o.tags
 	}
@@ -161,7 +161,7 @@ func (o *AWSNodePool) Tags() map[string]string {
 // a flag indicating if the attribute has a value.
 //
 // Optional keys and values that the installer will add as tags to all AWS resources it creates
-func (o *AWSNodePool) GetTags() (value map[string]string, ok bool) {
+func (o *AWSNodePool) GetTags() (value map[string]*string, ok bool) {
 	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.tags

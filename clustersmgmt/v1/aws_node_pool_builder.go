@@ -28,7 +28,7 @@ type AWSNodePoolBuilder struct {
 	href            string
 	instanceProfile string
 	instanceType    string
-	tags            map[string]string
+	tags            map[string]*string
 }
 
 // NewAWSNodePool creates a new builder of 'AWS_node_pool' objects.
@@ -76,7 +76,7 @@ func (b *AWSNodePoolBuilder) InstanceType(value string) *AWSNodePoolBuilder {
 }
 
 // Tags sets the value of the 'tags' attribute to the given value.
-func (b *AWSNodePoolBuilder) Tags(value map[string]string) *AWSNodePoolBuilder {
+func (b *AWSNodePoolBuilder) Tags(value map[string]*string) *AWSNodePoolBuilder {
 	b.tags = value
 	if value != nil {
 		b.bitmap_ |= 32
@@ -97,7 +97,7 @@ func (b *AWSNodePoolBuilder) Copy(object *AWSNodePool) *AWSNodePoolBuilder {
 	b.instanceProfile = object.instanceProfile
 	b.instanceType = object.instanceType
 	if len(object.tags) > 0 {
-		b.tags = map[string]string{}
+		b.tags = map[string]*string{}
 		for k, v := range object.tags {
 			b.tags[k] = v
 		}
@@ -116,7 +116,7 @@ func (b *AWSNodePoolBuilder) Build() (object *AWSNodePool, err error) {
 	object.instanceProfile = b.instanceProfile
 	object.instanceType = b.instanceType
 	if b.tags != nil {
-		object.tags = make(map[string]string)
+		object.tags = make(map[string]*string)
 		for k, v := range b.tags {
 			object.tags[k] = v
 		}
