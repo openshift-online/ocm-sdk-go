@@ -50,7 +50,7 @@ func main() {
 	globalConnection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
-		Region("integration"). // Define the integration global region
+		RhRegion("integration"). // Define the integration global region
 		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
@@ -131,7 +131,7 @@ func main() {
 	connection, err = sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
-		Region("aws.xcm.integration"). // Apply the region URL
+		RhRegion("aws.xcm.integration"). // Apply the rh region URL
 		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
