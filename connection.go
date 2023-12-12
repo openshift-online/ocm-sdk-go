@@ -51,11 +51,12 @@ import (
 // Default values:
 const (
 	// #nosec G101
-	DefaultTokenURL     = authentication.DefaultTokenURL
-	DefaultClientID     = authentication.DefaultClientID
-	DefaultClientSecret = authentication.DefaultClientSecret
-	DefaultURL          = "https://api.openshift.com"
-	DefaultAgent        = "OCM-SDK/" + Version
+	DefaultTokenURL             = authentication.DefaultTokenURL
+	DefaultClientID             = authentication.DefaultClientID
+	DefaultClientSecret         = authentication.DefaultClientSecret
+	DefaultURL                  = "https://api.openshift.com"
+	FormattedDefaultRhRegionURL = "https://api.%s.openshift.com"
+	DefaultAgent                = "OCM-SDK/" + Version
 )
 
 // DefaultScopes is the ser of scopes used by default:
@@ -230,6 +231,20 @@ func (b *ConnectionBuilder) URL(url string) *ConnectionBuilder {
 		return b
 	}
 	return b.AlternativeURL("", url)
+}
+
+// Region builds the base URL of an API gateway based on an OCM region name. The default is
+// `https://api.%s.openshift.com`. Where `%s` is replaced by the RH region name.
+//
+// This method should be used in-lieu of URL when connecting to a regionalized API gateway.
+func (b *ConnectionBuilder) RhRegion(rhRegion string) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
+	if rhRegion == "" {
+		return b.AlternativeURL("", DefaultURL)
+	}
+	return b.AlternativeURL("", fmt.Sprintf(FormattedDefaultRhRegionURL, rhRegion))
 }
 
 // AlternativeURL sets an alternative base URL for the given path prefix. For example, to configure
@@ -566,6 +581,7 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 		URL              *string           `yaml:"url"`
 		AlternativeURLs  map[string]string `yaml:"alternative_urls"`
 		TokenURL         *string           `yaml:"token_url"`
+		RhRegion         *string           `yaml:"rh_region"`
 		User             *string           `yaml:"user"`
 		Password         *string           `yaml:"password"`
 		ClientID         *string           `yaml:"client_id"`
@@ -658,6 +674,11 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 	// Metrics subsystem:
 	if view.MetricsSubsystem != nil {
 		b.MetricsSubsystem(*view.MetricsSubsystem)
+	}
+
+	// Regions:
+	if view.RhRegion != nil {
+		b.RhRegion(*view.RhRegion)
 	}
 
 	return b
