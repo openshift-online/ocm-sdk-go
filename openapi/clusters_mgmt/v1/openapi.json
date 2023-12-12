@@ -7303,12 +7303,28 @@
             "required": true
           },
           {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the node pools instead of\nthe names of the columns of a table. For example, in order to sort the node pools\ndescending by identifier the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "page",
             "description": "Index of the requested page, where one corresponds to the first page.",
             "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the node pools instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nnode pools with replicas of two the following is required:\n\n```sql\nreplicas = 2\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nnode pools that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
