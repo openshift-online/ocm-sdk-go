@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.389
+- Update model version v0.0.342
+  -  Add `Search` and `Order` methods to List `/api/clusters_mgmt/v1/clusters/{id}/node_pools`
 
 ## 0.1.388
 - Update model version v0.0.341
