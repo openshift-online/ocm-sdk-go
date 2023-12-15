@@ -15892,6 +15892,8 @@
         "type": "string",
         "enum": [
           "aws",
+          "aws-classic",
+          "aws-hosted-cp",
           "gcp",
           "hostedcluster"
         ]
@@ -16273,6 +16275,10 @@
             "items": {
               "type": "string"
             }
+          },
+          "platform": {
+            "description": "Platform supplied to the network verifier for this subnet.",
+            "$ref": "#/components/schemas/Platform"
           },
           "state": {
             "description": "State of the subnet network verification.",
