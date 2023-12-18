@@ -41,7 +41,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Create the global connection
 	regValue, err := sdk.GetRhRegion("https://api.integration.openshift.com", "singapore")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't find region: %v", err)
