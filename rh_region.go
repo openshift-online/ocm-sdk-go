@@ -38,7 +38,7 @@ func GetRhRegion(ocmServiceUrl string, regionName string) (Region, error) {
 		return Region{}, err
 	}
 	for regName, regValue := range regions {
-		if strings.Contains(regName, regionName) {
+		if regName == regionName {
 			return regValue, nil
 		}
 	}
