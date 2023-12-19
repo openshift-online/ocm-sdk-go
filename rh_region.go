@@ -37,12 +37,12 @@ func GetRhRegion(ocmServiceUrl string, regionName string) (Region, error) {
 	if err != nil {
 		return Region{}, err
 	}
-	regionName = fmt.Sprintf("rh-%s", regionName)
-	regVal, ok := regions[regionName]
-	if !ok {
-		return Region{}, fmt.Errorf("Can't find region %s", regionName)
+	for regName, regValue := range regions {
+		if strings.Contains(regName, regionName) {
+			return regValue, nil
+		}
 	}
-	return regVal, nil
+	return Region{}, fmt.Errorf("Can't find region %s", regionName)
 }
 
 func DetermineRegionDiscoveryUrl(ocmServiceUrl string) (string, error) {
