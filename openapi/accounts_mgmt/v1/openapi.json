@@ -1696,6 +1696,42 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/notify_details": {
+      "post": {
+        "description": "Post Notification details about user related to subscription/cluster via email and get the data associated with it.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationDetailsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDetailsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/organizations": {
       "post": {
         "description": "Creates a new organization.",
@@ -6157,6 +6193,62 @@
           },
           "value": {
             "type": "string"
+          }
+        }
+      },
+      "NotificationDetailsRequest": {
+        "description": "This struct is a request to get a templated email to a user related to this.\nsubscription/cluster.",
+        "properties": {
+          "bcc_address": {
+            "description": "The BCC address to be included on the email that is sent.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Indicates which Cluster (internal id) the resource type belongs to.",
+            "type": "string"
+          },
+          "cluster_uuid": {
+            "description": "Indicates which Cluster (external id) the resource type belongs to.",
+            "type": "string"
+          },
+          "include_red_hat_associates": {
+            "description": "Indicates whether to include red hat associates in the email notification.",
+            "type": "boolean"
+          },
+          "internal_only": {
+            "description": "Indicates whether the service log is internal only to RH.",
+            "type": "boolean"
+          },
+          "subject": {
+            "description": "The email subject.",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "Indicates which Subscription the resource type belongs to.",
+            "type": "string"
+          }
+        }
+      },
+      "NotificationDetailsResponse": {
+        "description": "This struct is a request to get a templated email to a user related to this.\nsubscription/cluster.",
+        "properties": {
+          "associates": {
+            "description": "Indicates a list of associates email address.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "external_org_id": {
+            "description": "Indicates the external organization id of the subscription.",
+            "type": "string"
+          },
+          "recipients": {
+            "description": "Indicates a list of recipients username.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
