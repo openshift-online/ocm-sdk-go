@@ -53,6 +53,7 @@ var pathTreeData = `{
         },
         "labels": null,
         "notify": null,
+        "notify_details": null,
         "organizations": {
           "-": {
             "labels": {
