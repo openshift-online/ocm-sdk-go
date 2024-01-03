@@ -1076,6 +1076,42 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/aws_inquiries/validate_credentials": {
+      "post": {
+        "description": "Manages aws creds validation.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudProviderData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CloudProviderData"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/aws_inquiries/vpcs": {
       "post": {
         "description": "Retrieves the list of available vpcs of the cloud provider for specific region.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available vpcs\nof the provider.",
