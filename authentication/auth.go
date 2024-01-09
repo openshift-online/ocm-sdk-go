@@ -30,7 +30,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	authToken = tok.AccessToken
-	io.WriteString(w, "Login successful! Please close this window and return back to CLI")
+	_, err = io.WriteString(w, "Login successful! Please close this window and return back to CLI")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func serve(done chan int) {
@@ -67,7 +70,10 @@ func VerifyLogin(clientID string, clientSecret string) (string, error) {
 	twoMinTimer := time.Now().Local().Add(time.Minute * 2)
 	go serve(done)
 	time.Sleep(2 * time.Second)
-	open.Run(url)
+	err := open.Run(url)
+	if err != nil {
+		return authToken, err
+	}
 	time.Sleep(1 * time.Second)
 	for {
 		if authToken != "" {
@@ -77,6 +83,4 @@ func VerifyLogin(clientID string, clientSecret string) (string, error) {
 			return authToken, fmt.Errorf("Time expired")
 		}
 	}
-	<-done
-	return authToken, fmt.Errorf("An error occurred while verifying authentication")
 }
