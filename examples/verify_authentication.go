@@ -26,7 +26,7 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	token, err := authentication.VerifyLogin("cloud-services", "")
+	token, err := authentication.VerifyLogin("cloud-services")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't get token: %v\n", err)
 		os.Exit(1)

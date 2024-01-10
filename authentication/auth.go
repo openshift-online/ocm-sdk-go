@@ -47,13 +47,13 @@ func serve(done chan int) {
 	}
 }
 
-func VerifyLogin(clientID string, clientSecret string) (string, error) {
+func VerifyLogin(clientID string) (string, error) {
 	authToken = ""
 	ctx = context.Background()
 	// Create config for OAuth2, redirect to localhost for callback verification and retrieving tokens
 	conf = &oauth2.Config{
 		ClientID:     clientID,
-		ClientSecret: clientSecret,
+		ClientSecret: "",
 		Scopes:       []string{"openid"},
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  "https://sso.stage.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth",
