@@ -1714,7 +1714,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotificationDetailsResponse"
+                  "$ref": "#/components/schemas/GenericNotifyDetailsResponse"
                 }
               }
             }
@@ -6148,6 +6148,59 @@
           }
         }
       },
+      "GenericNotifyDetailsResponse": {
+        "description": "class that defines notify details response in general.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'GenericNotifyDetailsResponse' if this is a complete object or 'GenericNotifyDetailsResponseLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "associates": {
+            "description": "Retrieved List of associates email address.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "items": {
+            "description": "Retrieved list of additional notify details parameters key-value.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationDetailsResponse"
+            }
+          },
+          "page": {
+            "description": "Index of the returned page, where one corresponds to the first page. As this\ncollection doesn't support paging the result will always be `1`.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "recipients": {
+            "description": "Retrieved List of recipients username.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "size": {
+            "description": "Number of items that will be contained in the returned page. As this collection\ndoesn't support paging or searching the result will always be the total number of\nnotify details.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of notify details.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "Label": {
         "properties": {
           "kind": {
@@ -6230,25 +6283,27 @@
         }
       },
       "NotificationDetailsResponse": {
-        "description": "This struct is a request to get a templated email to a user related to this.\nsubscription/cluster.",
+        "description": "This class is a single response item for the notify details list.",
         "properties": {
-          "associates": {
-            "description": "Indicates a list of associates email address.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "external_org_id": {
-            "description": "Indicates the external organization id of the subscription.",
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NotificationDetailsResponse' if this is a complete object or 'NotificationDetailsResponseLink' if it is just a link.",
             "type": "string"
           },
-          "recipients": {
-            "description": "Indicates a list of recipients username.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "key": {
+            "description": "Indicates the key of the response parameter.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Indicates the value of the response parameter.",
+            "type": "string"
           }
         }
       },

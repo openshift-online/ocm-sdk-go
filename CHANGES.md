@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.392
+- Update model version v0.0.346
+  - Modify notify_details response
+
 ## 0.1.391
 - Update model version v0.0.345
   - Add `validate_credentials` resource to `AwsInquiries`
