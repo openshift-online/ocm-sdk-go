@@ -62,7 +62,6 @@ func shutdown(server *http.Server) {
 	if err := server.Shutdown(context.TODO()); err != nil {
 		log.Fatalf("HTTP shutdown error: %v", err)
 	}
-	log.Println("Graceful shutdown complete.")
 }
 
 func VerifyLogin(clientID string) (string, error) {
