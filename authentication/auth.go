@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
 )
 
@@ -40,11 +41,28 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func serve(done chan int) {
-	http.ListenAndServe(":9998", nil)
-	if done != nil {
-		done <- 0
+func serve(wg *sync.WaitGroup) *http.Server {
+	server := &http.Server{Addr: ":9998"}
+	http.HandleFunc("/oauth/callback", callbackHandler)
+	go func() {
+		defer wg.Done() // let main know we are done cleaning up
+
+		// always returns error. ErrServerClosed on graceful close
+		if err := server.ListenAndServe(); err != http.ErrServerClosed {
+			// unexpected error. port in use?
+			log.Fatalf("ListenAndServe(): %v", err)
+		}
+	}()
+
+	// returning reference so caller can call Shutdown()
+	return server
+}
+
+func shutdown(server *http.Server) {
+	if err := server.Shutdown(context.TODO()); err != nil {
+		log.Fatalf("HTTP shutdown error: %v", err)
 	}
+	log.Println("Graceful shutdown complete.")
 }
 
 func VerifyLogin(clientID string) (string, error) {
@@ -73,26 +91,25 @@ func VerifyLogin(clientID string) (string, error) {
 	// Create URL with PKCE
 	url := conf.AuthCodeURL("state", oauth2.AccessTypeOffline, oauth2.S256ChallengeOption(verifier))
 
-	http.HandleFunc("/oauth/callback", callbackHandler)
-	done := make(chan int)
+	httpServerExitDone := &sync.WaitGroup{}
 
-	// Add a 5 min timer until the user finishes the auth process
-	fiveMinTimer := time.Now().Local().Add(time.Minute * 5)
-	go serve(done)
-	time.Sleep(2 * time.Second)
+	httpServerExitDone.Add(1)
+	server := serve(httpServerExitDone)
 
-	// Redirect user to Red Hat SSO auth page
 	err := open.Run(url)
 	if err != nil {
 		return authToken, err
 	}
-	time.Sleep(1 * time.Second)
+	fiveMinTimer := time.Now().Local().Add(time.Minute * 5)
+
 	// Wait for the user to finish auth process, and return back with authToken. Otherwise, return an error after 5 mins
 	for {
 		if authToken != "" {
+			shutdown(server)
 			return authToken, nil
 		}
 		if time.Now().After(fiveMinTimer) {
+			shutdown(server)
 			return authToken, fmt.Errorf("Time expired")
 		}
 	}
