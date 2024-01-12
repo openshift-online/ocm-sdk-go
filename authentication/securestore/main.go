@@ -7,10 +7,9 @@ import (
 const (
 	SecureStoreConfigKey = "securestore"       // OCM_CONFIG key to enable secure OS store
 	KindInternetPassword = "Internet password" // MacOS Keychain item kind
-	LabelKey             = "RedHatSSO"
-	CollectionLabel      = "OCM"
-	KeychainName         = "login" // MacOS Keychain name
-	DefaultFilePath      = "~/.config/ocm/ocm.json"
+	ItemKey              = "RedHatSSO"
+	CollectionName       = "login"         // Common OS default collection name
+	DefaultFilePath      = "~/.config/ocm" // File path when using File backend
 )
 
 func getKeyringConfig() keyring.Config {
@@ -19,30 +18,30 @@ func getKeyringConfig() keyring.Config {
 		// that will attempt to be used.
 		AllowedBackends: []keyring.BackendType{
 			keyring.WinCredBackend,
-			keyring.KeychainBackend,      // Tested
-			keyring.SecretServiceBackend, // Tested
+			keyring.KeychainBackend,
+			keyring.SecretServiceBackend,
 			keyring.KWalletBackend,
 			keyring.KeyCtlBackend,
-			keyring.PassBackend, // Tested
+			keyring.PassBackend,
 			// The FileBackend is a last resort and will store credentials in an encrypted file. This has
 			// the worst user experience as the user will have to enter a password every time they attempt
 			// to access the file.
-			keyring.FileBackend, // Tested
+			keyring.FileBackend,
 		},
 		// Generic
-		ServiceName: CollectionLabel,
+		ServiceName: ItemKey,
 		// MacOS
-		KeychainName:                   KeychainName,
+		KeychainName:                   CollectionName,
 		KeychainTrustApplication:       true,
 		KeychainSynchronizable:         false,
 		KeychainAccessibleWhenUnlocked: false,
 		// Windows
-		WinCredPrefix: CollectionLabel,
+		WinCredPrefix: ItemKey,
 		// Secret Service
-		LibSecretCollectionName: CollectionLabel,
+		LibSecretCollectionName: CollectionName,
 		// KWallet
-		KWalletFolder: CollectionLabel,
-		KWalletAppID:  CollectionLabel,
+		KWalletFolder: CollectionName,
+		KWalletAppID:  ItemKey,
 		// KeyCtl
 		KeyCtlScope: "user",
 		// Encrypted File
@@ -63,15 +62,15 @@ func AvailableBackends() []string {
 }
 
 // UpsertConfigToKeyring will upsert the provided credentials to first priority OS secure store.
-func UpsertConfigToKeyring(creds []byte, debug bool) error {
+func UpsertConfigToKeyring(creds []byte) error {
 	ring, err := keyring.Open(getKeyringConfig())
 	if err != nil {
 		return err
 	}
 
 	err = ring.Set(keyring.Item{
-		Label:       LabelKey,
-		Key:         LabelKey,
+		Label:       ItemKey,
+		Key:         ItemKey,
 		Description: KindInternetPassword,
 		Data:        creds,
 	})
@@ -80,7 +79,7 @@ func UpsertConfigToKeyring(creds []byte, debug bool) error {
 }
 
 // GetConfigFromKeyring will retrieve the credentials from the first priority OS secure store.
-func GetConfigFromKeyring(debug bool) ([]byte, error) {
+func GetConfigFromKeyring() ([]byte, error) {
 	credentials := []byte("")
 
 	ring, err := keyring.Open(getKeyringConfig())
@@ -88,7 +87,7 @@ func GetConfigFromKeyring(debug bool) ([]byte, error) {
 		return nil, err
 	}
 
-	i, err := ring.Get(LabelKey)
+	i, err := ring.Get(ItemKey)
 	if err != nil && err != keyring.ErrKeyNotFound {
 		return credentials, err
 	} else if err == keyring.ErrKeyNotFound {
