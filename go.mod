@@ -4,7 +4,6 @@ go 1.21
 
 require (
 	github.com/cenkalti/backoff/v4 v4.1.3
-	github.com/docker/docker-credential-helpers v0.8.0
 	github.com/evanphx/json-patch/v5 v5.6.0
 	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/golang/glog v1.0.0
@@ -13,7 +12,6 @@ require (
 	github.com/jackc/pgconn v1.12.0
 	github.com/jackc/pgx/v4 v4.16.0
 	github.com/json-iterator/go v1.1.12
-	github.com/keybase/go-keychain v0.0.0-20231219164618-57a3676c3af6
 	github.com/lib/pq v1.10.5
 	github.com/microcosm-cc/bluemonday v1.0.18
 	github.com/onsi/ginkgo/v2 v2.1.4
@@ -61,6 +59,7 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/term v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
