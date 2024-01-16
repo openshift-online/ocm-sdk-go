@@ -73,8 +73,8 @@ func VerifyLogin(clientID string) (string, error) {
 		ClientSecret: "",
 		Scopes:       []string{"openid"},
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://sso.stage.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth",
-			TokenURL: "https://sso.stage.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token",
+			AuthURL:  "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth",
+			TokenURL: "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token",
 		},
 		RedirectURL: "http://127.0.0.1:9998/oauth/callback",
 	}

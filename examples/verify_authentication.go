@@ -26,7 +26,7 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	token, err := authentication.VerifyLogin("cloud-services")
+	token, err := authentication.VerifyLogin("ocm-cli")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't get token: %v\n", err)
 		os.Exit(1)
@@ -34,7 +34,6 @@ func main() {
 	connection, err := sdk.NewConnectionBuilder().
 		Logger(logger).
 		Tokens(token).
-		URL("http://localhost:8000").
 		BuildContext(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't build connection: %v\n", err)
