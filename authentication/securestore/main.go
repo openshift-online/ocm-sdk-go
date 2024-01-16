@@ -1,6 +1,11 @@
 package securestore
 
 import (
+	"bytes"
+	"compress/gzip"
+	"fmt"
+	"io"
+
 	"github.com/99designs/keyring"
 )
 
@@ -10,6 +15,7 @@ const (
 	ItemKey              = "RedHatSSO"
 	CollectionName       = "login"         // Common OS default collection name
 	DefaultFilePath      = "~/.config/ocm" // File path when using File backend
+	MaxWindowsByteSize   = 2500            // Windows Credential Manager has a 2500 byte limit
 )
 
 func getKeyringConfig() keyring.Config {
@@ -68,11 +74,22 @@ func UpsertConfigToKeyring(creds []byte) error {
 		return err
 	}
 
+	compressed, err := compressConfig(creds)
+	if err != nil {
+		return err
+	}
+
+	// check if available backend contains windows credential manager and exceeds the byte limit
+	if len(compressed) > MaxWindowsByteSize &&
+		keyring.AvailableBackends()[0] == keyring.WinCredBackend {
+		return fmt.Errorf("credentials are too large for Windows Credential Manager: %d bytes (max %d)", len(compressed), MaxWindowsByteSize)
+	}
+
 	err = ring.Set(keyring.Item{
 		Label:       ItemKey,
 		Key:         ItemKey,
 		Description: KindInternetPassword,
-		Data:        creds,
+		Data:        compressed,
 	})
 
 	return err
@@ -96,6 +113,46 @@ func GetConfigFromKeyring() ([]byte, error) {
 		credentials = i.Data
 	}
 
-	return credentials, nil
+	creds, err := decompressConfig(credentials)
+	if err != nil {
+		return nil, err
+	}
 
+	return creds, nil
+
+}
+
+// Compresses credential bytes to help ensure all OS secure stores can store the data.
+// Windows Credential Manager has a 2500 byte limit.
+func compressConfig(creds []byte) ([]byte, error) {
+	var b bytes.Buffer
+	gz := gzip.NewWriter(&b)
+
+	_, err := gz.Write(creds)
+	if err != nil {
+		return nil, err
+	}
+
+	err = gz.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
+// Decompresses credential bytes
+func decompressConfig(creds []byte) ([]byte, error) {
+	reader := bytes.NewReader(creds)
+	gzreader, err := gzip.NewReader(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	output, err := io.ReadAll(gzreader)
+	if err != nil {
+		return nil, err
+	}
+
+	return output, err
 }
