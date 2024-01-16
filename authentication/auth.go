@@ -21,6 +21,13 @@ var (
 	authToken string
 )
 
+const (
+	RedirectURL     = "http://127.0.0.1"
+	RedirectPort    = "9998"
+	DefaultAuthURL  = "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth"
+	CallbackHandler = "/oauth/callback"
+)
+
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	queryParts, _ := url.ParseQuery(r.URL.RawQuery)
 
@@ -42,8 +49,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func serve(wg *sync.WaitGroup) *http.Server {
-	server := &http.Server{Addr: ":9998"}
-	http.HandleFunc("/oauth/callback", callbackHandler)
+	server := &http.Server{Addr: fmt.Sprintf(":%s", RedirectPort)}
+	http.HandleFunc(CallbackHandler, callbackHandler)
 	go func() {
 		defer wg.Done() // let main know we are done cleaning up
 
@@ -73,10 +80,10 @@ func VerifyLogin(clientID string) (string, error) {
 		ClientSecret: "",
 		Scopes:       []string{"openid"},
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth",
-			TokenURL: "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token",
+			AuthURL:  DefaultAuthURL,
+			TokenURL: DefaultTokenURL,
 		},
-		RedirectURL: "http://127.0.0.1:9998/oauth/callback",
+		RedirectURL: fmt.Sprintf("%s:%s%s", RedirectURL, RedirectPort, CallbackHandler),
 	}
 	verifier = oauth2.GenerateVerifier()
 
