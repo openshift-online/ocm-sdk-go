@@ -3,6 +3,7 @@ module github.com/openshift-online/ocm-sdk-go
 go 1.21
 
 require (
+	github.com/99designs/keyring v1.2.2
 	github.com/cenkalti/backoff/v4 v4.1.3
 	github.com/evanphx/json-patch/v5 v5.6.0
 	github.com/golang-jwt/jwt/v4 v4.4.1
@@ -24,8 +25,6 @@ require (
 	golang.org/x/net v0.10.0
 	gopkg.in/yaml.v3 v3.0.1
 )
-
-require github.com/99designs/keyring v1.2.2
 
 require (
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect

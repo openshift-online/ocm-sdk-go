@@ -113,6 +113,11 @@ func GetConfigFromKeyring() ([]byte, error) {
 		credentials = i.Data
 	}
 
+	if len(credentials) == 0 {
+		// No creds to decompress, return early
+		return credentials, nil
+	}
+
 	creds, err := decompressConfig(credentials)
 	if err != nil {
 		return nil, err
