@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.394
+- Add `SubnetOutposts` and `AvailabilityZoneTypes` to `aws_node_pool_type` and `aws_machine_pool_type` resources.
+
 ## 0.1.393
 - Add authentication using OAuth2 and PCKE
 - Add secure token storage
