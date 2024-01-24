@@ -4,14 +4,15 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/skratchdot/open-golang/open"
-	"golang.org/x/oauth2"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"sync"
 	"time"
+
+	"github.com/skratchdot/open-golang/open"
+	"golang.org/x/oauth2"
 )
 
 var (

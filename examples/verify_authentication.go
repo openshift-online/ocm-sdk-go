@@ -5,8 +5,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/openshift-online/ocm-sdk-go/authentication"
 	"os"
+
+	"github.com/openshift-online/ocm-sdk-go/authentication"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
 	"github.com/openshift-online/ocm-sdk-go/logging"

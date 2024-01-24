@@ -12147,9 +12147,23 @@
               "type": "string"
             }
           },
+          "availability_zone_types": {
+            "description": "Associates nodepool availability zones with zone types (e.g. wavelength, local).",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "spot_market_options": {
             "description": "Use spot instances on this machine pool to reduce cost.",
             "$ref": "#/components/schemas/AWSSpotMarketOptions"
+          },
+          "subnet_outposts": {
+            "description": "Associates nodepool subnets with AWS Outposts",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -12168,6 +12182,13 @@
             "description": "Self link.",
             "type": "string"
           },
+          "availability_zone_types": {
+            "description": "Associates nodepool availability zones with zone types (e.g. wavelength, local).",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "instance_profile": {
             "description": "InstanceProfile is the AWS EC2 instance profile, which is a container for an IAM role that the EC2 instance uses.",
             "type": "string"
@@ -12175,6 +12196,13 @@
           "instance_type": {
             "description": "InstanceType is an ec2 instance type for node instances (e.g. m5.large).",
             "type": "string"
+          },
+          "subnet_outposts": {
+            "description": "Associates nodepool subnets with AWS Outposts",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           },
           "tags": {
             "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates",
@@ -16633,6 +16661,10 @@
             "description": "EndOfLifeTimestamp is the date and time when the version will get to End of Life, using the\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].",
             "type": "string",
             "format": "date-time"
+          },
+          "hosted_control_plane_default": {
+            "description": "HostedControlPlaneDefault is a flag that indicates if this should be selected as the default version when a\nHCP cluster is created without specifying explicitly the version.",
+            "type": "boolean"
           },
           "hosted_control_plane_enabled": {
             "description": "HostedControlPlaneEnabled indicates whether this version can be used to create HCP clusters.",
