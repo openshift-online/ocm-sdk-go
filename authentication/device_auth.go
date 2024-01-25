@@ -17,7 +17,7 @@ func InitiateDeviceAuth(clientID string) (string, error) {
 	conf := &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: "",
-		Scopes:       []string{"openid", "api.ocm"},
+		Scopes:       []string{"openid"},
 		Endpoint: oauth2.Endpoint{
 			DeviceAuthURL: DeviceAuthURL,
 			TokenURL:      DefaultTokenURL,

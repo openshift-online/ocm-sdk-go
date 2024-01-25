@@ -79,7 +79,7 @@ func InitiateAuthCode(clientID string) (string, error) {
 	conf = &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: "",
-		Scopes:       []string{"openid", "api.ocm"},
+		Scopes:       []string{"openid"},
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  DefaultAuthURL,
 			TokenURL: DefaultTokenURL,
