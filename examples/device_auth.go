@@ -28,7 +28,19 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	token, err := authentication.InitiateDeviceAuth(clientId)
+	cfg := &authentication.DeviceAuthConfig{
+		ClientID: clientId,
+	}
+	_, err = cfg.InitiateDeviceAuth(ctx)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't initiate device auth: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("To continue login, navigate to %v and enter code %v\n", cfg.DeviceAuthResponse.VerificationURI, cfg.DeviceAuthResponse.UserCode)
+	fmt.Printf("Checking status every %v seconds...\n", cfg.DeviceAuthResponse.Interval)
+
+	token, err := cfg.PollForTokenExchange(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't get token: %v\n", err)
 		os.Exit(1)
