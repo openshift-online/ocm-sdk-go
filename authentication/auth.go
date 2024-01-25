@@ -35,7 +35,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	// Use the authorization code that is pushed to the redirect URL
 	code := queryParts["code"][0]
 
-	// Exchange will do the handshake to retrieve the initial access token.
+	// Exchange will do the handshake to retrieve the initial token.
 	tok, err := conf.Exchange(ctx, code, oauth2.VerifierOption(verifier))
 	if err != nil {
 		log.Fatal(err)

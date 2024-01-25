@@ -11,7 +11,7 @@ const (
 	DeviceAuthURL = "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth/device"
 )
 
-// Initiates device code flow and returns access token
+// Initiates device code flow and returns a refresh token
 func InitiateDeviceAuth(clientID string) (string, error) {
 	ctx := context.Background()
 	conf := &oauth2.Config{
@@ -41,7 +41,7 @@ func InitiateDeviceAuth(clientID string) (string, error) {
 	// Wait for the user to enter the code, polls at interval specified in deviceAuthResp.Interval
 	token, err := conf.DeviceAccessToken(ctx, deviceAuthResp, verifierOpt)
 	if err != nil {
-		return "", fmt.Errorf("error exchanging for access token: %v", err)
+		return "", fmt.Errorf("error exchanging for token: %v", err)
 	}
 
 	return token.RefreshToken, nil
