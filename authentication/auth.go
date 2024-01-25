@@ -4,14 +4,15 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/skratchdot/open-golang/open"
-	"golang.org/x/oauth2"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"sync"
 	"time"
+
+	"github.com/skratchdot/open-golang/open"
+	"golang.org/x/oauth2"
 )
 
 var (
@@ -40,8 +41,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	// Get the access token and ask user to go back to CLI
-	authToken = tok.AccessToken
+	// Get the refresh token and ask user to go back to CLI
+	authToken = tok.RefreshToken
 	_, err = io.WriteString(w, "Login successful! Please close this window and return back to CLI")
 	if err != nil {
 		log.Fatal(err)
@@ -71,14 +72,14 @@ func shutdown(server *http.Server) {
 	}
 }
 
-func VerifyLogin(clientID string) (string, error) {
+func InitiateAuthCode(clientID string) (string, error) {
 	authToken = ""
 	ctx = context.Background()
 	// Create config for OAuth2, redirect to localhost for callback verification and retrieving tokens
 	conf = &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: "",
-		Scopes:       []string{"openid"},
+		Scopes:       []string{"openid", "api.ocm"},
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  DefaultAuthURL,
 			TokenURL: DefaultTokenURL,

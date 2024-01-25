@@ -28,7 +28,7 @@ func main() {
 	}
 
 	// Create the connection, and remember to close it:
-	token, err := authentication.InitiateAuthCode(clientId)
+	token, err := authentication.InitiateDeviceAuth(clientId)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't get token: %v\n", err)
 		os.Exit(1)
