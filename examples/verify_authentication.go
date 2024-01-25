@@ -50,7 +50,7 @@ func main() {
 	_, err = collection.Get().
 		SendContext(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't retrieve capabilities: %s\n", err)
+		fmt.Fprintf(os.Stderr, "Can't retrieve account: %s\n", err)
 		os.Exit(1)
 	}
 }
