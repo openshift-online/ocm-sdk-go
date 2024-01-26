@@ -16634,6 +16634,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "hosted_control_plane_default": {
+            "description": "HostedControlPlaneDefault is a flag that indicates if this should be selected as the default version when a\nHCP cluster is created without specifying explicitly the version.",
+            "type": "boolean"
+          },
           "hosted_control_plane_enabled": {
             "description": "HostedControlPlaneEnabled indicates whether this version can be used to create HCP clusters.",
             "type": "boolean"
