@@ -12147,9 +12147,23 @@
               "type": "string"
             }
           },
+          "availability_zone_types": {
+            "description": "Associates nodepool availability zones with zone types (e.g. wavelength, local).",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "spot_market_options": {
             "description": "Use spot instances on this machine pool to reduce cost.",
             "$ref": "#/components/schemas/AWSSpotMarketOptions"
+          },
+          "subnet_outposts": {
+            "description": "Associates nodepool subnets with AWS Outposts.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -12168,6 +12182,13 @@
             "description": "Self link.",
             "type": "string"
           },
+          "availability_zone_types": {
+            "description": "Associates nodepool availability zones with zone types (e.g. wavelength, local).",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "instance_profile": {
             "description": "InstanceProfile is the AWS EC2 instance profile, which is a container for an IAM role that the EC2 instance uses.",
             "type": "string"
@@ -12176,8 +12197,15 @@
             "description": "InstanceType is an ec2 instance type for node instances (e.g. m5.large).",
             "type": "string"
           },
+          "subnet_outposts": {
+            "description": "Associates nodepool subnets with AWS Outposts.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "tags": {
-            "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates",
+            "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates.",
             "type": "object",
             "additionalProperties": {
               "type": "string"
