@@ -40,6 +40,8 @@ goimports_version:=v0.4.0
 # machine: the leadership flag and retry tests.
 ginkgo_flags:=
 
+.DEFAULT_GOAL := examples
+
 .PHONY: examples
 examples:
 	cd examples && \
