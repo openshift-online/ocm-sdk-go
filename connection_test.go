@@ -986,6 +986,34 @@ var _ = Describe("Connection", func() {
 		err = connection.Close()
 		Expect(err).To(BeNil())
 	})
+
+	It("Can be created with no authentication", func() {
+		connection, err := NewUnauthenticatedConnectionBuilder().
+			Logger(logger).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		Expect(connection).ToNot(BeNil())
+		Expect(connection.Scopes()).To(BeEmpty())
+		Expect(connection.TokenURL()).To(BeEmpty())
+		clientId, clientSecret := connection.Client()
+		Expect(clientId).To(BeEmpty())
+		Expect(clientSecret).To(BeEmpty())
+		user, password := connection.User()
+		Expect(user).To(BeEmpty())
+		Expect(password).To(BeEmpty())
+		access, refresh, err := connection.Tokens()
+		Expect(access).To(BeEmpty())
+		Expect(refresh).To(BeEmpty())
+		Expect(err).ToNot(HaveOccurred())
+		access, refresh, err = connection.TokensContext(context.Background())
+		Expect(access).To(BeEmpty())
+		Expect(refresh).To(BeEmpty())
+		Expect(err).ToNot(HaveOccurred())
+
+		err = connection.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
 })
 
 type TestTransport struct {
