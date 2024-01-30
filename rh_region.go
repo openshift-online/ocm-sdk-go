@@ -51,8 +51,7 @@ func DetermineRegionDiscoveryUrl(ocmServiceUrl string) (string, error) {
 		return "", err
 	}
 	regionDiscoveryHost := "api.openshift.com"
-	//TODO: Remove the OR condition from this if statement before the MR merge
-	if strings.HasSuffix(baseUrl.Hostname(), "integration.openshift.com") || true {
+	if strings.HasSuffix(baseUrl.Hostname(), "integration.openshift.com") {
 		regionDiscoveryHost = "api.integration.openshift.com"
 	} else if strings.HasSuffix(baseUrl.Hostname(), "stage.openshift.com") {
 		regionDiscoveryHost = "api.stage.openshift.com"
