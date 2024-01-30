@@ -3,6 +3,36 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.397
+- Add `NewUnauthenticatedConnectionBuilder` function to allow creating a
+  `Connection` without client side authentication
+
+## 0.1.396
+- Remove redundant fields from /notify_details
+- Add `ExternalAuthConfig` to `Cluster` model.
+
+## 0.1.395
+- Add `SubnetOutposts` and `AvailabilityZoneTypes` to `aws_node_pool_type` and `aws_machine_pool_type` resources.
+
+## 0.1.394
+- Added Device Code flow to `authentication`
+- Update model version v0.0.347
+  - Add `HostedControlPlaneDefault` boolean to `Version` Type model.
+
+## 0.1.393
+- Add authentication using OAuth2 and PCKE
+- Add secure token storage
+
+## 0.1.392
+- Update model version v0.0.346
+  - Modify notify_details response
+
+## 0.1.391
+- Update model version v0.0.345
+  - Add `validate_credentials` resource to `AwsInquiries`
+- Update model version v0.0.344
+  - Add the /notify_details endpoint to the SDK
+
 ## 0.1.390
 - Update model version v0.0.343
   -  Add `Platform`to `subnet_network_verification_type` resource

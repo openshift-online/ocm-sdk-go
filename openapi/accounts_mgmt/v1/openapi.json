@@ -1696,6 +1696,42 @@
         }
       }
     },
+    "/api/accounts_mgmt/v1/notify_details": {
+      "post": {
+        "description": "Post Notification details about user related to subscription/cluster via email and get the data associated with it.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationDetailsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericNotifyDetailsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/accounts_mgmt/v1/organizations": {
       "post": {
         "description": "Creates a new organization.",
@@ -6112,6 +6148,44 @@
           }
         }
       },
+      "GenericNotifyDetailsResponse": {
+        "description": "class that defines notify details response in general.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'GenericNotifyDetailsResponse' if this is a complete object or 'GenericNotifyDetailsResponseLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "associates": {
+            "description": "Retrieved List of associates email address.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "items": {
+            "description": "Retrieved list of additional notify details parameters key-value.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationDetailsResponse"
+            }
+          },
+          "recipients": {
+            "description": "Retrieved List of recipients username.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "Label": {
         "properties": {
           "kind": {
@@ -6156,6 +6230,64 @@
             "format": "date-time"
           },
           "value": {
+            "type": "string"
+          }
+        }
+      },
+      "NotificationDetailsRequest": {
+        "description": "This struct is a request to get a templated email to a user related to this.\nsubscription/cluster.",
+        "properties": {
+          "bcc_address": {
+            "description": "The BCC address to be included on the email that is sent.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Indicates which Cluster (internal id) the resource type belongs to.",
+            "type": "string"
+          },
+          "cluster_uuid": {
+            "description": "Indicates which Cluster (external id) the resource type belongs to.",
+            "type": "string"
+          },
+          "include_red_hat_associates": {
+            "description": "Indicates whether to include red hat associates in the email notification.",
+            "type": "boolean"
+          },
+          "internal_only": {
+            "description": "Indicates whether the service log is internal only to RH.",
+            "type": "boolean"
+          },
+          "subject": {
+            "description": "The email subject.",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "Indicates which Subscription the resource type belongs to.",
+            "type": "string"
+          }
+        }
+      },
+      "NotificationDetailsResponse": {
+        "description": "This class is a single response item for the notify details list.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NotificationDetailsResponse' if this is a complete object or 'NotificationDetailsResponseLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "key": {
+            "description": "Indicates the key of the response parameter.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Indicates the value of the response parameter.",
             "type": "string"
           }
         }
