@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.397
+- Add `NewUnauthenticatedConnectionBuilder` function to allow creating a
+  `Connection` without client side authentication
+
 ## 0.1.396
 - Remove redundant fields from /notify_details
 - Add `ExternalAuthConfig` to `Cluster` model.
