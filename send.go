@@ -99,6 +99,9 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	}
 
 	// Check that the response content type is JSON:
+	if response.StatusCode == http.StatusNoContent {
+		return
+	}
 	err = internal.CheckContentType(response)
 	if err != nil {
 		return
