@@ -41,7 +41,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	regValue, err := sdk.GetRhRegion("https://api.integration.openshift.com", "rh-singapore")
+	regValue, err := sdk.GetRhRegion("https://api.stage.openshift.com", "rh-singapore")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Can't find region: %v", err)
 		os.Exit(1)
