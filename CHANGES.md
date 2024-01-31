@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.398
+- Add regions support from ocm shards
+
 ## 0.1.397
 - Add `NewUnauthenticatedConnectionBuilder` function to allow creating a
   `Connection` without client side authentication
