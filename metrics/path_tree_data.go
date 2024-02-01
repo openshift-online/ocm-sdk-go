@@ -52,7 +52,6 @@ var pathTreeData = `{
           }
         },
         "labels": null,
-        "notify": null,
         "notify_details": null,
         "organizations": {
           "-": {
@@ -96,7 +95,6 @@ var pathTreeData = `{
             "labels": {
               "-": null
             },
-            "notify": null,
             "reserved_resources": {
               "-": null
             },

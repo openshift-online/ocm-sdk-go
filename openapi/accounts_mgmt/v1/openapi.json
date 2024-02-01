@@ -1660,42 +1660,6 @@
         }
       }
     },
-    "/api/accounts_mgmt/v1/notify": {
-      "post": {
-        "description": "Notify user related to subscription/cluster via email",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SubscriptionNotify"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubscriptionNotify"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/accounts_mgmt/v1/notify_details": {
       "post": {
         "description": "Post Notification details about user related to subscription/cluster via email and get the data associated with it.",
@@ -5041,52 +5005,6 @@
         }
       }
     },
-    "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/notify": {
-      "post": {
-        "description": "Notify user related to subscription via email",
-        "parameters": [
-          {
-            "name": "subscription_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SubscriptionNotify"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubscriptionNotify"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/accounts_mgmt/v1/subscriptions/{subscription_id}/reserved_resources": {
       "get": {
         "description": "Retrieves items of the collection of reserved resources by the subscription.",
@@ -7058,50 +6976,6 @@
           },
           "upgrade": {
             "$ref": "#/components/schemas/ClusterUpgrade"
-          }
-        }
-      },
-      "SubscriptionNotify": {
-        "description": "This struct is a request to send a templated email to a user related to this\nsubscription.",
-        "properties": {
-          "bcc_address": {
-            "description": "The BCC address to be included on the email that is sent",
-            "type": "string"
-          },
-          "cluster_id": {
-            "description": "Indicates which Cluster (internal id) the resource type belongs to",
-            "type": "string"
-          },
-          "cluster_uuid": {
-            "description": "Indicates which Cluster (external id) the resource type belongs to",
-            "type": "string"
-          },
-          "include_red_hat_associates": {
-            "description": "Indicates whether to include red hat associates in the email notification",
-            "type": "boolean"
-          },
-          "internal_only": {
-            "description": "Indicates whether the service log is internal only to RH",
-            "type": "boolean"
-          },
-          "subject": {
-            "description": "The email subject",
-            "type": "string"
-          },
-          "subscription_id": {
-            "description": "Indicates which Subscription the resource type belongs to",
-            "type": "string"
-          },
-          "template_name": {
-            "description": "The name of the template used to construct the email contents",
-            "type": "string"
-          },
-          "template_parameters": {
-            "description": "The values which will be substituted into the templated email",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TemplateParameter"
-            }
           }
         }
       },
