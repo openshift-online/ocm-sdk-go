@@ -27,14 +27,26 @@ func main() {
 	config := []byte("mybytestringagain")
 
 	// Upsert to keyring
-	securestore.UpsertConfigToKeyring(config)
+	err = securestore.UpsertConfigToKeyring(config)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error upserting to keyring: %v", err)
+		os.Exit(1)
+	}
 
 	// Upsert again to keyring
 	config = []byte(token)
-	securestore.UpsertConfigToKeyring(config)
+	err = securestore.UpsertConfigToKeyring(config)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error upserting to keyring: %v", err)
+		os.Exit(1)
+	}
 
 	// Read bytes back from Keyring
-	readVal, _ := securestore.GetConfigFromKeyring()
+	readVal, err := securestore.GetConfigFromKeyring()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading from keyring: %v", err)
+		os.Exit(1)
+	}
 	// Should be a token
 	fmt.Printf("Read from keyring: %s\n", string(readVal))
 }

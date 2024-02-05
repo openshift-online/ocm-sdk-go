@@ -17,16 +17,21 @@ const (
 	MaxWindowsByteSize   = 2500    // Windows Credential Manager has a 2500 byte limit
 )
 
+var (
+	ErrNoBackendsAvailable = fmt.Errorf("no backends available, expected one of %v", allowedBackends)
+	// The order of the backends is important. The first backend in the list is the first one
+	// that will attempt to be used.
+	allowedBackends = []keyring.BackendType{
+		keyring.WinCredBackend,
+		keyring.KeychainBackend,
+		keyring.SecretServiceBackend,
+		keyring.PassBackend,
+	}
+)
+
 func getKeyringConfig() keyring.Config {
 	return keyring.Config{
-		// The order of the backends is important. The first backend in the list is the first one
-		// that will attempt to be used.
-		AllowedBackends: []keyring.BackendType{
-			keyring.WinCredBackend,
-			keyring.KeychainBackend,
-			keyring.SecretServiceBackend,
-			keyring.PassBackend,
-		},
+		AllowedBackends: allowedBackends,
 		// Generic
 		ServiceName: ItemKey,
 		// MacOS
@@ -48,9 +53,16 @@ func getKeyringConfig() keyring.Config {
 // The first backend in the slice is the first one that will be used.
 func AvailableBackends() []string {
 	b := []string{}
-	for _, k := range keyring.AvailableBackends() {
-		b = append(b, string(k))
+
+	// Intersection between available backends from OS and allowed backends
+	for _, avail := range keyring.AvailableBackends() {
+		for _, allowed := range allowedBackends {
+			if avail == allowed {
+				b = append(b, string(allowed))
+			}
+		}
 	}
+
 	return b
 }
 
@@ -58,6 +70,10 @@ func AvailableBackends() []string {
 //
 // Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
 func UpsertConfigToKeyring(creds []byte) error {
+	if err := validateBackends(); err != nil {
+		return err
+	}
+
 	ring, err := keyring.Open(getKeyringConfig())
 	if err != nil {
 		return err
@@ -84,10 +100,32 @@ func UpsertConfigToKeyring(creds []byte) error {
 	return err
 }
 
+// RemoveConfigFromKeyring will remove the credentials from the first priority OS secure store.
+//
+// Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
+func RemoveConfigFromKeyring() error {
+	if err := validateBackends(); err != nil {
+		return err
+	}
+
+	ring, err := keyring.Open(getKeyringConfig())
+	if err != nil {
+		return err
+	}
+
+	err = ring.Remove(ItemKey)
+
+	return err
+}
+
 // GetConfigFromKeyring will retrieve the credentials from the first priority OS secure store.
 //
 // Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
 func GetConfigFromKeyring() ([]byte, error) {
+	if err := validateBackends(); err != nil {
+		return nil, err
+	}
+
 	credentials := []byte("")
 
 	ring, err := keyring.Open(getKeyringConfig())
@@ -116,6 +154,14 @@ func GetConfigFromKeyring() ([]byte, error) {
 
 	return creds, nil
 
+}
+
+// Validates that at least one backend is available
+func validateBackends() error {
+	if len(AvailableBackends()) == 0 {
+		return ErrNoBackendsAvailable
+	}
+	return nil
 }
 
 // Compresses credential bytes to help ensure all OS secure stores can store the data.
