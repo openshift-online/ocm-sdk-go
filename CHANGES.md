@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.399
+- Additional error handling for `securestore`
+
 ## 0.1.398
 - Add regions support from ocm shards
 - Don't error when response is 204 and no content-type
