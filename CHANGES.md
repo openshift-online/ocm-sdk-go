@@ -6,7 +6,6 @@ SDK.
 ## 0.1.400
 - Update model version v0.0.352
   - Remove `StatusBoard` `fullname` search parameter.
-- Update model version v0.0.351
   - Deprecate `Notify` resource.
 
 ## 0.1.399
