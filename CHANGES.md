@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.400
+- Update model version v0.0.352
+  - Remove `StatusBoard` `fullname` search parameter.
+  - Deprecate `Notify` resource.
+
 ## 0.1.399
 - Additional error handling for `securestore`
 

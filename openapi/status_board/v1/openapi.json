@@ -299,13 +299,6 @@
         "description": "Retrieves the list of applications.",
         "parameters": [
           {
-            "name": "fullname",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "order_by",
             "in": "query",
             "schema": {
@@ -540,13 +533,6 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "name": "fullname",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           },
           {
             "name": "mine",
@@ -1434,13 +1420,6 @@
         "description": "Retrieves the list of products.",
         "parameters": [
           {
-            "name": "fullname",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "order_by",
             "in": "query",
             "schema": {
@@ -1675,13 +1654,6 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "name": "fullname",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           },
           {
             "name": "order_by",
@@ -1958,13 +1930,6 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "name": "fullname",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           },
           {
             "name": "mine",
@@ -2887,13 +2852,6 @@
       "get": {
         "description": "Retrieves the list of services.",
         "parameters": [
-          {
-            "name": "fullname",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "mine",
             "in": "query",
