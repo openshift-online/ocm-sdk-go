@@ -13348,6 +13348,10 @@
             "description": "Indicates if this add-on version can be added to clusters.",
             "type": "boolean"
           },
+          "package_image": {
+            "description": "The package image for this addon version",
+            "type": "string"
+          },
           "parameters": {
             "description": "List of parameters for this add-on version.",
             "type": "array",
