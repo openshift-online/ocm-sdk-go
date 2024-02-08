@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.401
+- Update model version v0.0.353
+  - Added support for `PackageImage` for `clusters_mgmt`
+
 ## 0.1.400
 - Update model version v0.0.352
   - Remove `StatusBoard` `fullname` search parameter.
