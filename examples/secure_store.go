@@ -9,6 +9,10 @@ import (
 )
 
 func main() {
+
+	// Modify the following variable to match your OS:
+	keyring := "keychain"
+
 	// Create a context:
 	clientId := "ocm-cli"
 
@@ -27,7 +31,7 @@ func main() {
 	config := []byte("mybytestringagain")
 
 	// Upsert to keyring
-	err = securestore.UpsertConfigToKeyring(config)
+	err = securestore.UpsertConfigToKeyring(keyring, config)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error upserting to keyring: %v", err)
 		os.Exit(1)
@@ -35,14 +39,14 @@ func main() {
 
 	// Upsert again to keyring
 	config = []byte(token)
-	err = securestore.UpsertConfigToKeyring(config)
+	err = securestore.UpsertConfigToKeyring(keyring, config)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error upserting to keyring: %v", err)
 		os.Exit(1)
 	}
 
 	// Read bytes back from Keyring
-	readVal, err := securestore.GetConfigFromKeyring()
+	readVal, err := securestore.GetConfigFromKeyring(keyring)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading from keyring: %v", err)
 		os.Exit(1)

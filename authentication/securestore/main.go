@@ -5,12 +5,12 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/99designs/keyring"
 )
 
 const (
-	SecureStoreConfigKey = "securestore"       // OCM_CONFIG key to enable secure OS store
 	KindInternetPassword = "Internet password" // MacOS Keychain item kind
 	ItemKey              = "RedHatSSO"
 	CollectionName       = "login" // Common OS default collection name
@@ -18,20 +18,19 @@ const (
 )
 
 var (
-	ErrNoBackendsAvailable = fmt.Errorf("no backends available, expected one of %v", allowedBackends)
-	// The order of the backends is important. The first backend in the list is the first one
-	// that will attempt to be used.
-	allowedBackends = []keyring.BackendType{
-		keyring.WinCredBackend,
-		keyring.KeychainBackend,
-		keyring.SecretServiceBackend,
-		keyring.PassBackend,
+	ErrKeyringUnavailable = fmt.Errorf("keyring is valid but is not available on the current OS")
+	ErrKeyringInvalid     = fmt.Errorf("keyring is invalid, expected one of: [%v]", strings.Join(AllowedBackends, ", "))
+	AllowedBackends       = []string{
+		string(keyring.WinCredBackend),
+		string(keyring.KeychainBackend),
+		string(keyring.SecretServiceBackend),
+		string(keyring.PassBackend),
 	}
 )
 
-func getKeyringConfig() keyring.Config {
+func getKeyringConfig(backend string) keyring.Config {
 	return keyring.Config{
-		AllowedBackends: allowedBackends,
+		AllowedBackends: []keyring.BackendType{keyring.BackendType(backend)},
 		// Generic
 		ServiceName: ItemKey,
 		// MacOS
@@ -46,19 +45,35 @@ func getKeyringConfig() keyring.Config {
 	}
 }
 
+// IsBackendAvailable provides validation that the desired backend is available on the current OS.
+//
+// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
+func IsBackendAvailable(backend string) (isAvailable bool) {
+	if backend == "" {
+		return false
+	}
+
+	for _, avail := range AvailableBackends() {
+		if avail == backend {
+			isAvailable = true
+			break
+		}
+	}
+
+	return isAvailable
+}
+
 // AvailableBackends provides a slice of all available backend keys on the current OS.
 //
-// Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
-//
-// The first backend in the slice is the first one that will be used.
+// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
 func AvailableBackends() []string {
 	b := []string{}
 
 	// Intersection between available backends from OS and allowed backends
 	for _, avail := range keyring.AvailableBackends() {
-		for _, allowed := range allowedBackends {
-			if avail == allowed {
-				b = append(b, string(allowed))
+		for _, allowed := range AllowedBackends {
+			if string(avail) == allowed {
+				b = append(b, allowed)
 			}
 		}
 	}
@@ -66,15 +81,15 @@ func AvailableBackends() []string {
 	return b
 }
 
-// UpsertConfigToKeyring will upsert the provided credentials to first priority OS secure store.
+// UpsertConfigToKeyring will upsert the provided credentials to the desired OS secure store.
 //
-// Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
-func UpsertConfigToKeyring(creds []byte) error {
-	if err := validateBackends(); err != nil {
+// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
+func UpsertConfigToKeyring(backend string, creds []byte) error {
+	if err := ValidateBackend(backend); err != nil {
 		return err
 	}
 
-	ring, err := keyring.Open(getKeyringConfig())
+	ring, err := keyring.Open(getKeyringConfig(backend))
 	if err != nil {
 		return err
 	}
@@ -86,7 +101,7 @@ func UpsertConfigToKeyring(creds []byte) error {
 
 	// check if available backend contains windows credential manager and exceeds the byte limit
 	if len(compressed) > MaxWindowsByteSize &&
-		keyring.AvailableBackends()[0] == keyring.WinCredBackend {
+		backend == string(keyring.WinCredBackend) {
 		return fmt.Errorf("credentials are too large for Windows Credential Manager: %d bytes (max %d)", len(compressed), MaxWindowsByteSize)
 	}
 
@@ -103,32 +118,42 @@ func UpsertConfigToKeyring(creds []byte) error {
 // RemoveConfigFromKeyring will remove the credentials from the first priority OS secure store.
 //
 // Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
-func RemoveConfigFromKeyring() error {
-	if err := validateBackends(); err != nil {
+func RemoveConfigFromKeyring(backend string) error {
+	if err := ValidateBackend(backend); err != nil {
 		return err
 	}
 
-	ring, err := keyring.Open(getKeyringConfig())
+	ring, err := keyring.Open(getKeyringConfig(backend))
 	if err != nil {
 		return err
 	}
 
 	err = ring.Remove(ItemKey)
+	if err != nil {
+		if err == keyring.ErrKeyNotFound {
+			// Ignore not found errors, key is already removed
+			return nil
+		}
+
+		if strings.Contains(err.Error(), "Keychain Error. (-25244)") {
+			return fmt.Errorf("%s\nThis application may not have permission to delete from the Keychain. Please check the permissions in the Keychain and try again", err.Error())
+		}
+	}
 
 	return err
 }
 
 // GetConfigFromKeyring will retrieve the credentials from the first priority OS secure store.
 //
-// Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
-func GetConfigFromKeyring() ([]byte, error) {
-	if err := validateBackends(); err != nil {
+// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
+func GetConfigFromKeyring(backend string) ([]byte, error) {
+	if err := ValidateBackend(backend); err != nil {
 		return nil, err
 	}
 
 	credentials := []byte("")
 
-	ring, err := keyring.Open(getKeyringConfig())
+	ring, err := keyring.Open(getKeyringConfig(backend))
 	if err != nil {
 		return nil, err
 	}
@@ -156,11 +181,29 @@ func GetConfigFromKeyring() ([]byte, error) {
 
 }
 
-// Validates that at least one backend is available
-func validateBackends() error {
-	if len(AvailableBackends()) == 0 {
-		return ErrNoBackendsAvailable
+// Validates that the requested backend is valid and available, returns an error if not.
+//
+// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
+func ValidateBackend(backend string) error {
+	if backend == "" {
+		return ErrKeyringInvalid
+	} else {
+		isAllowedBackend := false
+		for _, allowed := range AllowedBackends {
+			if allowed == backend {
+				isAllowedBackend = true
+				break
+			}
+		}
+		if !isAllowedBackend {
+			return ErrKeyringInvalid
+		}
 	}
+
+	if !IsBackendAvailable(backend) {
+		return ErrKeyringUnavailable
+	}
+
 	return nil
 }
 
