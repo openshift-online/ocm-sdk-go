@@ -3,13 +3,6 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-## 0.1.402
-- Update model version v0.0.355
-  - Removed undefined api calls from the model
-  - Add support to `securestore` that allows the caller to define a keyring target
-  - Additional `securestore` Error Standardization
-  - Add error handling to `securestore` for denied Keychain access due to permissions
-
 ## 0.1.401
 - Update model version v0.0.353
   - Added support for `PackageImage` for `clusters_mgmt`
