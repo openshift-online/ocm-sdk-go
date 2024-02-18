@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.403
+- Change model version to v0.0.354
+  - Revert changes presented in v0.0.355.
+  - Add `AdditionalSecurityGroupIds` to `AWS Node Pool` type.
+
 ## 0.1.402
 - Update model version v0.0.355
   - Removed undefined api calls from the model
