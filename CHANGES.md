@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+# 0.1.403
+- Update model version v0.0.356
+  - Reverting change to remove provision shard from cluster
+
 ## 0.1.402
 - Update model version v0.0.355
   - Removed undefined api calls from the model
