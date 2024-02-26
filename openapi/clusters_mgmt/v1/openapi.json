@@ -13231,6 +13231,19 @@
           }
         }
       },
+      "ClientComponent": {
+        "description": "The reference of a component that will consume the client configuration.",
+        "properties": {
+          "name": {
+            "description": "The name of the component.",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace of the component.",
+            "type": "string"
+          }
+        }
+      },
       "CloudVPC": {
         "description": "Description of a cloud provider virtual private cloud.",
         "properties": {
@@ -14242,12 +14255,90 @@
           }
         }
       },
+      "ExternalAuth": {
+        "description": "Representation of an external authentication provider.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ExternalAuth' if this is a complete object or 'ExternalAuthLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "claim": {
+            "description": "The rules on how to transform information from an ID token into a cluster identity.",
+            "$ref": "#/components/schemas/ExternalAuthClaim"
+          },
+          "clients": {
+            "description": "The list of the platform's clients that need to request tokens from the issuer.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAuthClientConfig"
+            }
+          },
+          "issuer": {
+            "description": "The issuer describes the attributes of the OIDC token issuer.",
+            "$ref": "#/components/schemas/TokenIssuer"
+          }
+        }
+      },
+      "ExternalAuthClaim": {
+        "description": "The claims and validation rules used in the configuration of the external authentication.",
+        "properties": {
+          "mappings": {
+            "description": "Mapping describes rules on how to transform information from an ID token into a cluster identity.",
+            "$ref": "#/components/schemas/TokenClaimMappings"
+          },
+          "validation_rules": {
+            "description": "ValidationRules are rules that are applied to validate token claims to authenticate users.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TokenClaimValidationRule"
+            }
+          }
+        }
+      },
+      "ExternalAuthClientConfig": {
+        "description": "ExternalAuthClientConfig contains configuration for the platform's clients that\nneed to request tokens from the issuer.",
+        "properties": {
+          "id": {
+            "description": "The identifier of the OIDC client from the OIDC provider.",
+            "type": "string"
+          },
+          "component": {
+            "description": "The component that is supposed to consume this client configuration.",
+            "$ref": "#/components/schemas/ClientComponent"
+          },
+          "extra_scopes": {
+            "description": "ExtraScopes is an optional set of scopes to request tokens with.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "secret": {
+            "description": "The secret of the OIDC client from the OIDC provider.",
+            "type": "string"
+          }
+        }
+      },
       "ExternalAuthConfig": {
         "description": "ExternalAuthConfig configuration",
         "properties": {
           "enabled": {
             "description": "Boolean flag indicating if the cluster should use an external authentication configuration.\n\nBy default this is false.\n\nTo enable it the cluster needs to be ROSA HCP cluster and the organization of the user needs\nto have the `external-authentication` feature toggle enabled.",
             "type": "boolean"
+          },
+          "external_auths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAuth"
+            }
           }
         }
       },
@@ -14427,6 +14518,18 @@
             "items": {
               "$ref": "#/components/schemas/User"
             }
+          }
+        }
+      },
+      "GroupsClaim": {
+        "properties": {
+          "claim": {
+            "description": "The claim used in the token.",
+            "type": "string"
+          },
+          "prefix": {
+            "description": "A prefix contatenated in the claim (Optional).",
+            "type": "string"
           }
         }
       },
@@ -16043,6 +16146,52 @@
           }
         }
       },
+      "TokenClaimMappings": {
+        "description": "The claim mappings defined for users and groups.",
+        "properties": {
+          "groups": {
+            "description": "Groups is a name of the claim that should be used to construct groups for the cluster identity.",
+            "$ref": "#/components/schemas/GroupsClaim"
+          },
+          "user_name": {
+            "description": "Username is a name of the claim that should be used to construct usernames for the cluster identity.",
+            "$ref": "#/components/schemas/UsernameClaim"
+          }
+        }
+      },
+      "TokenClaimValidationRule": {
+        "description": "The rule that is applied to validate token claims to authenticate users.",
+        "properties": {
+          "claim": {
+            "description": "Claim is a name of a required claim.",
+            "type": "string"
+          },
+          "required_value": {
+            "description": "RequiredValue is the required value for the claim.",
+            "type": "string"
+          }
+        }
+      },
+      "TokenIssuer": {
+        "description": "Representation of a token issuer used in an external authentication.",
+        "properties": {
+          "ca": {
+            "description": "Certificate bundle to use to validate server certificates for the configured URL.",
+            "type": "string"
+          },
+          "url": {
+            "description": "URL is the serving URL of the token issuer.",
+            "type": "string"
+          },
+          "audiences": {
+            "description": "Audiences is an array of audiences that the token was issued for.\nValid tokens must include at least one of these values in their\n\"aud\" claim.\nMust be set to exactly one value.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "TrustedIp": {
         "description": "Representation of a trusted ip address in clusterdeployment.",
         "properties": {
@@ -16196,6 +16345,23 @@
           },
           "href": {
             "description": "Self link.",
+            "type": "string"
+          }
+        }
+      },
+      "UsernameClaim": {
+        "description": "The username claim mapping.",
+        "properties": {
+          "claim": {
+            "description": "The claim used in the token.",
+            "type": "string"
+          },
+          "prefix": {
+            "description": "A prefix contatenated in the claim (Optional).",
+            "type": "string"
+          },
+          "prefix_policy": {
+            "description": "PrefixPolicy specifies how a prefix should apply.\n\nBy default, claims other than `email` will be prefixed with the issuer URL to\nprevent naming clashes with other plugins.\n\nSet to \"NoPrefix\" to disable prefixing.",
             "type": "string"
           }
         }
