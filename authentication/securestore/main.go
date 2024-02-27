@@ -3,11 +3,14 @@ package securestore
 import (
 	"bytes"
 	"compress/gzip"
+	"errors"
 	"fmt"
 	"io"
+	"runtime"
 	"strings"
 
 	"github.com/99designs/keyring"
+	gokeyring "github.com/zalando/go-keyring"
 )
 
 const (
@@ -46,8 +49,6 @@ func getKeyringConfig(backend string) keyring.Config {
 }
 
 // IsBackendAvailable provides validation that the desired backend is available on the current OS.
-//
-// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
 func IsBackendAvailable(backend string) (isAvailable bool) {
 	if backend == "" {
 		return false
@@ -64,10 +65,13 @@ func IsBackendAvailable(backend string) (isAvailable bool) {
 }
 
 // AvailableBackends provides a slice of all available backend keys on the current OS.
-//
-// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
 func AvailableBackends() []string {
 	b := []string{}
+
+	if isDarwin() {
+		// Assume Keychain is always available on Darwin. It will not return from keyring.AvailableBackends()
+		b = append(b, "keychain")
+	}
 
 	// Intersection between available backends from OS and allowed backends
 	for _, avail := range keyring.AvailableBackends() {
@@ -82,11 +86,13 @@ func AvailableBackends() []string {
 }
 
 // UpsertConfigToKeyring will upsert the provided credentials to the desired OS secure store.
-//
-// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
 func UpsertConfigToKeyring(backend string, creds []byte) error {
 	if err := ValidateBackend(backend); err != nil {
 		return err
+	}
+
+	if isDarwin() && isKeychain(backend) {
+		return keychainUpsert(creds)
 	}
 
 	ring, err := keyring.Open(getKeyringConfig(backend))
@@ -116,11 +122,13 @@ func UpsertConfigToKeyring(backend string, creds []byte) error {
 }
 
 // RemoveConfigFromKeyring will remove the credentials from the first priority OS secure store.
-//
-// Note: CGO_ENABLED=1 is required for OSX Keychain and darwin builds
 func RemoveConfigFromKeyring(backend string) error {
 	if err := ValidateBackend(backend); err != nil {
 		return err
+	}
+
+	if isDarwin() && isKeychain(backend) {
+		return keychainRemove()
 	}
 
 	ring, err := keyring.Open(getKeyringConfig(backend))
@@ -130,13 +138,9 @@ func RemoveConfigFromKeyring(backend string) error {
 
 	err = ring.Remove(ItemKey)
 	if err != nil {
-		if err == keyring.ErrKeyNotFound {
+		if errors.Is(err, keyring.ErrKeyNotFound) {
 			// Ignore not found errors, key is already removed
 			return nil
-		}
-
-		if strings.Contains(err.Error(), "Keychain Error. (-25244)") {
-			return fmt.Errorf("%s\nThis application may not have permission to delete from the Keychain. Please check the permissions in the Keychain and try again", err.Error())
 		}
 	}
 
@@ -144,11 +148,13 @@ func RemoveConfigFromKeyring(backend string) error {
 }
 
 // GetConfigFromKeyring will retrieve the credentials from the first priority OS secure store.
-//
-// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
 func GetConfigFromKeyring(backend string) ([]byte, error) {
 	if err := ValidateBackend(backend); err != nil {
 		return nil, err
+	}
+
+	if isDarwin() && isKeychain(backend) {
+		return keychainGet()
 	}
 
 	credentials := []byte("")
@@ -159,9 +165,9 @@ func GetConfigFromKeyring(backend string) ([]byte, error) {
 	}
 
 	i, err := ring.Get(ItemKey)
-	if err != nil && err != keyring.ErrKeyNotFound {
+	if err != nil && !errors.Is(err, keyring.ErrKeyNotFound) {
 		return credentials, err
-	} else if err == keyring.ErrKeyNotFound {
+	} else if errors.Is(err, keyring.ErrKeyNotFound) {
 		// Not found, continue
 	} else {
 		credentials = i.Data
@@ -182,8 +188,6 @@ func GetConfigFromKeyring(backend string) ([]byte, error) {
 }
 
 // Validates that the requested backend is valid and available, returns an error if not.
-//
-// Note: CGO_ENABLED=1 is required for darwin builds (enables OSX Keychain)
 func ValidateBackend(backend string) error {
 	if backend == "" {
 		return ErrKeyringInvalid
@@ -205,6 +209,55 @@ func ValidateBackend(backend string) error {
 	}
 
 	return nil
+}
+
+func keychainGet() ([]byte, error) {
+	credentials, err := gokeyring.Get(ItemKey, ItemKey)
+	if err != nil && !errors.Is(err, gokeyring.ErrNotFound) {
+		return []byte(credentials), err
+	} else if errors.Is(err, gokeyring.ErrNotFound) {
+		return []byte(""), nil
+	}
+
+	if len(credentials) == 0 {
+		// No creds to decompress, return early
+		return []byte(""), nil
+	}
+
+	creds, err := decompressConfig([]byte(credentials))
+	if err != nil {
+		return nil, err
+	}
+	return creds, nil
+}
+
+func keychainUpsert(creds []byte) error {
+	compressed, err := compressConfig(creds)
+	if err != nil {
+		return err
+	}
+
+	err = gokeyring.Set(ItemKey, ItemKey, string(compressed))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func keychainRemove() error {
+	err := gokeyring.Delete(ItemKey, ItemKey)
+	if err != nil {
+		if errors.Is(err, gokeyring.ErrNotFound) {
+			// Ignore not found errors, key is already removed
+			return nil
+		}
+		if strings.Contains(err.Error(), "Keychain Error. (-25244)") {
+			return fmt.Errorf("%s\nThis application may not have permission to delete from the Keychain. Please check the permissions in the Keychain and try again", err.Error())
+		}
+	}
+
+	return err
 }
 
 // Compresses credential bytes to help ensure all OS secure stores can store the data.
@@ -240,4 +293,14 @@ func decompressConfig(creds []byte) ([]byte, error) {
 	}
 
 	return output, err
+}
+
+// isDarwin returns true if the current OS runtime is "darwin"
+func isDarwin() bool {
+	return runtime.GOOS == "darwin"
+}
+
+// isKeychain returns true if the backend is "keychain"
+func isKeychain(backend string) bool {
+	return backend == "keychain"
 }

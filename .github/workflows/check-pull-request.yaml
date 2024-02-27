@@ -25,15 +25,27 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         go:
         - "1.21"
+        platform:
+        - ubuntu-latest
+        - macos-latest
+        - windows-latest
+    runs-on: ${{ matrix.platform }}
     steps:
     - name: Checkout the source
       uses: actions/checkout@v2
 
+    - name: Install Keyrings (macOS-only)
+      if: ${{ contains(fromJSON('["macos-latest"]'), matrix.platform) }}
+      run: brew install pass gnupg
+
+    - name: Install Keyrings (linux)
+      if: ${{ contains(fromJSON('["ubuntu-latest"]'), matrix.platform) }}
+      run: sudo apt-get install pass
+      
     - name: Setup Go
       uses: actions/setup-go@v2
       with:
