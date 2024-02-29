@@ -1,3 +1,6 @@
+//go:build !windows
+// +build !windows
+
 /*
 Copyright (c) 2020 Red Hat, Inc.
 
