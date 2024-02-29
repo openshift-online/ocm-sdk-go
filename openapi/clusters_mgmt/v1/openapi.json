@@ -3769,6 +3769,297 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/external_auth_config": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuthConfig"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/external_auth_config/external_auths": {
+      "post": {
+        "description": "Adds a new authentication to the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalAuth"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuth"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of external authentications.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ExternalAuth"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/external_auth_config/external_auths/{external_auth_id}": {
+      "delete": {
+        "description": "Deletes the external authentication.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "external_auth_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of an external authentication.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "external_auth_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuth"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the external authentication.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "external_auth_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalAuth"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuth"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/external_configuration": {
       "get": {
         "description": "Retrieves the details of the external configuration.",
@@ -11955,7 +12246,7 @@
         "description": "DNS settings of the cluster.",
         "properties": {
           "base_domain": {
-            "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the name of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n```http\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n```json\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).",
+            "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the domain_prefix of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n```http\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n```json\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).",
             "type": "string"
           }
         }
@@ -13523,6 +13814,10 @@
             "description": "Indicates whether the User workload monitoring is enabled or not\nIt is enabled by default",
             "type": "boolean"
           },
+          "domain_prefix": {
+            "description": "DomainPrefix of the cluster. This prefix is optionally assigned by the user when the\ncluster is created. It will appear in the Cluster's domain when the cluster is provisioned.",
+            "type": "string"
+          },
           "etcd_encryption": {
             "description": "Indicates whether that etcd is encrypted or not.\nThis is set only during cluster creation.",
             "type": "boolean"
@@ -13621,7 +13916,7 @@
             "type": "boolean"
           },
           "name": {
-            "description": "Name of the cluster. This name is assigned by the user when the\ncluster is created.",
+            "description": "Name of the cluster. This name is assigned by the user when the\ncluster is created. This is used to uniquely identify the cluster",
             "type": "string"
           },
           "network": {
