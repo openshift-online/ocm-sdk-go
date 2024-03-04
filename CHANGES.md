@@ -3,16 +3,19 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-# 0.1.405
+## 0.1.406
+- Migrate Keychain `securestore` usage to non-CGO libraries 
+
+## 0.1.405
 - Update model version v0.0.359
   - Add `ExternalAuthConfig` resource to `Cluster` model.
   - Add `DomainPrefix` to `Cluster` model.
 
-# 0.1.404
+## 0.1.404
 - Update model version v0.0.357
   - Add `ExternalAuth` to `ExternalAuthConfig` model
 
-# 0.1.403
+## 0.1.403
 - Update model version v0.0.356
   - Reverting change to remove provision shard from cluster
 
