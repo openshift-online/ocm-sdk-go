@@ -14382,6 +14382,40 @@
           }
         }
       },
+      "ComponentRoute": {
+        "description": "Representation of a Component Route.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ComponentRoute' if this is a complete object or 'ComponentRouteLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "hostname": {
+            "description": "Hostname of the route.",
+            "type": "string"
+          },
+          "tls_secret_ref": {
+            "description": "TLS Secret reference of the route.",
+            "type": "string"
+          }
+        }
+      },
+      "ComponentRouteType": {
+        "description": "Type of Component Route.",
+        "type": "string",
+        "enum": [
+          "console",
+          "downloads",
+          "oauth"
+        ]
+      },
       "ControlPlaneUpgradePolicy": {
         "description": "Representation of an upgrade policy that can be set for a cluster.",
         "properties": {
@@ -15042,6 +15076,13 @@
           "cluster_routes_tls_secret_ref": {
             "description": "Cluster routes TLS Secret reference.",
             "type": "string"
+          },
+          "component_routes": {
+            "description": "Component Routes settings.",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ComponentRoute"
+            }
           },
           "default": {
             "description": "Indicates if this is the default ingress.",
