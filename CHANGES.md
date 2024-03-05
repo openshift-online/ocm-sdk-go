@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+# 0.1.407
+- Update model version v0.0.360
+  - Add `ComponentRoutes` attribute to `Ingress`
+
 ## 0.1.406
 - Migrate Keychain `securestore` usage to non-CGO libraries 
 
