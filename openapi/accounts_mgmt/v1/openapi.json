@@ -5794,6 +5794,9 @@
             "items": {
               "$ref": "#/components/schemas/ReservedResource"
             }
+          },
+          "scope": {
+            "type": "string"
           }
         }
       },
@@ -6562,6 +6565,9 @@
             "type": "string"
           },
           "resource_type": {
+            "type": "string"
+          },
+          "scope": {
             "type": "string"
           },
           "updated_at": {
