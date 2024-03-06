@@ -3,12 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-# 0.1.408
+## 0.1.408
 - Update model version v0.0.361
   - Add `Scope` attribute to `ReservedResource`.
   - Add `Scope` attribute to `ClusterAuthorizationRequest`.
 
-# 0.1.407
+## 0.1.407
 - Update model version v0.0.360
   - Add `ComponentRoutes` attribute to `Ingress`
 
