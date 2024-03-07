@@ -15627,6 +15627,10 @@
               "type": "string"
             }
           },
+          "node_drain_grace_period": {
+            "description": "Time to wait for a NodePool to drain when it is upgraded or replaced before it is forcibly removed.",
+            "$ref": "#/components/schemas/Value"
+          },
           "replicas": {
             "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.",
             "type": "integer",
@@ -16489,7 +16493,7 @@
             "description": "Groups is a name of the claim that should be used to construct groups for the cluster identity.",
             "$ref": "#/components/schemas/GroupsClaim"
           },
-          "user_name": {
+          "username": {
             "description": "Username is a name of the claim that should be used to construct usernames for the cluster identity.",
             "$ref": "#/components/schemas/UsernameClaim"
           }

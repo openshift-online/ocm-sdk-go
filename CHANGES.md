@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.409
+- Update model version v0.0.363
+  - Add `NodeDrainGracePeriod` to the `NodePool` model.
+- Update model version v0.0.362
+  - Changed `UserName` attribute for TokenClaimMappings to `Username`.
+
 ## 0.1.408
 - Update model version v0.0.361
   - Add `Scope` attribute to `ReservedResource`.
