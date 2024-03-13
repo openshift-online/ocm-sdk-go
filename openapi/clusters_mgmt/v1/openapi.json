@@ -3367,6 +3367,202 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/break_glass_credentials": {
+      "post": {
+        "description": "Adds a new break glass credential to the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BreakGlassCredential"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BreakGlassCredential"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Revokes all the break glass certificates signed by a specific signer.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of break glass credentials.\n\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of break \nglass credentials for this cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of break glass credentials.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BreakGlassCredential"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/break_glass_credentials/{break_glass_credential_id}": {
+      "get": {
+        "description": "Retrieves the details of the break glass credential.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "break_glass_credential_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BreakGlassCredential"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/clusterdeployment": {
       "delete": {
         "description": "Deletes the clusterdeployment.",
@@ -13512,6 +13708,57 @@
             "type": "string"
           }
         }
+      },
+      "BreakGlassCredential": {
+        "description": "Representation of a break glass credential.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'BreakGlassCredential' if this is a complete object or 'BreakGlassCredentialLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "expiration_timestamp": {
+            "description": "ExpirationTimestamp is the date and time when the credential will expire.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "kubeconfig": {
+            "description": "Kubeconfig is the generated kubeconfig for this credential. It is only stored in memory",
+            "type": "string"
+          },
+          "revocation_timestamp": {
+            "description": "RevocationTimestamp is the date and time when the credential has been revoked.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "description": "Status is the status of this credential",
+            "$ref": "#/components/schemas/BreakGlassCredentialStatus"
+          },
+          "username": {
+            "description": "Username is the user which will be used for this credential.",
+            "type": "string"
+          }
+        }
+      },
+      "BreakGlassCredentialStatus": {
+        "description": "Status of the break glass credential.",
+        "type": "string",
+        "enum": [
+          "awaiting_revocation",
+          "created",
+          "expired",
+          "failed",
+          "issued",
+          "revoked"
+        ]
       },
       "ByoOidc": {
         "description": "ByoOidc configuration.",
