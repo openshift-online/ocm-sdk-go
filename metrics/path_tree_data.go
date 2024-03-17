@@ -45,6 +45,9 @@ var pathTreeData = `{
           "-": null
         },
         "current_account": null,
+        "default_capabilities": {
+          "-": null
+        },
         "deleted_subscriptions": null,
         "feature_toggles": {
           "-": {
