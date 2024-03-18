@@ -41,31 +41,8 @@ func MarshalDefaultCapability(object *DefaultCapability, writer io.Writer) error
 func writeDefaultCapability(object *DefaultCapability, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
-	stream.WriteObjectField("kind")
-	if object.bitmap_&1 != 0 {
-		stream.WriteString(DefaultCapabilityLinkKind)
-	} else {
-		stream.WriteString(DefaultCapabilityKind)
-	}
-	count++
-	if object.bitmap_&2 != 0 {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("id")
-		stream.WriteString(object.id)
-		count++
-	}
-	if object.bitmap_&4 != 0 {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("href")
-		stream.WriteString(object.href)
-		count++
-	}
 	var present_ bool
-	present_ = object.bitmap_&8 != 0
+	present_ = object.bitmap_&1 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -74,7 +51,7 @@ func writeDefaultCapability(object *DefaultCapability, stream *jsoniter.Stream) 
 		stream.WriteString(object.name)
 		count++
 	}
-	present_ = object.bitmap_&16 != 0
+	present_ = object.bitmap_&2 != 0
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -106,25 +83,14 @@ func readDefaultCapability(iterator *jsoniter.Iterator) *DefaultCapability {
 			break
 		}
 		switch field {
-		case "kind":
-			value := iterator.ReadString()
-			if value == DefaultCapabilityLinkKind {
-				object.bitmap_ |= 1
-			}
-		case "id":
-			object.id = iterator.ReadString()
-			object.bitmap_ |= 2
-		case "href":
-			object.href = iterator.ReadString()
-			object.bitmap_ |= 4
 		case "name":
 			value := iterator.ReadString()
 			object.name = value
-			object.bitmap_ |= 8
+			object.bitmap_ |= 1
 		case "value":
 			value := iterator.ReadString()
 			object.value = value
-			object.bitmap_ |= 16
+			object.bitmap_ |= 2
 		default:
 			iterator.ReadAny()
 		}

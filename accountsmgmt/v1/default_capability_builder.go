@@ -22,8 +22,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 // DefaultCapabilityBuilder contains the data and logic needed to build 'default_capability' objects.
 type DefaultCapabilityBuilder struct {
 	bitmap_ uint32
-	id      string
-	href    string
 	name    string
 	value   string
 }
@@ -33,42 +31,22 @@ func NewDefaultCapability() *DefaultCapabilityBuilder {
 	return &DefaultCapabilityBuilder{}
 }
 
-// Link sets the flag that indicates if this is a link.
-func (b *DefaultCapabilityBuilder) Link(value bool) *DefaultCapabilityBuilder {
-	b.bitmap_ |= 1
-	return b
-}
-
-// ID sets the identifier of the object.
-func (b *DefaultCapabilityBuilder) ID(value string) *DefaultCapabilityBuilder {
-	b.id = value
-	b.bitmap_ |= 2
-	return b
-}
-
-// HREF sets the link to the object.
-func (b *DefaultCapabilityBuilder) HREF(value string) *DefaultCapabilityBuilder {
-	b.href = value
-	b.bitmap_ |= 4
-	return b
-}
-
 // Empty returns true if the builder is empty, i.e. no attribute has a value.
 func (b *DefaultCapabilityBuilder) Empty() bool {
-	return b == nil || b.bitmap_&^1 == 0
+	return b == nil || b.bitmap_ == 0
 }
 
 // Name sets the value of the 'name' attribute to the given value.
 func (b *DefaultCapabilityBuilder) Name(value string) *DefaultCapabilityBuilder {
 	b.name = value
-	b.bitmap_ |= 8
+	b.bitmap_ |= 1
 	return b
 }
 
 // Value sets the value of the 'value' attribute to the given value.
 func (b *DefaultCapabilityBuilder) Value(value string) *DefaultCapabilityBuilder {
 	b.value = value
-	b.bitmap_ |= 16
+	b.bitmap_ |= 2
 	return b
 }
 
@@ -78,8 +56,6 @@ func (b *DefaultCapabilityBuilder) Copy(object *DefaultCapability) *DefaultCapab
 		return b
 	}
 	b.bitmap_ = object.bitmap_
-	b.id = object.id
-	b.href = object.href
 	b.name = object.name
 	b.value = object.value
 	return b
@@ -88,8 +64,6 @@ func (b *DefaultCapabilityBuilder) Copy(object *DefaultCapability) *DefaultCapab
 // Build creates a 'default_capability' object using the configuration stored in the builder.
 func (b *DefaultCapabilityBuilder) Build() (object *DefaultCapability, err error) {
 	object = new(DefaultCapability)
-	object.id = b.id
-	object.href = b.href
 	object.bitmap_ = b.bitmap_
 	object.name = b.name
 	object.value = b.value

@@ -6143,33 +6143,8 @@
           }
         }
       },
-      "DefaultCapabilities": {
-        "description": "Default Capability model that represents default internal labels with a key-value pair.",
-        "properties": {
-          "name": {
-            "description": "Name of the capability label.",
-            "type": "string"
-          },
-          "value": {
-            "description": "Value that can be assigned to the capability (eg. \"true\", \"false\" etc).",
-            "type": "string"
-          }
-        }
-      },
       "DefaultCapability": {
         "properties": {
-          "kind": {
-            "description": "Indicates the type of this object. Will be 'DefaultCapability' if this is a complete object or 'DefaultCapabilityLink' if it is just a link.",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique identifier of the object.",
-            "type": "string"
-          },
-          "href": {
-            "description": "Self link.",
-            "type": "string"
-          },
           "name": {
             "description": "Name of the default capability (the key).",
             "type": "string"
