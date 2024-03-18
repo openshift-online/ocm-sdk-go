@@ -19,82 +19,16 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
-// DefaultCapabilityKind is the name of the type used to represent objects
-// of type 'default_capability'.
-const DefaultCapabilityKind = "DefaultCapability"
-
-// DefaultCapabilityLinkKind is the name of the type used to represent links
-// to objects of type 'default_capability'.
-const DefaultCapabilityLinkKind = "DefaultCapabilityLink"
-
-// DefaultCapabilityNilKind is the name of the type used to nil references
-// to objects of type 'default_capability'.
-const DefaultCapabilityNilKind = "DefaultCapabilityNil"
-
 // DefaultCapability represents the values of the 'default_capability' type.
 type DefaultCapability struct {
 	bitmap_ uint32
-	id      string
-	href    string
 	name    string
 	value   string
 }
 
-// Kind returns the name of the type of the object.
-func (o *DefaultCapability) Kind() string {
-	if o == nil {
-		return DefaultCapabilityNilKind
-	}
-	if o.bitmap_&1 != 0 {
-		return DefaultCapabilityLinkKind
-	}
-	return DefaultCapabilityKind
-}
-
-// Link returns true iif this is a link.
-func (o *DefaultCapability) Link() bool {
-	return o != nil && o.bitmap_&1 != 0
-}
-
-// ID returns the identifier of the object.
-func (o *DefaultCapability) ID() string {
-	if o != nil && o.bitmap_&2 != 0 {
-		return o.id
-	}
-	return ""
-}
-
-// GetID returns the identifier of the object and a flag indicating if the
-// identifier has a value.
-func (o *DefaultCapability) GetID() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2 != 0
-	if ok {
-		value = o.id
-	}
-	return
-}
-
-// HREF returns the link to the object.
-func (o *DefaultCapability) HREF() string {
-	if o != nil && o.bitmap_&4 != 0 {
-		return o.href
-	}
-	return ""
-}
-
-// GetHREF returns the link of the object and a flag indicating if the
-// link has a value.
-func (o *DefaultCapability) GetHREF() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&4 != 0
-	if ok {
-		value = o.href
-	}
-	return
-}
-
 // Empty returns true if the object is empty, i.e. no attribute has a value.
 func (o *DefaultCapability) Empty() bool {
-	return o == nil || o.bitmap_&^1 == 0
+	return o == nil || o.bitmap_ == 0
 }
 
 // Name returns the value of the 'name' attribute, or
@@ -102,7 +36,7 @@ func (o *DefaultCapability) Empty() bool {
 //
 // Name of the default capability (the key).
 func (o *DefaultCapability) Name() string {
-	if o != nil && o.bitmap_&8 != 0 {
+	if o != nil && o.bitmap_&1 != 0 {
 		return o.name
 	}
 	return ""
@@ -113,7 +47,7 @@ func (o *DefaultCapability) Name() string {
 //
 // Name of the default capability (the key).
 func (o *DefaultCapability) GetName() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&8 != 0
+	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.name
 	}
@@ -125,7 +59,7 @@ func (o *DefaultCapability) GetName() (value string, ok bool) {
 //
 // Value of the default capability.
 func (o *DefaultCapability) Value() string {
-	if o != nil && o.bitmap_&16 != 0 {
+	if o != nil && o.bitmap_&2 != 0 {
 		return o.value
 	}
 	return ""
@@ -136,7 +70,7 @@ func (o *DefaultCapability) Value() string {
 //
 // Value of the default capability.
 func (o *DefaultCapability) GetValue() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&16 != 0
+	ok = o != nil && o.bitmap_&2 != 0
 	if ok {
 		value = o.value
 	}
@@ -160,40 +94,6 @@ type DefaultCapabilityList struct {
 	href  string
 	link  bool
 	items []*DefaultCapability
-}
-
-// Kind returns the name of the type of the object.
-func (l *DefaultCapabilityList) Kind() string {
-	if l == nil {
-		return DefaultCapabilityListNilKind
-	}
-	if l.link {
-		return DefaultCapabilityListLinkKind
-	}
-	return DefaultCapabilityListKind
-}
-
-// Link returns true iif this is a link.
-func (l *DefaultCapabilityList) Link() bool {
-	return l != nil && l.link
-}
-
-// HREF returns the link to the list.
-func (l *DefaultCapabilityList) HREF() string {
-	if l != nil {
-		return l.href
-	}
-	return ""
-}
-
-// GetHREF returns the link of the list and a flag indicating if the
-// link has a value.
-func (l *DefaultCapabilityList) GetHREF() (value string, ok bool) {
-	ok = l != nil && l.href != ""
-	if ok {
-		value = l.href
-	}
-	return
 }
 
 // Len returns the length of the list.
