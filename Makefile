@@ -40,6 +40,12 @@ goimports_version:=v0.4.0
 # machine: the leadership flag and retry tests.
 ginkgo_flags:=
 
+.DEFAULT_GOAL := examples
+
+GINKGO := $(LOCAL_BIN_PATH)/ginkgo
+ginkgo-install:
+	@GOBIN=$(LOCAL_BIN_PATH) go install github.com/onsi/ginkgo/v2/ginkgo@v2.1.4 ;\
+
 .PHONY: examples
 examples:
 	cd examples && \
@@ -48,8 +54,8 @@ examples:
 	done
 
 .PHONY: test tests
-test tests:
-	ginkgo run -r $(ginkgo_flags)
+test tests: ginkgo-install
+	$(GINKGO) run -r $(ginkgo_flags)
 
 .PHONY: fmt
 fmt:
