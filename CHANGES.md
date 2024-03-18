@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.412
+- Update model version v0.0.365
+  - [OCM-6763] Add default capability resource to SDK.
+
 ## 0.1.411
 - Upgrade pgx version and other dependencies
 
