@@ -3147,6 +3147,84 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws/role_policy_bindings": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of role policy bindings.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RolePolicyBinding"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/aws_infrastructure_access_role_grants": {
       "post": {
         "description": "Create a new AWS infrastructure access role grant and add it to the collection of\nAWS infrastructure access role grants on the cluster.",
@@ -10347,6 +10425,78 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/load_balancer_quota_values": {
+      "get": {
+        "description": "Retrieves the list of Load Balancer Quota Values.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of values.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "format": "int32"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/machine_types": {
       "get": {
         "description": "Retrieves the list of machine types.",
@@ -16495,6 +16645,73 @@
             "format": "int32"
           }
         }
+      },
+      "RolePolicy": {
+        "properties": {
+          "arn": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RolePolicyType"
+          }
+        }
+      },
+      "RolePolicyBinding": {
+        "properties": {
+          "arn": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "policies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RolePolicy"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/RolePolicyBindingStatus"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RolePolicyBindingType"
+          }
+        }
+      },
+      "RolePolicyBindingStatus": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/RolePolicyBindingStatusType"
+          }
+        }
+      },
+      "RolePolicyBindingStatusType": {
+        "type": "string",
+        "enum": [
+          "failed",
+          "succeeded"
+        ]
+      },
+      "RolePolicyBindingType": {
+        "type": "string",
+        "enum": [
+          "account",
+          "operator"
+        ]
+      },
+      "RolePolicyType": {
+        "type": "string",
+        "enum": [
+          "customer",
+          "inline",
+          "managed"
+        ]
       },
       "RootVolume": {
         "description": "Root volume capabilities.",

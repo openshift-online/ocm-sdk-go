@@ -201,7 +201,8 @@ var pathTreeData = `{
                 "principals": {
                   "-": null
                 }
-              }
+              },
+              "role_policy_bindings": null
             },
             "aws_infrastructure_access_role_grants": {
               "-": null
@@ -323,6 +324,7 @@ var pathTreeData = `{
         "limited_support_reason_templates": {
           "-": null
         },
+        "load_balancer_quota_values": null,
         "machine_types": {
           "-": null
         },
