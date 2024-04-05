@@ -31,7 +31,7 @@ model_version:=v0.0.366
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=v0.0.59
+metamodel_version:=v0.0.60
 
 goimports_version:=v0.4.0
 

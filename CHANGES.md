@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.414
+- Update metamodel version v0.0.60
+
 ## 0.1.413
 - Update model version v0.0.366
   - Fix Default Capabilities.
