@@ -13823,6 +13823,31 @@
           }
         }
       },
+      "Azure": {
+        "description": "Microsoft Azure settings of a cluster.",
+        "properties": {
+          "managed_resource_group_name": {
+            "description": "[Required] The name of the Azure Resource Group where the Azure Resources related\nto the cluster are created. The Azure Resource Group is created with the given\nvalue, within the Azure Subscription `subscription_id` of the cluster.\n`managed_resource_group_name` cannot be equal to the value of `managed_resource_group`.\n`managed_resource_group_name` is located in the same Azure location as the\ncluster's region.\nNot to be confused with `resource_group_name`, which is the Azure Resource Group Name\nwhere the own Azure Resource associated to the cluster resides.",
+            "type": "string"
+          },
+          "resource_group_name": {
+            "description": "[Required] The Azure Resource Group Name of the cluster. It must be within `subscription_id`\nof the cluster. `resource_group_name` is located in the same Azure location\nas the cluster's region.",
+            "type": "string"
+          },
+          "resource_name": {
+            "description": "[Required] The Azure Resource Name of the cluster. It must be within the\nAzure Resource Group Name `resource_group_name`.\n`resource_name` is located in the same Azure location as the cluster's region.",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "[Required] The Azure Subscription ID associated with the cluster. It must belong to\nthe Microsoft Entra Tenant ID `tenant_id`.",
+            "type": "string"
+          },
+          "tenant_id": {
+            "description": "[Required] The Microsoft Entra Tenant ID where the cluster belongs.",
+            "type": "string"
+          }
+        }
+      },
       "BillingModel": {
         "description": "Billing model for cluster resources.",
         "type": "string",
@@ -14190,6 +14215,10 @@
           "autoscaler": {
             "description": "Link to an optional _ClusterAutoscaler_ that is coupled with the cluster.",
             "$ref": "#/components/schemas/ClusterAutoscaler"
+          },
+          "azure": {
+            "description": "Microsoft Azure settings of the cluster.",
+            "$ref": "#/components/schemas/Azure"
           },
           "billing_model": {
             "description": "Billing model for cluster resources.",
