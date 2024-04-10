@@ -323,6 +323,7 @@ var pathTreeData = `{
         "limited_support_reason_templates": {
           "-": null
         },
+        "load_balancer_quota_values": null,
         "machine_types": {
           "-": null
         },
@@ -348,6 +349,7 @@ var pathTreeData = `{
         "provision_shards": {
           "-": null
         },
+        "storage_quota_values": null,
         "trusted_ip_addresses": null,
         "version_gates": {
           "-": null
