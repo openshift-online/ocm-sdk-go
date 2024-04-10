@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/skratchdot/open-golang/open"
+	"github.com/cli/browser"
 	"golang.org/x/oauth2"
 )
 
@@ -103,7 +103,7 @@ func InitiateAuthCode(clientID string) (string, error) {
 	httpServerExitDone.Add(1)
 	server := serve(httpServerExitDone)
 
-	err := open.Run(url)
+	err := browser.OpenURL(url)
 	if err != nil {
 		return authToken, err
 	}
