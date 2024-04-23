@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.416
+- Update windows api.openshift certs 
+
 ## 0.1.415
 - Update model version v0.0.369
   - Update metamodel version to 0.0.60
