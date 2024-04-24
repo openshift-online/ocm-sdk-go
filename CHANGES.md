@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.417
+- Add RolePolicyBindings to the AWS resource model to support STS Arbitrary Policies feature.
+
 ## 0.1.416
 - Update windows api.openshift certs 
 
