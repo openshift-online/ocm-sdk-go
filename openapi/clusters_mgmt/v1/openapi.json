@@ -12464,6 +12464,13 @@
             "additionalProperties": {
               "type": "string"
             }
+          },
+          "tags": {
+            "description": "Optional keys and values that the machine pool provisioner will add as AWS tags to all AWS resources it creates.\n\nAWS tags must conform to the following standards:\n- Each resource may have a maximum of 25 tags\n- Tags beginning with \"aws:\" are reserved for system use and may not be set\n- Tag keys may be between 1 and 128 characters in length\n- Tag values may be between 0 and 256 characters in length\n- Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -12512,7 +12519,7 @@
             }
           },
           "tags": {
-            "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates.",
+            "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates.\n\nAWS tags must conform to the following standards:\n- Each resource may have a maximum of 25 tags\n- Tags beginning with \"aws:\" are reserved for system use and may not be set\n- Tag keys may be between 1 and 128 characters in length\n- Tag values may be between 0 and 256 characters in length\n- Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]",
             "type": "object",
             "additionalProperties": {
               "type": "string"
