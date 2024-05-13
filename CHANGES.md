@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.420
+- Update model version v0.0.373
+  - Add `subnet_resource_id` to `Azure` resource
+  - Add `network_security_group_resource_id to `Azure` resource
+
 ## 0.1.419
 - Update model version v0.0.372
   - Exposed the `/api/clusters_mgmt/v1/clusters/{id}/kubelet_configs` endpoint
