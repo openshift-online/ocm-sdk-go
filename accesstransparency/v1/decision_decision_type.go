@@ -24,9 +24,9 @@ type DecisionDecision string
 
 const (
 	//
-	DecisionDecisionApproved DecisionDecision = "approved"
+	DecisionDecisionApproved DecisionDecision = "Approved"
 	//
-	DecisionDecisionDenied DecisionDecision = "denied"
+	DecisionDecisionDenied DecisionDecision = "Denied"
 	//
-	DecisionDecisionExpired DecisionDecision = "expired"
+	DecisionDecisionExpired DecisionDecision = "Expired"
 )

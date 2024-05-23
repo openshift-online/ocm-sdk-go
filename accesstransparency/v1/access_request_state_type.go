@@ -24,11 +24,11 @@ type AccessRequestState string
 
 const (
 	//
-	AccessRequestStateApproved AccessRequestState = "approved"
+	AccessRequestStateApproved AccessRequestState = "Approved"
 	//
-	AccessRequestStateDenied AccessRequestState = "denied"
+	AccessRequestStateDenied AccessRequestState = "Denied"
 	//
-	AccessRequestStateExpired AccessRequestState = "expired"
+	AccessRequestStateExpired AccessRequestState = "Expired"
 	//
-	AccessRequestStatePending AccessRequestState = "pending"
+	AccessRequestStatePending AccessRequestState = "Pending"
 )
