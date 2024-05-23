@@ -17070,6 +17070,14 @@
           "arn": {
             "type": "string"
           },
+          "creation_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_update_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
           "name": {
             "type": "string"
           },
