@@ -69,6 +69,7 @@ lint:
 .PHONY: generate
 generate: model metamodel-install goimports-install
 	rm -rf \
+		accesstransparency \
 		accountsmgmt \
 		addonsmgmt \
 		authorizations \
