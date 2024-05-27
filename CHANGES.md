@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.421
+- Update model version v0.0.374
+  - Add `CreationTimestamp` and `LastUpdateTimestamp` to `RolePolicyBinding` type
+  - Add `access_transparency` service
+
 ## 0.1.420
 - Update model version v0.0.373
   - Add `subnet_resource_id` to `Azure` resource

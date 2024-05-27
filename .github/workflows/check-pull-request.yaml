@@ -90,6 +90,7 @@ jobs:
     - name: Check differences
       run: |
         git diff --exit-code \
+          accesstransparency \
           accountsmgmt \
           addonsmgmt \
           authorizations \

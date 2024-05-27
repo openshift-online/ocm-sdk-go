@@ -1,0 +1,699 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1",
+    "title": "access_transparency",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "contact": {
+      "name": "OCM Feedback",
+      "email": "ocm-feedback@redhat.com"
+    }
+  },
+  "servers": [
+    {
+      "description": "Production",
+      "url": "https://api.openshift.com"
+    },
+    {
+      "description": "Stage",
+      "url": "https://api.stage.openshift.com"
+    }
+  ],
+  "paths": {
+    "/api/access_transparency/v1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/access_transparency/v1/access_protection": {
+      "get": {
+        "description": "Retrieves an Access Protection by organization/cluster/subscription query param.",
+        "parameters": [
+          {
+            "name": "clusterId",
+            "description": "Check status by Cluter.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationId",
+            "description": "Check status by Organization.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subscriptionId",
+            "description": "Check status by Subscription.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessProtection"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/access_transparency/v1/access_requests": {
+      "get": {
+        "description": "Retrieves the list of access requests.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the access request instead of\nthe names of the columns of a table. For example, in order to sort the access requests\ndescending by created_at the value should be:\n\n```sql\ncreated_at desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the access request instead of\nthe names of the columns of a table. For example, in order to retrieve all the\naccess requests with a requested_by starting with `my` the value should be:\n\n```sql\nrequested_by like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the access requests\nthat the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of access requests.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AccessRequest"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new access request and add it to the collection of access requests.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessRequestPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessRequest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/access_transparency/v1/access_requests/{access_request_id}": {
+      "get": {
+        "description": "Retrieves the details of the access request.",
+        "parameters": [
+          {
+            "name": "access_request_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessRequest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/access_transparency/v1/access_requests/{access_request_id}/decisions": {
+      "post": {
+        "description": "Create a new decision and add it to the collection of decisions of an access request.",
+        "parameters": [
+          {
+            "name": "access_request_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of decisions.",
+        "parameters": [
+          {
+            "name": "access_request_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the decision instead of\nthe names of the columns of a table. For example, in order to sort the decisions\ndescending by created_at the value should be:\n\n```sql\ncreated_at desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the decision instead of\nthe names of the columns of a table. For example, in order to retrieve all the\ndecisions with a decided_by starting with `my` the value should be:\n\n```sql\ndecided_by like 'my%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the decisions\nthat the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of decisions.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Decision"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/access_transparency/v1/access_requests/{access_request_id}/decisions/{decision_id}": {
+      "get": {
+        "description": "Retrieves the details of the decision.",
+        "parameters": [
+          {
+            "name": "access_request_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "decision_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
+      "AccessProtection": {
+        "description": "Representation of an access protection.",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AccessRequest": {
+        "description": "Representation of an access request.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AccessRequest' if this is a complete object or 'AccessRequestLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Cluster from which the Access Request belongs to.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Date and time when the access request was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "deadline": {
+            "description": "How long the Access Request can be in pending state waiting for a customer decision.",
+            "type": "string"
+          },
+          "deadline_at": {
+            "description": "Date and time for the deadline that the Access Request needs to be decided, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "decisions": {
+            "description": "Decisions attached to the Access Request.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Decision"
+            }
+          },
+          "duration": {
+            "description": "How long the access will last after it's been approved.",
+            "type": "string"
+          },
+          "internal_support_case_id": {
+            "description": "Internal support case id linking to jira ticket.",
+            "type": "string"
+          },
+          "justification": {
+            "description": "Justification of the Access Request.",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "Organization from which the Access Request belongs to.",
+            "type": "string"
+          },
+          "requested_by": {
+            "description": "User that requested the Access.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Access Request status.",
+            "$ref": "#/components/schemas/AccessRequestStatus"
+          },
+          "subscription_id": {
+            "description": "Subscription from which the Access Request belongs to.",
+            "type": "string"
+          },
+          "support_case_id": {
+            "description": "Support case ID linking to JIRA ticket.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Date and time when the access request was lastly updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AccessRequestPostRequest": {
+        "description": "Representation of an access request post request.",
+        "properties": {
+          "cluster_id": {
+            "description": "Cluster from which the Access Request belongs to.",
+            "type": "string"
+          },
+          "deadline": {
+            "description": "How long the Access Request can be in pending state waiting for a customer decision.",
+            "type": "string"
+          },
+          "duration": {
+            "description": "How long the access will last after it's been approved.",
+            "type": "string"
+          },
+          "internal_support_case_id": {
+            "description": "Internal support case id linking to jira ticket.",
+            "type": "string"
+          },
+          "justification": {
+            "description": "Justification of the Access Request.",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "Subscription from which the Access Request belongs to.",
+            "type": "string"
+          },
+          "support_case_id": {
+            "description": "Support case ID linking to JIRA ticket.",
+            "type": "string"
+          }
+        }
+      },
+      "AccessRequestState": {
+        "description": "Possible states to an access request status.",
+        "type": "string",
+        "enum": [
+          "Approved",
+          "Denied",
+          "Expired",
+          "Pending"
+        ]
+      },
+      "AccessRequestStatus": {
+        "description": "Representation of an access request status.",
+        "properties": {
+          "expires_at": {
+            "description": "Date and time when the access request will expire, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "description": "Current state of the Access Request.",
+            "$ref": "#/components/schemas/AccessRequestState"
+          }
+        }
+      },
+      "Decision": {
+        "description": "Representation of an decision.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Decision' if this is a complete object or 'DecisionLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Date and time when the decision was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "decided_by": {
+            "description": "User that decided.",
+            "type": "string"
+          },
+          "decision": {
+            "description": "State of the decision.",
+            "$ref": "#/components/schemas/DecisionDecision"
+          },
+          "justification": {
+            "description": "Justification of the decision.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Date and time when the decision was lastly updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DecisionDecision": {
+        "description": "Possible decisions to a decision status.",
+        "type": "string",
+        "enum": [
+          "Approved",
+          "Denied",
+          "Expired"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will always be 'Error'",
+            "type": "string"
+          },
+          "id": {
+            "description": "Numeric identifier of the error.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "code": {
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Human readable description of the error.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Extra information about the error.",
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": [
+        
+      ]
+    }
+  ]
+}
