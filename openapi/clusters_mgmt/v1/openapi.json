@@ -12493,6 +12493,13 @@
             "description": "AWS account identifier.",
             "type": "string"
           },
+          "additional_allowed_principals": {
+            "description": "Additional allowed principal ARNs to be added to the hosted control plane's VPC Endpoint Service.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "additional_compute_security_group_ids": {
             "description": "Additional AWS Security Groups to be added to default worker (compute) machine pool.",
             "type": "array",
@@ -16430,6 +16437,10 @@
               "type": "string"
             }
           },
+          "management_upgrade": {
+            "description": "Management parameters (Optional).",
+            "$ref": "#/components/schemas/NodePoolManagementUpgrade"
+          },
           "node_drain_grace_period": {
             "description": "Time to wait for a NodePool to drain when it is upgraded or replaced before it is forcibly removed.",
             "$ref": "#/components/schemas/Value"
@@ -16491,6 +16502,35 @@
             "description": "The minimum number of replicas for the node pool.",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "NodePoolManagementUpgrade": {
+        "description": "Representation of node pool management.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePoolManagementUpgrade' if this is a complete object or 'NodePoolManagementUpgradeLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "max_surge": {
+            "description": "Maximum number of nodes in the NodePool of a ROSA HCP cluster that can be scheduled above the desired number of nodes during the upgrade.",
+            "type": "string"
+          },
+          "max_unavailable": {
+            "description": "Maximum number of nodes in the NodePool of a ROSA HCP cluster that can be unavailable during the upgrade.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of strategy for handling upgrades.",
+            "type": "string"
           }
         }
       },
