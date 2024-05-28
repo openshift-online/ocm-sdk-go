@@ -18,6 +18,11 @@ package internal
 
 import (
 	"context"
+	"crypto/x509"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 
 	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
 	. "github.com/onsi/gomega"             // nolint
@@ -104,5 +109,71 @@ var _ = Describe("Select client", func() {
 		secondClient, err := selector.Select(ctx, secondAddress)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(secondClient == firstClient).To(BeFalse())
+	})
+})
+
+var _ = Describe("Redirect Behavior", func() {
+	var (
+		ctx                  context.Context
+		selector             *ClientSelector
+		originServer         *httptest.Server
+		responseServer       *httptest.Server
+		expectedResponseBody string
+	)
+
+	BeforeEach(func() {
+		var err error
+
+		// Create a context:
+		ctx = context.Background()
+
+		expectedResponseBody = "myServerDotComRedirect"
+
+		responseServer = httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			//nolint
+			fmt.Fprintf(w, expectedResponseBody)
+		}))
+
+		// simulate a redirect to a different domain by responding with a localhost url rather than a 127.0.0.1 url
+		redirectURL := strings.Replace(responseServer.URL, "127.0.0.1", "localhost", 1)
+		originServer = httptest.NewTLSServer(http.RedirectHandler(redirectURL, http.StatusMovedPermanently))
+
+		cas := x509.NewCertPool()
+		cas.AddCert(responseServer.Certificate())
+		cas.AddCert(originServer.Certificate())
+
+		// Create the selector:
+		selector, err = NewClientSelector().
+			TrustedCAs(cas).
+			Insecure(true). //need insecure when using "localhost" to connect or you get TLS verification errors
+			Logger(logger).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(selector).ToNot(BeNil())
+	})
+
+	AfterEach(func() {
+		defer responseServer.Close()
+		defer originServer.Close()
+
+		// Close the selector:
+		err := selector.Close()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	It("Doesn't re-use origin host for redirect", func() {
+		address, err := ParseServerAddress(ctx, originServer.URL)
+		Expect(err).ToNot(HaveOccurred())
+
+		client, err := selector.Select(ctx, address)
+		Expect(err).ToNot(HaveOccurred())
+
+		resp, err := client.Get(originServer.URL)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(resp.TLS.ServerName).To(Equal("localhost"))
+
+		body := make([]byte, len(expectedResponseBody))
+		_, _ = resp.Body.Read(body)
+		Expect(string(body)).To(Equal("myServerDotComRedirect"))
 	})
 })
