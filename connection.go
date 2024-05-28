@@ -55,7 +55,7 @@ const (
 	DefaultTokenURL     = authentication.DefaultTokenURL
 	DefaultClientID     = authentication.DefaultClientID
 	DefaultClientSecret = authentication.DefaultClientSecret
-	DefaultURL          = "http://localhost:9000"
+	DefaultURL          = "https://api.openshift.com"
 	DefaultAgent        = "OCM-SDK/" + Version
 )
 
