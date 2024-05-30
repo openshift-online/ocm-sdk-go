@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.422
+- Update model version v0.0.375
+  - Add `ManagementUpgrade` parameters to the `NodePool` model to support additional upgrade configuration.
+  - Support server name inference for regionalized OCM redirects
+  - Add `AdditionalAllowedPrincipals` to `AWS` type to support additional allowed principal ARNs to be added to the hosted control plane's VPC Endpoint Service.
+
 ## 0.1.421
 - Update model version v0.0.374
   - Add `CreationTimestamp` and `LastUpdateTimestamp` to `RolePolicyBinding` type
