@@ -14212,6 +14212,31 @@
           }
         }
       },
+      "AzureNodePool": {
+        "description": "Representation of azure node pool specific parameters.",
+        "properties": {
+          "os_disk_size_gibibytes": {
+            "description": "The size in GiB to assign to the OS disks of the\nNodes in the Node Pool. The property\nis the number of bytes x 1024^3.\nIf not specified, OS disk size is 30 GiB.",
+            "type": "string"
+          },
+          "os_disk_storage_account_type": {
+            "description": "The disk storage account type to use for the OS disks of the Nodes in the\nNode Pool. Valid values are:\n* Standard_LRS: HDD\n* StandardSSD_LRS: Standard SSD\n* Premium_LRS: Premium SDD\n* UltraSSD_LRS: Ultra SDD\n\nIf not specified, `Premium_LRS` is used.",
+            "type": "string"
+          },
+          "vm_size": {
+            "description": "The Azure Virtual Machine size identifier used for the\nNodes of the Node Pool.\nAvailability of VM sizes are dependent on the Azure Location\nof the parent Cluster.\nRequired during creation.",
+            "type": "string"
+          },
+          "ephemeral_os_disk_enabled": {
+            "description": "Enables Ephemeral OS Disks for the Nodes in the Node Pool.\nIf not specified, no Ephemeral OS Disks are used.",
+            "type": "boolean"
+          },
+          "resource_name": {
+            "description": "ResourceName is the Azure Resource Name of the NodePool.\nResourceName must be within the Azure Resource Group Name of the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Location as the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Subscription as the parent\nCluster it belongs to.\nResourceName must belong to the same Microsoft Entra Tenant ID as the parent\nCluster it belongs to.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
       "BillingModel": {
         "description": "Billing model for cluster resources.",
         "type": "string",
@@ -16422,6 +16447,10 @@
           "availability_zone": {
             "description": "The availability zone upon which the node is created.",
             "type": "string"
+          },
+          "azure_node_pool": {
+            "description": "Azure specific parameters.",
+            "$ref": "#/components/schemas/AzureNodePool"
           },
           "kubelet_configs": {
             "description": "The names of the KubeletConfigs for this node pool.",
