@@ -48,7 +48,7 @@ func writeAzureNodePool(object *AzureNodePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("os_disk_size_gibibytes")
-		stream.WriteString(object.osDiskSizeGibibytes)
+		stream.WriteInt(object.osDiskSizeGibibytes)
 		count++
 	}
 	present_ = object.bitmap_&2 != 0
@@ -111,7 +111,7 @@ func readAzureNodePool(iterator *jsoniter.Iterator) *AzureNodePool {
 		}
 		switch field {
 		case "os_disk_size_gibibytes":
-			value := iterator.ReadString()
+			value := iterator.ReadInt()
 			object.osDiskSizeGibibytes = value
 			object.bitmap_ |= 1
 		case "os_disk_storage_account_type":

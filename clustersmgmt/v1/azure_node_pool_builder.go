@@ -24,7 +24,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Representation of azure node pool specific parameters.
 type AzureNodePoolBuilder struct {
 	bitmap_                  uint32
-	osDiskSizeGibibytes      string
+	osDiskSizeGibibytes      int
 	osDiskStorageAccountType string
 	vmSize                   string
 	resourceName             string
@@ -42,7 +42,7 @@ func (b *AzureNodePoolBuilder) Empty() bool {
 }
 
 // OSDiskSizeGibibytes sets the value of the 'OS_disk_size_gibibytes' attribute to the given value.
-func (b *AzureNodePoolBuilder) OSDiskSizeGibibytes(value string) *AzureNodePoolBuilder {
+func (b *AzureNodePoolBuilder) OSDiskSizeGibibytes(value int) *AzureNodePoolBuilder {
 	b.osDiskSizeGibibytes = value
 	b.bitmap_ |= 1
 	return b

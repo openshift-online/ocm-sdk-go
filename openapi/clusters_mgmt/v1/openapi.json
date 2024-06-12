@@ -14217,7 +14217,8 @@
         "properties": {
           "os_disk_size_gibibytes": {
             "description": "The size in GiB to assign to the OS disks of the\nNodes in the Node Pool. The property\nis the number of bytes x 1024^3.\nIf not specified, OS disk size is 30 GiB.",
-            "type": "string"
+            "type": "integer",
+            "format": "int32"
           },
           "os_disk_storage_account_type": {
             "description": "The disk storage account type to use for the OS disks of the Nodes in the\nNode Pool. Valid values are:\n* Standard_LRS: HDD\n* StandardSSD_LRS: Standard SSD\n* Premium_LRS: Premium SDD\n* UltraSSD_LRS: Ultra SDD\n\nIf not specified, `Premium_LRS` is used.",
