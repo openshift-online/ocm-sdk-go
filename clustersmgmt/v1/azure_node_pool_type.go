@@ -24,7 +24,7 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 // Representation of azure node pool specific parameters.
 type AzureNodePool struct {
 	bitmap_                  uint32
-	osDiskSizeGibibytes      string
+	osDiskSizeGibibytes      int
 	osDiskStorageAccountType string
 	vmSize                   string
 	resourceName             string
@@ -43,11 +43,11 @@ func (o *AzureNodePool) Empty() bool {
 // Nodes in the Node Pool. The property
 // is the number of bytes x 1024^3.
 // If not specified, OS disk size is 30 GiB.
-func (o *AzureNodePool) OSDiskSizeGibibytes() string {
+func (o *AzureNodePool) OSDiskSizeGibibytes() int {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.osDiskSizeGibibytes
 	}
-	return ""
+	return 0
 }
 
 // GetOSDiskSizeGibibytes returns the value of the 'OS_disk_size_gibibytes' attribute and
@@ -57,7 +57,7 @@ func (o *AzureNodePool) OSDiskSizeGibibytes() string {
 // Nodes in the Node Pool. The property
 // is the number of bytes x 1024^3.
 // If not specified, OS disk size is 30 GiB.
-func (o *AzureNodePool) GetOSDiskSizeGibibytes() (value string, ok bool) {
+func (o *AzureNodePool) GetOSDiskSizeGibibytes() (value int, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.osDiskSizeGibibytes
