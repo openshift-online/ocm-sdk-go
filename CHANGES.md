@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.425
+- Update Windows certificates
+
 ## 0.1.424
 - Update model version v0.0.377
   - Change type of the `OSDiskSizeGibibytes` attribute in the `AzureNodePool` resource from String to Integer.
