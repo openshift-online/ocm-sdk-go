@@ -14740,6 +14740,10 @@
             "description": "Flag indicating if the cluster should be created with nodes in\ndifferent availability zones or all the nodes in a single one\nrandomly selected.",
             "type": "boolean"
           },
+          "multi_arch_enabled": {
+            "description": "Indicate whether the cluster is enabled for multi arch workers",
+            "type": "boolean"
+          },
           "name": {
             "description": "Name of the cluster. This name is assigned by the user when the\ncluster is created. This is used to uniquely identify the cluster",
             "type": "string"
