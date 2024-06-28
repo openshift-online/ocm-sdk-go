@@ -12766,6 +12766,10 @@
               "type": "string"
             }
           },
+          "ec2_metadata_http_tokens": {
+            "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
+            "$ref": "#/components/schemas/Ec2MetadataHttpTokens"
+          },
           "instance_profile": {
             "description": "InstanceProfile is the AWS EC2 instance profile, which is a container for an IAM role that the EC2 instance uses.",
             "type": "string"
