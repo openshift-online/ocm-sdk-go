@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.429
+- Update model version v0.0.380
+  - Add `Architecture` attribute to `MachineType` model
+  - Add `ReleaseImages` attribute to `Version` model
+
 ## 0.1.428
 - Update model version v0.0.379
   - Add `Ec2MetadataHttpTokens` to `AWSNodePool` resource
