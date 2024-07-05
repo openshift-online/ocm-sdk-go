@@ -16272,6 +16272,10 @@
             "description": "The amount of cpu's of the machine type.",
             "$ref": "#/components/schemas/Value"
           },
+          "architecture": {
+            "description": "The architecture of the machine type.",
+            "$ref": "#/components/schemas/ProcessorType"
+          },
           "category": {
             "description": "The category which the machine type is suitable for.",
             "$ref": "#/components/schemas/MachineTypeCategory"
@@ -16950,6 +16954,14 @@
           }
         }
       },
+      "ProcessorType": {
+        "description": "Processor type category.",
+        "type": "string",
+        "enum": [
+          "amd64",
+          "arm64"
+        ]
+      },
       "Product": {
         "description": "Representation of an product that can be selected as a cluster type.",
         "properties": {
@@ -17115,6 +17127,33 @@
           "no_proxy": {
             "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
             "type": "string"
+          }
+        }
+      },
+      "ReleaseImageDetails": {
+        "properties": {
+          "available_upgrades": {
+            "description": "AvailableUpgrades is the list of versions this version can be upgraded to.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "release_image": {
+            "description": "ReleaseImage contains the URI of Openshift release image.",
+            "type": "string"
+          }
+        }
+      },
+      "ReleaseImages": {
+        "properties": {
+          "arm64": {
+            "description": "Arm64 will contain the reference for the arm64 image which will be used for cluster deployments",
+            "$ref": "#/components/schemas/ReleaseImageDetails"
+          },
+          "multi": {
+            "description": "Multi will contain the reference for the multi image which will be used for cluster deployments",
+            "$ref": "#/components/schemas/ReleaseImageDetails"
           }
         }
       },
@@ -17732,8 +17771,12 @@
             "type": "string"
           },
           "release_image": {
-            "description": "ReleaseImage contains the URI of Openshift release image.",
+            "description": "ReleaseImage contains the URI of Openshift release image for amd64 architecture.",
             "type": "string"
+          },
+          "release_images": {
+            "description": "ReleaseImages contains the URI of OpenShift release images for arm64 and multi architectures.",
+            "$ref": "#/components/schemas/ReleaseImages"
           }
         }
       },
