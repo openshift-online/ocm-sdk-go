@@ -12432,6 +12432,227 @@
           }
         }
       }
+    },
+    "/api/clusters_mgmt/v1/wif_configs": {
+      "post": {
+        "description": "Provision a new wif_config resource and add it to the collection of wif_configs.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WifConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WifConfig"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of wif_configs",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to sort the clusters\ndescending by region identifier the value should be:\n\n```sql\nregion.id desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nclusters with a name starting with `my` in the `us-east-1` region the value\nshould be:\n\n```sql\nname like 'my%' and region.id = 'us-east-1'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nwif_configs that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of wif_configs.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/WifConfig"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/wif_configs/{wif_config_id}": {
+      "delete": {
+        "description": "Deletes the wif_config.",
+        "parameters": [
+          {
+            "name": "wif_config_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "dry_run",
+            "description": "Dry run flag is used to check if the operation can be completed, but won't delete.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the WifConfig.",
+        "parameters": [
+          {
+            "name": "wif_config_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WifConfig"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/wif_templates": {
+      "get": {
+        "description": "Retrieves the details of the wif_template.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WifTemplate"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -17853,6 +18074,185 @@
           "version_gate": {
             "description": "link to the version gate that the user agreed to",
             "$ref": "#/components/schemas/VersionGate"
+          }
+        }
+      },
+      "WifAccessMethod": {
+        "type": "string",
+        "enum": [
+          "impersonate",
+          "wif"
+        ]
+      },
+      "WifConfig": {
+        "description": "Definition of an wif_config resource.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'WifConfig' if this is a complete object or 'WifConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "The name OCM clients will display for this wif_config.",
+            "type": "string"
+          },
+          "gcp": {
+            "description": "Holds GCP related data.",
+            "$ref": "#/components/schemas/WifGcp"
+          },
+          "organization": {
+            "description": "The OCM organization that this wif_config resource belongs to.",
+            "$ref": "#/components/schemas/OrganizationLink"
+          }
+        }
+      },
+      "WifCredentialRequest": {
+        "properties": {
+          "secret_ref": {
+            "$ref": "#/components/schemas/WifSecretRef"
+          },
+          "service_account_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "WifGcp": {
+        "properties": {
+          "impersonator_email": {
+            "description": "This is the service account email that OCM will use to access other SAs. ",
+            "type": "string"
+          },
+          "project_id": {
+            "description": "This represents the GCP project ID in which the wif resources will be configured.",
+            "type": "string"
+          },
+          "service_accounts": {
+            "description": "The list of service accounts and their associated roles that will need to be\nconfigured on the user's GCP project.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifServiceAccount"
+            }
+          },
+          "workload_identity_pool": {
+            "description": "The workload identity configuration data that will be used to create the\nworkload identity pool on the user's account.",
+            "$ref": "#/components/schemas/WifPool"
+          }
+        }
+      },
+      "WifIdentityProvider": {
+        "properties": {
+          "allowed_audiences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "identity_provider_id": {
+            "type": "string"
+          },
+          "issuer_url": {
+            "type": "string"
+          },
+          "jwks": {
+            "type": "string"
+          }
+        }
+      },
+      "WifPool": {
+        "properties": {
+          "identity_provider": {
+            "description": "Identity provider configuration data that will be created as part of the\nworkload identity pool.",
+            "$ref": "#/components/schemas/WifIdentityProvider"
+          },
+          "pool_id": {
+            "description": "The Id of the workload identity pool.",
+            "type": "string"
+          },
+          "pool_name": {
+            "description": "The display name of the workload identity pool.",
+            "type": "string"
+          }
+        }
+      },
+      "WifRole": {
+        "properties": {
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "predefined": {
+            "type": "boolean"
+          },
+          "role_id": {
+            "type": "string"
+          }
+        }
+      },
+      "WifSecretRef": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          }
+        }
+      },
+      "WifServiceAccount": {
+        "properties": {
+          "access_method": {
+            "$ref": "#/components/schemas/WifAccessMethod"
+          },
+          "credential_request": {
+            "$ref": "#/components/schemas/WifCredentialRequest"
+          },
+          "osd_role": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifRole"
+            }
+          },
+          "service_account_id": {
+            "type": "string"
+          }
+        }
+      },
+      "WifTemplate": {
+        "description": "Definition of an wif_template resource.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'WifTemplate' if this is a complete object or 'WifTemplateLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "service_accounts": {
+            "description": "The list of service accounts and their associated roles that this template\nwould require to be configured on the user's GCP project.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifServiceAccount"
+            }
           }
         }
       },

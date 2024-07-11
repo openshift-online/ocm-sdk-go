@@ -270,3 +270,23 @@ func (c *Client) Versions() *VersionsClient {
 		path.Join(c.path, "versions"),
 	)
 }
+
+// WifConfigs returns the target 'wif_configs' resource.
+//
+// Reference to the resource that manages wif_configs
+func (c *Client) WifConfigs() *WifConfigsClient {
+	return NewWifConfigsClient(
+		c.transport,
+		path.Join(c.path, "wif_configs"),
+	)
+}
+
+// WifTemplates returns the target 'wif_template' resource.
+//
+// Reference to the resource that manages wif_templates
+func (c *Client) WifTemplates() *WifTemplateClient {
+	return NewWifTemplateClient(
+		c.transport,
+		path.Join(c.path, "wif_templates"),
+	)
+}
