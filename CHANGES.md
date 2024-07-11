@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.430
+- Added WIF endpoints and resources
+
 ## 0.1.429
 - Update model version v0.0.380
   - Add `Architecture` attribute to `MachineType` model
