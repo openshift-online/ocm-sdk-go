@@ -372,7 +372,11 @@ var pathTreeData = `{
         },
         "versions": {
           "-": null
-        }
+        },
+        "wif_configs": {
+          "-": null
+        },
+        "wif_templates": null
       }
     },
     "job_queue": {
