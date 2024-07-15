@@ -13232,6 +13232,10 @@
             "description": "GCP Authentication provider x509 certificate url",
             "type": "string"
           },
+          "authentication": {
+            "description": "GCP Authentication Method",
+            "$ref": "#/components/schemas/GcpAuthentication"
+          },
           "client_id": {
             "description": "GCP client identifier",
             "type": "string"
@@ -15795,6 +15799,15 @@
             "description": "Number of master nodes of the cluster.",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "GcpAuthentication": {
+        "description": "Google cloud platform authentication method of a cluster.",
+        "properties": {
+          "href": {
+            "description": "Self Link",
+            "type": "string"
           }
         }
       },
