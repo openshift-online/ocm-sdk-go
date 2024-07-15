@@ -18,14 +18,16 @@ require (
 	github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega v1.19.0
 	github.com/prometheus/client_golang v1.12.1
-	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	golang.org/x/crypto v0.20.0 // indirect
 	golang.org/x/net v0.21.0
 	golang.org/x/oauth2 v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-require github.com/zalando/go-keyring v0.2.3
+require (
+	github.com/cli/browser v1.3.0
+	github.com/zalando/go-keyring v0.2.3
+)
 
 require (
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
