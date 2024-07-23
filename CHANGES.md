@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.432
+- Update model version v0.0.383
+  - Add `Kind` and `Id` field to GCP `Authentication` structure
+
 ## 0.1.431
 - Update model version v0.0.382
   - Add `Authentication` field to GCP model
