@@ -25,6 +25,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 type GcpAuthenticationBuilder struct {
 	bitmap_ uint32
 	href    string
+	id      string
+	kind    string
 }
 
 // NewGcpAuthentication creates a new builder of 'gcp_authentication' objects.
@@ -44,6 +46,20 @@ func (b *GcpAuthenticationBuilder) Href(value string) *GcpAuthenticationBuilder 
 	return b
 }
 
+// Id sets the value of the 'id' attribute to the given value.
+func (b *GcpAuthenticationBuilder) Id(value string) *GcpAuthenticationBuilder {
+	b.id = value
+	b.bitmap_ |= 2
+	return b
+}
+
+// Kind sets the value of the 'kind' attribute to the given value.
+func (b *GcpAuthenticationBuilder) Kind(value string) *GcpAuthenticationBuilder {
+	b.kind = value
+	b.bitmap_ |= 4
+	return b
+}
+
 // Copy copies the attributes of the given object into this builder, discarding any previous values.
 func (b *GcpAuthenticationBuilder) Copy(object *GcpAuthentication) *GcpAuthenticationBuilder {
 	if object == nil {
@@ -51,6 +67,8 @@ func (b *GcpAuthenticationBuilder) Copy(object *GcpAuthentication) *GcpAuthentic
 	}
 	b.bitmap_ = object.bitmap_
 	b.href = object.href
+	b.id = object.id
+	b.kind = object.kind
 	return b
 }
 
@@ -59,5 +77,7 @@ func (b *GcpAuthenticationBuilder) Build() (object *GcpAuthentication, err error
 	object = new(GcpAuthentication)
 	object.bitmap_ = b.bitmap_
 	object.href = b.href
+	object.id = b.id
+	object.kind = b.kind
 	return
 }

@@ -49,6 +49,24 @@ func writeGcpAuthentication(object *GcpAuthentication, stream *jsoniter.Stream) 
 		}
 		stream.WriteObjectField("href")
 		stream.WriteString(object.href)
+		count++
+	}
+	present_ = object.bitmap_&2 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("id")
+		stream.WriteString(object.id)
+		count++
+	}
+	present_ = object.bitmap_&4 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("kind")
+		stream.WriteString(object.kind)
 	}
 	stream.WriteObjectEnd()
 }
@@ -78,6 +96,14 @@ func readGcpAuthentication(iterator *jsoniter.Iterator) *GcpAuthentication {
 			value := iterator.ReadString()
 			object.href = value
 			object.bitmap_ |= 1
+		case "id":
+			value := iterator.ReadString()
+			object.id = value
+			object.bitmap_ |= 2
+		case "kind":
+			value := iterator.ReadString()
+			object.kind = value
+			object.bitmap_ |= 4
 		default:
 			iterator.ReadAny()
 		}
