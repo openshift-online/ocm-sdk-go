@@ -15806,7 +15806,15 @@
         "description": "Google cloud platform authentication method of a cluster.",
         "properties": {
           "href": {
-            "description": "Self Link",
+            "description": "Self link",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Indicates the type of this object",
             "type": "string"
           }
         }

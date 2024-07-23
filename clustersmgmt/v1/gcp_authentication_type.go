@@ -25,6 +25,8 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 type GcpAuthentication struct {
 	bitmap_ uint32
 	href    string
+	id      string
+	kind    string
 }
 
 // Empty returns true if the object is empty, i.e. no attribute has a value.
@@ -35,7 +37,7 @@ func (o *GcpAuthentication) Empty() bool {
 // Href returns the value of the 'href' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Self Link
+// Self link
 func (o *GcpAuthentication) Href() string {
 	if o != nil && o.bitmap_&1 != 0 {
 		return o.href
@@ -46,11 +48,57 @@ func (o *GcpAuthentication) Href() string {
 // GetHref returns the value of the 'href' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Self Link
+// Self link
 func (o *GcpAuthentication) GetHref() (value string, ok bool) {
 	ok = o != nil && o.bitmap_&1 != 0
 	if ok {
 		value = o.href
+	}
+	return
+}
+
+// Id returns the value of the 'id' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Unique identifier of the object
+func (o *GcpAuthentication) Id() string {
+	if o != nil && o.bitmap_&2 != 0 {
+		return o.id
+	}
+	return ""
+}
+
+// GetId returns the value of the 'id' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Unique identifier of the object
+func (o *GcpAuthentication) GetId() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&2 != 0
+	if ok {
+		value = o.id
+	}
+	return
+}
+
+// Kind returns the value of the 'kind' attribute, or
+// the zero value of the type if the attribute doesn't have a value.
+//
+// Indicates the type of this object
+func (o *GcpAuthentication) Kind() string {
+	if o != nil && o.bitmap_&4 != 0 {
+		return o.kind
+	}
+	return ""
+}
+
+// GetKind returns the value of the 'kind' attribute and
+// a flag indicating if the attribute has a value.
+//
+// Indicates the type of this object
+func (o *GcpAuthentication) GetKind() (value string, ok bool) {
+	ok = o != nil && o.bitmap_&4 != 0
+	if ok {
+		value = o.kind
 	}
 	return
 }
