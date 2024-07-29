@@ -22,12 +22,10 @@ package errors // github.com/openshift-online/ocm-sdk-go/errors
 import (
 	"fmt"
 	"io"
-	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/golang/glog"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/openshift-online/ocm-api-metamodel/pkg/runtime"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
