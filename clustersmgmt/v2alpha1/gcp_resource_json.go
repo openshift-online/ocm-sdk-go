@@ -18,14 +18,3 @@ limitations under the License.
 // your changes will be lost when the file is generated again.
 
 package v2alpha1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v2alpha1
-
-import "io"
-
-func writeWifTemplateGetRequest(request *WifTemplateGetRequest, writer io.Writer) error {
-	return nil
-}
-func readWifTemplateGetResponse(response *WifTemplateGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalWifTemplate(reader)
-	return err
-}

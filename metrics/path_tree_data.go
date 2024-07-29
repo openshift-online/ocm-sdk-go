@@ -329,6 +329,11 @@ var pathTreeData = `{
         "flavours": {
           "-": null
         },
+        "gcp": {
+          "wif_configs": {
+            "-": null
+          }
+        },
         "gcp_inquiries": {
           "encryption_keys": null,
           "key_rings": null,
@@ -372,11 +377,7 @@ var pathTreeData = `{
         },
         "versions": {
           "-": null
-        },
-        "wif_configs": {
-          "-": null
-        },
-        "wif_templates": null
+        }
       },
       "v2alpha1": {
         "addons": {
@@ -541,6 +542,11 @@ var pathTreeData = `{
         "flavours": {
           "-": null
         },
+        "gcp": {
+          "wif_configs": {
+            "-": null
+          }
+        },
         "gcp_inquiries": {
           "encryption_keys": null,
           "key_rings": null,
@@ -584,11 +590,7 @@ var pathTreeData = `{
         },
         "versions": {
           "-": null
-        },
-        "wif_configs": {
-          "-": null
-        },
-        "wif_templates": null
+        }
       }
     },
     "job_queue": {

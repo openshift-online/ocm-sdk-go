@@ -20,42 +20,34 @@ limitations under the License.
 package v2alpha1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v2alpha1
 
 import (
-	"io"
-
-	"github.com/openshift-online/ocm-sdk-go/helpers"
+	"net/http"
+	"path"
 )
 
-func writeWifTemplatesListRequest(request *WifTemplatesListRequest, writer io.Writer) error {
-	return nil
+// GCPClient is the client of the 'GCP' resource.
+//
+// Manages the collection of gcp endpoints.
+type GCPClient struct {
+	transport http.RoundTripper
+	path      string
 }
-func readWifTemplatesListResponse(response *WifTemplatesListResponse, reader io.Reader) error {
-	iterator, err := helpers.NewIterator(reader)
-	if err != nil {
-		return err
+
+// NewGCPClient creates a new client for the 'GCP'
+// resource using the given transport to send the requests and receive the
+// responses.
+func NewGCPClient(transport http.RoundTripper, path string) *GCPClient {
+	return &GCPClient{
+		transport: transport,
+		path:      path,
 	}
-	for {
-		field := iterator.ReadObject()
-		if field == "" {
-			break
-		}
-		switch field {
-		case "page":
-			value := iterator.ReadInt()
-			response.page = &value
-		case "size":
-			value := iterator.ReadInt()
-			response.size = &value
-		case "total":
-			value := iterator.ReadInt()
-			response.total = &value
-		case "items":
-			items := readWifTemplateList(iterator)
-			response.items = &WifTemplateList{
-				items: items,
-			}
-		default:
-			iterator.ReadAny()
-		}
-	}
-	return iterator.Error
+}
+
+// WifConfigs returns the target 'wif_configs' resource.
+//
+// Reference to the resource that manages wif_configs
+func (c *GCPClient) WifConfigs() *WifConfigsClient {
+	return NewWifConfigsClient(
+		c.transport,
+		path.Join(c.path, "wif_configs"),
+	)
 }

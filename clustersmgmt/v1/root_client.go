@@ -81,6 +81,16 @@ func (c *Client) DNSDomains() *DNSDomainsClient {
 	)
 }
 
+// GCP returns the target 'GCP' resource.
+//
+// Reference to the resource that manages the collection of gcp endpoints.
+func (c *Client) GCP() *GCPClient {
+	return NewGCPClient(
+		c.transport,
+		path.Join(c.path, "gcp"),
+	)
+}
+
 // GCPInquiries returns the target 'GCP_inquiries' resource.
 //
 // Reference to the resource that manages the collection of gcp inquiries.
@@ -268,25 +278,5 @@ func (c *Client) Versions() *VersionsClient {
 	return NewVersionsClient(
 		c.transport,
 		path.Join(c.path, "versions"),
-	)
-}
-
-// WifConfigs returns the target 'wif_configs' resource.
-//
-// Reference to the resource that manages wif_configs
-func (c *Client) WifConfigs() *WifConfigsClient {
-	return NewWifConfigsClient(
-		c.transport,
-		path.Join(c.path, "wif_configs"),
-	)
-}
-
-// WifTemplates returns the target 'wif_template' resource.
-//
-// Reference to the resource that manages wif_templates
-func (c *Client) WifTemplates() *WifTemplateClient {
-	return NewWifTemplateClient(
-		c.transport,
-		path.Join(c.path, "wif_templates"),
 	)
 }
