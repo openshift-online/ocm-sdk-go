@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.433
+- Update model version v0.0.384
+  - Add clusters_mgmt API model for v2alpha1
+- Update model version v0.0.385
+  - Update WIF endpoint path
+  - Remove WIF templates endpoints
+
 ## 0.1.432
 - Update model version v0.0.383
   - Add `Kind` and `Id` field to GCP `Authentication` structure
