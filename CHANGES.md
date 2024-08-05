@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.434
+- Update model version v0.0.386
+  - Add `RootVolume` attribute to `AWSNodePool` model
+- Update model version v0.0.387
+  - Add `ProjectNumber` field to `WifConfig` model
+
 ## 0.1.433
 - Update model version v0.0.384
   - Add clusters_mgmt API model for v2alpha1
