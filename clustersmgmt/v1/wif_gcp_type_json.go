@@ -60,7 +60,16 @@ func writeWifGcp(object *WifGcp, stream *jsoniter.Stream) {
 		stream.WriteString(object.projectId)
 		count++
 	}
-	present_ = object.bitmap_&4 != 0 && object.serviceAccounts != nil
+	present_ = object.bitmap_&4 != 0
+	if present_ {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("project_number")
+		stream.WriteString(object.projectNumber)
+		count++
+	}
+	present_ = object.bitmap_&8 != 0 && object.serviceAccounts != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -69,7 +78,7 @@ func writeWifGcp(object *WifGcp, stream *jsoniter.Stream) {
 		writeWifServiceAccountList(object.serviceAccounts, stream)
 		count++
 	}
-	present_ = object.bitmap_&8 != 0 && object.workloadIdentityPool != nil
+	present_ = object.bitmap_&16 != 0 && object.workloadIdentityPool != nil
 	if present_ {
 		if count > 0 {
 			stream.WriteMore()
@@ -109,14 +118,18 @@ func readWifGcp(iterator *jsoniter.Iterator) *WifGcp {
 			value := iterator.ReadString()
 			object.projectId = value
 			object.bitmap_ |= 2
+		case "project_number":
+			value := iterator.ReadString()
+			object.projectNumber = value
+			object.bitmap_ |= 4
 		case "service_accounts":
 			value := readWifServiceAccountList(iterator)
 			object.serviceAccounts = value
-			object.bitmap_ |= 4
+			object.bitmap_ |= 8
 		case "workload_identity_pool":
 			value := readWifPool(iterator)
 			object.workloadIdentityPool = value
-			object.bitmap_ |= 8
+			object.bitmap_ |= 16
 		default:
 			iterator.ReadAny()
 		}

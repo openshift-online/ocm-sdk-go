@@ -24,6 +24,7 @@ type WifGcpBuilder struct {
 	bitmap_              uint32
 	impersonatorEmail    string
 	projectId            string
+	projectNumber        string
 	serviceAccounts      []*WifServiceAccountBuilder
 	workloadIdentityPool *WifPoolBuilder
 }
@@ -52,11 +53,18 @@ func (b *WifGcpBuilder) ProjectId(value string) *WifGcpBuilder {
 	return b
 }
 
+// ProjectNumber sets the value of the 'project_number' attribute to the given value.
+func (b *WifGcpBuilder) ProjectNumber(value string) *WifGcpBuilder {
+	b.projectNumber = value
+	b.bitmap_ |= 4
+	return b
+}
+
 // ServiceAccounts sets the value of the 'service_accounts' attribute to the given values.
 func (b *WifGcpBuilder) ServiceAccounts(values ...*WifServiceAccountBuilder) *WifGcpBuilder {
 	b.serviceAccounts = make([]*WifServiceAccountBuilder, len(values))
 	copy(b.serviceAccounts, values)
-	b.bitmap_ |= 4
+	b.bitmap_ |= 8
 	return b
 }
 
@@ -64,9 +72,9 @@ func (b *WifGcpBuilder) ServiceAccounts(values ...*WifServiceAccountBuilder) *Wi
 func (b *WifGcpBuilder) WorkloadIdentityPool(value *WifPoolBuilder) *WifGcpBuilder {
 	b.workloadIdentityPool = value
 	if value != nil {
-		b.bitmap_ |= 8
+		b.bitmap_ |= 16
 	} else {
-		b.bitmap_ &^= 8
+		b.bitmap_ &^= 16
 	}
 	return b
 }
@@ -79,6 +87,7 @@ func (b *WifGcpBuilder) Copy(object *WifGcp) *WifGcpBuilder {
 	b.bitmap_ = object.bitmap_
 	b.impersonatorEmail = object.impersonatorEmail
 	b.projectId = object.projectId
+	b.projectNumber = object.projectNumber
 	if object.serviceAccounts != nil {
 		b.serviceAccounts = make([]*WifServiceAccountBuilder, len(object.serviceAccounts))
 		for i, v := range object.serviceAccounts {
@@ -101,6 +110,7 @@ func (b *WifGcpBuilder) Build() (object *WifGcp, err error) {
 	object.bitmap_ = b.bitmap_
 	object.impersonatorEmail = b.impersonatorEmail
 	object.projectId = b.projectId
+	object.projectNumber = b.projectNumber
 	if b.serviceAccounts != nil {
 		object.serviceAccounts = make([]*WifServiceAccount, len(b.serviceAccounts))
 		for i, v := range b.serviceAccounts {

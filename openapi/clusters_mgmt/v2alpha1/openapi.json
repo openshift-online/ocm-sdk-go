@@ -12972,6 +12972,10 @@
             "description": "InstanceType is an ec2 instance type for node instances (e.g. m5.large).",
             "type": "string"
           },
+          "root_volume": {
+            "description": "AWS Volume specification to be used to set custom worker disk size",
+            "$ref": "#/components/schemas/AWSVolume"
+          },
           "subnet_outposts": {
             "description": "Associates nodepool subnets with AWS Outposts.",
             "type": "object",
