@@ -755,6 +755,42 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/aws_inquiries/oidc_thumbprint": {
+      "post": {
+        "description": "Fetches/creates an OIDC Config Thumbprint from either a cluster ID, or an oidc config ID.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OidcThumbprintInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidcThumbprint"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/aws_inquiries/regions": {
       "post": {
         "description": "Retrieves the list of available regions of the cloud provider.\nIMPORTANT: This list doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.",
@@ -16953,6 +16989,44 @@
           },
           "secret_arn": {
             "description": "Secrets Manager ARN for the OIDC private key, supplied in request. It is only to be used in Unmanaged Oidc Config.",
+            "type": "string"
+          }
+        }
+      },
+      "OidcThumbprint": {
+        "description": "Contains the necessary attributes to support oidc configuration thumbprint operations such as fetching/creation of a thumbprint",
+        "properties": {
+          "href": {
+            "description": "HREF for the oidc config thumbprint, filled in response.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "ClusterId is the for the cluster used, filled in response.",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Kind is the resource type, filled in response.",
+            "type": "string"
+          },
+          "oidc_config_id": {
+            "description": "OidcConfigId is the ID for the oidc config used, filled in response.",
+            "type": "string"
+          },
+          "thumbprint": {
+            "description": "Thumbprint is the thumbprint itself, filled in response.",
+            "type": "string"
+          }
+        }
+      },
+      "OidcThumbprintInput": {
+        "description": "Contains the necessary attributes to fetch an OIDC Configuration thumbprint",
+        "properties": {
+          "cluster_id": {
+            "description": "ClusterId is the for the cluster used, exclusive from OidcConfigId.",
+            "type": "string"
+          },
+          "oidc_config_id": {
+            "description": "OidcConfigId is the ID for the oidc config used, exclusive from ClusterId.",
             "type": "string"
           }
         }
