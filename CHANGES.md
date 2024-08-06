@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.435
+- Add 'OidcThumbprint' type model to v1 and v2alpha1
+- Add 'OidcThumbprintInput' type model to v1 and v2alpha1
+- Add 'OidcThumbprint' resource model to v1 and v2alpha1
+
 ## 0.1.434
 - Update model version v0.0.386
   - Add `RootVolume` attribute to `AWSNodePool` model
