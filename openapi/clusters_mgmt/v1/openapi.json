@@ -16321,6 +16321,10 @@
             "description": "Indicates if the reason was detected automatically or manually.\nWhen creating a new reason this field should be empty or \"manual\".",
             "$ref": "#/components/schemas/DetectionType"
           },
+          "override": {
+            "description": "Indicates if the override is enabled",
+            "$ref": "#/components/schemas/LimitedSupportReasonOverride"
+          },
           "summary": {
             "description": "Summary of the reason.",
             "type": "string"
@@ -16328,6 +16332,27 @@
           "template": {
             "description": "Optional link to a template with summary and details.",
             "$ref": "#/components/schemas/LimitedSupportReasonTemplate"
+          }
+        }
+      },
+      "LimitedSupportReasonOverride": {
+        "description": "Representation of the limited support reason override.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LimitedSupportReasonOverride' if this is a complete object or 'LimitedSupportReasonOverrideLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates if the override is enabled",
+            "type": "boolean"
           }
         }
       },
