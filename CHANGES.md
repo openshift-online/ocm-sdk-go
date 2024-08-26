@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.437
+- Update model version v0.0.390
+  - Add `RolePrefix` field to `WifGcp` model
+
 ## 0.1.436
 - Update model version v0.0.389
   - Add state struct to node pool
