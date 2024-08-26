@@ -18237,6 +18237,10 @@
             "description": "This represents the GCP project number in which the wif resources will be configured.",
             "type": "string"
           },
+          "role_prefix": {
+            "description": "Prefix for naming GCP custom roles configured.",
+            "type": "string"
+          },
           "service_accounts": {
             "description": "The list of service accounts and their associated roles that will need to be\nconfigured on the user's GCP project.",
             "type": "array",
