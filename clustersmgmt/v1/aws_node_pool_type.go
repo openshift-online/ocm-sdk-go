@@ -45,7 +45,7 @@ type AWSNodePool struct {
 	instanceType               string
 	rootVolume                 *AWSVolume
 	subnetOutposts             map[string]string
-	tags                       map[string]string
+	tags                       map[string]interface{}
 }
 
 // Kind returns the name of the type of the object.
@@ -277,7 +277,7 @@ func (o *AWSNodePool) GetSubnetOutposts() (value map[string]string, ok bool) {
 // - Tag keys may be between 1 and 128 characters in length
 // - Tag values may be between 0 and 256 characters in length
 // - Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]
-func (o *AWSNodePool) Tags() map[string]string {
+func (o *AWSNodePool) Tags() map[string]interface{} {
 	if o != nil && o.bitmap_&1024 != 0 {
 		return o.tags
 	}
@@ -295,7 +295,7 @@ func (o *AWSNodePool) Tags() map[string]string {
 // - Tag keys may be between 1 and 128 characters in length
 // - Tag values may be between 0 and 256 characters in length
 // - Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]
-func (o *AWSNodePool) GetTags() (value map[string]string, ok bool) {
+func (o *AWSNodePool) GetTags() (value map[string]interface{}, ok bool) {
 	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
 		value = o.tags

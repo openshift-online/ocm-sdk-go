@@ -33,7 +33,7 @@ type AWSNodePoolBuilder struct {
 	instanceType               string
 	rootVolume                 *AWSVolumeBuilder
 	subnetOutposts             map[string]string
-	tags                       map[string]string
+	tags                       map[string]interface{}
 }
 
 // NewAWSNodePool creates a new builder of 'AWS_node_pool' objects.
@@ -133,7 +133,7 @@ func (b *AWSNodePoolBuilder) SubnetOutposts(value map[string]string) *AWSNodePoo
 }
 
 // Tags sets the value of the 'tags' attribute to the given value.
-func (b *AWSNodePoolBuilder) Tags(value map[string]string) *AWSNodePoolBuilder {
+func (b *AWSNodePoolBuilder) Tags(value map[string]interface{}) *AWSNodePoolBuilder {
 	b.tags = value
 	if value != nil {
 		b.bitmap_ |= 1024
@@ -182,7 +182,7 @@ func (b *AWSNodePoolBuilder) Copy(object *AWSNodePool) *AWSNodePoolBuilder {
 		b.subnetOutposts = nil
 	}
 	if len(object.tags) > 0 {
-		b.tags = map[string]string{}
+		b.tags = map[string]interface{}{}
 		for k, v := range object.tags {
 			b.tags[k] = v
 		}
@@ -224,7 +224,7 @@ func (b *AWSNodePoolBuilder) Build() (object *AWSNodePool, err error) {
 		}
 	}
 	if b.tags != nil {
-		object.tags = make(map[string]string)
+		object.tags = make(map[string]interface{})
 		for k, v := range b.tags {
 			object.tags[k] = v
 		}
