@@ -12211,6 +12211,192 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/registry_allowlists": {
+      "post": {
+        "description": "Adds a new break registry allowlist.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistryAllowlist"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistryAllowlist"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of registry allowlists.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the registry allowlists\ninstead of the the names of the columns of a table. For example, in order to sort the\nallowlists descending by identifier the value should be:\n\n```sql\ncreation_timestamp desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the registry allowlists\ninstead of the names of the columns of a table. For example, in order to retrieve all\nthe allowlists with a specific cloud provider and creation time the following is required:\n\n```sql\ncloud_provider.id='aws' and creation_timestamp > '2023-03-01T00:00:00Z'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nregistry allowlists that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of registry allowlists.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RegistryAllowlist"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/registry_allowlists/{registry_allowlist_id}": {
+      "delete": {
+        "description": "Deletes the allowlist.",
+        "parameters": [
+          {
+            "name": "registry_allowlist_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the allowlist.",
+        "parameters": [
+          {
+            "name": "registry_allowlist_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistryAllowlist"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/storage_quota_values": {
       "get": {
         "description": "Retrieves the list of Storage Quota Values.",
@@ -15036,6 +15222,10 @@
             "description": "Link to the cloud provider region where the cluster is installed.",
             "$ref": "#/components/schemas/CloudRegion"
           },
+          "registry_config": {
+            "description": "Registry configuration for the cluster",
+            "$ref": "#/components/schemas/ClusterRegistryConfig"
+          },
           "state": {
             "description": "Overall state of the cluster.",
             "$ref": "#/components/schemas/ClusterState"
@@ -15345,6 +15535,33 @@
           "subscription_id": {
             "description": "Subscription identifier of the cluster generated by the account\nmanager.",
             "type": "string"
+          }
+        }
+      },
+      "ClusterRegistryConfig": {
+        "description": "ClusterRegistryConfig describes the configuration of registries for the cluster.\nIts format reflects the OpenShift Image Configuration, for which docs are available on\n[docs.openshift.com](https://docs.openshift.com/container-platform/4.16/openshift_images/image-configuration.html)\n```json\n{\n   \"registry_config\": {\n     \"registry_sources\": {\n       \"blocked_registries\": [\n         \"badregistry.io\",\n         \"badregistry8.io\"\n       ]\n     }\n   }\n}\n```\n",
+        "properties": {
+          "additional_trusted_ca": {
+            "description": "A map containing the registry hostname as the key, and the PEM-encoded certificate as the value,\nfor each additional registry CA to trust.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "allowed_registries_for_import": {
+            "description": "AllowedRegistriesForImport limits the container image registries that normal users may import\nimages from. Set this list to the registries that you trust to contain valid Docker\nimages and that you want applications to be able to import from. Users with\npermission to create Images or ImageStreamMappings via the API are not affected by\nthis policy - typically only administrators or system integrations will have those\npermissions.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegistryLocation"
+            }
+          },
+          "platform_allowlist": {
+            "description": "PlatformAllowlist contains a reference to a RegistryAllowlist which is a list of internal registries\nwhich needs to be whitelisted for the platform to work. It can be omitted at creation and \nupdating and its lifecycle can be managed separately if needed.",
+            "$ref": "#/components/schemas/RegistryAllowlist"
+          },
+          "registry_sources": {
+            "description": "RegistrySources contains configuration that determines how the container runtime\nshould treat individual registries when accessing images for builds+pods. (e.g.\nwhether or not to allow insecure access). It does not contain configuration for the\ninternal cluster registry.",
+            "$ref": "#/components/schemas/RegistrySources"
           }
         }
       },
@@ -17445,6 +17662,78 @@
           "no_proxy": {
             "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
             "type": "string"
+          }
+        }
+      },
+      "RegistryAllowlist": {
+        "description": "RegistryAllowlist represents a single registry allowlist.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'RegistryAllowlist' if this is a complete object or 'RegistryAllowlistLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cloud_provider": {
+            "description": "CloudProvider is the cloud provider for which this allowlist is valid.",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
+          "creation_timestamp": {
+            "description": "CreationTimestamp is the date and time when the allow list has been created.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "registries": {
+            "description": "Registries is the list of registries contained in this Allowlist.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RegistryLocation": {
+        "description": "RegistryLocation contains a location of the registry specified by the registry domain\nname. The domain name might include wildcards, like '*' or '??'.",
+        "properties": {
+          "domain_name": {
+            "description": "domainName specifies a domain name for the registry\nIn case the registry use non-standard (80 or 443) port, the port should be included\nin the domain name as well.",
+            "type": "string"
+          },
+          "insecure": {
+            "description": "insecure indicates whether the registry is secure (https) or insecure (http)\nBy default (if not specified) the registry is assumed as secure.",
+            "type": "boolean"
+          }
+        }
+      },
+      "RegistrySources": {
+        "description": "RegistrySources contains configuration that determines how the container runtime should treat individual\nregistries when accessing images for builds and pods. For instance, whether or not to allow insecure access.\nIt does not contain configuration for the internal cluster registry.",
+        "properties": {
+          "allowed_registries": {
+            "description": "AllowedRegistries: registries for which image pull and push actions are allowed.\nTo specify all subdomains, add the asterisk (*) wildcard character as a prefix to the domain name.\nFor example, *.example.com. You can specify an individual repository within a registry.\nFor example: reg1.io/myrepo/myapp:latest. All other registries are blocked.\nMutually exclusive with `BlockedRegistries`",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "blocked_registries": {
+            "description": "BlockedRegistries: registries for which image pull and push actions are denied.\nTo specify all subdomains, add the asterisk (*) wildcard character as a prefix to the domain name.\nFor example, *.example.com. You can specify an individual repository within a registry.\nFor example: reg1.io/myrepo/myapp:latest. All other registries are allowed.\nMutually exclusive with `AllowedRegistries`",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "insecure_registries": {
+            "description": "InsecureRegistries are registries which do not have a valid TLS certificate or only support HTTP connections.\nTo specify all subdomains, add the asterisk (*) wildcard character as a prefix to the domain name.\nFor example, *.example.com. You can specify an individual repository within a registry.\nFor example: reg1.io/myrepo/myapp:latest.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
