@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.438
+- Update model version v0.0.391
+  - Add `RegistryConfig` attribute to `Cluster` model
+  - Add `RegistryAllowlist` resource and endpoints
+
 ## 0.1.437
 - Update model version v0.0.390
   - Add `RolePrefix` field to `WifGcp` model
