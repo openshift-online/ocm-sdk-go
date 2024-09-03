@@ -25,6 +25,7 @@ type WifGcpBuilder struct {
 	impersonatorEmail    string
 	projectId            string
 	serviceAccounts      []*WifServiceAccountBuilder
+	support              *WifSupportBuilder
 	workloadIdentityPool *WifPoolBuilder
 }
 
@@ -60,13 +61,24 @@ func (b *WifGcpBuilder) ServiceAccounts(values ...*WifServiceAccountBuilder) *Wi
 	return b
 }
 
-// WorkloadIdentityPool sets the value of the 'workload_identity_pool' attribute to the given value.
-func (b *WifGcpBuilder) WorkloadIdentityPool(value *WifPoolBuilder) *WifGcpBuilder {
-	b.workloadIdentityPool = value
+// Support sets the value of the 'support' attribute to the given value.
+func (b *WifGcpBuilder) Support(value *WifSupportBuilder) *WifGcpBuilder {
+	b.support = value
 	if value != nil {
 		b.bitmap_ |= 8
 	} else {
 		b.bitmap_ &^= 8
+	}
+	return b
+}
+
+// WorkloadIdentityPool sets the value of the 'workload_identity_pool' attribute to the given value.
+func (b *WifGcpBuilder) WorkloadIdentityPool(value *WifPoolBuilder) *WifGcpBuilder {
+	b.workloadIdentityPool = value
+	if value != nil {
+		b.bitmap_ |= 16
+	} else {
+		b.bitmap_ &^= 16
 	}
 	return b
 }
@@ -86,6 +98,11 @@ func (b *WifGcpBuilder) Copy(object *WifGcp) *WifGcpBuilder {
 		}
 	} else {
 		b.serviceAccounts = nil
+	}
+	if object.support != nil {
+		b.support = NewWifSupport().Copy(object.support)
+	} else {
+		b.support = nil
 	}
 	if object.workloadIdentityPool != nil {
 		b.workloadIdentityPool = NewWifPool().Copy(object.workloadIdentityPool)
@@ -108,6 +125,12 @@ func (b *WifGcpBuilder) Build() (object *WifGcp, err error) {
 			if err != nil {
 				return
 			}
+		}
+	}
+	if b.support != nil {
+		object.support, err = b.support.Build()
+		if err != nil {
+			return
 		}
 	}
 	if b.workloadIdentityPool != nil {

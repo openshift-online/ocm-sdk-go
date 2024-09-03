@@ -18467,6 +18467,7 @@
         "type": "string",
         "enum": [
           "impersonate",
+          "vm",
           "wif"
         ]
       },
@@ -18536,6 +18537,10 @@
             "items": {
               "$ref": "#/components/schemas/WifServiceAccount"
             }
+          },
+          "support": {
+            "description": "Defines the access configuration for support.",
+            "$ref": "#/components/schemas/WifSupport"
           },
           "workload_identity_pool": {
             "description": "The workload identity configuration data that will be used to create the\nworkload identity pool on the user's account.",
@@ -18623,6 +18628,19 @@
           },
           "service_account_id": {
             "type": "string"
+          }
+        }
+      },
+      "WifSupport": {
+        "properties": {
+          "principal": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifRole"
+            }
           }
         }
       },
