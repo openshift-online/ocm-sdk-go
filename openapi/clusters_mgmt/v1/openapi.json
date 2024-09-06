@@ -16842,6 +16842,24 @@
             "description": "Self link.",
             "type": "string"
           },
+          "creation_timestamp": {
+            "description": "Date and time when the manifest got created in clusters-service.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "live_resource": {
+            "description": "Transient value to represent the underyling live resource.",
+            "type": "object"
+          },
+          "spec": {
+            "description": "Spec of Manifest Work object from open cluster management.",
+            "type": "object"
+          },
+          "updated_timestamp": {
+            "description": "Date and time when the manifest got updated in clusters-service.",
+            "type": "string",
+            "format": "date-time"
+          },
           "workloads": {
             "description": "List of k8s objects to deploy on a hosted cluster.",
             "type": "array",
