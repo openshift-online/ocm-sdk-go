@@ -16179,6 +16179,10 @@
       "HypershiftConfig": {
         "description": "Hypershift configuration.",
         "properties": {
+          "hcp_namespace": {
+            "description": "Contains the name of the hcp namespace for this Hypershift cluster.\nEmpty for non Hypershift clusters.",
+            "type": "string"
+          },
           "enabled": {
             "description": "Boolean flag indicating if the cluster should be creating using _Hypershift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
             "type": "boolean"
@@ -16843,20 +16847,20 @@
             "type": "string"
           },
           "creation_timestamp": {
-            "description": "Date and time when the manifest got created in clusters-service.",
+            "description": "Date and time when the manifest got created in OCM database.",
             "type": "string",
             "format": "date-time"
           },
           "live_resource": {
-            "description": "Transient value to represent the underyling live resource.",
+            "description": "Transient value to represent the underlying live resource.",
             "type": "object"
           },
           "spec": {
-            "description": "Spec of Manifest Work object from open cluster management.",
+            "description": "Spec of Manifest Work object from open cluster management\nFor more info please check https://open-cluster-management.io/concepts/manifestwork.",
             "type": "object"
           },
           "updated_timestamp": {
-            "description": "Date and time when the manifest got updated in clusters-service.",
+            "description": "Date and time when the manifest got updated in OCM database.",
             "type": "string",
             "format": "date-time"
           },

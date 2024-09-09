@@ -109,7 +109,7 @@ func (o *Manifest) Empty() bool {
 // CreationTimestamp returns the value of the 'creation_timestamp' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Date and time when the manifest got created in clusters-service.
+// Date and time when the manifest got created in OCM database.
 func (o *Manifest) CreationTimestamp() time.Time {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.creationTimestamp
@@ -120,7 +120,7 @@ func (o *Manifest) CreationTimestamp() time.Time {
 // GetCreationTimestamp returns the value of the 'creation_timestamp' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Date and time when the manifest got created in clusters-service.
+// Date and time when the manifest got created in OCM database.
 func (o *Manifest) GetCreationTimestamp() (value time.Time, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
@@ -132,7 +132,7 @@ func (o *Manifest) GetCreationTimestamp() (value time.Time, ok bool) {
 // LiveResource returns the value of the 'live_resource' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Transient value to represent the underyling live resource.
+// Transient value to represent the underlying live resource.
 func (o *Manifest) LiveResource() interface{} {
 	if o != nil && o.bitmap_&16 != 0 {
 		return o.liveResource
@@ -143,7 +143,7 @@ func (o *Manifest) LiveResource() interface{} {
 // GetLiveResource returns the value of the 'live_resource' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Transient value to represent the underyling live resource.
+// Transient value to represent the underlying live resource.
 func (o *Manifest) GetLiveResource() (value interface{}, ok bool) {
 	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
@@ -155,7 +155,8 @@ func (o *Manifest) GetLiveResource() (value interface{}, ok bool) {
 // Spec returns the value of the 'spec' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Spec of Manifest Work object from open cluster management.
+// Spec of Manifest Work object from open cluster management
+// For more info please check https://open-cluster-management.io/concepts/manifestwork.
 func (o *Manifest) Spec() interface{} {
 	if o != nil && o.bitmap_&32 != 0 {
 		return o.spec
@@ -166,7 +167,8 @@ func (o *Manifest) Spec() interface{} {
 // GetSpec returns the value of the 'spec' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Spec of Manifest Work object from open cluster management.
+// Spec of Manifest Work object from open cluster management
+// For more info please check https://open-cluster-management.io/concepts/manifestwork.
 func (o *Manifest) GetSpec() (value interface{}, ok bool) {
 	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
@@ -178,7 +180,7 @@ func (o *Manifest) GetSpec() (value interface{}, ok bool) {
 // UpdatedTimestamp returns the value of the 'updated_timestamp' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// Date and time when the manifest got updated in clusters-service.
+// Date and time when the manifest got updated in OCM database.
 func (o *Manifest) UpdatedTimestamp() time.Time {
 	if o != nil && o.bitmap_&64 != 0 {
 		return o.updatedTimestamp
@@ -189,7 +191,7 @@ func (o *Manifest) UpdatedTimestamp() time.Time {
 // GetUpdatedTimestamp returns the value of the 'updated_timestamp' attribute and
 // a flag indicating if the attribute has a value.
 //
-// Date and time when the manifest got updated in clusters-service.
+// Date and time when the manifest got updated in OCM database.
 func (o *Manifest) GetUpdatedTimestamp() (value time.Time, ok bool) {
 	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
