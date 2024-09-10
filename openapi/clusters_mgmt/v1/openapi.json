@@ -18519,6 +18519,13 @@
           "organization": {
             "description": "The OCM organization that this wif_config resource belongs to.",
             "$ref": "#/components/schemas/OrganizationLink"
+          },
+          "wif_templates": {
+            "description": "Wif template(s) used to configure IAM resources",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
