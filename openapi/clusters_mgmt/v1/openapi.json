@@ -13214,6 +13214,18 @@
           }
         }
       },
+      "AWSShard": {
+        "description": "Config for AWS provision shards",
+        "properties": {
+          "ecr_repository_urls": {
+            "description": "ECR repository URLs of the provision shard",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "AWSSpotMarketOptions": {
         "description": "Spot market options for AWS machine pool.",
         "properties": {
@@ -17904,6 +17916,10 @@
             "description": "Self link.",
             "type": "string"
           },
+          "aws_shard": {
+            "description": "Config for AWS provision shards",
+            "$ref": "#/components/schemas/AWSShard"
+          },
           "kubeconfig": {
             "description": "The kubeconfig of the server.",
             "type": "string"
@@ -18406,6 +18422,10 @@
           "release_images": {
             "description": "ReleaseImages contains the URI of OpenShift release images for arm64 and multi architectures.",
             "$ref": "#/components/schemas/ReleaseImages"
+          },
+          "wif_enabled": {
+            "description": "WifEnabled is a flag that indicates whether this version is enabled for Workload Identity Federation.",
+            "type": "boolean"
           }
         }
       },

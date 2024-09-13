@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.442
+- Update model version v0.0.395
+  - Add `ASWShard` struct
+  - Add `WifEnabled` field to `Version` model
+
 ## 0.1.441
 - Update model version v0.0.394
   - Add `WifTemplates` field to `WifConfig` model
