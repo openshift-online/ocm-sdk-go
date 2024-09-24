@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.443
+- Update model version v0.0.396
+  - Add `FlapDetection` field to `status_board.status_updates` model
+
 ## 0.1.442
 - Update model version v0.0.395
   - Add `ASWShard` struct
