@@ -834,6 +834,13 @@
             }
           },
           {
+            "name": "flap_detection",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "full_names",
             "in": "query",
             "schema": {
@@ -2271,6 +2278,13 @@
             }
           },
           {
+            "name": "flap_detection",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "full_names",
             "in": "query",
             "schema": {
@@ -2600,6 +2614,13 @@
             "schema": {
               "type": "string",
               "format": "date-time"
+            }
+          },
+          {
+            "name": "flap_detection",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -3112,6 +3133,13 @@
             }
           },
           {
+            "name": "flap_detection",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "full_names",
             "in": "query",
             "schema": {
@@ -3378,6 +3406,13 @@
             }
           },
           {
+            "name": "flap_detection",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "full_names",
             "in": "query",
             "schema": {
@@ -3617,6 +3652,13 @@
             "schema": {
               "type": "string",
               "format": "date-time"
+            }
+          },
+          {
+            "name": "flap_detection",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
