@@ -13467,6 +13467,10 @@
             "description": "GCP private key identifier",
             "type": "string"
           },
+          "private_service_connect": {
+            "description": "GCP PrivateServiceConnect configuration",
+            "$ref": "#/components/schemas/GcpPrivateServiceConnect"
+          },
           "project_id": {
             "description": "GCP project identifier.",
             "type": "string"
@@ -16057,6 +16061,15 @@
           },
           "kind": {
             "description": "Indicates the type of this object",
+            "type": "string"
+          }
+        }
+      },
+      "GcpPrivateServiceConnect": {
+        "description": "Google cloud platform private service connect configuration of a cluster.",
+        "properties": {
+          "service_attachment_subnet": {
+            "description": "The name of the subnet where the PSC service attachment is created",
             "type": "string"
           }
         }
