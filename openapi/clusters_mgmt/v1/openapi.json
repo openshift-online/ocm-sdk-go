@@ -14627,31 +14627,61 @@
         "description": "Microsoft Azure settings of a cluster.",
         "properties": {
           "managed_resource_group_name": {
-            "description": "[Required] The name of the Azure Resource Group where the Azure Resources related\nto the cluster are created. The Azure Resource Group is created with the given\nvalue, within the Azure Subscription `subscription_id` of the cluster.\n`managed_resource_group_name` cannot be equal to the value of `managed_resource_group`.\n`managed_resource_group_name` is located in the same Azure location as the\ncluster's region.\nNot to be confused with `resource_group_name`, which is the Azure Resource Group Name\nwhere the own Azure Resource associated to the cluster resides.",
+            "description": "The desired name of the Azure Resource Group where the Azure Resources related\nto the cluster are created. It must not previously exist. The Azure Resource\nGroup is created with the given value, within the Azure Subscription\n`subscription_id` of the cluster.\n`managed_resource_group_name` cannot be equal to the value of `managed_resource_group`.\n`managed_resource_group_name` is located in the same Azure location as the\ncluster's region.\nNot to be confused with `resource_group_name`, which is the Azure Resource Group Name\nwhere the own Azure Resource associated to the cluster resides.\nRequired during creation.\nImmutable.",
             "type": "string"
           },
           "network_security_group_resource_id": {
-            "description": "[Required] The Azure Resource ID of a pre-existing\nAzure Network Security Group.\nThe Network Security Group specified in network_security_group_resource_id\nmust already be associated to the Azure Subnet `subnet_resource_id`.\nIt is the Azure Network Security Group associated to the cluster's subnet\nspecified in `subnet_resource_id`.\n`network_security_group_resource_id` must be located in the same Azure\nlocation as the cluster's region.\nThe Azure Subscription specified as part of\n`network_security_group_resource_id` must be located in the same Azure\nSubscription as `subscription_id`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust belong to the Azure Subscription `subscription_id`, and in the same\nAzure location as the cluster's region.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust be a different Resource Group Name than the one specified in\n`managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\ncan be the same, or a different one than the one specified in\n`resource_group_name`.",
+            "description": "The Azure Resource ID of a pre-existing Azure Network Security Group.\nThe Network Security Group specified in network_security_group_resource_id\nmust already be associated to the Azure Subnet `subnet_resource_id`.\nIt is the Azure Network Security Group associated to the cluster's subnet\nspecified in `subnet_resource_id`.\n`network_security_group_resource_id` must be located in the same Azure\nlocation as the cluster's region.\nThe Azure Subscription specified as part of\n`network_security_group_resource_id` must be located in the same Azure\nSubscription as `subscription_id`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust belong to the Azure Subscription `subscription_id`, and in the same\nAzure location as the cluster's region.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust be a different Resource Group Name than the one specified in\n`managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\ncan be the same, or a different one than the one specified in\n`resource_group_name`.\nRequired during creation.\nImmutable.",
             "type": "string"
           },
+          "operators_authentication": {
+            "description": "Defines how the operators of the cluster authenticate to Azure.\nRequired during creation.\nImmutable.",
+            "$ref": "#/components/schemas/AzureOperatorsAuthentication"
+          },
           "resource_group_name": {
-            "description": "[Required] The Azure Resource Group Name of the cluster. It must be within `subscription_id`\nof the cluster. `resource_group_name` is located in the same Azure location\nas the cluster's region.",
+            "description": "The Azure Resource Group Name of the cluster. It must be a pre-existing\nAzure Resource Group and it must exist within the Azure Subscription\n`subscription_id` of the cluster.\n`resource_group_name` is located in the same Azure location as the\ncluster's region.\nRequired during creation.\nImmutable.",
             "type": "string"
           },
           "resource_name": {
-            "description": "[Required] The Azure Resource Name of the cluster. It must be within the\nAzure Resource Group Name `resource_group_name`.\n`resource_name` is located in the same Azure location as the cluster's region.",
+            "description": "The Azure Resource Name of the cluster. It must be within the\nAzure Resource Group Name `resource_group_name`.\n`resource_name` is located in the same Azure location as the cluster's region.\nRequired during creation.\nImmutable.",
             "type": "string"
           },
           "subnet_resource_id": {
-            "description": "[Required] The Azure Resource ID of a pre-existing Azure\nSubnet. It is an Azure Subnet used for the Data Plane of the cluster.\n`subnet_resource_id` must be located in the same Azure location as the\ncluster's region.\nThe Azure Subscription specified as part of the `subnet_resource_id`\nmust be located in the same Azure Subscription as `subscription_id`.\nThe Azure Resource Group Name specified as part of `subnet_resource_id`\nmust belong to the Azure Subscription `subscription_id`, and in the same\nAzure location as the cluster's region.\nThe Azure Resource Group Name specified as part of `subnet_resource_id`\nmust be a different Resource Group Name than the one specified in\n`managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the `subnet_resource_id`\ncan be the same, or a different one than the one specified in\n`resource_group_name`.",
+            "description": "The Azure Resource ID of a pre-existing Azure Subnet. It is an Azure\nSubnet used for the Data Plane of the cluster. `subnet_resource_id`\nmust be located in the same Azure location as the cluster's region.\nThe Azure Subscription specified as part of the `subnet_resource_id`\nmust be located in the same Azure Subscription as `subscription_id`.\nThe Azure Resource Group Name specified as part of `subnet_resource_id`\nmust belong to the Azure Subscription `subscription_id`, and in the same\nAzure location as the cluster's region.\nThe Azure Resource Group Name specified as part of `subnet_resource_id`\nmust be a different Resource Group Name than the one specified in\n`managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the `subnet_resource_id`\ncan be the same, or a different one than the one specified in\n`resource_group_name`.\nRequired during creation.\nImmutable.",
             "type": "string"
           },
           "subscription_id": {
-            "description": "[Required] The Azure Subscription ID associated with the cluster. It must belong to\nthe Microsoft Entra Tenant ID `tenant_id`.",
+            "description": "The Azure Subscription ID associated with the cluster. It must belong to\nthe Microsoft Entra Tenant ID `tenant_id`.\nRequired during creation.\nImmutable.",
             "type": "string"
           },
           "tenant_id": {
-            "description": "[Required] The Microsoft Entra Tenant ID where the cluster belongs.",
+            "description": "The Microsoft Entra Tenant ID where the cluster belongs.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureControlPlaneManagedIdentity": {
+        "description": "Represents the information associated to an Azure User-Assigned\nManaged Identity belonging to the Control Plane of the cluster.",
+        "properties": {
+          "client_id": {
+            "description": "The Client ID associated to the Azure User-Assigned Managed Identity.\nReadonly.",
+            "type": "string"
+          },
+          "principal_id": {
+            "description": "The Principal ID associated to the Azure User-Assigned Identity.\nReadonly.",
+            "type": "string"
+          },
+          "resource_id": {
+            "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureDataPlaneManagedIdentity": {
+        "description": "Represents the information associated to an Azure User-Assigned\nManaged Identity belonging to the Data Plane of the cluster.",
+        "properties": {
+          "resource_id": {
+            "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
             "type": "string"
           }
         }
@@ -14678,6 +14708,59 @@
           },
           "resource_name": {
             "description": "ResourceName is the Azure Resource Name of the NodePool.\nResourceName must be within the Azure Resource Group Name of the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Location as the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Subscription as the parent\nCluster it belongs to.\nResourceName must belong to the same Microsoft Entra Tenant ID as the parent\nCluster it belongs to.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureOperatorsAuthentication": {
+        "description": "The configuration that the operators of the\ncluster have to authenticate to Azure.",
+        "properties": {
+          "managed_identities": {
+            "description": "The authentication configuration to authenticate\nto Azure using Azure User-Assigned Managed Identities.\nRequired during creation.",
+            "$ref": "#/components/schemas/AzureOperatorsAuthenticationManagedIdentities"
+          }
+        }
+      },
+      "AzureOperatorsAuthenticationManagedIdentities": {
+        "description": "Represents the information related to Azure User-Assigned managed identities\nneeded to perform Operators authentication based on Azure User-Assigned\nManaged Identities",
+        "properties": {
+          "control_plane_operators_managed_identities": {
+            "description": "The set of Azure User-Assigned Managed Identities leveraged for the\nControl Plane operators of the cluster. The set of required managed\nidentities is dependent on the Cluster's OpenShift version.\nImmutable",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AzureControlPlaneManagedIdentity"
+            }
+          },
+          "data_plane_operators_managed_identities": {
+            "description": "The set of Azure User-Assigned Managed Identities leveraged for the\nData Plane operators of the cluster. The set of required managed\nidentities is dependent on the Cluster's OpenShift version.\nImmutable.",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AzureDataPlaneManagedIdentity"
+            }
+          },
+          "managed_identities_data_plane_identity_url": {
+            "description": "The Managed Identities Data Plane Identity URL associated with the\ncluster. It is the URL that will be used to communicate with the\nManaged Identities Resource Provider (MI RP).\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "service_managed_identity": {
+            "description": "The Azure User-Assigned Managed Identity used to perform service\nlevel actions. Specifically:\n- Add Federated Identity Credentials to the identities in\n  `data_plane_operators_managed_identities` that belong to Data\n  Plane Cluster Operators\n- Perform permissions validation for the BYOVNet related resources\n  associated to the Cluster\nRequired during creation.\nImmutable.",
+            "$ref": "#/components/schemas/AzureServiceManagedIdentity"
+          }
+        }
+      },
+      "AzureServiceManagedIdentity": {
+        "description": "Represents the information associated to an Azure User-Assigned\nManaged Identity whose purpose is to perform service level actions.",
+        "properties": {
+          "client_id": {
+            "description": "The Client ID associated to the Azure User-Assigned Managed Identity.\nReadonly.",
+            "type": "string"
+          },
+          "principal_id": {
+            "description": "The Principal ID associated to the Azure User-Assigned Managed Identity.\nReadonly.",
+            "type": "string"
+          },
+          "resource_id": {
+            "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
             "type": "string"
           }
         }
