@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.446
+- Update model version v0.0.399
+  - Improve Clusters Azure API type documentation
+  - Add Azure Operators Authentication related types
+  - Add `AzureOperatorsAuthentication` type to `Azure` type
+
 ## 0.1.445
 - Update model version v0.0.398
   - Add updates for GCP Private Service Connect feature
