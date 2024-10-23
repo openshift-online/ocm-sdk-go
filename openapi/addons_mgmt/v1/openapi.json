@@ -1413,7 +1413,10 @@
           },
           "parameters": {
             "description": "List of parameters for this addon.",
-            "$ref": "#/components/schemas/AddonParameters"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonParameter"
+            }
           },
           "requirements": {
             "description": "List of requirements for this addon.",
@@ -1547,7 +1550,10 @@
           },
           "parameters": {
             "description": "Parameters in the installation",
-            "$ref": "#/components/schemas/AddonInstallationParameters"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddonInstallationParameter"
+            }
           },
           "state": {
             "description": "Addon Installation State",
