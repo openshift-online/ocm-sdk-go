@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.447
+- Update model version v0.0.400
+  - Update ocm-sdk-go examples for Addons
+  - Update `Parameters` attribute in addon_installation_type.model to the List of `AddonInstallationParameter` type.
+  - Update `Parameters` attribute in addon_type.model to the  List of `AddonParameter` type.
+
 ## 0.1.446
 - Update model version v0.0.399
   - Improve Clusters Azure API type documentation
