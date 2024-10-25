@@ -26,7 +26,7 @@ import (
 	"os"
 
 	sdk "github.com/openshift-online/ocm-sdk-go"
-	cmv1 "github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1"
+	cmv1 "github.com/openshift-online/ocm-sdk-go/addonsmgmt/v1"
 	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
@@ -58,7 +58,7 @@ func main() {
 	defer connection.Close()
 
 	// Get the client for the collection of add-ons:
-	collection := connection.ClustersMgmt().V1().Addons()
+	collection := connection.AddonsMgmt().V1().Addons()
 
 	// Load the sets of add-ons from the JSON file and from the API:
 	fileIndex, err := loadJSON(ctx, fileData)
@@ -76,7 +76,7 @@ func main() {
 	for id, fileItem := range fileIndex {
 		_, ok := apiIndex[id]
 		if !ok {
-			apiItem, err := cmv1.NewAddOn().
+			apiItem, err := cmv1.NewAddon().
 				Copy(fileItem).
 				Enabled(true).
 				Build()
@@ -98,7 +98,7 @@ func main() {
 	for id, fileItem := range fileIndex {
 		_, ok := apiIndex[id]
 		if ok {
-			apiItem, err := cmv1.NewAddOn().
+			apiItem, err := cmv1.NewAddon().
 				Name(fileItem.Name()).
 				Description(fileItem.Description()).
 				Icon(fileItem.Icon()).
@@ -122,7 +122,7 @@ func main() {
 	for id := range apiIndex {
 		_, ok := fileIndex[id]
 		if !ok {
-			apiItem, err := cmv1.NewAddOn().
+			apiItem, err := cmv1.NewAddon().
 				Enabled(false).
 				Build()
 			if err != nil {
@@ -142,15 +142,15 @@ func main() {
 
 // loadJSON loads the add-ons from the JSON document and returns a map where the key is the
 // identifier of the add-on and the value is the add-on object.
-func loadJSON(ctx context.Context, data []byte) (result map[string]*cmv1.AddOn, err error) {
+func loadJSON(ctx context.Context, data []byte) (result map[string]*cmv1.Addon, err error) {
 	// Load the list of add-ons:
-	items, err := cmv1.UnmarshalAddOnList(data)
+	items, err := cmv1.UnmarshalAddonList(data)
 	if err != nil {
 		return
 	}
 
 	// Populate the map:
-	result = map[string]*cmv1.AddOn{}
+	result = map[string]*cmv1.Addon{}
 	for _, item := range items {
 		result[item.ID()] = item
 	}
@@ -160,7 +160,7 @@ func loadJSON(ctx context.Context, data []byte) (result map[string]*cmv1.AddOn, 
 
 // loadAPI loads the add-ons from the API and returns a map where the key is the identifier of the
 // add-on and the value is the add-on object.
-func loadAPI(ctx context.Context, collection *cmv1.AddOnsClient) (result map[string]*cmv1.AddOn,
+func loadAPI(ctx context.Context, collection *cmv1.AddonsClient) (result map[string]*cmv1.Addon,
 	err error) {
 	// Retrieve the list of add-ons using pages of ten items, till we get a page that has less
 	// items than requests, as that marks the end of the collection:
@@ -168,7 +168,7 @@ func loadAPI(ctx context.Context, collection *cmv1.AddOnsClient) (result map[str
 	page := 1
 	for {
 		// Retrieve the page:
-		var response *cmv1.AddOnsListResponse
+		var response *cmv1.AddonsListResponse
 		response, err = collection.List().
 			Size(size).
 			Page(page).
@@ -178,8 +178,8 @@ func loadAPI(ctx context.Context, collection *cmv1.AddOnsClient) (result map[str
 		}
 
 		// Process the page:
-		result = map[string]*cmv1.AddOn{}
-		response.Items().Each(func(item *cmv1.AddOn) bool {
+		result = map[string]*cmv1.Addon{}
+		response.Items().Each(func(item *cmv1.Addon) bool {
 			result[item.ID()] = item
 			return true
 		})
