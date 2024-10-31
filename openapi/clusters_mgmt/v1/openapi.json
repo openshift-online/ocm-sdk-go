@@ -12953,6 +12953,10 @@
             "description": "Related etcd encryption configuration",
             "$ref": "#/components/schemas/AwsEtcdEncryption"
           },
+          "hcp_internal_communication_hosted_zone_id": {
+            "description": "ID of local private hosted zone for hypershift internal communication.",
+            "type": "string"
+          },
           "private_hosted_zone_id": {
             "description": "ID of private hosted zone.",
             "type": "string"
@@ -12986,6 +12990,10 @@
             "additionalProperties": {
               "type": "string"
             }
+          },
+          "vpc_endpoint_role_arn": {
+            "description": "Role ARN for VPC Endpoint Service cross account role.",
+            "type": "string"
           }
         }
       },
@@ -13416,6 +13424,10 @@
           "cluster": {
             "description": "Link to the cluster that is registered with the DNS domain (optional).",
             "$ref": "#/components/schemas/ClusterLink"
+          },
+          "cluster_arch": {
+            "description": "Signals which cluster architecture the domain is ready for.",
+            "$ref": "#/components/schemas/ClusterArchitecture"
           },
           "organization": {
             "description": "Link to the organization that reserved the DNS domain.",
@@ -15359,6 +15371,14 @@
             "$ref": "#/components/schemas/ListeningMethod"
           }
         }
+      },
+      "ClusterArchitecture": {
+        "description": "Possible cluster architectures.",
+        "type": "string",
+        "enum": [
+          "classic",
+          "hcp"
+        ]
       },
       "ClusterAutoscaler": {
         "description": "Cluster-wide autoscaling configuration.",
