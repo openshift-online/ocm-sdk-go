@@ -78,12 +78,12 @@ func main() {
 				AccountID("xxx").
 				BillingAccountID("xxx").
 				AdditionalAllowedPrincipals(
-					"arn:aws:iam::xxx:role/oadler-shared-vpc",
-					"arn:aws:iam::xxx:role/vpc-endpoint-service").
+					"arn:aws:iam::xxx:role/ca-route53",
+					"arn:aws:iam::xxx:role/ca-vpc-endpoint-service").
 				PrivateHostedZoneID("xxx").
-				PrivateHostedZoneRoleARN("arn:aws:iam::xxx:role/oadler-shared-vpc").
+				PrivateHostedZoneRoleARN("arn:aws:iam::xxx:role/ca-route53").
 				HcpInternalCommunicationHostedZoneId("xxx").
-				VpcEndpointRoleArn("arn:aws:iam::xxx:role/vpc-endpoint-service").
+				VpcEndpointRoleArn("arn:aws:iam::xxx:role/ca-vpc-endpoint-service").
 				SubnetIDs(
 					"subnet-xxx",
 					"subnet-xxx").
