@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.449
+Update model version v0.0.402
+  - Add WifConfig status endpoint
+  - Add `WifConfigStatus` model
+
 ## 0.1.448
 - Update model version v0.0.401
   - Include support for HCP shared vpc fields in `Cluster` and `DNS` models.
