@@ -10427,6 +10427,42 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/gcp/wif_configs/{wif_config_id}/status": {
+      "get": {
+        "parameters": [
+          {
+            "name": "wif_config_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WifConfigStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/gcp_inquiries/encryption_keys": {
       "post": {
         "description": "Retrieves the list of encryption keys.\nIMPORTANT: This collection doesn't currently support paging or searching, so the returned\n`page` will always be 1 and `size` and `total` will always be the total number of available regions\nof the provider.",
@@ -18662,6 +18698,19 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "WifConfigStatus": {
+        "description": "Configuration status of a WifConfig.",
+        "properties": {
+          "configured": {
+            "description": "Indicates the current status of the WifConfig resource configuration.\n- `false`: The WifConfig resource has a user configuration error.\n- `true`: The resources associated with the WifConfig object are properly configured and operational at the time of the check.",
+            "type": "boolean"
+          },
+          "description": {
+            "description": "Provides additional information about the WifConfig resource status.\n- When `Configured` is `false`, this field contains details about the user configuration error.\n- When `Configured` is `true`, this field may be empty or contain optional notes about the configuration.",
+            "type": "string"
           }
         }
       },

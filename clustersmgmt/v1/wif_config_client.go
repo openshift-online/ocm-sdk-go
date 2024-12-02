@@ -25,6 +25,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
@@ -67,6 +68,14 @@ func (c *WifConfigClient) Get() *WifConfigGetRequest {
 		transport: c.transport,
 		path:      c.path,
 	}
+}
+
+// Status returns the target 'wif_config_status' resource.
+func (c *WifConfigClient) Status() *WifConfigStatusClient {
+	return NewWifConfigStatusClient(
+		c.transport,
+		path.Join(c.path, "status"),
+	)
 }
 
 // WifConfigPollRequest is the request for the Poll method.

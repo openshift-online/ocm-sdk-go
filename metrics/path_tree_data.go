@@ -332,7 +332,9 @@ var pathTreeData = `{
         },
         "gcp": {
           "wif_configs": {
-            "-": null
+            "-": {
+              "status": null
+            }
           }
         },
         "gcp_inquiries": {
