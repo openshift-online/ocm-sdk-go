@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.451
+- Update model version v0.0.404
+  - Add WifConfig patch endpoint
+
 ## 0.1.450
 - Update model version v0.0.403
   - Add `NodesOutboundConnectivity` in azure_type.model to the `Azure` model
