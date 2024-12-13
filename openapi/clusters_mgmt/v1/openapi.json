@@ -14682,6 +14682,10 @@
             "description": "The Azure Resource ID of a pre-existing Azure Network Security Group.\nThe Network Security Group specified in network_security_group_resource_id\nmust already be associated to the Azure Subnet `subnet_resource_id`.\nIt is the Azure Network Security Group associated to the cluster's subnet\nspecified in `subnet_resource_id`.\n`network_security_group_resource_id` must be located in the same Azure\nlocation as the cluster's region.\nThe Azure Subscription specified as part of\n`network_security_group_resource_id` must be located in the same Azure\nSubscription as `subscription_id`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust belong to the Azure Subscription `subscription_id`, and in the same\nAzure location as the cluster's region.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust be a different Resource Group Name than the one specified in\n`managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\ncan be the same, or a different one than the one specified in\n`resource_group_name`.\nRequired during creation.\nImmutable.",
             "type": "string"
           },
+          "nodes_outbound_connectivity": {
+            "description": "NodesOutboundConnectivity defines how the network outbound\nconfiguration of the Cluster's Node Pool's Nodes is performed.\nBy default this is configured as Azure Load Balancer. This value is immutable.",
+            "$ref": "#/components/schemas/AzureNodesOutboundConnectivity"
+          },
           "operators_authentication": {
             "description": "Defines how the operators of the cluster authenticate to Azure.\nRequired during creation.\nImmutable.",
             "$ref": "#/components/schemas/AzureOperatorsAuthentication"
@@ -14756,6 +14760,15 @@
           },
           "resource_name": {
             "description": "ResourceName is the Azure Resource Name of the NodePool.\nResourceName must be within the Azure Resource Group Name of the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Location as the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Subscription as the parent\nCluster it belongs to.\nResourceName must belong to the same Microsoft Entra Tenant ID as the parent\nCluster it belongs to.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureNodesOutboundConnectivity": {
+        "description": "The configuration of the node outbound connectivity",
+        "properties": {
+          "outbound_type": {
+            "description": "OutboundType is the type of network outbound configuration.\nThe default and only accepted value is 'load_balancer'.\nThis value is immutable.",
             "type": "string"
           }
         }
