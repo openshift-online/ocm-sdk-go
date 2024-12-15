@@ -29,7 +29,7 @@ import (
 // MarshalAzure writes a value of the 'azure' type to the given writer.
 func MarshalAzure(object *Azure, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAzure(object, stream)
+	WriteAzure(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalAzure(object *Azure, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeAzure writes a value of the 'azure' type to the given stream.
-func writeAzure(object *Azure, stream *jsoniter.Stream) {
+// WriteAzure writes a value of the 'azure' type to the given stream.
+func WriteAzure(object *Azure, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -66,7 +66,7 @@ func writeAzure(object *Azure, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("nodes_outbound_connectivity")
-		writeAzureNodesOutboundConnectivity(object.nodesOutboundConnectivity, stream)
+		WriteAzureNodesOutboundConnectivity(object.nodesOutboundConnectivity, stream)
 		count++
 	}
 	present_ = object.bitmap_&8 != 0 && object.operatorsAuthentication != nil
@@ -75,7 +75,7 @@ func writeAzure(object *Azure, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("operators_authentication")
-		writeAzureOperatorsAuthentication(object.operatorsAuthentication, stream)
+		WriteAzureOperatorsAuthentication(object.operatorsAuthentication, stream)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0
@@ -132,13 +132,13 @@ func UnmarshalAzure(source interface{}) (object *Azure, err error) {
 	if err != nil {
 		return
 	}
-	object = readAzure(iterator)
+	object = ReadAzure(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAzure reads a value of the 'azure' type from the given iterator.
-func readAzure(iterator *jsoniter.Iterator) *Azure {
+// ReadAzure reads a value of the 'azure' type from the given iterator.
+func ReadAzure(iterator *jsoniter.Iterator) *Azure {
 	object := &Azure{}
 	for {
 		field := iterator.ReadObject()
@@ -155,11 +155,11 @@ func readAzure(iterator *jsoniter.Iterator) *Azure {
 			object.networkSecurityGroupResourceID = value
 			object.bitmap_ |= 2
 		case "nodes_outbound_connectivity":
-			value := readAzureNodesOutboundConnectivity(iterator)
+			value := ReadAzureNodesOutboundConnectivity(iterator)
 			object.nodesOutboundConnectivity = value
 			object.bitmap_ |= 4
 		case "operators_authentication":
-			value := readAzureOperatorsAuthentication(iterator)
+			value := ReadAzureOperatorsAuthentication(iterator)
 			object.operatorsAuthentication = value
 			object.bitmap_ |= 8
 		case "resource_group_name":

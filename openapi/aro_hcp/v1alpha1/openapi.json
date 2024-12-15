@@ -1,0 +1,2087 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1alpha1",
+    "title": "aro_hcp",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "contact": {
+      "name": "OCM Feedback",
+      "email": "ocm-feedback@redhat.com"
+    }
+  },
+  "servers": [
+    {
+      "description": "Production",
+      "url": "https://api.openshift.com"
+    },
+    {
+      "description": "Stage",
+      "url": "https://api.stage.openshift.com"
+    }
+  ],
+  "paths": {
+    "/api/aro_hcp/v1alpha1": {
+      "get": {
+        "description": "Retrieves the version metadata.",
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters": {
+      "post": {
+        "description": "Provision a new cluster and add it to the collection of clusters.\n\nSee the `register_cluster` method for adding an existing cluster.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cluster"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of clusters.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to sort the clusters\ndescending by region identifier the value should be:\n\n```sql\nregion.id desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of a\nSQL statement, but using the names of the attributes of the cluster instead of\nthe names of the columns of a table. For example, in order to retrieve all the\nclusters with a name starting with `my` in the `us-east-1` region the value\nshould be:\n\n```sql\nname like 'my%' and region.id = 'us-east-1'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the\nclusters that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of clusters.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Cluster"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}": {
+      "delete": {
+        "description": "Deletes the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "best_effort",
+            "description": "BestEffort flag is used to check if the cluster deletion should be best-effort mode or not.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "dry_run",
+            "description": "Dry run flag is used to check if the operation can be completed, but won't delete.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cluster"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Metadata": {
+        "description": "Version metadata.",
+        "properties": {
+          "server_version": {
+            "description": "Version of the server.",
+            "type": "string"
+          }
+        }
+      },
+      "AWS": {
+        "description": "_Amazon Web Services_ specific settings of a cluster.",
+        "properties": {
+          "kms_key_arn": {
+            "description": "Customer Managed Key to encrypt EBS Volume",
+            "type": "string"
+          },
+          "sts": {
+            "description": "Contains the necessary attributes to support role-based authentication on AWS.",
+            "$ref": "#/components/schemas/STS"
+          },
+          "access_key_id": {
+            "description": "AWS access key identifier.",
+            "type": "string"
+          },
+          "account_id": {
+            "description": "AWS account identifier.",
+            "type": "string"
+          },
+          "additional_allowed_principals": {
+            "description": "Additional allowed principal ARNs to be added to the hosted control plane's VPC Endpoint Service.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additional_compute_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added to default worker (compute) machine pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additional_control_plane_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added to default control plane machine pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "additional_infra_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added to default infra machine pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "audit_log": {
+            "description": "Audit log forwarding configuration",
+            "$ref": "#/components/schemas/AuditLog"
+          },
+          "billing_account_id": {
+            "description": "BillingAccountID is the account used for billing subscriptions purchased via the marketplace",
+            "type": "string"
+          },
+          "ec2_metadata_http_tokens": {
+            "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
+            "$ref": "#/components/schemas/Ec2MetadataHttpTokens"
+          },
+          "etcd_encryption": {
+            "description": "Related etcd encryption configuration",
+            "$ref": "#/components/schemas/AwsEtcdEncryption"
+          },
+          "hcp_internal_communication_hosted_zone_id": {
+            "description": "ID of local private hosted zone for hypershift internal communication.",
+            "type": "string"
+          },
+          "private_hosted_zone_id": {
+            "description": "ID of private hosted zone.",
+            "type": "string"
+          },
+          "private_hosted_zone_role_arn": {
+            "description": "Role ARN for private hosted zone.",
+            "type": "string"
+          },
+          "private_link": {
+            "description": "Sets cluster to be inaccessible externally.",
+            "type": "boolean"
+          },
+          "private_link_configuration": {
+            "description": "Manages additional configuration for Private Links.",
+            "$ref": "#/components/schemas/PrivateLinkClusterConfiguration"
+          },
+          "secret_access_key": {
+            "description": "AWS secret access key.",
+            "type": "string"
+          },
+          "subnet_ids": {
+            "description": "The subnet ids to be used when installing the cluster.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "vpc_endpoint_role_arn": {
+            "description": "Role ARN for VPC Endpoint Service cross account role.",
+            "type": "string"
+          }
+        }
+      },
+      "AWSShard": {
+        "description": "Config for AWS provision shards",
+        "properties": {
+          "ecr_repository_urls": {
+            "description": "ECR repository URLs of the provision shard",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AWSVolume": {
+        "description": "Holds settings for an AWS storage volume.",
+        "properties": {
+          "iops": {
+            "description": "Volume provisioned IOPS.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "description": "Volume size in Gib.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CCS": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'CCS' if this is a complete object or 'CCSLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "disable_scp_checks": {
+            "description": "Indicates if cloud permissions checks are disabled,\nwhen attempting installation of the cluster.",
+            "type": "boolean"
+          },
+          "enabled": {
+            "description": "Indicates if Customer Cloud Subscription is enabled on the cluster.",
+            "type": "boolean"
+          }
+        }
+      },
+      "DNS": {
+        "description": "DNS settings of the cluster.",
+        "properties": {
+          "base_domain": {
+            "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the domain_prefix of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n```http\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n```json\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).",
+            "type": "string"
+          }
+        }
+      },
+      "GCP": {
+        "description": "Google cloud platform settings of a cluster.",
+        "properties": {
+          "auth_uri": {
+            "description": "GCP authentication uri",
+            "type": "string"
+          },
+          "auth_provider_x509_cert_url": {
+            "description": "GCP Authentication provider x509 certificate url",
+            "type": "string"
+          },
+          "authentication": {
+            "description": "GCP Authentication Method",
+            "$ref": "#/components/schemas/GcpAuthentication"
+          },
+          "client_id": {
+            "description": "GCP client identifier",
+            "type": "string"
+          },
+          "client_x509_cert_url": {
+            "description": "GCP client x509 certificate url",
+            "type": "string"
+          },
+          "client_email": {
+            "description": "GCP client email",
+            "type": "string"
+          },
+          "private_key": {
+            "description": "GCP private key",
+            "type": "string"
+          },
+          "private_key_id": {
+            "description": "GCP private key identifier",
+            "type": "string"
+          },
+          "private_service_connect": {
+            "description": "GCP PrivateServiceConnect configuration",
+            "$ref": "#/components/schemas/GcpPrivateServiceConnect"
+          },
+          "project_id": {
+            "description": "GCP project identifier.",
+            "type": "string"
+          },
+          "security": {
+            "description": "GCP Security Settings",
+            "$ref": "#/components/schemas/GcpSecurity"
+          },
+          "token_uri": {
+            "description": "GCP token uri",
+            "type": "string"
+          },
+          "type": {
+            "description": "GCP the type of the service the key belongs to",
+            "type": "string"
+          }
+        }
+      },
+      "GCPEncryptionKey": {
+        "description": "GCP Encryption Key for CCS clusters.",
+        "properties": {
+          "kms_key_service_account": {
+            "description": "Service account used to access the KMS key",
+            "type": "string"
+          },
+          "key_location": {
+            "description": "Location of the encryption key ring",
+            "type": "string"
+          },
+          "key_name": {
+            "description": "Name of the encryption key",
+            "type": "string"
+          },
+          "key_ring": {
+            "description": "Name of the key ring the encryption key is located on",
+            "type": "string"
+          }
+        }
+      },
+      "GCPNetwork": {
+        "description": "GCP Network configuration of a cluster.",
+        "properties": {
+          "vpc_name": {
+            "description": "VPC mame used by the cluster.",
+            "type": "string"
+          },
+          "vpc_project_id": {
+            "description": "The name of the host project where the shared VPC exists.",
+            "type": "string"
+          },
+          "compute_subnet": {
+            "description": "Compute subnet used by the cluster.",
+            "type": "string"
+          },
+          "control_plane_subnet": {
+            "description": "Control plane subnet used by the cluster.",
+            "type": "string"
+          }
+        }
+      },
+      "GCPVolume": {
+        "description": "Holds settings for an GCP storage volume.",
+        "properties": {
+          "size": {
+            "description": "Volume size in Gib.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "HTPasswdIdentityProvider": {
+        "description": "Details for `htpasswd` identity providers.",
+        "properties": {
+          "password": {
+            "description": "Password to be used in the _HTPasswd_ data file.",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username to be used in the _HTPasswd_ data file.",
+            "type": "string"
+          },
+          "users": {
+            "description": "Link to the collection of _HTPasswd_ users.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HTPasswdUser"
+            }
+          }
+        }
+      },
+      "STS": {
+        "description": "Contains the necessary attributes to support role-based authentication on AWS.",
+        "properties": {
+          "oidc_endpoint_url": {
+            "description": "URL of the location where OIDC configuration and keys are available",
+            "type": "string"
+          },
+          "auto_mode": {
+            "description": "Auto creation mode for cluster - OCM will create the operator roles and OIDC provider. false by default.",
+            "type": "boolean"
+          },
+          "enabled": {
+            "description": "If STS is enabled or disabled",
+            "type": "boolean"
+          },
+          "external_id": {
+            "description": "Optional unique identifier when assuming role in another account",
+            "type": "string"
+          },
+          "instance_iam_roles": {
+            "description": "Instance IAM roles to use for the instance profiles of the master and worker instances",
+            "$ref": "#/components/schemas/InstanceIAMRoles"
+          },
+          "managed_policies": {
+            "description": "If true, cluster account and operator roles have managed policies attached.",
+            "type": "boolean"
+          },
+          "oidc_config": {
+            "description": "Registered Oidc Config, if available holds information related to the oidc config.",
+            "$ref": "#/components/schemas/OidcConfig"
+          },
+          "operator_iam_roles": {
+            "description": "List of roles necessary to access the AWS resources of the various operators used during installation",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperatorIAMRole"
+            }
+          },
+          "operator_role_prefix": {
+            "description": "Optional user provided prefix for operator roles.",
+            "type": "string"
+          },
+          "permission_boundary": {
+            "description": "Optional user provided permission boundary.",
+            "type": "string"
+          },
+          "role_arn": {
+            "description": "ARN of the AWS role to assume when installing the cluster",
+            "type": "string"
+          },
+          "support_role_arn": {
+            "description": "ARN of the AWS role used by SREs to access the cluster AWS account in order to provide support",
+            "type": "string"
+          }
+        }
+      },
+      "AuditLog": {
+        "description": "Contains the necessary attributes to support audit log forwarding",
+        "properties": {
+          "role_arn": {
+            "description": "ARN of the CloudWatch audit log forwarding role",
+            "type": "string"
+          }
+        }
+      },
+      "AwsEtcdEncryption": {
+        "description": "Contains the necessary attributes to support etcd encryption for AWS based clusters.",
+        "properties": {
+          "kms_key_arn": {
+            "description": "ARN of the KMS to be used for the etcd encryption",
+            "type": "string"
+          }
+        }
+      },
+      "Azure": {
+        "description": "Microsoft Azure settings of a cluster.",
+        "properties": {
+          "managed_resource_group_name": {
+            "description": "The desired name of the Azure Resource Group where the Azure Resources related\nto the cluster are created. It must not previously exist. The Azure Resource\nGroup is created with the given value, within the Azure Subscription\n`subscription_id` of the cluster.\n`managed_resource_group_name` cannot be equal to the value of `managed_resource_group`.\n`managed_resource_group_name` is located in the same Azure location as the\ncluster's region.\nNot to be confused with `resource_group_name`, which is the Azure Resource Group Name\nwhere the own Azure Resource associated to the cluster resides.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "network_security_group_resource_id": {
+            "description": "The Azure Resource ID of a pre-existing Azure Network Security Group.\nThe Network Security Group specified in network_security_group_resource_id\nmust already be associated to the Azure Subnet `subnet_resource_id`.\nIt is the Azure Network Security Group associated to the cluster's subnet\nspecified in `subnet_resource_id`.\n`network_security_group_resource_id` must be located in the same Azure\nlocation as the cluster's region.\nThe Azure Subscription specified as part of\n`network_security_group_resource_id` must be located in the same Azure\nSubscription as `subscription_id`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust belong to the Azure Subscription `subscription_id`, and in the same\nAzure location as the cluster's region.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\nmust be a different Resource Group Name than the one specified in\n`managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of `network_security_group_resource_id`\ncan be the same, or a different one than the one specified in\n`resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "nodes_outbound_connectivity": {
+            "description": "NodesOutboundConnectivity defines how the network outbound\nconfiguration of the Cluster's Node Pool's Nodes is performed.\nBy default this is configured as Azure Load Balancer. This value is immutable.",
+            "$ref": "#/components/schemas/AzureNodesOutboundConnectivity"
+          },
+          "operators_authentication": {
+            "description": "Defines how the operators of the cluster authenticate to Azure.\nRequired during creation.\nImmutable.",
+            "$ref": "#/components/schemas/AzureOperatorsAuthentication"
+          },
+          "resource_group_name": {
+            "description": "The Azure Resource Group Name of the cluster. It must be a pre-existing\nAzure Resource Group and it must exist within the Azure Subscription\n`subscription_id` of the cluster.\n`resource_group_name` is located in the same Azure location as the\ncluster's region.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "resource_name": {
+            "description": "The Azure Resource Name of the cluster. It must be within the\nAzure Resource Group Name `resource_group_name`.\n`resource_name` is located in the same Azure location as the cluster's region.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "subnet_resource_id": {
+            "description": "The Azure Resource ID of a pre-existing Azure Subnet. It is an Azure\nSubnet used for the Data Plane of the cluster. `subnet_resource_id`\nmust be located in the same Azure location as the cluster's region.\nThe Azure Subscription specified as part of the `subnet_resource_id`\nmust be located in the same Azure Subscription as `subscription_id`.\nThe Azure Resource Group Name specified as part of `subnet_resource_id`\nmust belong to the Azure Subscription `subscription_id`, and in the same\nAzure location as the cluster's region.\nThe Azure Resource Group Name specified as part of `subnet_resource_id`\nmust be a different Resource Group Name than the one specified in\n`managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the `subnet_resource_id`\ncan be the same, or a different one than the one specified in\n`resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "The Azure Subscription ID associated with the cluster. It must belong to\nthe Microsoft Entra Tenant ID `tenant_id`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "tenant_id": {
+            "description": "The Microsoft Entra Tenant ID where the cluster belongs.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureControlPlaneManagedIdentity": {
+        "description": "Represents the information associated to an Azure User-Assigned\nManaged Identity belonging to the Control Plane of the cluster.",
+        "properties": {
+          "client_id": {
+            "description": "The Client ID associated to the Azure User-Assigned Managed Identity.\nReadonly.",
+            "type": "string"
+          },
+          "principal_id": {
+            "description": "The Principal ID associated to the Azure User-Assigned Identity.\nReadonly.",
+            "type": "string"
+          },
+          "resource_id": {
+            "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureDataPlaneManagedIdentity": {
+        "description": "Represents the information associated to an Azure User-Assigned\nManaged Identity belonging to the Data Plane of the cluster.",
+        "properties": {
+          "resource_id": {
+            "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureNodesOutboundConnectivity": {
+        "description": "The configuration of the node outbound connectivity",
+        "properties": {
+          "outbound_type": {
+            "description": "OutboundType is the type of network outbound configuration.\nThe default and only accepted value is 'load_balancer'.\nThis value is immutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureOperatorsAuthentication": {
+        "description": "The configuration that the operators of the\ncluster have to authenticate to Azure.",
+        "properties": {
+          "managed_identities": {
+            "description": "The authentication configuration to authenticate\nto Azure using Azure User-Assigned Managed Identities.\nRequired during creation.",
+            "$ref": "#/components/schemas/AzureOperatorsAuthenticationManagedIdentities"
+          }
+        }
+      },
+      "AzureOperatorsAuthenticationManagedIdentities": {
+        "description": "Represents the information related to Azure User-Assigned managed identities\nneeded to perform Operators authentication based on Azure User-Assigned\nManaged Identities",
+        "properties": {
+          "control_plane_operators_managed_identities": {
+            "description": "The set of Azure User-Assigned Managed Identities leveraged for the\nControl Plane operators of the cluster. The set of required managed\nidentities is dependent on the Cluster's OpenShift version.\nImmutable",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AzureControlPlaneManagedIdentity"
+            }
+          },
+          "data_plane_operators_managed_identities": {
+            "description": "The set of Azure User-Assigned Managed Identities leveraged for the\nData Plane operators of the cluster. The set of required managed\nidentities is dependent on the Cluster's OpenShift version.\nImmutable.",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AzureDataPlaneManagedIdentity"
+            }
+          },
+          "managed_identities_data_plane_identity_url": {
+            "description": "The Managed Identities Data Plane Identity URL associated with the\ncluster. It is the URL that will be used to communicate with the\nManaged Identities Resource Provider (MI RP).\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "service_managed_identity": {
+            "description": "The Azure User-Assigned Managed Identity used to perform service\nlevel actions. Specifically:\n- Add Federated Identity Credentials to the identities in\n  `data_plane_operators_managed_identities` that belong to Data\n  Plane Cluster Operators\n- Perform permissions validation for the BYOVNet related resources\n  associated to the Cluster\nRequired during creation.\nImmutable.",
+            "$ref": "#/components/schemas/AzureServiceManagedIdentity"
+          }
+        }
+      },
+      "AzureServiceManagedIdentity": {
+        "description": "Represents the information associated to an Azure User-Assigned\nManaged Identity whose purpose is to perform service level actions.",
+        "properties": {
+          "client_id": {
+            "description": "The Client ID associated to the Azure User-Assigned Managed Identity.\nReadonly.",
+            "type": "string"
+          },
+          "principal_id": {
+            "description": "The Principal ID associated to the Azure User-Assigned Managed Identity.\nReadonly.",
+            "type": "string"
+          },
+          "resource_id": {
+            "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "BillingModel": {
+        "description": "Billing model for cluster resources.",
+        "type": "string",
+        "enum": [
+          "marketplace",
+          "marketplace-aws",
+          "marketplace-gcp",
+          "marketplace-rhm",
+          "marketplace-azure",
+          "standard"
+        ]
+      },
+      "ByoOidc": {
+        "description": "ByoOidc configuration.",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should be creating using _ByoOidc_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `byo-oidc` feature toggle enabled.",
+            "type": "boolean"
+          }
+        }
+      },
+      "CloudProvider": {
+        "description": "Cloud provider.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'CloudProvider' if this is a complete object or 'CloudProviderLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "Name of the cloud provider for display purposes. It can contain any characters,\nincluding spaces.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Human friendly identifier of the cloud provider, for example `aws`.",
+            "type": "string"
+          },
+          "regions": {
+            "description": "(optional) Provider's regions - only included when listing providers with `fetchRegions=true`.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CloudRegion"
+            }
+          }
+        }
+      },
+      "CloudRegion": {
+        "description": "Description of a region of a cloud provider.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'CloudRegion' if this is a complete object or 'CloudRegionLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "ccs_only": {
+            "description": "'true' if the region is supported only for CCS clusters, 'false' otherwise.",
+            "type": "boolean"
+          },
+          "kms_location_id": {
+            "description": "(GCP only) Comma-separated list of KMS location IDs that can be used with this region.\nE.g. \"global,nam4,us\". Order is not guaranteed.",
+            "type": "string"
+          },
+          "kms_location_name": {
+            "description": "(GCP only) Comma-separated list of display names corresponding to KMSLocationID.\nE.g. \"Global,nam4 (Iowa, South Carolina, and Oklahoma),US\". Order is not guaranteed but will match KMSLocationID.\nUnfortunately, this API doesn't allow robust splitting - Contact ocm-feedback@redhat.com if you want to rely on this.",
+            "type": "string"
+          },
+          "cloud_provider": {
+            "description": "Link to the cloud provider that the region belongs to.",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
+          "display_name": {
+            "description": "Name of the region for display purposes, for example `N. Virginia`.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Whether the region is enabled for deploying a managed cluster.",
+            "type": "boolean"
+          },
+          "govcloud": {
+            "description": "Whether the region is an AWS GovCloud region.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Human friendly identifier of the region, for example `us-east-1`.\n\nNOTE: Currently for all cloud providers and all regions `id` and `name` have exactly\nthe same values.",
+            "type": "string"
+          },
+          "supports_hypershift": {
+            "description": "'true' if the region is supported for Hypershift deployments, 'false' otherwise.",
+            "type": "boolean"
+          },
+          "supports_multi_az": {
+            "description": "Whether the region supports multiple availability zones.",
+            "type": "boolean"
+          }
+        }
+      },
+      "Cluster": {
+        "description": "Definition of an _OpenShift_ cluster.\n\nThe `cloud_provider` attribute is a reference to the cloud provider. When a\ncluster is retrieved it will be a link to the cloud provider, containing only\nthe kind, id and href attributes:\n\n```json\n{\n  \"cloud_provider\": {\n    \"kind\": \"CloudProviderLink\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/cloud_providers/123\"\n  }\n}\n```\n\nWhen a cluster is created this is optional, and if used it should contain the\nidentifier of the cloud provider to use:\n\n```json\n{\n  \"cloud_provider\": {\n    \"id\": \"123\",\n  }\n}\n```\n\nIf not included, then the cluster will be created using the default cloud\nprovider, which is currently Amazon Web Services.\n\nThe region attribute is mandatory when a cluster is created.\n\nThe `aws.access_key_id`, `aws.secret_access_key` and `dns.base_domain`\nattributes are mandatory when creation a cluster with your own Amazon Web\nServices account.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Cluster' if this is a complete object or 'ClusterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "api": {
+            "description": "Information about the API of the cluster.",
+            "$ref": "#/components/schemas/ClusterAPI"
+          },
+          "aws": {
+            "description": "Amazon Web Services settings of the cluster.",
+            "$ref": "#/components/schemas/AWS"
+          },
+          "aws_infrastructure_access_role_grants": {
+            "description": "List of AWS infrastructure access role grants on this cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrant"
+            }
+          },
+          "ccs": {
+            "description": "Contains configuration of a Customer Cloud Subscription cluster.",
+            "$ref": "#/components/schemas/CCS"
+          },
+          "dns": {
+            "description": "DNS settings of the cluster.",
+            "$ref": "#/components/schemas/DNS"
+          },
+          "fips": {
+            "description": "Create cluster that uses FIPS Validated / Modules in Process cryptographic libraries.",
+            "type": "boolean"
+          },
+          "gcp": {
+            "description": "Google cloud platform settings of the cluster.",
+            "$ref": "#/components/schemas/GCP"
+          },
+          "gcp_encryption_key": {
+            "description": "Key used for encryption of GCP cluster nodes.",
+            "$ref": "#/components/schemas/GCPEncryptionKey"
+          },
+          "gcp_network": {
+            "description": "GCP Network.",
+            "$ref": "#/components/schemas/GCPNetwork"
+          },
+          "additional_trust_bundle": {
+            "description": "Additional trust bundle.",
+            "type": "string"
+          },
+          "addons": {
+            "description": "List of add-ons on this cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnInstallation"
+            }
+          },
+          "autoscaler": {
+            "description": "Link to an optional _ClusterAutoscaler_ that is coupled with the cluster.",
+            "$ref": "#/components/schemas/ClusterAutoscaler"
+          },
+          "azure": {
+            "description": "Microsoft Azure settings of the cluster.",
+            "$ref": "#/components/schemas/Azure"
+          },
+          "billing_model": {
+            "description": "Billing model for cluster resources.",
+            "$ref": "#/components/schemas/BillingModel"
+          },
+          "byo_oidc": {
+            "description": "Contains information about BYO OIDC.",
+            "$ref": "#/components/schemas/ByoOidc"
+          },
+          "cloud_provider": {
+            "description": "Link to the cloud provider where the cluster is installed.",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
+          "console": {
+            "description": "Information about the console of the cluster.",
+            "$ref": "#/components/schemas/ClusterConsole"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the cluster was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "delete_protection": {
+            "description": "Delete protection",
+            "$ref": "#/components/schemas/DeleteProtection"
+          },
+          "disable_user_workload_monitoring": {
+            "description": "Indicates whether the User workload monitoring is enabled or not\nIt is enabled by default",
+            "type": "boolean"
+          },
+          "domain_prefix": {
+            "description": "DomainPrefix of the cluster. This prefix is optionally assigned by the user when the\ncluster is created. It will appear in the Cluster's domain when the cluster is provisioned.",
+            "type": "string"
+          },
+          "etcd_encryption": {
+            "description": "Indicates whether that etcd is encrypted or not.\nThis is set only during cluster creation.",
+            "type": "boolean"
+          },
+          "expiration_timestamp": {
+            "description": "Date and time when the cluster will be automatically deleted, using the format defined in\n[RFC3339](https://www.ietf.org/rfc/rfc3339.txt). If no timestamp is provided, the cluster\nwill never expire.\n\nThis option is unsupported.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "external_id": {
+            "description": "External identifier of the cluster, generated by the installer.",
+            "type": "string"
+          },
+          "external_auth_config": {
+            "description": "External authentication configuration",
+            "$ref": "#/components/schemas/ExternalAuthConfig"
+          },
+          "external_configuration": {
+            "description": "ExternalConfiguration shows external configuration on the cluster.",
+            "$ref": "#/components/schemas/ExternalConfiguration"
+          },
+          "flavour": {
+            "description": "Link to the _flavour_ that was used to create the cluster.",
+            "$ref": "#/components/schemas/Flavour"
+          },
+          "groups": {
+            "description": "Link to the collection of groups of user of the cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "health_state": {
+            "description": "HealthState indicates the overall health state of the cluster.",
+            "$ref": "#/components/schemas/ClusterHealthState"
+          },
+          "htpasswd": {
+            "description": "Details for `htpasswd` identity provider.",
+            "$ref": "#/components/schemas/HTPasswdIdentityProvider"
+          },
+          "hypershift": {
+            "description": "Hypershift configuration.",
+            "$ref": "#/components/schemas/Hypershift"
+          },
+          "identity_providers": {
+            "description": "Link to the collection of identity providers of the cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentityProvider"
+            }
+          },
+          "inflight_checks": {
+            "description": "List of inflight checks on this cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InflightCheck"
+            }
+          },
+          "infra_id": {
+            "description": "InfraID is used for example to name the VPCs.",
+            "type": "string"
+          },
+          "ingresses": {
+            "description": "List of ingresses on this cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ingress"
+            }
+          },
+          "kubelet_config": {
+            "description": "Details of cluster-wide KubeletConfig",
+            "$ref": "#/components/schemas/KubeletConfig"
+          },
+          "load_balancer_quota": {
+            "description": "Load Balancer quota to be assigned to the cluster.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "machine_pools": {
+            "description": "List of machine pools on this cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MachinePool"
+            }
+          },
+          "managed": {
+            "description": "Flag indicating if the cluster is managed (by Red Hat) or\nself-managed by the user.",
+            "type": "boolean"
+          },
+          "managed_service": {
+            "description": "Contains information about Managed Service",
+            "$ref": "#/components/schemas/ManagedService"
+          },
+          "multi_az": {
+            "description": "Flag indicating if the cluster should be created with nodes in\ndifferent availability zones or all the nodes in a single one\nrandomly selected.",
+            "type": "boolean"
+          },
+          "multi_arch_enabled": {
+            "description": "Indicate whether the cluster is enabled for multi arch workers",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the cluster. This name is assigned by the user when the\ncluster is created. This is used to uniquely identify the cluster",
+            "type": "string"
+          },
+          "network": {
+            "description": "Network settings of the cluster.",
+            "$ref": "#/components/schemas/Network"
+          },
+          "node_drain_grace_period": {
+            "description": "Node drain grace period.",
+            "$ref": "#/components/schemas/Value"
+          },
+          "node_pools": {
+            "description": "List of node pools on this cluster.\nNodePool is a scalable set of worker nodes attached to a hosted cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NodePool"
+            }
+          },
+          "nodes": {
+            "description": "Information about the nodes of the cluster.",
+            "$ref": "#/components/schemas/ClusterNodes"
+          },
+          "openshift_version": {
+            "description": "Version of _OpenShift_ installed in the cluster, for example `4.0.0-0.2`.\n\nWhen retrieving a cluster this will always be reported.\n\nWhen provisioning a cluster this will be ignored, as the version to\ndeploy will be determined internally.",
+            "type": "string"
+          },
+          "product": {
+            "description": "Link to the product type of this cluster.",
+            "$ref": "#/components/schemas/Product"
+          },
+          "properties": {
+            "description": "User defined properties for tagging and querying.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "provision_shard": {
+            "description": "ProvisionShard contains the properties of the provision shard, including AWS and GCP related configurations",
+            "$ref": "#/components/schemas/ProvisionShard"
+          },
+          "proxy": {
+            "description": "Proxy.",
+            "$ref": "#/components/schemas/Proxy"
+          },
+          "region": {
+            "description": "Link to the cloud provider region where the cluster is installed.",
+            "$ref": "#/components/schemas/CloudRegion"
+          },
+          "registry_config": {
+            "description": "Registry configuration for the cluster",
+            "$ref": "#/components/schemas/ClusterRegistryConfig"
+          },
+          "state": {
+            "description": "Overall state of the cluster.",
+            "$ref": "#/components/schemas/ClusterState"
+          },
+          "status": {
+            "description": "Status of cluster",
+            "$ref": "#/components/schemas/ClusterStatus"
+          },
+          "storage_quota": {
+            "description": "Storage quota to be assigned to the cluster.",
+            "$ref": "#/components/schemas/Value"
+          },
+          "subscription": {
+            "description": "Link to the subscription that comes from the account management service when the cluster\nis registered.",
+            "$ref": "#/components/schemas/Subscription"
+          },
+          "version": {
+            "description": "Link to the version of _OpenShift_ that will be used to install the cluster.",
+            "$ref": "#/components/schemas/Version"
+          }
+        }
+      },
+      "ClusterAPI": {
+        "description": "Information about the API of a cluster.",
+        "properties": {
+          "url": {
+            "description": "The URL of the API server of the cluster.",
+            "type": "string"
+          },
+          "listening": {
+            "description": "The listening method of the API server.",
+            "$ref": "#/components/schemas/ListeningMethod"
+          }
+        }
+      },
+      "ClusterConfigurationMode": {
+        "description": "Configuration mode of a cluster.",
+        "type": "string",
+        "enum": [
+          "full",
+          "read_only"
+        ]
+      },
+      "ClusterConsole": {
+        "description": "Information about the console of a cluster.",
+        "properties": {
+          "url": {
+            "description": "The URL of the console of the cluster.",
+            "type": "string"
+          }
+        }
+      },
+      "ClusterHealthState": {
+        "description": "ClusterHealthState indicates the health of a cluster.",
+        "type": "string",
+        "enum": [
+          "healthy",
+          "unhealthy",
+          "unknown"
+        ]
+      },
+      "ClusterNodes": {
+        "description": "Counts of different classes of nodes inside a cluster.",
+        "properties": {
+          "autoscale_compute": {
+            "description": "Details for auto-scaling the compute machine pool.\nCompute and AutoscaleCompute cannot be used together.",
+            "$ref": "#/components/schemas/MachinePoolAutoscaling"
+          },
+          "availability_zones": {
+            "description": "The availability zones upon which the nodes are created.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "compute": {
+            "description": "Number of compute nodes of the cluster.\nCompute and AutoscaleCompute cannot be used together.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "compute_labels": {
+            "description": "The labels set on the \"default\" compute machine pool.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "compute_machine_type": {
+            "description": "The compute machine type to use, for example `r5.xlarge`.",
+            "$ref": "#/components/schemas/MachineType"
+          },
+          "compute_root_volume": {
+            "description": "The compute machine root volume capabilities.",
+            "$ref": "#/components/schemas/RootVolume"
+          },
+          "infra": {
+            "description": "Number of infrastructure nodes of the cluster.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "infra_machine_type": {
+            "description": "The infra machine type to use, for example `r5.xlarge` (Optional).",
+            "$ref": "#/components/schemas/MachineType"
+          },
+          "master": {
+            "description": "Number of master nodes of the cluster.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "master_machine_type": {
+            "description": "The master machine type to use, for example `r5.xlarge` (Optional).",
+            "$ref": "#/components/schemas/MachineType"
+          },
+          "security_group_filters": {
+            "description": "List of security groups to be applied to nodes (Optional).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MachinePoolSecurityGroupFilter"
+            }
+          },
+          "total": {
+            "description": "Total number of nodes of the cluster.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ClusterRegistryConfig": {
+        "description": "ClusterRegistryConfig describes the configuration of registries for the cluster.\nIts format reflects the OpenShift Image Configuration, for which docs are available on\n[docs.openshift.com](https://docs.openshift.com/container-platform/4.16/openshift_images/image-configuration.html)\n```json\n{\n   \"registry_config\": {\n     \"registry_sources\": {\n       \"blocked_registries\": [\n         \"badregistry.io\",\n         \"badregistry8.io\"\n       ]\n     }\n   }\n}\n```\n",
+        "properties": {
+          "additional_trusted_ca": {
+            "description": "A map containing the registry hostname as the key, and the PEM-encoded certificate as the value,\nfor each additional registry CA to trust.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "allowed_registries_for_import": {
+            "description": "AllowedRegistriesForImport limits the container image registries that normal users may import\nimages from. Set this list to the registries that you trust to contain valid Docker\nimages and that you want applications to be able to import from. Users with\npermission to create Images or ImageStreamMappings via the API are not affected by\nthis policy - typically only administrators or system integrations will have those\npermissions.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegistryLocation"
+            }
+          },
+          "platform_allowlist": {
+            "description": "PlatformAllowlist contains a reference to a RegistryAllowlist which is a list of internal registries\nwhich needs to be whitelisted for the platform to work. It can be omitted at creation and \nupdating and its lifecycle can be managed separately if needed.",
+            "$ref": "#/components/schemas/RegistryAllowlist"
+          },
+          "registry_sources": {
+            "description": "RegistrySources contains configuration that determines how the container runtime\nshould treat individual registries when accessing images for builds+pods. (e.g.\nwhether or not to allow insecure access). It does not contain configuration for the\ninternal cluster registry.",
+            "$ref": "#/components/schemas/RegistrySources"
+          }
+        }
+      },
+      "ClusterState": {
+        "description": "Overall state of a cluster.",
+        "type": "string",
+        "enum": [
+          "error",
+          "hibernating",
+          "installing",
+          "pending",
+          "powering_down",
+          "ready",
+          "resuming",
+          "uninstalling",
+          "unknown",
+          "validating",
+          "waiting"
+        ]
+      },
+      "ClusterStatus": {
+        "description": "Detailed status of a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterStatus' if this is a complete object or 'ClusterStatusLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "dns_ready": {
+            "description": "DNSReady from Provisioner",
+            "type": "boolean"
+          },
+          "oidc_ready": {
+            "description": "OIDCReady from user configuration.",
+            "type": "boolean"
+          },
+          "configuration_mode": {
+            "description": "Configuration mode",
+            "$ref": "#/components/schemas/ClusterConfigurationMode"
+          },
+          "current_compute": {
+            "description": "Current Replicas available for a Hosted Cluster",
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "description": "Detailed description of the cluster status.",
+            "type": "string"
+          },
+          "limited_support_reason_count": {
+            "description": "Limited Support Reason Count",
+            "type": "integer",
+            "format": "int32"
+          },
+          "provision_error_code": {
+            "description": "Provisioning Error Code",
+            "type": "string"
+          },
+          "provision_error_message": {
+            "description": "Provisioning Error Message",
+            "type": "string"
+          },
+          "state": {
+            "description": "The overall state of the cluster.",
+            "$ref": "#/components/schemas/ClusterState"
+          }
+        }
+      },
+      "DeleteProtection": {
+        "description": "DeleteProtection configuration.",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should be be using _DeleteProtection_.\n\nBy default this is `false`.\n\nTo enable it a SREP needs to patch the value through OCM API",
+            "type": "boolean"
+          }
+        }
+      },
+      "Ec2MetadataHttpTokens": {
+        "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
+        "type": "string",
+        "enum": [
+          "optional",
+          "required"
+        ]
+      },
+      "ExternalAuthConfig": {
+        "description": "ExternalAuthConfig configuration",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should use an external authentication configuration.\n\nBy default this is false.\n\nTo enable it the cluster needs to be ROSA HCP cluster and the organization of the user needs\nto have the `external-authentication` feature toggle enabled.",
+            "type": "boolean"
+          },
+          "external_auths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAuth"
+            }
+          }
+        }
+      },
+      "ExternalConfiguration": {
+        "description": "Representation of cluster external configuration.",
+        "properties": {
+          "labels": {
+            "description": "list of labels externally configured on the clusterdeployment.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Label"
+            }
+          },
+          "manifests": {
+            "description": "list of manifest externally configured for a hosted cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Manifest"
+            }
+          },
+          "syncsets": {
+            "description": "list of syncsets externally configured on the cluster.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Syncset"
+            }
+          }
+        }
+      },
+      "GcpAuthentication": {
+        "description": "Google cloud platform authentication method of a cluster.",
+        "properties": {
+          "href": {
+            "description": "Self link",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Indicates the type of this object",
+            "type": "string"
+          }
+        }
+      },
+      "GcpPrivateServiceConnect": {
+        "description": "Google cloud platform private service connect configuration of a cluster.",
+        "properties": {
+          "service_attachment_subnet": {
+            "description": "The name of the subnet where the PSC service attachment is created",
+            "type": "string"
+          }
+        }
+      },
+      "GcpSecurity": {
+        "description": "Google cloud platform security settings of a cluster.",
+        "properties": {
+          "secure_boot": {
+            "description": "Determines if Shielded VM feature \"Secure Boot\" should be set for the nodes of the cluster.",
+            "type": "boolean"
+          }
+        }
+      },
+      "Hypershift": {
+        "description": "Hypershift configuration.",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should be creating using _Hypershift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
+            "type": "boolean"
+          }
+        }
+      },
+      "InstanceIAMRoles": {
+        "description": "Contains the necessary attributes to support role-based authentication on AWS.",
+        "properties": {
+          "master_role_arn": {
+            "description": "The IAM role ARN that will be attached to master instances",
+            "type": "string"
+          },
+          "worker_role_arn": {
+            "description": "The IAM role ARN that will be attached to worker instances",
+            "type": "string"
+          }
+        }
+      },
+      "KubeletConfig": {
+        "description": "OCM representation of KubeletConfig, exposing the fields of Kubernetes\nKubeletConfig that can be managed by users",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'KubeletConfig' if this is a complete object or 'KubeletConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Allows the user to specify the name to be used to identify this KubeletConfig.\nOptional. A name will be generated if not provided.",
+            "type": "string"
+          },
+          "pod_pids_limit": {
+            "description": "Allows the user to specify the podPidsLimit to be applied via KubeletConfig.\nUseful if workloads have greater PIDs limit requirements than the OCP default.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ListeningMethod": {
+        "description": "Cluster components listening method.",
+        "type": "string",
+        "enum": [
+          "external",
+          "internal"
+        ]
+      },
+      "MachinePoolAutoscaling": {
+        "description": "Representation of a autoscaling in a machine pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'MachinePoolAutoscaling' if this is a complete object or 'MachinePoolAutoscalingLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "max_replicas": {
+            "description": "The maximum number of replicas for the machine pool.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "min_replicas": {
+            "description": "The minimum number of replicas for the machine pool.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MachinePoolSecurityGroupFilter": {
+        "description": "Security Group Filter object, containing name of the filter tag and value of the filter tag",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "MachineType": {
+        "description": "Machine type.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'MachineType' if this is a complete object or 'MachineTypeLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "ccs_only": {
+            "description": "'true' if the instance type is supported only for CCS clusters, 'false' otherwise.",
+            "type": "boolean"
+          },
+          "cpu": {
+            "description": "The amount of cpu's of the machine type.",
+            "$ref": "#/components/schemas/Value"
+          },
+          "architecture": {
+            "description": "The architecture of the machine type.",
+            "$ref": "#/components/schemas/ProcessorType"
+          },
+          "category": {
+            "description": "The category which the machine type is suitable for.",
+            "$ref": "#/components/schemas/MachineTypeCategory"
+          },
+          "cloud_provider": {
+            "description": "Link to the cloud provider that the machine type belongs to.",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
+          "generic_name": {
+            "description": "Generic name for quota purposes, for example `highmem-4`.\nCloud provider agnostic - many values are shared between \"similar\"\nmachine types on different providers.\nCorresponds to `resource_name` values in \"compute.node\"  quota cost data.",
+            "type": "string"
+          },
+          "memory": {
+            "description": "The amount of memory of the machine type.",
+            "$ref": "#/components/schemas/Value"
+          },
+          "name": {
+            "description": "Human friendly identifier of the machine type, for example `r5.xlarge - Memory Optimized`.",
+            "type": "string"
+          },
+          "size": {
+            "description": "The size of the machine type.",
+            "$ref": "#/components/schemas/MachineTypeSize"
+          }
+        }
+      },
+      "MachineTypeCategory": {
+        "description": "Machine type category.",
+        "type": "string",
+        "enum": [
+          "accelerated_computing",
+          "compute_optimized",
+          "general_purpose",
+          "memory_optimized"
+        ]
+      },
+      "MachineTypeSize": {
+        "description": "Machine type size.",
+        "type": "string",
+        "enum": [
+          "large",
+          "medium",
+          "small"
+        ]
+      },
+      "ManagedService": {
+        "description": "Contains the necessary attributes to support role-based authentication on AWS.",
+        "properties": {
+          "enabled": {
+            "description": "Indicates whether the cluster belongs to a managed service\nThis should only be set by the \"Managed Service\" service.\nclusters with this set can only be modified by the \"Managed Service\" service.",
+            "type": "boolean"
+          }
+        }
+      },
+      "Network": {
+        "description": "Network configuration of a cluster.",
+        "properties": {
+          "host_prefix": {
+            "description": "Network host prefix which is defaulted to `23` if not specified.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "machine_cidr": {
+            "description": "IP address block from which to assign machine IP addresses, for example `10.0.0.0/16`.",
+            "type": "string"
+          },
+          "pod_cidr": {
+            "description": "IP address block from which to assign pod IP addresses, for example `10.128.0.0/14`.",
+            "type": "string"
+          },
+          "service_cidr": {
+            "description": "IP address block from which to assign service IP addresses, for example `172.30.0.0/16`.",
+            "type": "string"
+          },
+          "type": {
+            "description": "The main controller responsible for rendering the core networking components.",
+            "type": "string"
+          }
+        }
+      },
+      "OidcConfig": {
+        "description": "Contains the necessary attributes to support oidc configuration hosting under Red Hat or registering a Customer's byo oidc config.",
+        "properties": {
+          "href": {
+            "description": "HREF for the oidc config, filled in response.",
+            "type": "string"
+          },
+          "id": {
+            "description": "ID for the oidc config, filled in response.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Creation timestamp, filled in response.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "installer_role_arn": {
+            "description": "ARN of the AWS role to assume when installing the cluster as to reveal the secret, supplied in request. It is only to be used in Unmanaged Oidc Config.",
+            "type": "string"
+          },
+          "issuer_url": {
+            "description": "Issuer URL, filled in response when Managed and supplied in Unmanaged.",
+            "type": "string"
+          },
+          "last_update_timestamp": {
+            "description": "Last update timestamp, filled when patching a valid attribute of this oidc config.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_used_timestamp": {
+            "description": "Last used timestamp, filled by the latest cluster that used this oidc config.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "managed": {
+            "description": "Indicates whether it is Managed or Unmanaged (Customer hosted).",
+            "type": "boolean"
+          },
+          "organization_id": {
+            "description": "Organization ID, filled in response respecting token provided.",
+            "type": "string"
+          },
+          "reusable": {
+            "description": "Indicates whether the Oidc Config can be reused.",
+            "type": "boolean"
+          },
+          "secret_arn": {
+            "description": "Secrets Manager ARN for the OIDC private key, supplied in request. It is only to be used in Unmanaged Oidc Config.",
+            "type": "string"
+          }
+        }
+      },
+      "OperatorIAMRole": {
+        "description": "Contains the necessary attributes to allow each operator to access the necessary AWS resources",
+        "properties": {
+          "id": {
+            "description": "Randomly-generated ID to identify the operator role",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the credentials secret used to access cloud resources",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "Namespace where the credentials secret lives in the cluster",
+            "type": "string"
+          },
+          "role_arn": {
+            "description": "Role to assume when accessing AWS resources",
+            "type": "string"
+          },
+          "service_account": {
+            "description": "Service account name to use when authenticating",
+            "type": "string"
+          }
+        }
+      },
+      "PrivateLinkClusterConfiguration": {
+        "description": "Manages the configuration for the Private Links.",
+        "properties": {
+          "principals": {
+            "description": "List of additional principals for the Private Link",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PrivateLinkPrincipal"
+            }
+          }
+        }
+      },
+      "PrivateLinkPrincipal": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'PrivateLinkPrincipal' if this is a complete object or 'PrivateLinkPrincipalLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "principal": {
+            "description": "ARN for a principal that is allowed for this Private Link.",
+            "type": "string"
+          }
+        }
+      },
+      "ProcessorType": {
+        "description": "Processor type category.",
+        "type": "string",
+        "enum": [
+          "amd64",
+          "arm64"
+        ]
+      },
+      "ProvisionShard": {
+        "description": "Contains the properties of the provision shard, including AWS and GCP related configurations",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ProvisionShard' if this is a complete object or 'ProvisionShardLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "aws_account_operator_config": {
+            "description": "Contains the configuration for the AWS account operator.",
+            "$ref": "#/components/schemas/ServerConfig"
+          },
+          "aws_base_domain": {
+            "description": "Contains the AWS base domain.",
+            "type": "string"
+          },
+          "gcp_base_domain": {
+            "description": "Contains the GCP base domain.",
+            "type": "string"
+          },
+          "gcp_project_operator": {
+            "description": "Contains the configuration for the GCP project operator.",
+            "$ref": "#/components/schemas/ServerConfig"
+          },
+          "cloud_provider": {
+            "description": "Contains the cloud provider name.",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the provision shard was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "hive_config": {
+            "description": "Contains the configuration for Hive.",
+            "$ref": "#/components/schemas/ServerConfig"
+          },
+          "hypershift_config": {
+            "description": "Contains the configuration for Hypershift.",
+            "$ref": "#/components/schemas/ServerConfig"
+          },
+          "last_update_timestamp": {
+            "description": "Date and time when the provision shard was last updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "management_cluster": {
+            "description": "Contains the name of the management cluster for Hypershift clusters that are assigned to this shard.\nThis field is populated by OCM, and must not be overwritten via API.",
+            "type": "string"
+          },
+          "region": {
+            "description": "Contains the cloud-provider region in which the provisioner spins up the cluster.",
+            "$ref": "#/components/schemas/CloudRegion"
+          },
+          "status": {
+            "description": "Status of the provision shard. Possible values: active/maintenance/offline.",
+            "type": "string"
+          }
+        }
+      },
+      "ProvisionShardTopology": {
+        "type": "string",
+        "enum": [
+          "dedicated"
+        ]
+      },
+      "Proxy": {
+        "description": "Proxy configuration of a cluster.",
+        "properties": {
+          "http_proxy": {
+            "description": "HTTPProxy is the URL of the proxy for HTTP requests.",
+            "type": "string"
+          },
+          "https_proxy": {
+            "description": "HTTPSProxy is the URL of the proxy for HTTPS requests.",
+            "type": "string"
+          },
+          "no_proxy": {
+            "description": "NoProxy is a comma-separated list of domains and CIDRs for which \nthe proxy should not be used",
+            "type": "string"
+          }
+        }
+      },
+      "RegistryAllowlist": {
+        "description": "RegistryAllowlist represents a single registry allowlist.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'RegistryAllowlist' if this is a complete object or 'RegistryAllowlistLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cloud_provider": {
+            "description": "CloudProvider is the cloud provider for which this allowlist is valid.",
+            "$ref": "#/components/schemas/CloudProvider"
+          },
+          "creation_timestamp": {
+            "description": "CreationTimestamp is the date and time when the allow list has been created.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "registries": {
+            "description": "Registries is the list of registries contained in this Allowlist.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RegistryLocation": {
+        "description": "RegistryLocation contains a location of the registry specified by the registry domain\nname. The domain name might include wildcards, like '*' or '??'.",
+        "properties": {
+          "domain_name": {
+            "description": "domainName specifies a domain name for the registry\nIn case the registry use non-standard (80 or 443) port, the port should be included\nin the domain name as well.",
+            "type": "string"
+          },
+          "insecure": {
+            "description": "insecure indicates whether the registry is secure (https) or insecure (http)\nBy default (if not specified) the registry is assumed as secure.",
+            "type": "boolean"
+          }
+        }
+      },
+      "RegistrySources": {
+        "description": "RegistrySources contains configuration that determines how the container runtime should treat individual\nregistries when accessing images for builds and pods. For instance, whether or not to allow insecure access.\nIt does not contain configuration for the internal cluster registry.",
+        "properties": {
+          "allowed_registries": {
+            "description": "AllowedRegistries: registries for which image pull and push actions are allowed.\nTo specify all subdomains, add the asterisk (*) wildcard character as a prefix to the domain name.\nFor example, *.example.com. You can specify an individual repository within a registry.\nFor example: reg1.io/myrepo/myapp:latest. All other registries are blocked.\nMutually exclusive with `BlockedRegistries`",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "blocked_registries": {
+            "description": "BlockedRegistries: registries for which image pull and push actions are denied.\nTo specify all subdomains, add the asterisk (*) wildcard character as a prefix to the domain name.\nFor example, *.example.com. You can specify an individual repository within a registry.\nFor example: reg1.io/myrepo/myapp:latest. All other registries are allowed.\nMutually exclusive with `AllowedRegistries`",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "insecure_registries": {
+            "description": "InsecureRegistries are registries which do not have a valid TLS certificate or only support HTTP connections.\nTo specify all subdomains, add the asterisk (*) wildcard character as a prefix to the domain name.\nFor example, *.example.com. You can specify an individual repository within a registry.\nFor example: reg1.io/myrepo/myapp:latest.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RootVolume": {
+        "description": "Root volume capabilities.",
+        "properties": {
+          "aws": {
+            "description": "AWS volume specification",
+            "$ref": "#/components/schemas/AWSVolume"
+          },
+          "gcp": {
+            "description": "GCP Volume specification",
+            "$ref": "#/components/schemas/GCPVolume"
+          }
+        }
+      },
+      "ServerConfig": {
+        "description": "Representation of a server config",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ServerConfig' if this is a complete object or 'ServerConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "aws_shard": {
+            "description": "Config for AWS provision shards",
+            "$ref": "#/components/schemas/AWSShard"
+          },
+          "kubeconfig": {
+            "description": "The kubeconfig of the server.",
+            "type": "string"
+          },
+          "server": {
+            "description": "The URL of the server.",
+            "type": "string"
+          },
+          "topology": {
+            "description": "The topology of a provision shard (Optional).",
+            "$ref": "#/components/schemas/ProvisionShardTopology"
+          }
+        }
+      },
+      "Value": {
+        "description": "Numeric value and the unit used to measure it.\n\nUnits are not mandatory, and they're not specified for some resources. For\nresources that use bytes, the accepted units are:\n\n- 1 B = 1 byte\n- 1 KB = 10^3 bytes\n- 1 MB = 10^6 bytes\n- 1 GB = 10^9 bytes\n- 1 TB = 10^12 bytes\n- 1 PB = 10^15 bytes\n\n- 1 B = 1 byte\n- 1 KiB = 2^10 bytes\n- 1 MiB = 2^20 bytes\n- 1 GiB = 2^30 bytes\n- 1 TiB = 2^40 bytes\n- 1 PiB = 2^50 bytes",
+        "properties": {
+          "unit": {
+            "description": "Name of the unit used to measure the value.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Numeric value.",
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will always be 'Error'",
+            "type": "string"
+          },
+          "id": {
+            "description": "Numeric identifier of the error.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "code": {
+            "description": "Globally unique code of the error, composed of the unique identifier of the API and the numeric identifier of the error. For example, for if the numeric identifier of the error is `93` and the identifier of the API is `clusters_mgmt` then the code will be `CLUSTERS-MGMT-93`.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Human readable description of the error.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Extra information about the error.",
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": [
+        
+      ]
+    }
+  ]
+}

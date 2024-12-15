@@ -29,7 +29,7 @@ import (
 // MarshalWifConfigStatus writes a value of the 'wif_config_status' type to the given writer.
 func MarshalWifConfigStatus(object *WifConfigStatus, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeWifConfigStatus(object, stream)
+	WriteWifConfigStatus(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalWifConfigStatus(object *WifConfigStatus, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeWifConfigStatus writes a value of the 'wif_config_status' type to the given stream.
-func writeWifConfigStatus(object *WifConfigStatus, stream *jsoniter.Stream) {
+// WriteWifConfigStatus writes a value of the 'wif_config_status' type to the given stream.
+func WriteWifConfigStatus(object *WifConfigStatus, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -69,13 +69,13 @@ func UnmarshalWifConfigStatus(source interface{}) (object *WifConfigStatus, err 
 	if err != nil {
 		return
 	}
-	object = readWifConfigStatus(iterator)
+	object = ReadWifConfigStatus(iterator)
 	err = iterator.Error
 	return
 }
 
-// readWifConfigStatus reads a value of the 'wif_config_status' type from the given iterator.
-func readWifConfigStatus(iterator *jsoniter.Iterator) *WifConfigStatus {
+// ReadWifConfigStatus reads a value of the 'wif_config_status' type from the given iterator.
+func ReadWifConfigStatus(iterator *jsoniter.Iterator) *WifConfigStatus {
 	object := &WifConfigStatus{}
 	for {
 		field := iterator.ReadObject()
