@@ -30,7 +30,7 @@ import (
 // MarshalMachinePool writes a value of the 'machine_pool' type to the given writer.
 func MarshalMachinePool(object *MachinePool, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeMachinePool(object, stream)
+	WriteMachinePool(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -38,8 +38,8 @@ func MarshalMachinePool(object *MachinePool, writer io.Writer) error {
 	return stream.Error
 }
 
-// writeMachinePool writes a value of the 'machine_pool' type to the given stream.
-func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
+// WriteMachinePool writes a value of the 'machine_pool' type to the given stream.
+func WriteMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	stream.WriteObjectField("kind")
@@ -72,7 +72,7 @@ func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("aws")
-		writeAWSMachinePool(object.aws, stream)
+		WriteAWSMachinePool(object.aws, stream)
 		count++
 	}
 	present_ = object.bitmap_&16 != 0 && object.autoscaling != nil
@@ -81,7 +81,7 @@ func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("autoscaling")
-		writeMachinePoolAutoscaling(object.autoscaling, stream)
+		WriteMachinePoolAutoscaling(object.autoscaling, stream)
 		count++
 	}
 	present_ = object.bitmap_&32 != 0 && object.availabilityZones != nil
@@ -90,7 +90,7 @@ func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("availability_zones")
-		writeStringList(object.availabilityZones, stream)
+		WriteStringList(object.availabilityZones, stream)
 		count++
 	}
 	present_ = object.bitmap_&64 != 0
@@ -146,7 +146,7 @@ func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("root_volume")
-		writeRootVolume(object.rootVolume, stream)
+		WriteRootVolume(object.rootVolume, stream)
 		count++
 	}
 	present_ = object.bitmap_&1024 != 0 && object.securityGroupFilters != nil
@@ -155,7 +155,7 @@ func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("security_group_filters")
-		writeMachinePoolSecurityGroupFilterList(object.securityGroupFilters, stream)
+		WriteMachinePoolSecurityGroupFilterList(object.securityGroupFilters, stream)
 		count++
 	}
 	present_ = object.bitmap_&2048 != 0 && object.subnets != nil
@@ -164,7 +164,7 @@ func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("subnets")
-		writeStringList(object.subnets, stream)
+		WriteStringList(object.subnets, stream)
 		count++
 	}
 	present_ = object.bitmap_&4096 != 0 && object.taints != nil
@@ -173,7 +173,7 @@ func writeMachinePool(object *MachinePool, stream *jsoniter.Stream) {
 			stream.WriteMore()
 		}
 		stream.WriteObjectField("taints")
-		writeTaintList(object.taints, stream)
+		WriteTaintList(object.taints, stream)
 	}
 	stream.WriteObjectEnd()
 }
@@ -185,13 +185,13 @@ func UnmarshalMachinePool(source interface{}) (object *MachinePool, err error) {
 	if err != nil {
 		return
 	}
-	object = readMachinePool(iterator)
+	object = ReadMachinePool(iterator)
 	err = iterator.Error
 	return
 }
 
-// readMachinePool reads a value of the 'machine_pool' type from the given iterator.
-func readMachinePool(iterator *jsoniter.Iterator) *MachinePool {
+// ReadMachinePool reads a value of the 'machine_pool' type from the given iterator.
+func ReadMachinePool(iterator *jsoniter.Iterator) *MachinePool {
 	object := &MachinePool{}
 	for {
 		field := iterator.ReadObject()
@@ -211,15 +211,15 @@ func readMachinePool(iterator *jsoniter.Iterator) *MachinePool {
 			object.href = iterator.ReadString()
 			object.bitmap_ |= 4
 		case "aws":
-			value := readAWSMachinePool(iterator)
+			value := ReadAWSMachinePool(iterator)
 			object.aws = value
 			object.bitmap_ |= 8
 		case "autoscaling":
-			value := readMachinePoolAutoscaling(iterator)
+			value := ReadMachinePoolAutoscaling(iterator)
 			object.autoscaling = value
 			object.bitmap_ |= 16
 		case "availability_zones":
-			value := readStringList(iterator)
+			value := ReadStringList(iterator)
 			object.availabilityZones = value
 			object.bitmap_ |= 32
 		case "instance_type":
@@ -243,19 +243,19 @@ func readMachinePool(iterator *jsoniter.Iterator) *MachinePool {
 			object.replicas = value
 			object.bitmap_ |= 256
 		case "root_volume":
-			value := readRootVolume(iterator)
+			value := ReadRootVolume(iterator)
 			object.rootVolume = value
 			object.bitmap_ |= 512
 		case "security_group_filters":
-			value := readMachinePoolSecurityGroupFilterList(iterator)
+			value := ReadMachinePoolSecurityGroupFilterList(iterator)
 			object.securityGroupFilters = value
 			object.bitmap_ |= 1024
 		case "subnets":
-			value := readStringList(iterator)
+			value := ReadStringList(iterator)
 			object.subnets = value
 			object.bitmap_ |= 2048
 		case "taints":
-			value := readTaintList(iterator)
+			value := ReadTaintList(iterator)
 			object.taints = value
 			object.bitmap_ |= 4096
 		default:

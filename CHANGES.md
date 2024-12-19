@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.452
+- Update model version v0.0.405
+- Update metamodel version v0.0.64
+  - Add ARO HCP v1alpha1 root resource
+
 ## 0.1.451
 - Update model version v0.0.404
   - Add WifConfig patch endpoint

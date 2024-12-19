@@ -30,7 +30,7 @@ import (
 // the given writer.
 func MarshalAzureNodesOutboundConnectivityList(list []*AzureNodesOutboundConnectivity, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAzureNodesOutboundConnectivityList(list, stream)
+	WriteAzureNodesOutboundConnectivityList(list, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -38,15 +38,15 @@ func MarshalAzureNodesOutboundConnectivityList(list []*AzureNodesOutboundConnect
 	return stream.Error
 }
 
-// writeAzureNodesOutboundConnectivityList writes a list of value of the 'azure_nodes_outbound_connectivity' type to
+// WriteAzureNodesOutboundConnectivityList writes a list of value of the 'azure_nodes_outbound_connectivity' type to
 // the given stream.
-func writeAzureNodesOutboundConnectivityList(list []*AzureNodesOutboundConnectivity, stream *jsoniter.Stream) {
+func WriteAzureNodesOutboundConnectivityList(list []*AzureNodesOutboundConnectivity, stream *jsoniter.Stream) {
 	stream.WriteArrayStart()
 	for i, value := range list {
 		if i > 0 {
 			stream.WriteMore()
 		}
-		writeAzureNodesOutboundConnectivity(value, stream)
+		WriteAzureNodesOutboundConnectivity(value, stream)
 	}
 	stream.WriteArrayEnd()
 }
@@ -58,17 +58,17 @@ func UnmarshalAzureNodesOutboundConnectivityList(source interface{}) (items []*A
 	if err != nil {
 		return
 	}
-	items = readAzureNodesOutboundConnectivityList(iterator)
+	items = ReadAzureNodesOutboundConnectivityList(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAzureNodesOutboundConnectivityList reads list of values of the ”azure_nodes_outbound_connectivity' type from
+// ReadAzureNodesOutboundConnectivityList reads list of values of the ”azure_nodes_outbound_connectivity' type from
 // the given iterator.
-func readAzureNodesOutboundConnectivityList(iterator *jsoniter.Iterator) []*AzureNodesOutboundConnectivity {
+func ReadAzureNodesOutboundConnectivityList(iterator *jsoniter.Iterator) []*AzureNodesOutboundConnectivity {
 	list := []*AzureNodesOutboundConnectivity{}
 	for iterator.ReadArray() {
-		item := readAzureNodesOutboundConnectivity(iterator)
+		item := ReadAzureNodesOutboundConnectivity(iterator)
 		list = append(list, item)
 	}
 	return list

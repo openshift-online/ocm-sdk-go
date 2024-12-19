@@ -29,7 +29,7 @@ import (
 // MarshalAzureNodesOutboundConnectivity writes a value of the 'azure_nodes_outbound_connectivity' type to the given writer.
 func MarshalAzureNodesOutboundConnectivity(object *AzureNodesOutboundConnectivity, writer io.Writer) error {
 	stream := helpers.NewStream(writer)
-	writeAzureNodesOutboundConnectivity(object, stream)
+	WriteAzureNodesOutboundConnectivity(object, stream)
 	err := stream.Flush()
 	if err != nil {
 		return err
@@ -37,8 +37,8 @@ func MarshalAzureNodesOutboundConnectivity(object *AzureNodesOutboundConnectivit
 	return stream.Error
 }
 
-// writeAzureNodesOutboundConnectivity writes a value of the 'azure_nodes_outbound_connectivity' type to the given stream.
-func writeAzureNodesOutboundConnectivity(object *AzureNodesOutboundConnectivity, stream *jsoniter.Stream) {
+// WriteAzureNodesOutboundConnectivity writes a value of the 'azure_nodes_outbound_connectivity' type to the given stream.
+func WriteAzureNodesOutboundConnectivity(object *AzureNodesOutboundConnectivity, stream *jsoniter.Stream) {
 	count := 0
 	stream.WriteObjectStart()
 	var present_ bool
@@ -60,13 +60,13 @@ func UnmarshalAzureNodesOutboundConnectivity(source interface{}) (object *AzureN
 	if err != nil {
 		return
 	}
-	object = readAzureNodesOutboundConnectivity(iterator)
+	object = ReadAzureNodesOutboundConnectivity(iterator)
 	err = iterator.Error
 	return
 }
 
-// readAzureNodesOutboundConnectivity reads a value of the 'azure_nodes_outbound_connectivity' type from the given iterator.
-func readAzureNodesOutboundConnectivity(iterator *jsoniter.Iterator) *AzureNodesOutboundConnectivity {
+// ReadAzureNodesOutboundConnectivity reads a value of the 'azure_nodes_outbound_connectivity' type from the given iterator.
+func ReadAzureNodesOutboundConnectivity(iterator *jsoniter.Iterator) *AzureNodesOutboundConnectivity {
 	object := &AzureNodesOutboundConnectivity{}
 	for {
 		field := iterator.ReadObject()
