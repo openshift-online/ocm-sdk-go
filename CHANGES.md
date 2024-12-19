@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.453
+- Update model version to v0.0.406
+  - Expose the GCP Shielded VM secure boot setting at the machine pool level
+
 ## 0.1.452
 - Update model version v0.0.405
 - Update metamodel version v0.0.64
