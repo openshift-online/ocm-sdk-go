@@ -151,6 +151,13 @@ var pathTreeData = `{
         }
       }
     },
+    "aro_hcp": {
+      "v1alpha1": {
+        "clusters": {
+          "-": null
+        }
+      }
+    },
     "authorizations": {
       "v1": {
         "access_review": null,
