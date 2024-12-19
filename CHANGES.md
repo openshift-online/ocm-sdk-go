@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.452
+- Update model version to v0.0.406
+  - Expose the GCP Shielded VM secure boot setting at the machine pool level
+  - Add aro_hcp v1alpha1 Root resource
+
 ## 0.1.451
 - Update model version v0.0.404
   - Add WifConfig patch endpoint
