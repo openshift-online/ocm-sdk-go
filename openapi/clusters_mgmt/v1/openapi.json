@@ -13664,6 +13664,15 @@
           }
         }
       },
+      "GCPMachinePool": {
+        "description": "Representation of gcp machine pool specific parameters.",
+        "properties": {
+          "secure_boot": {
+            "description": "Determines whether the Shielded VM's SecureBoot feature should be\nenabled for the nodes of the machine pool. If SecureBoot is not\nspecified, the value of this attribute will remain unspecified and the\nSecureBoot's value specified in the `.gcp.security.secure_boot`\nattribute of the parent Cluster will be the one applied to the nodes of\nthe machine pool.\nImmutable.",
+            "type": "boolean"
+          }
+        }
+      },
       "GCPNetwork": {
         "description": "GCP Network configuration of a cluster.",
         "properties": {
@@ -16878,6 +16887,10 @@
           "aws": {
             "description": "AWS specific parameters (Optional).",
             "$ref": "#/components/schemas/AWSMachinePool"
+          },
+          "gcp": {
+            "description": "GCP specific parameters (Optional).",
+            "$ref": "#/components/schemas/GCPMachinePool"
           },
           "autoscaling": {
             "description": "Details for auto-scaling the machine pool.\nReplicas and autoscaling cannot be used together.",
