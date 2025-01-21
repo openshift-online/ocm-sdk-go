@@ -301,6 +301,9 @@ var pathTreeData = `{
               "nodes": null,
               "socket_total_by_node_roles_os": null
             },
+            "migrations": {
+              "-": null
+            },
             "node_pools": {
               "-": {
                 "upgrade_policies": {

@@ -8163,6 +8163,173 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/migrations": {
+      "post": {
+        "description": "Adds a cluster migration to the database.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusterMigration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterMigration"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the returned page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of cluster migrations.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ClusterMigration"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the returned page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page. As this collection doesn't support paging or\nsearching the result will always be the total number of migrations of the cluster.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/migrations/{migration_id}": {
+      "get": {
+        "description": "Retrieves the details of the cluster migration.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "migration_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterMigration"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/node_pools": {
       "post": {
         "description": "Adds a new node pool to the cluster.",
@@ -15626,6 +15793,65 @@
           }
         }
       },
+      "ClusterMigration": {
+        "description": "Representation of a cluster migration.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterMigration' if this is a complete object or 'ClusterMigrationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Internal cluster ID.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the cluster migration was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "sdn_to_ovn": {
+            "description": "Details for `SdnToOvn` cluster migrations.",
+            "$ref": "#/components/schemas/SdnToOvnClusterMigration"
+          },
+          "state": {
+            "description": "The state of the cluster migration.",
+            "$ref": "#/components/schemas/ClusterMigrationState"
+          },
+          "type": {
+            "description": "Type of cluster migration. The rest of the attributes will be populated according to this\nvalue. For example, if the type is `sdnToOvn` then only the `SdnToOvn` attribute will be\npopulated.",
+            "$ref": "#/components/schemas/ClusterMigrationType"
+          },
+          "updated_timestamp": {
+            "description": "Date and time when the cluster migration was last updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ClusterMigrationState": {
+        "description": "The state of the cluster migration.",
+        "type": "string",
+        "enum": [
+          "completed",
+          "in progress",
+          "scheduled"
+        ]
+      },
+      "ClusterMigrationType": {
+        "description": "Type of cluster migration.",
+        "type": "string",
+        "enum": [
+          "SdnToOvnClusterMigration"
+        ]
+      },
       "ClusterNodes": {
         "description": "Counts of different classes of nodes inside a cluster.",
         "properties": {
@@ -18105,6 +18331,23 @@
           "automatic",
           "manual"
         ]
+      },
+      "SdnToOvnClusterMigration": {
+        "description": "Details for `SdnToOvn` cluster migrations.",
+        "properties": {
+          "join_ipv_4": {
+            "description": "The IP address range to use for the internalJoinSubnet parameter of OVN-Kubernetes\nupon migration.",
+            "type": "string"
+          },
+          "masquerade_ipv_4": {
+            "description": "The IP address range to us for the internalMasqueradeSubnet parameter of OVN-Kubernetes\nupon migration.",
+            "type": "string"
+          },
+          "transit_ipv_4": {
+            "description": "The IP address range to use for the internalTransSwitchSubnet parameter of OVN-Kubernetes\nupon migration.",
+            "type": "string"
+          }
+        }
       },
       "SecurityGroup": {
         "description": "AWS security group object",
