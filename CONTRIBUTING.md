@@ -40,7 +40,7 @@ Hard tabs are required rather than spaces.
 
 To use any updates to the [ocm-api-model](https://github.com/openshift-online/ocm-api-model), the version
 must be incremented for consumption in ocm-sdk-go generation. The version is defined by the latest git tag.
-The version is also defined in the ocm-api-model/CHANGES.md file and version.go file.
+The version is also defined in the ocm-api-model/CHANGES.md file.
 
 Once all changes to the OCM API Model have been committed to the main branch, submit a separate change with
 an update to ocm-api-model/CHANGES.md. This update should indicate the version and describe the changes
@@ -53,7 +53,7 @@ included with the version update. The following is an example update to version 
 - Add `config_managed` attribute to the `RoleBinding` type.
 ```
 
-Submit an MR with the CHANGES.md and version.go modifications and review/merge.
+Submit an MR with the CHANGES.md modification and review/merge.
 
 Finally, create and submit a new tag with the new version following the below example:
 
