@@ -15849,7 +15849,7 @@
         "description": "Type of cluster migration.",
         "type": "string",
         "enum": [
-          "SdnToOvnClusterMigration"
+          "sdnToOvn"
         ]
       },
       "ClusterNodes": {
