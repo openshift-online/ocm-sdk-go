@@ -15837,6 +15837,19 @@
         }
       },
       "ClusterMigrationState": {
+        "description": "Representation of a cluster migration state.",
+        "properties": {
+          "description": {
+            "description": "A longer description of the current state of the cluster migration.",
+            "type": "string"
+          },
+          "value": {
+            "description": "The current state of the cluster migration.",
+            "$ref": "#/components/schemas/ClusterMigrationStateValue"
+          }
+        }
+      },
+      "ClusterMigrationStateValue": {
         "description": "The state of the cluster migration.",
         "type": "string",
         "enum": [
