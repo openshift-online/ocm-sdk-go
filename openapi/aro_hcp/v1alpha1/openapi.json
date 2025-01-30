@@ -295,6 +295,42 @@
           }
         }
       }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/status": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -305,6 +341,35 @@
           "server_version": {
             "description": "Version of the server.",
             "type": "string"
+          }
+        }
+      },
+      "AMIOverride": {
+        "description": "AMIOverride specifies what Amazon Machine Image should be used for a particular product and region.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AMIOverride' if this is a complete object or 'AMIOverrideLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "ami": {
+            "description": "AMI is the id of the Amazon Machine Image.",
+            "type": "string"
+          },
+          "product": {
+            "description": "Link to the product type.",
+            "$ref": "#/components/schemas/Product"
+          },
+          "region": {
+            "description": "Link to the cloud provider region.",
+            "$ref": "#/components/schemas/CloudRegion"
           }
         }
       },
@@ -412,6 +477,67 @@
           "vpc_endpoint_role_arn": {
             "description": "Role ARN for VPC Endpoint Service cross account role.",
             "type": "string"
+          }
+        }
+      },
+      "AWSNodePool": {
+        "description": "Representation of aws node pool specific parameters.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSNodePool' if this is a complete object or 'AWSNodePoolLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "additional_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added node pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "availability_zone_types": {
+            "description": "Associates nodepool availability zones with zone types (e.g. wavelength, local).",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "ec2_metadata_http_tokens": {
+            "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
+            "$ref": "#/components/schemas/Ec2MetadataHttpTokens"
+          },
+          "instance_profile": {
+            "description": "InstanceProfile is the AWS EC2 instance profile, which is a container for an IAM role that the EC2 instance uses.",
+            "type": "string"
+          },
+          "instance_type": {
+            "description": "InstanceType is an ec2 instance type for node instances (e.g. m5.large).",
+            "type": "string"
+          },
+          "root_volume": {
+            "description": "AWS Volume specification to be used to set custom worker disk size",
+            "$ref": "#/components/schemas/AWSVolume"
+          },
+          "subnet_outposts": {
+            "description": "Associates nodepool subnets with AWS Outposts.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "description": "Optional keys and values that the installer will add as tags to all AWS resources it creates.\n\nAWS tags must conform to the following standards:\n- Each resource may have a maximum of 25 tags\n- Tags beginning with \"aws:\" are reserved for system use and may not be set\n- Tag keys may be between 1 and 128 characters in length\n- Tag values may be between 0 and 256 characters in length\n- Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -549,6 +675,39 @@
           },
           "key_ring": {
             "description": "Name of the key ring the encryption key is located on",
+            "type": "string"
+          }
+        }
+      },
+      "GCPImageOverride": {
+        "description": "GcpImageOverride specifies what a GCP VM Image should be used for a particular product and billing model",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'GCPImageOverride' if this is a complete object or 'GCPImageOverrideLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "billing_model": {
+            "description": "Link to the billing model.",
+            "$ref": "#/components/schemas/BillingModelItem"
+          },
+          "image_id": {
+            "description": "ImageID is the id of the Google Cloud Platform image.",
+            "type": "string"
+          },
+          "product": {
+            "description": "Link to the product type.",
+            "$ref": "#/components/schemas/Product"
+          },
+          "project_id": {
+            "description": "ProjectID is the id of the Google Cloud Platform project that hosts the image.",
             "type": "string"
           }
         }
@@ -741,6 +900,32 @@
         "properties": {
           "resource_id": {
             "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureNodePool": {
+        "description": "Representation of azure node pool specific parameters.",
+        "properties": {
+          "os_disk_size_gibibytes": {
+            "description": "The size in GiB to assign to the OS disks of the\nNodes in the Node Pool. The property\nis the number of bytes x 1024^3.\nIf not specified, OS disk size is 30 GiB.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "os_disk_storage_account_type": {
+            "description": "The disk storage account type to use for the OS disks of the Nodes in the\nNode Pool. Valid values are:\n* Standard_LRS: HDD\n* StandardSSD_LRS: Standard SSD\n* Premium_LRS: Premium SDD\n* UltraSSD_LRS: Ultra SDD\n\nIf not specified, `Premium_LRS` is used.",
+            "type": "string"
+          },
+          "vm_size": {
+            "description": "The Azure Virtual Machine size identifier used for the\nNodes of the Node Pool.\nAvailability of VM sizes are dependent on the Azure Location\nof the parent Cluster.\nRequired during creation.",
+            "type": "string"
+          },
+          "ephemeral_os_disk_enabled": {
+            "description": "Enables Ephemeral OS Disks for the Nodes in the Node Pool.\nIf not specified, no Ephemeral OS Disks are used.",
+            "type": "boolean"
+          },
+          "resource_name": {
+            "description": "ResourceName is the Azure Resource Name of the NodePool.\nResourceName must be within the Azure Resource Group Name of the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Location as the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Subscription as the parent\nCluster it belongs to.\nResourceName must belong to the same Microsoft Entra Tenant ID as the parent\nCluster it belongs to.\nRequired during creation.\nImmutable.",
             "type": "string"
           }
         }
@@ -1506,6 +1691,35 @@
           }
         }
       },
+      "ImageOverrides": {
+        "description": "ImageOverrides holds the lists of available images per cloud provider.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ImageOverrides' if this is a complete object or 'ImageOverridesLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "aws": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AMIOverride"
+            }
+          },
+          "gcp": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GCPImageOverride"
+            }
+          }
+        }
+      },
       "InstanceIAMRoles": {
         "description": "Contains the necessary attributes to support role-based authentication on AWS.",
         "properties": {
@@ -1694,6 +1908,178 @@
           },
           "type": {
             "description": "The main controller responsible for rendering the core networking components.",
+            "type": "string"
+          }
+        }
+      },
+      "NodePool": {
+        "description": "Representation of a node pool in a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePool' if this is a complete object or 'NodePoolLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "aws_node_pool": {
+            "description": "AWS specific parameters (Optional).",
+            "$ref": "#/components/schemas/AWSNodePool"
+          },
+          "auto_repair": {
+            "description": "Specifies whether health checks should be enabled for machines in the NodePool.",
+            "type": "boolean"
+          },
+          "autoscaling": {
+            "description": "Details for auto-scaling the machine pool.\nReplicas and autoscaling cannot be used together.",
+            "$ref": "#/components/schemas/NodePoolAutoscaling"
+          },
+          "availability_zone": {
+            "description": "The availability zone upon which the node is created.",
+            "type": "string"
+          },
+          "azure_node_pool": {
+            "description": "Azure specific parameters.",
+            "$ref": "#/components/schemas/AzureNodePool"
+          },
+          "kubelet_configs": {
+            "description": "The names of the KubeletConfigs for this node pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "labels": {
+            "description": "The labels set on the Nodes created.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "management_upgrade": {
+            "description": "Management parameters (Optional).",
+            "$ref": "#/components/schemas/NodePoolManagementUpgrade"
+          },
+          "node_drain_grace_period": {
+            "description": "Time to wait for a NodePool to drain when it is upgraded or replaced before it is forcibly removed.",
+            "$ref": "#/components/schemas/Value"
+          },
+          "replicas": {
+            "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "description": "NodePool status.",
+            "$ref": "#/components/schemas/NodePoolStatus"
+          },
+          "subnet": {
+            "description": "The subnet upon which the nodes are created.",
+            "type": "string"
+          },
+          "taints": {
+            "description": "The taints set on the Nodes created.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Taint"
+            }
+          },
+          "tuning_configs": {
+            "description": "The names of the tuning configs for this node pool.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "description": "Version of the node pool.",
+            "$ref": "#/components/schemas/Version"
+          }
+        }
+      },
+      "NodePoolAutoscaling": {
+        "description": "Representation of a autoscaling in a node pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePoolAutoscaling' if this is a complete object or 'NodePoolAutoscalingLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "max_replica": {
+            "description": "The maximum number of replicas for the node pool.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "min_replica": {
+            "description": "The minimum number of replicas for the node pool.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "NodePoolManagementUpgrade": {
+        "description": "Representation of node pool management.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePoolManagementUpgrade' if this is a complete object or 'NodePoolManagementUpgradeLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "max_surge": {
+            "description": "Maximum number of nodes in the NodePool of a ROSA HCP cluster that can be scheduled above the desired number of nodes during the upgrade.",
+            "type": "string"
+          },
+          "max_unavailable": {
+            "description": "Maximum number of nodes in the NodePool of a ROSA HCP cluster that can be unavailable during the upgrade.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of strategy for handling upgrades.",
+            "type": "string"
+          }
+        }
+      },
+      "NodePoolStatus": {
+        "description": "Representation of the status of a node pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePoolStatus' if this is a complete object or 'NodePoolStatusLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "current_replicas": {
+            "description": "The current number of replicas for the node pool.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "description": "Adds additional information about the NodePool status when the node pool doesn't reach the desired replicas.",
             "type": "string"
           }
         }
@@ -1977,6 +2363,33 @@
           }
         }
       },
+      "ReleaseImageDetails": {
+        "properties": {
+          "available_upgrades": {
+            "description": "AvailableUpgrades is the list of versions this version can be upgraded to.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "release_image": {
+            "description": "ReleaseImage contains the URI of Openshift release image.",
+            "type": "string"
+          }
+        }
+      },
+      "ReleaseImages": {
+        "properties": {
+          "arm64": {
+            "description": "Arm64 will contain the reference for the arm64 image which will be used for cluster deployments",
+            "$ref": "#/components/schemas/ReleaseImageDetails"
+          },
+          "multi": {
+            "description": "Multi will contain the reference for the multi image which will be used for cluster deployments",
+            "$ref": "#/components/schemas/ReleaseImageDetails"
+          }
+        }
+      },
       "RootVolume": {
         "description": "Root volume capabilities.",
         "properties": {
@@ -2023,6 +2436,23 @@
           }
         }
       },
+      "Taint": {
+        "description": "Representation of a Taint set on a MachinePool in a cluster.",
+        "properties": {
+          "effect": {
+            "description": "The effect on the node for the pods matching the taint, i.e: NoSchedule, NoExecute, PreferNoSchedule.",
+            "type": "string"
+          },
+          "key": {
+            "description": "The key for the taint",
+            "type": "string"
+          },
+          "value": {
+            "description": "The value for the taint.",
+            "type": "string"
+          }
+        }
+      },
       "Value": {
         "description": "Numeric value and the unit used to measure it.\n\nUnits are not mandatory, and they're not specified for some resources. For\nresources that use bytes, the accepted units are:\n\n- 1 B = 1 byte\n- 1 KB = 10^3 bytes\n- 1 MB = 10^6 bytes\n- 1 GB = 10^9 bytes\n- 1 TB = 10^12 bytes\n- 1 PB = 10^15 bytes\n\n- 1 B = 1 byte\n- 1 KiB = 2^10 bytes\n- 1 MiB = 2^20 bytes\n- 1 GiB = 2^30 bytes\n- 1 TiB = 2^40 bytes\n- 1 PiB = 2^50 bytes",
         "properties": {
@@ -2034,6 +2464,83 @@
             "description": "Numeric value.",
             "type": "number",
             "format": "float"
+          }
+        }
+      },
+      "Version": {
+        "description": "Representation of an _OpenShift_ version.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Version' if this is a complete object or 'VersionLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "gcp_marketplace_enabled": {
+            "description": "GCPMarketplaceEnabled indicates if this version can be used to create GCP Marketplace clusters.",
+            "type": "boolean"
+          },
+          "rosa_enabled": {
+            "description": "ROSAEnabled indicates whether this version can be used to create ROSA clusters.",
+            "type": "boolean"
+          },
+          "available_upgrades": {
+            "description": "AvailableUpgrades is the list of versions this version can be upgraded to.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "channel_group": {
+            "description": "ChannelGroup is the name of the group where this image belongs.\nChannelGroup is a mechanism to partition the images to different groups,\neach image belongs to only a single group.",
+            "type": "string"
+          },
+          "default": {
+            "description": "Indicates if this should be selected as the default version when a cluster is created\nwithout specifying explicitly the version.",
+            "type": "boolean"
+          },
+          "enabled": {
+            "description": "Indicates if this version can be used to create clusters.",
+            "type": "boolean"
+          },
+          "end_of_life_timestamp": {
+            "description": "EndOfLifeTimestamp is the date and time when the version will get to End of Life, using the\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].",
+            "type": "string",
+            "format": "date-time"
+          },
+          "hosted_control_plane_default": {
+            "description": "HostedControlPlaneDefault is a flag that indicates if this should be selected as the default version when a\nHCP cluster is created without specifying explicitly the version.",
+            "type": "boolean"
+          },
+          "hosted_control_plane_enabled": {
+            "description": "HostedControlPlaneEnabled indicates whether this version can be used to create HCP clusters.",
+            "type": "boolean"
+          },
+          "image_overrides": {
+            "description": "ImageOverrides contains the lists of images per cloud provider.",
+            "$ref": "#/components/schemas/ImageOverrides"
+          },
+          "raw_id": {
+            "description": "RawID is the id of the version - without channel group and prefix.",
+            "type": "string"
+          },
+          "release_image": {
+            "description": "ReleaseImage contains the URI of Openshift release image for amd64 architecture.",
+            "type": "string"
+          },
+          "release_images": {
+            "description": "ReleaseImages contains the URI of OpenShift release images for arm64 and multi architectures.",
+            "$ref": "#/components/schemas/ReleaseImages"
+          },
+          "wif_enabled": {
+            "description": "WifEnabled is a flag that indicates whether this version is enabled for Workload Identity Federation.",
+            "type": "boolean"
           }
         }
       },

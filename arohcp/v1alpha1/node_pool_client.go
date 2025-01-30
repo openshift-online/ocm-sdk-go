@@ -26,26 +26,25 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-// ClusterClient is the client of the 'cluster' resource.
+// NodePoolClient is the client of the 'node_pool' resource.
 //
-// Manages a specific cluster.
-type ClusterClient struct {
+// Manages a specific nodepool.
+type NodePoolClient struct {
 	transport http.RoundTripper
 	path      string
 }
 
-// NewClusterClient creates a new client for the 'cluster'
+// NewNodePoolClient creates a new client for the 'node_pool'
 // resource using the given transport to send the requests and receive the
 // responses.
-func NewClusterClient(transport http.RoundTripper, path string) *ClusterClient {
-	return &ClusterClient{
+func NewNodePoolClient(transport http.RoundTripper, path string) *NodePoolClient {
+	return &NodePoolClient{
 		transport: transport,
 		path:      path,
 	}
@@ -53,9 +52,9 @@ func NewClusterClient(transport http.RoundTripper, path string) *ClusterClient {
 
 // Delete creates a request for the 'delete' method.
 //
-// Deletes the cluster.
-func (c *ClusterClient) Delete() *ClusterDeleteRequest {
-	return &ClusterDeleteRequest{
+// Deletes the node pool.
+func (c *NodePoolClient) Delete() *NodePoolDeleteRequest {
+	return &NodePoolDeleteRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -63,9 +62,9 @@ func (c *ClusterClient) Delete() *ClusterDeleteRequest {
 
 // Get creates a request for the 'get' method.
 //
-// Retrieves the details of the cluster.
-func (c *ClusterClient) Get() *ClusterGetRequest {
-	return &ClusterGetRequest{
+// Retrieves the details of the node pool.
+func (c *NodePoolClient) Get() *NodePoolGetRequest {
+	return &NodePoolGetRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
@@ -73,51 +72,43 @@ func (c *ClusterClient) Get() *ClusterGetRequest {
 
 // Update creates a request for the 'update' method.
 //
-// Updates the cluster.
-func (c *ClusterClient) Update() *ClusterUpdateRequest {
-	return &ClusterUpdateRequest{
+// Updates the node pool.
+func (c *NodePoolClient) Update() *NodePoolUpdateRequest {
+	return &NodePoolUpdateRequest{
 		transport: c.transport,
 		path:      c.path,
 	}
 }
 
-// Status returns the target 'cluster_status' resource.
-func (c *ClusterClient) Status() *ClusterStatusClient {
-	return NewClusterStatusClient(
-		c.transport,
-		path.Join(c.path, "status"),
-	)
-}
-
-// ClusterPollRequest is the request for the Poll method.
-type ClusterPollRequest struct {
-	request    *ClusterGetRequest
+// NodePoolPollRequest is the request for the Poll method.
+type NodePoolPollRequest struct {
+	request    *NodePoolGetRequest
 	interval   time.Duration
 	statuses   []int
 	predicates []func(interface{}) bool
 }
 
 // Parameter adds a query parameter to all the requests that will be used to retrieve the object.
-func (r *ClusterPollRequest) Parameter(name string, value interface{}) *ClusterPollRequest {
+func (r *NodePoolPollRequest) Parameter(name string, value interface{}) *NodePoolPollRequest {
 	r.request.Parameter(name, value)
 	return r
 }
 
 // Header adds a request header to all the requests that will be used to retrieve the object.
-func (r *ClusterPollRequest) Header(name string, value interface{}) *ClusterPollRequest {
+func (r *NodePoolPollRequest) Header(name string, value interface{}) *NodePoolPollRequest {
 	r.request.Header(name, value)
 	return r
 }
 
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
-func (r *ClusterPollRequest) Interval(value time.Duration) *ClusterPollRequest {
+func (r *NodePoolPollRequest) Interval(value time.Duration) *NodePoolPollRequest {
 	r.interval = value
 	return r
 }
 
 // Status set the expected status of the response. Multiple values can be set calling this method
 // multiple times. The response will be considered successful if the status is any of those values.
-func (r *ClusterPollRequest) Status(value int) *ClusterPollRequest {
+func (r *NodePoolPollRequest) Status(value int) *NodePoolPollRequest {
 	r.statuses = append(r.statuses, value)
 	return r
 }
@@ -125,9 +116,9 @@ func (r *ClusterPollRequest) Status(value int) *ClusterPollRequest {
 // Predicate adds a predicate that the response should satisfy be considered successful. Multiple
 // predicates can be set calling this method multiple times. The response will be considered successful
 // if all the predicates are satisfied.
-func (r *ClusterPollRequest) Predicate(value func(*ClusterGetResponse) bool) *ClusterPollRequest {
+func (r *NodePoolPollRequest) Predicate(value func(*NodePoolGetResponse) bool) *NodePoolPollRequest {
 	r.predicates = append(r.predicates, func(response interface{}) bool {
-		return value(response.(*ClusterGetResponse))
+		return value(response.(*NodePoolGetResponse))
 	})
 	return r
 }
@@ -137,11 +128,11 @@ func (r *ClusterPollRequest) Predicate(value func(*ClusterGetResponse) bool) *Cl
 // method return nil.
 //
 // The context must have a timeout or deadline, otherwise this method will immediately return an error.
-func (r *ClusterPollRequest) StartContext(ctx context.Context) (response *ClusterPollResponse, err error) {
+func (r *NodePoolPollRequest) StartContext(ctx context.Context) (response *NodePoolPollResponse, err error) {
 	result, err := helpers.PollContext(ctx, r.interval, r.statuses, r.predicates, r.task)
 	if result != nil {
-		response = &ClusterPollResponse{
-			response: result.(*ClusterGetResponse),
+		response = &NodePoolPollResponse{
+			response: result.(*NodePoolGetResponse),
 		}
 	}
 	return
@@ -149,7 +140,7 @@ func (r *ClusterPollRequest) StartContext(ctx context.Context) (response *Cluste
 
 // task adapts the types of the request/response types so that they can be used with the generic
 // polling function from the helpers package.
-func (r *ClusterPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
+func (r *NodePoolPollRequest) task(ctx context.Context) (status int, result interface{}, err error) {
 	response, err := r.request.SendContext(ctx)
 	if response != nil {
 		status = response.Status()
@@ -158,13 +149,13 @@ func (r *ClusterPollRequest) task(ctx context.Context) (status int, result inter
 	return
 }
 
-// ClusterPollResponse is the response for the Poll method.
-type ClusterPollResponse struct {
-	response *ClusterGetResponse
+// NodePoolPollResponse is the response for the Poll method.
+type NodePoolPollResponse struct {
+	response *NodePoolGetResponse
 }
 
 // Status returns the response status code.
-func (r *ClusterPollResponse) Status() int {
+func (r *NodePoolPollResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -172,7 +163,7 @@ func (r *ClusterPollResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterPollResponse) Header() http.Header {
+func (r *NodePoolPollResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -180,7 +171,7 @@ func (r *ClusterPollResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterPollResponse) Error() *errors.Error {
+func (r *NodePoolPollResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -188,66 +179,48 @@ func (r *ClusterPollResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-func (r *ClusterPollResponse) Body() *Cluster {
+func (r *NodePoolPollResponse) Body() *NodePool {
 	return r.response.Body()
 }
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-func (r *ClusterPollResponse) GetBody() (value *Cluster, ok bool) {
+func (r *NodePoolPollResponse) GetBody() (value *NodePool, ok bool) {
 	return r.response.GetBody()
 }
 
 // Poll creates a request to repeatedly retrieve the object till the response has one of a given set
 // of states and satisfies a set of predicates.
-func (c *ClusterClient) Poll() *ClusterPollRequest {
-	return &ClusterPollRequest{
+func (c *NodePoolClient) Poll() *NodePoolPollRequest {
+	return &NodePoolPollRequest{
 		request: c.Get(),
 	}
 }
 
-// ClusterDeleteRequest is the request for the 'delete' method.
-type ClusterDeleteRequest struct {
-	transport  http.RoundTripper
-	path       string
-	query      url.Values
-	header     http.Header
-	bestEffort *bool
-	dryRun     *bool
+// NodePoolDeleteRequest is the request for the 'delete' method.
+type NodePoolDeleteRequest struct {
+	transport http.RoundTripper
+	path      string
+	query     url.Values
+	header    http.Header
 }
 
 // Parameter adds a query parameter.
-func (r *ClusterDeleteRequest) Parameter(name string, value interface{}) *ClusterDeleteRequest {
+func (r *NodePoolDeleteRequest) Parameter(name string, value interface{}) *NodePoolDeleteRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ClusterDeleteRequest) Header(name string, value interface{}) *ClusterDeleteRequest {
+func (r *NodePoolDeleteRequest) Header(name string, value interface{}) *NodePoolDeleteRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *ClusterDeleteRequest) Impersonate(user string) *ClusterDeleteRequest {
+func (r *NodePoolDeleteRequest) Impersonate(user string) *NodePoolDeleteRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
-	return r
-}
-
-// BestEffort sets the value of the 'best_effort' parameter.
-//
-// BestEffort flag is used to check if the cluster deletion should be best-effort mode or not.
-func (r *ClusterDeleteRequest) BestEffort(value bool) *ClusterDeleteRequest {
-	r.bestEffort = &value
-	return r
-}
-
-// DryRun sets the value of the 'dry_run' parameter.
-//
-// Dry run flag is used to check if the operation can be completed, but won't delete.
-func (r *ClusterDeleteRequest) DryRun(value bool) *ClusterDeleteRequest {
-	r.dryRun = &value
 	return r
 }
 
@@ -255,19 +228,13 @@ func (r *ClusterDeleteRequest) DryRun(value bool) *ClusterDeleteRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ClusterDeleteRequest) Send() (result *ClusterDeleteResponse, err error) {
+func (r *NodePoolDeleteRequest) Send() (result *NodePoolDeleteResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *ClusterDeleteResponse, err error) {
+func (r *NodePoolDeleteRequest) SendContext(ctx context.Context) (result *NodePoolDeleteResponse, err error) {
 	query := helpers.CopyQuery(r.query)
-	if r.bestEffort != nil {
-		helpers.AddValue(&query, "best_effort", *r.bestEffort)
-	}
-	if r.dryRun != nil {
-		helpers.AddValue(&query, "dry_run", *r.dryRun)
-	}
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,
@@ -286,7 +253,7 @@ func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *Cluster
 		return
 	}
 	defer response.Body.Close()
-	result = &ClusterDeleteResponse{}
+	result = &NodePoolDeleteResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -306,15 +273,15 @@ func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *Cluster
 	return
 }
 
-// ClusterDeleteResponse is the response for the 'delete' method.
-type ClusterDeleteResponse struct {
+// NodePoolDeleteResponse is the response for the 'delete' method.
+type NodePoolDeleteResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
 }
 
 // Status returns the response status code.
-func (r *ClusterDeleteResponse) Status() int {
+func (r *NodePoolDeleteResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -322,7 +289,7 @@ func (r *ClusterDeleteResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterDeleteResponse) Header() http.Header {
+func (r *NodePoolDeleteResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -330,15 +297,15 @@ func (r *ClusterDeleteResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterDeleteResponse) Error() *errors.Error {
+func (r *NodePoolDeleteResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
 	return r.err
 }
 
-// ClusterGetRequest is the request for the 'get' method.
-type ClusterGetRequest struct {
+// NodePoolGetRequest is the request for the 'get' method.
+type NodePoolGetRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
@@ -346,20 +313,20 @@ type ClusterGetRequest struct {
 }
 
 // Parameter adds a query parameter.
-func (r *ClusterGetRequest) Parameter(name string, value interface{}) *ClusterGetRequest {
+func (r *NodePoolGetRequest) Parameter(name string, value interface{}) *NodePoolGetRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ClusterGetRequest) Header(name string, value interface{}) *ClusterGetRequest {
+func (r *NodePoolGetRequest) Header(name string, value interface{}) *NodePoolGetRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *ClusterGetRequest) Impersonate(user string) *ClusterGetRequest {
+func (r *NodePoolGetRequest) Impersonate(user string) *NodePoolGetRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
@@ -368,12 +335,12 @@ func (r *ClusterGetRequest) Impersonate(user string) *ClusterGetRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ClusterGetRequest) Send() (result *ClusterGetResponse, err error) {
+func (r *NodePoolGetRequest) Send() (result *NodePoolGetResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGetResponse, err error) {
+func (r *NodePoolGetRequest) SendContext(ctx context.Context) (result *NodePoolGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
@@ -393,7 +360,7 @@ func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGet
 		return
 	}
 	defer response.Body.Close()
-	result = &ClusterGetResponse{}
+	result = &NodePoolGetResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -410,23 +377,23 @@ func (r *ClusterGetRequest) SendContext(ctx context.Context) (result *ClusterGet
 		err = result.err
 		return
 	}
-	err = readClusterGetResponse(result, reader)
+	err = readNodePoolGetResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// ClusterGetResponse is the response for the 'get' method.
-type ClusterGetResponse struct {
+// NodePoolGetResponse is the response for the 'get' method.
+type NodePoolGetResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Cluster
+	body   *NodePool
 }
 
 // Status returns the response status code.
-func (r *ClusterGetResponse) Status() int {
+func (r *NodePoolGetResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -434,7 +401,7 @@ func (r *ClusterGetResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterGetResponse) Header() http.Header {
+func (r *NodePoolGetResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -442,7 +409,7 @@ func (r *ClusterGetResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterGetResponse) Error() *errors.Error {
+func (r *NodePoolGetResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -450,7 +417,7 @@ func (r *ClusterGetResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-func (r *ClusterGetResponse) Body() *Cluster {
+func (r *NodePoolGetResponse) Body() *NodePool {
 	if r == nil {
 		return nil
 	}
@@ -459,7 +426,7 @@ func (r *ClusterGetResponse) Body() *Cluster {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-func (r *ClusterGetResponse) GetBody() (value *Cluster, ok bool) {
+func (r *NodePoolGetResponse) GetBody() (value *NodePool, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
@@ -467,36 +434,36 @@ func (r *ClusterGetResponse) GetBody() (value *Cluster, ok bool) {
 	return
 }
 
-// ClusterUpdateRequest is the request for the 'update' method.
-type ClusterUpdateRequest struct {
+// NodePoolUpdateRequest is the request for the 'update' method.
+type NodePoolUpdateRequest struct {
 	transport http.RoundTripper
 	path      string
 	query     url.Values
 	header    http.Header
-	body      *Cluster
+	body      *NodePool
 }
 
 // Parameter adds a query parameter.
-func (r *ClusterUpdateRequest) Parameter(name string, value interface{}) *ClusterUpdateRequest {
+func (r *NodePoolUpdateRequest) Parameter(name string, value interface{}) *NodePoolUpdateRequest {
 	helpers.AddValue(&r.query, name, value)
 	return r
 }
 
 // Header adds a request header.
-func (r *ClusterUpdateRequest) Header(name string, value interface{}) *ClusterUpdateRequest {
+func (r *NodePoolUpdateRequest) Header(name string, value interface{}) *NodePoolUpdateRequest {
 	helpers.AddHeader(&r.header, name, value)
 	return r
 }
 
 // Impersonate wraps requests on behalf of another user.
 // Note: Services that do not support this feature may silently ignore this call.
-func (r *ClusterUpdateRequest) Impersonate(user string) *ClusterUpdateRequest {
+func (r *NodePoolUpdateRequest) Impersonate(user string) *NodePoolUpdateRequest {
 	helpers.AddImpersonationHeader(&r.header, user)
 	return r
 }
 
 // Body sets the value of the 'body' parameter.
-func (r *ClusterUpdateRequest) Body(value *Cluster) *ClusterUpdateRequest {
+func (r *NodePoolUpdateRequest) Body(value *NodePool) *NodePoolUpdateRequest {
 	r.body = value
 	return r
 }
@@ -505,16 +472,16 @@ func (r *ClusterUpdateRequest) Body(value *Cluster) *ClusterUpdateRequest {
 //
 // This is a potentially lengthy operation, as it requires network communication.
 // Consider using a context and the SendContext method.
-func (r *ClusterUpdateRequest) Send() (result *ClusterUpdateResponse, err error) {
+func (r *NodePoolUpdateRequest) Send() (result *NodePoolUpdateResponse, err error) {
 	return r.SendContext(context.Background())
 }
 
 // SendContext sends this request, waits for the response, and returns it.
-func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *ClusterUpdateResponse, err error) {
+func (r *NodePoolUpdateRequest) SendContext(ctx context.Context) (result *NodePoolUpdateResponse, err error) {
 	query := helpers.CopyQuery(r.query)
 	header := helpers.CopyHeader(r.header)
 	buffer := &bytes.Buffer{}
-	err = writeClusterUpdateRequest(r, buffer)
+	err = writeNodePoolUpdateRequest(r, buffer)
 	if err != nil {
 		return
 	}
@@ -536,7 +503,7 @@ func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *Cluster
 		return
 	}
 	defer response.Body.Close()
-	result = &ClusterUpdateResponse{}
+	result = &NodePoolUpdateResponse{}
 	result.status = response.StatusCode
 	result.header = response.Header
 	reader := bufio.NewReader(response.Body)
@@ -553,23 +520,23 @@ func (r *ClusterUpdateRequest) SendContext(ctx context.Context) (result *Cluster
 		err = result.err
 		return
 	}
-	err = readClusterUpdateResponse(result, reader)
+	err = readNodePoolUpdateResponse(result, reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// ClusterUpdateResponse is the response for the 'update' method.
-type ClusterUpdateResponse struct {
+// NodePoolUpdateResponse is the response for the 'update' method.
+type NodePoolUpdateResponse struct {
 	status int
 	header http.Header
 	err    *errors.Error
-	body   *Cluster
+	body   *NodePool
 }
 
 // Status returns the response status code.
-func (r *ClusterUpdateResponse) Status() int {
+func (r *NodePoolUpdateResponse) Status() int {
 	if r == nil {
 		return 0
 	}
@@ -577,7 +544,7 @@ func (r *ClusterUpdateResponse) Status() int {
 }
 
 // Header returns header of the response.
-func (r *ClusterUpdateResponse) Header() http.Header {
+func (r *NodePoolUpdateResponse) Header() http.Header {
 	if r == nil {
 		return nil
 	}
@@ -585,7 +552,7 @@ func (r *ClusterUpdateResponse) Header() http.Header {
 }
 
 // Error returns the response error.
-func (r *ClusterUpdateResponse) Error() *errors.Error {
+func (r *NodePoolUpdateResponse) Error() *errors.Error {
 	if r == nil {
 		return nil
 	}
@@ -593,7 +560,7 @@ func (r *ClusterUpdateResponse) Error() *errors.Error {
 }
 
 // Body returns the value of the 'body' parameter.
-func (r *ClusterUpdateResponse) Body() *Cluster {
+func (r *NodePoolUpdateResponse) Body() *NodePool {
 	if r == nil {
 		return nil
 	}
@@ -602,7 +569,7 @@ func (r *ClusterUpdateResponse) Body() *Cluster {
 
 // GetBody returns the value of the 'body' parameter and
 // a flag indicating if the parameter has a value.
-func (r *ClusterUpdateResponse) GetBody() (value *Cluster, ok bool) {
+func (r *NodePoolUpdateResponse) GetBody() (value *NodePool, ok bool) {
 	ok = r != nil && r.body != nil
 	if ok {
 		value = r.body
