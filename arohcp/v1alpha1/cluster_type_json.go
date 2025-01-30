@@ -502,7 +502,7 @@ func WriteCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteObjectField("node_pools")
 		stream.WriteObjectStart()
 		stream.WriteObjectField("items")
-		v1.WriteNodePoolList(object.nodePools.Items(), stream)
+		WriteNodePoolList(object.nodePools.Items(), stream)
 		stream.WriteObjectEnd()
 		count++
 	}
@@ -987,7 +987,7 @@ func ReadCluster(iterator *jsoniter.Iterator) *Cluster {
 			object.nodeDrainGracePeriod = value
 			object.bitmap_ |= 140737488355328
 		case "node_pools":
-			value := &v1.NodePoolList{}
+			value := &NodePoolList{}
 			for {
 				field := iterator.ReadObject()
 				if field == "" {
@@ -996,11 +996,11 @@ func ReadCluster(iterator *jsoniter.Iterator) *Cluster {
 				switch field {
 				case "kind":
 					text := iterator.ReadString()
-					value.SetLink(text == v1.NodePoolListLinkKind)
+					value.SetLink(text == NodePoolListLinkKind)
 				case "href":
 					value.SetHREF(iterator.ReadString())
 				case "items":
-					value.SetItems(v1.ReadNodePoolList(iterator))
+					value.SetItems(ReadNodePoolList(iterator))
 				default:
 					iterator.ReadAny()
 				}
