@@ -29,6 +29,12 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+type contextKey string
+
+const (
+	leadershipFlag contextKey = "leadership-flag"
+)
+
 // FlagBuilder contains the data and logic needed to build leadership flags.
 type FlagBuilder struct {
 	// Basic fields:
@@ -61,6 +67,7 @@ type Flag struct {
 	value         int32
 	timer         *time.Timer
 	stop          chan struct{}
+	ctx           context.Context
 
 	// Fields used for metrics:
 	stateMetric *prometheus.GaugeVec
@@ -248,6 +255,7 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 		timer:         timer,
 		stop:          stop,
 		stateMetric:   stateMetric,
+		ctx:           ctx,
 	}
 
 	// Run the loop:
@@ -304,7 +312,8 @@ func (f *Flag) check() {
 	var err error
 
 	// Create a context:
-	ctx := context.Background()
+	// whilst respecting parent context values
+	ctx := context.WithValue(f.ctx, leadershipFlag, "")
 
 	// Get the global time from the database, so that we don't depend on synchronization of the
 	// machines that compete for the flag.
