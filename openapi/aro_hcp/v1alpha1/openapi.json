@@ -295,6 +295,42 @@
           }
         }
       }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/status": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
