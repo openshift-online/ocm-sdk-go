@@ -18348,15 +18348,15 @@
       "SdnToOvnClusterMigration": {
         "description": "Details for `SdnToOvn` cluster migrations.",
         "properties": {
-          "join_ipv_4": {
+          "join_ipv4": {
             "description": "The IP address range to use for the internalJoinSubnet parameter of OVN-Kubernetes\nupon migration.",
             "type": "string"
           },
-          "masquerade_ipv_4": {
+          "masquerade_ipv4": {
             "description": "The IP address range to us for the internalMasqueradeSubnet parameter of OVN-Kubernetes\nupon migration.",
             "type": "string"
           },
-          "transit_ipv_4": {
+          "transit_ipv4": {
             "description": "The IP address range to use for the internalTransSwitchSubnet parameter of OVN-Kubernetes\nupon migration.",
             "type": "string"
           }
