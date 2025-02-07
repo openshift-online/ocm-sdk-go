@@ -371,6 +371,10 @@ var _ = Describe("Metrics", func() {
 				"/api/service_logs/v1/accounts/123",
 				"ocm-logs-service",
 			),
+			Entry(
+				"Future service not in existing service list",
+				"/api/future_mgmt/v1/",
+				"ocm-future_mgmt"),
 		)
 	})
 
