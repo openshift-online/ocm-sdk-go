@@ -42,7 +42,6 @@ type VersionGate struct {
 	bitmap_            uint32
 	id                 string
 	href               string
-	clusterCondition   string
 	creationTimestamp  time.Time
 	description        string
 	documentationURL   string
@@ -113,8 +112,7 @@ func (o *VersionGate) Empty() bool {
 // STSOnly returns the value of the 'STS_only' attribute, or
 // the zero value of the type if the attribute doesn't have a value.
 //
-// STSOnly indicates if this version gate is for STS clusters only,
-// deprecated: to be replaced with ClusterCondition
+// STSOnly indicates if this version gate is for STS clusters only
 func (o *VersionGate) STSOnly() bool {
 	if o != nil && o.bitmap_&8 != 0 {
 		return o.stsOnly
@@ -125,37 +123,11 @@ func (o *VersionGate) STSOnly() bool {
 // GetSTSOnly returns the value of the 'STS_only' attribute and
 // a flag indicating if the attribute has a value.
 //
-// STSOnly indicates if this version gate is for STS clusters only,
-// deprecated: to be replaced with ClusterCondition
+// STSOnly indicates if this version gate is for STS clusters only
 func (o *VersionGate) GetSTSOnly() (value bool, ok bool) {
 	ok = o != nil && o.bitmap_&8 != 0
 	if ok {
 		value = o.stsOnly
-	}
-	return
-}
-
-// ClusterCondition returns the value of the 'cluster_condition' attribute, or
-// the zero value of the type if the attribute doesn't have a value.
-//
-// ClusterCondition aims at selecting the clusters targeted by this version gate,
-// ignored if STSOnly is true
-func (o *VersionGate) ClusterCondition() string {
-	if o != nil && o.bitmap_&16 != 0 {
-		return o.clusterCondition
-	}
-	return ""
-}
-
-// GetClusterCondition returns the value of the 'cluster_condition' attribute and
-// a flag indicating if the attribute has a value.
-//
-// ClusterCondition aims at selecting the clusters targeted by this version gate,
-// ignored if STSOnly is true
-func (o *VersionGate) GetClusterCondition() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&16 != 0
-	if ok {
-		value = o.clusterCondition
 	}
 	return
 }
@@ -166,7 +138,7 @@ func (o *VersionGate) GetClusterCondition() (value string, ok bool) {
 // CreationTimestamp is the date and time when the version gate was created,
 // format defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].
 func (o *VersionGate) CreationTimestamp() time.Time {
-	if o != nil && o.bitmap_&32 != 0 {
+	if o != nil && o.bitmap_&16 != 0 {
 		return o.creationTimestamp
 	}
 	return time.Time{}
@@ -178,7 +150,7 @@ func (o *VersionGate) CreationTimestamp() time.Time {
 // CreationTimestamp is the date and time when the version gate was created,
 // format defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].
 func (o *VersionGate) GetCreationTimestamp() (value time.Time, ok bool) {
-	ok = o != nil && o.bitmap_&32 != 0
+	ok = o != nil && o.bitmap_&16 != 0
 	if ok {
 		value = o.creationTimestamp
 	}
@@ -190,7 +162,7 @@ func (o *VersionGate) GetCreationTimestamp() (value time.Time, ok bool) {
 //
 // Description of the version gate.
 func (o *VersionGate) Description() string {
-	if o != nil && o.bitmap_&64 != 0 {
+	if o != nil && o.bitmap_&32 != 0 {
 		return o.description
 	}
 	return ""
@@ -201,7 +173,7 @@ func (o *VersionGate) Description() string {
 //
 // Description of the version gate.
 func (o *VersionGate) GetDescription() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&64 != 0
+	ok = o != nil && o.bitmap_&32 != 0
 	if ok {
 		value = o.description
 	}
@@ -213,7 +185,7 @@ func (o *VersionGate) GetDescription() (value string, ok bool) {
 //
 // DocumentationURL is the URL for the documentation of the version gate.
 func (o *VersionGate) DocumentationURL() string {
-	if o != nil && o.bitmap_&128 != 0 {
+	if o != nil && o.bitmap_&64 != 0 {
 		return o.documentationURL
 	}
 	return ""
@@ -224,7 +196,7 @@ func (o *VersionGate) DocumentationURL() string {
 //
 // DocumentationURL is the URL for the documentation of the version gate.
 func (o *VersionGate) GetDocumentationURL() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&128 != 0
+	ok = o != nil && o.bitmap_&64 != 0
 	if ok {
 		value = o.documentationURL
 	}
@@ -236,7 +208,7 @@ func (o *VersionGate) GetDocumentationURL() (value string, ok bool) {
 //
 // Label representing the version gate in OpenShift.
 func (o *VersionGate) Label() string {
-	if o != nil && o.bitmap_&256 != 0 {
+	if o != nil && o.bitmap_&128 != 0 {
 		return o.label
 	}
 	return ""
@@ -247,7 +219,7 @@ func (o *VersionGate) Label() string {
 //
 // Label representing the version gate in OpenShift.
 func (o *VersionGate) GetLabel() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&256 != 0
+	ok = o != nil && o.bitmap_&128 != 0
 	if ok {
 		value = o.label
 	}
@@ -259,7 +231,7 @@ func (o *VersionGate) GetLabel() (value string, ok bool) {
 //
 // Value represents the required value of the label.
 func (o *VersionGate) Value() string {
-	if o != nil && o.bitmap_&512 != 0 {
+	if o != nil && o.bitmap_&256 != 0 {
 		return o.value
 	}
 	return ""
@@ -270,7 +242,7 @@ func (o *VersionGate) Value() string {
 //
 // Value represents the required value of the label.
 func (o *VersionGate) GetValue() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&512 != 0
+	ok = o != nil && o.bitmap_&256 != 0
 	if ok {
 		value = o.value
 	}
@@ -282,7 +254,7 @@ func (o *VersionGate) GetValue() (value string, ok bool) {
 //
 // VersionRawIDPrefix represents the versions prefix that the gate applies to.
 func (o *VersionGate) VersionRawIDPrefix() string {
-	if o != nil && o.bitmap_&1024 != 0 {
+	if o != nil && o.bitmap_&512 != 0 {
 		return o.versionRawIDPrefix
 	}
 	return ""
@@ -293,7 +265,7 @@ func (o *VersionGate) VersionRawIDPrefix() string {
 //
 // VersionRawIDPrefix represents the versions prefix that the gate applies to.
 func (o *VersionGate) GetVersionRawIDPrefix() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&1024 != 0
+	ok = o != nil && o.bitmap_&512 != 0
 	if ok {
 		value = o.versionRawIDPrefix
 	}
@@ -305,7 +277,7 @@ func (o *VersionGate) GetVersionRawIDPrefix() (value string, ok bool) {
 //
 // WarningMessage is a warning that will be displayed to the user before they acknowledge the gate
 func (o *VersionGate) WarningMessage() string {
-	if o != nil && o.bitmap_&2048 != 0 {
+	if o != nil && o.bitmap_&1024 != 0 {
 		return o.warningMessage
 	}
 	return ""
@@ -316,7 +288,7 @@ func (o *VersionGate) WarningMessage() string {
 //
 // WarningMessage is a warning that will be displayed to the user before they acknowledge the gate
 func (o *VersionGate) GetWarningMessage() (value string, ok bool) {
-	ok = o != nil && o.bitmap_&2048 != 0
+	ok = o != nil && o.bitmap_&1024 != 0
 	if ok {
 		value = o.warningMessage
 	}
