@@ -15426,6 +15426,10 @@
             "description": "Contains information about BYO OIDC.",
             "$ref": "#/components/schemas/ByoOidc"
           },
+          "capabilities": {
+            "description": "Cluster capabilities configuration",
+            "$ref": "#/components/schemas/ClusterCapabilitiesSpec"
+          },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.",
             "$ref": "#/components/schemas/CloudProvider"
@@ -15709,6 +15713,17 @@
           "skip_nodes_with_local_storage": {
             "description": "Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.",
             "type": "boolean"
+          }
+        }
+      },
+      "ClusterCapabilitiesSpec": {
+        "properties": {
+          "disabled": {
+            "description": "Disabled capabilities",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionalClusterCapability"
+            }
           }
         }
       },
@@ -17865,6 +17880,13 @@
           }
         }
       },
+      "OptionalClusterCapability": {
+        "description": "Optional cluster capabilities that can be disabled.",
+        "type": "string",
+        "enum": [
+          "ImageRegistry"
+        ]
+      },
       "OrganizationLink": {
         "description": "Definition of an organization link.",
         "properties": {
@@ -18348,15 +18370,15 @@
       "SdnToOvnClusterMigration": {
         "description": "Details for `SdnToOvn` cluster migrations.",
         "properties": {
-          "join_ipv_4": {
+          "join_ipv4": {
             "description": "The IP address range to use for the internalJoinSubnet parameter of OVN-Kubernetes\nupon migration.",
             "type": "string"
           },
-          "masquerade_ipv_4": {
+          "masquerade_ipv4": {
             "description": "The IP address range to us for the internalMasqueradeSubnet parameter of OVN-Kubernetes\nupon migration.",
             "type": "string"
           },
-          "transit_ipv_4": {
+          "transit_ipv4": {
             "description": "The IP address range to use for the internalTransSwitchSubnet parameter of OVN-Kubernetes\nupon migration.",
             "type": "string"
           }
