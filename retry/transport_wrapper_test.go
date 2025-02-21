@@ -704,6 +704,63 @@ var _ = It("Tolerates connection reset by peer", func() {
 	Expect(body).To(MatchJSON("{}"))
 })
 
+var _ = It("Puts do NOT tolerate connection reset by peer", func() {
+	var err error
+
+	// Create a context:
+	ctx := context.Background()
+
+	// Create a listener:
+	listener, address := Listen()
+	defer func() {
+		err = listener.Close()
+		Expect(err).ToNot(HaveOccurred())
+	}()
+
+	// Run the server:
+	go func() {
+		defer GinkgoRecover()
+
+		// Accept the first connection and close it inmediately. This will trigger
+		// the `connection reset by peer` error in the client.
+		first := Accept(listener)
+		Serve(first, func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, err := w.Write([]byte("{"))
+			Expect(err).ToNot(HaveOccurred())
+			err = first.Close()
+			Expect(err).ToNot(HaveOccurred())
+		})
+	}()
+
+	// Wrap the transport:
+	wrapper, err := NewTransportWrapper().
+		Logger(logger).
+		Interval(100 * time.Millisecond).
+		Jitter(0).
+		Build(ctx)
+	Expect(err).ToNot(HaveOccurred())
+	defer func() {
+		err = wrapper.Close()
+		Expect(err).ToNot(HaveOccurred())
+	}()
+	client := &http.Client{
+		Transport: wrapper.Wrap(&http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+			ForceAttemptHTTP2: true,
+		}),
+		Timeout: 10 * time.Second,
+	}
+
+	// Send the request:
+	response, err := client.Post(address, "", nil)
+	Expect(err).To(HaveOccurred())
+	Expect(response).To(BeNil())
+})
+
 var _ = It("Doesn't change request body object", func() {
 	var err error
 
