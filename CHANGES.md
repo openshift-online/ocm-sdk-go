@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.460
+- Updated model version to v0.0.412
+  - Added `ClusterCondition` field to `VersionGate` type
+
 ## 0.1.459
 - Update model version to v0.0.411
   - Update json values for SDN to OVN Cluster Migration configuration properties
