@@ -18923,8 +18923,12 @@
             "type": "string"
           },
           "sts_only": {
-            "description": "STSOnly indicates if this version gate is for STS clusters only",
+            "description": "STSOnly indicates if this version gate is for STS clusters only,\ndeprecated: to be replaced with ClusterCondition",
             "type": "boolean"
+          },
+          "cluster_condition": {
+            "description": "ClusterCondition aims at selecting the clusters targeted by this version gate,\nignored if STSOnly is true",
+            "type": "string"
           },
           "creation_timestamp": {
             "description": "CreationTimestamp is the date and time when the version gate was created,\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].",
