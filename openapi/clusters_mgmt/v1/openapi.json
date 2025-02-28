@@ -14894,6 +14894,10 @@
       "Azure": {
         "description": "Microsoft Azure settings of a cluster.",
         "properties": {
+          "cluster_capabilities": {
+            "description": "Configure the optional components of the cluster.\nImmutable.",
+            "$ref": "#/components/schemas/AzureClusterCapabilities"
+          },
           "managed_resource_group_name": {
             "description": "The desired name of the Azure Resource Group where the Azure Resources related\nto the cluster are created. It must not previously exist. The Azure Resource\nGroup is created with the given value, within the Azure Subscription\n`subscription_id` of the cluster.\n`managed_resource_group_name` cannot be equal to the value of `managed_resource_group`.\n`managed_resource_group_name` is located in the same Azure location as the\ncluster's region.\nNot to be confused with `resource_group_name`, which is the Azure Resource Group Name\nwhere the own Azure Resource associated to the cluster resides.\nRequired during creation.\nImmutable.",
             "type": "string"
@@ -14929,6 +14933,17 @@
           "tenant_id": {
             "description": "The Microsoft Entra Tenant ID where the cluster belongs.\nRequired during creation.\nImmutable.",
             "type": "string"
+          }
+        }
+      },
+      "AzureClusterCapabilities": {
+        "properties": {
+          "disabled": {
+            "description": "Disabled capabilities",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AzureOptionalClusterCapability"
+            }
           }
         }
       },
@@ -15028,6 +15043,13 @@
             "$ref": "#/components/schemas/AzureServiceManagedIdentity"
           }
         }
+      },
+      "AzureOptionalClusterCapability": {
+        "description": "Optional cluster capabilities that can be disabled.",
+        "type": "string",
+        "enum": [
+          "ImageRegistry"
+        ]
       },
       "AzureServiceManagedIdentity": {
         "description": "Represents the information associated to an Azure User-Assigned\nManaged Identity whose purpose is to perform service level actions.",
