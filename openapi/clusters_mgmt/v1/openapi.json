@@ -15426,6 +15426,10 @@
             "description": "Contains information about BYO OIDC.",
             "$ref": "#/components/schemas/ByoOidc"
           },
+          "capabilities": {
+            "description": "Disabled capabilities",
+            "$ref": "#/components/schemas/ClusterCapabilitiesConfig"
+          },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.",
             "$ref": "#/components/schemas/CloudProvider"
@@ -15709,6 +15713,17 @@
           "skip_nodes_with_local_storage": {
             "description": "Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.",
             "type": "boolean"
+          }
+        }
+      },
+      "ClusterCapabilitiesConfig": {
+        "properties": {
+          "disabled": {
+            "description": "Disabled capabilities",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionalClusterCapability"
+            }
           }
         }
       },
@@ -17865,6 +17880,13 @@
           }
         }
       },
+      "OptionalClusterCapability": {
+        "description": "Optional cluster capabilities that can be disabled.",
+        "type": "string",
+        "enum": [
+          "ImageRegistry"
+        ]
+      },
       "OrganizationLink": {
         "description": "Definition of an organization link.",
         "properties": {
@@ -18923,12 +18945,8 @@
             "type": "string"
           },
           "sts_only": {
-            "description": "STSOnly indicates if this version gate is for STS clusters only,\ndeprecated: to be replaced with ClusterCondition",
+            "description": "STSOnly indicates if this version gate is for STS clusters only",
             "type": "boolean"
-          },
-          "cluster_condition": {
-            "description": "ClusterCondition aims at selecting the clusters targeted by this version gate,\nignored if STSOnly is true",
-            "type": "string"
           },
           "creation_timestamp": {
             "description": "CreationTimestamp is the date and time when the version gate was created,\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].",
