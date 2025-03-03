@@ -108,7 +108,7 @@ model:
 METAMODEL=$(LOCAL_BIN_PATH)/metamodel
 metamodel-install:
 	#GOBIN=$(LOCAL_BIN_PATH) go install github.com/openshift-online/ocm-api-metamodel/cmd/metamodel@$(metamodel_version)
-	cp /home/deads/workspaces/ocm-api-model/src/github.com/openshift-online/ocm-api-model $METAMODEL
+	cp /home/deads/workspaces/ocm-api-model/src/github.com/openshift-online/ocm-api-model/metamodel $(METAMODEL)
 
 .PHONY: goimports
 goimports-install:
