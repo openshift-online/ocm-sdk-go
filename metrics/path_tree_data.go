@@ -155,6 +155,9 @@ var pathTreeData = `{
       "v1alpha1": {
         "clusters": {
           "-": {
+            "inflight_checks": {
+              "-": null
+            },
             "status": null
           }
         }

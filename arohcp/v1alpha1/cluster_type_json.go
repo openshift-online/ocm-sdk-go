@@ -376,7 +376,7 @@ func WriteCluster(object *Cluster, stream *jsoniter.Stream) {
 		stream.WriteObjectField("inflight_checks")
 		stream.WriteObjectStart()
 		stream.WriteObjectField("items")
-		v1.WriteInflightCheckList(object.inflightChecks.Items(), stream)
+		WriteInflightCheckList(object.inflightChecks.Items(), stream)
 		stream.WriteObjectEnd()
 		count++
 	}
@@ -884,7 +884,7 @@ func ReadCluster(iterator *jsoniter.Iterator) *Cluster {
 			object.identityProviders = value
 			object.bitmap_ |= 17179869184
 		case "inflight_checks":
-			value := &v1.InflightCheckList{}
+			value := &InflightCheckList{}
 			for {
 				field := iterator.ReadObject()
 				if field == "" {
@@ -893,11 +893,11 @@ func ReadCluster(iterator *jsoniter.Iterator) *Cluster {
 				switch field {
 				case "kind":
 					text := iterator.ReadString()
-					value.SetLink(text == v1.InflightCheckListLinkKind)
+					value.SetLink(text == InflightCheckListLinkKind)
 				case "href":
 					value.SetHREF(iterator.ReadString())
 				case "items":
-					value.SetItems(v1.ReadInflightCheckList(iterator))
+					value.SetItems(ReadInflightCheckList(iterator))
 				default:
 					iterator.ReadAny()
 				}

@@ -296,6 +296,130 @@
         }
       }
     },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/inflight_checks": {
+      "get": {
+        "description": "Retrieves the list of inflight checks.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of inflight checks.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/InflightCheck"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/inflight_checks/{inflight_check_id}": {
+      "get": {
+        "description": "Retrieves the details of the inflight check.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "inflight_check_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InflightCheck"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/status": {
       "get": {
         "parameters": [
@@ -1541,6 +1665,60 @@
             "type": "boolean"
           }
         }
+      },
+      "InflightCheck": {
+        "description": "Representation of check running before the cluster is provisioned.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'InflightCheck' if this is a complete object or 'InflightCheckLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details regarding the state of the inflight check.",
+            "type": "object"
+          },
+          "ended_at": {
+            "description": "The time the check finished running.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "description": "The name of the inflight check.",
+            "type": "string"
+          },
+          "restarts": {
+            "description": "The number of times the inflight check restarted.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "started_at": {
+            "description": "The time the check started running.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "description": "State of the inflight check.",
+            "$ref": "#/components/schemas/InflightCheckState"
+          }
+        }
+      },
+      "InflightCheckState": {
+        "description": "State of an inflight check.",
+        "type": "string",
+        "enum": [
+          "failed",
+          "passed",
+          "pending",
+          "running"
+        ]
       },
       "InstanceIAMRoles": {
         "description": "Contains the necessary attributes to support role-based authentication on AWS.",

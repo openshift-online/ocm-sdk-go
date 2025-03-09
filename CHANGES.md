@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.461
+- Updated model version to v0.0.413
+  - Add the new inflight check endpoints
+- Updated meta model version to v0.0.66
+
 ## 0.1.460
 - Updated model version to v0.0.412
   - Added `ClusterCondition` field to `VersionGate` type
