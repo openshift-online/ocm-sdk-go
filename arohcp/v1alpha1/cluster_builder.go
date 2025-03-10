@@ -99,7 +99,7 @@ type ClusterBuilder struct {
 	htpasswd                          *HTPasswdIdentityProviderBuilder
 	hypershift                        *HypershiftBuilder
 	identityProviders                 *v1.IdentityProviderListBuilder
-	inflightChecks                    *v1.InflightCheckListBuilder
+	inflightChecks                    *InflightCheckListBuilder
 	infraID                           string
 	ingresses                         *v1.IngressListBuilder
 	kubeletConfig                     *KubeletConfigBuilder
@@ -497,7 +497,7 @@ func (b *ClusterBuilder) IdentityProviders(value *v1.IdentityProviderListBuilder
 }
 
 // InflightChecks sets the value of the 'inflight_checks' attribute to the given values.
-func (b *ClusterBuilder) InflightChecks(value *v1.InflightCheckListBuilder) *ClusterBuilder {
+func (b *ClusterBuilder) InflightChecks(value *InflightCheckListBuilder) *ClusterBuilder {
 	b.inflightChecks = value
 	b.bitmap_ |= 34359738368
 	return b
@@ -955,7 +955,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.identityProviders = nil
 	}
 	if object.inflightChecks != nil {
-		b.inflightChecks = v1.NewInflightCheckList().Copy(object.inflightChecks)
+		b.inflightChecks = NewInflightCheckList().Copy(object.inflightChecks)
 	} else {
 		b.inflightChecks = nil
 	}
