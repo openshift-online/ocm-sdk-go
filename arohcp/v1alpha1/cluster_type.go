@@ -121,7 +121,7 @@ type Cluster struct {
 	name                              string
 	network                           *Network
 	nodeDrainGracePeriod              *Value
-	nodePools                         *v1.NodePoolList
+	nodePools                         *NodePoolList
 	nodes                             *ClusterNodes
 	openshiftVersion                  string
 	product                           *v1.Product
@@ -1264,7 +1264,7 @@ func (o *Cluster) GetNodeDrainGracePeriod() (value *Value, ok bool) {
 //
 // List of node pools on this cluster.
 // NodePool is a scalable set of worker nodes attached to a hosted cluster.
-func (o *Cluster) NodePools() *v1.NodePoolList {
+func (o *Cluster) NodePools() *NodePoolList {
 	if o != nil && o.bitmap_&281474976710656 != 0 {
 		return o.nodePools
 	}
@@ -1276,7 +1276,7 @@ func (o *Cluster) NodePools() *v1.NodePoolList {
 //
 // List of node pools on this cluster.
 // NodePool is a scalable set of worker nodes attached to a hosted cluster.
-func (o *Cluster) GetNodePools() (value *v1.NodePoolList, ok bool) {
+func (o *Cluster) GetNodePools() (value *NodePoolList, ok bool) {
 	ok = o != nil && o.bitmap_&281474976710656 != 0
 	if ok {
 		value = o.nodePools

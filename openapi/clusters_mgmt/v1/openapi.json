@@ -17568,6 +17568,32 @@
           }
         }
       },
+      "NodePoolState": {
+        "description": "Representation of the status of a node pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePoolState' if this is a complete object or 'NodePoolStateLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "last_updated_timestamp": {
+            "description": "The current number of replicas for the node pool.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "node_pool_state_value": {
+            "description": "The current state of the node pool",
+            "type": "string"
+          }
+        }
+      },
       "NodePoolStatus": {
         "description": "Representation of the status of a node pool.",
         "properties": {
@@ -17591,6 +17617,10 @@
           "message": {
             "description": "Adds additional information about the NodePool status when the node pool doesn't reach the desired replicas.",
             "type": "string"
+          },
+          "state": {
+            "description": "The current state of the node pool",
+            "$ref": "#/components/schemas/NodePoolState"
           }
         }
       },

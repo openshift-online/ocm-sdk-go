@@ -91,6 +91,14 @@ func (c *ClusterClient) InflightChecks() *InflightChecksClient {
 	)
 }
 
+// NodePools returns the target 'node_pools' resource.
+func (c *ClusterClient) NodePools() *NodePoolsClient {
+	return NewNodePoolsClient(
+		c.transport,
+		path.Join(c.path, "node_pools"),
+	)
+}
+
 // Status returns the target 'cluster_status' resource.
 func (c *ClusterClient) Status() *ClusterStatusClient {
 	return NewClusterStatusClient(

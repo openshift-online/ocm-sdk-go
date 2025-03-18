@@ -158,6 +158,11 @@ var pathTreeData = `{
             "inflight_checks": {
               "-": null
             },
+            "node_pools": {
+              "-": {
+                "status": null
+              }
+            },
             "status": null
           }
         }
