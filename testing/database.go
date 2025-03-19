@@ -196,12 +196,17 @@ func (s *DatabaseServer) MakeDatabase() *Database {
 	return db
 }
 
-// MakeHandle creates a new database handle for this database.
-func (d *Database) MakeHandle() *sql.DB {
-	url := fmt.Sprintf(
+// MakeURL calculates the URL for this database.
+func (d *Database) MakeURL() string {
+	return fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
 		d.user, d.password, d.server.host, d.server.port, d.name,
 	)
+}
+
+// MakeHandle creates a new database handle for this database.
+func (d *Database) MakeHandle() *sql.DB {
+	url := d.MakeURL()
 	handle, err := sql.Open("pgx", url)
 	Expect(err).ToNot(HaveOccurred())
 	return handle
