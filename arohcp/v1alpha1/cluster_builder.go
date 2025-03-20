@@ -109,7 +109,7 @@ type ClusterBuilder struct {
 	name                              string
 	network                           *NetworkBuilder
 	nodeDrainGracePeriod              *ValueBuilder
-	nodePools                         *v1.NodePoolListBuilder
+	nodePools                         *NodePoolListBuilder
 	nodes                             *ClusterNodesBuilder
 	openshiftVersion                  string
 	product                           *v1.ProductBuilder
@@ -630,7 +630,7 @@ func (b *ClusterBuilder) NodeDrainGracePeriod(value *ValueBuilder) *ClusterBuild
 }
 
 // NodePools sets the value of the 'node_pools' attribute to the given values.
-func (b *ClusterBuilder) NodePools(value *v1.NodePoolListBuilder) *ClusterBuilder {
+func (b *ClusterBuilder) NodePools(value *NodePoolListBuilder) *ClusterBuilder {
 	b.nodePools = value
 	b.bitmap_ |= 281474976710656
 	return b
@@ -996,7 +996,7 @@ func (b *ClusterBuilder) Copy(object *Cluster) *ClusterBuilder {
 		b.nodeDrainGracePeriod = nil
 	}
 	if object.nodePools != nil {
-		b.nodePools = v1.NewNodePoolList().Copy(object.nodePools)
+		b.nodePools = NewNodePoolList().Copy(object.nodePools)
 	} else {
 		b.nodePools = nil
 	}
