@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.463
+- Updated model version to v0.0.415
+  - Added `ClusterCapabilities` type
+  - Added `Capabilities` field to `Cluster` type
+
 ## 0.1.462
 - Updated model version to v0.0.414
   - Added node pool endpoint resources for aro_hcp
