@@ -15426,6 +15426,10 @@
             "description": "Contains information about BYO OIDC.",
             "$ref": "#/components/schemas/ByoOidc"
           },
+          "capabilities": {
+            "description": "OpenShift Cluster Capabilities configuration",
+            "$ref": "#/components/schemas/ClusterCapabilities"
+          },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.",
             "$ref": "#/components/schemas/CloudProvider"
@@ -15709,6 +15713,17 @@
           "skip_nodes_with_local_storage": {
             "description": "Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.",
             "type": "boolean"
+          }
+        }
+      },
+      "ClusterCapabilities": {
+        "properties": {
+          "disabled": {
+            "description": "Immutable list of disabled capabilities. May only contain \"ImageRegistry\" at\nthis time. Additional capabilities may be available in the future. Clients\nshould expect to handle additional values.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

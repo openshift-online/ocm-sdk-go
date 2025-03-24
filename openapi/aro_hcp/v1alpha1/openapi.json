@@ -1623,6 +1623,10 @@
             "description": "Contains information about BYO OIDC.",
             "$ref": "#/components/schemas/ByoOidc"
           },
+          "capabilities": {
+            "description": "OpenShift Cluster Capabilities configuration",
+            "$ref": "#/components/schemas/ClusterCapabilities"
+          },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.",
             "$ref": "#/components/schemas/CloudProvider"
@@ -1835,6 +1839,17 @@
           "listening": {
             "description": "The listening method of the API server.",
             "$ref": "#/components/schemas/ListeningMethod"
+          }
+        }
+      },
+      "ClusterCapabilities": {
+        "properties": {
+          "disabled": {
+            "description": "Immutable list of disabled capabilities. May only contain \"ImageRegistry\" at\nthis time. Additional capabilities may be available in the future. Clients\nshould expect to handle additional values.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
