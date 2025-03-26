@@ -68,31 +68,12 @@ lint:
 
 .PHONY: generate
 generate: model metamodel-install goimports-install
-	rm -rf \
-		accesstransparency \
-		accountsmgmt \
-		addonsmgmt \
-		authorizations \
-		clustersmgmt \
-		arohcp \
-		errors \
-		helpers \
-		jobqueue \
-		servicelogs \
-		servicemgmt \
-		statusboard \
-		webrca \
-		osdfleetmgmt \
-		openapi
-	$(METAMODEL) generate go \
-		--model=model/model \
-		--base=github.com/openshift-online/ocm-sdk-go \
-		--apiBase=github.com/openshift-online/ocm-api-model/clientapi \
-		--generators=builders-alias,clients,errors,helpers,json-alias,request-json,metrics,openapi,types-alias \
-		--output=.
-	$(METAMODEL) generate openapi \
-		--model=model/model \
-		--output=openapi
+	hack/generate-client.sh $(METAMODEL) .
+	hack/generate-openapi.sh $(METAMODEL) ./openapi
+
+verify: model metamodel-install goimports-install
+	hack/verify-client.sh $(METAMODEL) .
+	hack/verify-openapi.sh $(METAMODEL) ./openapi
 
 .PHONY: model
 model:
