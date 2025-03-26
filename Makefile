@@ -87,6 +87,8 @@ generate: model metamodel-install goimports-install
 	$(METAMODEL) generate go \
 		--model=model/model \
 		--base=github.com/openshift-online/ocm-sdk-go \
+		--apiBase=github.com/openshift-online/ocm-api-model/clientapi \
+		--generators=builders-alias,clients,errors,helpers,json-alias,request-json,metrics,openapi,types-alias \
 		--output=.
 	$(METAMODEL) generate openapi \
 		--model=model/model \
