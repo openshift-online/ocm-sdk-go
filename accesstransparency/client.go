@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/accesstransparency/v1"
+	"github.com/openshift-online/ocm-sdk-go/accesstransparency/v1"
 )
 
 // Client is the client for service 'access_transparency'.

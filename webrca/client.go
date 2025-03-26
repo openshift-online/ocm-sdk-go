@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"path"
 
-	v1 "github.com/openshift-online/ocm-sdk-go/webrca/v1"
+	"github.com/openshift-online/ocm-sdk-go/webrca/v1"
 )
 
 // Client is the client for service 'web_rca'.
