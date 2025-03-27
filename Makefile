@@ -74,16 +74,7 @@ verify: model metamodel-install goimports-install
 
 .PHONY: model
 model:
-	rm -rf "$@"
-	if [ -d "$(model_url)" ]; then \
-		cp -r "$(model_url)" "$@"; \
-	else \
-		git clone "$(model_url)" "$@"; \
-		cd "$@"; \
-		git fetch --tags origin; \
-		git checkout -B build "$(model_version)"; \
-	fi
-
+	go mod tidy && go mod vendor
 
 .PHONY: metamodel
 METAMODEL=$(PROJECT_PATH)/metamodel_generator/metamodel
