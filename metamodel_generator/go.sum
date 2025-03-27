@@ -4,6 +4,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.1/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46t
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/deads2k/ocm-api-metamodel v0.0.0-20250326194516-ba2daee63724 h1:S2QndwDdHZNyqiGaZMTI4tqHIZdmlogR7LzglpEB8Ws=
+github.com/deads2k/ocm-api-metamodel v0.0.0-20250326194516-ba2daee63724/go.mod h1:Q8qCHM/JoQ0sJC4jfZ/bzQB2Oiyr5BA9ODTAEpvU2co=
 github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250327131439-18e4c232b37c h1:US+KDQS1XgZHYNhvPVF05T1zildDXWhMCznvZNE1iIc=
 github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250327131439-18e4c232b37c/go.mod h1:KsQ0k2TXAsppOOGdSPJ0gjCzXIF/L/TxyN4zxgbN+Gc=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
@@ -20,8 +22,6 @@ github.com/onsi/ginkgo/v2 v2.1.3 h1:e/3Cwtogj0HA+25nMP1jCMDIf8RtRYbGwGGuBIFztkc=
 github.com/onsi/ginkgo/v2 v2.1.3/go.mod h1:vw5CSIxN1JObi/U8gcbwft7ZxR2dgaR70JSE3/PpL4c=
 github.com/onsi/gomega v1.19.0 h1:4ieX6qQjPP/BfC3mpsAtIGGlxTWPeA3Inl/7DtXw1tw=
 github.com/onsi/gomega v1.19.0/go.mod h1:LY+I3pBVzYsTBU1AnDwOSxaYi9WoWiqgwooUqq9yPro=
-github.com/openshift-online/ocm-api-metamodel v0.0.65 h1:GecpiKM42tmZRhEWfDoJ/lcPMzvuGfWruy803B5kstM=
-github.com/openshift-online/ocm-api-metamodel v0.0.65/go.mod h1:Q8qCHM/JoQ0sJC4jfZ/bzQB2Oiyr5BA9ODTAEpvU2co=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=

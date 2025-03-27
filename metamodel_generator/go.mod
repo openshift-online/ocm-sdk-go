@@ -16,3 +16,5 @@ require (
 )
 
 replace github.com/openshift-online/ocm-api-model/metamodel_generator => github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250327131439-18e4c232b37c
+
+replace github.com/openshift-online/ocm-api-metamodel => github.com/deads2k/ocm-api-metamodel v0.0.0-20250326194516-ba2daee63724
