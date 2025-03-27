@@ -9,5 +9,5 @@ TARGET_DIR="${2:-./openapi}"
 rm -rf "${TARGET_DIR}"
 
 ${METAMODEL} generate openapi \
-  --model=model/model \
+  --model=vendor/github.com/openshift-online/ocm-api-model/model \
   --output="${TARGET_DIR}"

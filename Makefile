@@ -26,10 +26,6 @@ export PATH := $(LOCAL_BIN_PATH):$(PATH)
 # Disable CGO so that we always generate static binaries:
 export CGO_ENABLED=0
 
-# Details of the model to use:
-model_version:=v0.0.415
-model_url:=https://github.com/openshift-online/ocm-api-model.git
-
 goimports_version:=v0.4.0
 
 # Additional flags to pass to the `ginkgo` command. This is used in the GitHub
