@@ -30,9 +30,6 @@ export CGO_ENABLED=0
 model_version:=v0.0.415
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
-# Details of the metamodel to use:
-metamodel_version:=v0.0.67
-
 goimports_version:=v0.4.0
 
 # Additional flags to pass to the `ginkgo` command. This is used in the GitHub
@@ -87,10 +84,11 @@ model:
 		git checkout -B build "$(model_version)"; \
 	fi
 
+
 .PHONY: metamodel
-METAMODEL=$(LOCAL_BIN_PATH)/metamodel
+METAMODEL=$(PROJECT_PATH)/metamodel_generator/metamodel
 metamodel-install:
-	GOBIN=$(LOCAL_BIN_PATH) go install github.com/openshift-online/ocm-api-metamodel/cmd/metamodel@$(metamodel_version)
+	 $(MAKE) -C metamodel_generator metamodel
 
 .PHONY: goimports
 goimports-install:
@@ -99,6 +97,6 @@ goimports-install:
 .PHONY: clean
 clean:
 	rm -rf \
-		metamodel \
+		$(PROJECT_PATH)/metamodel_generator/metamodel \
 		model \
 		$(NULL)
