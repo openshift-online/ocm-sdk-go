@@ -2,7 +2,7 @@
 
 source "$(dirname "${BASH_SOURCE}")/init.sh"
 
-METAMODEL="${1:-.}"
+METAMODEL="${1:-metamodel_generator/metamodel}"
 TARGET_DIR="${2:-.}"
 
 # clean existing output
