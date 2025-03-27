@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/openshift-online/ocm-sdk-go/statusboard/v1"
+	v1 "github.com/openshift-online/ocm-sdk-go/statusboard/v1"
 )
 
 // Client is the client for service 'status_board'.
