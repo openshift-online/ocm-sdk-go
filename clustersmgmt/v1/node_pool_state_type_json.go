@@ -80,7 +80,7 @@ func WriteNodePoolState(object *NodePoolState, stream *jsoniter.Stream) {
 		if count > 0 {
 			stream.WriteMore()
 		}
-		stream.WriteObjectField("node_pool_state_value")
+		stream.WriteObjectField("value")
 		stream.WriteString(object.nodePoolStateValue)
 	}
 	stream.WriteObjectEnd()
@@ -126,7 +126,7 @@ func ReadNodePoolState(iterator *jsoniter.Iterator) *NodePoolState {
 			}
 			object.lastUpdatedTimestamp = value
 			object.bitmap_ |= 8
-		case "node_pool_state_value":
+		case "value":
 			value := iterator.ReadString()
 			object.nodePoolStateValue = value
 			object.bitmap_ |= 16
