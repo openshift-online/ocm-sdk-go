@@ -2587,7 +2587,7 @@
             "type": "string",
             "format": "date-time"
           },
-          "node_pool_state_value": {
+          "value": {
             "description": "The current state of the node pool",
             "type": "string"
           }
