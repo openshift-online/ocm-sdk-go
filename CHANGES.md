@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.464
+- Update model version to v0.0.416
+  - Added annotation to Node Pool State
+
 ## 0.1.463
 - Updated model version to v0.0.415
   - Added `ClusterCapabilities` type
