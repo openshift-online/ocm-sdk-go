@@ -6016,6 +6016,9 @@
               "$ref": "#/components/schemas/ReservedResource"
             }
           },
+          "rh_region_id": {
+            "type": "string"
+          },
           "scope": {
             "type": "string"
           }
@@ -7111,6 +7114,9 @@
           "released": {
             "description": "Flag used to denote whether or not the owner of the cluster has released the ownership and ready to be transferred to a different user.",
             "type": "boolean"
+          },
+          "rh_region_id": {
+            "type": "string"
           },
           "service_level": {
             "type": "string"
