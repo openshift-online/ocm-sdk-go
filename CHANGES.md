@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.465
+- Update model version v0.0.417
+  - Add `RhRegionID` field to `Subscription` and `ClusterAuthorizationRequest` type
+
 ## 0.1.464
 - Update model version to v0.0.416
   - Added annotation to Node Pool State
