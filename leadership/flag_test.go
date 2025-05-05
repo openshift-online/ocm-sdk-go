@@ -19,6 +19,8 @@ package leadership
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"sync/atomic"
 	"time"
 
 	. "github.com/onsi/ginkgo/v2/dsl/core"             // nolint
@@ -582,6 +584,89 @@ var _ = Describe("Flag behaviour", func() {
 			// that it recovers and raises it:
 			time.Sleep(200 * time.Millisecond)
 			Expect(flag.Raised()).To(BeTrue())
+		})
+	})
+
+	// These sets of tests are two contesting leadership
+	When("Precheck is defined", func() {
+		var (
+			flip      *Flag
+			flop      *Flag
+			condition int32
+		)
+		const (
+			flagName    = "my_flag"
+			flipProcess = "flip" // This process will have the flag when the precheck condition is true.
+			flopProcess = "flop" // This process will have the flag when the precheck condition is false.
+			intervalMs  = 100
+		)
+
+		BeforeEach(func() {
+			var err error
+
+			// Create the database table:
+			CreateTable()
+
+			// Create the database row so that the flag is already held by another
+			// process that will eventually fail to update it:
+			_, err = dbHandle.Exec(fmt.Sprintf(`
+				insert into leadership_flags (
+					name,
+					holder,
+					version,
+					timestamp
+				) values (
+					'%s',
+					'your_process',
+					123,
+					now()
+				)
+			`, flagName))
+			Expect(err).ToNot(HaveOccurred())
+
+			// Create the object:
+			flip, err = NewFlag().
+				Logger(logger).
+				Handle(dbHandle).
+				Name(flagName).
+				Process(flipProcess).
+				PrecheckFunc(func() (bool, error) { return atomic.LoadInt32(&condition) != 1, nil }).
+				Interval(intervalMs * time.Millisecond).
+				Jitter(0).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+
+			flop, err = NewFlag().
+				Logger(logger).
+				Handle(dbHandle).
+				Name(flagName).
+				Process(flopProcess).
+				PrecheckFunc(func() (bool, error) { return atomic.LoadInt32(&condition) == 1, nil }).
+				Interval(intervalMs * time.Millisecond).
+				Jitter(0).
+				Build(ctx)
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		AfterEach(func() {
+			err := flip.Close()
+			Expect(err).ToNot(HaveOccurred())
+
+			err = flop.Close()
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("It is attained by the process with the precheck set to true", func() {
+			time.Sleep(2 * intervalMs * time.Millisecond)
+			Expect(flip.Raised()).To(BeTrue(), "Flip is expected to have the flag")
+			Expect(flop.Raised()).To(BeFalse(), "Flop is expected to not have the flag")
+
+			By("swapping the precheck condition")
+			atomic.SwapInt32(&condition, 1)
+
+			time.Sleep(4 * intervalMs * time.Millisecond)
+			Expect(flip.Raised()).To(BeFalse(), "Flip is expected to not have the flag after switch")
+			Expect(flop.Raised()).To(BeTrue(), "Flop is expected to have the flag after switch")
 		})
 	})
 })
