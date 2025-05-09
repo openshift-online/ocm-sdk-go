@@ -46,6 +46,11 @@ GINKGO := $(LOCAL_BIN_PATH)/ginkgo
 ginkgo-install:
 	@GOBIN=$(LOCAL_BIN_PATH) go install github.com/onsi/ginkgo/v2/ginkgo@v2.1.4 ;\
 
+verify: lint examples
+	go vet $(find . -maxdepth 1 -type d  ! -name 'vendor' ! -name '.')
+	hack/verify-gofmt.sh
+.PHONY: verify
+
 .PHONY: examples
 examples:
 	cd examples && \
@@ -55,7 +60,12 @@ examples:
 
 .PHONY: test tests
 test tests: ginkgo-install
+ifndef JUNITFILE
 	$(GINKGO) run -r $(ginkgo_flags)
+else
+	$(GINKGO) run -r $(ginkgo_flags) --junit-report=junit_golang_tests_junit.xml --output-dir=${ARTIFACT_DIR}
+endif
+
 
 .PHONY: fmt
 fmt:
