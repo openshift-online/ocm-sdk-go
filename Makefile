@@ -26,13 +26,6 @@ export PATH := $(LOCAL_BIN_PATH):$(PATH)
 # Disable CGO so that we always generate static binaries:
 export CGO_ENABLED=0
 
-# Details of the model to use:
-model_version:=v0.0.419
-model_url:=https://github.com/openshift-online/ocm-api-model.git
-
-# Details of the metamodel to use:
-metamodel_version:=v0.0.68
-
 goimports_version:=v0.4.0
 
 # Additional flags to pass to the `ginkgo` command. This is used in the GitHub
@@ -46,9 +39,11 @@ GINKGO := $(LOCAL_BIN_PATH)/ginkgo
 ginkgo-install:
 	@GOBIN=$(LOCAL_BIN_PATH) go install github.com/onsi/ginkgo/v2/ginkgo@v2.1.4 ;\
 
-verify: lint examples
+verify: lint examples model metamodel-install goimports-install
 	go vet $(find . -maxdepth 1 -type d  ! -name 'vendor' ! -name '.')
 	hack/verify-gofmt.sh
+	hack/verify-client.sh $(METAMODEL) .
+	hack/verify-openapi.sh $(METAMODEL) ./openapi
 .PHONY: verify
 
 .PHONY: examples
@@ -78,46 +73,17 @@ lint:
 
 .PHONY: generate
 generate: model metamodel-install goimports-install
-	rm -rf \
-		accesstransparency \
-		accountsmgmt \
-		addonsmgmt \
-		authorizations \
-		clustersmgmt \
-		arohcp \
-		errors \
-		helpers \
-		jobqueue \
-		servicelogs \
-		servicemgmt \
-		statusboard \
-		webrca \
-		osdfleetmgmt \
-		openapi
-	$(METAMODEL) generate go \
-		--model=model/model \
-		--base=github.com/openshift-online/ocm-sdk-go \
-		--output=.
-	$(METAMODEL) generate openapi \
-		--model=model/model \
-		--output=openapi
+	hack/generate-client.sh $(METAMODEL) .
+	hack/generate-openapi.sh $(METAMODEL) ./openapi
 
 .PHONY: model
 model:
-	rm -rf "$@"
-	if [ -d "$(model_url)" ]; then \
-		cp -r "$(model_url)" "$@"; \
-	else \
-		git clone "$(model_url)" "$@"; \
-		cd "$@"; \
-		git fetch --tags origin; \
-		git checkout -B build "$(model_version)"; \
-	fi
+	go mod tidy && go mod vendor
 
 .PHONY: metamodel
-METAMODEL=$(LOCAL_BIN_PATH)/metamodel
+METAMODEL=$(PROJECT_PATH)/metamodel_generator/metamodel
 metamodel-install:
-	GOBIN=$(LOCAL_BIN_PATH) go install github.com/openshift-online/ocm-api-metamodel/cmd/metamodel@$(metamodel_version)
+	 $(MAKE) -C metamodel_generator metamodel
 
 .PHONY: goimports
 goimports-install:
@@ -125,7 +91,9 @@ goimports-install:
 
 .PHONY: clean
 clean:
+	hack/clean-client.sh
+	hack/clean-openapi.sh
 	rm -rf \
-		metamodel \
+		$(PROJECT_PATH)/metamodel_generator/metamodel \
 		model \
 		$(NULL)
