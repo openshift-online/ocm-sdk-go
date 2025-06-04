@@ -27,11 +27,11 @@ export PATH := $(LOCAL_BIN_PATH):$(PATH)
 export CGO_ENABLED=0
 
 # Details of the model to use:
-model_version:=v0.0.417
+model_version:=v0.0.418
 model_url:=https://github.com/openshift-online/ocm-api-model.git
 
 # Details of the metamodel to use:
-metamodel_version:=v0.0.67
+metamodel_version:=v0.0.68
 
 goimports_version:=v0.4.0
 

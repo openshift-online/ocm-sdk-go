@@ -14974,12 +14974,25 @@
             "description": "The Azure Virtual Machine size identifier used for the\nNodes of the Node Pool.\nAvailability of VM sizes are dependent on the Azure Location\nof the parent Cluster.\nRequired during creation.",
             "type": "string"
           },
+          "encryption_at_host": {
+            "description": "EncryptionAtHost contains Encryption At Host disk encryption configuration.\nWhen enabled, it enhances Azure Disk Storage Server-Side Encryption to ensure that all temporary disks\nand disk caches are encrypted at rest and flow encrypted to the Storage clusters.\nIf not specified, Encryption at Host is not enabled.\nImmutable.",
+            "$ref": "#/components/schemas/AzureNodePoolEncryptionAtHost"
+          },
           "ephemeral_os_disk_enabled": {
             "description": "Enables Ephemeral OS Disks for the Nodes in the Node Pool.\nIf not specified, no Ephemeral OS Disks are used.",
             "type": "boolean"
           },
           "resource_name": {
             "description": "ResourceName is the Azure Resource Name of the NodePool.\nResourceName must be within the Azure Resource Group Name of the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Location as the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Subscription as the parent\nCluster it belongs to.\nResourceName must belong to the same Microsoft Entra Tenant ID as the parent\nCluster it belongs to.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureNodePoolEncryptionAtHost": {
+        "description": "AzureNodePoolEncryptionAtHost defines the encryption setting for Encryption At Host.\nIf not specified, Encryption at Host is not enabled.",
+        "properties": {
+          "state": {
+            "description": "State indicates whether Encryption At Host is enabled.\nWhen enabled, it enhances Azure Disk Storage Server-Side Encryption to ensure that all temporary disks\nand disk caches are encrypted at rest and flow encrypted to the Storage clusters.\nAccepted values are: \"disabled\" or \"enabled\".\nIf not specified, its value is \"disabled\", which indicates Encryption At Host is disabled.\nImmutable.",
             "type": "string"
           }
         }
