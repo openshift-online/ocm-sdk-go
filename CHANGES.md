@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.467
+- Update model version v0.0.419
+  - Add `LogType` to `NotificationDetailsRequest`
+
 ## 0.1.466
 - Update model version v0.0.418
   - Add arohcp Version types and endpoints
