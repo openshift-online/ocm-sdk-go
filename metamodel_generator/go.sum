@@ -4,10 +4,10 @@ github.com/cpuguy83/go-md2man/v2 v2.0.1/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46t
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/deads2k/ocm-api-metamodel v0.0.0-20250527182851-0cf699c36fe5 h1:l3PqTNn8mp17751o23j5lRFp30mTMj9V0uQHrMpvUi8=
-github.com/deads2k/ocm-api-metamodel v0.0.0-20250527182851-0cf699c36fe5/go.mod h1:Q8qCHM/JoQ0sJC4jfZ/bzQB2Oiyr5BA9ODTAEpvU2co=
-github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250527201755-64b6c160d65c h1:BkurkBoulEu0/myPPEkkTXAl21aUnLd8c/ImXEC0DQw=
-github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250527201755-64b6c160d65c/go.mod h1:89C4BieSisHeeK49h6NVTwdoOlAZ9bvOfzZMxCOQ1BQ=
+github.com/deads2k/ocm-api-metamodel v0.0.0-20250605182044-e8d407524072 h1:akf3Apb/8r2wkKb6Nw++N6ugO9J1FgtkW+Y5FlHniYs=
+github.com/deads2k/ocm-api-metamodel v0.0.0-20250605182044-e8d407524072/go.mod h1:Q8qCHM/JoQ0sJC4jfZ/bzQB2Oiyr5BA9ODTAEpvU2co=
+github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250528185917-4d270d8e8089 h1:Axf4Rx/c2j0tWXD1R1cDw5eOd0zgP5SnYtB1NHQUlf0=
+github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250528185917-4d270d8e8089/go.mod h1:89C4BieSisHeeK49h6NVTwdoOlAZ9bvOfzZMxCOQ1BQ=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NHg9XEKhtSvM=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
