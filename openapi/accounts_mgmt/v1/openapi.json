@@ -6414,6 +6414,10 @@
             "description": "Indicates whether the service log is internal only to RH.",
             "type": "boolean"
           },
+          "log_type": {
+            "description": "Indicates the type of the service log.",
+            "type": "string"
+          },
           "subject": {
             "description": "The email subject.",
             "type": "string"
