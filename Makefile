@@ -71,6 +71,10 @@ lint:
 	golangci-lint --version
 	golangci-lint run
 
+# set "normal" alias matching kube and ocp
+.PHONY: update
+update: generate
+
 .PHONY: generate
 generate: model metamodel-install goimports-install
 	hack/generate-client.sh $(METAMODEL) .
@@ -83,7 +87,8 @@ model:
 .PHONY: metamodel
 METAMODEL=$(PROJECT_PATH)/metamodel_generator/metamodel
 metamodel-install:
-	 $(MAKE) -C metamodel_generator metamodel
+	 $(MAKE) -C metamodel_generator clean
+	 $(MAKE) -C metamodel_generator build
 
 .PHONY: goimports
 goimports-install:
