@@ -1,6 +1,6 @@
 module github.com/openshift-online/ocm-sdk-go
 
-go 1.21
+go 1.23.0
 
 require (
 	github.com/99designs/keyring v1.2.2
@@ -25,7 +25,11 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-require github.com/zalando/go-keyring v0.2.3
+require (
+	github.com/openshift-online/ocm-api-model/clientapi v0.0.0-00010101000000-000000000000
+	github.com/openshift-online/ocm-api-model/model v0.0.0-00010101000000-000000000000
+	github.com/zalando/go-keyring v0.2.3
+)
 
 require (
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
@@ -63,3 +67,7 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace github.com/openshift-online/ocm-api-model/clientapi => github.com/deads2k/ocm-api-model/clientapi v0.0.0-20250606185646-3372686a3125
+
+replace github.com/openshift-online/ocm-api-model/model => github.com/deads2k/ocm-api-model/model v0.0.0-20250606185646-3372686a3125
