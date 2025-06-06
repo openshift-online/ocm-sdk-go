@@ -68,6 +68,6 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/openshift-online/ocm-api-model/clientapi => github.com/deads2k/ocm-api-model/clientapi v0.0.0-20250527201755-64b6c160d65c
+replace github.com/openshift-online/ocm-api-model/clientapi => github.com/deads2k/ocm-api-model/clientapi v0.0.0-20250606130039-db1d8bf810ca
 
-replace github.com/openshift-online/ocm-api-model/model => github.com/deads2k/ocm-api-model/model v0.0.0-20250527201755-64b6c160d65c
+replace github.com/openshift-online/ocm-api-model/model => github.com/deads2k/ocm-api-model/model v0.0.0-20250606130039-db1d8bf810ca
