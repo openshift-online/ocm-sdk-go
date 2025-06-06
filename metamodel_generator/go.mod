@@ -15,6 +15,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 )
 
-replace github.com/openshift-online/ocm-api-model/metamodel_generator => github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250528185917-4d270d8e8089
+replace github.com/openshift-online/ocm-api-model/metamodel_generator => github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250606130039-db1d8bf810ca
 
-replace github.com/openshift-online/ocm-api-metamodel => github.com/deads2k/ocm-api-metamodel v0.0.0-20250605182044-e8d407524072
+replace github.com/openshift-online/ocm-api-metamodel => github.com/deads2k/ocm-api-metamodel v0.0.0-20250605203857-a9593d6d60f6
