@@ -562,6 +562,10 @@
             "description": "Defines the username of the account of which access is being reviewed ",
             "type": "string"
           },
+          "cluster_id": {
+            "description": "Defines the cluster id which access is being reviewed",
+            "type": "string"
+          },
           "feature": {
             "description": "Indicates the feature which can be toggled",
             "type": "string"
