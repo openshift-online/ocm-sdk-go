@@ -8,6 +8,7 @@ github.com/deads2k/ocm-api-metamodel v0.0.0-20250605203857-a9593d6d60f6 h1:Wwuuc
 github.com/deads2k/ocm-api-metamodel v0.0.0-20250605203857-a9593d6d60f6/go.mod h1:Q8qCHM/JoQ0sJC4jfZ/bzQB2Oiyr5BA9ODTAEpvU2co=
 github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250606130039-db1d8bf810ca h1:Z4qqoQhAjqGc9TFe/qGl3gXAj4jn5qEtBFhrlzXVVX8=
 github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250606130039-db1d8bf810ca/go.mod h1:dpnzUrphLzHhWj3OchfLRDI3Ydf6MWBFYlQz96di/cI=
+github.com/deads2k/ocm-api-model/metamodel_generator v0.0.0-20250606185646-3372686a3125/go.mod h1:dpnzUrphLzHhWj3OchfLRDI3Ydf6MWBFYlQz96di/cI=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NHg9XEKhtSvM=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=

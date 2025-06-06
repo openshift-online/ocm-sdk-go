@@ -44,6 +44,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
 	github.com/openshift-online/ocm-api-model/clientapi v0.0.0-00010101000000-000000000000 // indirect
+	github.com/openshift-online/ocm-api-model/model v0.0.0-00010101000000-000000000000 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
@@ -65,4 +66,6 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.1 // indirect
 )
 
-replace github.com/openshift-online/ocm-api-model/clientapi => github.com/deads2k/ocm-api-model/clientapi v0.0.0-20250527201755-64b6c160d65c
+replace github.com/openshift-online/ocm-api-model/clientapi => github.com/deads2k/ocm-api-model/clientapi v0.0.0-20250606185646-3372686a3125
+
+replace github.com/openshift-online/ocm-api-model/model => github.com/deads2k/ocm-api-model/model v0.0.0-20250606185646-3372686a3125
