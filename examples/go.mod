@@ -1,6 +1,8 @@
 module github.com/openshift-online/ocm-sdk-go/examples
 
-go 1.21
+go 1.23.0
+
+toolchain go1.23.6
 
 // We don't want to use the latest released versio of the SDK, but exactly the same version that
 // is in the parent directory.
@@ -41,6 +43,8 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
+	github.com/openshift-online/ocm-api-model/clientapi v0.0.0-20250609145654-e5d93cf79fc9 // indirect
+	github.com/openshift-online/ocm-api-model/model v0.0.0-20250609145654-e5d93cf79fc9 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
