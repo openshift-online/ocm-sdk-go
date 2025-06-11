@@ -49,6 +49,8 @@ type FlagBuilder struct {
 	// Fields used for metrics:
 	metricsSubsystem  string
 	metricsRegisterer prometheus.Registerer
+
+	precheckFunc func() (bool, error)
 }
 
 // Flag is a distributed flag intended to manage leadership in a group of processes. Only one of the
@@ -71,6 +73,8 @@ type Flag struct {
 
 	// Fields used for metrics:
 	stateMetric *prometheus.GaugeVec
+
+	precheck func() (bool, error)
 }
 
 // NewFlag creates a builder that can then be used to configure and create a leadership flag.
@@ -167,6 +171,17 @@ func (b *FlagBuilder) MetricsRegisterer(value prometheus.Registerer) *FlagBuilde
 	return b
 }
 
+// Precheck sets a precheck function that, when set, will run before the
+// leadership flag is checked. The precheck function returns two values: a
+// boolean indicating whether the leadership check should occur, and an error
+// indicating if an error occurred when running the precheck. When an error
+// occurs during precheck, the error is logged and the leadership check is
+// skipped.
+func (b *FlagBuilder) PrecheckFunc(f func() (bool, error)) *FlagBuilder {
+	b.precheckFunc = f
+	return b
+}
+
 // Build uses the data stored in the builder to configure and create a new leadership flag.
 func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 	// Check parameters:
@@ -256,6 +271,7 @@ func (b *FlagBuilder) Build(ctx context.Context) (result *Flag, err error) {
 		stop:          stop,
 		stateMetric:   stateMetric,
 		ctx:           ctx,
+		precheck:      b.precheckFunc,
 	}
 
 	// Run the loop:
@@ -296,11 +312,33 @@ func (f *Flag) Close() error {
 // run runs the loop that checks the contents of the table and updates it and the state of the flag
 // accordinly.
 func (f *Flag) run() {
+	// Create a context:
+	// whilst respecting parent context values
+	ctx := context.WithValue(f.ctx, leadershipFlag, "")
 loop:
 	for {
 		select {
 		case <-f.timer.C:
-			f.check()
+			if f.precheck != nil {
+				check, err := f.precheck()
+				if err != nil {
+					f.logger.Error(
+						f.ctx,
+						"error running precheck: %v",
+						f.process, f.name, err,
+					)
+					f.schedule(ctx, f.retryInterval)
+					f.lower(ctx)
+					continue
+				}
+				if !check {
+					f.schedule(ctx, f.retryInterval)
+					f.lower(ctx)
+					continue
+				}
+
+			}
+			f.check(ctx)
 		case <-f.stop:
 			break loop
 		}
@@ -308,12 +346,8 @@ loop:
 }
 
 // check checks the contents of the table and updates it and the state of the flag accordingly.
-func (f *Flag) check() {
+func (f *Flag) check(ctx context.Context) {
 	var err error
-
-	// Create a context:
-	// whilst respecting parent context values
-	ctx := context.WithValue(f.ctx, leadershipFlag, "")
 
 	// Get the global time from the database, so that we don't depend on synchronization of the
 	// machines that compete for the flag.
@@ -698,3 +732,4 @@ var flagMetricsLabels = []string{
 	flagMetricsNameLabel,
 	flagMetricsProcessLabel,
 }
+
