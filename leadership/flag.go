@@ -732,4 +732,3 @@ var flagMetricsLabels = []string{
 	flagMetricsNameLabel,
 	flagMetricsProcessLabel,
 }
-
