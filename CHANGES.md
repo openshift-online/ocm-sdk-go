@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.468
+- add metamodule submodule to have repeatable and externally detectable levels of metamodel
+- add new generation and makefile scripts
+- add macgregor, cristianoveiga to owners/approvers
+- leadership flag enhancement: precheck handler added
+
 ## 0.1.467
 - Update model version v0.0.419
   - Add `LogType` to `NotificationDetailsRequest`
