@@ -61,16 +61,16 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout the source
-      uses: actions/checkout@v2
-
-    - name: Run the linter
-      uses: golangci/golangci-lint-action@v3
-      with:
-        version: v1.61.0
-        args: --timeout 10m
-        skip-pkg-cache: true
-        skip-build-cache: true
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.1
+          args: --timeout 10m
+          skip-cache: 'true'
 
   generate:
     name: Generate
