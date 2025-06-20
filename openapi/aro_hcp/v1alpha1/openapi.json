@@ -772,6 +772,51 @@
         }
       }
     },
+    "/api/aro_hcp/v1alpha1/managed_identities_requirements": {
+      "get": {
+        "description": "Retrieves an ManagedIdentitiesRequirements by version query param.",
+        "parameters": [
+          {
+            "name": "required",
+            "description": "Get the managed identities requirements depending on when they are required.\nThe query parameter is optional, it needs to be either (\"always\" or \"on_enablement\"). \nWhen not supplied, this enablement constraint won't be taken into account.\nWhen supplied and among the accepted values, the query parameter will be used to return all managed identities requirements\nthat matches the value given in the query parameter.\nWhen supplied but the value is invalid, an error is going to be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "description": "Get the managed identities requirements by OpenShift version.\nThe query parameter is optional, but when supplied it needs to be \nin the format X.Y (e.g 4.18) where X and Y are major and minor segments of \nthe OpenShift version respectively.\nWhen supplied, the returned response will include all the control plane \nand data plane operators requirements for the given version. \nIf not supplied, the OpenShift version constraint won't be taken into account \nwhen returning the managed identities requirements.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedIdentitiesRequirements"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/aro_hcp/v1alpha1/versions": {
       "get": {
         "description": "Retrieves a list of versions.",
@@ -1324,6 +1369,18 @@
             "items": {
               "$ref": "#/components/schemas/HTPasswdUser"
             }
+          }
+        }
+      },
+      "K8sServiceAccountOperatorIdentityRequirement": {
+        "properties": {
+          "name": {
+            "description": "The name of the service account to be leveraged by the operator",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace of the service account to be leveraged by the operator",
+            "type": "string"
           }
         }
       },
@@ -2181,6 +2238,67 @@
           }
         }
       },
+      "ControlPlaneOperatorIdentityRequirement": {
+        "properties": {
+          "max_openshift_version": {
+            "description": "The field is a string and it is of format X.Y.\nNot specifying it indicates support for this operator in all Openshift versions,\nstarting from min_openshift_version if min_openshift_version is defined. ",
+            "type": "string"
+          },
+          "min_openshift_version": {
+            "description": "The field is a string and it is of format X.Y.\nNot specifying it indicates support for this operator in all Openshift versions,\nor up to max_openshift_version, if defined. ",
+            "type": "string"
+          },
+          "operator_name": {
+            "description": "The name of the control plane operator that needs the identity",
+            "type": "string"
+          },
+          "required": {
+            "description": "Indicates whether the identity is always required or not.\n\"always\" means that the identity is always required\n\"on_enablement\" means that the identity is only required when a functionality \nthat leverages the operator is enabled. \nPossible values are (\"always\", \"on_enablement\")",
+            "type": "string"
+          },
+          "role_definitions": {
+            "description": "A list of roles that are required by the operator ",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleDefinitionOperatorIdentityRequirement"
+            }
+          }
+        }
+      },
+      "DataPlaneOperatorIdentityRequirement": {
+        "properties": {
+          "max_openshift_version": {
+            "description": "The field is a string and it is of format X.Y (e.g 4.18) where X and Y are major and \nminor segments of the OpenShift version respectively.\nNot specifying it indicates support for this operator in all Openshift versions,\nstarting from min_openshift_version if min_openshift_version is defined. ",
+            "type": "string"
+          },
+          "min_openshift_version": {
+            "description": "The field is a string and it is of format X.Y (e.g 4.18) where X and Y are major and \nminor segments of the OpenShift version respectively.\nNot specifying it indicates support for this operator in all Openshift versions,\nor up to max_openshift_version, if defined. ",
+            "type": "string"
+          },
+          "operator_name": {
+            "description": "The name of the data plane operator that needs the identity",
+            "type": "string"
+          },
+          "required": {
+            "description": "Indicates whether the identity is always required or not\n\"always\" means that the identity is always required\n\"on_enablement\" means that the identity is only required when a functionality \nthat leverages the operator is enabled.\nPossible values are (\"always\", \"on_enablement\")",
+            "type": "string"
+          },
+          "role_definitions": {
+            "description": "A list of roles that are required by the operator ",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleDefinitionOperatorIdentityRequirement"
+            }
+          },
+          "service_accounts": {
+            "description": "It is a list of K8s ServiceAccounts leveraged by the operator.\nThere must be at least a single service account specified.\nThis information is needed to federate a managed identity to a k8s subject.\nThere should be no duplicated \"name:namespace\" entries within this field. ",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/K8sServiceAccountOperatorIdentityRequirement"
+            }
+          }
+        }
+      },
       "DeleteProtection": {
         "description": "DeleteProtection configuration.",
         "properties": {
@@ -2522,6 +2640,37 @@
           "medium",
           "small"
         ]
+      },
+      "ManagedIdentitiesRequirements": {
+        "description": "Representation of managed identities requirements.\nWhen creating ARO-HCP Clusters, the end-users will need to pre-create the set of Managed Identities\nrequired by the clusters.\nThe set of Managed Identities that the end-users need to precreate is not static and depends on \nseveral factors:\n(1) The OpenShift version of the cluster being created. \n(2) The functionalities that are being enabled for the cluster. Some Managed Identities are not\nalways required but become required if a given functionality is enabled.\nAdditionally, the Managed Identities that the end-users will need to precreate will have to have a \nset of required permissions assigned to them which also have to be returned to the end users.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ManagedIdentitiesRequirements' if this is a complete object or 'ManagedIdentitiesRequirementsLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "control_plane_operators_identities": {
+            "description": "The control plane operators managed identities requirements",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ControlPlaneOperatorIdentityRequirement"
+            }
+          },
+          "data_plane_operators_identities": {
+            "description": "The data plane operators managed identities requirements",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataPlaneOperatorIdentityRequirement"
+            }
+          }
+        }
       },
       "ManagedService": {
         "description": "Contains the necessary attributes to support role-based authentication on AWS.",
@@ -3063,6 +3212,18 @@
           "multi": {
             "description": "Multi will contain the reference for the multi image which will be used for cluster deployments",
             "$ref": "#/components/schemas/ReleaseImageDetails"
+          }
+        }
+      },
+      "RoleDefinitionOperatorIdentityRequirement": {
+        "properties": {
+          "name": {
+            "description": "The official name of the Role defined in resource_id. \nIt is purely a friendly/descriptive name.",
+            "type": "string"
+          },
+          "resource_id": {
+            "description": "A string representing the Resource ID of an Azure Role Definition. \nThe role definition indicates what permissions are needed by the operator",
+            "type": "string"
           }
         }
       },
