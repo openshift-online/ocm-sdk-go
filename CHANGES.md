@@ -3,12 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.469
+- Update model to add arohcp ManagedIdentitiesRequirements types and endpoints
+ 
 ## 0.1.468
 - update golangci to v2
 - add macgregor, cristianoveiga to owners/approvers
 - leadership flag enhancement: precheck handler added
 - move JSON structs (serialization) to ocm-api-model
-
 
 ## 0.1.467
 - Update model version v0.0.419
