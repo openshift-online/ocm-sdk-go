@@ -166,6 +166,7 @@ var pathTreeData = `{
             "status": null
           }
         },
+        "managed_identities_requirements": null,
         "versions": {
           "-": null
         }
