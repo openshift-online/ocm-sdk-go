@@ -9,6 +9,7 @@ toolchain go1.23.6
 replace github.com/openshift-online/ocm-sdk-go => ../
 
 require (
+	github.com/openshift-online/ocm-api-model/clientapi v0.0.0-20250609145654-e5d93cf79fc9
 	github.com/openshift-online/ocm-sdk-go v0.0.0-00010101000000-000000000000
 	github.com/prometheus/client_golang v1.12.1
 	k8s.io/api v0.23.6
@@ -43,7 +44,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
-	github.com/openshift-online/ocm-api-model/clientapi v0.0.0-20250609145654-e5d93cf79fc9 // indirect
 	github.com/openshift-online/ocm-api-model/model v0.0.0-20250609145654-e5d93cf79fc9 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
@@ -65,3 +65,7 @@ require (
 	sigs.k8s.io/json v0.0.0-20211020170558-c049b76a60c6 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.1 // indirect
 )
+
+replace github.com/openshift-online/ocm-api-model/model => /home/cristianoveiga/go/src/github.com/openshift-online/ocm-api-model/model
+
+replace github.com/openshift-online/ocm-api-model/clientapi => /home/cristianoveiga/go/src/github.com/openshift-online/ocm-api-model/clientapi

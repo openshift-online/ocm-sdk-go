@@ -31,6 +31,9 @@ require (
 	github.com/zalando/go-keyring v0.2.3
 )
 
+replace github.com/openshift-online/ocm-api-model/model => /home/cristianoveiga/go/src/github.com/openshift-online/ocm-api-model/model
+replace github.com/openshift-online/ocm-api-model/clientapi => /home/cristianoveiga/go/src/github.com/openshift-online/ocm-api-model/clientapi
+
 require (
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
 	github.com/alessio/shellescape v1.4.1 // indirect
