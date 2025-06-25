@@ -51,40 +51,6 @@
       }
     },
     "/api/aro_hcp/v1alpha1/clusters": {
-      "post": {
-        "description": "Provision a new cluster and add it to the collection of clusters.\n\nSee the `register_cluster` method for adding an existing cluster.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Cluster"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cluster"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
       "get": {
         "description": "Retrieves the list of clusters.",
         "parameters": [
@@ -171,6 +137,54 @@
         }
       }
     },
+    "/api/aro_hcp/v1alpha1/clusters/async_add": {
+      "post": {
+        "description": "Provision a new cluster and add it to the collection of clusters.\n\nSee the `register_cluster` method for adding an existing cluster.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "description": "Description of the cluster.",
+                    "$ref": "#/components/schemas/Cluster"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "body": {
+                      "description": "Description of the cluster.",
+                      "$ref": "#/components/schemas/Cluster"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}": {
       "delete": {
         "description": "Deletes the cluster.",
@@ -201,7 +215,7 @@
           }
         ],
         "responses": {
-          "204": {
+          "202": {
             "description": "Success."
           },
           "default": {
@@ -421,50 +435,6 @@
       }
     },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/node_pools": {
-      "post": {
-        "description": "Adds a new node pool to the cluster.",
-        "parameters": [
-          {
-            "name": "cluster_id",
-            "in": "path",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NodePool"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Success.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NodePool"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
       "get": {
         "description": "Retrieves the list of node pools.",
         "parameters": [
@@ -540,6 +510,64 @@
                       "description": "Total number of items of the collection.",
                       "type": "integer",
                       "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/node_pools/async_add": {
+      "post": {
+        "description": "Adds a new node pool to the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "description": "Description of the node pool",
+                    "$ref": "#/components/schemas/NodePool"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "body": {
+                      "description": "Description of the node pool",
+                      "$ref": "#/components/schemas/NodePool"
                     }
                   }
                 }
@@ -1089,6 +1117,27 @@
           }
         }
       },
+      "AWSBackupConfig": {
+        "description": "Backup configuration for AWS clusters",
+        "properties": {
+          "s3_bucket": {
+            "description": "Name of the S3 bucket used to save the backup",
+            "type": "string"
+          },
+          "account_id": {
+            "description": "ID of the AWS Disaster Recovery (DR) account",
+            "type": "string"
+          },
+          "identity_provider_arn": {
+            "description": "ARN of the identity provider created in the Disaster Recovery (DR) account for the Management Cluster",
+            "type": "string"
+          },
+          "role_arn": {
+            "description": "ARN of the role used by the CS Trusted Account to gain access to the Disaster Recovery (DR) account",
+            "type": "string"
+          }
+        }
+      },
       "AWSNodePool": {
         "description": "Representation of aws node pool specific parameters.",
         "properties": {
@@ -1158,6 +1207,13 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "backup_configs": {
+            "description": "Backup configurations per Management Cluster ID",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AWSBackupConfig"
             }
           }
         }

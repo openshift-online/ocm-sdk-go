@@ -19,27 +19,10 @@ limitations under the License.
 
 package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
-import "io"
+import (
+	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
+)
 
-func writeClusterAsyncDeleteRequest(request *ClusterDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readClusterAsyncDeleteResponse(response *ClusterDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeClusterGetRequest(request *ClusterGetRequest, writer io.Writer) error {
-	return nil
-}
-func readClusterGetResponse(response *ClusterGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalCluster(reader)
-	return err
-}
-func writeClusterUpdateRequest(request *ClusterUpdateRequest, writer io.Writer) error {
-	return MarshalCluster(request.body, writer)
-}
-func readClusterUpdateResponse(response *ClusterUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalCluster(reader)
-	return err
-}
+type AWSBackupConfigListBuilder = api_v1alpha1.AWSBackupConfigListBuilder
+
+var NewAWSBackupConfigList = api_v1alpha1.NewAWSBackupConfigList
