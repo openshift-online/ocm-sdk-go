@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// VersionBuilder contains the data and logic needed to build 'version' objects.
+//
+// Representation of an _OpenShift_ version.
 type VersionBuilder = api_v1.VersionBuilder
 
+// NewVersion creates a new builder of 'version' objects.
 var NewVersion = api_v1.NewVersion

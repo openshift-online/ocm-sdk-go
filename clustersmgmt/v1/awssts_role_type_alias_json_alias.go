@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAWSSTSRole writes a value of the 'AWSSTS_role' type to the given writer.
 var MarshalAWSSTSRole = api_v1.MarshalAWSSTSRole
+
+// WriteAWSSTSRole writes a value of the 'AWSSTS_role' type to the given stream.
 var WriteAWSSTSRole = api_v1.WriteAWSSTSRole
+
+// UnmarshalAWSSTSRole reads a value of the 'AWSSTS_role' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAWSSTSRole = api_v1.UnmarshalAWSSTSRole
+
+// ReadAWSSTSRole reads a value of the 'AWSSTS_role' type from the given iterator.
 var ReadAWSSTSRole = api_v1.ReadAWSSTSRole

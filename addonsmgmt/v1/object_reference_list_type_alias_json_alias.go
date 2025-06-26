@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// MarshalObjectReferenceList writes a list of values of the 'object_reference' type to
+// the given writer.
 var MarshalObjectReferenceList = api_v1.MarshalObjectReferenceList
+
+// WriteObjectReferenceList writes a list of value of the 'object_reference' type to
+// the given stream.
 var WriteObjectReferenceList = api_v1.WriteObjectReferenceList
+
+// UnmarshalObjectReferenceList reads a list of values of the 'object_reference' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalObjectReferenceList = api_v1.UnmarshalObjectReferenceList
+
+// ReadObjectReferenceList reads list of values of the ”object_reference' type from
+// the given iterator.
 var ReadObjectReferenceList = api_v1.ReadObjectReferenceList

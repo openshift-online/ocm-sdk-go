@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AdditionalCatalogSourceListBuilder contains the data and logic needed to build
+// 'additional_catalog_source' objects.
 type AdditionalCatalogSourceListBuilder = api_v1.AdditionalCatalogSourceListBuilder
 
+// NewAdditionalCatalogSourceList creates a new builder of 'additional_catalog_source' objects.
 var NewAdditionalCatalogSourceList = api_v1.NewAdditionalCatalogSourceList

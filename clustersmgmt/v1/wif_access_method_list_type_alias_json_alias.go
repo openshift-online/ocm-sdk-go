@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalWifAccessMethodList writes a list of values of the 'wif_access_method' type to
+// the given writer.
 var MarshalWifAccessMethodList = api_v1.MarshalWifAccessMethodList
+
+// WriteWifAccessMethodList writes a list of value of the 'wif_access_method' type to
+// the given stream.
 var WriteWifAccessMethodList = api_v1.WriteWifAccessMethodList
+
+// UnmarshalWifAccessMethodList reads a list of values of the 'wif_access_method' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalWifAccessMethodList = api_v1.UnmarshalWifAccessMethodList
+
+// ReadWifAccessMethodList reads list of values of the ”wif_access_method' type from
+// the given iterator.
 var ReadWifAccessMethodList = api_v1.ReadWifAccessMethodList

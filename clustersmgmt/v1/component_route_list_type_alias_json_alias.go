@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalComponentRouteList writes a list of values of the 'component_route' type to
+// the given writer.
 var MarshalComponentRouteList = api_v1.MarshalComponentRouteList
+
+// WriteComponentRouteList writes a list of value of the 'component_route' type to
+// the given stream.
 var WriteComponentRouteList = api_v1.WriteComponentRouteList
+
+// UnmarshalComponentRouteList reads a list of values of the 'component_route' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalComponentRouteList = api_v1.UnmarshalComponentRouteList
+
+// ReadComponentRouteList reads list of values of the ”component_route' type from
+// the given iterator.
 var ReadComponentRouteList = api_v1.ReadComponentRouteList

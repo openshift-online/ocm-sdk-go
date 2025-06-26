@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// GcpPrivateServiceConnectBuilder contains the data and logic needed to build 'gcp_private_service_connect' objects.
+//
+// Google cloud platform private service connect configuration of a cluster.
 type GcpPrivateServiceConnectBuilder = api_v1alpha1.GcpPrivateServiceConnectBuilder
 
+// NewGcpPrivateServiceConnect creates a new builder of 'gcp_private_service_connect' objects.
 var NewGcpPrivateServiceConnect = api_v1alpha1.NewGcpPrivateServiceConnect

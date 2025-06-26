@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// BreakGlassCredentialListBuilder contains the data and logic needed to build
+// 'break_glass_credential' objects.
 type BreakGlassCredentialListBuilder = api_v1.BreakGlassCredentialListBuilder
 
+// NewBreakGlassCredentialList creates a new builder of 'break_glass_credential' objects.
 var NewBreakGlassCredentialList = api_v1.NewBreakGlassCredentialList

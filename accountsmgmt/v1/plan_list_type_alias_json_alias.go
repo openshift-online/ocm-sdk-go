@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalPlanList writes a list of values of the 'plan' type to
+// the given writer.
 var MarshalPlanList = api_v1.MarshalPlanList
+
+// WritePlanList writes a list of value of the 'plan' type to
+// the given stream.
 var WritePlanList = api_v1.WritePlanList
+
+// UnmarshalPlanList reads a list of values of the 'plan' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalPlanList = api_v1.UnmarshalPlanList
+
+// ReadPlanList reads list of values of the ”plan' type from
+// the given iterator.
 var ReadPlanList = api_v1.ReadPlanList

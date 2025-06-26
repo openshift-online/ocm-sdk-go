@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// MarshalApplicationDependency writes a value of the 'application_dependency' type to the given writer.
 var MarshalApplicationDependency = api_v1.MarshalApplicationDependency
+
+// WriteApplicationDependency writes a value of the 'application_dependency' type to the given stream.
 var WriteApplicationDependency = api_v1.WriteApplicationDependency
+
+// UnmarshalApplicationDependency reads a value of the 'application_dependency' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalApplicationDependency = api_v1.UnmarshalApplicationDependency
+
+// ReadApplicationDependency reads a value of the 'application_dependency' type from the given iterator.
 var ReadApplicationDependency = api_v1.ReadApplicationDependency

@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalContractList writes a list of values of the 'contract' type to
+// the given writer.
 var MarshalContractList = api_v1.MarshalContractList
+
+// WriteContractList writes a list of value of the 'contract' type to
+// the given stream.
 var WriteContractList = api_v1.WriteContractList
+
+// UnmarshalContractList reads a list of values of the 'contract' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalContractList = api_v1.UnmarshalContractList
+
+// ReadContractList reads list of values of the ”contract' type from
+// the given iterator.
 var ReadContractList = api_v1.ReadContractList

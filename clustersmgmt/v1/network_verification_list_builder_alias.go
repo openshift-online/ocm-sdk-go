@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// NetworkVerificationListBuilder contains the data and logic needed to build
+// 'network_verification' objects.
 type NetworkVerificationListBuilder = api_v1.NetworkVerificationListBuilder
 
+// NewNetworkVerificationList creates a new builder of 'network_verification' objects.
 var NewNetworkVerificationList = api_v1.NewNetworkVerificationList

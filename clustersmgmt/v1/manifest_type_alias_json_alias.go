@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalManifest writes a value of the 'manifest' type to the given writer.
 var MarshalManifest = api_v1.MarshalManifest
+
+// WriteManifest writes a value of the 'manifest' type to the given stream.
 var WriteManifest = api_v1.WriteManifest
+
+// UnmarshalManifest reads a value of the 'manifest' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalManifest = api_v1.UnmarshalManifest
+
+// ReadManifest reads a value of the 'manifest' type from the given iterator.
 var ReadManifest = api_v1.ReadManifest

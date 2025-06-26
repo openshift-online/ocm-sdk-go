@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// TemplateParameterListBuilder contains the data and logic needed to build
+// 'template_parameter' objects.
 type TemplateParameterListBuilder = api_v1.TemplateParameterListBuilder
 
+// NewTemplateParameterList creates a new builder of 'template_parameter' objects.
 var NewTemplateParameterList = api_v1.NewTemplateParameterList

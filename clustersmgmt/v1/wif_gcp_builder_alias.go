@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// WifGcpBuilder contains the data and logic needed to build 'wif_gcp' objects.
 type WifGcpBuilder = api_v1.WifGcpBuilder
 
+// NewWifGcp creates a new builder of 'wif_gcp' objects.
 var NewWifGcp = api_v1.NewWifGcp

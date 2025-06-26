@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalLog writes a value of the 'log' type to the given writer.
 var MarshalLog = api_v1.MarshalLog
+
+// WriteLog writes a value of the 'log' type to the given stream.
 var WriteLog = api_v1.WriteLog
+
+// UnmarshalLog reads a value of the 'log' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalLog = api_v1.UnmarshalLog
+
+// ReadLog reads a value of the 'log' type from the given iterator.
 var ReadLog = api_v1.ReadLog

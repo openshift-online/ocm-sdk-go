@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MachineTypeBuilder contains the data and logic needed to build 'machine_type' objects.
+//
+// Machine type.
 type MachineTypeBuilder = api_v1.MachineTypeBuilder
 
+// NewMachineType creates a new builder of 'machine_type' objects.
 var NewMachineType = api_v1.NewMachineType

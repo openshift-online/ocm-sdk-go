@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// AddonStatusConditionListBuilder contains the data and logic needed to build
+// 'addon_status_condition' objects.
 type AddonStatusConditionListBuilder = api_v1.AddonStatusConditionListBuilder
 
+// NewAddonStatusConditionList creates a new builder of 'addon_status_condition' objects.
 var NewAddonStatusConditionList = api_v1.NewAddonStatusConditionList

@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// CapabilityListBuilder contains the data and logic needed to build
+// 'capability' objects.
 type CapabilityListBuilder = api_v1.CapabilityListBuilder
 
+// NewCapabilityList creates a new builder of 'capability' objects.
 var NewCapabilityList = api_v1.NewCapabilityList

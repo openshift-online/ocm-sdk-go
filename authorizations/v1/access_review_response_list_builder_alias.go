@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
+// AccessReviewResponseListBuilder contains the data and logic needed to build
+// 'access_review_response' objects.
 type AccessReviewResponseListBuilder = api_v1.AccessReviewResponseListBuilder
 
+// NewAccessReviewResponseList creates a new builder of 'access_review_response' objects.
 var NewAccessReviewResponseList = api_v1.NewAccessReviewResponseList

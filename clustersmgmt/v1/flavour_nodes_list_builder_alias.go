@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// FlavourNodesListBuilder contains the data and logic needed to build
+// 'flavour_nodes' objects.
 type FlavourNodesListBuilder = api_v1.FlavourNodesListBuilder
 
+// NewFlavourNodesList creates a new builder of 'flavour_nodes' objects.
 var NewFlavourNodesList = api_v1.NewFlavourNodesList

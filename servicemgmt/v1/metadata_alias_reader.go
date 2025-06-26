@@ -23,5 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// MarshalMetadata writes a value of the metadata type to the given target, which
 var MarshalMetadata = api_v1.MarshalMetadata
+
+// UnmarshalMetadata reads a value of the metadata type from the given source, which
+// which can be a reader, a slice of byte or a string.
 var UnmarshalMetadata = api_v1.UnmarshalMetadata

@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// UserListBuilder contains the data and logic needed to build
+// 'user' objects.
 type UserListBuilder = api_v1.UserListBuilder
 
+// NewUserList creates a new builder of 'user' objects.
 var NewUserList = api_v1.NewUserList

@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AMIOverrideListBuilder contains the data and logic needed to build
+// 'AMI_override' objects.
 type AMIOverrideListBuilder = api_v1alpha1.AMIOverrideListBuilder
 
+// NewAMIOverrideList creates a new builder of 'AMI_override' objects.
 var NewAMIOverrideList = api_v1alpha1.NewAMIOverrideList

@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalMachineTypeCategoryList writes a list of values of the 'machine_type_category' type to
+// the given writer.
 var MarshalMachineTypeCategoryList = api_v1.MarshalMachineTypeCategoryList
+
+// WriteMachineTypeCategoryList writes a list of value of the 'machine_type_category' type to
+// the given stream.
 var WriteMachineTypeCategoryList = api_v1.WriteMachineTypeCategoryList
+
+// UnmarshalMachineTypeCategoryList reads a list of values of the 'machine_type_category' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalMachineTypeCategoryList = api_v1.UnmarshalMachineTypeCategoryList
+
+// ReadMachineTypeCategoryList reads list of values of the ”machine_type_category' type from
+// the given iterator.
 var ReadMachineTypeCategoryList = api_v1.ReadMachineTypeCategoryList

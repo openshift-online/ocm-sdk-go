@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
+// MarshalManagementClusterList writes a list of values of the 'management_cluster' type to
+// the given writer.
 var MarshalManagementClusterList = api_v1.MarshalManagementClusterList
+
+// WriteManagementClusterList writes a list of value of the 'management_cluster' type to
+// the given stream.
 var WriteManagementClusterList = api_v1.WriteManagementClusterList
+
+// UnmarshalManagementClusterList reads a list of values of the 'management_cluster' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalManagementClusterList = api_v1.UnmarshalManagementClusterList
+
+// ReadManagementClusterList reads list of values of the ”management_cluster' type from
+// the given iterator.
 var ReadManagementClusterList = api_v1.ReadManagementClusterList

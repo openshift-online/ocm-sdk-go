@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalTemplateParameterList writes a list of values of the 'template_parameter' type to
+// the given writer.
 var MarshalTemplateParameterList = api_v1.MarshalTemplateParameterList
+
+// WriteTemplateParameterList writes a list of value of the 'template_parameter' type to
+// the given stream.
 var WriteTemplateParameterList = api_v1.WriteTemplateParameterList
+
+// UnmarshalTemplateParameterList reads a list of values of the 'template_parameter' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalTemplateParameterList = api_v1.UnmarshalTemplateParameterList
+
+// ReadTemplateParameterList reads list of values of the ”template_parameter' type from
+// the given iterator.
 var ReadTemplateParameterList = api_v1.ReadTemplateParameterList

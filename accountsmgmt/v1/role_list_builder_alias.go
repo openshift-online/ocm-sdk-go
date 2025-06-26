@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// RoleListBuilder contains the data and logic needed to build
+// 'role' objects.
 type RoleListBuilder = api_v1.RoleListBuilder
 
+// NewRoleList creates a new builder of 'role' objects.
 var NewRoleList = api_v1.NewRoleList

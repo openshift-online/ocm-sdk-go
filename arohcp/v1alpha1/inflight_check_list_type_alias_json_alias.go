@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalInflightCheckList writes a list of values of the 'inflight_check' type to
+// the given writer.
 var MarshalInflightCheckList = api_v1alpha1.MarshalInflightCheckList
+
+// WriteInflightCheckList writes a list of value of the 'inflight_check' type to
+// the given stream.
 var WriteInflightCheckList = api_v1alpha1.WriteInflightCheckList
+
+// UnmarshalInflightCheckList reads a list of values of the 'inflight_check' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalInflightCheckList = api_v1alpha1.UnmarshalInflightCheckList
+
+// ReadInflightCheckList reads list of values of the ”inflight_check' type from
+// the given iterator.
 var ReadInflightCheckList = api_v1alpha1.ReadInflightCheckList

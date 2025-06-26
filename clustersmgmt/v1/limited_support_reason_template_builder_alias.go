@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// LimitedSupportReasonTemplateBuilder contains the data and logic needed to build 'limited_support_reason_template' objects.
+//
+// A template for cluster limited support reason.
 type LimitedSupportReasonTemplateBuilder = api_v1.LimitedSupportReasonTemplateBuilder
 
+// NewLimitedSupportReasonTemplate creates a new builder of 'limited_support_reason_template' objects.
 var NewLimitedSupportReasonTemplate = api_v1.NewLimitedSupportReasonTemplate

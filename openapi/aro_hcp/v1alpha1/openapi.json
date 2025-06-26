@@ -63,7 +63,7 @@
           }
         },
         "responses": {
-          "201": {
+          "202": {
             "description": "Success.",
             "content": {
               "application/json": {
@@ -201,7 +201,7 @@
           }
         ],
         "responses": {
-          "204": {
+          "202": {
             "description": "Success."
           },
           "default": {
@@ -443,7 +443,7 @@
           }
         },
         "responses": {
-          "201": {
+          "202": {
             "description": "Success.",
             "content": {
               "application/json": {
@@ -1089,6 +1089,27 @@
           }
         }
       },
+      "AWSBackupConfig": {
+        "description": "Backup configuration for AWS clusters",
+        "properties": {
+          "s3_bucket": {
+            "description": "Name of the S3 bucket used to save the backup",
+            "type": "string"
+          },
+          "account_id": {
+            "description": "ID of the AWS Disaster Recovery (DR) account",
+            "type": "string"
+          },
+          "identity_provider_arn": {
+            "description": "ARN of the identity provider created in the Disaster Recovery (DR) account for the Management Cluster",
+            "type": "string"
+          },
+          "role_arn": {
+            "description": "ARN of the role used by the CS Trusted Account to gain access to the Disaster Recovery (DR) account",
+            "type": "string"
+          }
+        }
+      },
       "AWSNodePool": {
         "description": "Representation of aws node pool specific parameters.",
         "properties": {
@@ -1158,6 +1179,13 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "backup_configs": {
+            "description": "Backup configurations per Management Cluster ID",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AWSBackupConfig"
             }
           }
         }

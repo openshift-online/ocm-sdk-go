@@ -51,7 +51,7 @@ func NewClusterClient(transport http.RoundTripper, path string) *ClusterClient {
 	}
 }
 
-// Delete creates a request for the 'delete' method.
+// Delete creates a request for the 'async_delete' method.
 //
 // Deletes the cluster.
 func (c *ClusterClient) Delete() *ClusterDeleteRequest {
@@ -224,7 +224,7 @@ func (c *ClusterClient) Poll() *ClusterPollRequest {
 	}
 }
 
-// ClusterDeleteRequest is the request for the 'delete' method.
+// ClusterDeleteRequest is the request for the 'async_delete' method.
 type ClusterDeleteRequest struct {
 	transport  http.RoundTripper
 	path       string
@@ -324,7 +324,7 @@ func (r *ClusterDeleteRequest) SendContext(ctx context.Context) (result *Cluster
 	return
 }
 
-// ClusterDeleteResponse is the response for the 'delete' method.
+// ClusterDeleteResponse is the response for the 'async_delete' method.
 type ClusterDeleteResponse struct {
 	status int
 	header http.Header

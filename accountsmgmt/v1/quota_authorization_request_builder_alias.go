@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// QuotaAuthorizationRequestBuilder contains the data and logic needed to build 'quota_authorization_request' objects.
 type QuotaAuthorizationRequestBuilder = api_v1.QuotaAuthorizationRequestBuilder
 
+// NewQuotaAuthorizationRequest creates a new builder of 'quota_authorization_request' objects.
 var NewQuotaAuthorizationRequest = api_v1.NewQuotaAuthorizationRequest

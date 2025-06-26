@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// SyncsetListBuilder contains the data and logic needed to build
+// 'syncset' objects.
 type SyncsetListBuilder = api_v1.SyncsetListBuilder
 
+// NewSyncsetList creates a new builder of 'syncset' objects.
 var NewSyncsetList = api_v1.NewSyncsetList

@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AzureNodePoolEncryptionAtHostBuilder contains the data and logic needed to build 'azure_node_pool_encryption_at_host' objects.
+//
+// AzureNodePoolEncryptionAtHost defines the encryption setting for Encryption At Host.
+// If not specified, Encryption at Host is not enabled.
 type AzureNodePoolEncryptionAtHostBuilder = api_v1.AzureNodePoolEncryptionAtHostBuilder
 
+// NewAzureNodePoolEncryptionAtHost creates a new builder of 'azure_node_pool_encryption_at_host' objects.
 var NewAzureNodePoolEncryptionAtHost = api_v1.NewAzureNodePoolEncryptionAtHost

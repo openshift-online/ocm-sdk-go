@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAddOnRequirementList writes a list of values of the 'add_on_requirement' type to
+// the given writer.
 var MarshalAddOnRequirementList = api_v1.MarshalAddOnRequirementList
+
+// WriteAddOnRequirementList writes a list of value of the 'add_on_requirement' type to
+// the given stream.
 var WriteAddOnRequirementList = api_v1.WriteAddOnRequirementList
+
+// UnmarshalAddOnRequirementList reads a list of values of the 'add_on_requirement' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddOnRequirementList = api_v1.UnmarshalAddOnRequirementList
+
+// ReadAddOnRequirementList reads list of values of the ”add_on_requirement' type from
+// the given iterator.
 var ReadAddOnRequirementList = api_v1.ReadAddOnRequirementList

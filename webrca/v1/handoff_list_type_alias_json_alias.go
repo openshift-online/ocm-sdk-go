@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// MarshalHandoffList writes a list of values of the 'handoff' type to
+// the given writer.
 var MarshalHandoffList = api_v1.MarshalHandoffList
+
+// WriteHandoffList writes a list of value of the 'handoff' type to
+// the given stream.
 var WriteHandoffList = api_v1.WriteHandoffList
+
+// UnmarshalHandoffList reads a list of values of the 'handoff' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalHandoffList = api_v1.UnmarshalHandoffList
+
+// ReadHandoffList reads list of values of the ”handoff' type from
+// the given iterator.
 var ReadHandoffList = api_v1.ReadHandoffList

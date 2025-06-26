@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// MarshalAddonSubOperator writes a value of the 'addon_sub_operator' type to the given writer.
 var MarshalAddonSubOperator = api_v1.MarshalAddonSubOperator
+
+// WriteAddonSubOperator writes a value of the 'addon_sub_operator' type to the given stream.
 var WriteAddonSubOperator = api_v1.WriteAddonSubOperator
+
+// UnmarshalAddonSubOperator reads a value of the 'addon_sub_operator' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddonSubOperator = api_v1.UnmarshalAddonSubOperator
+
+// ReadAddonSubOperator reads a value of the 'addon_sub_operator' type from the given iterator.
 var ReadAddonSubOperator = api_v1.ReadAddonSubOperator

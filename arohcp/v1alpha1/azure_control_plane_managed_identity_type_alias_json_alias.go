@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalAzureControlPlaneManagedIdentity writes a value of the 'azure_control_plane_managed_identity' type to the given writer.
 var MarshalAzureControlPlaneManagedIdentity = api_v1alpha1.MarshalAzureControlPlaneManagedIdentity
+
+// WriteAzureControlPlaneManagedIdentity writes a value of the 'azure_control_plane_managed_identity' type to the given stream.
 var WriteAzureControlPlaneManagedIdentity = api_v1alpha1.WriteAzureControlPlaneManagedIdentity
+
+// UnmarshalAzureControlPlaneManagedIdentity reads a value of the 'azure_control_plane_managed_identity' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAzureControlPlaneManagedIdentity = api_v1alpha1.UnmarshalAzureControlPlaneManagedIdentity
+
+// ReadAzureControlPlaneManagedIdentity reads a value of the 'azure_control_plane_managed_identity' type from the given iterator.
 var ReadAzureControlPlaneManagedIdentity = api_v1alpha1.ReadAzureControlPlaneManagedIdentity

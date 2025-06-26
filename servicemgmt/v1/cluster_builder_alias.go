@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// ClusterBuilder contains the data and logic needed to build 'cluster' objects.
+//
+// This represents the parameters needed by Managed Service to create a cluster.
 type ClusterBuilder = api_v1.ClusterBuilder
 
+// NewCluster creates a new builder of 'cluster' objects.
 var NewCluster = api_v1.NewCluster

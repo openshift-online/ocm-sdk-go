@@ -25,10 +25,10 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeNodePoolsAddRequest(request *NodePoolsAddRequest, writer io.Writer) error {
+func writeNodePoolsAsyncAddRequest(request *NodePoolsAddRequest, writer io.Writer) error {
 	return MarshalNodePool(request.body, writer)
 }
-func readNodePoolsAddResponse(response *NodePoolsAddResponse, reader io.Reader) error {
+func readNodePoolsAsyncAddResponse(response *NodePoolsAddResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalNodePool(reader)
 	return err

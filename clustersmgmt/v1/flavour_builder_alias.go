@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// FlavourBuilder contains the data and logic needed to build 'flavour' objects.
+//
+// Set of predefined properties of a cluster. For example, a _huge_ flavour can be a cluster
+// with 10 infra nodes and 1000 compute nodes.
 type FlavourBuilder = api_v1.FlavourBuilder
 
+// NewFlavour creates a new builder of 'flavour' objects.
 var NewFlavour = api_v1.NewFlavour

@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// SubscriptionBuilder contains the data and logic needed to build 'subscription' objects.
 type SubscriptionBuilder = api_v1.SubscriptionBuilder
 
+// NewSubscription creates a new builder of 'subscription' objects.
 var NewSubscription = api_v1.NewSubscription

@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// AddonNamespaceListBuilder contains the data and logic needed to build
+// 'addon_namespace' objects.
 type AddonNamespaceListBuilder = api_v1.AddonNamespaceListBuilder
 
+// NewAddonNamespaceList creates a new builder of 'addon_namespace' objects.
 var NewAddonNamespaceList = api_v1.NewAddonNamespaceList

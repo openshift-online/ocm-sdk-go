@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ManifestListBuilder contains the data and logic needed to build
+// 'manifest' objects.
 type ManifestListBuilder = api_v1.ManifestListBuilder
 
+// NewManifestList creates a new builder of 'manifest' objects.
 var NewManifestList = api_v1.NewManifestList

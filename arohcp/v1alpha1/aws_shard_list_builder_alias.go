@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AWSShardListBuilder contains the data and logic needed to build
+// 'AWS_shard' objects.
 type AWSShardListBuilder = api_v1alpha1.AWSShardListBuilder
 
+// NewAWSShardList creates a new builder of 'AWS_shard' objects.
 var NewAWSShardList = api_v1alpha1.NewAWSShardList

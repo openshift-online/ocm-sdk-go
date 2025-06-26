@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// ClusterAuthorizationRequestListBuilder contains the data and logic needed to build
+// 'cluster_authorization_request' objects.
 type ClusterAuthorizationRequestListBuilder = api_v1.ClusterAuthorizationRequestListBuilder
 
+// NewClusterAuthorizationRequestList creates a new builder of 'cluster_authorization_request' objects.
 var NewClusterAuthorizationRequestList = api_v1.NewClusterAuthorizationRequestList

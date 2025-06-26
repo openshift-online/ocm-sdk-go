@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSkuRuleList writes a list of values of the 'sku_rule' type to
+// the given writer.
 var MarshalSkuRuleList = api_v1.MarshalSkuRuleList
+
+// WriteSkuRuleList writes a list of value of the 'sku_rule' type to
+// the given stream.
 var WriteSkuRuleList = api_v1.WriteSkuRuleList
+
+// UnmarshalSkuRuleList reads a list of values of the 'sku_rule' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSkuRuleList = api_v1.UnmarshalSkuRuleList
+
+// ReadSkuRuleList reads list of values of the ”sku_rule' type from
+// the given iterator.
 var ReadSkuRuleList = api_v1.ReadSkuRuleList

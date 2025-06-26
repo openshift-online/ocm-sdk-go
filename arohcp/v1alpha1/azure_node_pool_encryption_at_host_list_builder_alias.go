@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AzureNodePoolEncryptionAtHostListBuilder contains the data and logic needed to build
+// 'azure_node_pool_encryption_at_host' objects.
 type AzureNodePoolEncryptionAtHostListBuilder = api_v1alpha1.AzureNodePoolEncryptionAtHostListBuilder
 
+// NewAzureNodePoolEncryptionAtHostList creates a new builder of 'azure_node_pool_encryption_at_host' objects.
 var NewAzureNodePoolEncryptionAtHostList = api_v1alpha1.NewAzureNodePoolEncryptionAtHostList

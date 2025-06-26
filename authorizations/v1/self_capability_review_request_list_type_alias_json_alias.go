@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
+// MarshalSelfCapabilityReviewRequestList writes a list of values of the 'self_capability_review_request' type to
+// the given writer.
 var MarshalSelfCapabilityReviewRequestList = api_v1.MarshalSelfCapabilityReviewRequestList
+
+// WriteSelfCapabilityReviewRequestList writes a list of value of the 'self_capability_review_request' type to
+// the given stream.
 var WriteSelfCapabilityReviewRequestList = api_v1.WriteSelfCapabilityReviewRequestList
+
+// UnmarshalSelfCapabilityReviewRequestList reads a list of values of the 'self_capability_review_request' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSelfCapabilityReviewRequestList = api_v1.UnmarshalSelfCapabilityReviewRequestList
+
+// ReadSelfCapabilityReviewRequestList reads list of values of the ”self_capability_review_request' type from
+// the given iterator.
 var ReadSelfCapabilityReviewRequestList = api_v1.ReadSelfCapabilityReviewRequestList

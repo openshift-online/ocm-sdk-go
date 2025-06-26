@@ -21,10 +21,10 @@ package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
 import "io"
 
-func writeClusterDeleteRequest(request *ClusterDeleteRequest, writer io.Writer) error {
+func writeClusterAsyncDeleteRequest(request *ClusterDeleteRequest, writer io.Writer) error {
 	return nil
 }
-func readClusterDeleteResponse(response *ClusterDeleteResponse, reader io.Reader) error {
+func readClusterAsyncDeleteResponse(response *ClusterDeleteResponse, reader io.Reader) error {
 	return nil
 }
 func writeClusterGetRequest(request *ClusterGetRequest, writer io.Writer) error {

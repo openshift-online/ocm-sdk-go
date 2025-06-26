@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalRegistryAllowlist writes a value of the 'registry_allowlist' type to the given writer.
 var MarshalRegistryAllowlist = api_v1.MarshalRegistryAllowlist
+
+// WriteRegistryAllowlist writes a value of the 'registry_allowlist' type to the given stream.
 var WriteRegistryAllowlist = api_v1.WriteRegistryAllowlist
+
+// UnmarshalRegistryAllowlist reads a value of the 'registry_allowlist' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalRegistryAllowlist = api_v1.UnmarshalRegistryAllowlist
+
+// ReadRegistryAllowlist reads a value of the 'registry_allowlist' type from the given iterator.
 var ReadRegistryAllowlist = api_v1.ReadRegistryAllowlist

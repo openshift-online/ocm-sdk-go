@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// PrivateLinkPrincipalListBuilder contains the data and logic needed to build
+// 'private_link_principal' objects.
 type PrivateLinkPrincipalListBuilder = api_v1.PrivateLinkPrincipalListBuilder
 
+// NewPrivateLinkPrincipalList creates a new builder of 'private_link_principal' objects.
 var NewPrivateLinkPrincipalList = api_v1.NewPrivateLinkPrincipalList

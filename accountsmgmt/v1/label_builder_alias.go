@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// LabelBuilder contains the data and logic needed to build 'label' objects.
 type LabelBuilder = api_v1.LabelBuilder
 
+// NewLabel creates a new builder of 'label' objects.
 var NewLabel = api_v1.NewLabel

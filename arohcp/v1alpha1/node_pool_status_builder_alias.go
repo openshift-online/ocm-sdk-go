@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// NodePoolStatusBuilder contains the data and logic needed to build 'node_pool_status' objects.
+//
+// Representation of the status of a node pool.
 type NodePoolStatusBuilder = api_v1alpha1.NodePoolStatusBuilder
 
+// NewNodePoolStatus creates a new builder of 'node_pool_status' objects.
 var NewNodePoolStatus = api_v1alpha1.NewNodePoolStatus

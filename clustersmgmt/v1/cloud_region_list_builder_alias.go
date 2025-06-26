@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// CloudRegionListBuilder contains the data and logic needed to build
+// 'cloud_region' objects.
 type CloudRegionListBuilder = api_v1.CloudRegionListBuilder
 
+// NewCloudRegionList creates a new builder of 'cloud_region' objects.
 var NewCloudRegionList = api_v1.NewCloudRegionList

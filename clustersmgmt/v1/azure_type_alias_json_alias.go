@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAzure writes a value of the 'azure' type to the given writer.
 var MarshalAzure = api_v1.MarshalAzure
+
+// WriteAzure writes a value of the 'azure' type to the given stream.
 var WriteAzure = api_v1.WriteAzure
+
+// UnmarshalAzure reads a value of the 'azure' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAzure = api_v1.UnmarshalAzure
+
+// ReadAzure reads a value of the 'azure' type from the given iterator.
 var ReadAzure = api_v1.ReadAzure

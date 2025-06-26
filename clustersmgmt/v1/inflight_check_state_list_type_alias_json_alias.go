@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalInflightCheckStateList writes a list of values of the 'inflight_check_state' type to
+// the given writer.
 var MarshalInflightCheckStateList = api_v1.MarshalInflightCheckStateList
+
+// WriteInflightCheckStateList writes a list of value of the 'inflight_check_state' type to
+// the given stream.
 var WriteInflightCheckStateList = api_v1.WriteInflightCheckStateList
+
+// UnmarshalInflightCheckStateList reads a list of values of the 'inflight_check_state' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalInflightCheckStateList = api_v1.UnmarshalInflightCheckStateList
+
+// ReadInflightCheckStateList reads list of values of the ”inflight_check_state' type from
+// the given iterator.
 var ReadInflightCheckStateList = api_v1.ReadInflightCheckStateList
