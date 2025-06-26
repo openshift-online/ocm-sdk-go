@@ -26,43 +26,12 @@ import (
 )
 
 func writeClustersAsyncAddRequest(request *ClustersAddRequest, writer io.Writer) error {
-	count := 0
-	stream := helpers.NewStream(writer)
-	stream.WriteObjectStart()
-	if request.body != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("body")
-		WriteCluster(request.body, stream)
-		count++
-	}
-	stream.WriteObjectEnd()
-	err := stream.Flush()
-	if err != nil {
-		return err
-	}
-	return stream.Error
+	return MarshalCluster(request.body, writer)
 }
 func readClustersAsyncAddResponse(response *ClustersAddResponse, reader io.Reader) error {
-	iterator, err := helpers.NewIterator(reader)
-	if err != nil {
-		return err
-	}
-	for {
-		field := iterator.ReadObject()
-		if field == "" {
-			break
-		}
-		switch field {
-		case "body":
-			value := ReadCluster(iterator)
-			response.body = value
-		default:
-			iterator.ReadAny()
-		}
-	}
-	return iterator.Error
+	var err error
+	response.body, err = UnmarshalCluster(reader)
+	return err
 }
 func writeClustersListRequest(request *ClustersListRequest, writer io.Writer) error {
 	return nil

@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// HTPasswdIdentityProviderListBuilder contains the data and logic needed to build
+// 'HT_passwd_identity_provider' objects.
 type HTPasswdIdentityProviderListBuilder = api_v1alpha1.HTPasswdIdentityProviderListBuilder
 
+// NewHTPasswdIdentityProviderList creates a new builder of 'HT_passwd_identity_provider' objects.
 var NewHTPasswdIdentityProviderList = api_v1alpha1.NewHTPasswdIdentityProviderList

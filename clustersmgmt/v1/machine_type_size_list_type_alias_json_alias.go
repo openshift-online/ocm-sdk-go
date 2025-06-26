@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalMachineTypeSizeList writes a list of values of the 'machine_type_size' type to
+// the given writer.
 var MarshalMachineTypeSizeList = api_v1.MarshalMachineTypeSizeList
+
+// WriteMachineTypeSizeList writes a list of value of the 'machine_type_size' type to
+// the given stream.
 var WriteMachineTypeSizeList = api_v1.WriteMachineTypeSizeList
+
+// UnmarshalMachineTypeSizeList reads a list of values of the 'machine_type_size' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalMachineTypeSizeList = api_v1.UnmarshalMachineTypeSizeList
+
+// ReadMachineTypeSizeList reads list of values of the ”machine_type_size' type from
+// the given iterator.
 var ReadMachineTypeSizeList = api_v1.ReadMachineTypeSizeList

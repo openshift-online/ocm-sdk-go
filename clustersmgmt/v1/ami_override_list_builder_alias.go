@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AMIOverrideListBuilder contains the data and logic needed to build
+// 'AMI_override' objects.
 type AMIOverrideListBuilder = api_v1.AMIOverrideListBuilder
 
+// NewAMIOverrideList creates a new builder of 'AMI_override' objects.
 var NewAMIOverrideList = api_v1.NewAMIOverrideList

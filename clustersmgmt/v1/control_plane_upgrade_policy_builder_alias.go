@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ControlPlaneUpgradePolicyBuilder contains the data and logic needed to build 'control_plane_upgrade_policy' objects.
+//
+// Representation of an upgrade policy that can be set for a cluster.
 type ControlPlaneUpgradePolicyBuilder = api_v1.ControlPlaneUpgradePolicyBuilder
 
+// NewControlPlaneUpgradePolicy creates a new builder of 'control_plane_upgrade_policy' objects.
 var NewControlPlaneUpgradePolicy = api_v1.NewControlPlaneUpgradePolicy

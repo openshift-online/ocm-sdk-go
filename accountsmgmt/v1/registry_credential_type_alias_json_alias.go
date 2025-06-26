@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalRegistryCredential writes a value of the 'registry_credential' type to the given writer.
 var MarshalRegistryCredential = api_v1.MarshalRegistryCredential
+
+// WriteRegistryCredential writes a value of the 'registry_credential' type to the given stream.
 var WriteRegistryCredential = api_v1.WriteRegistryCredential
+
+// UnmarshalRegistryCredential reads a value of the 'registry_credential' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalRegistryCredential = api_v1.UnmarshalRegistryCredential
+
+// ReadRegistryCredential reads a value of the 'registry_credential' type from the given iterator.
 var ReadRegistryCredential = api_v1.ReadRegistryCredential

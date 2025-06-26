@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalClusterRegistrationList writes a list of values of the 'cluster_registration' type to
+// the given writer.
 var MarshalClusterRegistrationList = api_v1.MarshalClusterRegistrationList
+
+// WriteClusterRegistrationList writes a list of value of the 'cluster_registration' type to
+// the given stream.
 var WriteClusterRegistrationList = api_v1.WriteClusterRegistrationList
+
+// UnmarshalClusterRegistrationList reads a list of values of the 'cluster_registration' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterRegistrationList = api_v1.UnmarshalClusterRegistrationList
+
+// ReadClusterRegistrationList reads list of values of the ”cluster_registration' type from
+// the given iterator.
 var ReadClusterRegistrationList = api_v1.ReadClusterRegistrationList

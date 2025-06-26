@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAWSSpotMarketOptions writes a value of the 'AWS_spot_market_options' type to the given writer.
 var MarshalAWSSpotMarketOptions = api_v1.MarshalAWSSpotMarketOptions
+
+// WriteAWSSpotMarketOptions writes a value of the 'AWS_spot_market_options' type to the given stream.
 var WriteAWSSpotMarketOptions = api_v1.WriteAWSSpotMarketOptions
+
+// UnmarshalAWSSpotMarketOptions reads a value of the 'AWS_spot_market_options' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAWSSpotMarketOptions = api_v1.UnmarshalAWSSpotMarketOptions
+
+// ReadAWSSpotMarketOptions reads a value of the 'AWS_spot_market_options' type from the given iterator.
 var ReadAWSSpotMarketOptions = api_v1.ReadAWSSpotMarketOptions

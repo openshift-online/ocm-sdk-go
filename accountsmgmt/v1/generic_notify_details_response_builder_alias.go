@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// GenericNotifyDetailsResponseBuilder contains the data and logic needed to build 'generic_notify_details_response' objects.
+//
+// class that defines notify details response in general.
 type GenericNotifyDetailsResponseBuilder = api_v1.GenericNotifyDetailsResponseBuilder
 
+// NewGenericNotifyDetailsResponse creates a new builder of 'generic_notify_details_response' objects.
 var NewGenericNotifyDetailsResponse = api_v1.NewGenericNotifyDetailsResponse

@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ValueListBuilder contains the data and logic needed to build
+// 'value' objects.
 type ValueListBuilder = api_v1alpha1.ValueListBuilder
 
+// NewValueList creates a new builder of 'value' objects.
 var NewValueList = api_v1alpha1.NewValueList

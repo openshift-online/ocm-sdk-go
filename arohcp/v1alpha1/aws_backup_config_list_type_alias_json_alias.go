@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalAWSBackupConfigList writes a list of values of the 'AWS_backup_config' type to
+// the given writer.
 var MarshalAWSBackupConfigList = api_v1alpha1.MarshalAWSBackupConfigList
+
+// WriteAWSBackupConfigList writes a list of value of the 'AWS_backup_config' type to
+// the given stream.
 var WriteAWSBackupConfigList = api_v1alpha1.WriteAWSBackupConfigList
+
+// UnmarshalAWSBackupConfigList reads a list of values of the 'AWS_backup_config' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAWSBackupConfigList = api_v1alpha1.UnmarshalAWSBackupConfigList
+
+// ReadAWSBackupConfigList reads list of values of the ”AWS_backup_config' type from
+// the given iterator.
 var ReadAWSBackupConfigList = api_v1alpha1.ReadAWSBackupConfigList

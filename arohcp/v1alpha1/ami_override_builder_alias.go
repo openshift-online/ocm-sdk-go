@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AMIOverrideBuilder contains the data and logic needed to build 'AMI_override' objects.
+//
+// AMIOverride specifies what Amazon Machine Image should be used for a particular product and region.
 type AMIOverrideBuilder = api_v1alpha1.AMIOverrideBuilder
 
+// NewAMIOverride creates a new builder of 'AMI_override' objects.
 var NewAMIOverride = api_v1alpha1.NewAMIOverride

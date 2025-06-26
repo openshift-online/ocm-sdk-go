@@ -23,6 +23,8 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ReleaseImagesBuilder contains the data and logic needed to build 'release_images' objects.
 type ReleaseImagesBuilder = api_v1alpha1.ReleaseImagesBuilder
 
+// NewReleaseImages creates a new builder of 'release_images' objects.
 var NewReleaseImages = api_v1alpha1.NewReleaseImages

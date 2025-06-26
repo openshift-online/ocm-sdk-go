@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
+// SelfAccessReviewResponseBuilder contains the data and logic needed to build 'self_access_review_response' objects.
+//
+// Representation of an access review response, performed against oneself
 type SelfAccessReviewResponseBuilder = api_v1.SelfAccessReviewResponseBuilder
 
+// NewSelfAccessReviewResponse creates a new builder of 'self_access_review_response' objects.
 var NewSelfAccessReviewResponse = api_v1.NewSelfAccessReviewResponse

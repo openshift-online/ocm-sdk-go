@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// MarshalUser writes a value of the 'user' type to the given writer.
 var MarshalUser = api_v1.MarshalUser
+
+// WriteUser writes a value of the 'user' type to the given stream.
 var WriteUser = api_v1.WriteUser
+
+// UnmarshalUser reads a value of the 'user' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalUser = api_v1.UnmarshalUser
+
+// ReadUser reads a value of the 'user' type from the given iterator.
 var ReadUser = api_v1.ReadUser

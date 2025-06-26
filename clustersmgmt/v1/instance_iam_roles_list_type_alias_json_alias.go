@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalInstanceIAMRolesList writes a list of values of the 'instance_IAM_roles' type to
+// the given writer.
 var MarshalInstanceIAMRolesList = api_v1.MarshalInstanceIAMRolesList
+
+// WriteInstanceIAMRolesList writes a list of value of the 'instance_IAM_roles' type to
+// the given stream.
 var WriteInstanceIAMRolesList = api_v1.WriteInstanceIAMRolesList
+
+// UnmarshalInstanceIAMRolesList reads a list of values of the 'instance_IAM_roles' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalInstanceIAMRolesList = api_v1.UnmarshalInstanceIAMRolesList
+
+// ReadInstanceIAMRolesList reads list of values of the ”instance_IAM_roles' type from
+// the given iterator.
 var ReadInstanceIAMRolesList = api_v1.ReadInstanceIAMRolesList

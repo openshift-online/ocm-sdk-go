@@ -161,12 +161,10 @@ var pathTreeData = `{
             "node_pools": {
               "-": {
                 "status": null
-              },
-              "async_add": null
+              }
             },
             "status": null
-          },
-          "async_add": null
+          }
         },
         "managed_identities_requirements": null,
         "versions": {

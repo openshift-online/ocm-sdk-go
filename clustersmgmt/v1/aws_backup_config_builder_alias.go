@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AWSBackupConfigBuilder contains the data and logic needed to build 'AWS_backup_config' objects.
+//
+// Backup configuration for AWS clusters
 type AWSBackupConfigBuilder = api_v1.AWSBackupConfigBuilder
 
+// NewAWSBackupConfig creates a new builder of 'AWS_backup_config' objects.
 var NewAWSBackupConfig = api_v1.NewAWSBackupConfig

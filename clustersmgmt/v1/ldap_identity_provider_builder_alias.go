@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// LDAPIdentityProviderBuilder contains the data and logic needed to build 'LDAP_identity_provider' objects.
+//
+// Details for `ldap` identity providers.
 type LDAPIdentityProviderBuilder = api_v1.LDAPIdentityProviderBuilder
 
+// NewLDAPIdentityProvider creates a new builder of 'LDAP_identity_provider' objects.
 var NewLDAPIdentityProvider = api_v1.NewLDAPIdentityProvider

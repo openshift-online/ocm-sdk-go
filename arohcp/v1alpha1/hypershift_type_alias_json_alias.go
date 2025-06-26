@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalHypershift writes a value of the 'hypershift' type to the given writer.
 var MarshalHypershift = api_v1alpha1.MarshalHypershift
+
+// WriteHypershift writes a value of the 'hypershift' type to the given stream.
 var WriteHypershift = api_v1alpha1.WriteHypershift
+
+// UnmarshalHypershift reads a value of the 'hypershift' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalHypershift = api_v1alpha1.UnmarshalHypershift
+
+// ReadHypershift reads a value of the 'hypershift' type from the given iterator.
 var ReadHypershift = api_v1alpha1.ReadHypershift

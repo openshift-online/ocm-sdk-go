@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// WifSupportBuilder contains the data and logic needed to build 'wif_support' objects.
 type WifSupportBuilder = api_v1.WifSupportBuilder
 
+// NewWifSupport creates a new builder of 'wif_support' objects.
 var NewWifSupport = api_v1.NewWifSupport

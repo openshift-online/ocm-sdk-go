@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalEncryptionKey writes a value of the 'encryption_key' type to the given writer.
 var MarshalEncryptionKey = api_v1.MarshalEncryptionKey
+
+// WriteEncryptionKey writes a value of the 'encryption_key' type to the given stream.
 var WriteEncryptionKey = api_v1.WriteEncryptionKey
+
+// UnmarshalEncryptionKey reads a value of the 'encryption_key' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalEncryptionKey = api_v1.UnmarshalEncryptionKey
+
+// ReadEncryptionKey reads a value of the 'encryption_key' type from the given iterator.
 var ReadEncryptionKey = api_v1.ReadEncryptionKey

@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// NodePoolAutoscalingBuilder contains the data and logic needed to build 'node_pool_autoscaling' objects.
+//
+// Representation of a autoscaling in a node pool.
 type NodePoolAutoscalingBuilder = api_v1alpha1.NodePoolAutoscalingBuilder
 
+// NewNodePoolAutoscaling creates a new builder of 'node_pool_autoscaling' objects.
 var NewNodePoolAutoscaling = api_v1alpha1.NewNodePoolAutoscaling

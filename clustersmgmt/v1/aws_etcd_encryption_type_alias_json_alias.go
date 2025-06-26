@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAwsEtcdEncryption writes a value of the 'aws_etcd_encryption' type to the given writer.
 var MarshalAwsEtcdEncryption = api_v1.MarshalAwsEtcdEncryption
+
+// WriteAwsEtcdEncryption writes a value of the 'aws_etcd_encryption' type to the given stream.
 var WriteAwsEtcdEncryption = api_v1.WriteAwsEtcdEncryption
+
+// UnmarshalAwsEtcdEncryption reads a value of the 'aws_etcd_encryption' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAwsEtcdEncryption = api_v1.UnmarshalAwsEtcdEncryption
+
+// ReadAwsEtcdEncryption reads a value of the 'aws_etcd_encryption' type from the given iterator.
 var ReadAwsEtcdEncryption = api_v1.ReadAwsEtcdEncryption

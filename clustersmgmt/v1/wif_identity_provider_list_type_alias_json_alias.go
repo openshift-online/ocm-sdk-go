@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalWifIdentityProviderList writes a list of values of the 'wif_identity_provider' type to
+// the given writer.
 var MarshalWifIdentityProviderList = api_v1.MarshalWifIdentityProviderList
+
+// WriteWifIdentityProviderList writes a list of value of the 'wif_identity_provider' type to
+// the given stream.
 var WriteWifIdentityProviderList = api_v1.WriteWifIdentityProviderList
+
+// UnmarshalWifIdentityProviderList reads a list of values of the 'wif_identity_provider' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalWifIdentityProviderList = api_v1.UnmarshalWifIdentityProviderList
+
+// ReadWifIdentityProviderList reads list of values of the ”wif_identity_provider' type from
+// the given iterator.
 var ReadWifIdentityProviderList = api_v1.ReadWifIdentityProviderList

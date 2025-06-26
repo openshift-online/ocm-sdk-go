@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalGCPMachinePoolList writes a list of values of the 'GCP_machine_pool' type to
+// the given writer.
 var MarshalGCPMachinePoolList = api_v1.MarshalGCPMachinePoolList
+
+// WriteGCPMachinePoolList writes a list of value of the 'GCP_machine_pool' type to
+// the given stream.
 var WriteGCPMachinePoolList = api_v1.WriteGCPMachinePoolList
+
+// UnmarshalGCPMachinePoolList reads a list of values of the 'GCP_machine_pool' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalGCPMachinePoolList = api_v1.UnmarshalGCPMachinePoolList
+
+// ReadGCPMachinePoolList reads list of values of the ”GCP_machine_pool' type from
+// the given iterator.
 var ReadGCPMachinePoolList = api_v1.ReadGCPMachinePoolList

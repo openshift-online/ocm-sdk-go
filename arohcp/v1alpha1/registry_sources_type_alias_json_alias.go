@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalRegistrySources writes a value of the 'registry_sources' type to the given writer.
 var MarshalRegistrySources = api_v1alpha1.MarshalRegistrySources
+
+// WriteRegistrySources writes a value of the 'registry_sources' type to the given stream.
 var WriteRegistrySources = api_v1alpha1.WriteRegistrySources
+
+// UnmarshalRegistrySources reads a value of the 'registry_sources' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalRegistrySources = api_v1alpha1.UnmarshalRegistrySources
+
+// ReadRegistrySources reads a value of the 'registry_sources' type from the given iterator.
 var ReadRegistrySources = api_v1alpha1.ReadRegistrySources

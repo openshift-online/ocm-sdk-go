@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ManagedServiceBuilder contains the data and logic needed to build 'managed_service' objects.
+//
+// Contains the necessary attributes to support role-based authentication on AWS.
 type ManagedServiceBuilder = api_v1alpha1.ManagedServiceBuilder
 
+// NewManagedService creates a new builder of 'managed_service' objects.
 var NewManagedService = api_v1alpha1.NewManagedService

@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// GCPVolumeListBuilder contains the data and logic needed to build
+// 'GCP_volume' objects.
 type GCPVolumeListBuilder = api_v1alpha1.GCPVolumeListBuilder
 
+// NewGCPVolumeList creates a new builder of 'GCP_volume' objects.
 var NewGCPVolumeList = api_v1alpha1.NewGCPVolumeList

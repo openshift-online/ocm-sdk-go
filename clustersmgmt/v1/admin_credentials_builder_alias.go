@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AdminCredentialsBuilder contains the data and logic needed to build 'admin_credentials' objects.
+//
+// Temporary administrator credentials generated during the installation of the
+// cluster.
 type AdminCredentialsBuilder = api_v1.AdminCredentialsBuilder
 
+// NewAdminCredentials creates a new builder of 'admin_credentials' objects.
 var NewAdminCredentials = api_v1.NewAdminCredentials

@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalAMIOverrideList writes a list of values of the 'AMI_override' type to
+// the given writer.
 var MarshalAMIOverrideList = api_v1alpha1.MarshalAMIOverrideList
+
+// WriteAMIOverrideList writes a list of value of the 'AMI_override' type to
+// the given stream.
 var WriteAMIOverrideList = api_v1alpha1.WriteAMIOverrideList
+
+// UnmarshalAMIOverrideList reads a list of values of the 'AMI_override' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAMIOverrideList = api_v1alpha1.UnmarshalAMIOverrideList
+
+// ReadAMIOverrideList reads list of values of the ”AMI_override' type from
+// the given iterator.
 var ReadAMIOverrideList = api_v1alpha1.ReadAMIOverrideList

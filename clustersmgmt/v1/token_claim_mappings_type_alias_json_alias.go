@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalTokenClaimMappings writes a value of the 'token_claim_mappings' type to the given writer.
 var MarshalTokenClaimMappings = api_v1.MarshalTokenClaimMappings
+
+// WriteTokenClaimMappings writes a value of the 'token_claim_mappings' type to the given stream.
 var WriteTokenClaimMappings = api_v1.WriteTokenClaimMappings
+
+// UnmarshalTokenClaimMappings reads a value of the 'token_claim_mappings' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalTokenClaimMappings = api_v1.UnmarshalTokenClaimMappings
+
+// ReadTokenClaimMappings reads a value of the 'token_claim_mappings' type from the given iterator.
 var ReadTokenClaimMappings = api_v1.ReadTokenClaimMappings

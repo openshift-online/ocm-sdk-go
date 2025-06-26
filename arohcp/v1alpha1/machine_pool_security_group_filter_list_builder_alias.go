@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MachinePoolSecurityGroupFilterListBuilder contains the data and logic needed to build
+// 'machine_pool_security_group_filter' objects.
 type MachinePoolSecurityGroupFilterListBuilder = api_v1alpha1.MachinePoolSecurityGroupFilterListBuilder
 
+// NewMachinePoolSecurityGroupFilterList creates a new builder of 'machine_pool_security_group_filter' objects.
 var NewMachinePoolSecurityGroupFilterList = api_v1alpha1.NewMachinePoolSecurityGroupFilterList

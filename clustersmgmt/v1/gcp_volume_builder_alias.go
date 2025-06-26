@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// GCPVolumeBuilder contains the data and logic needed to build 'GCP_volume' objects.
+//
+// Holds settings for an GCP storage volume.
 type GCPVolumeBuilder = api_v1.GCPVolumeBuilder
 
+// NewGCPVolume creates a new builder of 'GCP_volume' objects.
 var NewGCPVolume = api_v1.NewGCPVolume

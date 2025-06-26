@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AWSShardBuilder contains the data and logic needed to build 'AWS_shard' objects.
+//
+// Config for AWS provision shards
 type AWSShardBuilder = api_v1alpha1.AWSShardBuilder
 
+// NewAWSShard creates a new builder of 'AWS_shard' objects.
 var NewAWSShard = api_v1alpha1.NewAWSShard

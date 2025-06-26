@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// CloudProviderDataListBuilder contains the data and logic needed to build
+// 'cloud_provider_data' objects.
 type CloudProviderDataListBuilder = api_v1.CloudProviderDataListBuilder
 
+// NewCloudProviderDataList creates a new builder of 'cloud_provider_data' objects.
 var NewCloudProviderDataList = api_v1.NewCloudProviderDataList

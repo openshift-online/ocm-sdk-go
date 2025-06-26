@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalDefaultCapability writes a value of the 'default_capability' type to the given writer.
 var MarshalDefaultCapability = api_v1.MarshalDefaultCapability
+
+// WriteDefaultCapability writes a value of the 'default_capability' type to the given stream.
 var WriteDefaultCapability = api_v1.WriteDefaultCapability
+
+// UnmarshalDefaultCapability reads a value of the 'default_capability' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalDefaultCapability = api_v1.UnmarshalDefaultCapability
+
+// ReadDefaultCapability reads a value of the 'default_capability' type from the given iterator.
 var ReadDefaultCapability = api_v1.ReadDefaultCapability

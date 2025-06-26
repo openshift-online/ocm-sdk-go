@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AlertsInfoListBuilder contains the data and logic needed to build
+// 'alerts_info' objects.
 type AlertsInfoListBuilder = api_v1.AlertsInfoListBuilder
 
+// NewAlertsInfoList creates a new builder of 'alerts_info' objects.
 var NewAlertsInfoList = api_v1.NewAlertsInfoList

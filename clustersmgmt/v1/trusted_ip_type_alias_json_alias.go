@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalTrustedIp writes a value of the 'trusted_ip' type to the given writer.
 var MarshalTrustedIp = api_v1.MarshalTrustedIp
+
+// WriteTrustedIp writes a value of the 'trusted_ip' type to the given stream.
 var WriteTrustedIp = api_v1.WriteTrustedIp
+
+// UnmarshalTrustedIp reads a value of the 'trusted_ip' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalTrustedIp = api_v1.UnmarshalTrustedIp
+
+// ReadTrustedIp reads a value of the 'trusted_ip' type from the given iterator.
 var ReadTrustedIp = api_v1.ReadTrustedIp

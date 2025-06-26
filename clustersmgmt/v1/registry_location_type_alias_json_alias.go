@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalRegistryLocation writes a value of the 'registry_location' type to the given writer.
 var MarshalRegistryLocation = api_v1.MarshalRegistryLocation
+
+// WriteRegistryLocation writes a value of the 'registry_location' type to the given stream.
 var WriteRegistryLocation = api_v1.WriteRegistryLocation
+
+// UnmarshalRegistryLocation reads a value of the 'registry_location' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalRegistryLocation = api_v1.UnmarshalRegistryLocation
+
+// ReadRegistryLocation reads a value of the 'registry_location' type from the given iterator.
 var ReadRegistryLocation = api_v1.ReadRegistryLocation

@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAWSVolumeList writes a list of values of the 'AWS_volume' type to
+// the given writer.
 var MarshalAWSVolumeList = api_v1.MarshalAWSVolumeList
+
+// WriteAWSVolumeList writes a list of value of the 'AWS_volume' type to
+// the given stream.
 var WriteAWSVolumeList = api_v1.WriteAWSVolumeList
+
+// UnmarshalAWSVolumeList reads a list of values of the 'AWS_volume' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAWSVolumeList = api_v1.UnmarshalAWSVolumeList
+
+// ReadAWSVolumeList reads list of values of the ”AWS_volume' type from
+// the given iterator.
 var ReadAWSVolumeList = api_v1.ReadAWSVolumeList

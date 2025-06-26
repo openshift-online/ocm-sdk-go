@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// LDAPAttributesListBuilder contains the data and logic needed to build
+// 'LDAP_attributes' objects.
 type LDAPAttributesListBuilder = api_v1.LDAPAttributesListBuilder
 
+// NewLDAPAttributesList creates a new builder of 'LDAP_attributes' objects.
 var NewLDAPAttributesList = api_v1.NewLDAPAttributesList

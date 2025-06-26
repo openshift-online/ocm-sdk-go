@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ServerConfigBuilder contains the data and logic needed to build 'server_config' objects.
+//
+// Representation of a server config
 type ServerConfigBuilder = api_v1alpha1.ServerConfigBuilder
 
+// NewServerConfig creates a new builder of 'server_config' objects.
 var NewServerConfig = api_v1alpha1.NewServerConfig

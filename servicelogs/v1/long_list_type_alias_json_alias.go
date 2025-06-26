@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicelogs/v1"
 )
 
+// MarshalLongList writes a list of values of the 'long' type to
+// the given writer.
 var MarshalLongList = api_v1.MarshalLongList
+
+// WriteLongList writes a list of value of the 'long' type to
+// the given stream.
 var WriteLongList = api_v1.WriteLongList
+
+// UnmarshalLongList reads a list of values of the 'long' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalLongList = api_v1.UnmarshalLongList
+
+// ReadLongList reads list of values of the ”long' type from
+// the given iterator.
 var ReadLongList = api_v1.ReadLongList

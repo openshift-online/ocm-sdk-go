@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAWSFlavourList writes a list of values of the 'AWS_flavour' type to
+// the given writer.
 var MarshalAWSFlavourList = api_v1.MarshalAWSFlavourList
+
+// WriteAWSFlavourList writes a list of value of the 'AWS_flavour' type to
+// the given stream.
 var WriteAWSFlavourList = api_v1.WriteAWSFlavourList
+
+// UnmarshalAWSFlavourList reads a list of values of the 'AWS_flavour' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAWSFlavourList = api_v1.UnmarshalAWSFlavourList
+
+// ReadAWSFlavourList reads list of values of the ”AWS_flavour' type from
+// the given iterator.
 var ReadAWSFlavourList = api_v1.ReadAWSFlavourList

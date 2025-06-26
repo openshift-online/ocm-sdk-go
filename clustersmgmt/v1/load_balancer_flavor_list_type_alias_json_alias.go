@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalLoadBalancerFlavorList writes a list of values of the 'load_balancer_flavor' type to
+// the given writer.
 var MarshalLoadBalancerFlavorList = api_v1.MarshalLoadBalancerFlavorList
+
+// WriteLoadBalancerFlavorList writes a list of value of the 'load_balancer_flavor' type to
+// the given stream.
 var WriteLoadBalancerFlavorList = api_v1.WriteLoadBalancerFlavorList
+
+// UnmarshalLoadBalancerFlavorList reads a list of values of the 'load_balancer_flavor' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalLoadBalancerFlavorList = api_v1.UnmarshalLoadBalancerFlavorList
+
+// ReadLoadBalancerFlavorList reads list of values of the ”load_balancer_flavor' type from
+// the given iterator.
 var ReadLoadBalancerFlavorList = api_v1.ReadLoadBalancerFlavorList

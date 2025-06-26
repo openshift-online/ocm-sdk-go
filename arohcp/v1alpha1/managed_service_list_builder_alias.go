@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ManagedServiceListBuilder contains the data and logic needed to build
+// 'managed_service' objects.
 type ManagedServiceListBuilder = api_v1alpha1.ManagedServiceListBuilder
 
+// NewManagedServiceList creates a new builder of 'managed_service' objects.
 var NewManagedServiceList = api_v1alpha1.NewManagedServiceList

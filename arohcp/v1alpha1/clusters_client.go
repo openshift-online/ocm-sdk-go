@@ -58,7 +58,7 @@ func NewClustersClient(transport http.RoundTripper, path string) *ClustersClient
 func (c *ClustersClient) Add() *ClustersAddRequest {
 	return &ClustersAddRequest{
 		transport: c.transport,
-		path:      path.Join(c.path, "async_add"),
+		path:      c.path,
 	}
 }
 

@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// ManagedServiceListBuilder contains the data and logic needed to build
+// 'managed_service' objects.
 type ManagedServiceListBuilder = api_v1.ManagedServiceListBuilder
 
+// NewManagedServiceList creates a new builder of 'managed_service' objects.
 var NewManagedServiceList = api_v1.NewManagedServiceList

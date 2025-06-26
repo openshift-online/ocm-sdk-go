@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalReleaseImages writes a value of the 'release_images' type to the given writer.
 var MarshalReleaseImages = api_v1.MarshalReleaseImages
+
+// WriteReleaseImages writes a value of the 'release_images' type to the given stream.
 var WriteReleaseImages = api_v1.WriteReleaseImages
+
+// UnmarshalReleaseImages reads a value of the 'release_images' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalReleaseImages = api_v1.UnmarshalReleaseImages
+
+// ReadReleaseImages reads a value of the 'release_images' type from the given iterator.
 var ReadReleaseImages = api_v1.ReadReleaseImages

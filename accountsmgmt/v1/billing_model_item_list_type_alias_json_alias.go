@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalBillingModelItemList writes a list of values of the 'billing_model_item' type to
+// the given writer.
 var MarshalBillingModelItemList = api_v1.MarshalBillingModelItemList
+
+// WriteBillingModelItemList writes a list of value of the 'billing_model_item' type to
+// the given stream.
 var WriteBillingModelItemList = api_v1.WriteBillingModelItemList
+
+// UnmarshalBillingModelItemList reads a list of values of the 'billing_model_item' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalBillingModelItemList = api_v1.UnmarshalBillingModelItemList
+
+// ReadBillingModelItemList reads list of values of the ”billing_model_item' type from
+// the given iterator.
 var ReadBillingModelItemList = api_v1.ReadBillingModelItemList

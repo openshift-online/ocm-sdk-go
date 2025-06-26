@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// NotificationDetailsRequestListBuilder contains the data and logic needed to build
+// 'notification_details_request' objects.
 type NotificationDetailsRequestListBuilder = api_v1.NotificationDetailsRequestListBuilder
 
+// NewNotificationDetailsRequestList creates a new builder of 'notification_details_request' objects.
 var NewNotificationDetailsRequestList = api_v1.NewNotificationDetailsRequestList

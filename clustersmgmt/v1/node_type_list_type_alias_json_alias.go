@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalNodeTypeList writes a list of values of the 'node_type' type to
+// the given writer.
 var MarshalNodeTypeList = api_v1.MarshalNodeTypeList
+
+// WriteNodeTypeList writes a list of value of the 'node_type' type to
+// the given stream.
 var WriteNodeTypeList = api_v1.WriteNodeTypeList
+
+// UnmarshalNodeTypeList reads a list of values of the 'node_type' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalNodeTypeList = api_v1.UnmarshalNodeTypeList
+
+// ReadNodeTypeList reads list of values of the ”node_type' type from
+// the given iterator.
 var ReadNodeTypeList = api_v1.ReadNodeTypeList

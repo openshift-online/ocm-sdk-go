@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// SubscriptionRegistrationListBuilder contains the data and logic needed to build
+// 'subscription_registration' objects.
 type SubscriptionRegistrationListBuilder = api_v1.SubscriptionRegistrationListBuilder
 
+// NewSubscriptionRegistrationList creates a new builder of 'subscription_registration' objects.
 var NewSubscriptionRegistrationList = api_v1.NewSubscriptionRegistrationList

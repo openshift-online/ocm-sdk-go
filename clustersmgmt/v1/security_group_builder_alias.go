@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// SecurityGroupBuilder contains the data and logic needed to build 'security_group' objects.
+//
+// AWS security group object
 type SecurityGroupBuilder = api_v1.SecurityGroupBuilder
 
+// NewSecurityGroup creates a new builder of 'security_group' objects.
 var NewSecurityGroup = api_v1.NewSecurityGroup

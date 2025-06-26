@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalCCS writes a value of the 'CCS' type to the given writer.
 var MarshalCCS = api_v1.MarshalCCS
+
+// WriteCCS writes a value of the 'CCS' type to the given stream.
 var WriteCCS = api_v1.WriteCCS
+
+// UnmarshalCCS reads a value of the 'CCS' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCCS = api_v1.UnmarshalCCS
+
+// ReadCCS reads a value of the 'CCS' type from the given iterator.
 var ReadCCS = api_v1.ReadCCS
