@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalClusterOperatorsInfoList writes a list of values of the 'cluster_operators_info' type to
+// the given writer.
 var MarshalClusterOperatorsInfoList = api_v1.MarshalClusterOperatorsInfoList
+
+// WriteClusterOperatorsInfoList writes a list of value of the 'cluster_operators_info' type to
+// the given stream.
 var WriteClusterOperatorsInfoList = api_v1.WriteClusterOperatorsInfoList
+
+// UnmarshalClusterOperatorsInfoList reads a list of values of the 'cluster_operators_info' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterOperatorsInfoList = api_v1.UnmarshalClusterOperatorsInfoList
+
+// ReadClusterOperatorsInfoList reads list of values of the ”cluster_operators_info' type from
+// the given iterator.
 var ReadClusterOperatorsInfoList = api_v1.ReadClusterOperatorsInfoList

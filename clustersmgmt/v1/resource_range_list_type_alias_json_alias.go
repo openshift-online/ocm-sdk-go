@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalResourceRangeList writes a list of values of the 'resource_range' type to
+// the given writer.
 var MarshalResourceRangeList = api_v1.MarshalResourceRangeList
+
+// WriteResourceRangeList writes a list of value of the 'resource_range' type to
+// the given stream.
 var WriteResourceRangeList = api_v1.WriteResourceRangeList
+
+// UnmarshalResourceRangeList reads a list of values of the 'resource_range' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalResourceRangeList = api_v1.UnmarshalResourceRangeList
+
+// ReadResourceRangeList reads list of values of the ”resource_range' type from
+// the given iterator.
 var ReadResourceRangeList = api_v1.ReadResourceRangeList

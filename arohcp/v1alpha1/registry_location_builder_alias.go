@@ -23,6 +23,11 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// RegistryLocationBuilder contains the data and logic needed to build 'registry_location' objects.
+//
+// RegistryLocation contains a location of the registry specified by the registry domain
+// name. The domain name might include wildcards, like '*' or '??'.
 type RegistryLocationBuilder = api_v1alpha1.RegistryLocationBuilder
 
+// NewRegistryLocation creates a new builder of 'registry_location' objects.
 var NewRegistryLocation = api_v1alpha1.NewRegistryLocation

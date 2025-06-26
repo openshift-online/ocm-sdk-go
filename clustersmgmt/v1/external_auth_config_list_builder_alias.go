@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ExternalAuthConfigListBuilder contains the data and logic needed to build
+// 'external_auth_config' objects.
 type ExternalAuthConfigListBuilder = api_v1.ExternalAuthConfigListBuilder
 
+// NewExternalAuthConfigList creates a new builder of 'external_auth_config' objects.
 var NewExternalAuthConfigList = api_v1.NewExternalAuthConfigList

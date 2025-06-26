@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAWSSTSPolicyList writes a list of values of the 'AWSSTS_policy' type to
+// the given writer.
 var MarshalAWSSTSPolicyList = api_v1.MarshalAWSSTSPolicyList
+
+// WriteAWSSTSPolicyList writes a list of value of the 'AWSSTS_policy' type to
+// the given stream.
 var WriteAWSSTSPolicyList = api_v1.WriteAWSSTSPolicyList
+
+// UnmarshalAWSSTSPolicyList reads a list of values of the 'AWSSTS_policy' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAWSSTSPolicyList = api_v1.UnmarshalAWSSTSPolicyList
+
+// ReadAWSSTSPolicyList reads list of values of the ”AWSSTS_policy' type from
+// the given iterator.
 var ReadAWSSTSPolicyList = api_v1.ReadAWSSTSPolicyList

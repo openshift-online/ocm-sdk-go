@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// PendingDeleteClusterBuilder contains the data and logic needed to build 'pending_delete_cluster' objects.
+//
+// Represents a pending delete entry for a specific cluster.
 type PendingDeleteClusterBuilder = api_v1.PendingDeleteClusterBuilder
 
+// NewPendingDeleteCluster creates a new builder of 'pending_delete_cluster' objects.
 var NewPendingDeleteCluster = api_v1.NewPendingDeleteCluster

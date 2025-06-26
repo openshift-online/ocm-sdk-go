@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// CloudVPCBuilder contains the data and logic needed to build 'cloud_VPC' objects.
+//
+// Description of a cloud provider virtual private cloud.
 type CloudVPCBuilder = api_v1.CloudVPCBuilder
 
+// NewCloudVPC creates a new builder of 'cloud_VPC' objects.
 var NewCloudVPC = api_v1.NewCloudVPC

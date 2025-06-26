@@ -56,7 +56,7 @@ func NewNodePoolsClient(transport http.RoundTripper, path string) *NodePoolsClie
 func (c *NodePoolsClient) Add() *NodePoolsAddRequest {
 	return &NodePoolsAddRequest{
 		transport: c.transport,
-		path:      path.Join(c.path, "async_add"),
+		path:      c.path,
 	}
 }
 

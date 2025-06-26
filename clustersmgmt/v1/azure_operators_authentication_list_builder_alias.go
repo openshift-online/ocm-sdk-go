@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AzureOperatorsAuthenticationListBuilder contains the data and logic needed to build
+// 'azure_operators_authentication' objects.
 type AzureOperatorsAuthenticationListBuilder = api_v1.AzureOperatorsAuthenticationListBuilder
 
+// NewAzureOperatorsAuthenticationList creates a new builder of 'azure_operators_authentication' objects.
 var NewAzureOperatorsAuthenticationList = api_v1.NewAzureOperatorsAuthenticationList

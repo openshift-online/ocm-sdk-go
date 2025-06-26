@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ProductTechnologyPreviewListBuilder contains the data and logic needed to build
+// 'product_technology_preview' objects.
 type ProductTechnologyPreviewListBuilder = api_v1.ProductTechnologyPreviewListBuilder
 
+// NewProductTechnologyPreviewList creates a new builder of 'product_technology_preview' objects.
 var NewProductTechnologyPreviewList = api_v1.NewProductTechnologyPreviewList

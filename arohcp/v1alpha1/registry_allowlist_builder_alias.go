@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// RegistryAllowlistBuilder contains the data and logic needed to build 'registry_allowlist' objects.
+//
+// RegistryAllowlist represents a single registry allowlist.
 type RegistryAllowlistBuilder = api_v1alpha1.RegistryAllowlistBuilder
 
+// NewRegistryAllowlist creates a new builder of 'registry_allowlist' objects.
 var NewRegistryAllowlist = api_v1alpha1.NewRegistryAllowlist

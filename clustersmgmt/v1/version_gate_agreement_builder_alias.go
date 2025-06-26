@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// VersionGateAgreementBuilder contains the data and logic needed to build 'version_gate_agreement' objects.
+//
+// VersionGateAgreement represents a version gate that the user agreed to for a specific cluster.
 type VersionGateAgreementBuilder = api_v1.VersionGateAgreementBuilder
 
+// NewVersionGateAgreement creates a new builder of 'version_gate_agreement' objects.
 var NewVersionGateAgreement = api_v1.NewVersionGateAgreement

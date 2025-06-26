@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalTaint writes a value of the 'taint' type to the given writer.
 var MarshalTaint = api_v1.MarshalTaint
+
+// WriteTaint writes a value of the 'taint' type to the given stream.
 var WriteTaint = api_v1.WriteTaint
+
+// UnmarshalTaint reads a value of the 'taint' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalTaint = api_v1.UnmarshalTaint
+
+// ReadTaint reads a value of the 'taint' type from the given iterator.
 var ReadTaint = api_v1.ReadTaint

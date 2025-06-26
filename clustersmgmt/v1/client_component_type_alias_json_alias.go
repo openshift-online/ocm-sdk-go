@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalClientComponent writes a value of the 'client_component' type to the given writer.
 var MarshalClientComponent = api_v1.MarshalClientComponent
+
+// WriteClientComponent writes a value of the 'client_component' type to the given stream.
 var WriteClientComponent = api_v1.WriteClientComponent
+
+// UnmarshalClientComponent reads a value of the 'client_component' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalClientComponent = api_v1.UnmarshalClientComponent
+
+// ReadClientComponent reads a value of the 'client_component' type from the given iterator.
 var ReadClientComponent = api_v1.ReadClientComponent

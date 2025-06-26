@@ -26,43 +26,12 @@ import (
 )
 
 func writeNodePoolsAsyncAddRequest(request *NodePoolsAddRequest, writer io.Writer) error {
-	count := 0
-	stream := helpers.NewStream(writer)
-	stream.WriteObjectStart()
-	if request.body != nil {
-		if count > 0 {
-			stream.WriteMore()
-		}
-		stream.WriteObjectField("body")
-		WriteNodePool(request.body, stream)
-		count++
-	}
-	stream.WriteObjectEnd()
-	err := stream.Flush()
-	if err != nil {
-		return err
-	}
-	return stream.Error
+	return MarshalNodePool(request.body, writer)
 }
 func readNodePoolsAsyncAddResponse(response *NodePoolsAddResponse, reader io.Reader) error {
-	iterator, err := helpers.NewIterator(reader)
-	if err != nil {
-		return err
-	}
-	for {
-		field := iterator.ReadObject()
-		if field == "" {
-			break
-		}
-		switch field {
-		case "body":
-			value := ReadNodePool(iterator)
-			response.body = value
-		default:
-			iterator.ReadAny()
-		}
-	}
-	return iterator.Error
+	var err error
+	response.body, err = UnmarshalNodePool(reader)
+	return err
 }
 func writeNodePoolsListRequest(request *NodePoolsListRequest, writer io.Writer) error {
 	return nil

@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalKeyRingList writes a list of values of the 'key_ring' type to
+// the given writer.
 var MarshalKeyRingList = api_v1.MarshalKeyRingList
+
+// WriteKeyRingList writes a list of value of the 'key_ring' type to
+// the given stream.
 var WriteKeyRingList = api_v1.WriteKeyRingList
+
+// UnmarshalKeyRingList reads a list of values of the 'key_ring' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalKeyRingList = api_v1.UnmarshalKeyRingList
+
+// ReadKeyRingList reads list of values of the ”key_ring' type from
+// the given iterator.
 var ReadKeyRingList = api_v1.ReadKeyRingList

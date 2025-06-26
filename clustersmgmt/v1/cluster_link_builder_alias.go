@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ClusterLinkBuilder contains the data and logic needed to build 'cluster_link' objects.
+//
+// Definition of a cluster link.
 type ClusterLinkBuilder = api_v1.ClusterLinkBuilder
 
+// NewClusterLink creates a new builder of 'cluster_link' objects.
 var NewClusterLink = api_v1.NewClusterLink

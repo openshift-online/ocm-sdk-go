@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ReleaseImagesListBuilder contains the data and logic needed to build
+// 'release_images' objects.
 type ReleaseImagesListBuilder = api_v1.ReleaseImagesListBuilder
 
+// NewReleaseImagesList creates a new builder of 'release_images' objects.
 var NewReleaseImagesList = api_v1.NewReleaseImagesList

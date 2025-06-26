@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSubscriptionRegistration writes a value of the 'subscription_registration' type to the given writer.
 var MarshalSubscriptionRegistration = api_v1.MarshalSubscriptionRegistration
+
+// WriteSubscriptionRegistration writes a value of the 'subscription_registration' type to the given stream.
 var WriteSubscriptionRegistration = api_v1.WriteSubscriptionRegistration
+
+// UnmarshalSubscriptionRegistration reads a value of the 'subscription_registration' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalSubscriptionRegistration = api_v1.UnmarshalSubscriptionRegistration
+
+// ReadSubscriptionRegistration reads a value of the 'subscription_registration' type from the given iterator.
 var ReadSubscriptionRegistration = api_v1.ReadSubscriptionRegistration

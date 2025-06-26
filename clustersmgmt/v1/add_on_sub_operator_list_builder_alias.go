@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AddOnSubOperatorListBuilder contains the data and logic needed to build
+// 'add_on_sub_operator' objects.
 type AddOnSubOperatorListBuilder = api_v1.AddOnSubOperatorListBuilder
 
+// NewAddOnSubOperatorList creates a new builder of 'add_on_sub_operator' objects.
 var NewAddOnSubOperatorList = api_v1.NewAddOnSubOperatorList

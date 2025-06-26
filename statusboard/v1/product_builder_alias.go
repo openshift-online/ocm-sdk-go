@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// ProductBuilder contains the data and logic needed to build 'product' objects.
+//
+// Definition of a Status Board product.
 type ProductBuilder = api_v1.ProductBuilder
 
+// NewProduct creates a new builder of 'product' objects.
 var NewProduct = api_v1.NewProduct

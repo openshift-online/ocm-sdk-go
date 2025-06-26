@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// AttachmentListBuilder contains the data and logic needed to build
+// 'attachment' objects.
 type AttachmentListBuilder = api_v1.AttachmentListBuilder
 
+// NewAttachmentList creates a new builder of 'attachment' objects.
 var NewAttachmentList = api_v1.NewAttachmentList

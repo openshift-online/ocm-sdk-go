@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// ServiceDependencyListBuilder contains the data and logic needed to build
+// 'service_dependency' objects.
 type ServiceDependencyListBuilder = api_v1.ServiceDependencyListBuilder
 
+// NewServiceDependencyList creates a new builder of 'service_dependency' objects.
 var NewServiceDependencyList = api_v1.NewServiceDependencyList

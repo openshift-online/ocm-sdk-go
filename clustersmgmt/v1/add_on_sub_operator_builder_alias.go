@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AddOnSubOperatorBuilder contains the data and logic needed to build 'add_on_sub_operator' objects.
+//
+// Representation of an add-on sub operator. A sub operator is an operator
+// who's life cycle is controlled by the add-on umbrella operator.
 type AddOnSubOperatorBuilder = api_v1.AddOnSubOperatorBuilder
 
+// NewAddOnSubOperator creates a new builder of 'add_on_sub_operator' objects.
 var NewAddOnSubOperator = api_v1.NewAddOnSubOperator

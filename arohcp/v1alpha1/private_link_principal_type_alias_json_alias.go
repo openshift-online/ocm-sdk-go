@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalPrivateLinkPrincipal writes a value of the 'private_link_principal' type to the given writer.
 var MarshalPrivateLinkPrincipal = api_v1alpha1.MarshalPrivateLinkPrincipal
+
+// WritePrivateLinkPrincipal writes a value of the 'private_link_principal' type to the given stream.
 var WritePrivateLinkPrincipal = api_v1alpha1.WritePrivateLinkPrincipal
+
+// UnmarshalPrivateLinkPrincipal reads a value of the 'private_link_principal' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalPrivateLinkPrincipal = api_v1alpha1.UnmarshalPrivateLinkPrincipal
+
+// ReadPrivateLinkPrincipal reads a value of the 'private_link_principal' type from the given iterator.
 var ReadPrivateLinkPrincipal = api_v1alpha1.ReadPrivateLinkPrincipal

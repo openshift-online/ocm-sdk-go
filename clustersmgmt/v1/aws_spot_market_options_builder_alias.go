@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AWSSpotMarketOptionsBuilder contains the data and logic needed to build 'AWS_spot_market_options' objects.
+//
+// Spot market options for AWS machine pool.
 type AWSSpotMarketOptionsBuilder = api_v1.AWSSpotMarketOptionsBuilder
 
+// NewAWSSpotMarketOptions creates a new builder of 'AWS_spot_market_options' objects.
 var NewAWSSpotMarketOptions = api_v1.NewAWSSpotMarketOptions

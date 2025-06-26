@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalEc2MetadataHttpTokensList writes a list of values of the 'ec_2_metadata_http_tokens' type to
+// the given writer.
 var MarshalEc2MetadataHttpTokensList = api_v1.MarshalEc2MetadataHttpTokensList
+
+// WriteEc2MetadataHttpTokensList writes a list of value of the 'ec_2_metadata_http_tokens' type to
+// the given stream.
 var WriteEc2MetadataHttpTokensList = api_v1.WriteEc2MetadataHttpTokensList
+
+// UnmarshalEc2MetadataHttpTokensList reads a list of values of the 'ec_2_metadata_http_tokens' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalEc2MetadataHttpTokensList = api_v1.UnmarshalEc2MetadataHttpTokensList
+
+// ReadEc2MetadataHttpTokensList reads list of values of the ”ec_2_metadata_http_tokens' type from
+// the given iterator.
 var ReadEc2MetadataHttpTokensList = api_v1.ReadEc2MetadataHttpTokensList

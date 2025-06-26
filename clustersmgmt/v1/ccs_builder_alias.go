@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// CCSBuilder contains the data and logic needed to build 'CCS' objects.
 type CCSBuilder = api_v1.CCSBuilder
 
+// NewCCS creates a new builder of 'CCS' objects.
 var NewCCS = api_v1.NewCCS

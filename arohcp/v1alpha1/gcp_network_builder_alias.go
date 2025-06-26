@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// GCPNetworkBuilder contains the data and logic needed to build 'GCP_network' objects.
+//
+// GCP Network configuration of a cluster.
 type GCPNetworkBuilder = api_v1alpha1.GCPNetworkBuilder
 
+// NewGCPNetwork creates a new builder of 'GCP_network' objects.
 var NewGCPNetwork = api_v1alpha1.NewGCPNetwork

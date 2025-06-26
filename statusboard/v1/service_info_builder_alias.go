@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// ServiceInfoBuilder contains the data and logic needed to build 'service_info' objects.
+//
+// Definition of a Status Board service info.
 type ServiceInfoBuilder = api_v1.ServiceInfoBuilder
 
+// NewServiceInfo creates a new builder of 'service_info' objects.
 var NewServiceInfo = api_v1.NewServiceInfo

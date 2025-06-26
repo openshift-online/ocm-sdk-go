@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalDNSList writes a list of values of the 'DNS' type to
+// the given writer.
 var MarshalDNSList = api_v1.MarshalDNSList
+
+// WriteDNSList writes a list of value of the 'DNS' type to
+// the given stream.
 var WriteDNSList = api_v1.WriteDNSList
+
+// UnmarshalDNSList reads a list of values of the 'DNS' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalDNSList = api_v1.UnmarshalDNSList
+
+// ReadDNSList reads list of values of the ”DNS' type from
+// the given iterator.
 var ReadDNSList = api_v1.ReadDNSList

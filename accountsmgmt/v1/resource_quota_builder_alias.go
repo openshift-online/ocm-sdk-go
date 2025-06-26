@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// ResourceQuotaBuilder contains the data and logic needed to build 'resource_quota' objects.
 type ResourceQuotaBuilder = api_v1.ResourceQuotaBuilder
 
+// NewResourceQuota creates a new builder of 'resource_quota' objects.
 var NewResourceQuota = api_v1.NewResourceQuota

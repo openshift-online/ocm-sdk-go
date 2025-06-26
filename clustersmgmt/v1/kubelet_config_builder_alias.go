@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// KubeletConfigBuilder contains the data and logic needed to build 'kubelet_config' objects.
+//
+// OCM representation of KubeletConfig, exposing the fields of Kubernetes
+// KubeletConfig that can be managed by users
 type KubeletConfigBuilder = api_v1.KubeletConfigBuilder
 
+// NewKubeletConfig creates a new builder of 'kubelet_config' objects.
 var NewKubeletConfig = api_v1.NewKubeletConfig

@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// TrustedIpBuilder contains the data and logic needed to build 'trusted_ip' objects.
+//
+// Representation of a trusted ip address in clusterdeployment.
 type TrustedIpBuilder = api_v1.TrustedIpBuilder
 
+// NewTrustedIp creates a new builder of 'trusted_ip' objects.
 var NewTrustedIp = api_v1.NewTrustedIp

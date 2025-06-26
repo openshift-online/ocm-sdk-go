@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// STSOperatorBuilder contains the data and logic needed to build 'STS_operator' objects.
+//
+// Representation of an sts operator
 type STSOperatorBuilder = api_v1.STSOperatorBuilder
 
+// NewSTSOperator creates a new builder of 'STS_operator' objects.
 var NewSTSOperator = api_v1.NewSTSOperator

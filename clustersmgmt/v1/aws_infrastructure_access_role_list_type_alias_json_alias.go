@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAWSInfrastructureAccessRoleList writes a list of values of the 'AWS_infrastructure_access_role' type to
+// the given writer.
 var MarshalAWSInfrastructureAccessRoleList = api_v1.MarshalAWSInfrastructureAccessRoleList
+
+// WriteAWSInfrastructureAccessRoleList writes a list of value of the 'AWS_infrastructure_access_role' type to
+// the given stream.
 var WriteAWSInfrastructureAccessRoleList = api_v1.WriteAWSInfrastructureAccessRoleList
+
+// UnmarshalAWSInfrastructureAccessRoleList reads a list of values of the 'AWS_infrastructure_access_role' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAWSInfrastructureAccessRoleList = api_v1.UnmarshalAWSInfrastructureAccessRoleList
+
+// ReadAWSInfrastructureAccessRoleList reads list of values of the ”AWS_infrastructure_access_role' type from
+// the given iterator.
 var ReadAWSInfrastructureAccessRoleList = api_v1.ReadAWSInfrastructureAccessRoleList

@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalReleaseImageDetailsList writes a list of values of the 'release_image_details' type to
+// the given writer.
 var MarshalReleaseImageDetailsList = api_v1alpha1.MarshalReleaseImageDetailsList
+
+// WriteReleaseImageDetailsList writes a list of value of the 'release_image_details' type to
+// the given stream.
 var WriteReleaseImageDetailsList = api_v1alpha1.WriteReleaseImageDetailsList
+
+// UnmarshalReleaseImageDetailsList reads a list of values of the 'release_image_details' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalReleaseImageDetailsList = api_v1alpha1.UnmarshalReleaseImageDetailsList
+
+// ReadReleaseImageDetailsList reads list of values of the ”release_image_details' type from
+// the given iterator.
 var ReadReleaseImageDetailsList = api_v1alpha1.ReadReleaseImageDetailsList

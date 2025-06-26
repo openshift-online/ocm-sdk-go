@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalRelatedResourceList writes a list of values of the 'related_resource' type to
+// the given writer.
 var MarshalRelatedResourceList = api_v1.MarshalRelatedResourceList
+
+// WriteRelatedResourceList writes a list of value of the 'related_resource' type to
+// the given stream.
 var WriteRelatedResourceList = api_v1.WriteRelatedResourceList
+
+// UnmarshalRelatedResourceList reads a list of values of the 'related_resource' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRelatedResourceList = api_v1.UnmarshalRelatedResourceList
+
+// ReadRelatedResourceList reads list of values of the ”related_resource' type from
+// the given iterator.
 var ReadRelatedResourceList = api_v1.ReadRelatedResourceList

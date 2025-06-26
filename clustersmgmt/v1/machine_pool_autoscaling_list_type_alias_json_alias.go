@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalMachinePoolAutoscalingList writes a list of values of the 'machine_pool_autoscaling' type to
+// the given writer.
 var MarshalMachinePoolAutoscalingList = api_v1.MarshalMachinePoolAutoscalingList
+
+// WriteMachinePoolAutoscalingList writes a list of value of the 'machine_pool_autoscaling' type to
+// the given stream.
 var WriteMachinePoolAutoscalingList = api_v1.WriteMachinePoolAutoscalingList
+
+// UnmarshalMachinePoolAutoscalingList reads a list of values of the 'machine_pool_autoscaling' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalMachinePoolAutoscalingList = api_v1.UnmarshalMachinePoolAutoscalingList
+
+// ReadMachinePoolAutoscalingList reads list of values of the ”machine_pool_autoscaling' type from
+// the given iterator.
 var ReadMachinePoolAutoscalingList = api_v1.ReadMachinePoolAutoscalingList

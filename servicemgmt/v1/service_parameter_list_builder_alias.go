@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// ServiceParameterListBuilder contains the data and logic needed to build
+// 'service_parameter' objects.
 type ServiceParameterListBuilder = api_v1.ServiceParameterListBuilder
 
+// NewServiceParameterList creates a new builder of 'service_parameter' objects.
 var NewServiceParameterList = api_v1.NewServiceParameterList

@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// TuningConfigBuilder contains the data and logic needed to build 'tuning_config' objects.
+//
+// Representation of a tuning config.
 type TuningConfigBuilder = api_v1.TuningConfigBuilder
 
+// NewTuningConfig creates a new builder of 'tuning_config' objects.
 var NewTuningConfig = api_v1.NewTuningConfig

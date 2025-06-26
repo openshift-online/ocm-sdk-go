@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// TokenClaimValidationRuleBuilder contains the data and logic needed to build 'token_claim_validation_rule' objects.
+//
+// The rule that is applied to validate token claims to authenticate users.
 type TokenClaimValidationRuleBuilder = api_v1.TokenClaimValidationRuleBuilder
 
+// NewTokenClaimValidationRule creates a new builder of 'token_claim_validation_rule' objects.
 var NewTokenClaimValidationRule = api_v1.NewTokenClaimValidationRule

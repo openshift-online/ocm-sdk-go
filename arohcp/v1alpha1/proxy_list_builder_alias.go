@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ProxyListBuilder contains the data and logic needed to build
+// 'proxy' objects.
 type ProxyListBuilder = api_v1alpha1.ProxyListBuilder
 
+// NewProxyList creates a new builder of 'proxy' objects.
 var NewProxyList = api_v1alpha1.NewProxyList
