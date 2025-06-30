@@ -71,7 +71,8 @@ Note that a repository administrator may need to push the tag to the repository 
 The OCM SDK can be generated simply by running the following after all changes have been made:
 
 ```shell
-make generate
+./hack/update-ocm-api-model.sh
+make update
 ```
 
 In most cases, the ocm-api-model version will be incremented prior to generation. To increment the ocm-api-model
