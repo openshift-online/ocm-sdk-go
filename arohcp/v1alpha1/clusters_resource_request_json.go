@@ -25,13 +25,44 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeClustersAddRequest(request *ClustersAddRequest, writer io.Writer) error {
-	return MarshalCluster(request.body, writer)
+func writeClustersAsyncAddRequest(request *ClustersAddRequest, writer io.Writer) error {
+	count := 0
+	stream := helpers.NewStream(writer)
+	stream.WriteObjectStart()
+	if request.body != nil {
+		if count > 0 {
+			stream.WriteMore()
+		}
+		stream.WriteObjectField("body")
+		WriteCluster(request.body, stream)
+		count++
+	}
+	stream.WriteObjectEnd()
+	err := stream.Flush()
+	if err != nil {
+		return err
+	}
+	return stream.Error
 }
-func readClustersAddResponse(response *ClustersAddResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalCluster(reader)
-	return err
+func readClustersAsyncAddResponse(response *ClustersAddResponse, reader io.Reader) error {
+	iterator, err := helpers.NewIterator(reader)
+	if err != nil {
+		return err
+	}
+	for {
+		field := iterator.ReadObject()
+		if field == "" {
+			break
+		}
+		switch field {
+		case "body":
+			value := ReadCluster(iterator)
+			response.body = value
+		default:
+			iterator.ReadAny()
+		}
+	}
+	return iterator.Error
 }
 func writeClustersListRequest(request *ClustersListRequest, writer io.Writer) error {
 	return nil

@@ -26,8 +26,8 @@ require (
 )
 
 require (
-	github.com/openshift-online/ocm-api-model/clientapi v0.0.0-20250619114224-37dc3401307a
-	github.com/openshift-online/ocm-api-model/model v0.0.0-20250619114224-37dc3401307a
+	github.com/openshift-online/ocm-api-model/clientapi v0.0.0-20250704013503-25683ec58436
+	github.com/openshift-online/ocm-api-model/model v0.0.0-20250704013503-25683ec58436
 	github.com/zalando/go-keyring v0.2.3
 )
 

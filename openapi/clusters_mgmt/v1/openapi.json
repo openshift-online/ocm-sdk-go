@@ -13244,6 +13244,27 @@
           }
         }
       },
+      "AWSBackupConfig": {
+        "description": "Backup configuration for AWS clusters",
+        "properties": {
+          "s3_bucket": {
+            "description": "Name of the S3 bucket used to save the backup",
+            "type": "string"
+          },
+          "account_id": {
+            "description": "ID of the AWS Disaster Recovery (DR) account",
+            "type": "string"
+          },
+          "identity_provider_arn": {
+            "description": "ARN of the identity provider created in the Disaster Recovery (DR) account for the Management Cluster",
+            "type": "string"
+          },
+          "role_arn": {
+            "description": "ARN of the role used by the CS Trusted Account to gain access to the Disaster Recovery (DR) account",
+            "type": "string"
+          }
+        }
+      },
       "AWSFlavour": {
         "description": "Specification for different classes of nodes inside a flavour.",
         "properties": {
@@ -13477,6 +13498,13 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "backup_configs": {
+            "description": "Backup configurations per Management Cluster ID",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AWSBackupConfig"
             }
           }
         }
@@ -15482,7 +15510,7 @@
             "type": "string"
           },
           "external_auth_config": {
-            "description": "External authentication configuration",
+            "description": "External authentication configuration.\n\nFor ROSA HCP, if this is not specified, external authentication configuration will be disabled by default\nFor ARO HCP, if this is not specified, external authentication configuration will be enabled by default",
             "$ref": "#/components/schemas/ExternalAuthConfig"
           },
           "external_configuration": {
@@ -16099,6 +16127,7 @@
           "resuming",
           "uninstalling",
           "unknown",
+          "updating",
           "validating",
           "waiting"
         ]
@@ -16389,6 +16418,10 @@
           "issuer": {
             "description": "The issuer describes the attributes of the OIDC token issuer.",
             "$ref": "#/components/schemas/TokenIssuer"
+          },
+          "status": {
+            "description": "The status describes the current state of the external authentication provider.\nThis is read-only.",
+            "$ref": "#/components/schemas/ExternalAuthStatus"
           }
         }
       },
@@ -16412,7 +16445,7 @@
         "description": "ExternalAuthClientConfig contains configuration for the platform's clients that\nneed to request tokens from the issuer.",
         "properties": {
           "id": {
-            "description": "The identifier of the OIDC client from the OIDC provider.",
+            "description": "The identifier of the OIDC client from the OIDC provider.\nThis is required.\nMust be at least one character length.",
             "type": "string"
           },
           "component": {
@@ -16427,23 +16460,87 @@
             }
           },
           "secret": {
-            "description": "The secret of the OIDC client from the OIDC provider.",
+            "description": "The secret of the OIDC client from the OIDC provider.\nThe client is considered 'public' if no secret is specified. Otherwise, it is considered\nas a 'confidential' client.\nThis can only be used for an external authentication provider belonging to a ROSA HCP cluster.",
             "type": "string"
+          },
+          "type": {
+            "description": "Determines the OIDC provider client type.\n\nThis is required to be defined for clients of an external authentication provider belonging to an ARO-HCP cluster.\n\nFor clients belonging to a ROSA HCP cluster, this is read-only. The value of this property will be determined by the \n'secret' property in the client configuration. \n   - If the 'secret' property is set, the type of the client is 'confidential.\n   - If the 'secret' property is not set, the type of the client is 'public.",
+            "$ref": "#/components/schemas/ExternalAuthClientType"
           }
         }
       },
+      "ExternalAuthClientType": {
+        "description": "Representation of the possible values of an external authentication client's type",
+        "type": "string",
+        "enum": [
+          "confidential",
+          "public"
+        ]
+      },
       "ExternalAuthConfig": {
-        "description": "ExternalAuthConfig configuration",
+        "description": "Represents an external authentication configuration",
         "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ExternalAuthConfig' if this is a complete object or 'ExternalAuthConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
           "enabled": {
-            "description": "Boolean flag indicating if the cluster should use an external authentication configuration.\n\nBy default this is false.\n\nTo enable it the cluster needs to be ROSA HCP cluster and the organization of the user needs\nto have the `external-authentication` feature toggle enabled.",
+            "description": "Boolean flag indicating if the cluster should use an external authentication configuration for ROSA HCP clusters.\n\nBy default this is false.\n\nTo enable it the cluster needs to be ROSA HCP cluster and the organization of the user needs\nto have the `external-authentication` feature toggle enabled.\n\nFor ARO HCP clusters, use the \"State\" property to enable/disable this feature instead.",
             "type": "boolean"
           },
           "external_auths": {
+            "description": "A list of external authentication providers configured for the cluster.\n\nOnly one external authentication provider can be configured.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ExternalAuth"
             }
+          },
+          "state": {
+            "description": "Controls whether the cluster uses an external authentication configuration for ARO HCP clusters.\n\nFor ARO HCP clusters, this will be \"enabled\" by default and cannot be set to \"disabled\".\n\nFOR ROSA HCP clusters, use the \"Enabled\" boolean flag to enable/disable this feature instead.",
+            "$ref": "#/components/schemas/ExternalAuthConfigState"
+          }
+        }
+      },
+      "ExternalAuthConfigState": {
+        "description": "Representation of the possible values for the state field of an external authentication configuration",
+        "type": "string",
+        "enum": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      "ExternalAuthState": {
+        "description": "Representation of the state of an external authentication provider.",
+        "properties": {
+          "last_updated_timestamp": {
+            "description": "The date and time when the external authentication provider state was last updated.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "description": "A string value representing the external authentication provider's current state.",
+            "type": "string"
+          }
+        }
+      },
+      "ExternalAuthStatus": {
+        "description": "Representation of the status of an external authentication provider.",
+        "properties": {
+          "message": {
+            "description": "A descriptive message providing additional context about the current \nstate of the external authentication provider.",
+            "type": "string"
+          },
+          "state": {
+            "description": "The current state of the external authentication provider.",
+            "$ref": "#/components/schemas/ExternalAuthState"
           }
         }
       },
@@ -18688,11 +18785,11 @@
             "type": "string"
           },
           "url": {
-            "description": "URL is the serving URL of the token issuer.",
+            "description": "URL is the serving URL of the token issuer.\nIt must be a valid url and use the 'https' scheme.\nThis is required.",
             "type": "string"
           },
           "audiences": {
-            "description": "Audiences is an array of audiences that the token was issued for.\nValid tokens must include at least one of these values in their\n\"aud\" claim.\nMust be set to exactly one value.",
+            "description": "Audiences is an array of audiences that the token was issued for.\nValid tokens must include at least one of these values in their\n\"aud\" claim.\nMust have at least one audience and a maximum of ten.\nAny clients defined for this external authentication must have their id included here.",
             "type": "array",
             "items": {
               "type": "string"
@@ -18869,7 +18966,7 @@
             "type": "string"
           },
           "prefix_policy": {
-            "description": "PrefixPolicy specifies how a prefix should apply.\n\nBy default, claims other than `email` will be prefixed with the issuer URL to\nprevent naming clashes with other plugins.\n\nSet to \"NoPrefix\" to disable prefixing.",
+            "description": "PrefixPolicy specifies how a prefix should apply.\n\nBy default, claims other than `email` will be prefixed with the issuer URL to\nprevent naming clashes with other plugins.\n\nSet to \"NoPrefix\" to disable prefixing.\n\nIf a prefix is defined, this will be set to 'Prefix' by default.",
             "type": "string"
           }
         }
