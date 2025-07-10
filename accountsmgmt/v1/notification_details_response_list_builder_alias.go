@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// NotificationDetailsResponseListBuilder contains the data and logic needed to build
+// 'notification_details_response' objects.
 type NotificationDetailsResponseListBuilder = api_v1.NotificationDetailsResponseListBuilder
 
+// NewNotificationDetailsResponseList creates a new builder of 'notification_details_response' objects.
 var NewNotificationDetailsResponseList = api_v1.NewNotificationDetailsResponseList

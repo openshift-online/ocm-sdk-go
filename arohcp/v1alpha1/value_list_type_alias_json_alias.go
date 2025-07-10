@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalValueList writes a list of values of the 'value' type to
+// the given writer.
 var MarshalValueList = api_v1alpha1.MarshalValueList
+
+// WriteValueList writes a list of value of the 'value' type to
+// the given stream.
 var WriteValueList = api_v1alpha1.WriteValueList
+
+// UnmarshalValueList reads a list of values of the 'value' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalValueList = api_v1alpha1.UnmarshalValueList
+
+// ReadValueList reads list of values of the ”value' type from
+// the given iterator.
 var ReadValueList = api_v1alpha1.ReadValueList

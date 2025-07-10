@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// RootVolumeBuilder contains the data and logic needed to build 'root_volume' objects.
+//
+// Root volume capabilities.
 type RootVolumeBuilder = api_v1.RootVolumeBuilder
 
+// NewRootVolume creates a new builder of 'root_volume' objects.
 var NewRootVolume = api_v1.NewRootVolume

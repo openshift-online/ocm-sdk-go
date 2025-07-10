@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalIdentityProvider writes a value of the 'identity_provider' type to the given writer.
 var MarshalIdentityProvider = api_v1.MarshalIdentityProvider
+
+// WriteIdentityProvider writes a value of the 'identity_provider' type to the given stream.
 var WriteIdentityProvider = api_v1.WriteIdentityProvider
+
+// UnmarshalIdentityProvider reads a value of the 'identity_provider' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalIdentityProvider = api_v1.UnmarshalIdentityProvider
+
+// ReadIdentityProvider reads a value of the 'identity_provider' type from the given iterator.
 var ReadIdentityProvider = api_v1.ReadIdentityProvider

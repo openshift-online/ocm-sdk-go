@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// SubnetworkBuilder contains the data and logic needed to build 'subnetwork' objects.
+//
+// AWS subnetwork object to be used while installing a cluster
 type SubnetworkBuilder = api_v1.SubnetworkBuilder
 
+// NewSubnetwork creates a new builder of 'subnetwork' objects.
 var NewSubnetwork = api_v1.NewSubnetwork

@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// LDAPAttributesBuilder contains the data and logic needed to build 'LDAP_attributes' objects.
+//
+// LDAP attributes used to configure the LDAP identity provider.
 type LDAPAttributesBuilder = api_v1.LDAPAttributesBuilder
 
+// NewLDAPAttributes creates a new builder of 'LDAP_attributes' objects.
 var NewLDAPAttributes = api_v1.NewLDAPAttributes

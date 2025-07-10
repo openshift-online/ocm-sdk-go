@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// MarshalStatefulObjectList writes a list of values of the 'stateful_object' type to
+// the given writer.
 var MarshalStatefulObjectList = api_v1.MarshalStatefulObjectList
+
+// WriteStatefulObjectList writes a list of value of the 'stateful_object' type to
+// the given stream.
 var WriteStatefulObjectList = api_v1.WriteStatefulObjectList
+
+// UnmarshalStatefulObjectList reads a list of values of the 'stateful_object' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalStatefulObjectList = api_v1.UnmarshalStatefulObjectList
+
+// ReadStatefulObjectList reads list of values of the ”stateful_object' type from
+// the given iterator.
 var ReadStatefulObjectList = api_v1.ReadStatefulObjectList

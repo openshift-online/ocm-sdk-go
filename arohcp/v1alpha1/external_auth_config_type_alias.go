@@ -23,9 +23,21 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ExternalAuthConfigKind is the name of the type used to represent objects
+// of type 'external_auth_config'.
+const ExternalAuthConfigKind = api_v1alpha1.ExternalAuthConfigKind
+
+// ExternalAuthConfigLinkKind is the name of the type used to represent links
+// to objects of type 'external_auth_config'.
+const ExternalAuthConfigLinkKind = api_v1alpha1.ExternalAuthConfigLinkKind
+
+// ExternalAuthConfigNilKind is the name of the type used to nil references
+// to objects of type 'external_auth_config'.
+const ExternalAuthConfigNilKind = api_v1alpha1.ExternalAuthConfigNilKind
+
 // ExternalAuthConfig represents the values of the 'external_auth_config' type.
 //
-// ExternalAuthConfig configuration
+// Represents an external authentication configuration
 type ExternalAuthConfig = api_v1alpha1.ExternalAuthConfig
 
 // ExternalAuthConfigListKind is the name of the type used to represent list of objects of

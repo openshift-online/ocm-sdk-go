@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalAWSNodePoolList writes a list of values of the 'AWS_node_pool' type to
+// the given writer.
 var MarshalAWSNodePoolList = api_v1alpha1.MarshalAWSNodePoolList
+
+// WriteAWSNodePoolList writes a list of value of the 'AWS_node_pool' type to
+// the given stream.
 var WriteAWSNodePoolList = api_v1alpha1.WriteAWSNodePoolList
+
+// UnmarshalAWSNodePoolList reads a list of values of the 'AWS_node_pool' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAWSNodePoolList = api_v1alpha1.UnmarshalAWSNodePoolList
+
+// ReadAWSNodePoolList reads list of values of the ”AWS_node_pool' type from
+// the given iterator.
 var ReadAWSNodePoolList = api_v1alpha1.ReadAWSNodePoolList

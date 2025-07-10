@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AddOnSecretPropagationListBuilder contains the data and logic needed to build
+// 'add_on_secret_propagation' objects.
 type AddOnSecretPropagationListBuilder = api_v1.AddOnSecretPropagationListBuilder
 
+// NewAddOnSecretPropagationList creates a new builder of 'add_on_secret_propagation' objects.
 var NewAddOnSecretPropagationList = api_v1.NewAddOnSecretPropagationList

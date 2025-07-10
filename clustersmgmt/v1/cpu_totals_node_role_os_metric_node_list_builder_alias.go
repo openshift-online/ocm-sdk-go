@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// CPUTotalsNodeRoleOSMetricNodeListBuilder contains the data and logic needed to build
+// 'CPU_totals_node_role_OS_metric_node' objects.
 type CPUTotalsNodeRoleOSMetricNodeListBuilder = api_v1.CPUTotalsNodeRoleOSMetricNodeListBuilder
 
+// NewCPUTotalsNodeRoleOSMetricNodeList creates a new builder of 'CPU_totals_node_role_OS_metric_node' objects.
 var NewCPUTotalsNodeRoleOSMetricNodeList = api_v1.NewCPUTotalsNodeRoleOSMetricNodeList

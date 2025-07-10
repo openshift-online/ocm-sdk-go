@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// PermissionListBuilder contains the data and logic needed to build
+// 'permission' objects.
 type PermissionListBuilder = api_v1.PermissionListBuilder
 
+// NewPermissionList creates a new builder of 'permission' objects.
 var NewPermissionList = api_v1.NewPermissionList

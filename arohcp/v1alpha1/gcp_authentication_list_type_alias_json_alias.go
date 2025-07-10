@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalGcpAuthenticationList writes a list of values of the 'gcp_authentication' type to
+// the given writer.
 var MarshalGcpAuthenticationList = api_v1alpha1.MarshalGcpAuthenticationList
+
+// WriteGcpAuthenticationList writes a list of value of the 'gcp_authentication' type to
+// the given stream.
 var WriteGcpAuthenticationList = api_v1alpha1.WriteGcpAuthenticationList
+
+// UnmarshalGcpAuthenticationList reads a list of values of the 'gcp_authentication' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalGcpAuthenticationList = api_v1alpha1.UnmarshalGcpAuthenticationList
+
+// ReadGcpAuthenticationList reads list of values of the ”gcp_authentication' type from
+// the given iterator.
 var ReadGcpAuthenticationList = api_v1alpha1.ReadGcpAuthenticationList

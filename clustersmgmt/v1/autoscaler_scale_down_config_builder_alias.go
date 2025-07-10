@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AutoscalerScaleDownConfigBuilder contains the data and logic needed to build 'autoscaler_scale_down_config' objects.
 type AutoscalerScaleDownConfigBuilder = api_v1.AutoscalerScaleDownConfigBuilder
 
+// NewAutoscalerScaleDownConfig creates a new builder of 'autoscaler_scale_down_config' objects.
 var NewAutoscalerScaleDownConfig = api_v1.NewAutoscalerScaleDownConfig

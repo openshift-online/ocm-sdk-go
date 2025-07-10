@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalKubeletConfigList writes a list of values of the 'kubelet_config' type to
+// the given writer.
 var MarshalKubeletConfigList = api_v1.MarshalKubeletConfigList
+
+// WriteKubeletConfigList writes a list of value of the 'kubelet_config' type to
+// the given stream.
 var WriteKubeletConfigList = api_v1.WriteKubeletConfigList
+
+// UnmarshalKubeletConfigList reads a list of values of the 'kubelet_config' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalKubeletConfigList = api_v1.UnmarshalKubeletConfigList
+
+// ReadKubeletConfigList reads list of values of the ”kubelet_config' type from
+// the given iterator.
 var ReadKubeletConfigList = api_v1.ReadKubeletConfigList

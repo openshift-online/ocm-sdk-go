@@ -63,7 +63,7 @@
           }
         },
         "responses": {
-          "201": {
+          "202": {
             "description": "Success.",
             "content": {
               "application/json": {
@@ -201,8 +201,52 @@
           }
         ],
         "responses": {
-          "204": {
+          "202": {
             "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cluster"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cluster"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error.",
@@ -250,9 +294,47 @@
             }
           }
         }
-      },
-      "patch": {
-        "description": "Updates the cluster.",
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/external_auth_config": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuthConfig"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/external_auth_config/external_auths": {
+      "post": {
+        "description": "Adds a new external authentication provider to the cluster.",
         "parameters": [
           {
             "name": "cluster_id",
@@ -267,18 +349,227 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Cluster"
+                "$ref": "#/components/schemas/ExternalAuth"
               }
             }
           }
         },
+        "responses": {
+          "202": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuth"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Cluster"
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of external authentication providers.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ExternalAuth"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/external_auth_config/external_auths/{external_auth_id}": {
+      "delete": {
+        "description": "Deletes the external authentication provider.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "external_auth_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the external authentication provider.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "external_auth_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalAuth"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuth"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of an external authentication provider.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "external_auth_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalAuth"
                 }
               }
             }
@@ -443,7 +734,7 @@
           }
         },
         "responses": {
-          "201": {
+          "202": {
             "description": "Success.",
             "content": {
               "application/json": {
@@ -1089,6 +1380,31 @@
           }
         }
       },
+      "AWSBackupConfig": {
+        "description": "Backup configuration for AWS clusters",
+        "properties": {
+          "s3_bucket": {
+            "description": "Name of the S3 bucket used to save the backup",
+            "type": "string"
+          },
+          "account_id": {
+            "description": "ID of the AWS Disaster Recovery (DR) account",
+            "type": "string"
+          },
+          "identity_provider_arn": {
+            "description": "ARN of the identity provider created in the Disaster Recovery (DR) account for the Management Cluster",
+            "type": "string"
+          },
+          "management_cluster": {
+            "description": "Name of the management cluster the backup config refers to",
+            "type": "string"
+          },
+          "role_arn": {
+            "description": "ARN of the role used by the CS Trusted Account to gain access to the Disaster Recovery (DR) account",
+            "type": "string"
+          }
+        }
+      },
       "AWSNodePool": {
         "description": "Representation of aws node pool specific parameters.",
         "properties": {
@@ -1158,6 +1474,13 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "backup_configs": {
+            "description": "Backup configurations for the provision shard",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AWSBackupConfig"
             }
           }
         }
@@ -1461,6 +1784,10 @@
       "Azure": {
         "description": "Microsoft Azure settings of a cluster.",
         "properties": {
+          "etcd_encryption": {
+            "description": "Etcd encryption configuration.\nIf not specified, etcd data is encrypted with platform managed keys.\nCurrently etcd data encryption is only supported with customer managed keys.\nCreating a cluster with platform managed keys will result in a failure creating the cluster.",
+            "$ref": "#/components/schemas/AzureEtcdEncryption"
+          },
           "managed_resource_group_name": {
             "description": "The desired name of the Azure Resource Group where the Azure Resources related\nto the cluster are created. It must not previously exist. The Azure Resource\nGroup is created with the given value, within the Azure Subscription\n`subscription_id` of the cluster.\n`managed_resource_group_name` cannot be equal to the value of `managed_resource_group`.\n`managed_resource_group_name` is located in the same Azure location as the\ncluster's region.\nNot to be confused with `resource_group_name`, which is the Azure Resource Group Name\nwhere the own Azure Resource associated to the cluster resides.\nRequired during creation.\nImmutable.",
             "type": "string"
@@ -1525,6 +1852,67 @@
           }
         }
       },
+      "AzureEtcdDataEncryption": {
+        "description": "Contains the necessary attributes to support data encryption for Azure based clusters.",
+        "properties": {
+          "customer_managed": {
+            "description": "Customer Managed encryption keys configuration.\nRequired when key_management_mode is \"customer_managed\".",
+            "$ref": "#/components/schemas/AzureEtcdDataEncryptionCustomerManaged"
+          },
+          "key_management_mode": {
+            "description": "The key management strategy used for the encryption key that encrypts the etcd data.\nAccepted values are: \"customer_managed\", \"platform_managed\".\nBy default, \"platform_managed\" is used.\nCurrently only \"customer_managed\" mode is supported.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureEtcdDataEncryptionCustomerManaged": {
+        "description": "Contains the necessary attributes to support etcd data encryption with customer managed keys\nfor Azure based clusters.",
+        "properties": {
+          "encryption_type": {
+            "description": "The encryption type used.\nAccepted values are: \"kms\".\nBy default, \"kms\" is used.",
+            "type": "string"
+          },
+          "kms": {
+            "description": "The KMS encryption configuration.\nRequired when encryption_type is \"kms\".",
+            "$ref": "#/components/schemas/AzureKmsEncryption"
+          }
+        }
+      },
+      "AzureEtcdEncryption": {
+        "description": "Contains the necessary attributes to support etcd encryption for Azure based clusters.",
+        "properties": {
+          "data_encryption": {
+            "description": "etcd data encryption settings.\nIf not specified, etcd data is encrypted with platform managed keys.",
+            "$ref": "#/components/schemas/AzureEtcdDataEncryption"
+          }
+        }
+      },
+      "AzureKmsEncryption": {
+        "description": "Contains the necessary attributes to support KMS encryption for Azure based clusters.",
+        "properties": {
+          "active_key": {
+            "description": "The details of the active key\nRequired during creation.",
+            "$ref": "#/components/schemas/AzureKmsKey"
+          }
+        }
+      },
+      "AzureKmsKey": {
+        "description": "Contains the necessary attributes to support KMS encryption key for Azure based clusters",
+        "properties": {
+          "key_name": {
+            "description": "key_name is the name of the Azure Key Vault Key\nRequired during creation.",
+            "type": "string"
+          },
+          "key_vault_name": {
+            "description": "key_vault_name is the name of the Azure Key Vault that contains the encryption key\nRequired during creation.",
+            "type": "string"
+          },
+          "key_version": {
+            "description": "key_version is the version of the Azure Key Vault key\nRequired during creation.",
+            "type": "string"
+          }
+        }
+      },
       "AzureNodePool": {
         "description": "Representation of azure node pool specific parameters.",
         "properties": {
@@ -1548,6 +1936,10 @@
           "ephemeral_os_disk_enabled": {
             "description": "Enables Ephemeral OS Disks for the Nodes in the Node Pool.\nIf not specified, no Ephemeral OS Disks are used.",
             "type": "boolean"
+          },
+          "os_disk_sse_encryption_set_resource_id": {
+            "description": "The Azure Resource ID of a pre-existing Azure Disk Encryption Set (DES).\nWhen provided, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool\nis performed using the provided Disk Encryption Set.\nIt must be located in the same Azure location as the parent Cluster.  \nIt must be located in the same Azure Subscription as the parent Cluster.\nThe Azure Resource Group Name specified as part of it must be a different resource group name\nthan the one specified in the parent Cluster's `managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of it can be the same, or a different one\nthan the one specified in the parent Cluster's `resource_group_name`.\nIf not specified, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool \nis performed with platform managed keys.",
+            "type": "string"
           },
           "resource_name": {
             "description": "ResourceName is the Azure Resource Name of the NodePool.\nResourceName must be within the Azure Resource Group Name of the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Location as the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Subscription as the parent\nCluster it belongs to.\nResourceName must belong to the same Microsoft Entra Tenant ID as the parent\nCluster it belongs to.\nRequired during creation.\nImmutable.",
@@ -1644,6 +2036,19 @@
           "enabled": {
             "description": "Boolean flag indicating if the cluster should be creating using _ByoOidc_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `byo-oidc` feature toggle enabled.",
             "type": "boolean"
+          }
+        }
+      },
+      "ClientComponent": {
+        "description": "The reference of a component that will consume the client configuration.",
+        "properties": {
+          "name": {
+            "description": "The name of the component.",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace of the component.",
+            "type": "string"
           }
         }
       },
@@ -1847,7 +2252,7 @@
             "type": "string"
           },
           "etcd_encryption": {
-            "description": "Indicates whether that etcd is encrypted or not.\nThis is set only during cluster creation.",
+            "description": "Indicates whether that etcd is encrypted or not.\nThis is set only during cluster creation.\nFor ARO-HCP Clusters, this is a readonly attribute, always set to true.",
             "type": "boolean"
           },
           "expiration_timestamp": {
@@ -1860,7 +2265,7 @@
             "type": "string"
           },
           "external_auth_config": {
-            "description": "External authentication configuration",
+            "description": "External authentication configuration.\n\nFor ROSA HCP, if this is not specified, external authentication configuration will be disabled by default\nFor ARO HCP, if this is not specified, external authentication configuration will be enabled by default",
             "$ref": "#/components/schemas/ExternalAuthConfig"
           },
           "external_configuration": {
@@ -1896,6 +2301,10 @@
             "items": {
               "$ref": "#/components/schemas/IdentityProvider"
             }
+          },
+          "image_registry": {
+            "description": "Image registry configuration.\nFor non ARO-HCP clusters, it is readonly and always enabled",
+            "$ref": "#/components/schemas/ClusterImageRegistry"
           },
           "inflight_checks": {
             "description": "List of inflight checks on this cluster.",
@@ -1940,7 +2349,7 @@
             "$ref": "#/components/schemas/ManagedService"
           },
           "multi_az": {
-            "description": "Flag indicating if the cluster should be created with nodes in\ndifferent availability zones or all the nodes in a single one\nrandomly selected.",
+            "description": "Flag indicating if the cluster should be created with nodes in\ndifferent availability zones or all the nodes in a single one\nrandomly selected.\nFor ARO-HCP Clusters, this attribute is unused, and the control plane\nis deployed in multiple availability zones when the Azure region where\nit is deployed supports multiple availability zones.",
             "type": "boolean"
           },
           "multi_arch_enabled": {
@@ -2073,6 +2482,15 @@
           "unknown"
         ]
       },
+      "ClusterImageRegistry": {
+        "description": "ClusterImageRegistry represents the configuration for the cluster's internal image registry.",
+        "properties": {
+          "state": {
+            "description": "State indicates whether the image registry is enabled.\nUnless explicitly set, the image registry is enabled by default.\nThis setting is immutable and cannot be changed after the cluster is created.\nValid values: \"enabled\", \"disabled\".",
+            "type": "string"
+          }
+        }
+      },
       "ClusterNodes": {
         "description": "Counts of different classes of nodes inside a cluster.",
         "properties": {
@@ -2179,6 +2597,7 @@
           "resuming",
           "uninstalling",
           "unknown",
+          "updating",
           "validating",
           "waiting"
         ]
@@ -2316,18 +2735,158 @@
           "required"
         ]
       },
-      "ExternalAuthConfig": {
-        "description": "ExternalAuthConfig configuration",
+      "ExternalAuth": {
+        "description": "Representation of an external authentication provider.",
         "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ExternalAuth' if this is a complete object or 'ExternalAuthLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "claim": {
+            "description": "The rules on how to transform information from an ID token into a cluster identity.",
+            "$ref": "#/components/schemas/ExternalAuthClaim"
+          },
+          "clients": {
+            "description": "The list of the platform's clients that need to request tokens from the issuer.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAuthClientConfig"
+            }
+          },
+          "issuer": {
+            "description": "The issuer describes the attributes of the OIDC token issuer.",
+            "$ref": "#/components/schemas/TokenIssuer"
+          },
+          "status": {
+            "description": "The status describes the current state of the external authentication provider.\nThis is read-only.",
+            "$ref": "#/components/schemas/ExternalAuthStatus"
+          }
+        }
+      },
+      "ExternalAuthClaim": {
+        "description": "The claims and validation rules used in the configuration of the external authentication.",
+        "properties": {
+          "mappings": {
+            "description": "Mapping describes rules on how to transform information from an ID token into a cluster identity.",
+            "$ref": "#/components/schemas/TokenClaimMappings"
+          },
+          "validation_rules": {
+            "description": "ValidationRules are rules that are applied to validate token claims to authenticate users.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TokenClaimValidationRule"
+            }
+          }
+        }
+      },
+      "ExternalAuthClientConfig": {
+        "description": "ExternalAuthClientConfig contains configuration for the platform's clients that\nneed to request tokens from the issuer.",
+        "properties": {
+          "id": {
+            "description": "The identifier of the OIDC client from the OIDC provider.\nThis is required.\nMust be at least one character length.",
+            "type": "string"
+          },
+          "component": {
+            "description": "The component that is supposed to consume this client configuration.",
+            "$ref": "#/components/schemas/ClientComponent"
+          },
+          "extra_scopes": {
+            "description": "ExtraScopes is an optional set of scopes to request tokens with.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "secret": {
+            "description": "The secret of the OIDC client from the OIDC provider.\nThe client is considered 'public' if no secret is specified. Otherwise, it is considered\nas a 'confidential' client.\nThis can only be used for an external authentication provider belonging to a ROSA HCP cluster.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Determines the OIDC provider client type.\n\nThis is required to be defined for clients of an external authentication provider belonging to an ARO-HCP cluster.\n\nFor clients belonging to a ROSA HCP cluster, this is read-only. The value of this property will be determined by the \n'secret' property in the client configuration. \n   - If the 'secret' property is set, the type of the client is 'confidential.\n   - If the 'secret' property is not set, the type of the client is 'public.",
+            "$ref": "#/components/schemas/ExternalAuthClientType"
+          }
+        }
+      },
+      "ExternalAuthClientType": {
+        "description": "Representation of the possible values of an external authentication client's type",
+        "type": "string",
+        "enum": [
+          "confidential",
+          "public"
+        ]
+      },
+      "ExternalAuthConfig": {
+        "description": "Represents an external authentication configuration",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ExternalAuthConfig' if this is a complete object or 'ExternalAuthConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
           "enabled": {
-            "description": "Boolean flag indicating if the cluster should use an external authentication configuration.\n\nBy default this is false.\n\nTo enable it the cluster needs to be ROSA HCP cluster and the organization of the user needs\nto have the `external-authentication` feature toggle enabled.",
+            "description": "Boolean flag indicating if the cluster should use an external authentication configuration for ROSA HCP clusters.\n\nBy default this is false.\n\nTo enable it the cluster needs to be ROSA HCP cluster and the organization of the user needs\nto have the `external-authentication` feature toggle enabled.\n\nFor ARO HCP clusters, use the \"State\" property to enable/disable this feature instead.",
             "type": "boolean"
           },
           "external_auths": {
+            "description": "A list of external authentication providers configured for the cluster.\n\nOnly one external authentication provider can be configured.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ExternalAuth"
             }
+          },
+          "state": {
+            "description": "Controls whether the cluster uses an external authentication configuration for ARO HCP clusters.\n\nFor ARO HCP clusters, this will be \"enabled\" by default and cannot be set to \"disabled\".\n\nFOR ROSA HCP clusters, use the \"Enabled\" boolean flag to enable/disable this feature instead.",
+            "$ref": "#/components/schemas/ExternalAuthConfigState"
+          }
+        }
+      },
+      "ExternalAuthConfigState": {
+        "description": "Representation of the possible values for the state field of an external authentication configuration",
+        "type": "string",
+        "enum": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      "ExternalAuthState": {
+        "description": "Representation of the state of an external authentication provider.",
+        "properties": {
+          "last_updated_timestamp": {
+            "description": "The date and time when the external authentication provider state was last updated.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "description": "A string value representing the external authentication provider's current state.",
+            "type": "string"
+          }
+        }
+      },
+      "ExternalAuthStatus": {
+        "description": "Representation of the status of an external authentication provider.",
+        "properties": {
+          "message": {
+            "description": "A descriptive message providing additional context about the current \nstate of the external authentication provider.",
+            "type": "string"
+          },
+          "state": {
+            "description": "The current state of the external authentication provider.",
+            "$ref": "#/components/schemas/ExternalAuthState"
           }
         }
       },
@@ -2389,6 +2948,18 @@
           "secure_boot": {
             "description": "Determines if Shielded VM feature \"Secure Boot\" should be set for the nodes of the cluster.",
             "type": "boolean"
+          }
+        }
+      },
+      "GroupsClaim": {
+        "properties": {
+          "claim": {
+            "description": "The claim used in the token.",
+            "type": "string"
+          },
+          "prefix": {
+            "description": "A prefix contatenated in the claim (Optional).",
+            "type": "string"
           }
         }
       },
@@ -3286,6 +3857,69 @@
           },
           "value": {
             "description": "The value for the taint.",
+            "type": "string"
+          }
+        }
+      },
+      "TokenClaimMappings": {
+        "description": "The claim mappings defined for users and groups.",
+        "properties": {
+          "groups": {
+            "description": "Groups is a name of the claim that should be used to construct groups for the cluster identity.",
+            "$ref": "#/components/schemas/GroupsClaim"
+          },
+          "username": {
+            "description": "Username is a name of the claim that should be used to construct usernames for the cluster identity.",
+            "$ref": "#/components/schemas/UsernameClaim"
+          }
+        }
+      },
+      "TokenClaimValidationRule": {
+        "description": "The rule that is applied to validate token claims to authenticate users.",
+        "properties": {
+          "claim": {
+            "description": "Claim is a name of a required claim.",
+            "type": "string"
+          },
+          "required_value": {
+            "description": "RequiredValue is the required value for the claim.",
+            "type": "string"
+          }
+        }
+      },
+      "TokenIssuer": {
+        "description": "Representation of a token issuer used in an external authentication.",
+        "properties": {
+          "ca": {
+            "description": "Certificate bundle to use to validate server certificates for the configured URL.",
+            "type": "string"
+          },
+          "url": {
+            "description": "URL is the serving URL of the token issuer.\nIt must be a valid url and use the 'https' scheme.\nThis is required.",
+            "type": "string"
+          },
+          "audiences": {
+            "description": "Audiences is an array of audiences that the token was issued for.\nValid tokens must include at least one of these values in their\n\"aud\" claim.\nMust have at least one audience and a maximum of ten.\nAny clients defined for this external authentication must have their id included here.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UsernameClaim": {
+        "description": "The username claim mapping.",
+        "properties": {
+          "claim": {
+            "description": "The claim used in the token.",
+            "type": "string"
+          },
+          "prefix": {
+            "description": "A prefix contatenated in the claim (Optional).",
+            "type": "string"
+          },
+          "prefix_policy": {
+            "description": "PrefixPolicy specifies how a prefix should apply.\n\nBy default, claims other than `email` will be prefixed with the issuer URL to\nprevent naming clashes with other plugins.\n\nSet to \"NoPrefix\" to disable prefixing.\n\nIf a prefix is defined, this will be set to 'Prefix' by default.",
             "type": "string"
           }
         }

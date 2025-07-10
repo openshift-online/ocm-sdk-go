@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalNamespaceOwnershipPolicyList writes a list of values of the 'namespace_ownership_policy' type to
+// the given writer.
 var MarshalNamespaceOwnershipPolicyList = api_v1.MarshalNamespaceOwnershipPolicyList
+
+// WriteNamespaceOwnershipPolicyList writes a list of value of the 'namespace_ownership_policy' type to
+// the given stream.
 var WriteNamespaceOwnershipPolicyList = api_v1.WriteNamespaceOwnershipPolicyList
+
+// UnmarshalNamespaceOwnershipPolicyList reads a list of values of the 'namespace_ownership_policy' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalNamespaceOwnershipPolicyList = api_v1.UnmarshalNamespaceOwnershipPolicyList
+
+// ReadNamespaceOwnershipPolicyList reads list of values of the ”namespace_ownership_policy' type from
+// the given iterator.
 var ReadNamespaceOwnershipPolicyList = api_v1.ReadNamespaceOwnershipPolicyList

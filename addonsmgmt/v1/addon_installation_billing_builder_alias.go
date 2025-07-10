@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// AddonInstallationBillingBuilder contains the data and logic needed to build 'addon_installation_billing' objects.
+//
+// Representation of an add-on installation billing.
 type AddonInstallationBillingBuilder = api_v1.AddonInstallationBillingBuilder
 
+// NewAddonInstallationBilling creates a new builder of 'addon_installation_billing' objects.
 var NewAddonInstallationBilling = api_v1.NewAddonInstallationBilling

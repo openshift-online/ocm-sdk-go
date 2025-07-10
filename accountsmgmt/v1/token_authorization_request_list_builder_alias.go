@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// TokenAuthorizationRequestListBuilder contains the data and logic needed to build
+// 'token_authorization_request' objects.
 type TokenAuthorizationRequestListBuilder = api_v1.TokenAuthorizationRequestListBuilder
 
+// NewTokenAuthorizationRequestList creates a new builder of 'token_authorization_request' objects.
 var NewTokenAuthorizationRequestList = api_v1.NewTokenAuthorizationRequestList

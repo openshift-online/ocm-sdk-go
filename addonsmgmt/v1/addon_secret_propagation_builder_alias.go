@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// AddonSecretPropagationBuilder contains the data and logic needed to build 'addon_secret_propagation' objects.
+//
+// Representation of an addon secret propagation
 type AddonSecretPropagationBuilder = api_v1.AddonSecretPropagationBuilder
 
+// NewAddonSecretPropagation creates a new builder of 'addon_secret_propagation' objects.
 var NewAddonSecretPropagation = api_v1.NewAddonSecretPropagation

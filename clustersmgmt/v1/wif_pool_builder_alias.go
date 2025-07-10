@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// WifPoolBuilder contains the data and logic needed to build 'wif_pool' objects.
 type WifPoolBuilder = api_v1.WifPoolBuilder
 
+// NewWifPool creates a new builder of 'wif_pool' objects.
 var NewWifPool = api_v1.NewWifPool

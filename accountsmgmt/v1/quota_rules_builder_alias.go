@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// QuotaRulesBuilder contains the data and logic needed to build 'quota_rules' objects.
 type QuotaRulesBuilder = api_v1.QuotaRulesBuilder
 
+// NewQuotaRules creates a new builder of 'quota_rules' objects.
 var NewQuotaRules = api_v1.NewQuotaRules

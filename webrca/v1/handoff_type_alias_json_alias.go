@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// MarshalHandoff writes a value of the 'handoff' type to the given writer.
 var MarshalHandoff = api_v1.MarshalHandoff
+
+// WriteHandoff writes a value of the 'handoff' type to the given stream.
 var WriteHandoff = api_v1.WriteHandoff
+
+// UnmarshalHandoff reads a value of the 'handoff' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalHandoff = api_v1.UnmarshalHandoff
+
+// ReadHandoff reads a value of the 'handoff' type from the given iterator.
 var ReadHandoff = api_v1.ReadHandoff

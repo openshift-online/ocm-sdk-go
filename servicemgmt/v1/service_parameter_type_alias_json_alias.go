@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// MarshalServiceParameter writes a value of the 'service_parameter' type to the given writer.
 var MarshalServiceParameter = api_v1.MarshalServiceParameter
+
+// WriteServiceParameter writes a value of the 'service_parameter' type to the given stream.
 var WriteServiceParameter = api_v1.WriteServiceParameter
+
+// UnmarshalServiceParameter reads a value of the 'service_parameter' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalServiceParameter = api_v1.UnmarshalServiceParameter
+
+// ReadServiceParameter reads a value of the 'service_parameter' type from the given iterator.
 var ReadServiceParameter = api_v1.ReadServiceParameter

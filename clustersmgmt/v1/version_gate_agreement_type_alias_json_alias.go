@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalVersionGateAgreement writes a value of the 'version_gate_agreement' type to the given writer.
 var MarshalVersionGateAgreement = api_v1.MarshalVersionGateAgreement
+
+// WriteVersionGateAgreement writes a value of the 'version_gate_agreement' type to the given stream.
 var WriteVersionGateAgreement = api_v1.WriteVersionGateAgreement
+
+// UnmarshalVersionGateAgreement reads a value of the 'version_gate_agreement' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalVersionGateAgreement = api_v1.UnmarshalVersionGateAgreement
+
+// ReadVersionGateAgreement reads a value of the 'version_gate_agreement' type from the given iterator.
 var ReadVersionGateAgreement = api_v1.ReadVersionGateAgreement

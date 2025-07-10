@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalSubnetNetworkVerification writes a value of the 'subnet_network_verification' type to the given writer.
 var MarshalSubnetNetworkVerification = api_v1.MarshalSubnetNetworkVerification
+
+// WriteSubnetNetworkVerification writes a value of the 'subnet_network_verification' type to the given stream.
 var WriteSubnetNetworkVerification = api_v1.WriteSubnetNetworkVerification
+
+// UnmarshalSubnetNetworkVerification reads a value of the 'subnet_network_verification' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalSubnetNetworkVerification = api_v1.UnmarshalSubnetNetworkVerification
+
+// ReadSubnetNetworkVerification reads a value of the 'subnet_network_verification' type from the given iterator.
 var ReadSubnetNetworkVerification = api_v1.ReadSubnetNetworkVerification

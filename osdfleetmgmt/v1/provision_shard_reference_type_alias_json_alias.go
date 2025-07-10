@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
+// MarshalProvisionShardReference writes a value of the 'provision_shard_reference' type to the given writer.
 var MarshalProvisionShardReference = api_v1.MarshalProvisionShardReference
+
+// WriteProvisionShardReference writes a value of the 'provision_shard_reference' type to the given stream.
 var WriteProvisionShardReference = api_v1.WriteProvisionShardReference
+
+// UnmarshalProvisionShardReference reads a value of the 'provision_shard_reference' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalProvisionShardReference = api_v1.UnmarshalProvisionShardReference
+
+// ReadProvisionShardReference reads a value of the 'provision_shard_reference' type from the given iterator.
 var ReadProvisionShardReference = api_v1.ReadProvisionShardReference

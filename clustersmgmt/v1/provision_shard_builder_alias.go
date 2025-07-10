@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ProvisionShardBuilder contains the data and logic needed to build 'provision_shard' objects.
+//
+// Contains the properties of the provision shard, including AWS and GCP related configurations
 type ProvisionShardBuilder = api_v1.ProvisionShardBuilder
 
+// NewProvisionShard creates a new builder of 'provision_shard' objects.
 var NewProvisionShard = api_v1.NewProvisionShard

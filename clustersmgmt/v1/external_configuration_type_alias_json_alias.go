@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalExternalConfiguration writes a value of the 'external_configuration' type to the given writer.
 var MarshalExternalConfiguration = api_v1.MarshalExternalConfiguration
+
+// WriteExternalConfiguration writes a value of the 'external_configuration' type to the given stream.
 var WriteExternalConfiguration = api_v1.WriteExternalConfiguration
+
+// UnmarshalExternalConfiguration reads a value of the 'external_configuration' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalExternalConfiguration = api_v1.UnmarshalExternalConfiguration
+
+// ReadExternalConfiguration reads a value of the 'external_configuration' type from the given iterator.
 var ReadExternalConfiguration = api_v1.ReadExternalConfiguration

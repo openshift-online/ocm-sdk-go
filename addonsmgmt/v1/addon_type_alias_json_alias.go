@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// MarshalAddon writes a value of the 'addon' type to the given writer.
 var MarshalAddon = api_v1.MarshalAddon
+
+// WriteAddon writes a value of the 'addon' type to the given stream.
 var WriteAddon = api_v1.WriteAddon
+
+// UnmarshalAddon reads a value of the 'addon' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddon = api_v1.UnmarshalAddon
+
+// ReadAddon reads a value of the 'addon' type from the given iterator.
 var ReadAddon = api_v1.ReadAddon

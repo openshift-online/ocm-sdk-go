@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
+// SelfCapabilityReviewResponseBuilder contains the data and logic needed to build 'self_capability_review_response' objects.
+//
+// Representation of a capability review response.
 type SelfCapabilityReviewResponseBuilder = api_v1.SelfCapabilityReviewResponseBuilder
 
+// NewSelfCapabilityReviewResponse creates a new builder of 'self_capability_review_response' objects.
 var NewSelfCapabilityReviewResponse = api_v1.NewSelfCapabilityReviewResponse

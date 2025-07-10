@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// InflightCheckBuilder contains the data and logic needed to build 'inflight_check' objects.
+//
+// Representation of check running before the cluster is provisioned.
 type InflightCheckBuilder = api_v1alpha1.InflightCheckBuilder
 
+// NewInflightCheck creates a new builder of 'inflight_check' objects.
 var NewInflightCheck = api_v1alpha1.NewInflightCheck

@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalRootVolume writes a value of the 'root_volume' type to the given writer.
 var MarshalRootVolume = api_v1alpha1.MarshalRootVolume
+
+// WriteRootVolume writes a value of the 'root_volume' type to the given stream.
 var WriteRootVolume = api_v1alpha1.WriteRootVolume
+
+// UnmarshalRootVolume reads a value of the 'root_volume' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalRootVolume = api_v1alpha1.UnmarshalRootVolume
+
+// ReadRootVolume reads a value of the 'root_volume' type from the given iterator.
 var ReadRootVolume = api_v1alpha1.ReadRootVolume

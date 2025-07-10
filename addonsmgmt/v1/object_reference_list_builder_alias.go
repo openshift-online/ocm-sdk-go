@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// ObjectReferenceListBuilder contains the data and logic needed to build
+// 'object_reference' objects.
 type ObjectReferenceListBuilder = api_v1.ObjectReferenceListBuilder
 
+// NewObjectReferenceList creates a new builder of 'object_reference' objects.
 var NewObjectReferenceList = api_v1.NewObjectReferenceList

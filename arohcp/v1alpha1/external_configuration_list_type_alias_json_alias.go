@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalExternalConfigurationList writes a list of values of the 'external_configuration' type to
+// the given writer.
 var MarshalExternalConfigurationList = api_v1alpha1.MarshalExternalConfigurationList
+
+// WriteExternalConfigurationList writes a list of value of the 'external_configuration' type to
+// the given stream.
 var WriteExternalConfigurationList = api_v1alpha1.WriteExternalConfigurationList
+
+// UnmarshalExternalConfigurationList reads a list of values of the 'external_configuration' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalExternalConfigurationList = api_v1alpha1.UnmarshalExternalConfigurationList
+
+// ReadExternalConfigurationList reads list of values of the ”external_configuration' type from
+// the given iterator.
 var ReadExternalConfigurationList = api_v1alpha1.ReadExternalConfigurationList

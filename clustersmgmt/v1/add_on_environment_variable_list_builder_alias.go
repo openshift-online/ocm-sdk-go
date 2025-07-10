@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AddOnEnvironmentVariableListBuilder contains the data and logic needed to build
+// 'add_on_environment_variable' objects.
 type AddOnEnvironmentVariableListBuilder = api_v1.AddOnEnvironmentVariableListBuilder
 
+// NewAddOnEnvironmentVariableList creates a new builder of 'add_on_environment_variable' objects.
 var NewAddOnEnvironmentVariableList = api_v1.NewAddOnEnvironmentVariableList

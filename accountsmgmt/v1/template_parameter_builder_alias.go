@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// TemplateParameterBuilder contains the data and logic needed to build 'template_parameter' objects.
+//
+// A template parameter is used in an email to replace placeholder content with
+// values specific to the email recipient.
 type TemplateParameterBuilder = api_v1.TemplateParameterBuilder
 
+// NewTemplateParameter creates a new builder of 'template_parameter' objects.
 var NewTemplateParameter = api_v1.NewTemplateParameter

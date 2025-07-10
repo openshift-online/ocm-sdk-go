@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// MarshalIncidentList writes a list of values of the 'incident' type to
+// the given writer.
 var MarshalIncidentList = api_v1.MarshalIncidentList
+
+// WriteIncidentList writes a list of value of the 'incident' type to
+// the given stream.
 var WriteIncidentList = api_v1.WriteIncidentList
+
+// UnmarshalIncidentList reads a list of values of the 'incident' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalIncidentList = api_v1.UnmarshalIncidentList
+
+// ReadIncidentList reads list of values of the ”incident' type from
+// the given iterator.
 var ReadIncidentList = api_v1.ReadIncidentList

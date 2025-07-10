@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalGCPImageOverrideList writes a list of values of the 'GCP_image_override' type to
+// the given writer.
 var MarshalGCPImageOverrideList = api_v1.MarshalGCPImageOverrideList
+
+// WriteGCPImageOverrideList writes a list of value of the 'GCP_image_override' type to
+// the given stream.
 var WriteGCPImageOverrideList = api_v1.WriteGCPImageOverrideList
+
+// UnmarshalGCPImageOverrideList reads a list of values of the 'GCP_image_override' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalGCPImageOverrideList = api_v1.UnmarshalGCPImageOverrideList
+
+// ReadGCPImageOverrideList reads list of values of the ”GCP_image_override' type from
+// the given iterator.
 var ReadGCPImageOverrideList = api_v1.ReadGCPImageOverrideList

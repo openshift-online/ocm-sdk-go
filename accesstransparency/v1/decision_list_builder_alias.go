@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accesstransparency/v1"
 )
 
+// DecisionListBuilder contains the data and logic needed to build
+// 'decision' objects.
 type DecisionListBuilder = api_v1.DecisionListBuilder
 
+// NewDecisionList creates a new builder of 'decision' objects.
 var NewDecisionList = api_v1.NewDecisionList

@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// SummarySampleListBuilder contains the data and logic needed to build
+// 'summary_sample' objects.
 type SummarySampleListBuilder = api_v1.SummarySampleListBuilder
 
+// NewSummarySampleList creates a new builder of 'summary_sample' objects.
 var NewSummarySampleList = api_v1.NewSummarySampleList

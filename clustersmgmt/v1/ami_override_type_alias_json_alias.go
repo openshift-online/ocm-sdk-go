@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAMIOverride writes a value of the 'AMI_override' type to the given writer.
 var MarshalAMIOverride = api_v1.MarshalAMIOverride
+
+// WriteAMIOverride writes a value of the 'AMI_override' type to the given stream.
 var WriteAMIOverride = api_v1.WriteAMIOverride
+
+// UnmarshalAMIOverride reads a value of the 'AMI_override' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAMIOverride = api_v1.UnmarshalAMIOverride
+
+// ReadAMIOverride reads a value of the 'AMI_override' type from the given iterator.
 var ReadAMIOverride = api_v1.ReadAMIOverride

@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// PrivateLinkClusterConfigurationBuilder contains the data and logic needed to build 'private_link_cluster_configuration' objects.
+//
+// Manages the configuration for the Private Links.
 type PrivateLinkClusterConfigurationBuilder = api_v1.PrivateLinkClusterConfigurationBuilder
 
+// NewPrivateLinkClusterConfiguration creates a new builder of 'private_link_cluster_configuration' objects.
 var NewPrivateLinkClusterConfiguration = api_v1.NewPrivateLinkClusterConfiguration

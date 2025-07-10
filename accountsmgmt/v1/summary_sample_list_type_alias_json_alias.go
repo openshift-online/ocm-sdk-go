@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSummarySampleList writes a list of values of the 'summary_sample' type to
+// the given writer.
 var MarshalSummarySampleList = api_v1.MarshalSummarySampleList
+
+// WriteSummarySampleList writes a list of value of the 'summary_sample' type to
+// the given stream.
 var WriteSummarySampleList = api_v1.WriteSummarySampleList
+
+// UnmarshalSummarySampleList reads a list of values of the 'summary_sample' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSummarySampleList = api_v1.UnmarshalSummarySampleList
+
+// ReadSummarySampleList reads list of values of the ”summary_sample' type from
+// the given iterator.
 var ReadSummarySampleList = api_v1.ReadSummarySampleList

@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// InstanceIAMRolesBuilder contains the data and logic needed to build 'instance_IAM_roles' objects.
+//
+// Contains the necessary attributes to support role-based authentication on AWS.
 type InstanceIAMRolesBuilder = api_v1.InstanceIAMRolesBuilder
 
+// NewInstanceIAMRoles creates a new builder of 'instance_IAM_roles' objects.
 var NewInstanceIAMRoles = api_v1.NewInstanceIAMRoles

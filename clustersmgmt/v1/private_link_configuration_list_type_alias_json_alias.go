@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalPrivateLinkConfigurationList writes a list of values of the 'private_link_configuration' type to
+// the given writer.
 var MarshalPrivateLinkConfigurationList = api_v1.MarshalPrivateLinkConfigurationList
+
+// WritePrivateLinkConfigurationList writes a list of value of the 'private_link_configuration' type to
+// the given stream.
 var WritePrivateLinkConfigurationList = api_v1.WritePrivateLinkConfigurationList
+
+// UnmarshalPrivateLinkConfigurationList reads a list of values of the 'private_link_configuration' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalPrivateLinkConfigurationList = api_v1.UnmarshalPrivateLinkConfigurationList
+
+// ReadPrivateLinkConfigurationList reads list of values of the ”private_link_configuration' type from
+// the given iterator.
 var ReadPrivateLinkConfigurationList = api_v1.ReadPrivateLinkConfigurationList

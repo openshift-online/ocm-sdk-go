@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalInflightCheck writes a value of the 'inflight_check' type to the given writer.
 var MarshalInflightCheck = api_v1.MarshalInflightCheck
+
+// WriteInflightCheck writes a value of the 'inflight_check' type to the given stream.
 var WriteInflightCheck = api_v1.WriteInflightCheck
+
+// UnmarshalInflightCheck reads a value of the 'inflight_check' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalInflightCheck = api_v1.UnmarshalInflightCheck
+
+// ReadInflightCheck reads a value of the 'inflight_check' type from the given iterator.
 var ReadInflightCheck = api_v1.ReadInflightCheck

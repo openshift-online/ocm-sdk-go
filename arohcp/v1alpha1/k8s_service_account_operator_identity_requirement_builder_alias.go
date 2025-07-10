@@ -23,6 +23,8 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// K8sServiceAccountOperatorIdentityRequirementBuilder contains the data and logic needed to build 'K8s_service_account_operator_identity_requirement' objects.
 type K8sServiceAccountOperatorIdentityRequirementBuilder = api_v1alpha1.K8sServiceAccountOperatorIdentityRequirementBuilder
 
+// NewK8sServiceAccountOperatorIdentityRequirement creates a new builder of 'K8s_service_account_operator_identity_requirement' objects.
 var NewK8sServiceAccountOperatorIdentityRequirement = api_v1alpha1.NewK8sServiceAccountOperatorIdentityRequirement

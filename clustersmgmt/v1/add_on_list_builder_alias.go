@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AddOnListBuilder contains the data and logic needed to build
+// 'add_on' objects.
 type AddOnListBuilder = api_v1.AddOnListBuilder
 
+// NewAddOnList creates a new builder of 'add_on' objects.
 var NewAddOnList = api_v1.NewAddOnList

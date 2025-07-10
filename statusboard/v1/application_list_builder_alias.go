@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// ApplicationListBuilder contains the data and logic needed to build
+// 'application' objects.
 type ApplicationListBuilder = api_v1.ApplicationListBuilder
 
+// NewApplicationList creates a new builder of 'application' objects.
 var NewApplicationList = api_v1.NewApplicationList

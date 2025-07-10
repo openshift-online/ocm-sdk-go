@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// UsernameClaimBuilder contains the data and logic needed to build 'username_claim' objects.
+//
+// The username claim mapping.
 type UsernameClaimBuilder = api_v1.UsernameClaimBuilder
 
+// NewUsernameClaim creates a new builder of 'username_claim' objects.
 var NewUsernameClaim = api_v1.NewUsernameClaim

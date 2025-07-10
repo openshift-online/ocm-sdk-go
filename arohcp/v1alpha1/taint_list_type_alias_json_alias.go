@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalTaintList writes a list of values of the 'taint' type to
+// the given writer.
 var MarshalTaintList = api_v1alpha1.MarshalTaintList
+
+// WriteTaintList writes a list of value of the 'taint' type to
+// the given stream.
 var WriteTaintList = api_v1alpha1.WriteTaintList
+
+// UnmarshalTaintList reads a list of values of the 'taint' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalTaintList = api_v1alpha1.UnmarshalTaintList
+
+// ReadTaintList reads list of values of the ”taint' type from
+// the given iterator.
 var ReadTaintList = api_v1alpha1.ReadTaintList

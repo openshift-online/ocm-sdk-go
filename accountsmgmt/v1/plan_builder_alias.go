@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// PlanBuilder contains the data and logic needed to build 'plan' objects.
 type PlanBuilder = api_v1.PlanBuilder
 
+// NewPlan creates a new builder of 'plan' objects.
 var NewPlan = api_v1.NewPlan

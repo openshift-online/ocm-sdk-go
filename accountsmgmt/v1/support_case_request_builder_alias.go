@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// SupportCaseRequestBuilder contains the data and logic needed to build 'support_case_request' objects.
 type SupportCaseRequestBuilder = api_v1.SupportCaseRequestBuilder
 
+// NewSupportCaseRequest creates a new builder of 'support_case_request' objects.
 var NewSupportCaseRequest = api_v1.NewSupportCaseRequest

@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// MarshalServiceInfo writes a value of the 'service_info' type to the given writer.
 var MarshalServiceInfo = api_v1.MarshalServiceInfo
+
+// WriteServiceInfo writes a value of the 'service_info' type to the given stream.
 var WriteServiceInfo = api_v1.WriteServiceInfo
+
+// UnmarshalServiceInfo reads a value of the 'service_info' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalServiceInfo = api_v1.UnmarshalServiceInfo
+
+// ReadServiceInfo reads a value of the 'service_info' type from the given iterator.
 var ReadServiceInfo = api_v1.ReadServiceInfo

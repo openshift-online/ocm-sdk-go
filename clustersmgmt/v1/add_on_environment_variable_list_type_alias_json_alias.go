@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAddOnEnvironmentVariableList writes a list of values of the 'add_on_environment_variable' type to
+// the given writer.
 var MarshalAddOnEnvironmentVariableList = api_v1.MarshalAddOnEnvironmentVariableList
+
+// WriteAddOnEnvironmentVariableList writes a list of value of the 'add_on_environment_variable' type to
+// the given stream.
 var WriteAddOnEnvironmentVariableList = api_v1.WriteAddOnEnvironmentVariableList
+
+// UnmarshalAddOnEnvironmentVariableList reads a list of values of the 'add_on_environment_variable' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddOnEnvironmentVariableList = api_v1.UnmarshalAddOnEnvironmentVariableList
+
+// ReadAddOnEnvironmentVariableList reads list of values of the ”add_on_environment_variable' type from
+// the given iterator.
 var ReadAddOnEnvironmentVariableList = api_v1.ReadAddOnEnvironmentVariableList

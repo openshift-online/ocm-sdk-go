@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// MarshalOwner writes a value of the 'owner' type to the given writer.
 var MarshalOwner = api_v1.MarshalOwner
+
+// WriteOwner writes a value of the 'owner' type to the given stream.
 var WriteOwner = api_v1.WriteOwner
+
+// UnmarshalOwner reads a value of the 'owner' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalOwner = api_v1.UnmarshalOwner
+
+// ReadOwner reads a value of the 'owner' type from the given iterator.
 var ReadOwner = api_v1.ReadOwner

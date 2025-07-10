@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MachinePoolSecurityGroupFilterBuilder contains the data and logic needed to build 'machine_pool_security_group_filter' objects.
+//
+// Security Group Filter object, containing name of the filter tag and value of the filter tag
 type MachinePoolSecurityGroupFilterBuilder = api_v1.MachinePoolSecurityGroupFilterBuilder
 
+// NewMachinePoolSecurityGroupFilter creates a new builder of 'machine_pool_security_group_filter' objects.
 var NewMachinePoolSecurityGroupFilter = api_v1.NewMachinePoolSecurityGroupFilter

@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAddOnVersionList writes a list of values of the 'add_on_version' type to
+// the given writer.
 var MarshalAddOnVersionList = api_v1.MarshalAddOnVersionList
+
+// WriteAddOnVersionList writes a list of value of the 'add_on_version' type to
+// the given stream.
 var WriteAddOnVersionList = api_v1.WriteAddOnVersionList
+
+// UnmarshalAddOnVersionList reads a list of values of the 'add_on_version' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddOnVersionList = api_v1.UnmarshalAddOnVersionList
+
+// ReadAddOnVersionList reads list of values of the ”add_on_version' type from
+// the given iterator.
 var ReadAddOnVersionList = api_v1.ReadAddOnVersionList

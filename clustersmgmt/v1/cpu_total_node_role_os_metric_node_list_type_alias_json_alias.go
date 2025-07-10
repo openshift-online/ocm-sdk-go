@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalCPUTotalNodeRoleOSMetricNodeList writes a list of values of the 'CPU_total_node_role_OS_metric_node' type to
+// the given writer.
 var MarshalCPUTotalNodeRoleOSMetricNodeList = api_v1.MarshalCPUTotalNodeRoleOSMetricNodeList
+
+// WriteCPUTotalNodeRoleOSMetricNodeList writes a list of value of the 'CPU_total_node_role_OS_metric_node' type to
+// the given stream.
 var WriteCPUTotalNodeRoleOSMetricNodeList = api_v1.WriteCPUTotalNodeRoleOSMetricNodeList
+
+// UnmarshalCPUTotalNodeRoleOSMetricNodeList reads a list of values of the 'CPU_total_node_role_OS_metric_node' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalCPUTotalNodeRoleOSMetricNodeList = api_v1.UnmarshalCPUTotalNodeRoleOSMetricNodeList
+
+// ReadCPUTotalNodeRoleOSMetricNodeList reads list of values of the ”CPU_total_node_role_OS_metric_node' type from
+// the given iterator.
 var ReadCPUTotalNodeRoleOSMetricNodeList = api_v1.ReadCPUTotalNodeRoleOSMetricNodeList

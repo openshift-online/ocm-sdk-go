@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAutoscalerResourceLimitsGPULimit writes a value of the 'autoscaler_resource_limits_GPU_limit' type to the given writer.
 var MarshalAutoscalerResourceLimitsGPULimit = api_v1.MarshalAutoscalerResourceLimitsGPULimit
+
+// WriteAutoscalerResourceLimitsGPULimit writes a value of the 'autoscaler_resource_limits_GPU_limit' type to the given stream.
 var WriteAutoscalerResourceLimitsGPULimit = api_v1.WriteAutoscalerResourceLimitsGPULimit
+
+// UnmarshalAutoscalerResourceLimitsGPULimit reads a value of the 'autoscaler_resource_limits_GPU_limit' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAutoscalerResourceLimitsGPULimit = api_v1.UnmarshalAutoscalerResourceLimitsGPULimit
+
+// ReadAutoscalerResourceLimitsGPULimit reads a value of the 'autoscaler_resource_limits_GPU_limit' type from the given iterator.
 var ReadAutoscalerResourceLimitsGPULimit = api_v1.ReadAutoscalerResourceLimitsGPULimit

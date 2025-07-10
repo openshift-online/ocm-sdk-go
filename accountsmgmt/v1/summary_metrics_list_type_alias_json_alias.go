@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSummaryMetricsList writes a list of values of the 'summary_metrics' type to
+// the given writer.
 var MarshalSummaryMetricsList = api_v1.MarshalSummaryMetricsList
+
+// WriteSummaryMetricsList writes a list of value of the 'summary_metrics' type to
+// the given stream.
 var WriteSummaryMetricsList = api_v1.WriteSummaryMetricsList
+
+// UnmarshalSummaryMetricsList reads a list of values of the 'summary_metrics' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSummaryMetricsList = api_v1.UnmarshalSummaryMetricsList
+
+// ReadSummaryMetricsList reads list of values of the ”summary_metrics' type from
+// the given iterator.
 var ReadSummaryMetricsList = api_v1.ReadSummaryMetricsList

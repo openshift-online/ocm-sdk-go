@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ClusterAPIBuilder contains the data and logic needed to build 'cluster_API' objects.
+//
+// Information about the API of a cluster.
 type ClusterAPIBuilder = api_v1alpha1.ClusterAPIBuilder
 
+// NewClusterAPI creates a new builder of 'cluster_API' objects.
 var NewClusterAPI = api_v1alpha1.NewClusterAPI
