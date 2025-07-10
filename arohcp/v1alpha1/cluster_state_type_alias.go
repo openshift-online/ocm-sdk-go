@@ -45,6 +45,9 @@ const (
 	ClusterStateUninstalling ClusterState = api_v1alpha1.ClusterStateUninstalling
 	// The state of the cluster is unknown.
 	ClusterStateUnknown ClusterState = api_v1alpha1.ClusterStateUnknown
+	// The cluster is being updated.
+	// This state is currently used only by aro hcp clusters.
+	ClusterStateUpdating ClusterState = api_v1alpha1.ClusterStateUpdating
 	// The cluster is validating user input.
 	ClusterStateValidating ClusterState = api_v1alpha1.ClusterStateValidating
 	// The cluster is waiting for user action.
