@@ -21,24 +21,24 @@ package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
 import "io"
 
-func writeClusterDeleteRequest(request *ClusterDeleteRequest, writer io.Writer) error {
+func writeClusterAsyncDeleteRequest(request *ClusterDeleteRequest, writer io.Writer) error {
 	return nil
 }
-func readClusterDeleteResponse(response *ClusterDeleteResponse, reader io.Reader) error {
+func readClusterAsyncDeleteResponse(response *ClusterDeleteResponse, reader io.Reader) error {
 	return nil
+}
+func writeClusterAsyncUpdateRequest(request *ClusterUpdateRequest, writer io.Writer) error {
+	return MarshalCluster(request.body, writer)
+}
+func readClusterAsyncUpdateResponse(response *ClusterUpdateResponse, reader io.Reader) error {
+	var err error
+	response.body, err = UnmarshalCluster(reader)
+	return err
 }
 func writeClusterGetRequest(request *ClusterGetRequest, writer io.Writer) error {
 	return nil
 }
 func readClusterGetResponse(response *ClusterGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalCluster(reader)
-	return err
-}
-func writeClusterUpdateRequest(request *ClusterUpdateRequest, writer io.Writer) error {
-	return MarshalCluster(request.body, writer)
-}
-func readClusterUpdateResponse(response *ClusterUpdateResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalCluster(reader)
 	return err

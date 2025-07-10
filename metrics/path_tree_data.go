@@ -155,16 +155,24 @@ var pathTreeData = `{
       "v1alpha1": {
         "clusters": {
           "-": {
+            "external_auth_config": {
+              "external_auths": {
+                "-": null,
+                "async_add": null
+              }
+            },
             "inflight_checks": {
               "-": null
             },
             "node_pools": {
               "-": {
                 "status": null
-              }
+              },
+              "async_add": null
             },
             "status": null
-          }
+          },
+          "async_add": null
         },
         "managed_identities_requirements": null,
         "versions": {
