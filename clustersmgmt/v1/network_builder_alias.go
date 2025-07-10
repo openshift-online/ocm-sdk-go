@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// NetworkBuilder contains the data and logic needed to build 'network' objects.
+//
+// Network configuration of a cluster.
 type NetworkBuilder = api_v1.NetworkBuilder
 
+// NewNetwork creates a new builder of 'network' objects.
 var NewNetwork = api_v1.NewNetwork

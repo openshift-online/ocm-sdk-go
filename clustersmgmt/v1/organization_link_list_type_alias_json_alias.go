@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalOrganizationLinkList writes a list of values of the 'organization_link' type to
+// the given writer.
 var MarshalOrganizationLinkList = api_v1.MarshalOrganizationLinkList
+
+// WriteOrganizationLinkList writes a list of value of the 'organization_link' type to
+// the given stream.
 var WriteOrganizationLinkList = api_v1.WriteOrganizationLinkList
+
+// UnmarshalOrganizationLinkList reads a list of values of the 'organization_link' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalOrganizationLinkList = api_v1.UnmarshalOrganizationLinkList
+
+// ReadOrganizationLinkList reads list of values of the ”organization_link' type from
+// the given iterator.
 var ReadOrganizationLinkList = api_v1.ReadOrganizationLinkList

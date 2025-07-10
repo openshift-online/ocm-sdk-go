@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// VersionGateListBuilder contains the data and logic needed to build
+// 'version_gate' objects.
 type VersionGateListBuilder = api_v1.VersionGateListBuilder
 
+// NewVersionGateList creates a new builder of 'version_gate' objects.
 var NewVersionGateList = api_v1.NewVersionGateList

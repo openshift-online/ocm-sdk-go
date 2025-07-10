@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// EventListBuilder contains the data and logic needed to build
+// 'event' objects.
 type EventListBuilder = api_v1.EventListBuilder
 
+// NewEventList creates a new builder of 'event' objects.
 var NewEventList = api_v1.NewEventList

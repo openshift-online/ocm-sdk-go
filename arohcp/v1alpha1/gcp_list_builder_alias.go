@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// GCPListBuilder contains the data and logic needed to build
+// 'GCP' objects.
 type GCPListBuilder = api_v1alpha1.GCPListBuilder
 
+// NewGCPList creates a new builder of 'GCP' objects.
 var NewGCPList = api_v1alpha1.NewGCPList

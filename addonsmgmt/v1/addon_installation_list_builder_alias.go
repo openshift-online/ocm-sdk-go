@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// AddonInstallationListBuilder contains the data and logic needed to build
+// 'addon_installation' objects.
 type AddonInstallationListBuilder = api_v1.AddonInstallationListBuilder
 
+// NewAddonInstallationList creates a new builder of 'addon_installation' objects.
 var NewAddonInstallationList = api_v1.NewAddonInstallationList

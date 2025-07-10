@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// InstanceIAMRolesListBuilder contains the data and logic needed to build
+// 'instance_IAM_roles' objects.
 type InstanceIAMRolesListBuilder = api_v1.InstanceIAMRolesListBuilder
 
+// NewInstanceIAMRolesList creates a new builder of 'instance_IAM_roles' objects.
 var NewInstanceIAMRolesList = api_v1.NewInstanceIAMRolesList

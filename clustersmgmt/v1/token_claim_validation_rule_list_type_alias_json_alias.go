@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalTokenClaimValidationRuleList writes a list of values of the 'token_claim_validation_rule' type to
+// the given writer.
 var MarshalTokenClaimValidationRuleList = api_v1.MarshalTokenClaimValidationRuleList
+
+// WriteTokenClaimValidationRuleList writes a list of value of the 'token_claim_validation_rule' type to
+// the given stream.
 var WriteTokenClaimValidationRuleList = api_v1.WriteTokenClaimValidationRuleList
+
+// UnmarshalTokenClaimValidationRuleList reads a list of values of the 'token_claim_validation_rule' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalTokenClaimValidationRuleList = api_v1.UnmarshalTokenClaimValidationRuleList
+
+// ReadTokenClaimValidationRuleList reads list of values of the ”token_claim_validation_rule' type from
+// the given iterator.
 var ReadTokenClaimValidationRuleList = api_v1.ReadTokenClaimValidationRuleList

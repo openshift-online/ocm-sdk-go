@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalSdnToOvnClusterMigrationList writes a list of values of the 'sdn_to_ovn_cluster_migration' type to
+// the given writer.
 var MarshalSdnToOvnClusterMigrationList = api_v1.MarshalSdnToOvnClusterMigrationList
+
+// WriteSdnToOvnClusterMigrationList writes a list of value of the 'sdn_to_ovn_cluster_migration' type to
+// the given stream.
 var WriteSdnToOvnClusterMigrationList = api_v1.WriteSdnToOvnClusterMigrationList
+
+// UnmarshalSdnToOvnClusterMigrationList reads a list of values of the 'sdn_to_ovn_cluster_migration' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSdnToOvnClusterMigrationList = api_v1.UnmarshalSdnToOvnClusterMigrationList
+
+// ReadSdnToOvnClusterMigrationList reads list of values of the ”sdn_to_ovn_cluster_migration' type from
+// the given iterator.
 var ReadSdnToOvnClusterMigrationList = api_v1.ReadSdnToOvnClusterMigrationList

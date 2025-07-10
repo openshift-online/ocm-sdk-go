@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AzureNodesOutboundConnectivityListBuilder contains the data and logic needed to build
+// 'azure_nodes_outbound_connectivity' objects.
 type AzureNodesOutboundConnectivityListBuilder = api_v1alpha1.AzureNodesOutboundConnectivityListBuilder
 
+// NewAzureNodesOutboundConnectivityList creates a new builder of 'azure_nodes_outbound_connectivity' objects.
 var NewAzureNodesOutboundConnectivityList = api_v1alpha1.NewAzureNodesOutboundConnectivityList

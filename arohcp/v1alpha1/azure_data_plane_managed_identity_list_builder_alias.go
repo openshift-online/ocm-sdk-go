@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AzureDataPlaneManagedIdentityListBuilder contains the data and logic needed to build
+// 'azure_data_plane_managed_identity' objects.
 type AzureDataPlaneManagedIdentityListBuilder = api_v1alpha1.AzureDataPlaneManagedIdentityListBuilder
 
+// NewAzureDataPlaneManagedIdentityList creates a new builder of 'azure_data_plane_managed_identity' objects.
 var NewAzureDataPlaneManagedIdentityList = api_v1alpha1.NewAzureDataPlaneManagedIdentityList

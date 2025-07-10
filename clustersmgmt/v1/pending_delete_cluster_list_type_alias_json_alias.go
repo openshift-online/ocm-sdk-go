@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalPendingDeleteClusterList writes a list of values of the 'pending_delete_cluster' type to
+// the given writer.
 var MarshalPendingDeleteClusterList = api_v1.MarshalPendingDeleteClusterList
+
+// WritePendingDeleteClusterList writes a list of value of the 'pending_delete_cluster' type to
+// the given stream.
 var WritePendingDeleteClusterList = api_v1.WritePendingDeleteClusterList
+
+// UnmarshalPendingDeleteClusterList reads a list of values of the 'pending_delete_cluster' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalPendingDeleteClusterList = api_v1.UnmarshalPendingDeleteClusterList
+
+// ReadPendingDeleteClusterList reads list of values of the ”pending_delete_cluster' type from
+// the given iterator.
 var ReadPendingDeleteClusterList = api_v1.ReadPendingDeleteClusterList

@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSummaryDashboard writes a value of the 'summary_dashboard' type to the given writer.
 var MarshalSummaryDashboard = api_v1.MarshalSummaryDashboard
+
+// WriteSummaryDashboard writes a value of the 'summary_dashboard' type to the given stream.
 var WriteSummaryDashboard = api_v1.WriteSummaryDashboard
+
+// UnmarshalSummaryDashboard reads a value of the 'summary_dashboard' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalSummaryDashboard = api_v1.UnmarshalSummaryDashboard
+
+// ReadSummaryDashboard reads a value of the 'summary_dashboard' type from the given iterator.
 var ReadSummaryDashboard = api_v1.ReadSummaryDashboard

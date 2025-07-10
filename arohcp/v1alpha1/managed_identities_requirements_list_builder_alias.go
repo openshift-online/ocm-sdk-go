@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// ManagedIdentitiesRequirementsListBuilder contains the data and logic needed to build
+// 'managed_identities_requirements' objects.
 type ManagedIdentitiesRequirementsListBuilder = api_v1alpha1.ManagedIdentitiesRequirementsListBuilder
 
+// NewManagedIdentitiesRequirementsList creates a new builder of 'managed_identities_requirements' objects.
 var NewManagedIdentitiesRequirementsList = api_v1alpha1.NewManagedIdentitiesRequirementsList

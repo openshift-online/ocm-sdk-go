@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MachinePoolBuilder contains the data and logic needed to build 'machine_pool' objects.
+//
+// Representation of a machine pool in a cluster.
 type MachinePoolBuilder = api_v1.MachinePoolBuilder
 
+// NewMachinePool creates a new builder of 'machine_pool' objects.
 var NewMachinePool = api_v1.NewMachinePool

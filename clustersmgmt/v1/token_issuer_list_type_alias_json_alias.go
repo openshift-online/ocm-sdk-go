@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalTokenIssuerList writes a list of values of the 'token_issuer' type to
+// the given writer.
 var MarshalTokenIssuerList = api_v1.MarshalTokenIssuerList
+
+// WriteTokenIssuerList writes a list of value of the 'token_issuer' type to
+// the given stream.
 var WriteTokenIssuerList = api_v1.WriteTokenIssuerList
+
+// UnmarshalTokenIssuerList reads a list of values of the 'token_issuer' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalTokenIssuerList = api_v1.UnmarshalTokenIssuerList
+
+// ReadTokenIssuerList reads list of values of the ”token_issuer' type from
+// the given iterator.
 var ReadTokenIssuerList = api_v1.ReadTokenIssuerList

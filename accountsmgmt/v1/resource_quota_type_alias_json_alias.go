@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalResourceQuota writes a value of the 'resource_quota' type to the given writer.
 var MarshalResourceQuota = api_v1.MarshalResourceQuota
+
+// WriteResourceQuota writes a value of the 'resource_quota' type to the given stream.
 var WriteResourceQuota = api_v1.WriteResourceQuota
+
+// UnmarshalResourceQuota reads a value of the 'resource_quota' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalResourceQuota = api_v1.UnmarshalResourceQuota
+
+// ReadResourceQuota reads a value of the 'resource_quota' type from the given iterator.
 var ReadResourceQuota = api_v1.ReadResourceQuota

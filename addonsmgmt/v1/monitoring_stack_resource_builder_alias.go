@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// MonitoringStackResourceBuilder contains the data and logic needed to build 'monitoring_stack_resource' objects.
+//
+// Representation of Monitoring Stack Resource
 type MonitoringStackResourceBuilder = api_v1.MonitoringStackResourceBuilder
 
+// NewMonitoringStackResource creates a new builder of 'monitoring_stack_resource' objects.
 var NewMonitoringStackResource = api_v1.NewMonitoringStackResource

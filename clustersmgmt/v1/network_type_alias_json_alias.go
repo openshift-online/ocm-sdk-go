@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalNetwork writes a value of the 'network' type to the given writer.
 var MarshalNetwork = api_v1.MarshalNetwork
+
+// WriteNetwork writes a value of the 'network' type to the given stream.
 var WriteNetwork = api_v1.WriteNetwork
+
+// UnmarshalNetwork reads a value of the 'network' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalNetwork = api_v1.UnmarshalNetwork
+
+// ReadNetwork reads a value of the 'network' type from the given iterator.
 var ReadNetwork = api_v1.ReadNetwork

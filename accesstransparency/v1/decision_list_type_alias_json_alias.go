@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accesstransparency/v1"
 )
 
+// MarshalDecisionList writes a list of values of the 'decision' type to
+// the given writer.
 var MarshalDecisionList = api_v1.MarshalDecisionList
+
+// WriteDecisionList writes a list of value of the 'decision' type to
+// the given stream.
 var WriteDecisionList = api_v1.WriteDecisionList
+
+// UnmarshalDecisionList reads a list of values of the 'decision' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalDecisionList = api_v1.UnmarshalDecisionList
+
+// ReadDecisionList reads list of values of the ”decision' type from
+// the given iterator.
 var ReadDecisionList = api_v1.ReadDecisionList

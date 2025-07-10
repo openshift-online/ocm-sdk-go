@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// OwnerListBuilder contains the data and logic needed to build
+// 'owner' objects.
 type OwnerListBuilder = api_v1.OwnerListBuilder
 
+// NewOwnerList creates a new builder of 'owner' objects.
 var NewOwnerList = api_v1.NewOwnerList

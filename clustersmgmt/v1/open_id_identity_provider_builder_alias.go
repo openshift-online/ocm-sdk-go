@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// OpenIDIdentityProviderBuilder contains the data and logic needed to build 'open_ID_identity_provider' objects.
+//
+// Details for `openid` identity providers.
 type OpenIDIdentityProviderBuilder = api_v1.OpenIDIdentityProviderBuilder
 
+// NewOpenIDIdentityProvider creates a new builder of 'open_ID_identity_provider' objects.
 var NewOpenIDIdentityProvider = api_v1.NewOpenIDIdentityProvider

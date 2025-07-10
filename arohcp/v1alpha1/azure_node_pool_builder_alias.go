@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AzureNodePoolBuilder contains the data and logic needed to build 'azure_node_pool' objects.
+//
+// Representation of azure node pool specific parameters.
 type AzureNodePoolBuilder = api_v1alpha1.AzureNodePoolBuilder
 
+// NewAzureNodePool creates a new builder of 'azure_node_pool' objects.
 var NewAzureNodePool = api_v1alpha1.NewAzureNodePool

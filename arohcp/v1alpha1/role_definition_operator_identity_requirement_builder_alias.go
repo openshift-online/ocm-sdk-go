@@ -23,6 +23,8 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// RoleDefinitionOperatorIdentityRequirementBuilder contains the data and logic needed to build 'role_definition_operator_identity_requirement' objects.
 type RoleDefinitionOperatorIdentityRequirementBuilder = api_v1alpha1.RoleDefinitionOperatorIdentityRequirementBuilder
 
+// NewRoleDefinitionOperatorIdentityRequirement creates a new builder of 'role_definition_operator_identity_requirement' objects.
 var NewRoleDefinitionOperatorIdentityRequirement = api_v1alpha1.NewRoleDefinitionOperatorIdentityRequirement

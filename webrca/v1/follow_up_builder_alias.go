@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// FollowUpBuilder contains the data and logic needed to build 'follow_up' objects.
+//
+// Definition of a Web RCA event.
 type FollowUpBuilder = api_v1.FollowUpBuilder
 
+// NewFollowUp creates a new builder of 'follow_up' objects.
 var NewFollowUp = api_v1.NewFollowUp

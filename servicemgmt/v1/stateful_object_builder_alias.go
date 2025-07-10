@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// StatefulObjectBuilder contains the data and logic needed to build 'stateful_object' objects.
 type StatefulObjectBuilder = api_v1.StatefulObjectBuilder
 
+// NewStatefulObject creates a new builder of 'stateful_object' objects.
 var NewStatefulObject = api_v1.NewStatefulObject

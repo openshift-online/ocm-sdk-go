@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalOpenIDClaimsList writes a list of values of the 'open_ID_claims' type to
+// the given writer.
 var MarshalOpenIDClaimsList = api_v1.MarshalOpenIDClaimsList
+
+// WriteOpenIDClaimsList writes a list of value of the 'open_ID_claims' type to
+// the given stream.
 var WriteOpenIDClaimsList = api_v1.WriteOpenIDClaimsList
+
+// UnmarshalOpenIDClaimsList reads a list of values of the 'open_ID_claims' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalOpenIDClaimsList = api_v1.UnmarshalOpenIDClaimsList
+
+// ReadOpenIDClaimsList reads list of values of the ”open_ID_claims' type from
+// the given iterator.
 var ReadOpenIDClaimsList = api_v1.ReadOpenIDClaimsList

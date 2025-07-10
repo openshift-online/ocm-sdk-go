@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalQuotaCostList writes a list of values of the 'quota_cost' type to
+// the given writer.
 var MarshalQuotaCostList = api_v1.MarshalQuotaCostList
+
+// WriteQuotaCostList writes a list of value of the 'quota_cost' type to
+// the given stream.
 var WriteQuotaCostList = api_v1.WriteQuotaCostList
+
+// UnmarshalQuotaCostList reads a list of values of the 'quota_cost' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalQuotaCostList = api_v1.UnmarshalQuotaCostList
+
+// ReadQuotaCostList reads list of values of the ”quota_cost' type from
+// the given iterator.
 var ReadQuotaCostList = api_v1.ReadQuotaCostList

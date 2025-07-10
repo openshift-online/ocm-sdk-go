@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalRolePolicyBindingStatus writes a value of the 'role_policy_binding_status' type to the given writer.
 var MarshalRolePolicyBindingStatus = api_v1.MarshalRolePolicyBindingStatus
+
+// WriteRolePolicyBindingStatus writes a value of the 'role_policy_binding_status' type to the given stream.
 var WriteRolePolicyBindingStatus = api_v1.WriteRolePolicyBindingStatus
+
+// UnmarshalRolePolicyBindingStatus reads a value of the 'role_policy_binding_status' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalRolePolicyBindingStatus = api_v1.UnmarshalRolePolicyBindingStatus
+
+// ReadRolePolicyBindingStatus reads a value of the 'role_policy_binding_status' type from the given iterator.
 var ReadRolePolicyBindingStatus = api_v1.ReadRolePolicyBindingStatus

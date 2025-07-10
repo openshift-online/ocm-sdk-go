@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalDateList writes a list of values of the 'date' type to
+// the given writer.
 var MarshalDateList = api_v1alpha1.MarshalDateList
+
+// WriteDateList writes a list of value of the 'date' type to
+// the given stream.
 var WriteDateList = api_v1alpha1.WriteDateList
+
+// UnmarshalDateList reads a list of values of the 'date' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalDateList = api_v1alpha1.UnmarshalDateList
+
+// ReadDateList reads list of values of the ”date' type from
+// the given iterator.
 var ReadDateList = api_v1alpha1.ReadDateList

@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// GoogleIdentityProviderListBuilder contains the data and logic needed to build
+// 'google_identity_provider' objects.
 type GoogleIdentityProviderListBuilder = api_v1.GoogleIdentityProviderListBuilder
 
+// NewGoogleIdentityProviderList creates a new builder of 'google_identity_provider' objects.
 var NewGoogleIdentityProviderList = api_v1.NewGoogleIdentityProviderList

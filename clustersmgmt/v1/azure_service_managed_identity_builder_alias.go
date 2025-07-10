@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AzureServiceManagedIdentityBuilder contains the data and logic needed to build 'azure_service_managed_identity' objects.
+//
+// Represents the information associated to an Azure User-Assigned
+// Managed Identity whose purpose is to perform service level actions.
 type AzureServiceManagedIdentityBuilder = api_v1.AzureServiceManagedIdentityBuilder
 
+// NewAzureServiceManagedIdentity creates a new builder of 'azure_service_managed_identity' objects.
 var NewAzureServiceManagedIdentity = api_v1.NewAzureServiceManagedIdentity

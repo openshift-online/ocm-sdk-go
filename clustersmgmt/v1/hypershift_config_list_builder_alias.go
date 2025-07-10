@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// HypershiftConfigListBuilder contains the data and logic needed to build
+// 'hypershift_config' objects.
 type HypershiftConfigListBuilder = api_v1.HypershiftConfigListBuilder
 
+// NewHypershiftConfigList creates a new builder of 'hypershift_config' objects.
 var NewHypershiftConfigList = api_v1.NewHypershiftConfigList

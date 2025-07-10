@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AWSSTSPolicyBuilder contains the data and logic needed to build 'AWSSTS_policy' objects.
+//
+// Representation of an sts policies for rosa cluster
 type AWSSTSPolicyBuilder = api_v1.AWSSTSPolicyBuilder
 
+// NewAWSSTSPolicy creates a new builder of 'AWSSTS_policy' objects.
 var NewAWSSTSPolicy = api_v1.NewAWSSTSPolicy

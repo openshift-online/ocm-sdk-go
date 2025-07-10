@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// OrganizationLinkListBuilder contains the data and logic needed to build
+// 'organization_link' objects.
 type OrganizationLinkListBuilder = api_v1.OrganizationLinkListBuilder
 
+// NewOrganizationLinkList creates a new builder of 'organization_link' objects.
 var NewOrganizationLinkList = api_v1.NewOrganizationLinkList

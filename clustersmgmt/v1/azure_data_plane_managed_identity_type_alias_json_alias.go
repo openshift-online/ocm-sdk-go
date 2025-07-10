@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAzureDataPlaneManagedIdentity writes a value of the 'azure_data_plane_managed_identity' type to the given writer.
 var MarshalAzureDataPlaneManagedIdentity = api_v1.MarshalAzureDataPlaneManagedIdentity
+
+// WriteAzureDataPlaneManagedIdentity writes a value of the 'azure_data_plane_managed_identity' type to the given stream.
 var WriteAzureDataPlaneManagedIdentity = api_v1.WriteAzureDataPlaneManagedIdentity
+
+// UnmarshalAzureDataPlaneManagedIdentity reads a value of the 'azure_data_plane_managed_identity' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAzureDataPlaneManagedIdentity = api_v1.UnmarshalAzureDataPlaneManagedIdentity
+
+// ReadAzureDataPlaneManagedIdentity reads a value of the 'azure_data_plane_managed_identity' type from the given iterator.
 var ReadAzureDataPlaneManagedIdentity = api_v1.ReadAzureDataPlaneManagedIdentity

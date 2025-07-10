@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// GCPImageOverrideBuilder contains the data and logic needed to build 'GCP_image_override' objects.
+//
+// GcpImageOverride specifies what a GCP VM Image should be used for a particular product and billing model
 type GCPImageOverrideBuilder = api_v1.GCPImageOverrideBuilder
 
+// NewGCPImageOverride creates a new builder of 'GCP_image_override' objects.
 var NewGCPImageOverride = api_v1.NewGCPImageOverride

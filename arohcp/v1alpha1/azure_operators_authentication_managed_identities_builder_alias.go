@@ -23,6 +23,12 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AzureOperatorsAuthenticationManagedIdentitiesBuilder contains the data and logic needed to build 'azure_operators_authentication_managed_identities' objects.
+//
+// Represents the information related to Azure User-Assigned managed identities
+// needed to perform Operators authentication based on Azure User-Assigned
+// Managed Identities
 type AzureOperatorsAuthenticationManagedIdentitiesBuilder = api_v1alpha1.AzureOperatorsAuthenticationManagedIdentitiesBuilder
 
+// NewAzureOperatorsAuthenticationManagedIdentities creates a new builder of 'azure_operators_authentication_managed_identities' objects.
 var NewAzureOperatorsAuthenticationManagedIdentities = api_v1alpha1.NewAzureOperatorsAuthenticationManagedIdentities

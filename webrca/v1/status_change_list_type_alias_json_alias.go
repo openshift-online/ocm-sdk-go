@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// MarshalStatusChangeList writes a list of values of the 'status_change' type to
+// the given writer.
 var MarshalStatusChangeList = api_v1.MarshalStatusChangeList
+
+// WriteStatusChangeList writes a list of value of the 'status_change' type to
+// the given stream.
 var WriteStatusChangeList = api_v1.WriteStatusChangeList
+
+// UnmarshalStatusChangeList reads a list of values of the 'status_change' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalStatusChangeList = api_v1.UnmarshalStatusChangeList
+
+// ReadStatusChangeList reads list of values of the ”status_change' type from
+// the given iterator.
 var ReadStatusChangeList = api_v1.ReadStatusChangeList

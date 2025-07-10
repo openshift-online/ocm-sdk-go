@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accesstransparency/v1"
 )
 
+// AccessProtectionListBuilder contains the data and logic needed to build
+// 'access_protection' objects.
 type AccessProtectionListBuilder = api_v1.AccessProtectionListBuilder
 
+// NewAccessProtectionList creates a new builder of 'access_protection' objects.
 var NewAccessProtectionList = api_v1.NewAccessProtectionList

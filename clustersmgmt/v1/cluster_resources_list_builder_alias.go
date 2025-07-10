@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ClusterResourcesListBuilder contains the data and logic needed to build
+// 'cluster_resources' objects.
 type ClusterResourcesListBuilder = api_v1.ClusterResourcesListBuilder
 
+// NewClusterResourcesList creates a new builder of 'cluster_resources' objects.
 var NewClusterResourcesList = api_v1.NewClusterResourcesList

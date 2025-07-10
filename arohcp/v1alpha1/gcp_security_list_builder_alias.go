@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// GcpSecurityListBuilder contains the data and logic needed to build
+// 'gcp_security' objects.
 type GcpSecurityListBuilder = api_v1alpha1.GcpSecurityListBuilder
 
+// NewGcpSecurityList creates a new builder of 'gcp_security' objects.
 var NewGcpSecurityList = api_v1alpha1.NewGcpSecurityList

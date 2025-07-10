@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// LogBuilder contains the data and logic needed to build 'log' objects.
+//
+// Log of the cluster.
 type LogBuilder = api_v1.LogBuilder
 
+// NewLog creates a new builder of 'log' objects.
 var NewLog = api_v1.NewLog

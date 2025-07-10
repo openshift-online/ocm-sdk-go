@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// RegistrySourcesListBuilder contains the data and logic needed to build
+// 'registry_sources' objects.
 type RegistrySourcesListBuilder = api_v1alpha1.RegistrySourcesListBuilder
 
+// NewRegistrySourcesList creates a new builder of 'registry_sources' objects.
 var NewRegistrySourcesList = api_v1alpha1.NewRegistrySourcesList

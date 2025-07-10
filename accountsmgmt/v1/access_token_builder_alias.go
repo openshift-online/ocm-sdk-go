@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// AccessTokenBuilder contains the data and logic needed to build 'access_token' objects.
 type AccessTokenBuilder = api_v1.AccessTokenBuilder
 
+// NewAccessToken creates a new builder of 'access_token' objects.
 var NewAccessToken = api_v1.NewAccessToken

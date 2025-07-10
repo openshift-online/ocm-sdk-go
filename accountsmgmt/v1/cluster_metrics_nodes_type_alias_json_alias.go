@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalClusterMetricsNodes writes a value of the 'cluster_metrics_nodes' type to the given writer.
 var MarshalClusterMetricsNodes = api_v1.MarshalClusterMetricsNodes
+
+// WriteClusterMetricsNodes writes a value of the 'cluster_metrics_nodes' type to the given stream.
 var WriteClusterMetricsNodes = api_v1.WriteClusterMetricsNodes
+
+// UnmarshalClusterMetricsNodes reads a value of the 'cluster_metrics_nodes' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalClusterMetricsNodes = api_v1.UnmarshalClusterMetricsNodes
+
+// ReadClusterMetricsNodes reads a value of the 'cluster_metrics_nodes' type from the given iterator.
 var ReadClusterMetricsNodes = api_v1.ReadClusterMetricsNodes

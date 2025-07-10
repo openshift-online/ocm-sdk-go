@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
+// LabelRequestPayloadBuilder contains the data and logic needed to build 'label_request_payload' objects.
 type LabelRequestPayloadBuilder = api_v1.LabelRequestPayloadBuilder
 
+// NewLabelRequestPayload creates a new builder of 'label_request_payload' objects.
 var NewLabelRequestPayload = api_v1.NewLabelRequestPayload

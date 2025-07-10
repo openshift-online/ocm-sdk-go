@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSubscriptionMetricsList writes a list of values of the 'subscription_metrics' type to
+// the given writer.
 var MarshalSubscriptionMetricsList = api_v1.MarshalSubscriptionMetricsList
+
+// WriteSubscriptionMetricsList writes a list of value of the 'subscription_metrics' type to
+// the given stream.
 var WriteSubscriptionMetricsList = api_v1.WriteSubscriptionMetricsList
+
+// UnmarshalSubscriptionMetricsList reads a list of values of the 'subscription_metrics' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSubscriptionMetricsList = api_v1.UnmarshalSubscriptionMetricsList
+
+// ReadSubscriptionMetricsList reads list of values of the ”subscription_metrics' type from
+// the given iterator.
 var ReadSubscriptionMetricsList = api_v1.ReadSubscriptionMetricsList

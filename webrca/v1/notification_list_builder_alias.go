@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// NotificationListBuilder contains the data and logic needed to build
+// 'notification' objects.
 type NotificationListBuilder = api_v1.NotificationListBuilder
 
+// NewNotificationList creates a new builder of 'notification' objects.
 var NewNotificationList = api_v1.NewNotificationList

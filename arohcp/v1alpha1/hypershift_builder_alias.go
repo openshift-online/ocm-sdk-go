@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// HypershiftBuilder contains the data and logic needed to build 'hypershift' objects.
+//
+// Hypershift configuration.
 type HypershiftBuilder = api_v1alpha1.HypershiftBuilder
 
+// NewHypershift creates a new builder of 'hypershift' objects.
 var NewHypershift = api_v1alpha1.NewHypershift

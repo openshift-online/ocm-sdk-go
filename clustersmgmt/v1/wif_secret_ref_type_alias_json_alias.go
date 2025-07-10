@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalWifSecretRef writes a value of the 'wif_secret_ref' type to the given writer.
 var MarshalWifSecretRef = api_v1.MarshalWifSecretRef
+
+// WriteWifSecretRef writes a value of the 'wif_secret_ref' type to the given stream.
 var WriteWifSecretRef = api_v1.WriteWifSecretRef
+
+// UnmarshalWifSecretRef reads a value of the 'wif_secret_ref' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalWifSecretRef = api_v1.UnmarshalWifSecretRef
+
+// ReadWifSecretRef reads a value of the 'wif_secret_ref' type from the given iterator.
 var ReadWifSecretRef = api_v1.ReadWifSecretRef
