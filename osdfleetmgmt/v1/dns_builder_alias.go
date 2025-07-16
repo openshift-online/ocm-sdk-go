@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
+// DNSBuilder contains the data and logic needed to build 'DNS' objects.
+//
+// DNS settings of the cluster.
 type DNSBuilder = api_v1.DNSBuilder
 
+// NewDNS creates a new builder of 'DNS' objects.
 var NewDNS = api_v1.NewDNS

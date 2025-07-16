@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalWifGcp writes a value of the 'wif_gcp' type to the given writer.
 var MarshalWifGcp = api_v1.MarshalWifGcp
+
+// WriteWifGcp writes a value of the 'wif_gcp' type to the given stream.
 var WriteWifGcp = api_v1.WriteWifGcp
+
+// UnmarshalWifGcp reads a value of the 'wif_gcp' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalWifGcp = api_v1.UnmarshalWifGcp
+
+// ReadWifGcp reads a value of the 'wif_gcp' type from the given iterator.
 var ReadWifGcp = api_v1.ReadWifGcp

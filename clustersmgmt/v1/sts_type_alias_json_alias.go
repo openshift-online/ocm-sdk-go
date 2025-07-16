@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalSTS writes a value of the 'STS' type to the given writer.
 var MarshalSTS = api_v1.MarshalSTS
+
+// WriteSTS writes a value of the 'STS' type to the given stream.
 var WriteSTS = api_v1.WriteSTS
+
+// UnmarshalSTS reads a value of the 'STS' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalSTS = api_v1.UnmarshalSTS
+
+// ReadSTS reads a value of the 'STS' type from the given iterator.
 var ReadSTS = api_v1.ReadSTS

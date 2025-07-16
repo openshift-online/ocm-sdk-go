@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSubscriptionList writes a list of values of the 'subscription' type to
+// the given writer.
 var MarshalSubscriptionList = api_v1.MarshalSubscriptionList
+
+// WriteSubscriptionList writes a list of value of the 'subscription' type to
+// the given stream.
 var WriteSubscriptionList = api_v1.WriteSubscriptionList
+
+// UnmarshalSubscriptionList reads a list of values of the 'subscription' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSubscriptionList = api_v1.UnmarshalSubscriptionList
+
+// ReadSubscriptionList reads list of values of the ”subscription' type from
+// the given iterator.
 var ReadSubscriptionList = api_v1.ReadSubscriptionList

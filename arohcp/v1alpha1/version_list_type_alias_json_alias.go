@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalVersionList writes a list of values of the 'version' type to
+// the given writer.
 var MarshalVersionList = api_v1alpha1.MarshalVersionList
+
+// WriteVersionList writes a list of value of the 'version' type to
+// the given stream.
 var WriteVersionList = api_v1alpha1.WriteVersionList
+
+// UnmarshalVersionList reads a list of values of the 'version' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalVersionList = api_v1alpha1.UnmarshalVersionList
+
+// ReadVersionList reads list of values of the ”version' type from
+// the given iterator.
 var ReadVersionList = api_v1alpha1.ReadVersionList

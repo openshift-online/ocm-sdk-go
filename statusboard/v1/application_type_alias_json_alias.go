@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// MarshalApplication writes a value of the 'application' type to the given writer.
 var MarshalApplication = api_v1.MarshalApplication
+
+// WriteApplication writes a value of the 'application' type to the given stream.
 var WriteApplication = api_v1.WriteApplication
+
+// UnmarshalApplication reads a value of the 'application' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalApplication = api_v1.UnmarshalApplication
+
+// ReadApplication reads a value of the 'application' type from the given iterator.
 var ReadApplication = api_v1.ReadApplication

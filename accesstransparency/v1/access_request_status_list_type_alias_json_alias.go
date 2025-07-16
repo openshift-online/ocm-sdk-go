@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accesstransparency/v1"
 )
 
+// MarshalAccessRequestStatusList writes a list of values of the 'access_request_status' type to
+// the given writer.
 var MarshalAccessRequestStatusList = api_v1.MarshalAccessRequestStatusList
+
+// WriteAccessRequestStatusList writes a list of value of the 'access_request_status' type to
+// the given stream.
 var WriteAccessRequestStatusList = api_v1.WriteAccessRequestStatusList
+
+// UnmarshalAccessRequestStatusList reads a list of values of the 'access_request_status' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAccessRequestStatusList = api_v1.UnmarshalAccessRequestStatusList
+
+// ReadAccessRequestStatusList reads list of values of the ”access_request_status' type from
+// the given iterator.
 var ReadAccessRequestStatusList = api_v1.ReadAccessRequestStatusList

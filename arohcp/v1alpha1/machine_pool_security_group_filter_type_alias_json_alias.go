@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalMachinePoolSecurityGroupFilter writes a value of the 'machine_pool_security_group_filter' type to the given writer.
 var MarshalMachinePoolSecurityGroupFilter = api_v1alpha1.MarshalMachinePoolSecurityGroupFilter
+
+// WriteMachinePoolSecurityGroupFilter writes a value of the 'machine_pool_security_group_filter' type to the given stream.
 var WriteMachinePoolSecurityGroupFilter = api_v1alpha1.WriteMachinePoolSecurityGroupFilter
+
+// UnmarshalMachinePoolSecurityGroupFilter reads a value of the 'machine_pool_security_group_filter' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalMachinePoolSecurityGroupFilter = api_v1alpha1.UnmarshalMachinePoolSecurityGroupFilter
+
+// ReadMachinePoolSecurityGroupFilter reads a value of the 'machine_pool_security_group_filter' type from the given iterator.
 var ReadMachinePoolSecurityGroupFilter = api_v1alpha1.ReadMachinePoolSecurityGroupFilter

@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalCloudRegionList writes a list of values of the 'cloud_region' type to
+// the given writer.
 var MarshalCloudRegionList = api_v1alpha1.MarshalCloudRegionList
+
+// WriteCloudRegionList writes a list of value of the 'cloud_region' type to
+// the given stream.
 var WriteCloudRegionList = api_v1alpha1.WriteCloudRegionList
+
+// UnmarshalCloudRegionList reads a list of values of the 'cloud_region' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalCloudRegionList = api_v1alpha1.UnmarshalCloudRegionList
+
+// ReadCloudRegionList reads list of values of the ”cloud_region' type from
+// the given iterator.
 var ReadCloudRegionList = api_v1alpha1.ReadCloudRegionList

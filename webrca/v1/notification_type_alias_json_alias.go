@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// MarshalNotification writes a value of the 'notification' type to the given writer.
 var MarshalNotification = api_v1.MarshalNotification
+
+// WriteNotification writes a value of the 'notification' type to the given stream.
 var WriteNotification = api_v1.WriteNotification
+
+// UnmarshalNotification reads a value of the 'notification' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalNotification = api_v1.UnmarshalNotification
+
+// ReadNotification reads a value of the 'notification' type from the given iterator.
 var ReadNotification = api_v1.ReadNotification

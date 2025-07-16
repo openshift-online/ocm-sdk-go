@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// EscalationListBuilder contains the data and logic needed to build
+// 'escalation' objects.
 type EscalationListBuilder = api_v1.EscalationListBuilder
 
+// NewEscalationList creates a new builder of 'escalation' objects.
 var NewEscalationList = api_v1.NewEscalationList

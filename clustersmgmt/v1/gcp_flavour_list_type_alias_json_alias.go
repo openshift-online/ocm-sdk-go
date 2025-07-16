@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalGCPFlavourList writes a list of values of the 'GCP_flavour' type to
+// the given writer.
 var MarshalGCPFlavourList = api_v1.MarshalGCPFlavourList
+
+// WriteGCPFlavourList writes a list of value of the 'GCP_flavour' type to
+// the given stream.
 var WriteGCPFlavourList = api_v1.WriteGCPFlavourList
+
+// UnmarshalGCPFlavourList reads a list of values of the 'GCP_flavour' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalGCPFlavourList = api_v1.UnmarshalGCPFlavourList
+
+// ReadGCPFlavourList reads list of values of the ”GCP_flavour' type from
+// the given iterator.
 var ReadGCPFlavourList = api_v1.ReadGCPFlavourList

@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalExternalAuthConfig writes a value of the 'external_auth_config' type to the given writer.
 var MarshalExternalAuthConfig = api_v1alpha1.MarshalExternalAuthConfig
+
+// WriteExternalAuthConfig writes a value of the 'external_auth_config' type to the given stream.
 var WriteExternalAuthConfig = api_v1alpha1.WriteExternalAuthConfig
+
+// UnmarshalExternalAuthConfig reads a value of the 'external_auth_config' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalExternalAuthConfig = api_v1alpha1.UnmarshalExternalAuthConfig
+
+// ReadExternalAuthConfig reads a value of the 'external_auth_config' type from the given iterator.
 var ReadExternalAuthConfig = api_v1alpha1.ReadExternalAuthConfig

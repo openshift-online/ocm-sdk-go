@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ExternalAuthClaimListBuilder contains the data and logic needed to build
+// 'external_auth_claim' objects.
 type ExternalAuthClaimListBuilder = api_v1.ExternalAuthClaimListBuilder
 
+// NewExternalAuthClaimList creates a new builder of 'external_auth_claim' objects.
 var NewExternalAuthClaimList = api_v1.NewExternalAuthClaimList

@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
+// AWSBuilder contains the data and logic needed to build 'AWS' objects.
+//
+// _Amazon Web Services_ specific settings of a cluster.
 type AWSBuilder = api_v1.AWSBuilder
 
+// NewAWS creates a new builder of 'AWS' objects.
 var NewAWS = api_v1.NewAWS

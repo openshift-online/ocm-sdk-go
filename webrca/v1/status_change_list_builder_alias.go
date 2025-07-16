@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
+// StatusChangeListBuilder contains the data and logic needed to build
+// 'status_change' objects.
 type StatusChangeListBuilder = api_v1.StatusChangeListBuilder
 
+// NewStatusChangeList creates a new builder of 'status_change' objects.
 var NewStatusChangeList = api_v1.NewStatusChangeList

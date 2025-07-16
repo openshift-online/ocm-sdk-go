@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// MarshalError writes a value of the 'error' type to the given writer.
 var MarshalError = api_v1.MarshalError
+
+// WriteError writes a value of the 'error' type to the given stream.
 var WriteError = api_v1.WriteError
+
+// UnmarshalError reads a value of the 'error' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalError = api_v1.UnmarshalError
+
+// ReadError reads a value of the 'error' type from the given iterator.
 var ReadError = api_v1.ReadError

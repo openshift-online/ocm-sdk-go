@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// MarshalPeerDependency writes a value of the 'peer_dependency' type to the given writer.
 var MarshalPeerDependency = api_v1.MarshalPeerDependency
+
+// WritePeerDependency writes a value of the 'peer_dependency' type to the given stream.
 var WritePeerDependency = api_v1.WritePeerDependency
+
+// UnmarshalPeerDependency reads a value of the 'peer_dependency' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalPeerDependency = api_v1.UnmarshalPeerDependency
+
+// ReadPeerDependency reads a value of the 'peer_dependency' type from the given iterator.
 var ReadPeerDependency = api_v1.ReadPeerDependency

@@ -23,6 +23,11 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AddOnConfigBuilder contains the data and logic needed to build 'add_on_config' objects.
+//
+// Representation of an add-on config.
+// The attributes under it are to be used by the addon once its installed in the cluster.
 type AddOnConfigBuilder = api_v1.AddOnConfigBuilder
 
+// NewAddOnConfig creates a new builder of 'add_on_config' objects.
 var NewAddOnConfig = api_v1.NewAddOnConfig

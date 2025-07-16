@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalSubnetworkList writes a list of values of the 'subnetwork' type to
+// the given writer.
 var MarshalSubnetworkList = api_v1.MarshalSubnetworkList
+
+// WriteSubnetworkList writes a list of value of the 'subnetwork' type to
+// the given stream.
 var WriteSubnetworkList = api_v1.WriteSubnetworkList
+
+// UnmarshalSubnetworkList reads a list of values of the 'subnetwork' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSubnetworkList = api_v1.UnmarshalSubnetworkList
+
+// ReadSubnetworkList reads list of values of the ”subnetwork' type from
+// the given iterator.
 var ReadSubnetworkList = api_v1.ReadSubnetworkList

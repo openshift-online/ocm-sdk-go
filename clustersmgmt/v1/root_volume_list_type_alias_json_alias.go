@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalRootVolumeList writes a list of values of the 'root_volume' type to
+// the given writer.
 var MarshalRootVolumeList = api_v1.MarshalRootVolumeList
+
+// WriteRootVolumeList writes a list of value of the 'root_volume' type to
+// the given stream.
 var WriteRootVolumeList = api_v1.WriteRootVolumeList
+
+// UnmarshalRootVolumeList reads a list of values of the 'root_volume' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRootVolumeList = api_v1.UnmarshalRootVolumeList
+
+// ReadRootVolumeList reads list of values of the ”root_volume' type from
+// the given iterator.
 var ReadRootVolumeList = api_v1.ReadRootVolumeList

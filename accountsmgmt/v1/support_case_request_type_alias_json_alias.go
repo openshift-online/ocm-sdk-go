@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalSupportCaseRequest writes a value of the 'support_case_request' type to the given writer.
 var MarshalSupportCaseRequest = api_v1.MarshalSupportCaseRequest
+
+// WriteSupportCaseRequest writes a value of the 'support_case_request' type to the given stream.
 var WriteSupportCaseRequest = api_v1.WriteSupportCaseRequest
+
+// UnmarshalSupportCaseRequest reads a value of the 'support_case_request' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalSupportCaseRequest = api_v1.UnmarshalSupportCaseRequest
+
+// ReadSupportCaseRequest reads a value of the 'support_case_request' type from the given iterator.
 var ReadSupportCaseRequest = api_v1.ReadSupportCaseRequest

@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
+// MarshalLabelReference writes a value of the 'label_reference' type to the given writer.
 var MarshalLabelReference = api_v1.MarshalLabelReference
+
+// WriteLabelReference writes a value of the 'label_reference' type to the given stream.
 var WriteLabelReference = api_v1.WriteLabelReference
+
+// UnmarshalLabelReference reads a value of the 'label_reference' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalLabelReference = api_v1.UnmarshalLabelReference
+
+// ReadLabelReference reads a value of the 'label_reference' type from the given iterator.
 var ReadLabelReference = api_v1.ReadLabelReference

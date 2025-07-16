@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalRegistryList writes a list of values of the 'registry' type to
+// the given writer.
 var MarshalRegistryList = api_v1.MarshalRegistryList
+
+// WriteRegistryList writes a list of value of the 'registry' type to
+// the given stream.
 var WriteRegistryList = api_v1.WriteRegistryList
+
+// UnmarshalRegistryList reads a list of values of the 'registry' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRegistryList = api_v1.UnmarshalRegistryList
+
+// ReadRegistryList reads list of values of the ”registry' type from
+// the given iterator.
 var ReadRegistryList = api_v1.ReadRegistryList

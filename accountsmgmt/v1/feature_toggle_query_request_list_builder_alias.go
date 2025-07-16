@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// FeatureToggleQueryRequestListBuilder contains the data and logic needed to build
+// 'feature_toggle_query_request' objects.
 type FeatureToggleQueryRequestListBuilder = api_v1.FeatureToggleQueryRequestListBuilder
 
+// NewFeatureToggleQueryRequestList creates a new builder of 'feature_toggle_query_request' objects.
 var NewFeatureToggleQueryRequestList = api_v1.NewFeatureToggleQueryRequestList

@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// STSBuilder contains the data and logic needed to build 'STS' objects.
+//
+// Contains the necessary attributes to support role-based authentication on AWS.
 type STSBuilder = api_v1alpha1.STSBuilder
 
+// NewSTS creates a new builder of 'STS' objects.
 var NewSTS = api_v1alpha1.NewSTS

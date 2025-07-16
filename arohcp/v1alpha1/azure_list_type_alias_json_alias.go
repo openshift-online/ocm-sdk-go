@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalAzureList writes a list of values of the 'azure' type to
+// the given writer.
 var MarshalAzureList = api_v1alpha1.MarshalAzureList
+
+// WriteAzureList writes a list of value of the 'azure' type to
+// the given stream.
 var WriteAzureList = api_v1alpha1.WriteAzureList
+
+// UnmarshalAzureList reads a list of values of the 'azure' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAzureList = api_v1alpha1.UnmarshalAzureList
+
+// ReadAzureList reads list of values of the ”azure' type from
+// the given iterator.
 var ReadAzureList = api_v1alpha1.ReadAzureList

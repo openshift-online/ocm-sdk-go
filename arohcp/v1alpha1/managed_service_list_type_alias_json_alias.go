@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalManagedServiceList writes a list of values of the 'managed_service' type to
+// the given writer.
 var MarshalManagedServiceList = api_v1alpha1.MarshalManagedServiceList
+
+// WriteManagedServiceList writes a list of value of the 'managed_service' type to
+// the given stream.
 var WriteManagedServiceList = api_v1alpha1.WriteManagedServiceList
+
+// UnmarshalManagedServiceList reads a list of values of the 'managed_service' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalManagedServiceList = api_v1alpha1.UnmarshalManagedServiceList
+
+// ReadManagedServiceList reads list of values of the ”managed_service' type from
+// the given iterator.
 var ReadManagedServiceList = api_v1alpha1.ReadManagedServiceList

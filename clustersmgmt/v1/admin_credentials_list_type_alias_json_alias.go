@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAdminCredentialsList writes a list of values of the 'admin_credentials' type to
+// the given writer.
 var MarshalAdminCredentialsList = api_v1.MarshalAdminCredentialsList
+
+// WriteAdminCredentialsList writes a list of value of the 'admin_credentials' type to
+// the given stream.
 var WriteAdminCredentialsList = api_v1.WriteAdminCredentialsList
+
+// UnmarshalAdminCredentialsList reads a list of values of the 'admin_credentials' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAdminCredentialsList = api_v1.UnmarshalAdminCredentialsList
+
+// ReadAdminCredentialsList reads list of values of the ”admin_credentials' type from
+// the given iterator.
 var ReadAdminCredentialsList = api_v1.ReadAdminCredentialsList

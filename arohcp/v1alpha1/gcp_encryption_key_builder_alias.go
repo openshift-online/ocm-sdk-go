@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// GCPEncryptionKeyBuilder contains the data and logic needed to build 'GCP_encryption_key' objects.
+//
+// GCP Encryption Key for CCS clusters.
 type GCPEncryptionKeyBuilder = api_v1alpha1.GCPEncryptionKeyBuilder
 
+// NewGCPEncryptionKey creates a new builder of 'GCP_encryption_key' objects.
 var NewGCPEncryptionKey = api_v1alpha1.NewGCPEncryptionKey

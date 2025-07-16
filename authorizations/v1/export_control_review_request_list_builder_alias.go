@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
+// ExportControlReviewRequestListBuilder contains the data and logic needed to build
+// 'export_control_review_request' objects.
 type ExportControlReviewRequestListBuilder = api_v1.ExportControlReviewRequestListBuilder
 
+// NewExportControlReviewRequestList creates a new builder of 'export_control_review_request' objects.
 var NewExportControlReviewRequestList = api_v1.NewExportControlReviewRequestList

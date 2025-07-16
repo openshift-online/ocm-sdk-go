@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// AddonParameterOptionBuilder contains the data and logic needed to build 'addon_parameter_option' objects.
+//
+// Representation of an addon parameter option.
 type AddonParameterOptionBuilder = api_v1.AddonParameterOptionBuilder
 
+// NewAddonParameterOption creates a new builder of 'addon_parameter_option' objects.
 var NewAddonParameterOption = api_v1.NewAddonParameterOption

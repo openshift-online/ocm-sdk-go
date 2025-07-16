@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAddonUpgradePolicy writes a value of the 'addon_upgrade_policy' type to the given writer.
 var MarshalAddonUpgradePolicy = api_v1.MarshalAddonUpgradePolicy
+
+// WriteAddonUpgradePolicy writes a value of the 'addon_upgrade_policy' type to the given stream.
 var WriteAddonUpgradePolicy = api_v1.WriteAddonUpgradePolicy
+
+// UnmarshalAddonUpgradePolicy reads a value of the 'addon_upgrade_policy' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddonUpgradePolicy = api_v1.UnmarshalAddonUpgradePolicy
+
+// ReadAddonUpgradePolicy reads a value of the 'addon_upgrade_policy' type from the given iterator.
 var ReadAddonUpgradePolicy = api_v1.ReadAddonUpgradePolicy

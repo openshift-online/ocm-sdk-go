@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// FeatureToggleBuilder contains the data and logic needed to build 'feature_toggle' objects.
 type FeatureToggleBuilder = api_v1.FeatureToggleBuilder
 
+// NewFeatureToggle creates a new builder of 'feature_toggle' objects.
 var NewFeatureToggle = api_v1.NewFeatureToggle

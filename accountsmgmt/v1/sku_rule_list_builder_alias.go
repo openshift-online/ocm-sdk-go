@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// SkuRuleListBuilder contains the data and logic needed to build
+// 'sku_rule' objects.
 type SkuRuleListBuilder = api_v1.SkuRuleListBuilder
 
+// NewSkuRuleList creates a new builder of 'sku_rule' objects.
 var NewSkuRuleList = api_v1.NewSkuRuleList

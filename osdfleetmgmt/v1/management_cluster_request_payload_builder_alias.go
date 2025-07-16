@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
+// ManagementClusterRequestPayloadBuilder contains the data and logic needed to build 'management_cluster_request_payload' objects.
 type ManagementClusterRequestPayloadBuilder = api_v1.ManagementClusterRequestPayloadBuilder
 
+// NewManagementClusterRequestPayload creates a new builder of 'management_cluster_request_payload' objects.
 var NewManagementClusterRequestPayload = api_v1.NewManagementClusterRequestPayload

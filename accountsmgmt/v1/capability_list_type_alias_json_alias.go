@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalCapabilityList writes a list of values of the 'capability' type to
+// the given writer.
 var MarshalCapabilityList = api_v1.MarshalCapabilityList
+
+// WriteCapabilityList writes a list of value of the 'capability' type to
+// the given stream.
 var WriteCapabilityList = api_v1.WriteCapabilityList
+
+// UnmarshalCapabilityList reads a list of values of the 'capability' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalCapabilityList = api_v1.UnmarshalCapabilityList
+
+// ReadCapabilityList reads list of values of the ”capability' type from
+// the given iterator.
 var ReadCapabilityList = api_v1.ReadCapabilityList

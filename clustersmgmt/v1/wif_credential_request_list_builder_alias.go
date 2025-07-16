@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// WifCredentialRequestListBuilder contains the data and logic needed to build
+// 'wif_credential_request' objects.
 type WifCredentialRequestListBuilder = api_v1.WifCredentialRequestListBuilder
 
+// NewWifCredentialRequestList creates a new builder of 'wif_credential_request' objects.
 var NewWifCredentialRequestList = api_v1.NewWifCredentialRequestList

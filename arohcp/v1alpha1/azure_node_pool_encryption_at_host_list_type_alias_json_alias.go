@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalAzureNodePoolEncryptionAtHostList writes a list of values of the 'azure_node_pool_encryption_at_host' type to
+// the given writer.
 var MarshalAzureNodePoolEncryptionAtHostList = api_v1alpha1.MarshalAzureNodePoolEncryptionAtHostList
+
+// WriteAzureNodePoolEncryptionAtHostList writes a list of value of the 'azure_node_pool_encryption_at_host' type to
+// the given stream.
 var WriteAzureNodePoolEncryptionAtHostList = api_v1alpha1.WriteAzureNodePoolEncryptionAtHostList
+
+// UnmarshalAzureNodePoolEncryptionAtHostList reads a list of values of the 'azure_node_pool_encryption_at_host' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAzureNodePoolEncryptionAtHostList = api_v1alpha1.UnmarshalAzureNodePoolEncryptionAtHostList
+
+// ReadAzureNodePoolEncryptionAtHostList reads list of values of the ”azure_node_pool_encryption_at_host' type from
+// the given iterator.
 var ReadAzureNodePoolEncryptionAtHostList = api_v1alpha1.ReadAzureNodePoolEncryptionAtHostList

@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalCloudProvider writes a value of the 'cloud_provider' type to the given writer.
 var MarshalCloudProvider = api_v1alpha1.MarshalCloudProvider
+
+// WriteCloudProvider writes a value of the 'cloud_provider' type to the given stream.
 var WriteCloudProvider = api_v1alpha1.WriteCloudProvider
+
+// UnmarshalCloudProvider reads a value of the 'cloud_provider' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCloudProvider = api_v1alpha1.UnmarshalCloudProvider
+
+// ReadCloudProvider reads a value of the 'cloud_provider' type from the given iterator.
 var ReadCloudProvider = api_v1alpha1.ReadCloudProvider

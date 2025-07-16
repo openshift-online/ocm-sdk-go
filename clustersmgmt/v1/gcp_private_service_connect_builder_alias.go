@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// GcpPrivateServiceConnectBuilder contains the data and logic needed to build 'gcp_private_service_connect' objects.
+//
+// Google cloud platform private service connect configuration of a cluster.
 type GcpPrivateServiceConnectBuilder = api_v1.GcpPrivateServiceConnectBuilder
 
+// NewGcpPrivateServiceConnect creates a new builder of 'gcp_private_service_connect' objects.
 var NewGcpPrivateServiceConnect = api_v1.NewGcpPrivateServiceConnect

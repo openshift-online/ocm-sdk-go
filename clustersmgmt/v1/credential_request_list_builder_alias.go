@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// CredentialRequestListBuilder contains the data and logic needed to build
+// 'credential_request' objects.
 type CredentialRequestListBuilder = api_v1.CredentialRequestListBuilder
 
+// NewCredentialRequestList creates a new builder of 'credential_request' objects.
 var NewCredentialRequestList = api_v1.NewCredentialRequestList

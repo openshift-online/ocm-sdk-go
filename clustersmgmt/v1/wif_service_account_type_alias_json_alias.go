@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalWifServiceAccount writes a value of the 'wif_service_account' type to the given writer.
 var MarshalWifServiceAccount = api_v1.MarshalWifServiceAccount
+
+// WriteWifServiceAccount writes a value of the 'wif_service_account' type to the given stream.
 var WriteWifServiceAccount = api_v1.WriteWifServiceAccount
+
+// UnmarshalWifServiceAccount reads a value of the 'wif_service_account' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalWifServiceAccount = api_v1.UnmarshalWifServiceAccount
+
+// ReadWifServiceAccount reads a value of the 'wif_service_account' type from the given iterator.
 var ReadWifServiceAccount = api_v1.ReadWifServiceAccount

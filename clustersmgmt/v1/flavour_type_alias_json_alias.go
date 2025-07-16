@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalFlavour writes a value of the 'flavour' type to the given writer.
 var MarshalFlavour = api_v1.MarshalFlavour
+
+// WriteFlavour writes a value of the 'flavour' type to the given stream.
 var WriteFlavour = api_v1.WriteFlavour
+
+// UnmarshalFlavour reads a value of the 'flavour' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalFlavour = api_v1.UnmarshalFlavour
+
+// ReadFlavour reads a value of the 'flavour' type from the given iterator.
 var ReadFlavour = api_v1.ReadFlavour

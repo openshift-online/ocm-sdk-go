@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalManagedIdentitiesRequirements writes a value of the 'managed_identities_requirements' type to the given writer.
 var MarshalManagedIdentitiesRequirements = api_v1alpha1.MarshalManagedIdentitiesRequirements
+
+// WriteManagedIdentitiesRequirements writes a value of the 'managed_identities_requirements' type to the given stream.
 var WriteManagedIdentitiesRequirements = api_v1alpha1.WriteManagedIdentitiesRequirements
+
+// UnmarshalManagedIdentitiesRequirements reads a value of the 'managed_identities_requirements' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalManagedIdentitiesRequirements = api_v1alpha1.UnmarshalManagedIdentitiesRequirements
+
+// ReadManagedIdentitiesRequirements reads a value of the 'managed_identities_requirements' type from the given iterator.
 var ReadManagedIdentitiesRequirements = api_v1alpha1.ReadManagedIdentitiesRequirements

@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalRoleDefinitionOperatorIdentityRequirementList writes a list of values of the 'role_definition_operator_identity_requirement' type to
+// the given writer.
 var MarshalRoleDefinitionOperatorIdentityRequirementList = api_v1alpha1.MarshalRoleDefinitionOperatorIdentityRequirementList
+
+// WriteRoleDefinitionOperatorIdentityRequirementList writes a list of value of the 'role_definition_operator_identity_requirement' type to
+// the given stream.
 var WriteRoleDefinitionOperatorIdentityRequirementList = api_v1alpha1.WriteRoleDefinitionOperatorIdentityRequirementList
+
+// UnmarshalRoleDefinitionOperatorIdentityRequirementList reads a list of values of the 'role_definition_operator_identity_requirement' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRoleDefinitionOperatorIdentityRequirementList = api_v1alpha1.UnmarshalRoleDefinitionOperatorIdentityRequirementList
+
+// ReadRoleDefinitionOperatorIdentityRequirementList reads list of values of the ”role_definition_operator_identity_requirement' type from
+// the given iterator.
 var ReadRoleDefinitionOperatorIdentityRequirementList = api_v1alpha1.ReadRoleDefinitionOperatorIdentityRequirementList

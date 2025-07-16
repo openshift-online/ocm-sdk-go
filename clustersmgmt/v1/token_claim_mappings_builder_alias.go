@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// TokenClaimMappingsBuilder contains the data and logic needed to build 'token_claim_mappings' objects.
+//
+// The claim mappings defined for users and groups.
 type TokenClaimMappingsBuilder = api_v1.TokenClaimMappingsBuilder
 
+// NewTokenClaimMappings creates a new builder of 'token_claim_mappings' objects.
 var NewTokenClaimMappings = api_v1.NewTokenClaimMappings
