@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MetricsFederationBuilder contains the data and logic needed to build 'metrics_federation' objects.
-//
-// Representation of Metrics Federation
 type MetricsFederationBuilder = api_v1.MetricsFederationBuilder
 
-// NewMetricsFederation creates a new builder of 'metrics_federation' objects.
 var NewMetricsFederation = api_v1.NewMetricsFederation

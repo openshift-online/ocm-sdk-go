@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalGCPEncryptionKeyList writes a list of values of the 'GCP_encryption_key' type to
-// the given writer.
 var MarshalGCPEncryptionKeyList = api_v1.MarshalGCPEncryptionKeyList
-
-// WriteGCPEncryptionKeyList writes a list of value of the 'GCP_encryption_key' type to
-// the given stream.
 var WriteGCPEncryptionKeyList = api_v1.WriteGCPEncryptionKeyList
-
-// UnmarshalGCPEncryptionKeyList reads a list of values of the 'GCP_encryption_key' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalGCPEncryptionKeyList = api_v1.UnmarshalGCPEncryptionKeyList
-
-// ReadGCPEncryptionKeyList reads list of values of the ”GCP_encryption_key' type from
-// the given iterator.
 var ReadGCPEncryptionKeyList = api_v1.ReadGCPEncryptionKeyList

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AzureNodePoolBuilder contains the data and logic needed to build 'azure_node_pool' objects.
-//
-// Representation of azure node pool specific parameters.
 type AzureNodePoolBuilder = api_v1.AzureNodePoolBuilder
 
-// NewAzureNodePool creates a new builder of 'azure_node_pool' objects.
 var NewAzureNodePool = api_v1.NewAzureNodePool

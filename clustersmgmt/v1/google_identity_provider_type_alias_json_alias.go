@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalGoogleIdentityProvider writes a value of the 'google_identity_provider' type to the given writer.
 var MarshalGoogleIdentityProvider = api_v1.MarshalGoogleIdentityProvider
-
-// WriteGoogleIdentityProvider writes a value of the 'google_identity_provider' type to the given stream.
 var WriteGoogleIdentityProvider = api_v1.WriteGoogleIdentityProvider
-
-// UnmarshalGoogleIdentityProvider reads a value of the 'google_identity_provider' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalGoogleIdentityProvider = api_v1.UnmarshalGoogleIdentityProvider
-
-// ReadGoogleIdentityProvider reads a value of the 'google_identity_provider' type from the given iterator.
 var ReadGoogleIdentityProvider = api_v1.ReadGoogleIdentityProvider

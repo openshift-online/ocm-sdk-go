@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalNodePoolState writes a value of the 'node_pool_state' type to the given writer.
 var MarshalNodePoolState = api_v1.MarshalNodePoolState
-
-// WriteNodePoolState writes a value of the 'node_pool_state' type to the given stream.
 var WriteNodePoolState = api_v1.WriteNodePoolState
-
-// UnmarshalNodePoolState reads a value of the 'node_pool_state' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalNodePoolState = api_v1.UnmarshalNodePoolState
-
-// ReadNodePoolState reads a value of the 'node_pool_state' type from the given iterator.
 var ReadNodePoolState = api_v1.ReadNodePoolState

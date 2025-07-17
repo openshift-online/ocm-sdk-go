@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalServerConfig writes a value of the 'server_config' type to the given writer.
 var MarshalServerConfig = api_v1alpha1.MarshalServerConfig
-
-// WriteServerConfig writes a value of the 'server_config' type to the given stream.
 var WriteServerConfig = api_v1alpha1.WriteServerConfig
-
-// UnmarshalServerConfig reads a value of the 'server_config' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalServerConfig = api_v1alpha1.UnmarshalServerConfig
-
-// ReadServerConfig reads a value of the 'server_config' type from the given iterator.
 var ReadServerConfig = api_v1alpha1.ReadServerConfig

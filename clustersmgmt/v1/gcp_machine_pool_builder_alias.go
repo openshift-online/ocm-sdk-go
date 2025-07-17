@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GCPMachinePoolBuilder contains the data and logic needed to build 'GCP_machine_pool' objects.
-//
-// Representation of gcp machine pool specific parameters.
 type GCPMachinePoolBuilder = api_v1.GCPMachinePoolBuilder
 
-// NewGCPMachinePool creates a new builder of 'GCP_machine_pool' objects.
 var NewGCPMachinePool = api_v1.NewGCPMachinePool

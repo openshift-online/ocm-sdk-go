@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// GCPBuilder contains the data and logic needed to build 'GCP' objects.
-//
-// Google cloud platform settings of a cluster.
 type GCPBuilder = api_v1alpha1.GCPBuilder
 
-// NewGCP creates a new builder of 'GCP' objects.
 var NewGCP = api_v1alpha1.NewGCP

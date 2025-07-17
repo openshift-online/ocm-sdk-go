@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalRoleList writes a list of values of the 'role' type to
-// the given writer.
 var MarshalRoleList = api_v1.MarshalRoleList
-
-// WriteRoleList writes a list of value of the 'role' type to
-// the given stream.
 var WriteRoleList = api_v1.WriteRoleList
-
-// UnmarshalRoleList reads a list of values of the 'role' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRoleList = api_v1.UnmarshalRoleList
-
-// ReadRoleList reads list of values of the ”role' type from
-// the given iterator.
 var ReadRoleList = api_v1.ReadRoleList

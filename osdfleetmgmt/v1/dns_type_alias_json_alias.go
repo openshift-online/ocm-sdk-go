@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// MarshalDNS writes a value of the 'DNS' type to the given writer.
 var MarshalDNS = api_v1.MarshalDNS
-
-// WriteDNS writes a value of the 'DNS' type to the given stream.
 var WriteDNS = api_v1.WriteDNS
-
-// UnmarshalDNS reads a value of the 'DNS' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalDNS = api_v1.UnmarshalDNS
-
-// ReadDNS reads a value of the 'DNS' type from the given iterator.
 var ReadDNS = api_v1.ReadDNS

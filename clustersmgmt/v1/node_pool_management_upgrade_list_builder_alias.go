@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// NodePoolManagementUpgradeListBuilder contains the data and logic needed to build
-// 'node_pool_management_upgrade' objects.
 type NodePoolManagementUpgradeListBuilder = api_v1.NodePoolManagementUpgradeListBuilder
 
-// NewNodePoolManagementUpgradeList creates a new builder of 'node_pool_management_upgrade' objects.
 var NewNodePoolManagementUpgradeList = api_v1.NewNodePoolManagementUpgradeList

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// EventBuilder contains the data and logic needed to build 'event' objects.
-//
-// Definition of a Web RCA event.
 type EventBuilder = api_v1.EventBuilder
 
-// NewEvent creates a new builder of 'event' objects.
 var NewEvent = api_v1.NewEvent

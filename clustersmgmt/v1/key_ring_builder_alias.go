@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// KeyRingBuilder contains the data and logic needed to build 'key_ring' objects.
-//
-// Description of a cloud provider key ring.
 type KeyRingBuilder = api_v1.KeyRingBuilder
 
-// NewKeyRing creates a new builder of 'key_ring' objects.
 var NewKeyRing = api_v1.NewKeyRing

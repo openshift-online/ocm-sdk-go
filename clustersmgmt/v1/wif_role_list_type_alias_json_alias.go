@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalWifRoleList writes a list of values of the 'wif_role' type to
-// the given writer.
 var MarshalWifRoleList = api_v1.MarshalWifRoleList
-
-// WriteWifRoleList writes a list of value of the 'wif_role' type to
-// the given stream.
 var WriteWifRoleList = api_v1.WriteWifRoleList
-
-// UnmarshalWifRoleList reads a list of values of the 'wif_role' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalWifRoleList = api_v1.UnmarshalWifRoleList
-
-// ReadWifRoleList reads list of values of the ”wif_role' type from
-// the given iterator.
 var ReadWifRoleList = api_v1.ReadWifRoleList

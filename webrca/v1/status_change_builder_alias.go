@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// StatusChangeBuilder contains the data and logic needed to build 'status_change' objects.
-//
-// Definition of a Web RCA event.
 type StatusChangeBuilder = api_v1.StatusChangeBuilder
 
-// NewStatusChange creates a new builder of 'status_change' objects.
 var NewStatusChange = api_v1.NewStatusChange

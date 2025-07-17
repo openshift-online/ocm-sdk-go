@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterConsoleListBuilder contains the data and logic needed to build
-// 'cluster_console' objects.
 type ClusterConsoleListBuilder = api_v1.ClusterConsoleListBuilder
 
-// NewClusterConsoleList creates a new builder of 'cluster_console' objects.
 var NewClusterConsoleList = api_v1.NewClusterConsoleList

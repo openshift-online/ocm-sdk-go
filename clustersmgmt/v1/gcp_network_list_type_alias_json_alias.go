@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalGCPNetworkList writes a list of values of the 'GCP_network' type to
-// the given writer.
 var MarshalGCPNetworkList = api_v1.MarshalGCPNetworkList
-
-// WriteGCPNetworkList writes a list of value of the 'GCP_network' type to
-// the given stream.
 var WriteGCPNetworkList = api_v1.WriteGCPNetworkList
-
-// UnmarshalGCPNetworkList reads a list of values of the 'GCP_network' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalGCPNetworkList = api_v1.UnmarshalGCPNetworkList
-
-// ReadGCPNetworkList reads list of values of the ”GCP_network' type from
-// the given iterator.
 var ReadGCPNetworkList = api_v1.ReadGCPNetworkList

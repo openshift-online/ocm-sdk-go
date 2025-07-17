@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalByoOidcList writes a list of values of the 'byo_oidc' type to
-// the given writer.
 var MarshalByoOidcList = api_v1alpha1.MarshalByoOidcList
-
-// WriteByoOidcList writes a list of value of the 'byo_oidc' type to
-// the given stream.
 var WriteByoOidcList = api_v1alpha1.WriteByoOidcList
-
-// UnmarshalByoOidcList reads a list of values of the 'byo_oidc' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalByoOidcList = api_v1alpha1.UnmarshalByoOidcList
-
-// ReadByoOidcList reads list of values of the ”byo_oidc' type from
-// the given iterator.
 var ReadByoOidcList = api_v1alpha1.ReadByoOidcList

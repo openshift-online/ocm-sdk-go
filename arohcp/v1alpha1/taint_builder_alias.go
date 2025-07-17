@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// TaintBuilder contains the data and logic needed to build 'taint' objects.
-//
-// Representation of a Taint set on a MachinePool in a cluster.
 type TaintBuilder = api_v1alpha1.TaintBuilder
 
-// NewTaint creates a new builder of 'taint' objects.
 var NewTaint = api_v1alpha1.NewTaint

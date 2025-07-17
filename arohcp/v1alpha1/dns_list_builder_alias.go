@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// DNSListBuilder contains the data and logic needed to build
-// 'DNS' objects.
 type DNSListBuilder = api_v1alpha1.DNSListBuilder
 
-// NewDNSList creates a new builder of 'DNS' objects.
 var NewDNSList = api_v1alpha1.NewDNSList

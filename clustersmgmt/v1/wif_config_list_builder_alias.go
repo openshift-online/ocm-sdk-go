@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// WifConfigListBuilder contains the data and logic needed to build
-// 'wif_config' objects.
 type WifConfigListBuilder = api_v1.WifConfigListBuilder
 
-// NewWifConfigList creates a new builder of 'wif_config' objects.
 var NewWifConfigList = api_v1.NewWifConfigList

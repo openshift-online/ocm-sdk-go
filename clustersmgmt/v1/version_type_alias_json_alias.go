@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalVersion writes a value of the 'version' type to the given writer.
 var MarshalVersion = api_v1.MarshalVersion
-
-// WriteVersion writes a value of the 'version' type to the given stream.
 var WriteVersion = api_v1.WriteVersion
-
-// UnmarshalVersion reads a value of the 'version' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalVersion = api_v1.UnmarshalVersion
-
-// ReadVersion reads a value of the 'version' type from the given iterator.
 var ReadVersion = api_v1.ReadVersion

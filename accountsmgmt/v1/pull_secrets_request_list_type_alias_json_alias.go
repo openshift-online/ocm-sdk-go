@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalPullSecretsRequestList writes a list of values of the 'pull_secrets_request' type to
-// the given writer.
 var MarshalPullSecretsRequestList = api_v1.MarshalPullSecretsRequestList
-
-// WritePullSecretsRequestList writes a list of value of the 'pull_secrets_request' type to
-// the given stream.
 var WritePullSecretsRequestList = api_v1.WritePullSecretsRequestList
-
-// UnmarshalPullSecretsRequestList reads a list of values of the 'pull_secrets_request' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalPullSecretsRequestList = api_v1.UnmarshalPullSecretsRequestList
-
-// ReadPullSecretsRequestList reads list of values of the ”pull_secrets_request' type from
-// the given iterator.
 var ReadPullSecretsRequestList = api_v1.ReadPullSecretsRequestList

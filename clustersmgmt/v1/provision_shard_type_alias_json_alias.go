@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalProvisionShard writes a value of the 'provision_shard' type to the given writer.
 var MarshalProvisionShard = api_v1.MarshalProvisionShard
-
-// WriteProvisionShard writes a value of the 'provision_shard' type to the given stream.
 var WriteProvisionShard = api_v1.WriteProvisionShard
-
-// UnmarshalProvisionShard reads a value of the 'provision_shard' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalProvisionShard = api_v1.UnmarshalProvisionShard
-
-// ReadProvisionShard reads a value of the 'provision_shard' type from the given iterator.
 var ReadProvisionShard = api_v1.ReadProvisionShard

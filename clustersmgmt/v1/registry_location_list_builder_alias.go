@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// RegistryLocationListBuilder contains the data and logic needed to build
-// 'registry_location' objects.
 type RegistryLocationListBuilder = api_v1.RegistryLocationListBuilder
 
-// NewRegistryLocationList creates a new builder of 'registry_location' objects.
 var NewRegistryLocationList = api_v1.NewRegistryLocationList

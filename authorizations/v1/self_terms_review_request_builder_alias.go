@@ -23,11 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// SelfTermsReviewRequestBuilder contains the data and logic needed to build 'self_terms_review_request' objects.
-//
-// Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]
-// review requests.
 type SelfTermsReviewRequestBuilder = api_v1.SelfTermsReviewRequestBuilder
 
-// NewSelfTermsReviewRequest creates a new builder of 'self_terms_review_request' objects.
 var NewSelfTermsReviewRequest = api_v1.NewSelfTermsReviewRequest

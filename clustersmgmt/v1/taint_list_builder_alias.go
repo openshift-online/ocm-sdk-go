@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// TaintListBuilder contains the data and logic needed to build
-// 'taint' objects.
 type TaintListBuilder = api_v1.TaintListBuilder
 
-// NewTaintList creates a new builder of 'taint' objects.
 var NewTaintList = api_v1.NewTaintList

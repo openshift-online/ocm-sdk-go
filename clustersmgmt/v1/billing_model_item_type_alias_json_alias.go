@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalBillingModelItem writes a value of the 'billing_model_item' type to the given writer.
 var MarshalBillingModelItem = api_v1.MarshalBillingModelItem
-
-// WriteBillingModelItem writes a value of the 'billing_model_item' type to the given stream.
 var WriteBillingModelItem = api_v1.WriteBillingModelItem
-
-// UnmarshalBillingModelItem reads a value of the 'billing_model_item' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalBillingModelItem = api_v1.UnmarshalBillingModelItem
-
-// ReadBillingModelItem reads a value of the 'billing_model_item' type from the given iterator.
 var ReadBillingModelItem = api_v1.ReadBillingModelItem

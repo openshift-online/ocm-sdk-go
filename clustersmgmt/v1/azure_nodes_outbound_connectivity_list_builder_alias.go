@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AzureNodesOutboundConnectivityListBuilder contains the data and logic needed to build
-// 'azure_nodes_outbound_connectivity' objects.
 type AzureNodesOutboundConnectivityListBuilder = api_v1.AzureNodesOutboundConnectivityListBuilder
 
-// NewAzureNodesOutboundConnectivityList creates a new builder of 'azure_nodes_outbound_connectivity' objects.
 var NewAzureNodesOutboundConnectivityList = api_v1.NewAzureNodesOutboundConnectivityList

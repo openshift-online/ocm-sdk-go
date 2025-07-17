@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalClusterConfigurationModeList writes a list of values of the 'cluster_configuration_mode' type to
-// the given writer.
 var MarshalClusterConfigurationModeList = api_v1alpha1.MarshalClusterConfigurationModeList
-
-// WriteClusterConfigurationModeList writes a list of value of the 'cluster_configuration_mode' type to
-// the given stream.
 var WriteClusterConfigurationModeList = api_v1alpha1.WriteClusterConfigurationModeList
-
-// UnmarshalClusterConfigurationModeList reads a list of values of the 'cluster_configuration_mode' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterConfigurationModeList = api_v1alpha1.UnmarshalClusterConfigurationModeList
-
-// ReadClusterConfigurationModeList reads list of values of the ”cluster_configuration_mode' type from
-// the given iterator.
 var ReadClusterConfigurationModeList = api_v1alpha1.ReadClusterConfigurationModeList

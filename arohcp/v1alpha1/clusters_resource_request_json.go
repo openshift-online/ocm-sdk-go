@@ -25,10 +25,10 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeClustersAsyncAddRequest(request *ClustersAddRequest, writer io.Writer) error {
+func writeClustersAddRequest(request *ClustersAddRequest, writer io.Writer) error {
 	return MarshalCluster(request.body, writer)
 }
-func readClustersAsyncAddResponse(response *ClustersAddResponse, reader io.Reader) error {
+func readClustersAddResponse(response *ClustersAddResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalCluster(reader)
 	return err

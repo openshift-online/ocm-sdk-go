@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalCloudProviderData writes a value of the 'cloud_provider_data' type to the given writer.
 var MarshalCloudProviderData = api_v1.MarshalCloudProviderData
-
-// WriteCloudProviderData writes a value of the 'cloud_provider_data' type to the given stream.
 var WriteCloudProviderData = api_v1.WriteCloudProviderData
-
-// UnmarshalCloudProviderData reads a value of the 'cloud_provider_data' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCloudProviderData = api_v1.UnmarshalCloudProviderData
-
-// ReadCloudProviderData reads a value of the 'cloud_provider_data' type from the given iterator.
 var ReadCloudProviderData = api_v1.ReadCloudProviderData

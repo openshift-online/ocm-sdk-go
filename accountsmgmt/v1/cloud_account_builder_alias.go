@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// CloudAccountBuilder contains the data and logic needed to build 'cloud_account' objects.
 type CloudAccountBuilder = api_v1.CloudAccountBuilder
 
-// NewCloudAccount creates a new builder of 'cloud_account' objects.
 var NewCloudAccount = api_v1.NewCloudAccount

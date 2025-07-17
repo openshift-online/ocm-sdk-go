@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// InflightCheckListBuilder contains the data and logic needed to build
-// 'inflight_check' objects.
 type InflightCheckListBuilder = api_v1alpha1.InflightCheckListBuilder
 
-// NewInflightCheckList creates a new builder of 'inflight_check' objects.
 var NewInflightCheckList = api_v1alpha1.NewInflightCheckList

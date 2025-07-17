@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AuditLogBuilder contains the data and logic needed to build 'audit_log' objects.
-//
-// Contains the necessary attributes to support audit log forwarding
 type AuditLogBuilder = api_v1.AuditLogBuilder
 
-// NewAuditLog creates a new builder of 'audit_log' objects.
 var NewAuditLog = api_v1.NewAuditLog

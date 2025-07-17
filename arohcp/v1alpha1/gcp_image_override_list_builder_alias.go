@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// GCPImageOverrideListBuilder contains the data and logic needed to build
-// 'GCP_image_override' objects.
 type GCPImageOverrideListBuilder = api_v1alpha1.GCPImageOverrideListBuilder
 
-// NewGCPImageOverrideList creates a new builder of 'GCP_image_override' objects.
 var NewGCPImageOverrideList = api_v1alpha1.NewGCPImageOverrideList

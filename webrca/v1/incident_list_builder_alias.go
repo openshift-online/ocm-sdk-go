@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// IncidentListBuilder contains the data and logic needed to build
-// 'incident' objects.
 type IncidentListBuilder = api_v1.IncidentListBuilder
 
-// NewIncidentList creates a new builder of 'incident' objects.
 var NewIncidentList = api_v1.NewIncidentList

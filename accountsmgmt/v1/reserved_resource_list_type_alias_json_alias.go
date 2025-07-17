@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalReservedResourceList writes a list of values of the 'reserved_resource' type to
-// the given writer.
 var MarshalReservedResourceList = api_v1.MarshalReservedResourceList
-
-// WriteReservedResourceList writes a list of value of the 'reserved_resource' type to
-// the given stream.
 var WriteReservedResourceList = api_v1.WriteReservedResourceList
-
-// UnmarshalReservedResourceList reads a list of values of the 'reserved_resource' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalReservedResourceList = api_v1.UnmarshalReservedResourceList
-
-// ReadReservedResourceList reads list of values of the ”reserved_resource' type from
-// the given iterator.
 var ReadReservedResourceList = api_v1.ReadReservedResourceList

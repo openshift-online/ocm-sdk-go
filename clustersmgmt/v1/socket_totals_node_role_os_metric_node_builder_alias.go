@@ -23,11 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// SocketTotalsNodeRoleOSMetricNodeBuilder contains the data and logic needed to build 'socket_totals_node_role_OS_metric_node' objects.
-//
-// Representation of information from telemetry about the socket capacity by node
-// role and OS of a cluster.
 type SocketTotalsNodeRoleOSMetricNodeBuilder = api_v1.SocketTotalsNodeRoleOSMetricNodeBuilder
 
-// NewSocketTotalsNodeRoleOSMetricNode creates a new builder of 'socket_totals_node_role_OS_metric_node' objects.
 var NewSocketTotalsNodeRoleOSMetricNode = api_v1.NewSocketTotalsNodeRoleOSMetricNode

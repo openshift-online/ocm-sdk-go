@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterOperatorInfoListBuilder contains the data and logic needed to build
-// 'cluster_operator_info' objects.
 type ClusterOperatorInfoListBuilder = api_v1.ClusterOperatorInfoListBuilder
 
-// NewClusterOperatorInfoList creates a new builder of 'cluster_operator_info' objects.
 var NewClusterOperatorInfoList = api_v1.NewClusterOperatorInfoList

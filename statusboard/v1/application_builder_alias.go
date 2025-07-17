@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// ApplicationBuilder contains the data and logic needed to build 'application' objects.
-//
-// Definition of a Status Board application.
 type ApplicationBuilder = api_v1.ApplicationBuilder
 
-// NewApplication creates a new builder of 'application' objects.
 var NewApplication = api_v1.NewApplication

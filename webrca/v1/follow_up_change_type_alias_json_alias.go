@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// MarshalFollowUpChange writes a value of the 'follow_up_change' type to the given writer.
 var MarshalFollowUpChange = api_v1.MarshalFollowUpChange
-
-// WriteFollowUpChange writes a value of the 'follow_up_change' type to the given stream.
 var WriteFollowUpChange = api_v1.WriteFollowUpChange
-
-// UnmarshalFollowUpChange reads a value of the 'follow_up_change' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalFollowUpChange = api_v1.UnmarshalFollowUpChange
-
-// ReadFollowUpChange reads a value of the 'follow_up_change' type from the given iterator.
 var ReadFollowUpChange = api_v1.ReadFollowUpChange

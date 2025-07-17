@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// MarshalApplicationList writes a list of values of the 'application' type to
-// the given writer.
 var MarshalApplicationList = api_v1.MarshalApplicationList
-
-// WriteApplicationList writes a list of value of the 'application' type to
-// the given stream.
 var WriteApplicationList = api_v1.WriteApplicationList
-
-// UnmarshalApplicationList reads a list of values of the 'application' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalApplicationList = api_v1.UnmarshalApplicationList
-
-// ReadApplicationList reads list of values of the ”application' type from
-// the given iterator.
 var ReadApplicationList = api_v1.ReadApplicationList

@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// ResourceListBuilder contains the data and logic needed to build
-// 'resource' objects.
 type ResourceListBuilder = api_v1.ResourceListBuilder
 
-// NewResourceList creates a new builder of 'resource' objects.
 var NewResourceList = api_v1.NewResourceList

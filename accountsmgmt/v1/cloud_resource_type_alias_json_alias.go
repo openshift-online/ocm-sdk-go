@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalCloudResource writes a value of the 'cloud_resource' type to the given writer.
 var MarshalCloudResource = api_v1.MarshalCloudResource
-
-// WriteCloudResource writes a value of the 'cloud_resource' type to the given stream.
 var WriteCloudResource = api_v1.WriteCloudResource
-
-// UnmarshalCloudResource reads a value of the 'cloud_resource' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCloudResource = api_v1.UnmarshalCloudResource
-
-// ReadCloudResource reads a value of the 'cloud_resource' type from the given iterator.
 var ReadCloudResource = api_v1.ReadCloudResource

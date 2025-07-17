@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalClusterHealthStateList writes a list of values of the 'cluster_health_state' type to
-// the given writer.
 var MarshalClusterHealthStateList = api_v1.MarshalClusterHealthStateList
-
-// WriteClusterHealthStateList writes a list of value of the 'cluster_health_state' type to
-// the given stream.
 var WriteClusterHealthStateList = api_v1.WriteClusterHealthStateList
-
-// UnmarshalClusterHealthStateList reads a list of values of the 'cluster_health_state' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterHealthStateList = api_v1.UnmarshalClusterHealthStateList
-
-// ReadClusterHealthStateList reads list of values of the ”cluster_health_state' type from
-// the given iterator.
 var ReadClusterHealthStateList = api_v1.ReadClusterHealthStateList

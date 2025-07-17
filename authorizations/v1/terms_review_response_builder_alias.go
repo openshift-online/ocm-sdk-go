@@ -23,11 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// TermsReviewResponseBuilder contains the data and logic needed to build 'terms_review_response' objects.
-//
-// Representation of Red Hat's Terms and Conditions for using OpenShift Dedicated and Amazon Red Hat OpenShift [Terms]
-// review response.
 type TermsReviewResponseBuilder = api_v1.TermsReviewResponseBuilder
 
-// NewTermsReviewResponse creates a new builder of 'terms_review_response' objects.
 var NewTermsReviewResponse = api_v1.NewTermsReviewResponse

@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// QuotaAuthorizationResponseBuilder contains the data and logic needed to build 'quota_authorization_response' objects.
 type QuotaAuthorizationResponseBuilder = api_v1.QuotaAuthorizationResponseBuilder
 
-// NewQuotaAuthorizationResponse creates a new builder of 'quota_authorization_response' objects.
 var NewQuotaAuthorizationResponse = api_v1.NewQuotaAuthorizationResponse

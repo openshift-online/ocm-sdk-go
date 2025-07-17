@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AWSNodePoolListBuilder contains the data and logic needed to build
-// 'AWS_node_pool' objects.
 type AWSNodePoolListBuilder = api_v1alpha1.AWSNodePoolListBuilder
 
-// NewAWSNodePoolList creates a new builder of 'AWS_node_pool' objects.
 var NewAWSNodePoolList = api_v1alpha1.NewAWSNodePoolList

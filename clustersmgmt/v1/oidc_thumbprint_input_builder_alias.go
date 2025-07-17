@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// OidcThumbprintInputBuilder contains the data and logic needed to build 'oidc_thumbprint_input' objects.
-//
-// Contains the necessary attributes to fetch an OIDC Configuration thumbprint
 type OidcThumbprintInputBuilder = api_v1.OidcThumbprintInputBuilder
 
-// NewOidcThumbprintInput creates a new builder of 'oidc_thumbprint_input' objects.
 var NewOidcThumbprintInput = api_v1.NewOidcThumbprintInput

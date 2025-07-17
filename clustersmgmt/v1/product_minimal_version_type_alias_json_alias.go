@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalProductMinimalVersion writes a value of the 'product_minimal_version' type to the given writer.
 var MarshalProductMinimalVersion = api_v1.MarshalProductMinimalVersion
-
-// WriteProductMinimalVersion writes a value of the 'product_minimal_version' type to the given stream.
 var WriteProductMinimalVersion = api_v1.WriteProductMinimalVersion
-
-// UnmarshalProductMinimalVersion reads a value of the 'product_minimal_version' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalProductMinimalVersion = api_v1.UnmarshalProductMinimalVersion
-
-// ReadProductMinimalVersion reads a value of the 'product_minimal_version' type from the given iterator.
 var ReadProductMinimalVersion = api_v1.ReadProductMinimalVersion

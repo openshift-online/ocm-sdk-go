@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalNotificationDetailsRequest writes a value of the 'notification_details_request' type to the given writer.
 var MarshalNotificationDetailsRequest = api_v1.MarshalNotificationDetailsRequest
-
-// WriteNotificationDetailsRequest writes a value of the 'notification_details_request' type to the given stream.
 var WriteNotificationDetailsRequest = api_v1.WriteNotificationDetailsRequest
-
-// UnmarshalNotificationDetailsRequest reads a value of the 'notification_details_request' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalNotificationDetailsRequest = api_v1.UnmarshalNotificationDetailsRequest
-
-// ReadNotificationDetailsRequest reads a value of the 'notification_details_request' type from the given iterator.
 var ReadNotificationDetailsRequest = api_v1.ReadNotificationDetailsRequest

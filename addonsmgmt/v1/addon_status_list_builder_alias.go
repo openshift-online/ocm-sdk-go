@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// AddonStatusListBuilder contains the data and logic needed to build
-// 'addon_status' objects.
 type AddonStatusListBuilder = api_v1.AddonStatusListBuilder
 
-// NewAddonStatusList creates a new builder of 'addon_status' objects.
 var NewAddonStatusList = api_v1.NewAddonStatusList

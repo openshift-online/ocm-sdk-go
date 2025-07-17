@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalDeletedSubscription writes a value of the 'deleted_subscription' type to the given writer.
 var MarshalDeletedSubscription = api_v1.MarshalDeletedSubscription
-
-// WriteDeletedSubscription writes a value of the 'deleted_subscription' type to the given stream.
 var WriteDeletedSubscription = api_v1.WriteDeletedSubscription
-
-// UnmarshalDeletedSubscription reads a value of the 'deleted_subscription' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalDeletedSubscription = api_v1.UnmarshalDeletedSubscription
-
-// ReadDeletedSubscription reads a value of the 'deleted_subscription' type from the given iterator.
 var ReadDeletedSubscription = api_v1.ReadDeletedSubscription

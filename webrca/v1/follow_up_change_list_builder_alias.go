@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// FollowUpChangeListBuilder contains the data and logic needed to build
-// 'follow_up_change' objects.
 type FollowUpChangeListBuilder = api_v1.FollowUpChangeListBuilder
 
-// NewFollowUpChangeList creates a new builder of 'follow_up_change' objects.
 var NewFollowUpChangeList = api_v1.NewFollowUpChangeList

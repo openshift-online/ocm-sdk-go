@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalFeatureToggle writes a value of the 'feature_toggle' type to the given writer.
 var MarshalFeatureToggle = api_v1.MarshalFeatureToggle
-
-// WriteFeatureToggle writes a value of the 'feature_toggle' type to the given stream.
 var WriteFeatureToggle = api_v1.WriteFeatureToggle
-
-// UnmarshalFeatureToggle reads a value of the 'feature_toggle' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalFeatureToggle = api_v1.UnmarshalFeatureToggle
-
-// ReadFeatureToggle reads a value of the 'feature_toggle' type from the given iterator.
 var ReadFeatureToggle = api_v1.ReadFeatureToggle

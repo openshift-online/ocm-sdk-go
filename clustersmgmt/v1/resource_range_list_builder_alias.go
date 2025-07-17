@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ResourceRangeListBuilder contains the data and logic needed to build
-// 'resource_range' objects.
 type ResourceRangeListBuilder = api_v1.ResourceRangeListBuilder
 
-// NewResourceRangeList creates a new builder of 'resource_range' objects.
 var NewResourceRangeList = api_v1.NewResourceRangeList

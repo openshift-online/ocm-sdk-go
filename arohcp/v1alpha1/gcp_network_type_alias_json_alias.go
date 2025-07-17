@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalGCPNetwork writes a value of the 'GCP_network' type to the given writer.
 var MarshalGCPNetwork = api_v1alpha1.MarshalGCPNetwork
-
-// WriteGCPNetwork writes a value of the 'GCP_network' type to the given stream.
 var WriteGCPNetwork = api_v1alpha1.WriteGCPNetwork
-
-// UnmarshalGCPNetwork reads a value of the 'GCP_network' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalGCPNetwork = api_v1alpha1.UnmarshalGCPNetwork
-
-// ReadGCPNetwork reads a value of the 'GCP_network' type from the given iterator.
 var ReadGCPNetwork = api_v1alpha1.ReadGCPNetwork

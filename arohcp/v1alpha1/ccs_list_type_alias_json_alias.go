@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalCCSList writes a list of values of the 'CCS' type to
-// the given writer.
 var MarshalCCSList = api_v1alpha1.MarshalCCSList
-
-// WriteCCSList writes a list of value of the 'CCS' type to
-// the given stream.
 var WriteCCSList = api_v1alpha1.WriteCCSList
-
-// UnmarshalCCSList reads a list of values of the 'CCS' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalCCSList = api_v1alpha1.UnmarshalCCSList
-
-// ReadCCSList reads list of values of the ”CCS' type from
-// the given iterator.
 var ReadCCSList = api_v1alpha1.ReadCCSList

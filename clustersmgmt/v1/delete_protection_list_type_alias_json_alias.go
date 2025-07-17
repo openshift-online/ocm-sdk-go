@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalDeleteProtectionList writes a list of values of the 'delete_protection' type to
-// the given writer.
 var MarshalDeleteProtectionList = api_v1.MarshalDeleteProtectionList
-
-// WriteDeleteProtectionList writes a list of value of the 'delete_protection' type to
-// the given stream.
 var WriteDeleteProtectionList = api_v1.WriteDeleteProtectionList
-
-// UnmarshalDeleteProtectionList reads a list of values of the 'delete_protection' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalDeleteProtectionList = api_v1.UnmarshalDeleteProtectionList
-
-// ReadDeleteProtectionList reads list of values of the ”delete_protection' type from
-// the given iterator.
 var ReadDeleteProtectionList = api_v1.ReadDeleteProtectionList

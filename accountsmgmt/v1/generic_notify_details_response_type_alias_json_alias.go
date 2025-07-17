@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalGenericNotifyDetailsResponse writes a value of the 'generic_notify_details_response' type to the given writer.
 var MarshalGenericNotifyDetailsResponse = api_v1.MarshalGenericNotifyDetailsResponse
-
-// WriteGenericNotifyDetailsResponse writes a value of the 'generic_notify_details_response' type to the given stream.
 var WriteGenericNotifyDetailsResponse = api_v1.WriteGenericNotifyDetailsResponse
-
-// UnmarshalGenericNotifyDetailsResponse reads a value of the 'generic_notify_details_response' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalGenericNotifyDetailsResponse = api_v1.UnmarshalGenericNotifyDetailsResponse
-
-// ReadGenericNotifyDetailsResponse reads a value of the 'generic_notify_details_response' type from the given iterator.
 var ReadGenericNotifyDetailsResponse = api_v1.ReadGenericNotifyDetailsResponse

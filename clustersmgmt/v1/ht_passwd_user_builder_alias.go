@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// HTPasswdUserBuilder contains the data and logic needed to build 'HT_passwd_user' objects.
 type HTPasswdUserBuilder = api_v1.HTPasswdUserBuilder
 
-// NewHTPasswdUser creates a new builder of 'HT_passwd_user' objects.
 var NewHTPasswdUser = api_v1.NewHTPasswdUser

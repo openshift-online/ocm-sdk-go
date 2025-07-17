@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClientComponentBuilder contains the data and logic needed to build 'client_component' objects.
-//
-// The reference of a component that will consume the client configuration.
 type ClientComponentBuilder = api_v1.ClientComponentBuilder
 
-// NewClientComponent creates a new builder of 'client_component' objects.
 var NewClientComponent = api_v1.NewClientComponent

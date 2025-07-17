@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAddOnNamespaceList writes a list of values of the 'add_on_namespace' type to
-// the given writer.
 var MarshalAddOnNamespaceList = api_v1.MarshalAddOnNamespaceList
-
-// WriteAddOnNamespaceList writes a list of value of the 'add_on_namespace' type to
-// the given stream.
 var WriteAddOnNamespaceList = api_v1.WriteAddOnNamespaceList
-
-// UnmarshalAddOnNamespaceList reads a list of values of the 'add_on_namespace' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddOnNamespaceList = api_v1.UnmarshalAddOnNamespaceList
-
-// ReadAddOnNamespaceList reads list of values of the ”add_on_namespace' type from
-// the given iterator.
 var ReadAddOnNamespaceList = api_v1.ReadAddOnNamespaceList

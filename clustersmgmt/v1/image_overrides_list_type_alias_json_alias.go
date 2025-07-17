@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalImageOverridesList writes a list of values of the 'image_overrides' type to
-// the given writer.
 var MarshalImageOverridesList = api_v1.MarshalImageOverridesList
-
-// WriteImageOverridesList writes a list of value of the 'image_overrides' type to
-// the given stream.
 var WriteImageOverridesList = api_v1.WriteImageOverridesList
-
-// UnmarshalImageOverridesList reads a list of values of the 'image_overrides' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalImageOverridesList = api_v1.UnmarshalImageOverridesList
-
-// ReadImageOverridesList reads list of values of the ”image_overrides' type from
-// the given iterator.
 var ReadImageOverridesList = api_v1.ReadImageOverridesList

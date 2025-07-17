@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterCredentialsListBuilder contains the data and logic needed to build
-// 'cluster_credentials' objects.
 type ClusterCredentialsListBuilder = api_v1.ClusterCredentialsListBuilder
 
-// NewClusterCredentialsList creates a new builder of 'cluster_credentials' objects.
 var NewClusterCredentialsList = api_v1.NewClusterCredentialsList

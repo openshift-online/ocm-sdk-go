@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MachinePoolAutoscalingBuilder contains the data and logic needed to build 'machine_pool_autoscaling' objects.
-//
-// Representation of a autoscaling in a machine pool.
 type MachinePoolAutoscalingBuilder = api_v1.MachinePoolAutoscalingBuilder
 
-// NewMachinePoolAutoscaling creates a new builder of 'machine_pool_autoscaling' objects.
 var NewMachinePoolAutoscaling = api_v1.NewMachinePoolAutoscaling

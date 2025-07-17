@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GcpAuthenticationListBuilder contains the data and logic needed to build
-// 'gcp_authentication' objects.
 type GcpAuthenticationListBuilder = api_v1.GcpAuthenticationListBuilder
 
-// NewGcpAuthenticationList creates a new builder of 'gcp_authentication' objects.
 var NewGcpAuthenticationList = api_v1.NewGcpAuthenticationList

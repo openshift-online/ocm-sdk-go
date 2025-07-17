@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// NodePoolManagementUpgradeBuilder contains the data and logic needed to build 'node_pool_management_upgrade' objects.
-//
-// Representation of node pool management.
 type NodePoolManagementUpgradeBuilder = api_v1alpha1.NodePoolManagementUpgradeBuilder
 
-// NewNodePoolManagementUpgrade creates a new builder of 'node_pool_management_upgrade' objects.
 var NewNodePoolManagementUpgrade = api_v1alpha1.NewNodePoolManagementUpgrade

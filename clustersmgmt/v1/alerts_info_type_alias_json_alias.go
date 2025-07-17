@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAlertsInfo writes a value of the 'alerts_info' type to the given writer.
 var MarshalAlertsInfo = api_v1.MarshalAlertsInfo
-
-// WriteAlertsInfo writes a value of the 'alerts_info' type to the given stream.
 var WriteAlertsInfo = api_v1.WriteAlertsInfo
-
-// UnmarshalAlertsInfo reads a value of the 'alerts_info' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAlertsInfo = api_v1.UnmarshalAlertsInfo
-
-// ReadAlertsInfo reads a value of the 'alerts_info' type from the given iterator.
 var ReadAlertsInfo = api_v1.ReadAlertsInfo

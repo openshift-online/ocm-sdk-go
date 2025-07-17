@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAddOnInstallationList writes a list of values of the 'add_on_installation' type to
-// the given writer.
 var MarshalAddOnInstallationList = api_v1.MarshalAddOnInstallationList
-
-// WriteAddOnInstallationList writes a list of value of the 'add_on_installation' type to
-// the given stream.
 var WriteAddOnInstallationList = api_v1.WriteAddOnInstallationList
-
-// UnmarshalAddOnInstallationList reads a list of values of the 'add_on_installation' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddOnInstallationList = api_v1.UnmarshalAddOnInstallationList
-
-// ReadAddOnInstallationList reads list of values of the ”add_on_installation' type from
-// the given iterator.
 var ReadAddOnInstallationList = api_v1.ReadAddOnInstallationList

@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalResource writes a value of the 'resource' type to the given writer.
 var MarshalResource = api_v1.MarshalResource
-
-// WriteResource writes a value of the 'resource' type to the given stream.
 var WriteResource = api_v1.WriteResource
-
-// UnmarshalResource reads a value of the 'resource' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalResource = api_v1.UnmarshalResource
-
-// ReadResource reads a value of the 'resource' type from the given iterator.
 var ReadResource = api_v1.ReadResource

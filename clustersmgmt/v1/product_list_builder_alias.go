@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ProductListBuilder contains the data and logic needed to build
-// 'product' objects.
 type ProductListBuilder = api_v1.ProductListBuilder
 
-// NewProductList creates a new builder of 'product' objects.
 var NewProductList = api_v1.NewProductList

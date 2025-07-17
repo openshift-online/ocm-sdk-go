@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AutoscalerResourceLimitsGPULimitBuilder contains the data and logic needed to build 'autoscaler_resource_limits_GPU_limit' objects.
 type AutoscalerResourceLimitsGPULimitBuilder = api_v1.AutoscalerResourceLimitsGPULimitBuilder
 
-// NewAutoscalerResourceLimitsGPULimit creates a new builder of 'autoscaler_resource_limits_GPU_limit' objects.
 var NewAutoscalerResourceLimitsGPULimit = api_v1.NewAutoscalerResourceLimitsGPULimit

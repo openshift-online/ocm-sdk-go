@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// LabelReferenceListBuilder contains the data and logic needed to build
-// 'label_reference' objects.
 type LabelReferenceListBuilder = api_v1.LabelReferenceListBuilder
 
-// NewLabelReferenceList creates a new builder of 'label_reference' objects.
 var NewLabelReferenceList = api_v1.NewLabelReferenceList

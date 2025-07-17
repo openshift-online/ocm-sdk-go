@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ImageOverridesListBuilder contains the data and logic needed to build
-// 'image_overrides' objects.
 type ImageOverridesListBuilder = api_v1.ImageOverridesListBuilder
 
-// NewImageOverridesList creates a new builder of 'image_overrides' objects.
 var NewImageOverridesList = api_v1.NewImageOverridesList

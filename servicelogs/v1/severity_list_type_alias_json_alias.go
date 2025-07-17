@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicelogs/v1"
 )
 
-// MarshalSeverityList writes a list of values of the 'severity' type to
-// the given writer.
 var MarshalSeverityList = api_v1.MarshalSeverityList
-
-// WriteSeverityList writes a list of value of the 'severity' type to
-// the given stream.
 var WriteSeverityList = api_v1.WriteSeverityList
-
-// UnmarshalSeverityList reads a list of values of the 'severity' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSeverityList = api_v1.UnmarshalSeverityList
-
-// ReadSeverityList reads list of values of the ”severity' type from
-// the given iterator.
 var ReadSeverityList = api_v1.ReadSeverityList

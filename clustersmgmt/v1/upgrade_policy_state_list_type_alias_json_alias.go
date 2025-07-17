@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalUpgradePolicyStateList writes a list of values of the 'upgrade_policy_state' type to
-// the given writer.
 var MarshalUpgradePolicyStateList = api_v1.MarshalUpgradePolicyStateList
-
-// WriteUpgradePolicyStateList writes a list of value of the 'upgrade_policy_state' type to
-// the given stream.
 var WriteUpgradePolicyStateList = api_v1.WriteUpgradePolicyStateList
-
-// UnmarshalUpgradePolicyStateList reads a list of values of the 'upgrade_policy_state' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalUpgradePolicyStateList = api_v1.UnmarshalUpgradePolicyStateList
-
-// ReadUpgradePolicyStateList reads list of values of the ”upgrade_policy_state' type from
-// the given iterator.
 var ReadUpgradePolicyStateList = api_v1.ReadUpgradePolicyStateList

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSVolumeBuilder contains the data and logic needed to build 'AWS_volume' objects.
-//
-// Holds settings for an AWS storage volume.
 type AWSVolumeBuilder = api_v1.AWSVolumeBuilder
 
-// NewAWSVolume creates a new builder of 'AWS_volume' objects.
 var NewAWSVolume = api_v1.NewAWSVolume

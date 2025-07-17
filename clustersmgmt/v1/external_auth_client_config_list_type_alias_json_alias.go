@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalExternalAuthClientConfigList writes a list of values of the 'external_auth_client_config' type to
-// the given writer.
 var MarshalExternalAuthClientConfigList = api_v1.MarshalExternalAuthClientConfigList
-
-// WriteExternalAuthClientConfigList writes a list of value of the 'external_auth_client_config' type to
-// the given stream.
 var WriteExternalAuthClientConfigList = api_v1.WriteExternalAuthClientConfigList
-
-// UnmarshalExternalAuthClientConfigList reads a list of values of the 'external_auth_client_config' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalExternalAuthClientConfigList = api_v1.UnmarshalExternalAuthClientConfigList
-
-// ReadExternalAuthClientConfigList reads list of values of the ”external_auth_client_config' type from
-// the given iterator.
 var ReadExternalAuthClientConfigList = api_v1.ReadExternalAuthClientConfigList

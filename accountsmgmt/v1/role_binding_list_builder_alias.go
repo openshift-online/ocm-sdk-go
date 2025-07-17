@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// RoleBindingListBuilder contains the data and logic needed to build
-// 'role_binding' objects.
 type RoleBindingListBuilder = api_v1.RoleBindingListBuilder
 
-// NewRoleBindingList creates a new builder of 'role_binding' objects.
 var NewRoleBindingList = api_v1.NewRoleBindingList

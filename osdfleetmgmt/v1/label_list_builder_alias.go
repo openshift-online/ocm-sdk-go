@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// LabelListBuilder contains the data and logic needed to build
-// 'label' objects.
 type LabelListBuilder = api_v1.LabelListBuilder
 
-// NewLabelList creates a new builder of 'label' objects.
 var NewLabelList = api_v1.NewLabelList

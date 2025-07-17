@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ProductMinimalVersionListBuilder contains the data and logic needed to build
-// 'product_minimal_version' objects.
 type ProductMinimalVersionListBuilder = api_v1.ProductMinimalVersionListBuilder
 
-// NewProductMinimalVersionList creates a new builder of 'product_minimal_version' objects.
 var NewProductMinimalVersionList = api_v1.NewProductMinimalVersionList

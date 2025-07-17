@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// SubscriptionMetricsBuilder contains the data and logic needed to build 'subscription_metrics' objects.
-//
-// Each field is a metric fetched for a specific Subscription's cluster.
 type SubscriptionMetricsBuilder = api_v1.SubscriptionMetricsBuilder
 
-// NewSubscriptionMetrics creates a new builder of 'subscription_metrics' objects.
 var NewSubscriptionMetrics = api_v1.NewSubscriptionMetrics

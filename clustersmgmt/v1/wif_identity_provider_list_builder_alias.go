@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// WifIdentityProviderListBuilder contains the data and logic needed to build
-// 'wif_identity_provider' objects.
 type WifIdentityProviderListBuilder = api_v1.WifIdentityProviderListBuilder
 
-// NewWifIdentityProviderList creates a new builder of 'wif_identity_provider' objects.
 var NewWifIdentityProviderList = api_v1.NewWifIdentityProviderList

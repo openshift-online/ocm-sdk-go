@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalMonitoringStack writes a value of the 'monitoring_stack' type to the given writer.
 var MarshalMonitoringStack = api_v1.MarshalMonitoringStack
-
-// WriteMonitoringStack writes a value of the 'monitoring_stack' type to the given stream.
 var WriteMonitoringStack = api_v1.WriteMonitoringStack
-
-// UnmarshalMonitoringStack reads a value of the 'monitoring_stack' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalMonitoringStack = api_v1.UnmarshalMonitoringStack
-
-// ReadMonitoringStack reads a value of the 'monitoring_stack' type from the given iterator.
 var ReadMonitoringStack = api_v1.ReadMonitoringStack

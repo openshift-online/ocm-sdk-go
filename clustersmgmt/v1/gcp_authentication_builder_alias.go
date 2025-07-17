@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GcpAuthenticationBuilder contains the data and logic needed to build 'gcp_authentication' objects.
-//
-// Google cloud platform authentication method of a cluster.
 type GcpAuthenticationBuilder = api_v1.GcpAuthenticationBuilder
 
-// NewGcpAuthentication creates a new builder of 'gcp_authentication' objects.
 var NewGcpAuthentication = api_v1.NewGcpAuthentication

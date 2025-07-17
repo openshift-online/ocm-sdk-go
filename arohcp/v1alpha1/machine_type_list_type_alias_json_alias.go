@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalMachineTypeList writes a list of values of the 'machine_type' type to
-// the given writer.
 var MarshalMachineTypeList = api_v1alpha1.MarshalMachineTypeList
-
-// WriteMachineTypeList writes a list of value of the 'machine_type' type to
-// the given stream.
 var WriteMachineTypeList = api_v1alpha1.WriteMachineTypeList
-
-// UnmarshalMachineTypeList reads a list of values of the 'machine_type' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalMachineTypeList = api_v1alpha1.UnmarshalMachineTypeList
-
-// ReadMachineTypeList reads list of values of the ”machine_type' type from
-// the given iterator.
 var ReadMachineTypeList = api_v1alpha1.ReadMachineTypeList

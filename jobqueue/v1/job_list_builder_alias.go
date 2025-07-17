@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/jobqueue/v1"
 )
 
-// JobListBuilder contains the data and logic needed to build
-// 'job' objects.
 type JobListBuilder = api_v1.JobListBuilder
 
-// NewJobList creates a new builder of 'job' objects.
 var NewJobList = api_v1.NewJobList

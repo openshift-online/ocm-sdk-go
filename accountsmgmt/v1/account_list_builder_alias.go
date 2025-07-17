@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// AccountListBuilder contains the data and logic needed to build
-// 'account' objects.
 type AccountListBuilder = api_v1.AccountListBuilder
 
-// NewAccountList creates a new builder of 'account' objects.
 var NewAccountList = api_v1.NewAccountList

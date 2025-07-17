@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAWSMachinePool writes a value of the 'AWS_machine_pool' type to the given writer.
 var MarshalAWSMachinePool = api_v1.MarshalAWSMachinePool
-
-// WriteAWSMachinePool writes a value of the 'AWS_machine_pool' type to the given stream.
 var WriteAWSMachinePool = api_v1.WriteAWSMachinePool
-
-// UnmarshalAWSMachinePool reads a value of the 'AWS_machine_pool' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAWSMachinePool = api_v1.UnmarshalAWSMachinePool
-
-// ReadAWSMachinePool reads a value of the 'AWS_machine_pool' type from the given iterator.
 var ReadAWSMachinePool = api_v1.ReadAWSMachinePool

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterAutoscalerBuilder contains the data and logic needed to build 'cluster_autoscaler' objects.
-//
-// Cluster-wide autoscaling configuration.
 type ClusterAutoscalerBuilder = api_v1.ClusterAutoscalerBuilder
 
-// NewClusterAutoscaler creates a new builder of 'cluster_autoscaler' objects.
 var NewClusterAutoscaler = api_v1.NewClusterAutoscaler

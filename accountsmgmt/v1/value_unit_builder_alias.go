@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// ValueUnitBuilder contains the data and logic needed to build 'value_unit' objects.
 type ValueUnitBuilder = api_v1.ValueUnitBuilder
 
-// NewValueUnit creates a new builder of 'value_unit' objects.
 var NewValueUnit = api_v1.NewValueUnit

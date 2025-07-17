@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalAWSVolume writes a value of the 'AWS_volume' type to the given writer.
 var MarshalAWSVolume = api_v1alpha1.MarshalAWSVolume
-
-// WriteAWSVolume writes a value of the 'AWS_volume' type to the given stream.
 var WriteAWSVolume = api_v1alpha1.WriteAWSVolume
-
-// UnmarshalAWSVolume reads a value of the 'AWS_volume' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAWSVolume = api_v1alpha1.UnmarshalAWSVolume
-
-// ReadAWSVolume reads a value of the 'AWS_volume' type from the given iterator.
 var ReadAWSVolume = api_v1alpha1.ReadAWSVolume

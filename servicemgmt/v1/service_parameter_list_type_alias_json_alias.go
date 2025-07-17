@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
-// MarshalServiceParameterList writes a list of values of the 'service_parameter' type to
-// the given writer.
 var MarshalServiceParameterList = api_v1.MarshalServiceParameterList
-
-// WriteServiceParameterList writes a list of value of the 'service_parameter' type to
-// the given stream.
 var WriteServiceParameterList = api_v1.WriteServiceParameterList
-
-// UnmarshalServiceParameterList reads a list of values of the 'service_parameter' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalServiceParameterList = api_v1.UnmarshalServiceParameterList
-
-// ReadServiceParameterList reads list of values of the ”service_parameter' type from
-// the given iterator.
 var ReadServiceParameterList = api_v1.ReadServiceParameterList

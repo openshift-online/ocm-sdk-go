@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalNodePoolUpgradePolicy writes a value of the 'node_pool_upgrade_policy' type to the given writer.
 var MarshalNodePoolUpgradePolicy = api_v1.MarshalNodePoolUpgradePolicy
-
-// WriteNodePoolUpgradePolicy writes a value of the 'node_pool_upgrade_policy' type to the given stream.
 var WriteNodePoolUpgradePolicy = api_v1.WriteNodePoolUpgradePolicy
-
-// UnmarshalNodePoolUpgradePolicy reads a value of the 'node_pool_upgrade_policy' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalNodePoolUpgradePolicy = api_v1.UnmarshalNodePoolUpgradePolicy
-
-// ReadNodePoolUpgradePolicy reads a value of the 'node_pool_upgrade_policy' type from the given iterator.
 var ReadNodePoolUpgradePolicy = api_v1.ReadNodePoolUpgradePolicy

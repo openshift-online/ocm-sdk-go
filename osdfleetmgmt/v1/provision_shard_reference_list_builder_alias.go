@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// ProvisionShardReferenceListBuilder contains the data and logic needed to build
-// 'provision_shard_reference' objects.
 type ProvisionShardReferenceListBuilder = api_v1.ProvisionShardReferenceListBuilder
 
-// NewProvisionShardReferenceList creates a new builder of 'provision_shard_reference' objects.
 var NewProvisionShardReferenceList = api_v1.NewProvisionShardReferenceList

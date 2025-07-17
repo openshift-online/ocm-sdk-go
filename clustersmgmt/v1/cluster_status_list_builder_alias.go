@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterStatusListBuilder contains the data and logic needed to build
-// 'cluster_status' objects.
 type ClusterStatusListBuilder = api_v1.ClusterStatusListBuilder
 
-// NewClusterStatusList creates a new builder of 'cluster_status' objects.
 var NewClusterStatusList = api_v1.NewClusterStatusList

@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalTuningConfig writes a value of the 'tuning_config' type to the given writer.
 var MarshalTuningConfig = api_v1.MarshalTuningConfig
-
-// WriteTuningConfig writes a value of the 'tuning_config' type to the given stream.
 var WriteTuningConfig = api_v1.WriteTuningConfig
-
-// UnmarshalTuningConfig reads a value of the 'tuning_config' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalTuningConfig = api_v1.UnmarshalTuningConfig
-
-// ReadTuningConfig reads a value of the 'tuning_config' type from the given iterator.
 var ReadTuningConfig = api_v1.ReadTuningConfig

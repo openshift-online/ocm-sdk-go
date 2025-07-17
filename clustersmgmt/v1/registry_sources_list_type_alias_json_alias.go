@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalRegistrySourcesList writes a list of values of the 'registry_sources' type to
-// the given writer.
 var MarshalRegistrySourcesList = api_v1.MarshalRegistrySourcesList
-
-// WriteRegistrySourcesList writes a list of value of the 'registry_sources' type to
-// the given stream.
 var WriteRegistrySourcesList = api_v1.WriteRegistrySourcesList
-
-// UnmarshalRegistrySourcesList reads a list of values of the 'registry_sources' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRegistrySourcesList = api_v1.UnmarshalRegistrySourcesList
-
-// ReadRegistrySourcesList reads list of values of the ”registry_sources' type from
-// the given iterator.
 var ReadRegistrySourcesList = api_v1.ReadRegistrySourcesList

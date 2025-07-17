@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// SecurityGroupListBuilder contains the data and logic needed to build
-// 'security_group' objects.
 type SecurityGroupListBuilder = api_v1.SecurityGroupListBuilder
 
-// NewSecurityGroupList creates a new builder of 'security_group' objects.
 var NewSecurityGroupList = api_v1.NewSecurityGroupList

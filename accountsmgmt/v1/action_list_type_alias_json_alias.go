@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalActionList writes a list of values of the 'action' type to
-// the given writer.
 var MarshalActionList = api_v1.MarshalActionList
-
-// WriteActionList writes a list of value of the 'action' type to
-// the given stream.
 var WriteActionList = api_v1.WriteActionList
-
-// UnmarshalActionList reads a list of values of the 'action' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalActionList = api_v1.UnmarshalActionList
-
-// ReadActionList reads list of values of the ”action' type from
-// the given iterator.
 var ReadActionList = api_v1.ReadActionList

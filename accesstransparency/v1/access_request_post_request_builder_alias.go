@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accesstransparency/v1"
 )
 
-// AccessRequestPostRequestBuilder contains the data and logic needed to build 'access_request_post_request' objects.
-//
-// Representation of an access request post request.
 type AccessRequestPostRequestBuilder = api_v1.AccessRequestPostRequestBuilder
 
-// NewAccessRequestPostRequest creates a new builder of 'access_request_post_request' objects.
 var NewAccessRequestPostRequest = api_v1.NewAccessRequestPostRequest

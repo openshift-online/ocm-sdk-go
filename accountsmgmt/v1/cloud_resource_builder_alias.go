@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// CloudResourceBuilder contains the data and logic needed to build 'cloud_resource' objects.
 type CloudResourceBuilder = api_v1.CloudResourceBuilder
 
-// NewCloudResource creates a new builder of 'cloud_resource' objects.
 var NewCloudResource = api_v1.NewCloudResource

@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// ClusterUpgradeBuilder contains the data and logic needed to build 'cluster_upgrade' objects.
 type ClusterUpgradeBuilder = api_v1.ClusterUpgradeBuilder
 
-// NewClusterUpgrade creates a new builder of 'cluster_upgrade' objects.
 var NewClusterUpgrade = api_v1.NewClusterUpgrade

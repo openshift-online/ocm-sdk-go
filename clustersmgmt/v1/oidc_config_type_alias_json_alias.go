@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalOidcConfig writes a value of the 'oidc_config' type to the given writer.
 var MarshalOidcConfig = api_v1.MarshalOidcConfig
-
-// WriteOidcConfig writes a value of the 'oidc_config' type to the given stream.
 var WriteOidcConfig = api_v1.WriteOidcConfig
-
-// UnmarshalOidcConfig reads a value of the 'oidc_config' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalOidcConfig = api_v1.UnmarshalOidcConfig
-
-// ReadOidcConfig reads a value of the 'oidc_config' type from the given iterator.
 var ReadOidcConfig = api_v1.ReadOidcConfig

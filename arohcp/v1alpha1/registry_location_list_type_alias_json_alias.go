@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalRegistryLocationList writes a list of values of the 'registry_location' type to
-// the given writer.
 var MarshalRegistryLocationList = api_v1alpha1.MarshalRegistryLocationList
-
-// WriteRegistryLocationList writes a list of value of the 'registry_location' type to
-// the given stream.
 var WriteRegistryLocationList = api_v1alpha1.WriteRegistryLocationList
-
-// UnmarshalRegistryLocationList reads a list of values of the 'registry_location' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRegistryLocationList = api_v1alpha1.UnmarshalRegistryLocationList
-
-// ReadRegistryLocationList reads list of values of the ”registry_location' type from
-// the given iterator.
 var ReadRegistryLocationList = api_v1alpha1.ReadRegistryLocationList

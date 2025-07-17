@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalAWSNodePool writes a value of the 'AWS_node_pool' type to the given writer.
 var MarshalAWSNodePool = api_v1alpha1.MarshalAWSNodePool
-
-// WriteAWSNodePool writes a value of the 'AWS_node_pool' type to the given stream.
 var WriteAWSNodePool = api_v1alpha1.WriteAWSNodePool
-
-// UnmarshalAWSNodePool reads a value of the 'AWS_node_pool' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAWSNodePool = api_v1alpha1.UnmarshalAWSNodePool
-
-// ReadAWSNodePool reads a value of the 'AWS_node_pool' type from the given iterator.
 var ReadAWSNodePool = api_v1alpha1.ReadAWSNodePool

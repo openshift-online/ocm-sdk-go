@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// WifServiceAccountBuilder contains the data and logic needed to build 'wif_service_account' objects.
 type WifServiceAccountBuilder = api_v1.WifServiceAccountBuilder
 
-// NewWifServiceAccount creates a new builder of 'wif_service_account' objects.
 var NewWifServiceAccount = api_v1.NewWifServiceAccount

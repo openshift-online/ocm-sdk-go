@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// SubscriptionListBuilder contains the data and logic needed to build
-// 'subscription' objects.
 type SubscriptionListBuilder = api_v1.SubscriptionListBuilder
 
-// NewSubscriptionList creates a new builder of 'subscription' objects.
 var NewSubscriptionList = api_v1.NewSubscriptionList

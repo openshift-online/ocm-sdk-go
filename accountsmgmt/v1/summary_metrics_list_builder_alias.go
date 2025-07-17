@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// SummaryMetricsListBuilder contains the data and logic needed to build
-// 'summary_metrics' objects.
 type SummaryMetricsListBuilder = api_v1.SummaryMetricsListBuilder
 
-// NewSummaryMetricsList creates a new builder of 'summary_metrics' objects.
 var NewSummaryMetricsList = api_v1.NewSummaryMetricsList

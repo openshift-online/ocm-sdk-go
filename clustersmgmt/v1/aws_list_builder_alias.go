@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSListBuilder contains the data and logic needed to build
-// 'AWS' objects.
 type AWSListBuilder = api_v1.AWSListBuilder
 
-// NewAWSList creates a new builder of 'AWS' objects.
 var NewAWSList = api_v1.NewAWSList

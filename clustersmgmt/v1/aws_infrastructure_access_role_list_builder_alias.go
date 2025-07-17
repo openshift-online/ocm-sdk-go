@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSInfrastructureAccessRoleListBuilder contains the data and logic needed to build
-// 'AWS_infrastructure_access_role' objects.
 type AWSInfrastructureAccessRoleListBuilder = api_v1.AWSInfrastructureAccessRoleListBuilder
 
-// NewAWSInfrastructureAccessRoleList creates a new builder of 'AWS_infrastructure_access_role' objects.
 var NewAWSInfrastructureAccessRoleList = api_v1.NewAWSInfrastructureAccessRoleList

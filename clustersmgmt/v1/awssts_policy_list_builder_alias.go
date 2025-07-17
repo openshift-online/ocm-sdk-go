@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSSTSPolicyListBuilder contains the data and logic needed to build
-// 'AWSSTS_policy' objects.
 type AWSSTSPolicyListBuilder = api_v1.AWSSTSPolicyListBuilder
 
-// NewAWSSTSPolicyList creates a new builder of 'AWSSTS_policy' objects.
 var NewAWSSTSPolicyList = api_v1.NewAWSSTSPolicyList

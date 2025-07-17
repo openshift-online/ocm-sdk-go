@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalAccount writes a value of the 'account' type to the given writer.
 var MarshalAccount = api_v1.MarshalAccount
-
-// WriteAccount writes a value of the 'account' type to the given stream.
 var WriteAccount = api_v1.WriteAccount
-
-// UnmarshalAccount reads a value of the 'account' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAccount = api_v1.UnmarshalAccount
-
-// ReadAccount reads a value of the 'account' type from the given iterator.
 var ReadAccount = api_v1.ReadAccount

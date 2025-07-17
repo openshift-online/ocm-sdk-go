@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// CloudProviderListBuilder contains the data and logic needed to build
-// 'cloud_provider' objects.
 type CloudProviderListBuilder = api_v1alpha1.CloudProviderListBuilder
 
-// NewCloudProviderList creates a new builder of 'cloud_provider' objects.
 var NewCloudProviderList = api_v1alpha1.NewCloudProviderList

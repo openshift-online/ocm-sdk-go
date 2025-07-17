@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalScheduleTypeList writes a list of values of the 'schedule_type' type to
-// the given writer.
 var MarshalScheduleTypeList = api_v1.MarshalScheduleTypeList
-
-// WriteScheduleTypeList writes a list of value of the 'schedule_type' type to
-// the given stream.
 var WriteScheduleTypeList = api_v1.WriteScheduleTypeList
-
-// UnmarshalScheduleTypeList reads a list of values of the 'schedule_type' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalScheduleTypeList = api_v1.UnmarshalScheduleTypeList
-
-// ReadScheduleTypeList reads list of values of the ”schedule_type' type from
-// the given iterator.
 var ReadScheduleTypeList = api_v1.ReadScheduleTypeList

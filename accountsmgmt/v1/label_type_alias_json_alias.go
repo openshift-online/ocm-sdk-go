@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalLabel writes a value of the 'label' type to the given writer.
 var MarshalLabel = api_v1.MarshalLabel
-
-// WriteLabel writes a value of the 'label' type to the given stream.
 var WriteLabel = api_v1.WriteLabel
-
-// UnmarshalLabel reads a value of the 'label' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalLabel = api_v1.UnmarshalLabel
-
-// ReadLabel reads a value of the 'label' type from the given iterator.
 var ReadLabel = api_v1.ReadLabel

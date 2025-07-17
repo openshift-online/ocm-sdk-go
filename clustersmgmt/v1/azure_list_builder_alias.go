@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AzureListBuilder contains the data and logic needed to build
-// 'azure' objects.
 type AzureListBuilder = api_v1.AzureListBuilder
 
-// NewAzureList creates a new builder of 'azure' objects.
 var NewAzureList = api_v1.NewAzureList

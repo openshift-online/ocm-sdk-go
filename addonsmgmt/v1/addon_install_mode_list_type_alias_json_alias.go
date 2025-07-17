@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalAddonInstallModeList writes a list of values of the 'addon_install_mode' type to
-// the given writer.
 var MarshalAddonInstallModeList = api_v1.MarshalAddonInstallModeList
-
-// WriteAddonInstallModeList writes a list of value of the 'addon_install_mode' type to
-// the given stream.
 var WriteAddonInstallModeList = api_v1.WriteAddonInstallModeList
-
-// UnmarshalAddonInstallModeList reads a list of values of the 'addon_install_mode' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddonInstallModeList = api_v1.UnmarshalAddonInstallModeList
-
-// ReadAddonInstallModeList reads list of values of the ”addon_install_mode' type from
-// the given iterator.
 var ReadAddonInstallModeList = api_v1.ReadAddonInstallModeList

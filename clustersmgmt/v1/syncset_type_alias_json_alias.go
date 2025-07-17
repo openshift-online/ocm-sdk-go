@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalSyncset writes a value of the 'syncset' type to the given writer.
 var MarshalSyncset = api_v1.MarshalSyncset
-
-// WriteSyncset writes a value of the 'syncset' type to the given stream.
 var WriteSyncset = api_v1.WriteSyncset
-
-// UnmarshalSyncset reads a value of the 'syncset' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalSyncset = api_v1.UnmarshalSyncset
-
-// ReadSyncset reads a value of the 'syncset' type from the given iterator.
 var ReadSyncset = api_v1.ReadSyncset

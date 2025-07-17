@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalStorageQuota writes a value of the 'storage_quota' type to the given writer.
 var MarshalStorageQuota = api_v1.MarshalStorageQuota
-
-// WriteStorageQuota writes a value of the 'storage_quota' type to the given stream.
 var WriteStorageQuota = api_v1.WriteStorageQuota
-
-// UnmarshalStorageQuota reads a value of the 'storage_quota' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalStorageQuota = api_v1.UnmarshalStorageQuota
-
-// ReadStorageQuota reads a value of the 'storage_quota' type from the given iterator.
 var ReadStorageQuota = api_v1.ReadStorageQuota

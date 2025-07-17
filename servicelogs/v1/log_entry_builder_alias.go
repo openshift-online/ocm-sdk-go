@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicelogs/v1"
 )
 
-// LogEntryBuilder contains the data and logic needed to build 'log_entry' objects.
 type LogEntryBuilder = api_v1.LogEntryBuilder
 
-// NewLogEntry creates a new builder of 'log_entry' objects.
 var NewLogEntry = api_v1.NewLogEntry

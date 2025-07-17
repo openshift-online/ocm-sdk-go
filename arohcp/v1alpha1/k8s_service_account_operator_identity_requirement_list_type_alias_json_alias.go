@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalK8sServiceAccountOperatorIdentityRequirementList writes a list of values of the 'K8s_service_account_operator_identity_requirement' type to
-// the given writer.
 var MarshalK8sServiceAccountOperatorIdentityRequirementList = api_v1alpha1.MarshalK8sServiceAccountOperatorIdentityRequirementList
-
-// WriteK8sServiceAccountOperatorIdentityRequirementList writes a list of value of the 'K8s_service_account_operator_identity_requirement' type to
-// the given stream.
 var WriteK8sServiceAccountOperatorIdentityRequirementList = api_v1alpha1.WriteK8sServiceAccountOperatorIdentityRequirementList
-
-// UnmarshalK8sServiceAccountOperatorIdentityRequirementList reads a list of values of the 'K8s_service_account_operator_identity_requirement' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalK8sServiceAccountOperatorIdentityRequirementList = api_v1alpha1.UnmarshalK8sServiceAccountOperatorIdentityRequirementList
-
-// ReadK8sServiceAccountOperatorIdentityRequirementList reads list of values of the ”K8s_service_account_operator_identity_requirement' type from
-// the given iterator.
 var ReadK8sServiceAccountOperatorIdentityRequirementList = api_v1alpha1.ReadK8sServiceAccountOperatorIdentityRequirementList

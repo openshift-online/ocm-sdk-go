@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// DeletedSubscriptionBuilder contains the data and logic needed to build 'deleted_subscription' objects.
 type DeletedSubscriptionBuilder = api_v1.DeletedSubscriptionBuilder
 
-// NewDeletedSubscription creates a new builder of 'deleted_subscription' objects.
 var NewDeletedSubscription = api_v1.NewDeletedSubscription

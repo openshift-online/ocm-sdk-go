@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalInterfaceList writes a list of values of the 'interface' type to
-// the given writer.
 var MarshalInterfaceList = api_v1.MarshalInterfaceList
-
-// WriteInterfaceList writes a list of value of the 'interface' type to
-// the given stream.
 var WriteInterfaceList = api_v1.WriteInterfaceList
-
-// UnmarshalInterfaceList reads a list of values of the 'interface' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalInterfaceList = api_v1.UnmarshalInterfaceList
-
-// ReadInterfaceList reads list of values of the ”interface' type from
-// the given iterator.
 var ReadInterfaceList = api_v1.ReadInterfaceList

@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalGitlabIdentityProvider writes a value of the 'gitlab_identity_provider' type to the given writer.
 var MarshalGitlabIdentityProvider = api_v1.MarshalGitlabIdentityProvider
-
-// WriteGitlabIdentityProvider writes a value of the 'gitlab_identity_provider' type to the given stream.
 var WriteGitlabIdentityProvider = api_v1.WriteGitlabIdentityProvider
-
-// UnmarshalGitlabIdentityProvider reads a value of the 'gitlab_identity_provider' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalGitlabIdentityProvider = api_v1.UnmarshalGitlabIdentityProvider
-
-// ReadGitlabIdentityProvider reads a value of the 'gitlab_identity_provider' type from the given iterator.
 var ReadGitlabIdentityProvider = api_v1.ReadGitlabIdentityProvider

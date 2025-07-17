@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// WifSecretRefBuilder contains the data and logic needed to build 'wif_secret_ref' objects.
 type WifSecretRefBuilder = api_v1.WifSecretRefBuilder
 
-// NewWifSecretRef creates a new builder of 'wif_secret_ref' objects.
 var NewWifSecretRef = api_v1.NewWifSecretRef

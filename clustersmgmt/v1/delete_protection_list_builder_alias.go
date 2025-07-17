@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// DeleteProtectionListBuilder contains the data and logic needed to build
-// 'delete_protection' objects.
 type DeleteProtectionListBuilder = api_v1.DeleteProtectionListBuilder
 
-// NewDeleteProtectionList creates a new builder of 'delete_protection' objects.
 var NewDeleteProtectionList = api_v1.NewDeleteProtectionList

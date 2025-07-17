@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalProductTechnologyPreview writes a value of the 'product_technology_preview' type to the given writer.
 var MarshalProductTechnologyPreview = api_v1.MarshalProductTechnologyPreview
-
-// WriteProductTechnologyPreview writes a value of the 'product_technology_preview' type to the given stream.
 var WriteProductTechnologyPreview = api_v1.WriteProductTechnologyPreview
-
-// UnmarshalProductTechnologyPreview reads a value of the 'product_technology_preview' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalProductTechnologyPreview = api_v1.UnmarshalProductTechnologyPreview
-
-// ReadProductTechnologyPreview reads a value of the 'product_technology_preview' type from the given iterator.
 var ReadProductTechnologyPreview = api_v1.ReadProductTechnologyPreview

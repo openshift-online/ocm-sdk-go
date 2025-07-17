@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalSTSList writes a list of values of the 'STS' type to
-// the given writer.
 var MarshalSTSList = api_v1alpha1.MarshalSTSList
-
-// WriteSTSList writes a list of value of the 'STS' type to
-// the given stream.
 var WriteSTSList = api_v1alpha1.WriteSTSList
-
-// UnmarshalSTSList reads a list of values of the 'STS' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSTSList = api_v1alpha1.UnmarshalSTSList
-
-// ReadSTSList reads list of values of the ”STS' type from
-// the given iterator.
 var ReadSTSList = api_v1alpha1.ReadSTSList

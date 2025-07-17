@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAddOnSecretPropagation writes a value of the 'add_on_secret_propagation' type to the given writer.
 var MarshalAddOnSecretPropagation = api_v1.MarshalAddOnSecretPropagation
-
-// WriteAddOnSecretPropagation writes a value of the 'add_on_secret_propagation' type to the given stream.
 var WriteAddOnSecretPropagation = api_v1.WriteAddOnSecretPropagation
-
-// UnmarshalAddOnSecretPropagation reads a value of the 'add_on_secret_propagation' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddOnSecretPropagation = api_v1.UnmarshalAddOnSecretPropagation
-
-// ReadAddOnSecretPropagation reads a value of the 'add_on_secret_propagation' type from the given iterator.
 var ReadAddOnSecretPropagation = api_v1.ReadAddOnSecretPropagation

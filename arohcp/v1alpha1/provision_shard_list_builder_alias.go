@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ProvisionShardListBuilder contains the data and logic needed to build
-// 'provision_shard' objects.
 type ProvisionShardListBuilder = api_v1alpha1.ProvisionShardListBuilder
 
-// NewProvisionShardList creates a new builder of 'provision_shard' objects.
 var NewProvisionShardList = api_v1alpha1.NewProvisionShardList

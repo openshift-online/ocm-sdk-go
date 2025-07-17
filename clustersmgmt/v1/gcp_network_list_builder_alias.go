@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GCPNetworkListBuilder contains the data and logic needed to build
-// 'GCP_network' objects.
 type GCPNetworkListBuilder = api_v1.GCPNetworkListBuilder
 
-// NewGCPNetworkList creates a new builder of 'GCP_network' objects.
 var NewGCPNetworkList = api_v1.NewGCPNetworkList

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalSecurityGroupList writes a list of values of the 'security_group' type to
-// the given writer.
 var MarshalSecurityGroupList = api_v1.MarshalSecurityGroupList
-
-// WriteSecurityGroupList writes a list of value of the 'security_group' type to
-// the given stream.
 var WriteSecurityGroupList = api_v1.WriteSecurityGroupList
-
-// UnmarshalSecurityGroupList reads a list of values of the 'security_group' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSecurityGroupList = api_v1.UnmarshalSecurityGroupList
-
-// ReadSecurityGroupList reads list of values of the ”security_group' type from
-// the given iterator.
 var ReadSecurityGroupList = api_v1.ReadSecurityGroupList

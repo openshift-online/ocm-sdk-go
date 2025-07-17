@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// OidcConfigListBuilder contains the data and logic needed to build
-// 'oidc_config' objects.
 type OidcConfigListBuilder = api_v1alpha1.OidcConfigListBuilder
 
-// NewOidcConfigList creates a new builder of 'oidc_config' objects.
 var NewOidcConfigList = api_v1alpha1.NewOidcConfigList

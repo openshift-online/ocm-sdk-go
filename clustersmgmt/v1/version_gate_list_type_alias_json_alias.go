@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalVersionGateList writes a list of values of the 'version_gate' type to
-// the given writer.
 var MarshalVersionGateList = api_v1.MarshalVersionGateList
-
-// WriteVersionGateList writes a list of value of the 'version_gate' type to
-// the given stream.
 var WriteVersionGateList = api_v1.WriteVersionGateList
-
-// UnmarshalVersionGateList reads a list of values of the 'version_gate' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalVersionGateList = api_v1.UnmarshalVersionGateList
-
-// ReadVersionGateList reads list of values of the ”version_gate' type from
-// the given iterator.
 var ReadVersionGateList = api_v1.ReadVersionGateList

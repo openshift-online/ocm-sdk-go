@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalClusterLink writes a value of the 'cluster_link' type to the given writer.
 var MarshalClusterLink = api_v1.MarshalClusterLink
-
-// WriteClusterLink writes a value of the 'cluster_link' type to the given stream.
 var WriteClusterLink = api_v1.WriteClusterLink
-
-// UnmarshalClusterLink reads a value of the 'cluster_link' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalClusterLink = api_v1.UnmarshalClusterLink
-
-// ReadClusterLink reads a value of the 'cluster_link' type from the given iterator.
 var ReadClusterLink = api_v1.ReadClusterLink

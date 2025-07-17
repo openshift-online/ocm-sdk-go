@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// RegistryLocationListBuilder contains the data and logic needed to build
-// 'registry_location' objects.
 type RegistryLocationListBuilder = api_v1alpha1.RegistryLocationListBuilder
 
-// NewRegistryLocationList creates a new builder of 'registry_location' objects.
 var NewRegistryLocationList = api_v1alpha1.NewRegistryLocationList

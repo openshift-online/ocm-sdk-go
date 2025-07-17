@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// DefaultCapabilityListBuilder contains the data and logic needed to build
-// 'default_capability' objects.
 type DefaultCapabilityListBuilder = api_v1.DefaultCapabilityListBuilder
 
-// NewDefaultCapabilityList creates a new builder of 'default_capability' objects.
 var NewDefaultCapabilityList = api_v1.NewDefaultCapabilityList

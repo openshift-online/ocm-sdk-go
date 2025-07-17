@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// MarshalServiceList writes a list of values of the 'service' type to
-// the given writer.
 var MarshalServiceList = api_v1.MarshalServiceList
-
-// WriteServiceList writes a list of value of the 'service' type to
-// the given stream.
 var WriteServiceList = api_v1.WriteServiceList
-
-// UnmarshalServiceList reads a list of values of the 'service' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalServiceList = api_v1.UnmarshalServiceList
-
-// ReadServiceList reads list of values of the ”service' type from
-// the given iterator.
 var ReadServiceList = api_v1.ReadServiceList

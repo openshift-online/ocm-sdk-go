@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
-// MarshalVersionInquiryRequest writes a value of the 'version_inquiry_request' type to the given writer.
 var MarshalVersionInquiryRequest = api_v1.MarshalVersionInquiryRequest
-
-// WriteVersionInquiryRequest writes a value of the 'version_inquiry_request' type to the given stream.
 var WriteVersionInquiryRequest = api_v1.WriteVersionInquiryRequest
-
-// UnmarshalVersionInquiryRequest reads a value of the 'version_inquiry_request' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalVersionInquiryRequest = api_v1.UnmarshalVersionInquiryRequest
-
-// ReadVersionInquiryRequest reads a value of the 'version_inquiry_request' type from the given iterator.
 var ReadVersionInquiryRequest = api_v1.ReadVersionInquiryRequest

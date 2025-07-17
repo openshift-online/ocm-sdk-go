@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// MarshalFeatureReviewResponse writes a value of the 'feature_review_response' type to the given writer.
 var MarshalFeatureReviewResponse = api_v1.MarshalFeatureReviewResponse
-
-// WriteFeatureReviewResponse writes a value of the 'feature_review_response' type to the given stream.
 var WriteFeatureReviewResponse = api_v1.WriteFeatureReviewResponse
-
-// UnmarshalFeatureReviewResponse reads a value of the 'feature_review_response' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalFeatureReviewResponse = api_v1.UnmarshalFeatureReviewResponse
-
-// ReadFeatureReviewResponse reads a value of the 'feature_review_response' type from the given iterator.
 var ReadFeatureReviewResponse = api_v1.ReadFeatureReviewResponse

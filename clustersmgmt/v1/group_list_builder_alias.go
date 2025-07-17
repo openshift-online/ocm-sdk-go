@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GroupListBuilder contains the data and logic needed to build
-// 'group' objects.
 type GroupListBuilder = api_v1.GroupListBuilder
 
-// NewGroupList creates a new builder of 'group' objects.
 var NewGroupList = api_v1.NewGroupList

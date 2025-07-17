@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// NodesInfoListBuilder contains the data and logic needed to build
-// 'nodes_info' objects.
 type NodesInfoListBuilder = api_v1.NodesInfoListBuilder
 
-// NewNodesInfoList creates a new builder of 'nodes_info' objects.
 var NewNodesInfoList = api_v1.NewNodesInfoList

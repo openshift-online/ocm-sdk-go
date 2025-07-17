@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AWSVolumeListBuilder contains the data and logic needed to build
-// 'AWS_volume' objects.
 type AWSVolumeListBuilder = api_v1alpha1.AWSVolumeListBuilder
 
-// NewAWSVolumeList creates a new builder of 'AWS_volume' objects.
 var NewAWSVolumeList = api_v1alpha1.NewAWSVolumeList

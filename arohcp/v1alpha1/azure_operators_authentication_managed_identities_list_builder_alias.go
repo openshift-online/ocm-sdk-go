@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AzureOperatorsAuthenticationManagedIdentitiesListBuilder contains the data and logic needed to build
-// 'azure_operators_authentication_managed_identities' objects.
 type AzureOperatorsAuthenticationManagedIdentitiesListBuilder = api_v1alpha1.AzureOperatorsAuthenticationManagedIdentitiesListBuilder
 
-// NewAzureOperatorsAuthenticationManagedIdentitiesList creates a new builder of 'azure_operators_authentication_managed_identities' objects.
 var NewAzureOperatorsAuthenticationManagedIdentitiesList = api_v1alpha1.NewAzureOperatorsAuthenticationManagedIdentitiesList

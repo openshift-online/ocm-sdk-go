@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterCapabilitiesBuilder contains the data and logic needed to build 'cluster_capabilities' objects.
 type ClusterCapabilitiesBuilder = api_v1.ClusterCapabilitiesBuilder
 
-// NewClusterCapabilities creates a new builder of 'cluster_capabilities' objects.
 var NewClusterCapabilities = api_v1.NewClusterCapabilities

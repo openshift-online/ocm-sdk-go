@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalMetricsFederation writes a value of the 'metrics_federation' type to the given writer.
 var MarshalMetricsFederation = api_v1.MarshalMetricsFederation
-
-// WriteMetricsFederation writes a value of the 'metrics_federation' type to the given stream.
 var WriteMetricsFederation = api_v1.WriteMetricsFederation
-
-// UnmarshalMetricsFederation reads a value of the 'metrics_federation' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalMetricsFederation = api_v1.UnmarshalMetricsFederation
-
-// ReadMetricsFederation reads a value of the 'metrics_federation' type from the given iterator.
 var ReadMetricsFederation = api_v1.ReadMetricsFederation

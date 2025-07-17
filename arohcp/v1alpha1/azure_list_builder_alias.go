@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AzureListBuilder contains the data and logic needed to build
-// 'azure' objects.
 type AzureListBuilder = api_v1alpha1.AzureListBuilder
 
-// NewAzureList creates a new builder of 'azure' objects.
 var NewAzureList = api_v1alpha1.NewAzureList

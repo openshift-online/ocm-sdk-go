@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// GcpPrivateServiceConnectListBuilder contains the data and logic needed to build
-// 'gcp_private_service_connect' objects.
 type GcpPrivateServiceConnectListBuilder = api_v1alpha1.GcpPrivateServiceConnectListBuilder
 
-// NewGcpPrivateServiceConnectList creates a new builder of 'gcp_private_service_connect' objects.
 var NewGcpPrivateServiceConnectList = api_v1alpha1.NewGcpPrivateServiceConnectList

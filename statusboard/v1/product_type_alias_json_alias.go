@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// MarshalProduct writes a value of the 'product' type to the given writer.
 var MarshalProduct = api_v1.MarshalProduct
-
-// WriteProduct writes a value of the 'product' type to the given stream.
 var WriteProduct = api_v1.WriteProduct
-
-// UnmarshalProduct reads a value of the 'product' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalProduct = api_v1.UnmarshalProduct
-
-// ReadProduct reads a value of the 'product' type from the given iterator.
 var ReadProduct = api_v1.ReadProduct

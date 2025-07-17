@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// ErrorListBuilder contains the data and logic needed to build
-// 'error' objects.
 type ErrorListBuilder = api_v1.ErrorListBuilder
 
-// NewErrorList creates a new builder of 'error' objects.
 var NewErrorList = api_v1.NewErrorList

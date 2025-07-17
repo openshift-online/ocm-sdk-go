@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MonitoringStackBuilder contains the data and logic needed to build 'monitoring_stack' objects.
-//
-// Representation of Monitoring Stack
 type MonitoringStackBuilder = api_v1.MonitoringStackBuilder
 
-// NewMonitoringStack creates a new builder of 'monitoring_stack' objects.
 var NewMonitoringStack = api_v1.NewMonitoringStack

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// MarshalErrorList writes a list of values of the 'error' type to
-// the given writer.
 var MarshalErrorList = api_v1.MarshalErrorList
-
-// WriteErrorList writes a list of value of the 'error' type to
-// the given stream.
 var WriteErrorList = api_v1.WriteErrorList
-
-// UnmarshalErrorList reads a list of values of the 'error' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalErrorList = api_v1.UnmarshalErrorList
-
-// ReadErrorList reads list of values of the ”error' type from
-// the given iterator.
 var ReadErrorList = api_v1.ReadErrorList

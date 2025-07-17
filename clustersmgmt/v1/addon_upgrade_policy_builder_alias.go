@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AddonUpgradePolicyBuilder contains the data and logic needed to build 'addon_upgrade_policy' objects.
-//
-// Representation of an upgrade policy that can be set for a cluster.
 type AddonUpgradePolicyBuilder = api_v1.AddonUpgradePolicyBuilder
 
-// NewAddonUpgradePolicy creates a new builder of 'addon_upgrade_policy' objects.
 var NewAddonUpgradePolicy = api_v1.NewAddonUpgradePolicy

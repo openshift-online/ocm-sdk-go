@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// SummaryDashboardBuilder contains the data and logic needed to build 'summary_dashboard' objects.
 type SummaryDashboardBuilder = api_v1.SummaryDashboardBuilder
 
-// NewSummaryDashboard creates a new builder of 'summary_dashboard' objects.
 var NewSummaryDashboard = api_v1.NewSummaryDashboard

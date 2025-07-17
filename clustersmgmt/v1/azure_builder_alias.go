@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AzureBuilder contains the data and logic needed to build 'azure' objects.
-//
-// Microsoft Azure settings of a cluster.
 type AzureBuilder = api_v1.AzureBuilder
 
-// NewAzure creates a new builder of 'azure' objects.
 var NewAzure = api_v1.NewAzure

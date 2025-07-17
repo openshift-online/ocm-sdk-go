@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ClusterConsoleBuilder contains the data and logic needed to build 'cluster_console' objects.
-//
-// Information about the console of a cluster.
 type ClusterConsoleBuilder = api_v1alpha1.ClusterConsoleBuilder
 
-// NewClusterConsole creates a new builder of 'cluster_console' objects.
 var NewClusterConsole = api_v1alpha1.NewClusterConsole

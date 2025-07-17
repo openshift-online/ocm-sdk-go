@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalEnvironmentList writes a list of values of the 'environment' type to
-// the given writer.
 var MarshalEnvironmentList = api_v1.MarshalEnvironmentList
-
-// WriteEnvironmentList writes a list of value of the 'environment' type to
-// the given stream.
 var WriteEnvironmentList = api_v1.WriteEnvironmentList
-
-// UnmarshalEnvironmentList reads a list of values of the 'environment' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalEnvironmentList = api_v1.UnmarshalEnvironmentList
-
-// ReadEnvironmentList reads list of values of the ”environment' type from
-// the given iterator.
 var ReadEnvironmentList = api_v1.ReadEnvironmentList

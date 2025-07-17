@@ -23,12 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// RegistrySourcesBuilder contains the data and logic needed to build 'registry_sources' objects.
-//
-// RegistrySources contains configuration that determines how the container runtime should treat individual
-// registries when accessing images for builds and pods. For instance, whether or not to allow insecure access.
-// It does not contain configuration for the internal cluster registry.
 type RegistrySourcesBuilder = api_v1.RegistrySourcesBuilder
 
-// NewRegistrySources creates a new builder of 'registry_sources' objects.
 var NewRegistrySources = api_v1.NewRegistrySources

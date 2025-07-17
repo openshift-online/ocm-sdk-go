@@ -23,26 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterRegistryConfigBuilder contains the data and logic needed to build 'cluster_registry_config' objects.
-//
-// ClusterRegistryConfig describes the configuration of registries for the cluster.
-// Its format reflects the OpenShift Image Configuration, for which docs are available on
-// [docs.openshift.com](https://docs.openshift.com/container-platform/4.16/openshift_images/image-configuration.html)
-// ```json
-//
-//	{
-//	   "registry_config": {
-//	     "registry_sources": {
-//	       "blocked_registries": [
-//	         "badregistry.io",
-//	         "badregistry8.io"
-//	       ]
-//	     }
-//	   }
-//	}
-//
-// ```
 type ClusterRegistryConfigBuilder = api_v1.ClusterRegistryConfigBuilder
 
-// NewClusterRegistryConfig creates a new builder of 'cluster_registry_config' objects.
 var NewClusterRegistryConfig = api_v1.NewClusterRegistryConfig

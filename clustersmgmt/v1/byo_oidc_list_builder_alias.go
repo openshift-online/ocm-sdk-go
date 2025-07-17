@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ByoOidcListBuilder contains the data and logic needed to build
-// 'byo_oidc' objects.
 type ByoOidcListBuilder = api_v1.ByoOidcListBuilder
 
-// NewByoOidcList creates a new builder of 'byo_oidc' objects.
 var NewByoOidcList = api_v1.NewByoOidcList

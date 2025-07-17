@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// RootVolumeListBuilder contains the data and logic needed to build
-// 'root_volume' objects.
 type RootVolumeListBuilder = api_v1alpha1.RootVolumeListBuilder
 
-// NewRootVolumeList creates a new builder of 'root_volume' objects.
 var NewRootVolumeList = api_v1alpha1.NewRootVolumeList

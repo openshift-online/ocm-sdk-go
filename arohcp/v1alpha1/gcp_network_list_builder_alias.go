@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// GCPNetworkListBuilder contains the data and logic needed to build
-// 'GCP_network' objects.
 type GCPNetworkListBuilder = api_v1alpha1.GCPNetworkListBuilder
 
-// NewGCPNetworkList creates a new builder of 'GCP_network' objects.
 var NewGCPNetworkList = api_v1alpha1.NewGCPNetworkList

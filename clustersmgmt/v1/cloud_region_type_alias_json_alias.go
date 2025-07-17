@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalCloudRegion writes a value of the 'cloud_region' type to the given writer.
 var MarshalCloudRegion = api_v1.MarshalCloudRegion
-
-// WriteCloudRegion writes a value of the 'cloud_region' type to the given stream.
 var WriteCloudRegion = api_v1.WriteCloudRegion
-
-// UnmarshalCloudRegion reads a value of the 'cloud_region' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCloudRegion = api_v1.UnmarshalCloudRegion
-
-// ReadCloudRegion reads a value of the 'cloud_region' type from the given iterator.
 var ReadCloudRegion = api_v1.ReadCloudRegion

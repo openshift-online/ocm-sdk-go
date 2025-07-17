@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AddOnNamespaceListBuilder contains the data and logic needed to build
-// 'add_on_namespace' objects.
 type AddOnNamespaceListBuilder = api_v1.AddOnNamespaceListBuilder
 
-// NewAddOnNamespaceList creates a new builder of 'add_on_namespace' objects.
 var NewAddOnNamespaceList = api_v1.NewAddOnNamespaceList

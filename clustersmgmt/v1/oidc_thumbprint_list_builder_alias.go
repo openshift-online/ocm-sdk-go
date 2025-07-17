@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// OidcThumbprintListBuilder contains the data and logic needed to build
-// 'oidc_thumbprint' objects.
 type OidcThumbprintListBuilder = api_v1.OidcThumbprintListBuilder
 
-// NewOidcThumbprintList creates a new builder of 'oidc_thumbprint' objects.
 var NewOidcThumbprintList = api_v1.NewOidcThumbprintList

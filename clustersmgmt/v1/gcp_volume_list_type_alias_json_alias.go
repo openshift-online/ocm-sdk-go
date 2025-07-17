@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalGCPVolumeList writes a list of values of the 'GCP_volume' type to
-// the given writer.
 var MarshalGCPVolumeList = api_v1.MarshalGCPVolumeList
-
-// WriteGCPVolumeList writes a list of value of the 'GCP_volume' type to
-// the given stream.
 var WriteGCPVolumeList = api_v1.WriteGCPVolumeList
-
-// UnmarshalGCPVolumeList reads a list of values of the 'GCP_volume' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalGCPVolumeList = api_v1.UnmarshalGCPVolumeList
-
-// ReadGCPVolumeList reads list of values of the ”GCP_volume' type from
-// the given iterator.
 var ReadGCPVolumeList = api_v1.ReadGCPVolumeList

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GithubIdentityProviderBuilder contains the data and logic needed to build 'github_identity_provider' objects.
-//
-// Details for `github` identity providers.
 type GithubIdentityProviderBuilder = api_v1.GithubIdentityProviderBuilder
 
-// NewGithubIdentityProvider creates a new builder of 'github_identity_provider' objects.
 var NewGithubIdentityProvider = api_v1.NewGithubIdentityProvider

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ComponentRouteBuilder contains the data and logic needed to build 'component_route' objects.
-//
-// Representation of a Component Route.
 type ComponentRouteBuilder = api_v1.ComponentRouteBuilder
 
-// NewComponentRoute creates a new builder of 'component_route' objects.
 var NewComponentRoute = api_v1.NewComponentRoute

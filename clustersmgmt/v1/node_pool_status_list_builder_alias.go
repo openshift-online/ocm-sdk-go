@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// NodePoolStatusListBuilder contains the data and logic needed to build
-// 'node_pool_status' objects.
 type NodePoolStatusListBuilder = api_v1.NodePoolStatusListBuilder
 
-// NewNodePoolStatusList creates a new builder of 'node_pool_status' objects.
 var NewNodePoolStatusList = api_v1.NewNodePoolStatusList

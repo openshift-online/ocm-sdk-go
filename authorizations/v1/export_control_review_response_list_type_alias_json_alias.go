@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// MarshalExportControlReviewResponseList writes a list of values of the 'export_control_review_response' type to
-// the given writer.
 var MarshalExportControlReviewResponseList = api_v1.MarshalExportControlReviewResponseList
-
-// WriteExportControlReviewResponseList writes a list of value of the 'export_control_review_response' type to
-// the given stream.
 var WriteExportControlReviewResponseList = api_v1.WriteExportControlReviewResponseList
-
-// UnmarshalExportControlReviewResponseList reads a list of values of the 'export_control_review_response' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalExportControlReviewResponseList = api_v1.UnmarshalExportControlReviewResponseList
-
-// ReadExportControlReviewResponseList reads list of values of the ”export_control_review_response' type from
-// the given iterator.
 var ReadExportControlReviewResponseList = api_v1.ReadExportControlReviewResponseList

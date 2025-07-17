@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalQuotaAuthorizationRequestList writes a list of values of the 'quota_authorization_request' type to
-// the given writer.
 var MarshalQuotaAuthorizationRequestList = api_v1.MarshalQuotaAuthorizationRequestList
-
-// WriteQuotaAuthorizationRequestList writes a list of value of the 'quota_authorization_request' type to
-// the given stream.
 var WriteQuotaAuthorizationRequestList = api_v1.WriteQuotaAuthorizationRequestList
-
-// UnmarshalQuotaAuthorizationRequestList reads a list of values of the 'quota_authorization_request' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalQuotaAuthorizationRequestList = api_v1.UnmarshalQuotaAuthorizationRequestList
-
-// ReadQuotaAuthorizationRequestList reads list of values of the ”quota_authorization_request' type from
-// the given iterator.
 var ReadQuotaAuthorizationRequestList = api_v1.ReadQuotaAuthorizationRequestList

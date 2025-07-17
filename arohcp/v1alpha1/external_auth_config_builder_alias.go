@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ExternalAuthConfigBuilder contains the data and logic needed to build 'external_auth_config' objects.
-//
-// Represents an external authentication configuration
 type ExternalAuthConfigBuilder = api_v1alpha1.ExternalAuthConfigBuilder
 
-// NewExternalAuthConfig creates a new builder of 'external_auth_config' objects.
 var NewExternalAuthConfig = api_v1alpha1.NewExternalAuthConfig

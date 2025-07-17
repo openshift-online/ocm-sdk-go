@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// UserBuilder contains the data and logic needed to build 'user' objects.
-//
-// Definition of a Web RCA user.
 type UserBuilder = api_v1.UserBuilder
 
-// NewUser creates a new builder of 'user' objects.
 var NewUser = api_v1.NewUser

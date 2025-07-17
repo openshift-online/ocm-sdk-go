@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAzureNodesOutboundConnectivity writes a value of the 'azure_nodes_outbound_connectivity' type to the given writer.
 var MarshalAzureNodesOutboundConnectivity = api_v1.MarshalAzureNodesOutboundConnectivity
-
-// WriteAzureNodesOutboundConnectivity writes a value of the 'azure_nodes_outbound_connectivity' type to the given stream.
 var WriteAzureNodesOutboundConnectivity = api_v1.WriteAzureNodesOutboundConnectivity
-
-// UnmarshalAzureNodesOutboundConnectivity reads a value of the 'azure_nodes_outbound_connectivity' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAzureNodesOutboundConnectivity = api_v1.UnmarshalAzureNodesOutboundConnectivity
-
-// ReadAzureNodesOutboundConnectivity reads a value of the 'azure_nodes_outbound_connectivity' type from the given iterator.
 var ReadAzureNodesOutboundConnectivity = api_v1.ReadAzureNodesOutboundConnectivity

@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// AddonEnvironmentVariableListBuilder contains the data and logic needed to build
-// 'addon_environment_variable' objects.
 type AddonEnvironmentVariableListBuilder = api_v1.AddonEnvironmentVariableListBuilder
 
-// NewAddonEnvironmentVariableList creates a new builder of 'addon_environment_variable' objects.
 var NewAddonEnvironmentVariableList = api_v1.NewAddonEnvironmentVariableList

@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AWSVolumeBuilder contains the data and logic needed to build 'AWS_volume' objects.
-//
-// Holds settings for an AWS storage volume.
 type AWSVolumeBuilder = api_v1alpha1.AWSVolumeBuilder
 
-// NewAWSVolume creates a new builder of 'AWS_volume' objects.
 var NewAWSVolume = api_v1alpha1.NewAWSVolume

@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ExternalConfigurationBuilder contains the data and logic needed to build 'external_configuration' objects.
-//
-// Representation of cluster external configuration.
 type ExternalConfigurationBuilder = api_v1alpha1.ExternalConfigurationBuilder
 
-// NewExternalConfiguration creates a new builder of 'external_configuration' objects.
 var NewExternalConfiguration = api_v1alpha1.NewExternalConfiguration

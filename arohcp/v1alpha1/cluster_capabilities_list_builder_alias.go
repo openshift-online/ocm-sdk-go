@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ClusterCapabilitiesListBuilder contains the data and logic needed to build
-// 'cluster_capabilities' objects.
 type ClusterCapabilitiesListBuilder = api_v1alpha1.ClusterCapabilitiesListBuilder
 
-// NewClusterCapabilitiesList creates a new builder of 'cluster_capabilities' objects.
 var NewClusterCapabilitiesList = api_v1alpha1.NewClusterCapabilitiesList

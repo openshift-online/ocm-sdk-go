@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// DeleteProtectionListBuilder contains the data and logic needed to build
-// 'delete_protection' objects.
 type DeleteProtectionListBuilder = api_v1alpha1.DeleteProtectionListBuilder
 
-// NewDeleteProtectionList creates a new builder of 'delete_protection' objects.
 var NewDeleteProtectionList = api_v1alpha1.NewDeleteProtectionList

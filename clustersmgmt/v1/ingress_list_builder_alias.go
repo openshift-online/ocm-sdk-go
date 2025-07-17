@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// IngressListBuilder contains the data and logic needed to build
-// 'ingress' objects.
 type IngressListBuilder = api_v1.IngressListBuilder
 
-// NewIngressList creates a new builder of 'ingress' objects.
 var NewIngressList = api_v1.NewIngressList

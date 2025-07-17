@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalProvisionShardTopologyList writes a list of values of the 'provision_shard_topology' type to
-// the given writer.
 var MarshalProvisionShardTopologyList = api_v1.MarshalProvisionShardTopologyList
-
-// WriteProvisionShardTopologyList writes a list of value of the 'provision_shard_topology' type to
-// the given stream.
 var WriteProvisionShardTopologyList = api_v1.WriteProvisionShardTopologyList
-
-// UnmarshalProvisionShardTopologyList reads a list of values of the 'provision_shard_topology' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalProvisionShardTopologyList = api_v1.UnmarshalProvisionShardTopologyList
-
-// ReadProvisionShardTopologyList reads list of values of the ”provision_shard_topology' type from
-// the given iterator.
 var ReadProvisionShardTopologyList = api_v1.ReadProvisionShardTopologyList

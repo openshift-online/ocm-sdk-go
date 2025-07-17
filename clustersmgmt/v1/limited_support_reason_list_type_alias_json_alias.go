@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalLimitedSupportReasonList writes a list of values of the 'limited_support_reason' type to
-// the given writer.
 var MarshalLimitedSupportReasonList = api_v1.MarshalLimitedSupportReasonList
-
-// WriteLimitedSupportReasonList writes a list of value of the 'limited_support_reason' type to
-// the given stream.
 var WriteLimitedSupportReasonList = api_v1.WriteLimitedSupportReasonList
-
-// UnmarshalLimitedSupportReasonList reads a list of values of the 'limited_support_reason' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalLimitedSupportReasonList = api_v1.UnmarshalLimitedSupportReasonList
-
-// ReadLimitedSupportReasonList reads list of values of the ”limited_support_reason' type from
-// the given iterator.
 var ReadLimitedSupportReasonList = api_v1.ReadLimitedSupportReasonList

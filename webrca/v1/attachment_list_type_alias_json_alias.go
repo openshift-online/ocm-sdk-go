@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// MarshalAttachmentList writes a list of values of the 'attachment' type to
-// the given writer.
 var MarshalAttachmentList = api_v1.MarshalAttachmentList
-
-// WriteAttachmentList writes a list of value of the 'attachment' type to
-// the given stream.
 var WriteAttachmentList = api_v1.WriteAttachmentList
-
-// UnmarshalAttachmentList reads a list of values of the 'attachment' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAttachmentList = api_v1.UnmarshalAttachmentList
-
-// ReadAttachmentList reads list of values of the ”attachment' type from
-// the given iterator.
 var ReadAttachmentList = api_v1.ReadAttachmentList

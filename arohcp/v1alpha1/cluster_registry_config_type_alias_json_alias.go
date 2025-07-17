@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalClusterRegistryConfig writes a value of the 'cluster_registry_config' type to the given writer.
 var MarshalClusterRegistryConfig = api_v1alpha1.MarshalClusterRegistryConfig
-
-// WriteClusterRegistryConfig writes a value of the 'cluster_registry_config' type to the given stream.
 var WriteClusterRegistryConfig = api_v1alpha1.WriteClusterRegistryConfig
-
-// UnmarshalClusterRegistryConfig reads a value of the 'cluster_registry_config' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalClusterRegistryConfig = api_v1alpha1.UnmarshalClusterRegistryConfig
-
-// ReadClusterRegistryConfig reads a value of the 'cluster_registry_config' type from the given iterator.
 var ReadClusterRegistryConfig = api_v1alpha1.ReadClusterRegistryConfig

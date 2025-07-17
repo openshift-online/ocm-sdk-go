@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalRoleBindingList writes a list of values of the 'role_binding' type to
-// the given writer.
 var MarshalRoleBindingList = api_v1.MarshalRoleBindingList
-
-// WriteRoleBindingList writes a list of value of the 'role_binding' type to
-// the given stream.
 var WriteRoleBindingList = api_v1.WriteRoleBindingList
-
-// UnmarshalRoleBindingList reads a list of values of the 'role_binding' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalRoleBindingList = api_v1.UnmarshalRoleBindingList
-
-// ReadRoleBindingList reads list of values of the ”role_binding' type from
-// the given iterator.
 var ReadRoleBindingList = api_v1.ReadRoleBindingList

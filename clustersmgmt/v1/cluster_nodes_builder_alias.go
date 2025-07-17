@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterNodesBuilder contains the data and logic needed to build 'cluster_nodes' objects.
-//
-// Counts of different classes of nodes inside a cluster.
 type ClusterNodesBuilder = api_v1.ClusterNodesBuilder
 
-// NewClusterNodes creates a new builder of 'cluster_nodes' objects.
 var NewClusterNodes = api_v1.NewClusterNodes

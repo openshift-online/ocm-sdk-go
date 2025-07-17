@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// RegistryAllowlistListBuilder contains the data and logic needed to build
-// 'registry_allowlist' objects.
 type RegistryAllowlistListBuilder = api_v1.RegistryAllowlistListBuilder
 
-// NewRegistryAllowlistList creates a new builder of 'registry_allowlist' objects.
 var NewRegistryAllowlistList = api_v1.NewRegistryAllowlistList

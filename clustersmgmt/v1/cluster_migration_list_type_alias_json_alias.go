@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalClusterMigrationList writes a list of values of the 'cluster_migration' type to
-// the given writer.
 var MarshalClusterMigrationList = api_v1.MarshalClusterMigrationList
-
-// WriteClusterMigrationList writes a list of value of the 'cluster_migration' type to
-// the given stream.
 var WriteClusterMigrationList = api_v1.WriteClusterMigrationList
-
-// UnmarshalClusterMigrationList reads a list of values of the 'cluster_migration' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterMigrationList = api_v1.UnmarshalClusterMigrationList
-
-// ReadClusterMigrationList reads list of values of the ”cluster_migration' type from
-// the given iterator.
 var ReadClusterMigrationList = api_v1.ReadClusterMigrationList

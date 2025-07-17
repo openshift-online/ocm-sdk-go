@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAzureControlPlaneManagedIdentityList writes a list of values of the 'azure_control_plane_managed_identity' type to
-// the given writer.
 var MarshalAzureControlPlaneManagedIdentityList = api_v1.MarshalAzureControlPlaneManagedIdentityList
-
-// WriteAzureControlPlaneManagedIdentityList writes a list of value of the 'azure_control_plane_managed_identity' type to
-// the given stream.
 var WriteAzureControlPlaneManagedIdentityList = api_v1.WriteAzureControlPlaneManagedIdentityList
-
-// UnmarshalAzureControlPlaneManagedIdentityList reads a list of values of the 'azure_control_plane_managed_identity' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAzureControlPlaneManagedIdentityList = api_v1.UnmarshalAzureControlPlaneManagedIdentityList
-
-// ReadAzureControlPlaneManagedIdentityList reads list of values of the ”azure_control_plane_managed_identity' type from
-// the given iterator.
 var ReadAzureControlPlaneManagedIdentityList = api_v1.ReadAzureControlPlaneManagedIdentityList

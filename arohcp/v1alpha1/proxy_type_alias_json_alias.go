@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalProxy writes a value of the 'proxy' type to the given writer.
 var MarshalProxy = api_v1alpha1.MarshalProxy
-
-// WriteProxy writes a value of the 'proxy' type to the given stream.
 var WriteProxy = api_v1alpha1.WriteProxy
-
-// UnmarshalProxy reads a value of the 'proxy' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalProxy = api_v1alpha1.UnmarshalProxy
-
-// ReadProxy reads a value of the 'proxy' type from the given iterator.
 var ReadProxy = api_v1alpha1.ReadProxy

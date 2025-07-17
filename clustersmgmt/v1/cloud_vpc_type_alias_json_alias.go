@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalCloudVPC writes a value of the 'cloud_VPC' type to the given writer.
 var MarshalCloudVPC = api_v1.MarshalCloudVPC
-
-// WriteCloudVPC writes a value of the 'cloud_VPC' type to the given stream.
 var WriteCloudVPC = api_v1.WriteCloudVPC
-
-// UnmarshalCloudVPC reads a value of the 'cloud_VPC' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCloudVPC = api_v1.UnmarshalCloudVPC
-
-// ReadCloudVPC reads a value of the 'cloud_VPC' type from the given iterator.
 var ReadCloudVPC = api_v1.ReadCloudVPC

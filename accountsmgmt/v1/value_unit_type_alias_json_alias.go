@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalValueUnit writes a value of the 'value_unit' type to the given writer.
 var MarshalValueUnit = api_v1.MarshalValueUnit
-
-// WriteValueUnit writes a value of the 'value_unit' type to the given stream.
 var WriteValueUnit = api_v1.WriteValueUnit
-
-// UnmarshalValueUnit reads a value of the 'value_unit' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalValueUnit = api_v1.UnmarshalValueUnit
-
-// ReadValueUnit reads a value of the 'value_unit' type from the given iterator.
 var ReadValueUnit = api_v1.ReadValueUnit

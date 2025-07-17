@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// ServiceBuilder contains the data and logic needed to build 'service' objects.
-//
-// Definition of a Status Board Service.
 type ServiceBuilder = api_v1.ServiceBuilder
 
-// NewService creates a new builder of 'service' objects.
 var NewService = api_v1.NewService

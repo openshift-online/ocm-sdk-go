@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// CPUTotalNodeRoleOSMetricNodeBuilder contains the data and logic needed to build 'CPU_total_node_role_OS_metric_node' objects.
-//
-// Representation of information from telemetry about a the CPU capacity by node role and OS.
 type CPUTotalNodeRoleOSMetricNodeBuilder = api_v1.CPUTotalNodeRoleOSMetricNodeBuilder
 
-// NewCPUTotalNodeRoleOSMetricNode creates a new builder of 'CPU_total_node_role_OS_metric_node' objects.
 var NewCPUTotalNodeRoleOSMetricNode = api_v1.NewCPUTotalNodeRoleOSMetricNode

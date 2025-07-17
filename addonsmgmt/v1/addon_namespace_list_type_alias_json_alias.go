@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalAddonNamespaceList writes a list of values of the 'addon_namespace' type to
-// the given writer.
 var MarshalAddonNamespaceList = api_v1.MarshalAddonNamespaceList
-
-// WriteAddonNamespaceList writes a list of value of the 'addon_namespace' type to
-// the given stream.
 var WriteAddonNamespaceList = api_v1.WriteAddonNamespaceList
-
-// UnmarshalAddonNamespaceList reads a list of values of the 'addon_namespace' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddonNamespaceList = api_v1.UnmarshalAddonNamespaceList
-
-// ReadAddonNamespaceList reads list of values of the ”addon_namespace' type from
-// the given iterator.
 var ReadAddonNamespaceList = api_v1.ReadAddonNamespaceList

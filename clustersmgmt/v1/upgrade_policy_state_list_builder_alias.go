@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// UpgradePolicyStateListBuilder contains the data and logic needed to build
-// 'upgrade_policy_state' objects.
 type UpgradePolicyStateListBuilder = api_v1.UpgradePolicyStateListBuilder
 
-// NewUpgradePolicyStateList creates a new builder of 'upgrade_policy_state' objects.
 var NewUpgradePolicyStateList = api_v1.NewUpgradePolicyStateList

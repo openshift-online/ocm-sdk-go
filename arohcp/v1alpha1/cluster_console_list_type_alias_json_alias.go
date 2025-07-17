@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalClusterConsoleList writes a list of values of the 'cluster_console' type to
-// the given writer.
 var MarshalClusterConsoleList = api_v1alpha1.MarshalClusterConsoleList
-
-// WriteClusterConsoleList writes a list of value of the 'cluster_console' type to
-// the given stream.
 var WriteClusterConsoleList = api_v1alpha1.WriteClusterConsoleList
-
-// UnmarshalClusterConsoleList reads a list of values of the 'cluster_console' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterConsoleList = api_v1alpha1.UnmarshalClusterConsoleList
-
-// ReadClusterConsoleList reads list of values of the ”cluster_console' type from
-// the given iterator.
 var ReadClusterConsoleList = api_v1alpha1.ReadClusterConsoleList

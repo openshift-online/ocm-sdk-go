@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// QuotaCostBuilder contains the data and logic needed to build 'quota_cost' objects.
 type QuotaCostBuilder = api_v1.QuotaCostBuilder
 
-// NewQuotaCost creates a new builder of 'quota_cost' objects.
 var NewQuotaCost = api_v1.NewQuotaCost

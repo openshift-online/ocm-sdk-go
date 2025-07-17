@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// ClusterManagementReferenceBuilder contains the data and logic needed to build 'cluster_management_reference' objects.
-//
-// Cluster Mgmt reference settings of the cluster.
 type ClusterManagementReferenceBuilder = api_v1.ClusterManagementReferenceBuilder
 
-// NewClusterManagementReference creates a new builder of 'cluster_management_reference' objects.
 var NewClusterManagementReference = api_v1.NewClusterManagementReference

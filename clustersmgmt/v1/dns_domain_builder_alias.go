@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// DNSDomainBuilder contains the data and logic needed to build 'DNS_domain' objects.
-//
-// Contains the properties of a DNS domain.
 type DNSDomainBuilder = api_v1.DNSDomainBuilder
 
-// NewDNSDomain creates a new builder of 'DNS_domain' objects.
 var NewDNSDomain = api_v1.NewDNSDomain

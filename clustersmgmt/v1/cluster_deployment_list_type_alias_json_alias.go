@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalClusterDeploymentList writes a list of values of the 'cluster_deployment' type to
-// the given writer.
 var MarshalClusterDeploymentList = api_v1.MarshalClusterDeploymentList
-
-// WriteClusterDeploymentList writes a list of value of the 'cluster_deployment' type to
-// the given stream.
 var WriteClusterDeploymentList = api_v1.WriteClusterDeploymentList
-
-// UnmarshalClusterDeploymentList reads a list of values of the 'cluster_deployment' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterDeploymentList = api_v1.UnmarshalClusterDeploymentList
-
-// ReadClusterDeploymentList reads list of values of the ”cluster_deployment' type from
-// the given iterator.
 var ReadClusterDeploymentList = api_v1.ReadClusterDeploymentList

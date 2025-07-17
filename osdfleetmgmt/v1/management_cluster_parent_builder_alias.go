@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// ManagementClusterParentBuilder contains the data and logic needed to build 'management_cluster_parent' objects.
-//
-// ManagementClusterParent reference settings of the cluster.
 type ManagementClusterParentBuilder = api_v1.ManagementClusterParentBuilder
 
-// NewManagementClusterParent creates a new builder of 'management_cluster_parent' objects.
 var NewManagementClusterParent = api_v1.NewManagementClusterParent

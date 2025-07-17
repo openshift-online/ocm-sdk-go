@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// ClusterMetricsNodesBuilder contains the data and logic needed to build 'cluster_metrics_nodes' objects.
 type ClusterMetricsNodesBuilder = api_v1.ClusterMetricsNodesBuilder
 
-// NewClusterMetricsNodes creates a new builder of 'cluster_metrics_nodes' objects.
 var NewClusterMetricsNodes = api_v1.NewClusterMetricsNodes

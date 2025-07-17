@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AzureControlPlaneManagedIdentityListBuilder contains the data and logic needed to build
-// 'azure_control_plane_managed_identity' objects.
 type AzureControlPlaneManagedIdentityListBuilder = api_v1.AzureControlPlaneManagedIdentityListBuilder
 
-// NewAzureControlPlaneManagedIdentityList creates a new builder of 'azure_control_plane_managed_identity' objects.
 var NewAzureControlPlaneManagedIdentityList = api_v1.NewAzureControlPlaneManagedIdentityList

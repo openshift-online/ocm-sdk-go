@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAzureNodePoolEncryptionAtHost writes a value of the 'azure_node_pool_encryption_at_host' type to the given writer.
 var MarshalAzureNodePoolEncryptionAtHost = api_v1.MarshalAzureNodePoolEncryptionAtHost
-
-// WriteAzureNodePoolEncryptionAtHost writes a value of the 'azure_node_pool_encryption_at_host' type to the given stream.
 var WriteAzureNodePoolEncryptionAtHost = api_v1.WriteAzureNodePoolEncryptionAtHost
-
-// UnmarshalAzureNodePoolEncryptionAtHost reads a value of the 'azure_node_pool_encryption_at_host' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAzureNodePoolEncryptionAtHost = api_v1.UnmarshalAzureNodePoolEncryptionAtHost
-
-// ReadAzureNodePoolEncryptionAtHost reads a value of the 'azure_node_pool_encryption_at_host' type from the given iterator.
 var ReadAzureNodePoolEncryptionAtHost = api_v1.ReadAzureNodePoolEncryptionAtHost

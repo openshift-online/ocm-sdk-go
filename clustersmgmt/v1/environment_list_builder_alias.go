@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// EnvironmentListBuilder contains the data and logic needed to build
-// 'environment' objects.
 type EnvironmentListBuilder = api_v1.EnvironmentListBuilder
 
-// NewEnvironmentList creates a new builder of 'environment' objects.
 var NewEnvironmentList = api_v1.NewEnvironmentList

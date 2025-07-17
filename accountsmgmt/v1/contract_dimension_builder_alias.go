@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// ContractDimensionBuilder contains the data and logic needed to build 'contract_dimension' objects.
 type ContractDimensionBuilder = api_v1.ContractDimensionBuilder
 
-// NewContractDimension creates a new builder of 'contract_dimension' objects.
 var NewContractDimension = api_v1.NewContractDimension

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// NodePoolUpgradePolicyBuilder contains the data and logic needed to build 'node_pool_upgrade_policy' objects.
-//
-// Representation of an upgrade policy that can be set for a node pool.
 type NodePoolUpgradePolicyBuilder = api_v1.NodePoolUpgradePolicyBuilder
 
-// NewNodePoolUpgradePolicy creates a new builder of 'node_pool_upgrade_policy' objects.
 var NewNodePoolUpgradePolicy = api_v1.NewNodePoolUpgradePolicy

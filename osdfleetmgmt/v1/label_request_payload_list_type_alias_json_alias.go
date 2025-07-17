@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// MarshalLabelRequestPayloadList writes a list of values of the 'label_request_payload' type to
-// the given writer.
 var MarshalLabelRequestPayloadList = api_v1.MarshalLabelRequestPayloadList
-
-// WriteLabelRequestPayloadList writes a list of value of the 'label_request_payload' type to
-// the given stream.
 var WriteLabelRequestPayloadList = api_v1.WriteLabelRequestPayloadList
-
-// UnmarshalLabelRequestPayloadList reads a list of values of the 'label_request_payload' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalLabelRequestPayloadList = api_v1.UnmarshalLabelRequestPayloadList
-
-// ReadLabelRequestPayloadList reads list of values of the ”label_request_payload' type from
-// the given iterator.
 var ReadLabelRequestPayloadList = api_v1.ReadLabelRequestPayloadList

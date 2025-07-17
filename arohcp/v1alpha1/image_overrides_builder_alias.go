@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ImageOverridesBuilder contains the data and logic needed to build 'image_overrides' objects.
-//
-// ImageOverrides holds the lists of available images per cloud provider.
 type ImageOverridesBuilder = api_v1alpha1.ImageOverridesBuilder
 
-// NewImageOverrides creates a new builder of 'image_overrides' objects.
 var NewImageOverrides = api_v1alpha1.NewImageOverrides

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalAddonSecretPropagationList writes a list of values of the 'addon_secret_propagation' type to
-// the given writer.
 var MarshalAddonSecretPropagationList = api_v1.MarshalAddonSecretPropagationList
-
-// WriteAddonSecretPropagationList writes a list of value of the 'addon_secret_propagation' type to
-// the given stream.
 var WriteAddonSecretPropagationList = api_v1.WriteAddonSecretPropagationList
-
-// UnmarshalAddonSecretPropagationList reads a list of values of the 'addon_secret_propagation' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddonSecretPropagationList = api_v1.UnmarshalAddonSecretPropagationList
-
-// ReadAddonSecretPropagationList reads list of values of the ”addon_secret_propagation' type from
-// the given iterator.
 var ReadAddonSecretPropagationList = api_v1.ReadAddonSecretPropagationList

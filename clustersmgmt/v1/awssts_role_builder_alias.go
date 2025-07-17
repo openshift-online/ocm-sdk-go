@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSSTSRoleBuilder contains the data and logic needed to build 'AWSSTS_role' objects.
-//
-// Representation of an sts role for a rosa cluster
 type AWSSTSRoleBuilder = api_v1.AWSSTSRoleBuilder
 
-// NewAWSSTSRole creates a new builder of 'AWSSTS_role' objects.
 var NewAWSSTSRole = api_v1.NewAWSSTSRole

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalBooleanList writes a list of values of the 'boolean' type to
-// the given writer.
 var MarshalBooleanList = api_v1.MarshalBooleanList
-
-// WriteBooleanList writes a list of value of the 'boolean' type to
-// the given stream.
 var WriteBooleanList = api_v1.WriteBooleanList
-
-// UnmarshalBooleanList reads a list of values of the 'boolean' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalBooleanList = api_v1.UnmarshalBooleanList
-
-// ReadBooleanList reads list of values of the ”boolean' type from
-// the given iterator.
 var ReadBooleanList = api_v1.ReadBooleanList

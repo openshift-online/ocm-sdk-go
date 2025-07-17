@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalAzureOperatorsAuthenticationList writes a list of values of the 'azure_operators_authentication' type to
-// the given writer.
 var MarshalAzureOperatorsAuthenticationList = api_v1alpha1.MarshalAzureOperatorsAuthenticationList
-
-// WriteAzureOperatorsAuthenticationList writes a list of value of the 'azure_operators_authentication' type to
-// the given stream.
 var WriteAzureOperatorsAuthenticationList = api_v1alpha1.WriteAzureOperatorsAuthenticationList
-
-// UnmarshalAzureOperatorsAuthenticationList reads a list of values of the 'azure_operators_authentication' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAzureOperatorsAuthenticationList = api_v1alpha1.UnmarshalAzureOperatorsAuthenticationList
-
-// ReadAzureOperatorsAuthenticationList reads list of values of the ”azure_operators_authentication' type from
-// the given iterator.
 var ReadAzureOperatorsAuthenticationList = api_v1alpha1.ReadAzureOperatorsAuthenticationList

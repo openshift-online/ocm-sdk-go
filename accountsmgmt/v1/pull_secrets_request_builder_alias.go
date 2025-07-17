@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// PullSecretsRequestBuilder contains the data and logic needed to build 'pull_secrets_request' objects.
 type PullSecretsRequestBuilder = api_v1.PullSecretsRequestBuilder
 
-// NewPullSecretsRequest creates a new builder of 'pull_secrets_request' objects.
 var NewPullSecretsRequest = api_v1.NewPullSecretsRequest

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalClusterResourceList writes a list of values of the 'cluster_resource' type to
-// the given writer.
 var MarshalClusterResourceList = api_v1.MarshalClusterResourceList
-
-// WriteClusterResourceList writes a list of value of the 'cluster_resource' type to
-// the given stream.
 var WriteClusterResourceList = api_v1.WriteClusterResourceList
-
-// UnmarshalClusterResourceList reads a list of values of the 'cluster_resource' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterResourceList = api_v1.UnmarshalClusterResourceList
-
-// ReadClusterResourceList reads list of values of the ”cluster_resource' type from
-// the given iterator.
 var ReadClusterResourceList = api_v1.ReadClusterResourceList

@@ -23,11 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// NotificationDetailsRequestBuilder contains the data and logic needed to build 'notification_details_request' objects.
-//
-// This struct is a request to get a templated email to a user related to this.
-// subscription/cluster.
 type NotificationDetailsRequestBuilder = api_v1.NotificationDetailsRequestBuilder
 
-// NewNotificationDetailsRequest creates a new builder of 'notification_details_request' objects.
 var NewNotificationDetailsRequest = api_v1.NewNotificationDetailsRequest

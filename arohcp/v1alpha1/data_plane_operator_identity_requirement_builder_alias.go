@@ -23,8 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// DataPlaneOperatorIdentityRequirementBuilder contains the data and logic needed to build 'data_plane_operator_identity_requirement' objects.
 type DataPlaneOperatorIdentityRequirementBuilder = api_v1alpha1.DataPlaneOperatorIdentityRequirementBuilder
 
-// NewDataPlaneOperatorIdentityRequirement creates a new builder of 'data_plane_operator_identity_requirement' objects.
 var NewDataPlaneOperatorIdentityRequirement = api_v1alpha1.NewDataPlaneOperatorIdentityRequirement

@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// MarshalStatus writes a value of the 'status' type to the given writer.
 var MarshalStatus = api_v1.MarshalStatus
-
-// WriteStatus writes a value of the 'status' type to the given stream.
 var WriteStatus = api_v1.WriteStatus
-
-// UnmarshalStatus reads a value of the 'status' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalStatus = api_v1.UnmarshalStatus
-
-// ReadStatus reads a value of the 'status' type from the given iterator.
 var ReadStatus = api_v1.ReadStatus

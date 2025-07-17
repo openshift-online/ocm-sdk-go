@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalClusterAuthorizationRequestList writes a list of values of the 'cluster_authorization_request' type to
-// the given writer.
 var MarshalClusterAuthorizationRequestList = api_v1.MarshalClusterAuthorizationRequestList
-
-// WriteClusterAuthorizationRequestList writes a list of value of the 'cluster_authorization_request' type to
-// the given stream.
 var WriteClusterAuthorizationRequestList = api_v1.WriteClusterAuthorizationRequestList
-
-// UnmarshalClusterAuthorizationRequestList reads a list of values of the 'cluster_authorization_request' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterAuthorizationRequestList = api_v1.UnmarshalClusterAuthorizationRequestList
-
-// ReadClusterAuthorizationRequestList reads list of values of the ”cluster_authorization_request' type from
-// the given iterator.
 var ReadClusterAuthorizationRequestList = api_v1.ReadClusterAuthorizationRequestList

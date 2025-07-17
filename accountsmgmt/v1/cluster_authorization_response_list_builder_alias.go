@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// ClusterAuthorizationResponseListBuilder contains the data and logic needed to build
-// 'cluster_authorization_response' objects.
 type ClusterAuthorizationResponseListBuilder = api_v1.ClusterAuthorizationResponseListBuilder
 
-// NewClusterAuthorizationResponseList creates a new builder of 'cluster_authorization_response' objects.
 var NewClusterAuthorizationResponseList = api_v1.NewClusterAuthorizationResponseList

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalDetectionTypeList writes a list of values of the 'detection_type' type to
-// the given writer.
 var MarshalDetectionTypeList = api_v1.MarshalDetectionTypeList
-
-// WriteDetectionTypeList writes a list of value of the 'detection_type' type to
-// the given stream.
 var WriteDetectionTypeList = api_v1.WriteDetectionTypeList
-
-// UnmarshalDetectionTypeList reads a list of values of the 'detection_type' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalDetectionTypeList = api_v1.UnmarshalDetectionTypeList
-
-// ReadDetectionTypeList reads list of values of the ”detection_type' type from
-// the given iterator.
 var ReadDetectionTypeList = api_v1.ReadDetectionTypeList

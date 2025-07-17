@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// VersionListBuilder contains the data and logic needed to build
-// 'version' objects.
 type VersionListBuilder = api_v1alpha1.VersionListBuilder
 
-// NewVersionList creates a new builder of 'version' objects.
 var NewVersionList = api_v1alpha1.NewVersionList

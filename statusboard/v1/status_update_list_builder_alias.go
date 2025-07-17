@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// StatusUpdateListBuilder contains the data and logic needed to build
-// 'status_update' objects.
 type StatusUpdateListBuilder = api_v1.StatusUpdateListBuilder
 
-// NewStatusUpdateList creates a new builder of 'status_update' objects.
 var NewStatusUpdateList = api_v1.NewStatusUpdateList

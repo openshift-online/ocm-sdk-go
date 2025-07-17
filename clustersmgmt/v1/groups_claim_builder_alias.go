@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GroupsClaimBuilder contains the data and logic needed to build 'groups_claim' objects.
 type GroupsClaimBuilder = api_v1.GroupsClaimBuilder
 
-// NewGroupsClaim creates a new builder of 'groups_claim' objects.
 var NewGroupsClaim = api_v1.NewGroupsClaim

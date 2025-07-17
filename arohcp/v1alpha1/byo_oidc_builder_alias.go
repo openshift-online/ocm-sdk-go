@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ByoOidcBuilder contains the data and logic needed to build 'byo_oidc' objects.
-//
-// ByoOidc configuration.
 type ByoOidcBuilder = api_v1alpha1.ByoOidcBuilder
 
-// NewByoOidc creates a new builder of 'byo_oidc' objects.
 var NewByoOidc = api_v1alpha1.NewByoOidc

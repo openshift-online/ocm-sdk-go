@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// EncryptionKeyListBuilder contains the data and logic needed to build
-// 'encryption_key' objects.
 type EncryptionKeyListBuilder = api_v1.EncryptionKeyListBuilder
 
-// NewEncryptionKeyList creates a new builder of 'encryption_key' objects.
 var NewEncryptionKeyList = api_v1.NewEncryptionKeyList

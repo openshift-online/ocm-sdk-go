@@ -23,10 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// OperatorIAMRoleBuilder contains the data and logic needed to build 'operator_IAM_role' objects.
-//
-// Contains the necessary attributes to allow each operator to access the necessary AWS resources
 type OperatorIAMRoleBuilder = api_v1alpha1.OperatorIAMRoleBuilder
 
-// NewOperatorIAMRole creates a new builder of 'operator_IAM_role' objects.
 var NewOperatorIAMRole = api_v1alpha1.NewOperatorIAMRole

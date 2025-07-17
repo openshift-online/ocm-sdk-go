@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalPermission writes a value of the 'permission' type to the given writer.
 var MarshalPermission = api_v1.MarshalPermission
-
-// WritePermission writes a value of the 'permission' type to the given stream.
 var WritePermission = api_v1.WritePermission
-
-// UnmarshalPermission reads a value of the 'permission' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalPermission = api_v1.UnmarshalPermission
-
-// ReadPermission reads a value of the 'permission' type from the given iterator.
 var ReadPermission = api_v1.ReadPermission

@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AWSListBuilder contains the data and logic needed to build
-// 'AWS' objects.
 type AWSListBuilder = api_v1alpha1.AWSListBuilder
 
-// NewAWSList creates a new builder of 'AWS' objects.
 var NewAWSList = api_v1alpha1.NewAWSList

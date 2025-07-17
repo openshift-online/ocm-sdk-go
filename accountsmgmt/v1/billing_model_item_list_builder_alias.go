@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// BillingModelItemListBuilder contains the data and logic needed to build
-// 'billing_model_item' objects.
 type BillingModelItemListBuilder = api_v1.BillingModelItemListBuilder
 
-// NewBillingModelItemList creates a new builder of 'billing_model_item' objects.
 var NewBillingModelItemList = api_v1.NewBillingModelItemList

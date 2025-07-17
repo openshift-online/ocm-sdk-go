@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalContractDimensionList writes a list of values of the 'contract_dimension' type to
-// the given writer.
 var MarshalContractDimensionList = api_v1.MarshalContractDimensionList
-
-// WriteContractDimensionList writes a list of value of the 'contract_dimension' type to
-// the given stream.
 var WriteContractDimensionList = api_v1.WriteContractDimensionList
-
-// UnmarshalContractDimensionList reads a list of values of the 'contract_dimension' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalContractDimensionList = api_v1.UnmarshalContractDimensionList
-
-// ReadContractDimensionList reads list of values of the ”contract_dimension' type from
-// the given iterator.
 var ReadContractDimensionList = api_v1.ReadContractDimensionList

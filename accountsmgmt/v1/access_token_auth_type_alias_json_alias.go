@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalAccessTokenAuth writes a value of the 'access_token_auth' type to the given writer.
 var MarshalAccessTokenAuth = api_v1.MarshalAccessTokenAuth
-
-// WriteAccessTokenAuth writes a value of the 'access_token_auth' type to the given stream.
 var WriteAccessTokenAuth = api_v1.WriteAccessTokenAuth
-
-// UnmarshalAccessTokenAuth reads a value of the 'access_token_auth' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAccessTokenAuth = api_v1.UnmarshalAccessTokenAuth
-
-// ReadAccessTokenAuth reads a value of the 'access_token_auth' type from the given iterator.
 var ReadAccessTokenAuth = api_v1.ReadAccessTokenAuth

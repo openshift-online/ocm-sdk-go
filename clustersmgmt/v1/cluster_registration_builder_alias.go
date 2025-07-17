@@ -23,29 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterRegistrationBuilder contains the data and logic needed to build 'cluster_registration' objects.
-//
-// Registration of a new cluster to the service.
-//
-// For example, to register a cluster that has been provisioned outside
-// of this service, send a a request like this:
-//
-// ```http
-// POST /api/clusters_mgmt/v1/register_cluster HTTP/1.1
-// ```
-//
-// With a request body like this:
-//
-// ```json
-//
-//	{
-//	  "external_id": "d656aecf-11a6-4782-ad86-8f72638449ba",
-//	  "subscription_id": "...",
-//	  "organization_id": "..."
-//	}
-//
-// ```
 type ClusterRegistrationBuilder = api_v1.ClusterRegistrationBuilder
 
-// NewClusterRegistration creates a new builder of 'cluster_registration' objects.
 var NewClusterRegistration = api_v1.NewClusterRegistration

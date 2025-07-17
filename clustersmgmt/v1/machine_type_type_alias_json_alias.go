@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalMachineType writes a value of the 'machine_type' type to the given writer.
 var MarshalMachineType = api_v1.MarshalMachineType
-
-// WriteMachineType writes a value of the 'machine_type' type to the given stream.
 var WriteMachineType = api_v1.WriteMachineType
-
-// UnmarshalMachineType reads a value of the 'machine_type' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalMachineType = api_v1.UnmarshalMachineType
-
-// ReadMachineType reads a value of the 'machine_type' type from the given iterator.
 var ReadMachineType = api_v1.ReadMachineType

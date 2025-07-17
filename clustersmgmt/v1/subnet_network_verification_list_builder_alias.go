@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// SubnetNetworkVerificationListBuilder contains the data and logic needed to build
-// 'subnet_network_verification' objects.
 type SubnetNetworkVerificationListBuilder = api_v1.SubnetNetworkVerificationListBuilder
 
-// NewSubnetNetworkVerificationList creates a new builder of 'subnet_network_verification' objects.
 var NewSubnetNetworkVerificationList = api_v1.NewSubnetNetworkVerificationList

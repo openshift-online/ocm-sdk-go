@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalListeningMethodList writes a list of values of the 'listening_method' type to
-// the given writer.
 var MarshalListeningMethodList = api_v1.MarshalListeningMethodList
-
-// WriteListeningMethodList writes a list of value of the 'listening_method' type to
-// the given stream.
 var WriteListeningMethodList = api_v1.WriteListeningMethodList
-
-// UnmarshalListeningMethodList reads a list of values of the 'listening_method' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalListeningMethodList = api_v1.UnmarshalListeningMethodList
-
-// ReadListeningMethodList reads list of values of the ”listening_method' type from
-// the given iterator.
 var ReadListeningMethodList = api_v1.ReadListeningMethodList

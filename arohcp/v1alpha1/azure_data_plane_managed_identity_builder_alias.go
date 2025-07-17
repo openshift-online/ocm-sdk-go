@@ -23,11 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AzureDataPlaneManagedIdentityBuilder contains the data and logic needed to build 'azure_data_plane_managed_identity' objects.
-//
-// Represents the information associated to an Azure User-Assigned
-// Managed Identity belonging to the Data Plane of the cluster.
 type AzureDataPlaneManagedIdentityBuilder = api_v1alpha1.AzureDataPlaneManagedIdentityBuilder
 
-// NewAzureDataPlaneManagedIdentity creates a new builder of 'azure_data_plane_managed_identity' objects.
 var NewAzureDataPlaneManagedIdentity = api_v1alpha1.NewAzureDataPlaneManagedIdentity

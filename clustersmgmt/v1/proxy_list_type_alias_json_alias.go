@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalProxyList writes a list of values of the 'proxy' type to
-// the given writer.
 var MarshalProxyList = api_v1.MarshalProxyList
-
-// WriteProxyList writes a list of value of the 'proxy' type to
-// the given stream.
 var WriteProxyList = api_v1.WriteProxyList
-
-// UnmarshalProxyList reads a list of values of the 'proxy' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalProxyList = api_v1.UnmarshalProxyList
-
-// ReadProxyList reads list of values of the ”proxy' type from
-// the given iterator.
 var ReadProxyList = api_v1.ReadProxyList

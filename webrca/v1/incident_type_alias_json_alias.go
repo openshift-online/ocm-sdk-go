@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// MarshalIncident writes a value of the 'incident' type to the given writer.
 var MarshalIncident = api_v1.MarshalIncident
-
-// WriteIncident writes a value of the 'incident' type to the given stream.
 var WriteIncident = api_v1.WriteIncident
-
-// UnmarshalIncident reads a value of the 'incident' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalIncident = api_v1.UnmarshalIncident
-
-// ReadIncident reads a value of the 'incident' type from the given iterator.
 var ReadIncident = api_v1.ReadIncident

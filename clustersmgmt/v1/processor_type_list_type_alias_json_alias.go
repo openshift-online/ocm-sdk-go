@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalProcessorTypeList writes a list of values of the 'processor_type' type to
-// the given writer.
 var MarshalProcessorTypeList = api_v1.MarshalProcessorTypeList
-
-// WriteProcessorTypeList writes a list of value of the 'processor_type' type to
-// the given stream.
 var WriteProcessorTypeList = api_v1.WriteProcessorTypeList
-
-// UnmarshalProcessorTypeList reads a list of values of the 'processor_type' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalProcessorTypeList = api_v1.UnmarshalProcessorTypeList
-
-// ReadProcessorTypeList reads list of values of the ”processor_type' type from
-// the given iterator.
 var ReadProcessorTypeList = api_v1.ReadProcessorTypeList

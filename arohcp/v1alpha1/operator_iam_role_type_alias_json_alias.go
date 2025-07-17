@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalOperatorIAMRole writes a value of the 'operator_IAM_role' type to the given writer.
 var MarshalOperatorIAMRole = api_v1alpha1.MarshalOperatorIAMRole
-
-// WriteOperatorIAMRole writes a value of the 'operator_IAM_role' type to the given stream.
 var WriteOperatorIAMRole = api_v1alpha1.WriteOperatorIAMRole
-
-// UnmarshalOperatorIAMRole reads a value of the 'operator_IAM_role' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalOperatorIAMRole = api_v1alpha1.UnmarshalOperatorIAMRole
-
-// ReadOperatorIAMRole reads a value of the 'operator_IAM_role' type from the given iterator.
 var ReadOperatorIAMRole = api_v1alpha1.ReadOperatorIAMRole

@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// MarshalServiceCluster writes a value of the 'service_cluster' type to the given writer.
 var MarshalServiceCluster = api_v1.MarshalServiceCluster
-
-// WriteServiceCluster writes a value of the 'service_cluster' type to the given stream.
 var WriteServiceCluster = api_v1.WriteServiceCluster
-
-// UnmarshalServiceCluster reads a value of the 'service_cluster' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalServiceCluster = api_v1.UnmarshalServiceCluster
-
-// ReadServiceCluster reads a value of the 'service_cluster' type from the given iterator.
 var ReadServiceCluster = api_v1.ReadServiceCluster

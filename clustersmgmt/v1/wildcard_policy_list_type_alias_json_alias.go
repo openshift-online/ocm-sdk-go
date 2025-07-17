@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalWildcardPolicyList writes a list of values of the 'wildcard_policy' type to
-// the given writer.
 var MarshalWildcardPolicyList = api_v1.MarshalWildcardPolicyList
-
-// WriteWildcardPolicyList writes a list of value of the 'wildcard_policy' type to
-// the given stream.
 var WriteWildcardPolicyList = api_v1.WriteWildcardPolicyList
-
-// UnmarshalWildcardPolicyList reads a list of values of the 'wildcard_policy' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalWildcardPolicyList = api_v1.UnmarshalWildcardPolicyList
-
-// ReadWildcardPolicyList reads list of values of the ”wildcard_policy' type from
-// the given iterator.
 var ReadWildcardPolicyList = api_v1.ReadWildcardPolicyList

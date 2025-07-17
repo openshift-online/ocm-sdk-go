@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalClusterUpgradeList writes a list of values of the 'cluster_upgrade' type to
-// the given writer.
 var MarshalClusterUpgradeList = api_v1.MarshalClusterUpgradeList
-
-// WriteClusterUpgradeList writes a list of value of the 'cluster_upgrade' type to
-// the given stream.
 var WriteClusterUpgradeList = api_v1.WriteClusterUpgradeList
-
-// UnmarshalClusterUpgradeList reads a list of values of the 'cluster_upgrade' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalClusterUpgradeList = api_v1.UnmarshalClusterUpgradeList
-
-// ReadClusterUpgradeList reads list of values of the ”cluster_upgrade' type from
-// the given iterator.
 var ReadClusterUpgradeList = api_v1.ReadClusterUpgradeList

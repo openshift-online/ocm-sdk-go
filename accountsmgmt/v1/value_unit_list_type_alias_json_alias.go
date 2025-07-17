@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalValueUnitList writes a list of values of the 'value_unit' type to
-// the given writer.
 var MarshalValueUnitList = api_v1.MarshalValueUnitList
-
-// WriteValueUnitList writes a list of value of the 'value_unit' type to
-// the given stream.
 var WriteValueUnitList = api_v1.WriteValueUnitList
-
-// UnmarshalValueUnitList reads a list of values of the 'value_unit' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalValueUnitList = api_v1.UnmarshalValueUnitList
-
-// ReadValueUnitList reads list of values of the ”value_unit' type from
-// the given iterator.
 var ReadValueUnitList = api_v1.ReadValueUnitList

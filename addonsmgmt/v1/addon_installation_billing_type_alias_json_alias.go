@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalAddonInstallationBilling writes a value of the 'addon_installation_billing' type to the given writer.
 var MarshalAddonInstallationBilling = api_v1.MarshalAddonInstallationBilling
-
-// WriteAddonInstallationBilling writes a value of the 'addon_installation_billing' type to the given stream.
 var WriteAddonInstallationBilling = api_v1.WriteAddonInstallationBilling
-
-// UnmarshalAddonInstallationBilling reads a value of the 'addon_installation_billing' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddonInstallationBilling = api_v1.UnmarshalAddonInstallationBilling
-
-// ReadAddonInstallationBilling reads a value of the 'addon_installation_billing' type from the given iterator.
 var ReadAddonInstallationBilling = api_v1.ReadAddonInstallationBilling

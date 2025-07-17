@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// ResourceReviewListBuilder contains the data and logic needed to build
-// 'resource_review' objects.
 type ResourceReviewListBuilder = api_v1.ResourceReviewListBuilder
 
-// NewResourceReviewList creates a new builder of 'resource_review' objects.
 var NewResourceReviewList = api_v1.NewResourceReviewList

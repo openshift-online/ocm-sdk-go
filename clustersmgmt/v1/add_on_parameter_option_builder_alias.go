@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AddOnParameterOptionBuilder contains the data and logic needed to build 'add_on_parameter_option' objects.
-//
-// Representation of an add-on parameter option.
 type AddOnParameterOptionBuilder = api_v1.AddOnParameterOptionBuilder
 
-// NewAddOnParameterOption creates a new builder of 'add_on_parameter_option' objects.
 var NewAddOnParameterOption = api_v1.NewAddOnParameterOption

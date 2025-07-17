@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// HandoffBuilder contains the data and logic needed to build 'handoff' objects.
-//
-// Definition of a Web RCA handoff.
 type HandoffBuilder = api_v1.HandoffBuilder
 
-// NewHandoff creates a new builder of 'handoff' objects.
 var NewHandoff = api_v1.NewHandoff

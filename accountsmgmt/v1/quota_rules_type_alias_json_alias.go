@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalQuotaRules writes a value of the 'quota_rules' type to the given writer.
 var MarshalQuotaRules = api_v1.MarshalQuotaRules
-
-// WriteQuotaRules writes a value of the 'quota_rules' type to the given stream.
 var WriteQuotaRules = api_v1.WriteQuotaRules
-
-// UnmarshalQuotaRules reads a value of the 'quota_rules' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalQuotaRules = api_v1.UnmarshalQuotaRules
-
-// ReadQuotaRules reads a value of the 'quota_rules' type from the given iterator.
 var ReadQuotaRules = api_v1.ReadQuotaRules

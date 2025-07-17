@@ -23,9 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MachineTypeListBuilder contains the data and logic needed to build
-// 'machine_type' objects.
 type MachineTypeListBuilder = api_v1alpha1.MachineTypeListBuilder
 
-// NewMachineTypeList creates a new builder of 'machine_type' objects.
 var NewMachineTypeList = api_v1alpha1.NewMachineTypeList

@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// ServiceInfoListBuilder contains the data and logic needed to build
-// 'service_info' objects.
 type ServiceInfoListBuilder = api_v1.ServiceInfoListBuilder
 
-// NewServiceInfoList creates a new builder of 'service_info' objects.
 var NewServiceInfoList = api_v1.NewServiceInfoList

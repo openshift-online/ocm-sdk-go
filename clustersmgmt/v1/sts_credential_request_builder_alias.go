@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// STSCredentialRequestBuilder contains the data and logic needed to build 'STS_credential_request' objects.
-//
-// Representation of an credRequest
 type STSCredentialRequestBuilder = api_v1.STSCredentialRequestBuilder
 
-// NewSTSCredentialRequest creates a new builder of 'STS_credential_request' objects.
 var NewSTSCredentialRequest = api_v1.NewSTSCredentialRequest

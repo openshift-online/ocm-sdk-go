@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalAddonRequirementList writes a list of values of the 'addon_requirement' type to
-// the given writer.
 var MarshalAddonRequirementList = api_v1.MarshalAddonRequirementList
-
-// WriteAddonRequirementList writes a list of value of the 'addon_requirement' type to
-// the given stream.
 var WriteAddonRequirementList = api_v1.WriteAddonRequirementList
-
-// UnmarshalAddonRequirementList reads a list of values of the 'addon_requirement' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddonRequirementList = api_v1.UnmarshalAddonRequirementList
-
-// ReadAddonRequirementList reads list of values of the ”addon_requirement' type from
-// the given iterator.
 var ReadAddonRequirementList = api_v1.ReadAddonRequirementList

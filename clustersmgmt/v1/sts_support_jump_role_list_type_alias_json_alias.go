@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalStsSupportJumpRoleList writes a list of values of the 'sts_support_jump_role' type to
-// the given writer.
 var MarshalStsSupportJumpRoleList = api_v1.MarshalStsSupportJumpRoleList
-
-// WriteStsSupportJumpRoleList writes a list of value of the 'sts_support_jump_role' type to
-// the given stream.
 var WriteStsSupportJumpRoleList = api_v1.WriteStsSupportJumpRoleList
-
-// UnmarshalStsSupportJumpRoleList reads a list of values of the 'sts_support_jump_role' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalStsSupportJumpRoleList = api_v1.UnmarshalStsSupportJumpRoleList
-
-// ReadStsSupportJumpRoleList reads list of values of the ”sts_support_jump_role' type from
-// the given iterator.
 var ReadStsSupportJumpRoleList = api_v1.ReadStsSupportJumpRoleList

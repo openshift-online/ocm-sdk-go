@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// MarshalEscalationList writes a list of values of the 'escalation' type to
-// the given writer.
 var MarshalEscalationList = api_v1.MarshalEscalationList
-
-// WriteEscalationList writes a list of value of the 'escalation' type to
-// the given stream.
 var WriteEscalationList = api_v1.WriteEscalationList
-
-// UnmarshalEscalationList reads a list of values of the 'escalation' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalEscalationList = api_v1.UnmarshalEscalationList
-
-// ReadEscalationList reads list of values of the ”escalation' type from
-// the given iterator.
 var ReadEscalationList = api_v1.ReadEscalationList

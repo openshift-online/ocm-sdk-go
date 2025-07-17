@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// AdditionalCatalogSourceBuilder contains the data and logic needed to build 'additional_catalog_source' objects.
-//
-// Representation of an addon catalog source object used by addon versions.
 type AdditionalCatalogSourceBuilder = api_v1.AdditionalCatalogSourceBuilder
 
-// NewAdditionalCatalogSource creates a new builder of 'additional_catalog_source' objects.
 var NewAdditionalCatalogSource = api_v1.NewAdditionalCatalogSource

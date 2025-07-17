@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/jobqueue/v1"
 )
 
-// JobBuilder contains the data and logic needed to build 'job' objects.
-//
-// This struct is a job in a Job Queue.
 type JobBuilder = api_v1.JobBuilder
 
-// NewJob creates a new builder of 'job' objects.
 var NewJob = api_v1.NewJob

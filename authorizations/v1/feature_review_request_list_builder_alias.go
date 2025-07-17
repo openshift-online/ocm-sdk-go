@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// FeatureReviewRequestListBuilder contains the data and logic needed to build
-// 'feature_review_request' objects.
 type FeatureReviewRequestListBuilder = api_v1.FeatureReviewRequestListBuilder
 
-// NewFeatureReviewRequestList creates a new builder of 'feature_review_request' objects.
 var NewFeatureReviewRequestList = api_v1.NewFeatureReviewRequestList

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalBreakGlassCredentialStatusList writes a list of values of the 'break_glass_credential_status' type to
-// the given writer.
 var MarshalBreakGlassCredentialStatusList = api_v1.MarshalBreakGlassCredentialStatusList
-
-// WriteBreakGlassCredentialStatusList writes a list of value of the 'break_glass_credential_status' type to
-// the given stream.
 var WriteBreakGlassCredentialStatusList = api_v1.WriteBreakGlassCredentialStatusList
-
-// UnmarshalBreakGlassCredentialStatusList reads a list of values of the 'break_glass_credential_status' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalBreakGlassCredentialStatusList = api_v1.UnmarshalBreakGlassCredentialStatusList
-
-// ReadBreakGlassCredentialStatusList reads list of values of the ”break_glass_credential_status' type from
-// the given iterator.
 var ReadBreakGlassCredentialStatusList = api_v1.ReadBreakGlassCredentialStatusList

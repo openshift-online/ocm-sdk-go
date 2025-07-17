@@ -23,11 +23,6 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// AzureServiceManagedIdentityBuilder contains the data and logic needed to build 'azure_service_managed_identity' objects.
-//
-// Represents the information associated to an Azure User-Assigned
-// Managed Identity whose purpose is to perform service level actions.
 type AzureServiceManagedIdentityBuilder = api_v1alpha1.AzureServiceManagedIdentityBuilder
 
-// NewAzureServiceManagedIdentity creates a new builder of 'azure_service_managed_identity' objects.
 var NewAzureServiceManagedIdentity = api_v1alpha1.NewAzureServiceManagedIdentity

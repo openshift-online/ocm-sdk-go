@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/jobqueue/v1"
 )
 
-// MarshalQueue writes a value of the 'queue' type to the given writer.
 var MarshalQueue = api_v1.MarshalQueue
-
-// WriteQueue writes a value of the 'queue' type to the given stream.
 var WriteQueue = api_v1.WriteQueue
-
-// UnmarshalQueue reads a value of the 'queue' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalQueue = api_v1.UnmarshalQueue
-
-// ReadQueue reads a value of the 'queue' type from the given iterator.
 var ReadQueue = api_v1.ReadQueue

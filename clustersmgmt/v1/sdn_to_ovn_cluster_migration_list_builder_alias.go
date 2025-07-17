@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// SdnToOvnClusterMigrationListBuilder contains the data and logic needed to build
-// 'sdn_to_ovn_cluster_migration' objects.
 type SdnToOvnClusterMigrationListBuilder = api_v1.SdnToOvnClusterMigrationListBuilder
 
-// NewSdnToOvnClusterMigrationList creates a new builder of 'sdn_to_ovn_cluster_migration' objects.
 var NewSdnToOvnClusterMigrationList = api_v1.NewSdnToOvnClusterMigrationList

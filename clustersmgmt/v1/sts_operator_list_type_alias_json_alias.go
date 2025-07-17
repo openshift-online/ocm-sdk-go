@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalSTSOperatorList writes a list of values of the 'STS_operator' type to
-// the given writer.
 var MarshalSTSOperatorList = api_v1.MarshalSTSOperatorList
-
-// WriteSTSOperatorList writes a list of value of the 'STS_operator' type to
-// the given stream.
 var WriteSTSOperatorList = api_v1.WriteSTSOperatorList
-
-// UnmarshalSTSOperatorList reads a list of values of the 'STS_operator' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalSTSOperatorList = api_v1.UnmarshalSTSOperatorList
-
-// ReadSTSOperatorList reads list of values of the ”STS_operator' type from
-// the given iterator.
 var ReadSTSOperatorList = api_v1.ReadSTSOperatorList

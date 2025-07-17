@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalOidcConfigList writes a list of values of the 'oidc_config' type to
-// the given writer.
 var MarshalOidcConfigList = api_v1alpha1.MarshalOidcConfigList
-
-// WriteOidcConfigList writes a list of value of the 'oidc_config' type to
-// the given stream.
 var WriteOidcConfigList = api_v1alpha1.WriteOidcConfigList
-
-// UnmarshalOidcConfigList reads a list of values of the 'oidc_config' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalOidcConfigList = api_v1alpha1.UnmarshalOidcConfigList
-
-// ReadOidcConfigList reads list of values of the ”oidc_config' type from
-// the given iterator.
 var ReadOidcConfigList = api_v1alpha1.ReadOidcConfigList

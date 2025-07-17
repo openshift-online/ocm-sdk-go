@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// MarshalFloatList writes a list of values of the 'float' type to
-// the given writer.
 var MarshalFloatList = api_v1.MarshalFloatList
-
-// WriteFloatList writes a list of value of the 'float' type to
-// the given stream.
 var WriteFloatList = api_v1.WriteFloatList
-
-// UnmarshalFloatList reads a list of values of the 'float' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalFloatList = api_v1.UnmarshalFloatList
-
-// ReadFloatList reads list of values of the ”float' type from
-// the given iterator.
 var ReadFloatList = api_v1.ReadFloatList

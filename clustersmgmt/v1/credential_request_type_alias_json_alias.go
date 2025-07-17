@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalCredentialRequest writes a value of the 'credential_request' type to the given writer.
 var MarshalCredentialRequest = api_v1.MarshalCredentialRequest
-
-// WriteCredentialRequest writes a value of the 'credential_request' type to the given stream.
 var WriteCredentialRequest = api_v1.WriteCredentialRequest
-
-// UnmarshalCredentialRequest reads a value of the 'credential_request' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCredentialRequest = api_v1.UnmarshalCredentialRequest
-
-// ReadCredentialRequest reads a value of the 'credential_request' type from the given iterator.
 var ReadCredentialRequest = api_v1.ReadCredentialRequest

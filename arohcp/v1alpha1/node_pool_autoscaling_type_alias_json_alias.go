@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalNodePoolAutoscaling writes a value of the 'node_pool_autoscaling' type to the given writer.
 var MarshalNodePoolAutoscaling = api_v1alpha1.MarshalNodePoolAutoscaling
-
-// WriteNodePoolAutoscaling writes a value of the 'node_pool_autoscaling' type to the given stream.
 var WriteNodePoolAutoscaling = api_v1alpha1.WriteNodePoolAutoscaling
-
-// UnmarshalNodePoolAutoscaling reads a value of the 'node_pool_autoscaling' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalNodePoolAutoscaling = api_v1alpha1.UnmarshalNodePoolAutoscaling
-
-// ReadNodePoolAutoscaling reads a value of the 'node_pool_autoscaling' type from the given iterator.
 var ReadNodePoolAutoscaling = api_v1alpha1.ReadNodePoolAutoscaling

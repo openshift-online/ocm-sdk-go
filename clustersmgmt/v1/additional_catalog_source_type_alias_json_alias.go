@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAdditionalCatalogSource writes a value of the 'additional_catalog_source' type to the given writer.
 var MarshalAdditionalCatalogSource = api_v1.MarshalAdditionalCatalogSource
-
-// WriteAdditionalCatalogSource writes a value of the 'additional_catalog_source' type to the given stream.
 var WriteAdditionalCatalogSource = api_v1.WriteAdditionalCatalogSource
-
-// UnmarshalAdditionalCatalogSource reads a value of the 'additional_catalog_source' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAdditionalCatalogSource = api_v1.UnmarshalAdditionalCatalogSource
-
-// ReadAdditionalCatalogSource reads a value of the 'additional_catalog_source' type from the given iterator.
 var ReadAdditionalCatalogSource = api_v1.ReadAdditionalCatalogSource

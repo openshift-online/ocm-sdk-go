@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicelogs/v1"
 )
 
-// MarshalLogTypeList writes a list of values of the 'log_type' type to
-// the given writer.
 var MarshalLogTypeList = api_v1.MarshalLogTypeList
-
-// WriteLogTypeList writes a list of value of the 'log_type' type to
-// the given stream.
 var WriteLogTypeList = api_v1.WriteLogTypeList
-
-// UnmarshalLogTypeList reads a list of values of the 'log_type' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalLogTypeList = api_v1.UnmarshalLogTypeList
-
-// ReadLogTypeList reads list of values of the ”log_type' type from
-// the given iterator.
 var ReadLogTypeList = api_v1.ReadLogTypeList

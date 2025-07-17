@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// MarshalProductList writes a list of values of the 'product' type to
-// the given writer.
 var MarshalProductList = api_v1.MarshalProductList
-
-// WriteProductList writes a list of value of the 'product' type to
-// the given stream.
 var WriteProductList = api_v1.WriteProductList
-
-// UnmarshalProductList reads a list of values of the 'product' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalProductList = api_v1.UnmarshalProductList
-
-// ReadProductList reads list of values of the ”product' type from
-// the given iterator.
 var ReadProductList = api_v1.ReadProductList

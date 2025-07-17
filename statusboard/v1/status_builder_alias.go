@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// StatusBuilder contains the data and logic needed to build 'status' objects.
-//
-// Definition of a Status Board status.
 type StatusBuilder = api_v1.StatusBuilder
 
-// NewStatus creates a new builder of 'status' objects.
 var NewStatus = api_v1.NewStatus

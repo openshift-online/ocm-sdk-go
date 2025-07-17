@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalHypershiftConfig writes a value of the 'hypershift_config' type to the given writer.
 var MarshalHypershiftConfig = api_v1.MarshalHypershiftConfig
-
-// WriteHypershiftConfig writes a value of the 'hypershift_config' type to the given stream.
 var WriteHypershiftConfig = api_v1.WriteHypershiftConfig
-
-// UnmarshalHypershiftConfig reads a value of the 'hypershift_config' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalHypershiftConfig = api_v1.UnmarshalHypershiftConfig
-
-// ReadHypershiftConfig reads a value of the 'hypershift_config' type from the given iterator.
 var ReadHypershiftConfig = api_v1.ReadHypershiftConfig

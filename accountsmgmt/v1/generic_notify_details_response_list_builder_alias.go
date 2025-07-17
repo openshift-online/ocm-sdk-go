@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// GenericNotifyDetailsResponseListBuilder contains the data and logic needed to build
-// 'generic_notify_details_response' objects.
 type GenericNotifyDetailsResponseListBuilder = api_v1.GenericNotifyDetailsResponseListBuilder
 
-// NewGenericNotifyDetailsResponseList creates a new builder of 'generic_notify_details_response' objects.
 var NewGenericNotifyDetailsResponseList = api_v1.NewGenericNotifyDetailsResponseList

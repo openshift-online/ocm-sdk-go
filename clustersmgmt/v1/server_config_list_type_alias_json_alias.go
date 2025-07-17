@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalServerConfigList writes a list of values of the 'server_config' type to
-// the given writer.
 var MarshalServerConfigList = api_v1.MarshalServerConfigList
-
-// WriteServerConfigList writes a list of value of the 'server_config' type to
-// the given stream.
 var WriteServerConfigList = api_v1.WriteServerConfigList
-
-// UnmarshalServerConfigList reads a list of values of the 'server_config' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalServerConfigList = api_v1.UnmarshalServerConfigList
-
-// ReadServerConfigList reads list of values of the ”server_config' type from
-// the given iterator.
 var ReadServerConfigList = api_v1.ReadServerConfigList

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ProxyBuilder contains the data and logic needed to build 'proxy' objects.
-//
-// Proxy configuration of a cluster.
 type ProxyBuilder = api_v1.ProxyBuilder
 
-// NewProxy creates a new builder of 'proxy' objects.
 var NewProxy = api_v1.NewProxy

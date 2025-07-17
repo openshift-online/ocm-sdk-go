@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalDNSDomain writes a value of the 'DNS_domain' type to the given writer.
 var MarshalDNSDomain = api_v1.MarshalDNSDomain
-
-// WriteDNSDomain writes a value of the 'DNS_domain' type to the given stream.
 var WriteDNSDomain = api_v1.WriteDNSDomain
-
-// UnmarshalDNSDomain reads a value of the 'DNS_domain' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalDNSDomain = api_v1.UnmarshalDNSDomain
-
-// ReadDNSDomain reads a value of the 'DNS_domain' type from the given iterator.
 var ReadDNSDomain = api_v1.ReadDNSDomain

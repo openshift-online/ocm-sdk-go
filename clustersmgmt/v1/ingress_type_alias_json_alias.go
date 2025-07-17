@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalIngress writes a value of the 'ingress' type to the given writer.
 var MarshalIngress = api_v1.MarshalIngress
-
-// WriteIngress writes a value of the 'ingress' type to the given stream.
 var WriteIngress = api_v1.WriteIngress
-
-// UnmarshalIngress reads a value of the 'ingress' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalIngress = api_v1.UnmarshalIngress
-
-// ReadIngress reads a value of the 'ingress' type from the given iterator.
 var ReadIngress = api_v1.ReadIngress

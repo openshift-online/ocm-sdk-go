@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/jobqueue/v1"
 )
 
-// MarshalJobList writes a list of values of the 'job' type to
-// the given writer.
 var MarshalJobList = api_v1.MarshalJobList
-
-// WriteJobList writes a list of value of the 'job' type to
-// the given stream.
 var WriteJobList = api_v1.WriteJobList
-
-// UnmarshalJobList reads a list of values of the 'job' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalJobList = api_v1.UnmarshalJobList
-
-// ReadJobList reads list of values of the ”job' type from
-// the given iterator.
 var ReadJobList = api_v1.ReadJobList

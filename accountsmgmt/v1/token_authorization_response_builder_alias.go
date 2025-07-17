@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// TokenAuthorizationResponseBuilder contains the data and logic needed to build 'token_authorization_response' objects.
 type TokenAuthorizationResponseBuilder = api_v1.TokenAuthorizationResponseBuilder
 
-// NewTokenAuthorizationResponse creates a new builder of 'token_authorization_response' objects.
 var NewTokenAuthorizationResponse = api_v1.NewTokenAuthorizationResponse

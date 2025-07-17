@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
-// MarshalAWS writes a value of the 'AWS' type to the given writer.
 var MarshalAWS = api_v1.MarshalAWS
-
-// WriteAWS writes a value of the 'AWS' type to the given stream.
 var WriteAWS = api_v1.WriteAWS
-
-// UnmarshalAWS reads a value of the 'AWS' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAWS = api_v1.UnmarshalAWS
-
-// ReadAWS reads a value of the 'AWS' type from the given iterator.
 var ReadAWS = api_v1.ReadAWS

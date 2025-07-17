@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AddOnRequirementStatusListBuilder contains the data and logic needed to build
-// 'add_on_requirement_status' objects.
 type AddOnRequirementStatusListBuilder = api_v1.AddOnRequirementStatusListBuilder
 
-// NewAddOnRequirementStatusList creates a new builder of 'add_on_requirement_status' objects.
 var NewAddOnRequirementStatusList = api_v1.NewAddOnRequirementStatusList

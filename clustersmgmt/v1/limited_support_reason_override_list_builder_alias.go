@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// LimitedSupportReasonOverrideListBuilder contains the data and logic needed to build
-// 'limited_support_reason_override' objects.
 type LimitedSupportReasonOverrideListBuilder = api_v1.LimitedSupportReasonOverrideListBuilder
 
-// NewLimitedSupportReasonOverrideList creates a new builder of 'limited_support_reason_override' objects.
 var NewLimitedSupportReasonOverrideList = api_v1.NewLimitedSupportReasonOverrideList

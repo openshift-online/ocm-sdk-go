@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterDeploymentListBuilder contains the data and logic needed to build
-// 'cluster_deployment' objects.
 type ClusterDeploymentListBuilder = api_v1.ClusterDeploymentListBuilder
 
-// NewClusterDeploymentList creates a new builder of 'cluster_deployment' objects.
 var NewClusterDeploymentList = api_v1.NewClusterDeploymentList

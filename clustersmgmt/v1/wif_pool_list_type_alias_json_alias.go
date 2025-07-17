@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalWifPoolList writes a list of values of the 'wif_pool' type to
-// the given writer.
 var MarshalWifPoolList = api_v1.MarshalWifPoolList
-
-// WriteWifPoolList writes a list of value of the 'wif_pool' type to
-// the given stream.
 var WriteWifPoolList = api_v1.WriteWifPoolList
-
-// UnmarshalWifPoolList reads a list of values of the 'wif_pool' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalWifPoolList = api_v1.UnmarshalWifPoolList
-
-// ReadWifPoolList reads list of values of the ”wif_pool' type from
-// the given iterator.
 var ReadWifPoolList = api_v1.ReadWifPoolList

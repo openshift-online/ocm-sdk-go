@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalPrivateLinkPrincipals writes a value of the 'private_link_principals' type to the given writer.
 var MarshalPrivateLinkPrincipals = api_v1.MarshalPrivateLinkPrincipals
-
-// WritePrivateLinkPrincipals writes a value of the 'private_link_principals' type to the given stream.
 var WritePrivateLinkPrincipals = api_v1.WritePrivateLinkPrincipals
-
-// UnmarshalPrivateLinkPrincipals reads a value of the 'private_link_principals' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalPrivateLinkPrincipals = api_v1.UnmarshalPrivateLinkPrincipals
-
-// ReadPrivateLinkPrincipals reads a value of the 'private_link_principals' type from the given iterator.
 var ReadPrivateLinkPrincipals = api_v1.ReadPrivateLinkPrincipals

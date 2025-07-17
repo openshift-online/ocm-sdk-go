@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// MarshalRole writes a value of the 'role' type to the given writer.
 var MarshalRole = api_v1.MarshalRole
-
-// WriteRole writes a value of the 'role' type to the given stream.
 var WriteRole = api_v1.WriteRole
-
-// UnmarshalRole reads a value of the 'role' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalRole = api_v1.UnmarshalRole
-
-// ReadRole reads a value of the 'role' type from the given iterator.
 var ReadRole = api_v1.ReadRole

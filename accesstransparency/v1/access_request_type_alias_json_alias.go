@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accesstransparency/v1"
 )
 
-// MarshalAccessRequest writes a value of the 'access_request' type to the given writer.
 var MarshalAccessRequest = api_v1.MarshalAccessRequest
-
-// WriteAccessRequest writes a value of the 'access_request' type to the given stream.
 var WriteAccessRequest = api_v1.WriteAccessRequest
-
-// UnmarshalAccessRequest reads a value of the 'access_request' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAccessRequest = api_v1.UnmarshalAccessRequest
-
-// ReadAccessRequest reads a value of the 'access_request' type from the given iterator.
 var ReadAccessRequest = api_v1.ReadAccessRequest

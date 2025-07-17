@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalPlatformList writes a list of values of the 'platform' type to
-// the given writer.
 var MarshalPlatformList = api_v1.MarshalPlatformList
-
-// WritePlatformList writes a list of value of the 'platform' type to
-// the given stream.
 var WritePlatformList = api_v1.WritePlatformList
-
-// UnmarshalPlatformList reads a list of values of the 'platform' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalPlatformList = api_v1.UnmarshalPlatformList
-
-// ReadPlatformList reads list of values of the ”platform' type from
-// the given iterator.
 var ReadPlatformList = api_v1.ReadPlatformList

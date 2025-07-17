@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSFlavourListBuilder contains the data and logic needed to build
-// 'AWS_flavour' objects.
 type AWSFlavourListBuilder = api_v1.AWSFlavourListBuilder
 
-// NewAWSFlavourList creates a new builder of 'AWS_flavour' objects.
 var NewAWSFlavourList = api_v1.NewAWSFlavourList

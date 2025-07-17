@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalEventList writes a list of values of the 'event' type to
-// the given writer.
 var MarshalEventList = api_v1.MarshalEventList
-
-// WriteEventList writes a list of value of the 'event' type to
-// the given stream.
 var WriteEventList = api_v1.WriteEventList
-
-// UnmarshalEventList reads a list of values of the 'event' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalEventList = api_v1.UnmarshalEventList
-
-// ReadEventList reads list of values of the ”event' type from
-// the given iterator.
 var ReadEventList = api_v1.ReadEventList

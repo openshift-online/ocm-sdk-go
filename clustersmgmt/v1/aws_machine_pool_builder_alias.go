@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSMachinePoolBuilder contains the data and logic needed to build 'AWS_machine_pool' objects.
-//
-// Representation of aws machine pool specific parameters.
 type AWSMachinePoolBuilder = api_v1.AWSMachinePoolBuilder
 
-// NewAWSMachinePool creates a new builder of 'AWS_machine_pool' objects.
 var NewAWSMachinePool = api_v1.NewAWSMachinePool

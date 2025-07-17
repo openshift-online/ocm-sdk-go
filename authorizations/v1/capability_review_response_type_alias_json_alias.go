@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// MarshalCapabilityReviewResponse writes a value of the 'capability_review_response' type to the given writer.
 var MarshalCapabilityReviewResponse = api_v1.MarshalCapabilityReviewResponse
-
-// WriteCapabilityReviewResponse writes a value of the 'capability_review_response' type to the given stream.
 var WriteCapabilityReviewResponse = api_v1.WriteCapabilityReviewResponse
-
-// UnmarshalCapabilityReviewResponse reads a value of the 'capability_review_response' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalCapabilityReviewResponse = api_v1.UnmarshalCapabilityReviewResponse
-
-// ReadCapabilityReviewResponse reads a value of the 'capability_review_response' type from the given iterator.
 var ReadCapabilityReviewResponse = api_v1.ReadCapabilityReviewResponse

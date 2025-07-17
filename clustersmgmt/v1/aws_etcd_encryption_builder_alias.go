@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AwsEtcdEncryptionBuilder contains the data and logic needed to build 'aws_etcd_encryption' objects.
-//
-// Contains the necessary attributes to support etcd encryption for AWS based clusters.
 type AwsEtcdEncryptionBuilder = api_v1.AwsEtcdEncryptionBuilder
 
-// NewAwsEtcdEncryption creates a new builder of 'aws_etcd_encryption' objects.
 var NewAwsEtcdEncryption = api_v1.NewAwsEtcdEncryption

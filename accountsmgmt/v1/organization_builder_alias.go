@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// OrganizationBuilder contains the data and logic needed to build 'organization' objects.
 type OrganizationBuilder = api_v1.OrganizationBuilder
 
-// NewOrganization creates a new builder of 'organization' objects.
 var NewOrganization = api_v1.NewOrganization

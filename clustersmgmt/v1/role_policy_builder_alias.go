@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// RolePolicyBuilder contains the data and logic needed to build 'role_policy' objects.
 type RolePolicyBuilder = api_v1.RolePolicyBuilder
 
-// NewRolePolicy creates a new builder of 'role_policy' objects.
 var NewRolePolicy = api_v1.NewRolePolicy

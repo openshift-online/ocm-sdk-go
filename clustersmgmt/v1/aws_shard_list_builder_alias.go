@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AWSShardListBuilder contains the data and logic needed to build
-// 'AWS_shard' objects.
 type AWSShardListBuilder = api_v1.AWSShardListBuilder
 
-// NewAWSShardList creates a new builder of 'AWS_shard' objects.
 var NewAWSShardList = api_v1.NewAWSShardList

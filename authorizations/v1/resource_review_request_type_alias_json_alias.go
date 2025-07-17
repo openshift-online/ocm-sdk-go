@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// MarshalResourceReviewRequest writes a value of the 'resource_review_request' type to the given writer.
 var MarshalResourceReviewRequest = api_v1.MarshalResourceReviewRequest
-
-// WriteResourceReviewRequest writes a value of the 'resource_review_request' type to the given stream.
 var WriteResourceReviewRequest = api_v1.WriteResourceReviewRequest
-
-// UnmarshalResourceReviewRequest reads a value of the 'resource_review_request' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalResourceReviewRequest = api_v1.UnmarshalResourceReviewRequest
-
-// ReadResourceReviewRequest reads a value of the 'resource_review_request' type from the given iterator.
 var ReadResourceReviewRequest = api_v1.ReadResourceReviewRequest

@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// EscalationBuilder contains the data and logic needed to build 'escalation' objects.
-//
-// Definition of a Web RCA escalation.
 type EscalationBuilder = api_v1.EscalationBuilder
 
-// NewEscalation creates a new builder of 'escalation' objects.
 var NewEscalation = api_v1.NewEscalation

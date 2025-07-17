@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAddOn writes a value of the 'add_on' type to the given writer.
 var MarshalAddOn = api_v1.MarshalAddOn
-
-// WriteAddOn writes a value of the 'add_on' type to the given stream.
 var WriteAddOn = api_v1.WriteAddOn
-
-// UnmarshalAddOn reads a value of the 'add_on' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddOn = api_v1.UnmarshalAddOn
-
-// ReadAddOn reads a value of the 'add_on' type from the given iterator.
 var ReadAddOn = api_v1.ReadAddOn

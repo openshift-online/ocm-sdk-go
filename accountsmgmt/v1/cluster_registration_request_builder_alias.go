@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// ClusterRegistrationRequestBuilder contains the data and logic needed to build 'cluster_registration_request' objects.
 type ClusterRegistrationRequestBuilder = api_v1.ClusterRegistrationRequestBuilder
 
-// NewClusterRegistrationRequest creates a new builder of 'cluster_registration_request' objects.
 var NewClusterRegistrationRequest = api_v1.NewClusterRegistrationRequest

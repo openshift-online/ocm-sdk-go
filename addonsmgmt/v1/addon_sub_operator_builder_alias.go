@@ -23,11 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// AddonSubOperatorBuilder contains the data and logic needed to build 'addon_sub_operator' objects.
-//
-// Representation of an addon sub operator. A sub operator is an operator
-// who's life cycle is controlled by the addon umbrella operator.
 type AddonSubOperatorBuilder = api_v1.AddonSubOperatorBuilder
 
-// NewAddonSubOperator creates a new builder of 'addon_sub_operator' objects.
 var NewAddonSubOperator = api_v1.NewAddonSubOperator

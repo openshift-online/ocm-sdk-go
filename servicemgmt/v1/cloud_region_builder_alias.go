@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
-// CloudRegionBuilder contains the data and logic needed to build 'cloud_region' objects.
-//
-// Description of a region of a cloud provider.
 type CloudRegionBuilder = api_v1.CloudRegionBuilder
 
-// NewCloudRegion creates a new builder of 'cloud_region' objects.
 var NewCloudRegion = api_v1.NewCloudRegion

@@ -23,18 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalAwsEtcdEncryptionList writes a list of values of the 'aws_etcd_encryption' type to
-// the given writer.
 var MarshalAwsEtcdEncryptionList = api_v1alpha1.MarshalAwsEtcdEncryptionList
-
-// WriteAwsEtcdEncryptionList writes a list of value of the 'aws_etcd_encryption' type to
-// the given stream.
 var WriteAwsEtcdEncryptionList = api_v1alpha1.WriteAwsEtcdEncryptionList
-
-// UnmarshalAwsEtcdEncryptionList reads a list of values of the 'aws_etcd_encryption' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAwsEtcdEncryptionList = api_v1alpha1.UnmarshalAwsEtcdEncryptionList
-
-// ReadAwsEtcdEncryptionList reads list of values of the ”aws_etcd_encryption' type from
-// the given iterator.
 var ReadAwsEtcdEncryptionList = api_v1alpha1.ReadAwsEtcdEncryptionList

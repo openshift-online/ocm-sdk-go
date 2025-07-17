@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// OpenIDClaimsBuilder contains the data and logic needed to build 'open_ID_claims' objects.
-//
-// _OpenID_ identity provider claims.
 type OpenIDClaimsBuilder = api_v1.OpenIDClaimsBuilder
 
-// NewOpenIDClaims creates a new builder of 'open_ID_claims' objects.
 var NewOpenIDClaims = api_v1.NewOpenIDClaims

@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/osdfleetmgmt/v1"
 )
 
-// MarshalManagementClusterParent writes a value of the 'management_cluster_parent' type to the given writer.
 var MarshalManagementClusterParent = api_v1.MarshalManagementClusterParent
-
-// WriteManagementClusterParent writes a value of the 'management_cluster_parent' type to the given stream.
 var WriteManagementClusterParent = api_v1.WriteManagementClusterParent
-
-// UnmarshalManagementClusterParent reads a value of the 'management_cluster_parent' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalManagementClusterParent = api_v1.UnmarshalManagementClusterParent
-
-// ReadManagementClusterParent reads a value of the 'management_cluster_parent' type from the given iterator.
 var ReadManagementClusterParent = api_v1.ReadManagementClusterParent

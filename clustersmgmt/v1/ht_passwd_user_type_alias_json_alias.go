@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalHTPasswdUser writes a value of the 'HT_passwd_user' type to the given writer.
 var MarshalHTPasswdUser = api_v1.MarshalHTPasswdUser
-
-// WriteHTPasswdUser writes a value of the 'HT_passwd_user' type to the given stream.
 var WriteHTPasswdUser = api_v1.WriteHTPasswdUser
-
-// UnmarshalHTPasswdUser reads a value of the 'HT_passwd_user' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalHTPasswdUser = api_v1.UnmarshalHTPasswdUser
-
-// ReadHTPasswdUser reads a value of the 'HT_passwd_user' type from the given iterator.
 var ReadHTPasswdUser = api_v1.ReadHTPasswdUser

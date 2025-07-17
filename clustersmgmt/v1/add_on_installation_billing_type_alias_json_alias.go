@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAddOnInstallationBilling writes a value of the 'add_on_installation_billing' type to the given writer.
 var MarshalAddOnInstallationBilling = api_v1.MarshalAddOnInstallationBilling
-
-// WriteAddOnInstallationBilling writes a value of the 'add_on_installation_billing' type to the given stream.
 var WriteAddOnInstallationBilling = api_v1.WriteAddOnInstallationBilling
-
-// UnmarshalAddOnInstallationBilling reads a value of the 'add_on_installation_billing' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddOnInstallationBilling = api_v1.UnmarshalAddOnInstallationBilling
-
-// ReadAddOnInstallationBilling reads a value of the 'add_on_installation_billing' type from the given iterator.
 var ReadAddOnInstallationBilling = api_v1.ReadAddOnInstallationBilling

@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// GCPFlavourListBuilder contains the data and logic needed to build
-// 'GCP_flavour' objects.
 type GCPFlavourListBuilder = api_v1.GCPFlavourListBuilder
 
-// NewGCPFlavourList creates a new builder of 'GCP_flavour' objects.
 var NewGCPFlavourList = api_v1.NewGCPFlavourList

@@ -23,8 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// RegistryBuilder contains the data and logic needed to build 'registry' objects.
 type RegistryBuilder = api_v1.RegistryBuilder
 
-// NewRegistry creates a new builder of 'registry' objects.
 var NewRegistry = api_v1.NewRegistry

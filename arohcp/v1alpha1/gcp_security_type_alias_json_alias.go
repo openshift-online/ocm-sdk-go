@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalGcpSecurity writes a value of the 'gcp_security' type to the given writer.
 var MarshalGcpSecurity = api_v1alpha1.MarshalGcpSecurity
-
-// WriteGcpSecurity writes a value of the 'gcp_security' type to the given stream.
 var WriteGcpSecurity = api_v1alpha1.WriteGcpSecurity
-
-// UnmarshalGcpSecurity reads a value of the 'gcp_security' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalGcpSecurity = api_v1alpha1.UnmarshalGcpSecurity
-
-// ReadGcpSecurity reads a value of the 'gcp_security' type from the given iterator.
 var ReadGcpSecurity = api_v1alpha1.ReadGcpSecurity

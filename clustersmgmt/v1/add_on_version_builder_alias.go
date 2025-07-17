@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// AddOnVersionBuilder contains the data and logic needed to build 'add_on_version' objects.
-//
-// Representation of an add-on version.
 type AddOnVersionBuilder = api_v1.AddOnVersionBuilder
 
-// NewAddOnVersion creates a new builder of 'add_on_version' objects.
 var NewAddOnVersion = api_v1.NewAddOnVersion

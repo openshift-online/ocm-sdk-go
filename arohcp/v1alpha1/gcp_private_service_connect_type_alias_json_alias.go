@@ -23,15 +23,7 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalGcpPrivateServiceConnect writes a value of the 'gcp_private_service_connect' type to the given writer.
 var MarshalGcpPrivateServiceConnect = api_v1alpha1.MarshalGcpPrivateServiceConnect
-
-// WriteGcpPrivateServiceConnect writes a value of the 'gcp_private_service_connect' type to the given stream.
 var WriteGcpPrivateServiceConnect = api_v1alpha1.WriteGcpPrivateServiceConnect
-
-// UnmarshalGcpPrivateServiceConnect reads a value of the 'gcp_private_service_connect' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalGcpPrivateServiceConnect = api_v1alpha1.UnmarshalGcpPrivateServiceConnect
-
-// ReadGcpPrivateServiceConnect reads a value of the 'gcp_private_service_connect' type from the given iterator.
 var ReadGcpPrivateServiceConnect = api_v1alpha1.ReadGcpPrivateServiceConnect

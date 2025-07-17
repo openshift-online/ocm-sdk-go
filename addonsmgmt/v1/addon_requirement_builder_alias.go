@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
-// AddonRequirementBuilder contains the data and logic needed to build 'addon_requirement' objects.
-//
-// Representation of an addon requirement.
 type AddonRequirementBuilder = api_v1.AddonRequirementBuilder
 
-// NewAddonRequirement creates a new builder of 'addon_requirement' objects.
 var NewAddonRequirement = api_v1.NewAddonRequirement

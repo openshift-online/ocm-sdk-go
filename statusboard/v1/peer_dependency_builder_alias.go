@@ -23,10 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
-// PeerDependencyBuilder contains the data and logic needed to build 'peer_dependency' objects.
-//
-// Definition of a Status Board peer dependency.
 type PeerDependencyBuilder = api_v1.PeerDependencyBuilder
 
-// NewPeerDependency creates a new builder of 'peer_dependency' objects.
 var NewPeerDependency = api_v1.NewPeerDependency

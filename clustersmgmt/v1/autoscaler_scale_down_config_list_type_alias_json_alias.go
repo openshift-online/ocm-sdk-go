@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAutoscalerScaleDownConfigList writes a list of values of the 'autoscaler_scale_down_config' type to
-// the given writer.
 var MarshalAutoscalerScaleDownConfigList = api_v1.MarshalAutoscalerScaleDownConfigList
-
-// WriteAutoscalerScaleDownConfigList writes a list of value of the 'autoscaler_scale_down_config' type to
-// the given stream.
 var WriteAutoscalerScaleDownConfigList = api_v1.WriteAutoscalerScaleDownConfigList
-
-// UnmarshalAutoscalerScaleDownConfigList reads a list of values of the 'autoscaler_scale_down_config' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAutoscalerScaleDownConfigList = api_v1.UnmarshalAutoscalerScaleDownConfigList
-
-// ReadAutoscalerScaleDownConfigList reads list of values of the ”autoscaler_scale_down_config' type from
-// the given iterator.
 var ReadAutoscalerScaleDownConfigList = api_v1.ReadAutoscalerScaleDownConfigList

@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// StsSupportJumpRoleListBuilder contains the data and logic needed to build
-// 'sts_support_jump_role' objects.
 type StsSupportJumpRoleListBuilder = api_v1.StsSupportJumpRoleListBuilder
 
-// NewStsSupportJumpRoleList creates a new builder of 'sts_support_jump_role' objects.
 var NewStsSupportJumpRoleList = api_v1.NewStsSupportJumpRoleList

@@ -23,18 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/webrca/v1"
 )
 
-// MarshalFollowUpList writes a list of values of the 'follow_up' type to
-// the given writer.
 var MarshalFollowUpList = api_v1.MarshalFollowUpList
-
-// WriteFollowUpList writes a list of value of the 'follow_up' type to
-// the given stream.
 var WriteFollowUpList = api_v1.WriteFollowUpList
-
-// UnmarshalFollowUpList reads a list of values of the 'follow_up' type
-// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalFollowUpList = api_v1.UnmarshalFollowUpList
-
-// ReadFollowUpList reads list of values of the ”follow_up' type from
-// the given iterator.
 var ReadFollowUpList = api_v1.ReadFollowUpList

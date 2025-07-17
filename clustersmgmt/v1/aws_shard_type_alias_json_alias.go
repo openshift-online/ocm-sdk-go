@@ -23,15 +23,7 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalAWSShard writes a value of the 'AWS_shard' type to the given writer.
 var MarshalAWSShard = api_v1.MarshalAWSShard
-
-// WriteAWSShard writes a value of the 'AWS_shard' type to the given stream.
 var WriteAWSShard = api_v1.WriteAWSShard
-
-// UnmarshalAWSShard reads a value of the 'AWS_shard' type from the given
-// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAWSShard = api_v1.UnmarshalAWSShard
-
-// ReadAWSShard reads a value of the 'AWS_shard' type from the given iterator.
 var ReadAWSShard = api_v1.ReadAWSShard

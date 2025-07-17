@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicemgmt/v1"
 )
 
-// VersionInquiryResponseListBuilder contains the data and logic needed to build
-// 'version_inquiry_response' objects.
 type VersionInquiryResponseListBuilder = api_v1.VersionInquiryResponseListBuilder
 
-// NewVersionInquiryResponseList creates a new builder of 'version_inquiry_response' objects.
 var NewVersionInquiryResponseList = api_v1.NewVersionInquiryResponseList

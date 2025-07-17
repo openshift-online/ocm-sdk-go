@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
-// RegistryCredentialListBuilder contains the data and logic needed to build
-// 'registry_credential' objects.
 type RegistryCredentialListBuilder = api_v1.RegistryCredentialListBuilder
 
-// NewRegistryCredentialList creates a new builder of 'registry_credential' objects.
 var NewRegistryCredentialList = api_v1.NewRegistryCredentialList

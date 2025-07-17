@@ -23,9 +23,6 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/authorizations/v1"
 )
 
-// TermsReviewRequestListBuilder contains the data and logic needed to build
-// 'terms_review_request' objects.
 type TermsReviewRequestListBuilder = api_v1.TermsReviewRequestListBuilder
 
-// NewTermsReviewRequestList creates a new builder of 'terms_review_request' objects.
 var NewTermsReviewRequestList = api_v1.NewTermsReviewRequestList
