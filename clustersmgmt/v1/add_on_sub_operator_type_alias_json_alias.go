@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAddOnSubOperator writes a value of the 'add_on_sub_operator' type to the given writer.
 var MarshalAddOnSubOperator = api_v1.MarshalAddOnSubOperator
+
+// WriteAddOnSubOperator writes a value of the 'add_on_sub_operator' type to the given stream.
 var WriteAddOnSubOperator = api_v1.WriteAddOnSubOperator
+
+// UnmarshalAddOnSubOperator reads a value of the 'add_on_sub_operator' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalAddOnSubOperator = api_v1.UnmarshalAddOnSubOperator
+
+// ReadAddOnSubOperator reads a value of the 'add_on_sub_operator' type from the given iterator.
 var ReadAddOnSubOperator = api_v1.ReadAddOnSubOperator

@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// ReservedResourceListBuilder contains the data and logic needed to build
+// 'reserved_resource' objects.
 type ReservedResourceListBuilder = api_v1.ReservedResourceListBuilder
 
+// NewReservedResourceList creates a new builder of 'reserved_resource' objects.
 var NewReservedResourceList = api_v1.NewReservedResourceList

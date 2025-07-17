@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// MarshalAddonStatusConditionTypeList writes a list of values of the 'addon_status_condition_type' type to
+// the given writer.
 var MarshalAddonStatusConditionTypeList = api_v1.MarshalAddonStatusConditionTypeList
+
+// WriteAddonStatusConditionTypeList writes a list of value of the 'addon_status_condition_type' type to
+// the given stream.
 var WriteAddonStatusConditionTypeList = api_v1.WriteAddonStatusConditionTypeList
+
+// UnmarshalAddonStatusConditionTypeList reads a list of values of the 'addon_status_condition_type' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddonStatusConditionTypeList = api_v1.UnmarshalAddonStatusConditionTypeList
+
+// ReadAddonStatusConditionTypeList reads list of values of the ”addon_status_condition_type' type from
+// the given iterator.
 var ReadAddonStatusConditionTypeList = api_v1.ReadAddonStatusConditionTypeList

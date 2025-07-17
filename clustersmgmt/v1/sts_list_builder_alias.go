@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// STSListBuilder contains the data and logic needed to build
+// 'STS' objects.
 type STSListBuilder = api_v1.STSListBuilder
 
+// NewSTSList creates a new builder of 'STS' objects.
 var NewSTSList = api_v1.NewSTSList

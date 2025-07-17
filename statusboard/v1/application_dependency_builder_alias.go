@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// ApplicationDependencyBuilder contains the data and logic needed to build 'application_dependency' objects.
+//
+// Definition of a Status Board application dependency.
 type ApplicationDependencyBuilder = api_v1.ApplicationDependencyBuilder
 
+// NewApplicationDependency creates a new builder of 'application_dependency' objects.
 var NewApplicationDependency = api_v1.NewApplicationDependency

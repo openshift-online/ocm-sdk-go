@@ -23,7 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalDataPlaneOperatorIdentityRequirementList writes a list of values of the 'data_plane_operator_identity_requirement' type to
+// the given writer.
 var MarshalDataPlaneOperatorIdentityRequirementList = api_v1alpha1.MarshalDataPlaneOperatorIdentityRequirementList
+
+// WriteDataPlaneOperatorIdentityRequirementList writes a list of value of the 'data_plane_operator_identity_requirement' type to
+// the given stream.
 var WriteDataPlaneOperatorIdentityRequirementList = api_v1alpha1.WriteDataPlaneOperatorIdentityRequirementList
+
+// UnmarshalDataPlaneOperatorIdentityRequirementList reads a list of values of the 'data_plane_operator_identity_requirement' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalDataPlaneOperatorIdentityRequirementList = api_v1alpha1.UnmarshalDataPlaneOperatorIdentityRequirementList
+
+// ReadDataPlaneOperatorIdentityRequirementList reads list of values of the ”data_plane_operator_identity_requirement' type from
+// the given iterator.
 var ReadDataPlaneOperatorIdentityRequirementList = api_v1alpha1.ReadDataPlaneOperatorIdentityRequirementList

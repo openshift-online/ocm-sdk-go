@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ClusterMigrationStateListBuilder contains the data and logic needed to build
+// 'cluster_migration_state' objects.
 type ClusterMigrationStateListBuilder = api_v1.ClusterMigrationStateListBuilder
 
+// NewClusterMigrationStateList creates a new builder of 'cluster_migration_state' objects.
 var NewClusterMigrationStateList = api_v1.NewClusterMigrationStateList

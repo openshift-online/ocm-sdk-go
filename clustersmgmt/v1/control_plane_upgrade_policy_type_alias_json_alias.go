@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalControlPlaneUpgradePolicy writes a value of the 'control_plane_upgrade_policy' type to the given writer.
 var MarshalControlPlaneUpgradePolicy = api_v1.MarshalControlPlaneUpgradePolicy
+
+// WriteControlPlaneUpgradePolicy writes a value of the 'control_plane_upgrade_policy' type to the given stream.
 var WriteControlPlaneUpgradePolicy = api_v1.WriteControlPlaneUpgradePolicy
+
+// UnmarshalControlPlaneUpgradePolicy reads a value of the 'control_plane_upgrade_policy' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalControlPlaneUpgradePolicy = api_v1.UnmarshalControlPlaneUpgradePolicy
+
+// ReadControlPlaneUpgradePolicy reads a value of the 'control_plane_upgrade_policy' type from the given iterator.
 var ReadControlPlaneUpgradePolicy = api_v1.ReadControlPlaneUpgradePolicy

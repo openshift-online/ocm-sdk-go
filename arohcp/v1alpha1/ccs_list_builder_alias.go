@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// CCSListBuilder contains the data and logic needed to build
+// 'CCS' objects.
 type CCSListBuilder = api_v1alpha1.CCSListBuilder
 
+// NewCCSList creates a new builder of 'CCS' objects.
 var NewCCSList = api_v1alpha1.NewCCSList

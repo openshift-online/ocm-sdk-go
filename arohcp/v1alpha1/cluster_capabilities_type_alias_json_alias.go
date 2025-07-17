@@ -23,7 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// MarshalClusterCapabilities writes a value of the 'cluster_capabilities' type to the given writer.
 var MarshalClusterCapabilities = api_v1alpha1.MarshalClusterCapabilities
+
+// WriteClusterCapabilities writes a value of the 'cluster_capabilities' type to the given stream.
 var WriteClusterCapabilities = api_v1alpha1.WriteClusterCapabilities
+
+// UnmarshalClusterCapabilities reads a value of the 'cluster_capabilities' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalClusterCapabilities = api_v1alpha1.UnmarshalClusterCapabilities
+
+// ReadClusterCapabilities reads a value of the 'cluster_capabilities' type from the given iterator.
 var ReadClusterCapabilities = api_v1alpha1.ReadClusterCapabilities

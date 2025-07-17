@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/statusboard/v1"
 )
 
+// ApplicationDependencyListBuilder contains the data and logic needed to build
+// 'application_dependency' objects.
 type ApplicationDependencyListBuilder = api_v1.ApplicationDependencyListBuilder
 
+// NewApplicationDependencyList creates a new builder of 'application_dependency' objects.
 var NewApplicationDependencyList = api_v1.NewApplicationDependencyList

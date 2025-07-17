@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/jobqueue/v1"
 )
 
+// QueueBuilder contains the data and logic needed to build 'queue' objects.
 type QueueBuilder = api_v1.QueueBuilder
 
+// NewQueue creates a new builder of 'queue' objects.
 var NewQueue = api_v1.NewQueue

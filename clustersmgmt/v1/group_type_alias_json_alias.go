@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalGroup writes a value of the 'group' type to the given writer.
 var MarshalGroup = api_v1.MarshalGroup
+
+// WriteGroup writes a value of the 'group' type to the given stream.
 var WriteGroup = api_v1.WriteGroup
+
+// UnmarshalGroup reads a value of the 'group' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalGroup = api_v1.UnmarshalGroup
+
+// ReadGroup reads a value of the 'group' type from the given iterator.
 var ReadGroup = api_v1.ReadGroup

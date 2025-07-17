@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalOrganization writes a value of the 'organization' type to the given writer.
 var MarshalOrganization = api_v1.MarshalOrganization
+
+// WriteOrganization writes a value of the 'organization' type to the given stream.
 var WriteOrganization = api_v1.WriteOrganization
+
+// UnmarshalOrganization reads a value of the 'organization' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalOrganization = api_v1.UnmarshalOrganization
+
+// ReadOrganization reads a value of the 'organization' type from the given iterator.
 var ReadOrganization = api_v1.ReadOrganization

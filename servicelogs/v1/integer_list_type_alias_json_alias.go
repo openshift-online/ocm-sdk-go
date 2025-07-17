@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/servicelogs/v1"
 )
 
+// MarshalIntegerList writes a list of values of the 'integer' type to
+// the given writer.
 var MarshalIntegerList = api_v1.MarshalIntegerList
+
+// WriteIntegerList writes a list of value of the 'integer' type to
+// the given stream.
 var WriteIntegerList = api_v1.WriteIntegerList
+
+// UnmarshalIntegerList reads a list of values of the 'integer' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalIntegerList = api_v1.UnmarshalIntegerList
+
+// ReadIntegerList reads list of values of the ”integer' type from
+// the given iterator.
 var ReadIntegerList = api_v1.ReadIntegerList

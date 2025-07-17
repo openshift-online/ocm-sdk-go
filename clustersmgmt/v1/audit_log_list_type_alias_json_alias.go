@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAuditLogList writes a list of values of the 'audit_log' type to
+// the given writer.
 var MarshalAuditLogList = api_v1.MarshalAuditLogList
+
+// WriteAuditLogList writes a list of value of the 'audit_log' type to
+// the given stream.
 var WriteAuditLogList = api_v1.WriteAuditLogList
+
+// UnmarshalAuditLogList reads a list of values of the 'audit_log' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAuditLogList = api_v1.UnmarshalAuditLogList
+
+// ReadAuditLogList reads list of values of the ”audit_log' type from
+// the given iterator.
 var ReadAuditLogList = api_v1.ReadAuditLogList

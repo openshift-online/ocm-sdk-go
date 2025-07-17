@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// CapabilityBuilder contains the data and logic needed to build 'capability' objects.
+//
+// Capability model that represents internal labels with a key that matches a set list defined in AMS (defined in pkg/api/capability_types.go).
 type CapabilityBuilder = api_v1.CapabilityBuilder
 
+// NewCapability creates a new builder of 'capability' objects.
 var NewCapability = api_v1.NewCapability

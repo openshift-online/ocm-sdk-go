@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// AddonVersionBuilder contains the data and logic needed to build 'addon_version' objects.
+//
+// Representation of an addon version.
 type AddonVersionBuilder = api_v1.AddonVersionBuilder
 
+// NewAddonVersion creates a new builder of 'addon_version' objects.
 var NewAddonVersion = api_v1.NewAddonVersion

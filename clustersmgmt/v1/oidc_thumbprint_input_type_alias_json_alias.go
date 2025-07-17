@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalOidcThumbprintInput writes a value of the 'oidc_thumbprint_input' type to the given writer.
 var MarshalOidcThumbprintInput = api_v1.MarshalOidcThumbprintInput
+
+// WriteOidcThumbprintInput writes a value of the 'oidc_thumbprint_input' type to the given stream.
 var WriteOidcThumbprintInput = api_v1.WriteOidcThumbprintInput
+
+// UnmarshalOidcThumbprintInput reads a value of the 'oidc_thumbprint_input' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalOidcThumbprintInput = api_v1.UnmarshalOidcThumbprintInput
+
+// ReadOidcThumbprintInput reads a value of the 'oidc_thumbprint_input' type from the given iterator.
 var ReadOidcThumbprintInput = api_v1.ReadOidcThumbprintInput

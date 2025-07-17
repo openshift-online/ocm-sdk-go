@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalLDAPIdentityProvider writes a value of the 'LDAP_identity_provider' type to the given writer.
 var MarshalLDAPIdentityProvider = api_v1.MarshalLDAPIdentityProvider
+
+// WriteLDAPIdentityProvider writes a value of the 'LDAP_identity_provider' type to the given stream.
 var WriteLDAPIdentityProvider = api_v1.WriteLDAPIdentityProvider
+
+// UnmarshalLDAPIdentityProvider reads a value of the 'LDAP_identity_provider' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalLDAPIdentityProvider = api_v1.UnmarshalLDAPIdentityProvider
+
+// ReadLDAPIdentityProvider reads a value of the 'LDAP_identity_provider' type from the given iterator.
 var ReadLDAPIdentityProvider = api_v1.ReadLDAPIdentityProvider

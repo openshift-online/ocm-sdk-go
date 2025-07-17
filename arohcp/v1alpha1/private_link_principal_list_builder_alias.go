@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// PrivateLinkPrincipalListBuilder contains the data and logic needed to build
+// 'private_link_principal' objects.
 type PrivateLinkPrincipalListBuilder = api_v1alpha1.PrivateLinkPrincipalListBuilder
 
+// NewPrivateLinkPrincipalList creates a new builder of 'private_link_principal' objects.
 var NewPrivateLinkPrincipalList = api_v1alpha1.NewPrivateLinkPrincipalList

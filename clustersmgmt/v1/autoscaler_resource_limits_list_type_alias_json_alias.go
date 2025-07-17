@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalAutoscalerResourceLimitsList writes a list of values of the 'autoscaler_resource_limits' type to
+// the given writer.
 var MarshalAutoscalerResourceLimitsList = api_v1.MarshalAutoscalerResourceLimitsList
+
+// WriteAutoscalerResourceLimitsList writes a list of value of the 'autoscaler_resource_limits' type to
+// the given stream.
 var WriteAutoscalerResourceLimitsList = api_v1.WriteAutoscalerResourceLimitsList
+
+// UnmarshalAutoscalerResourceLimitsList reads a list of values of the 'autoscaler_resource_limits' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAutoscalerResourceLimitsList = api_v1.UnmarshalAutoscalerResourceLimitsList
+
+// ReadAutoscalerResourceLimitsList reads list of values of the ”autoscaler_resource_limits' type from
+// the given iterator.
 var ReadAutoscalerResourceLimitsList = api_v1.ReadAutoscalerResourceLimitsList

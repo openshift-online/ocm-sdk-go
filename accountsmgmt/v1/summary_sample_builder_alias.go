@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// SummarySampleBuilder contains the data and logic needed to build 'summary_sample' objects.
 type SummarySampleBuilder = api_v1.SummarySampleBuilder
 
+// NewSummarySample creates a new builder of 'summary_sample' objects.
 var NewSummarySample = api_v1.NewSummarySample

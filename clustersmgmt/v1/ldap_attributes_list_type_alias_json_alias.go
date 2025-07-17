@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// MarshalLDAPAttributesList writes a list of values of the 'LDAP_attributes' type to
+// the given writer.
 var MarshalLDAPAttributesList = api_v1.MarshalLDAPAttributesList
+
+// WriteLDAPAttributesList writes a list of value of the 'LDAP_attributes' type to
+// the given stream.
 var WriteLDAPAttributesList = api_v1.WriteLDAPAttributesList
+
+// UnmarshalLDAPAttributesList reads a list of values of the 'LDAP_attributes' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalLDAPAttributesList = api_v1.UnmarshalLDAPAttributesList
+
+// ReadLDAPAttributesList reads list of values of the ”LDAP_attributes' type from
+// the given iterator.
 var ReadLDAPAttributesList = api_v1.ReadLDAPAttributesList

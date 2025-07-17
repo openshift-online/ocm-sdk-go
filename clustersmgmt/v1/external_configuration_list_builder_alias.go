@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// ExternalConfigurationListBuilder contains the data and logic needed to build
+// 'external_configuration' objects.
 type ExternalConfigurationListBuilder = api_v1.ExternalConfigurationListBuilder
 
+// NewExternalConfigurationList creates a new builder of 'external_configuration' objects.
 var NewExternalConfigurationList = api_v1.NewExternalConfigurationList

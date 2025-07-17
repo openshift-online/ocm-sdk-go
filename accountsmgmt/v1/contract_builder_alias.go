@@ -23,6 +23,8 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// ContractBuilder contains the data and logic needed to build 'contract' objects.
 type ContractBuilder = api_v1.ContractBuilder
 
+// NewContract creates a new builder of 'contract' objects.
 var NewContract = api_v1.NewContract

@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// WifConfigStatusBuilder contains the data and logic needed to build 'wif_config_status' objects.
+//
+// Configuration status of a WifConfig.
 type WifConfigStatusBuilder = api_v1.WifConfigStatusBuilder
 
+// NewWifConfigStatus creates a new builder of 'wif_config_status' objects.
 var NewWifConfigStatus = api_v1.NewWifConfigStatus

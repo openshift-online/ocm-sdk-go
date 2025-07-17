@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// PrivateLinkClusterConfigurationListBuilder contains the data and logic needed to build
+// 'private_link_cluster_configuration' objects.
 type PrivateLinkClusterConfigurationListBuilder = api_v1alpha1.PrivateLinkClusterConfigurationListBuilder
 
+// NewPrivateLinkClusterConfigurationList creates a new builder of 'private_link_cluster_configuration' objects.
 var NewPrivateLinkClusterConfigurationList = api_v1alpha1.NewPrivateLinkClusterConfigurationList

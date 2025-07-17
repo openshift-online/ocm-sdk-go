@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// TokenIssuerBuilder contains the data and logic needed to build 'token_issuer' objects.
+//
+// Representation of a token issuer used in an external authentication.
 type TokenIssuerBuilder = api_v1.TokenIssuerBuilder
 
+// NewTokenIssuer creates a new builder of 'token_issuer' objects.
 var NewTokenIssuer = api_v1.NewTokenIssuer

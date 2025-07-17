@@ -23,6 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AwsEtcdEncryptionListBuilder contains the data and logic needed to build
+// 'aws_etcd_encryption' objects.
 type AwsEtcdEncryptionListBuilder = api_v1alpha1.AwsEtcdEncryptionListBuilder
 
+// NewAwsEtcdEncryptionList creates a new builder of 'aws_etcd_encryption' objects.
 var NewAwsEtcdEncryptionList = api_v1alpha1.NewAwsEtcdEncryptionList

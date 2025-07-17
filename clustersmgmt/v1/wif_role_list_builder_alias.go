@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// WifRoleListBuilder contains the data and logic needed to build
+// 'wif_role' objects.
 type WifRoleListBuilder = api_v1.WifRoleListBuilder
 
+// NewWifRoleList creates a new builder of 'wif_role' objects.
 var NewWifRoleList = api_v1.NewWifRoleList

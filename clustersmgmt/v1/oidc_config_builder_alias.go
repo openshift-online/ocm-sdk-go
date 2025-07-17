@@ -23,6 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// OidcConfigBuilder contains the data and logic needed to build 'oidc_config' objects.
+//
+// Contains the necessary attributes to support oidc configuration hosting under Red Hat or registering a Customer's byo oidc config.
 type OidcConfigBuilder = api_v1.OidcConfigBuilder
 
+// NewOidcConfig creates a new builder of 'oidc_config' objects.
 var NewOidcConfig = api_v1.NewOidcConfig

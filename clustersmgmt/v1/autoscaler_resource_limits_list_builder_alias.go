@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// AutoscalerResourceLimitsListBuilder contains the data and logic needed to build
+// 'autoscaler_resource_limits' objects.
 type AutoscalerResourceLimitsListBuilder = api_v1.AutoscalerResourceLimitsListBuilder
 
+// NewAutoscalerResourceLimitsList creates a new builder of 'autoscaler_resource_limits' objects.
 var NewAutoscalerResourceLimitsList = api_v1.NewAutoscalerResourceLimitsList

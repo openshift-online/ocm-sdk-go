@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// MarshalObjectReference writes a value of the 'object_reference' type to the given writer.
 var MarshalObjectReference = api_v1.MarshalObjectReference
+
+// WriteObjectReference writes a value of the 'object_reference' type to the given stream.
 var WriteObjectReference = api_v1.WriteObjectReference
+
+// UnmarshalObjectReference reads a value of the 'object_reference' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalObjectReference = api_v1.UnmarshalObjectReference
+
+// ReadObjectReference reads a value of the 'object_reference' type from the given iterator.
 var ReadObjectReference = api_v1.ReadObjectReference

@@ -23,7 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/accountsmgmt/v1"
 )
 
+// MarshalFeatureToggleQueryRequest writes a value of the 'feature_toggle_query_request' type to the given writer.
 var MarshalFeatureToggleQueryRequest = api_v1.MarshalFeatureToggleQueryRequest
+
+// WriteFeatureToggleQueryRequest writes a value of the 'feature_toggle_query_request' type to the given stream.
 var WriteFeatureToggleQueryRequest = api_v1.WriteFeatureToggleQueryRequest
+
+// UnmarshalFeatureToggleQueryRequest reads a value of the 'feature_toggle_query_request' type from the given
+// source, which can be an slice of bytes, a string or a reader.
 var UnmarshalFeatureToggleQueryRequest = api_v1.UnmarshalFeatureToggleQueryRequest
+
+// ReadFeatureToggleQueryRequest reads a value of the 'feature_toggle_query_request' type from the given iterator.
 var ReadFeatureToggleQueryRequest = api_v1.ReadFeatureToggleQueryRequest

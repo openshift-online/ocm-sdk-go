@@ -23,6 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
+// AzureBuilder contains the data and logic needed to build 'azure' objects.
+//
+// Microsoft Azure settings of a cluster.
 type AzureBuilder = api_v1alpha1.AzureBuilder
 
+// NewAzure creates a new builder of 'azure' objects.
 var NewAzure = api_v1alpha1.NewAzure

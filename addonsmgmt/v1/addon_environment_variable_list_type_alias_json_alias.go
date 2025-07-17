@@ -23,7 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/addonsmgmt/v1"
 )
 
+// MarshalAddonEnvironmentVariableList writes a list of values of the 'addon_environment_variable' type to
+// the given writer.
 var MarshalAddonEnvironmentVariableList = api_v1.MarshalAddonEnvironmentVariableList
+
+// WriteAddonEnvironmentVariableList writes a list of value of the 'addon_environment_variable' type to
+// the given stream.
 var WriteAddonEnvironmentVariableList = api_v1.WriteAddonEnvironmentVariableList
+
+// UnmarshalAddonEnvironmentVariableList reads a list of values of the 'addon_environment_variable' type
+// from the given source, which can be a slice of bytes, a string or a reader.
 var UnmarshalAddonEnvironmentVariableList = api_v1.UnmarshalAddonEnvironmentVariableList
+
+// ReadAddonEnvironmentVariableList reads list of values of the ”addon_environment_variable' type from
+// the given iterator.
 var ReadAddonEnvironmentVariableList = api_v1.ReadAddonEnvironmentVariableList

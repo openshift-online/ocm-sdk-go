@@ -23,6 +23,9 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
+// StorageQuotaListBuilder contains the data and logic needed to build
+// 'storage_quota' objects.
 type StorageQuotaListBuilder = api_v1.StorageQuotaListBuilder
 
+// NewStorageQuotaList creates a new builder of 'storage_quota' objects.
 var NewStorageQuotaList = api_v1.NewStorageQuotaList
