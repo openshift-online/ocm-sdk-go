@@ -23,8 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ClusterCapabilitiesBuilder contains the data and logic needed to build 'cluster_capabilities' objects.
-type ClusterCapabilitiesBuilder = api_v1alpha1.ClusterCapabilitiesBuilder
+// MarshalMarketTypeList writes a list of values of the 'market_type' type to
+// the given writer.
+var MarshalMarketTypeList = api_v1alpha1.MarshalMarketTypeList
 
-// NewClusterCapabilities creates a new builder of 'cluster_capabilities' objects.
-var NewClusterCapabilities = api_v1alpha1.NewClusterCapabilities
+// WriteMarketTypeList writes a list of value of the 'market_type' type to
+// the given stream.
+var WriteMarketTypeList = api_v1alpha1.WriteMarketTypeList
+
+// UnmarshalMarketTypeList reads a list of values of the 'market_type' type
+// from the given source, which can be a slice of bytes, a string or a reader.
+var UnmarshalMarketTypeList = api_v1alpha1.UnmarshalMarketTypeList
+
+// ReadMarketTypeList reads list of values of the ”market_type' type from
+// the given iterator.
+var ReadMarketTypeList = api_v1alpha1.ReadMarketTypeList

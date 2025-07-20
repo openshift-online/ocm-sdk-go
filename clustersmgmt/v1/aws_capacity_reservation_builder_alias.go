@@ -23,19 +23,10 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterCapabilities represents the values of the 'cluster_capabilities' type.
-type ClusterCapabilities = api_v1.ClusterCapabilities
+// AWSCapacityReservationBuilder contains the data and logic needed to build 'AWS_capacity_reservation' objects.
+//
+// AWS Capacity Reservation specification.
+type AWSCapacityReservationBuilder = api_v1.AWSCapacityReservationBuilder
 
-// ClusterCapabilitiesListKind is the name of the type used to represent list of objects of
-// type 'cluster_capabilities'.
-const ClusterCapabilitiesListKind = api_v1.ClusterCapabilitiesListKind
-
-// ClusterCapabilitiesListLinkKind is the name of the type used to represent links to list
-// of objects of type 'cluster_capabilities'.
-const ClusterCapabilitiesListLinkKind = api_v1.ClusterCapabilitiesListLinkKind
-
-// ClusterCapabilitiesNilKind is the name of the type used to nil lists of objects of
-// type 'cluster_capabilities'.
-const ClusterCapabilitiesListNilKind = api_v1.ClusterCapabilitiesListNilKind
-
-type ClusterCapabilitiesList = api_v1.ClusterCapabilitiesList
+// NewAWSCapacityReservation creates a new builder of 'AWS_capacity_reservation' objects.
+var NewAWSCapacityReservation = api_v1.NewAWSCapacityReservation

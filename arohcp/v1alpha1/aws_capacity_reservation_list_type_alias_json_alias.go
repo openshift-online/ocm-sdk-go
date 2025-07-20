@@ -23,19 +23,18 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ClusterCapabilities represents the values of the 'cluster_capabilities' type.
-type ClusterCapabilities = api_v1alpha1.ClusterCapabilities
+// MarshalAWSCapacityReservationList writes a list of values of the 'AWS_capacity_reservation' type to
+// the given writer.
+var MarshalAWSCapacityReservationList = api_v1alpha1.MarshalAWSCapacityReservationList
 
-// ClusterCapabilitiesListKind is the name of the type used to represent list of objects of
-// type 'cluster_capabilities'.
-const ClusterCapabilitiesListKind = api_v1alpha1.ClusterCapabilitiesListKind
+// WriteAWSCapacityReservationList writes a list of value of the 'AWS_capacity_reservation' type to
+// the given stream.
+var WriteAWSCapacityReservationList = api_v1alpha1.WriteAWSCapacityReservationList
 
-// ClusterCapabilitiesListLinkKind is the name of the type used to represent links to list
-// of objects of type 'cluster_capabilities'.
-const ClusterCapabilitiesListLinkKind = api_v1alpha1.ClusterCapabilitiesListLinkKind
+// UnmarshalAWSCapacityReservationList reads a list of values of the 'AWS_capacity_reservation' type
+// from the given source, which can be a slice of bytes, a string or a reader.
+var UnmarshalAWSCapacityReservationList = api_v1alpha1.UnmarshalAWSCapacityReservationList
 
-// ClusterCapabilitiesNilKind is the name of the type used to nil lists of objects of
-// type 'cluster_capabilities'.
-const ClusterCapabilitiesListNilKind = api_v1alpha1.ClusterCapabilitiesListNilKind
-
-type ClusterCapabilitiesList = api_v1alpha1.ClusterCapabilitiesList
+// ReadAWSCapacityReservationList reads list of values of the ”AWS_capacity_reservation' type from
+// the given iterator.
+var ReadAWSCapacityReservationList = api_v1alpha1.ReadAWSCapacityReservationList

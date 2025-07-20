@@ -23,18 +23,15 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalClusterCapabilitiesList writes a list of values of the 'cluster_capabilities' type to
-// the given writer.
-var MarshalClusterCapabilitiesList = api_v1.MarshalClusterCapabilitiesList
+// MarshalAWSCapacityReservation writes a value of the 'AWS_capacity_reservation' type to the given writer.
+var MarshalAWSCapacityReservation = api_v1.MarshalAWSCapacityReservation
 
-// WriteClusterCapabilitiesList writes a list of value of the 'cluster_capabilities' type to
-// the given stream.
-var WriteClusterCapabilitiesList = api_v1.WriteClusterCapabilitiesList
+// WriteAWSCapacityReservation writes a value of the 'AWS_capacity_reservation' type to the given stream.
+var WriteAWSCapacityReservation = api_v1.WriteAWSCapacityReservation
 
-// UnmarshalClusterCapabilitiesList reads a list of values of the 'cluster_capabilities' type
-// from the given source, which can be a slice of bytes, a string or a reader.
-var UnmarshalClusterCapabilitiesList = api_v1.UnmarshalClusterCapabilitiesList
+// UnmarshalAWSCapacityReservation reads a value of the 'AWS_capacity_reservation' type from the given
+// source, which can be an slice of bytes, a string or a reader.
+var UnmarshalAWSCapacityReservation = api_v1.UnmarshalAWSCapacityReservation
 
-// ReadClusterCapabilitiesList reads list of values of the ”cluster_capabilities' type from
-// the given iterator.
-var ReadClusterCapabilitiesList = api_v1.ReadClusterCapabilitiesList
+// ReadAWSCapacityReservation reads a value of the 'AWS_capacity_reservation' type from the given iterator.
+var ReadAWSCapacityReservation = api_v1.ReadAWSCapacityReservation
