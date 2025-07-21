@@ -23,18 +23,12 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// MarshalClusterCapabilitiesList writes a list of values of the 'cluster_capabilities' type to
-// the given writer.
-var MarshalClusterCapabilitiesList = api_v1alpha1.MarshalClusterCapabilitiesList
+// MarketType represents the values of the 'market_type' enumerated type.
+type MarketType = api_v1alpha1.MarketType
 
-// WriteClusterCapabilitiesList writes a list of value of the 'cluster_capabilities' type to
-// the given stream.
-var WriteClusterCapabilitiesList = api_v1alpha1.WriteClusterCapabilitiesList
-
-// UnmarshalClusterCapabilitiesList reads a list of values of the 'cluster_capabilities' type
-// from the given source, which can be a slice of bytes, a string or a reader.
-var UnmarshalClusterCapabilitiesList = api_v1alpha1.UnmarshalClusterCapabilitiesList
-
-// ReadClusterCapabilitiesList reads list of values of the ”cluster_capabilities' type from
-// the given iterator.
-var ReadClusterCapabilitiesList = api_v1alpha1.ReadClusterCapabilitiesList
+const (
+	// Scheduled pre-purchased compute capacity.
+	MarketTypeCapacityBlocks MarketType = api_v1alpha1.MarketTypeCapacityBlocks
+	// EC2 instances run as standard On-Demand instances.
+	MarketTypeOnDemand MarketType = api_v1alpha1.MarketTypeOnDemand
+)

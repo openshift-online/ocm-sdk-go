@@ -23,9 +23,10 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ClusterCapabilitiesListBuilder contains the data and logic needed to build
-// 'cluster_capabilities' objects.
-type ClusterCapabilitiesListBuilder = api_v1alpha1.ClusterCapabilitiesListBuilder
+// AWSCapacityReservationBuilder contains the data and logic needed to build 'AWS_capacity_reservation' objects.
+//
+// AWS Capacity Reservation specification.
+type AWSCapacityReservationBuilder = api_v1alpha1.AWSCapacityReservationBuilder
 
-// NewClusterCapabilitiesList creates a new builder of 'cluster_capabilities' objects.
-var NewClusterCapabilitiesList = api_v1alpha1.NewClusterCapabilitiesList
+// NewAWSCapacityReservation creates a new builder of 'AWS_capacity_reservation' objects.
+var NewAWSCapacityReservation = api_v1alpha1.NewAWSCapacityReservation

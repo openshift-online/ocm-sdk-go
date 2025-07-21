@@ -23,15 +23,12 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// MarshalClusterCapabilities writes a value of the 'cluster_capabilities' type to the given writer.
-var MarshalClusterCapabilities = api_v1.MarshalClusterCapabilities
+// MarketType represents the values of the 'market_type' enumerated type.
+type MarketType = api_v1.MarketType
 
-// WriteClusterCapabilities writes a value of the 'cluster_capabilities' type to the given stream.
-var WriteClusterCapabilities = api_v1.WriteClusterCapabilities
-
-// UnmarshalClusterCapabilities reads a value of the 'cluster_capabilities' type from the given
-// source, which can be an slice of bytes, a string or a reader.
-var UnmarshalClusterCapabilities = api_v1.UnmarshalClusterCapabilities
-
-// ReadClusterCapabilities reads a value of the 'cluster_capabilities' type from the given iterator.
-var ReadClusterCapabilities = api_v1.ReadClusterCapabilities
+const (
+	// Scheduled pre-purchased compute capacity.
+	MarketTypeCapacityBlocks MarketType = api_v1.MarketTypeCapacityBlocks
+	// EC2 instances run as standard On-Demand instances.
+	MarketTypeOnDemand MarketType = api_v1.MarketTypeOnDemand
+)

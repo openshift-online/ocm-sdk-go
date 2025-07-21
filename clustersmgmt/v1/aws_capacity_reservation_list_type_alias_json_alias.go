@@ -23,8 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// ClusterCapabilitiesBuilder contains the data and logic needed to build 'cluster_capabilities' objects.
-type ClusterCapabilitiesBuilder = api_v1.ClusterCapabilitiesBuilder
+// MarshalAWSCapacityReservationList writes a list of values of the 'AWS_capacity_reservation' type to
+// the given writer.
+var MarshalAWSCapacityReservationList = api_v1.MarshalAWSCapacityReservationList
 
-// NewClusterCapabilities creates a new builder of 'cluster_capabilities' objects.
-var NewClusterCapabilities = api_v1.NewClusterCapabilities
+// WriteAWSCapacityReservationList writes a list of value of the 'AWS_capacity_reservation' type to
+// the given stream.
+var WriteAWSCapacityReservationList = api_v1.WriteAWSCapacityReservationList
+
+// UnmarshalAWSCapacityReservationList reads a list of values of the 'AWS_capacity_reservation' type
+// from the given source, which can be a slice of bytes, a string or a reader.
+var UnmarshalAWSCapacityReservationList = api_v1.UnmarshalAWSCapacityReservationList
+
+// ReadAWSCapacityReservationList reads list of values of the ”AWS_capacity_reservation' type from
+// the given iterator.
+var ReadAWSCapacityReservationList = api_v1.ReadAWSCapacityReservationList

@@ -13269,6 +13269,19 @@
           }
         }
       },
+      "AWSCapacityReservation": {
+        "description": "AWS Capacity Reservation specification.",
+        "properties": {
+          "id": {
+            "description": "Specify the target Capacity Reservation in which the EC2 instances will be launched.",
+            "type": "string"
+          },
+          "market_type": {
+            "description": "marketType specifies the market type of the CapacityReservation for the EC2\ninstances. Valid values are OnDemand, CapacityBlocks.\n\"OnDemand\": EC2 instances run as standard On-Demand instances.\n\"CapacityBlocks\": scheduled pre-purchased compute capacity.",
+            "$ref": "#/components/schemas/MarketType"
+          }
+        }
+      },
       "AWSFlavour": {
         "description": "Specification for different classes of nodes inside a flavour.",
         "properties": {
@@ -13461,6 +13474,10 @@
             "additionalProperties": {
               "type": "string"
             }
+          },
+          "capacity_reservation": {
+            "description": "If present it defines the AWS Capacity Reservation used for this NodePool",
+            "$ref": "#/components/schemas/AWSCapacityReservation"
           },
           "ec2_metadata_http_tokens": {
             "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
@@ -15540,10 +15557,6 @@
             "description": "Contains information about BYO OIDC.",
             "$ref": "#/components/schemas/ByoOidc"
           },
-          "capabilities": {
-            "description": "OpenShift Cluster Capabilities configuration",
-            "$ref": "#/components/schemas/ClusterCapabilities"
-          },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.",
             "$ref": "#/components/schemas/CloudProvider"
@@ -15621,7 +15634,7 @@
             }
           },
           "image_registry": {
-            "description": "Image registry configuration.\nFor non ARO-HCP clusters, it is readonly and always enabled",
+            "description": "The OpenShift Image Registry configuration\nIt provides an internal, integrated container image registry to locally manage images.\nFor non ARO-HCP clusters, it is readonly and always enabled",
             "$ref": "#/components/schemas/ClusterImageRegistry"
           },
           "inflight_checks": {
@@ -15725,7 +15738,7 @@
             "$ref": "#/components/schemas/CloudRegion"
           },
           "registry_config": {
-            "description": "Registry configuration for the cluster",
+            "description": "External registry configuration for the cluster",
             "$ref": "#/components/schemas/ClusterRegistryConfig"
           },
           "state": {
@@ -15831,17 +15844,6 @@
           "skip_nodes_with_local_storage": {
             "description": "Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.",
             "type": "boolean"
-          }
-        }
-      },
-      "ClusterCapabilities": {
-        "properties": {
-          "disabled": {
-            "description": "Immutable list of disabled capabilities. May only contain \"ImageRegistry\" at\nthis time. Additional capabilities may be available in the future. Clients\nshould expect to handle additional values.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
       },
@@ -17556,6 +17558,14 @@
             }
           }
         }
+      },
+      "MarketType": {
+        "description": "Market type for AWS Capacity Reservations.",
+        "type": "string",
+        "enum": [
+          "capacity_blocks",
+          "on_demand"
+        ]
       },
       "NamespaceOwnershipPolicy": {
         "description": "Type of Namespace Ownership Policy.",
