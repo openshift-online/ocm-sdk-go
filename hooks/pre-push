@@ -1,0 +1,135 @@
+#!/bin/bash
+
+#
+# Git pre-push hook to validate that tag versions match the Version constant in version.go
+#
+# This hook is called with the following parameters:
+# $1 -- Name of the remote to which the push is being done
+# $2 -- URL to which the push is being done
+#
+# Information about the commits which are being pushed is supplied as lines to
+# the standard input in the form:
+#   <local ref> <local sha1> <remote ref> <remote sha1>
+#
+
+set -euo pipefail
+
+print_error() {
+    echo "ERROR: $1" >&2
+}
+
+print_warning() {
+    echo "WARNING: $1" >&2
+}
+
+print_info() {
+    echo "INFO: $1" >&2
+}
+
+# Function to extract version from version.go
+get_version_from_file() {
+    if [[ ! -f "version.go" ]]; then
+        print_error "version.go file not found"
+        return 1
+    fi
+
+    # Extract version using grep and sed
+    local version=$(grep -E '^const Version = ' version.go | sed -E 's/^const Version = "([^"]+)".*$/\1/')
+
+    if [[ -z "$version" ]]; then
+        print_error "Could not extract version from version.go"
+        return 1
+    fi
+
+    echo "$version"
+}
+
+# Function to check if a ref is a version tag
+is_version_tag() {
+    local ref="$1"
+    if [[ "$ref" == refs/tags/* ]]; then
+        local tag_name="${ref#refs/tags/}"
+        # Match ONLY pattern vX.Y.Z (e.g., v0.1.472, v1.2.3)
+        [[ "$tag_name" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+    else
+        return 1
+    fi
+}
+
+# Function to check if a tag has a message starting with 'Release'
+is_release_tag() {
+    local ref="$1"
+    if [[ "$ref" == refs/tags/* ]]; then
+        local tag_name="${ref#refs/tags/}"
+        # Get the tag message (first line)
+        local tag_message=$(git tag -l --format='%(contents:lines=1)' "$tag_name" 2>/dev/null || echo "")
+        [[ "$tag_message" =~ ^Release.* ]]
+    else
+        return 1
+    fi
+}
+
+# Function to extract version from tag name
+get_version_from_tag() {
+    local tag="$1"
+    # Remove refs/tags/ prefix and v prefix if present
+    local version="${tag#refs/tags/}"
+    version="${version#v}"
+    echo "$version"
+}
+
+# Function to validate tag version against version.go
+validate_tag_version() {
+    local tag_ref="$1"
+    local tag_version
+    local file_version
+
+    tag_version=$(get_version_from_tag "$tag_ref")
+    file_version=$(get_version_from_file)
+
+    print_info "Validating tag version..."
+    print_info "  Tag version:  $tag_version"
+    print_info "  File version: $file_version"
+
+    if [[ "$tag_version" != "$file_version" ]]; then
+        print_error "Version mismatch detected!"
+        print_error "  Tag version:      $tag_version"
+        print_error "  version.go const: $file_version"
+        print_error ""
+        print_error "Please update the Version constant in version.go to match the tag"
+        print_error "or use a tag that matches the current version in version.go"
+        print_error ""
+        print_error "To fix this:"
+        print_error "  1. Update version.go: const Version = \"$tag_version\""
+        print_error "  2. Commit the change"
+        print_error "  3. Push again"
+        return 1
+    fi
+    print_info "Version validation passed!"
+    return 0
+}
+
+# Read the refs being pushed from stdin
+while read local_ref local_sha remote_ref remote_sha; do
+    # Skip if we're deleting a ref
+    if [[ "$local_sha" == "0000000000000000000000000000000000000000" ]]; then
+        continue
+    fi
+    # Check if this is a version tag being pushed
+    if is_version_tag "$remote_ref"; then
+        print_info "Detected version tag push: $remote_ref"
+        # Check if this is a release tag (message starts with 'Release')
+        if is_release_tag "$remote_ref"; then
+            print_info "Tag has 'Release' message - validating version consistency"
+            # Validate the tag version
+            if ! validate_tag_version "$remote_ref"; then
+                exit 1
+            fi
+        else
+            print_info "Tag does not have 'Release' message - skipping validation"
+        fi
+    fi
+done
+
+print_info "Pre-push validation completed successfully"
+exit 0

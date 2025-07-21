@@ -39,12 +39,40 @@ GINKGO := $(LOCAL_BIN_PATH)/ginkgo
 ginkgo-install:
 	@GOBIN=$(LOCAL_BIN_PATH) go install github.com/onsi/ginkgo/v2/ginkgo@v2.1.4 ;\
 
-verify: lint examples model metamodel-install goimports-install
+verify: lint examples model metamodel-install goimports-install verify-hooks
 	go vet $(find . -maxdepth 1 -type d  ! -name 'vendor' ! -name '.')
 	hack/verify-gofmt.sh
 	hack/verify-client.sh $(METAMODEL) .
 	hack/verify-openapi.sh $(METAMODEL) ./openapi
 .PHONY: verify
+
+.PHONY: install-hooks
+install-hooks:
+	@echo "Installing git hooks..."
+	@if [ -f hooks/pre-push ]; then \
+		cp hooks/pre-push .git/hooks/pre-push && \
+		chmod +x .git/hooks/pre-push && \
+		echo "Installed and made .git/hooks/pre-push executable"; \
+	else \
+		echo "Error: hooks/pre-push not found in repository"; \
+		exit 1; \
+	fi
+
+.PHONY: verify-hooks
+verify-hooks:
+	@echo "Verifying git hooks..."
+	@if [ -f .git/hooks/pre-push ]; then \
+		if [ -x .git/hooks/pre-push ]; then \
+			echo ".git/hooks/pre-push is executable"; \
+		else \
+			echo ".git/hooks/pre-push is not executable"; \
+			echo "  Run 'make install-hooks' to fix this"; \
+			exit 1; \
+		fi \
+	else \
+		echo "Warning: .git/hooks/pre-push not found"; \
+		echo "  Run 'make install-hooks' to install it"; \
+	fi
 
 .PHONY: examples
 examples:
