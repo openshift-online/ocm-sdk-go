@@ -30,6 +30,7 @@ print_info() {
 get_version_from_file() {
     if [[ ! -f "version.go" ]]; then
         print_error "version.go file not found"
+        print_error "Make sure you are running this command from the root of the repository"
         return 1
     fi
 
