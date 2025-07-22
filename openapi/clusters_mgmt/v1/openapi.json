@@ -19310,6 +19310,14 @@
       },
       "WifGcp": {
         "properties": {
+          "federated_project_id": {
+            "description": "This represents the GCP project ID in which, when specified,\nthe wif workload WorkloadIdentityPool resources will be configured.",
+            "type": "string"
+          },
+          "federated_project_number": {
+            "description": "This represents the GCP project number in which, when specified,\nthe wif workload WorkloadIdentityPool resources will be configured.",
+            "type": "string"
+          },
           "impersonator_email": {
             "description": "This is the service account email that OCM will use to access other SAs. ",
             "type": "string"
