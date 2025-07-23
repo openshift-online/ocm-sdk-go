@@ -1954,6 +1954,10 @@
             "description": "Enables Ephemeral OS Disks for the Nodes in the Node Pool.\nIf not specified, no Ephemeral OS Disks are used.",
             "type": "boolean"
           },
+          "os_disk": {
+            "description": "The configuration for the OS disk used by the nodes in the Node Pool.",
+            "$ref": "#/components/schemas/AzureNodePoolOsDisk"
+          },
           "os_disk_sse_encryption_set_resource_id": {
             "description": "The Azure Resource ID of a pre-existing Azure Disk Encryption Set (DES).\nWhen provided, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool\nis performed using the provided Disk Encryption Set.\nIt must be located in the same Azure location as the parent Cluster.  \nIt must be located in the same Azure Subscription as the parent Cluster.\nThe Azure Resource Group Name specified as part of it must be a different resource group name\nthan the one specified in the parent Cluster's `managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of it can be the same, or a different one\nthan the one specified in the parent Cluster's `resource_group_name`.\nIf not specified, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool \nis performed with platform managed keys.",
             "type": "string"
@@ -1969,6 +1973,28 @@
         "properties": {
           "state": {
             "description": "State indicates whether Encryption At Host is enabled.\nWhen enabled, it enhances Azure Disk Storage Server-Side Encryption to ensure that all temporary disks\nand disk caches are encrypted at rest and flow encrypted to the Storage clusters.\nAccepted values are: \"disabled\" or \"enabled\".\nIf not specified, its value is \"disabled\", which indicates Encryption At Host is disabled.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureNodePoolOsDisk": {
+        "description": "Defines the configuration of a Node Pool's OS disk.",
+        "properties": {
+          "persistence": {
+            "description": "Specifies the OS Disk persistence for the OS Disks of the Nodes in the Node Pool.\nValid values are:\n* persistent\n* ephemeral\nIf not specified, Persistent OS Disks are used.",
+            "type": "string"
+          },
+          "size_gibibytes": {
+            "description": "The size in GiB to assign to the OS disks of the\nNodes in the Node Pool. The property\nis the number of bytes x 1024^3.\nIf not specified, OS disk size is 64 GiB.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "sse_encryption_set_resource_id": {
+            "description": "The Azure Resource ID of a pre-existing Azure Disk Encryption Set (DES).\nWhen provided, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool\nis performed using the provided Disk Encryption Set.\nIt must be located in the same Azure location as the parent Cluster.  \nIt must be located in the same Azure Subscription as the parent Cluster.\nThe Azure Resource Group Name specified as part of it must be a different resource group name\nthan the one specified in the parent Cluster's `managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of it can be the same, or a different one\nthan the one specified in the parent Cluster's `resource_group_name`.\nIf not specified, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool \nis performed with platform managed keys.",
+            "type": "string"
+          },
+          "storage_account_type": {
+            "description": "The disk storage account type to use for the OS disks of the Nodes in the\nNode Pool. Valid values are:\n* Standard_LRS: HDD\n* StandardSSD_LRS: Standard SSD\n* Premium_LRS: Premium SDD\n* UltraSSD_LRS: Ultra SDD\n\nIf not specified, `Premium_LRS` is used.",
             "type": "string"
           }
         }
