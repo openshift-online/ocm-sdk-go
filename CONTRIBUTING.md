@@ -1,18 +1,5 @@
 # Contributing to the OCM SDK
 
-## Updating the OCM API Model
-
-If new api types or endpoints need to be added, the
-[ocm-api-model](https://github.com/openshift-online/ocm-api-model) will need to be updated.
-
-Fork and clone the [ocm-api-model](https://github.com/openshift-online/ocm-api-model) repository to
-get started.
-
-The [OCM API Model README](https://github.com/openshift-online/ocm-api-model/blob/main/README.md)
-contains all the information needed to create or update models.
-
-Submit an MR with any changes after validation. The MR should be reviewed before merge.
-
 ### Validating model updates
 
 The easiest way to validate changes to the ocm-api-model is to generate the sdk based on the updated model.
@@ -39,7 +26,7 @@ Hard tabs are required rather than spaces.
 ## Releasing a new OCM API Model version
 
 To use any updates to the [ocm-api-model](https://github.com/openshift-online/ocm-api-model), the version
-must be incremented for consumption in ocm-sdk-go generation. The version is defined by the latest git commit-SHA.
+must be incremented for consumption in ocm-sdk-go generation. The version is defined by the latest git tag.
 
 Once all changes to the OCM API Model have been defined and reviewed the client types for the model need to be generated via `make update` target
 in the `ocm-api-model` project.
@@ -55,8 +42,10 @@ The OCM SDK can be generated simply by running the following after all changes h
 make update
 ```
 
-The `./hack/update-model.sh` script will ensure the `ocm-api-model` modules are all up to date with the latest commit SHA across the OCM-SDK project.
+The `./hack/update-model.sh` script will ensure the `ocm-api-model` modules are all up to date with the latest version across the OCM-SDK project.
 To verify that they are all in-sync one can use the `./hack/verify-model-version.sh` script.
+
+One can add an optional commit SHA or version to the `./update-model.sh <vX.Y.Z>` script to update the go modules to a specific version.
 
 Whenever an update is made, ensure that the corresponding example in [examples](examples) is also updated where
 necessary. It is *highly recommended* that new endpoints have a new example created.
