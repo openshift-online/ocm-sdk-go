@@ -3,6 +3,34 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.473
+- Update model to version 0.0.426:
+  - Restructure OS disk attributes for ARO-HCP NodePool
+  - Add `AzureNodePoolOsDisk` type and related resources
+  - Consolidate Azure node pool OS disk configuration into structured approach
+
+## 0.1.472
+- Add script to simplify model update process
+- Add git hook to validate pushed tag matches the Version constant
+- Add version bump script and update the version file
+- Update ocm-api-metamodel to v0.0.422
+- Update API model with Azure node pool OS disk types and endpoints
+
+## 0.1.471
+- Reorganize CONTRIBUTING.md file and remove unnecessary instructions
+- Update release process documentation for ocm-api-model
+- Add optional commit SHA argument to update-model script
+- Update model with latest changes
+
+## 0.1.470
+- Update model to version 0.0.422:
+  - Add AWS backup configuration support with `AWSBackupConfig` type
+  - Add Azure encryption enhancements including `AzureEtcdDataEncryption`, `AzureKmsEncryption`, and `AzureKmsKey` types
+  - Add new access transparency service with access protection and request types
+  - Add `ClientComponent` type for ARO-HCP
+- Add development workflow improvements
+- Prepare infrastructure for Azure node pool enhancements
+
 ## 0.1.469
 - Update model to add arohcp ManagedIdentitiesRequirements types and endpoints
  
