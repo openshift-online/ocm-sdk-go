@@ -1,37 +1,28 @@
 # Contributing to the OCM SDK
 
-### Validating model updates
-
-The easiest way to validate changes to the ocm-api-model is to generate the sdk based on the updated model.
-Ensure ocm-sdk-go is cloned locally alongside your cloned ocm-api-model directory where changes are made.
-
-In ocm-sdk-go, run the following to generate the sdk using the local ocm-api-model. Replace
-`/path/to/ocm-api-model` with the path to your cloned ocm-api-model repository where changes have been made.
-Replace `HEAD` with the commit SHA in ocm-api-model to build against if necessary.
-
-```shell
-make clean
-make model_version=HEAD model_url=/path/to/ocm-api-model generate
-```
-
-Review the output for errors. If none, the changes are at least syntactically proper.
-
-### Style notes
-
-Comments can be added to types with the `//` notation. Comments should be added to each type's attribute where
-possible.
-
-Hard tabs are required rather than spaces.
-
 ## Releasing a new OCM API Model version
 
-To use any updates to the [ocm-api-model](https://github.com/openshift-online/ocm-api-model), the version
+First, all changes to the [ocm-api-model](https://github.com/openshift-online/ocm-api-model) have been defined and reviewed. Then, the client types for the model need to be generated via `make update` target in the `ocm-api-model` project.
+
+Once the client types and api description are merged in [ocm-api-model](https://github.com/openshift-online/ocm-api-model), the version of the ocm-api-model
 must be incremented for consumption in ocm-sdk-go generation. The version is defined by the latest git tag.
 
-Once all changes to the OCM API Model have been defined and reviewed the client types for the model need to be generated via `make update` target
-in the `ocm-api-model` project.
+Once all changes to the OCM API Model have been committed to the main branch and a new tag is pused a new release will be created automatically.Then, you will need to update these changes in the SDK. (See "Updating the OCM SDK" section)
 
-Once all changes to the OCM API Model have been committed to the main branch you will need to update these changes in the SDK.
+### Validating model updates
+
+If you would like to test the SDK against a *local version* use the following instructions:
+
+Ensure ocm-sdk-go is cloned locally alongside your cloned ocm-api-model directory where changes are made.
+
+Use the following commands to test you're locally generated client types:
+```
+go mod edit -replace=github.com/openshift-online/ocm-api-model/clientapi=/path/to/your/local/ocm-api-model/clientapi
+
+go mod edit -replace=github.com/openshift-online/ocm-api-model/model=/path/to/your/local/ocm-api-model/model
+
+make update
+```
 
 ## Updating the OCM SDK
 
