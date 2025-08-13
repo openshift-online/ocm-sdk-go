@@ -41,6 +41,7 @@ MODULE_DIRS=(
 MODULES=(
   "github.com/openshift-online/ocm-api-model/model"
   "github.com/openshift-online/ocm-api-model/clientapi"
+  "github.com/openshift-online/ocm-api-model/metamodel_generator"
 )
 
 echo "Updating Go modules..."
