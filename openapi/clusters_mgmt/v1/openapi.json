@@ -3731,6 +3731,87 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/control_plane": {
+      "get": {
+        "description": "Retrieves the details of the control plane",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlPlane"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the control plane",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ControlPlane"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlPlane"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/control_plane/upgrade_policies": {
       "post": {
         "description": "Adds a new upgrade policy to the control plane of the cluster.",
@@ -13188,6 +13269,10 @@
             "description": "Audit log forwarding configuration",
             "$ref": "#/components/schemas/AuditLog"
           },
+          "auto_node": {
+            "description": "AWS specific configuration for AutoNode",
+            "$ref": "#/components/schemas/AwsAutoNode"
+          },
           "billing_account_id": {
             "description": "BillingAccountID is the account used for billing subscriptions purchased via the marketplace",
             "type": "string"
@@ -13654,6 +13739,29 @@
           "enabled": {
             "description": "Indicates if Customer Cloud Subscription is enabled on the cluster.",
             "type": "boolean"
+          }
+        }
+      },
+      "CIDRBlockAccess": {
+        "description": "Describes the CIDR Block access policy to the Kubernetes API server.\nCurrently, only supported for ARO-HCP based clusters.\nThe default policy mode is \"allow_all\" that is, all access is allowed.",
+        "properties": {
+          "allow": {
+            "$ref": "#/components/schemas/CIDRBlockAllowAccess"
+          }
+        }
+      },
+      "CIDRBlockAllowAccess": {
+        "properties": {
+          "mode": {
+            "description": "There are two modes: \"allow_all\" and \"allow_list\"; if \"allow_list\" is provided than a non-empty 'values' list must be provided.\nOtherwise, if \"allow_all\" is provided then 'values' list should be omitted.",
+            "type": "string"
+          },
+          "values": {
+            "description": "The 'values' list should contain a CIDR block list (An IPV4 address range in the format `<ipv4_address>/<network_mask>`). \nThe maximum number of CIDR blocks supported is 500. The CIDR blocks should be non-overlapping and valid.\nThe value \"0.0.0.0/0\" is not considered a valid value, as the user can use \"allow_all\" mode to indicate this behavior.\nThe values should not contain the set of Private IP address ranges.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -14931,6 +15039,15 @@
           }
         }
       },
+      "AwsAutoNode": {
+        "description": "AWS provider configuration settings when using AutoNode on a ROSA HCP Cluster",
+        "properties": {
+          "role_arn": {
+            "description": "The AWS ARN of the IAM Role that has the permissions required for the AutoNode\ncontroller.\nThe role must exist prior to enabling AutoNode on the cluster.",
+            "type": "string"
+          }
+        }
+      },
       "AwsEtcdEncryption": {
         "description": "Contains the necessary attributes to support etcd encryption for AWS based clusters.",
         "properties": {
@@ -15100,10 +15217,6 @@
             "description": "The configuration for the OS disk used by the nodes in the Node Pool.",
             "$ref": "#/components/schemas/AzureNodePoolOsDisk"
           },
-          "os_disk_sse_encryption_set_resource_id": {
-            "description": "The Azure Resource ID of a pre-existing Azure Disk Encryption Set (DES).\nWhen provided, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool\nis performed using the provided Disk Encryption Set.\nIt must be located in the same Azure location as the parent Cluster.  \nIt must be located in the same Azure Subscription as the parent Cluster.\nThe Azure Resource Group Name specified as part of it must be a different resource group name\nthan the one specified in the parent Cluster's `managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of it can be the same, or a different one\nthan the one specified in the parent Cluster's `resource_group_name`.\nIf not specified, Server-Side Encryption (SSE) on the OS Disks of the Nodes of the Node Pool \nis performed with platform managed keys.",
-            "type": "string"
-          },
           "resource_name": {
             "description": "ResourceName is the Azure Resource Name of the NodePool.\nResourceName must be within the Azure Resource Group Name of the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Location as the parent\nCluster it belongs to.\nResourceName must be located in the same Azure Subscription as the parent\nCluster it belongs to.\nResourceName must belong to the same Microsoft Entra Tenant ID as the parent\nCluster it belongs to.\nRequired during creation.\nImmutable.",
             "type": "string"
@@ -15199,6 +15312,15 @@
           },
           "resource_id": {
             "description": "The Azure Resource ID of the Azure User-Assigned Managed\nIdentity. The managed identity represented must exist before\ncreating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "Backup": {
+        "description": "Representation of a Backup.",
+        "properties": {
+          "state": {
+            "description": "Indicates the state of the backup.\nAccepted values are: \"enabled\", \"disabled\".",
             "type": "string"
           }
         }
@@ -15567,6 +15689,10 @@
               "$ref": "#/components/schemas/AddOnInstallation"
             }
           },
+          "auto_node": {
+            "description": "The AutoNode settings for this cluster.\nThis is currently only supported for ROSA HCP",
+            "$ref": "#/components/schemas/ClusterAutoNode"
+          },
           "autoscaler": {
             "description": "Link to an optional _ClusterAutoscaler_ that is coupled with the cluster.",
             "$ref": "#/components/schemas/ClusterAutoscaler"
@@ -15792,6 +15918,10 @@
       "ClusterAPI": {
         "description": "Information about the API of a cluster.",
         "properties": {
+          "cidr_block_access": {
+            "description": "Describes the CIDR Block access policy to the Kubernetes API server.",
+            "$ref": "#/components/schemas/CIDRBlockAccess"
+          },
           "url": {
             "description": "The URL of the API server of the cluster.",
             "type": "string"
@@ -15809,6 +15939,27 @@
           "classic",
           "hcp"
         ]
+      },
+      "ClusterAutoNode": {
+        "description": "The AutoNode configuration for the Cluster.",
+        "properties": {
+          "mode": {
+            "description": "Mode indicates the current state of AutoNode on this cluster.\nValid values: \"enabled\", \"disabled\".",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClusterAutoNodeStatus"
+          }
+        }
+      },
+      "ClusterAutoNodeStatus": {
+        "description": "Additional status information on the AutoNode configuration on this Cluster",
+        "properties": {
+          "message": {
+            "description": "Messages relating to the status of the AutoNode installation on this Cluster",
+            "type": "string"
+          }
+        }
       },
       "ClusterAutoscaler": {
         "description": "Cluster-wide autoscaling configuration.",
@@ -16334,6 +16485,15 @@
           "downloads",
           "oauth"
         ]
+      },
+      "ControlPlane": {
+        "description": "Representation of a Control Plane",
+        "properties": {
+          "backup": {
+            "description": "Information about the backup of the control plane",
+            "$ref": "#/components/schemas/Backup"
+          }
+        }
       },
       "ControlPlaneUpgradePolicy": {
         "description": "Representation of an upgrade policy that can be set for a cluster.",
@@ -19056,6 +19216,7 @@
           "OSD",
           "ADDON",
           "ControlPlane",
+          "ControlPlaneCVE",
           "NodePool"
         ]
       },

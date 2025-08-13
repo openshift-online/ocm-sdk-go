@@ -19,21 +19,19 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-import "io"
+import (
+	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
+)
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
-func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
-func writeControlPlaneUpdateRequest(request *ControlPlaneUpdateRequest, writer io.Writer) error {
-	return MarshalControlPlane(request.body, writer)
-}
-func readControlPlaneUpdateResponse(response *ControlPlaneUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
+// MarshalAwsAutoNode writes a value of the 'aws_auto_node' type to the given writer.
+var MarshalAwsAutoNode = api_v1.MarshalAwsAutoNode
+
+// WriteAwsAutoNode writes a value of the 'aws_auto_node' type to the given stream.
+var WriteAwsAutoNode = api_v1.WriteAwsAutoNode
+
+// UnmarshalAwsAutoNode reads a value of the 'aws_auto_node' type from the given
+// source, which can be an slice of bytes, a string or a reader.
+var UnmarshalAwsAutoNode = api_v1.UnmarshalAwsAutoNode
+
+// ReadAwsAutoNode reads a value of the 'aws_auto_node' type from the given iterator.
+var ReadAwsAutoNode = api_v1.ReadAwsAutoNode

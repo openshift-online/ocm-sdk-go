@@ -17,23 +17,18 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
-import "io"
+import (
+	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
+)
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
-func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
-func writeControlPlaneUpdateRequest(request *ControlPlaneUpdateRequest, writer io.Writer) error {
-	return MarshalControlPlane(request.body, writer)
-}
-func readControlPlaneUpdateResponse(response *ControlPlaneUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
+// CIDRBlockAccessBuilder contains the data and logic needed to build 'CIDR_block_access' objects.
+//
+// Describes the CIDR Block access policy to the Kubernetes API server.
+// Currently, only supported for ARO-HCP based clusters.
+// The default policy mode is "allow_all" that is, all access is allowed.
+type CIDRBlockAccessBuilder = api_v1alpha1.CIDRBlockAccessBuilder
+
+// NewCIDRBlockAccess creates a new builder of 'CIDR_block_access' objects.
+var NewCIDRBlockAccess = api_v1alpha1.NewCIDRBlockAccess

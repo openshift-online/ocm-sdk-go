@@ -19,21 +19,14 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-import "io"
+import (
+	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
+)
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
-func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
-func writeControlPlaneUpdateRequest(request *ControlPlaneUpdateRequest, writer io.Writer) error {
-	return MarshalControlPlane(request.body, writer)
-}
-func readControlPlaneUpdateResponse(response *ControlPlaneUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
+// ControlPlaneBuilder contains the data and logic needed to build 'control_plane' objects.
+//
+// Representation of a Control Plane
+type ControlPlaneBuilder = api_v1.ControlPlaneBuilder
+
+// NewControlPlane creates a new builder of 'control_plane' objects.
+var NewControlPlane = api_v1.NewControlPlane

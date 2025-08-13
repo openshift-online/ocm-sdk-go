@@ -23,18 +23,21 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// UpgradeType represents the values of the 'upgrade_type' enumerated type.
-type UpgradeType = api_v1.UpgradeType
+// AwsAutoNode represents the values of the 'aws_auto_node' type.
+//
+// AWS provider configuration settings when using AutoNode on a ROSA HCP Cluster
+type AwsAutoNode = api_v1.AwsAutoNode
 
-const (
-	// Upgrade of OSD cluster, which will upgrade the cluster's control plane, and all the node pools.
-	UpgradeTypeOSD UpgradeType = api_v1.UpgradeTypeOSD
-	// Upgrade of an AddOn
-	UpgradeTypeAddOn UpgradeType = api_v1.UpgradeTypeAddOn
-	// Control plane upgrade, relevant only for hosted control plane clusters.
-	UpgradeTypeControlPlane UpgradeType = api_v1.UpgradeTypeControlPlane
-	// An upgrade required for security reasons.
-	UpgradeTypeControlPlaneCVE UpgradeType = api_v1.UpgradeTypeControlPlaneCVE
-	// Node pool upgrade, relevant only for hosted control plane clusters.
-	UpgradeTypeNodePool UpgradeType = api_v1.UpgradeTypeNodePool
-)
+// AwsAutoNodeListKind is the name of the type used to represent list of objects of
+// type 'aws_auto_node'.
+const AwsAutoNodeListKind = api_v1.AwsAutoNodeListKind
+
+// AwsAutoNodeListLinkKind is the name of the type used to represent links to list
+// of objects of type 'aws_auto_node'.
+const AwsAutoNodeListLinkKind = api_v1.AwsAutoNodeListLinkKind
+
+// AwsAutoNodeNilKind is the name of the type used to nil lists of objects of
+// type 'aws_auto_node'.
+const AwsAutoNodeListNilKind = api_v1.AwsAutoNodeListNilKind
+
+type AwsAutoNodeList = api_v1.AwsAutoNodeList
