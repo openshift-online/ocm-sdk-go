@@ -19,21 +19,22 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-import "io"
+import (
+	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
+)
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
-func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
-func writeControlPlaneUpdateRequest(request *ControlPlaneUpdateRequest, writer io.Writer) error {
-	return MarshalControlPlane(request.body, writer)
-}
-func readControlPlaneUpdateResponse(response *ControlPlaneUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
+// MarshalControlPlaneList writes a list of values of the 'control_plane' type to
+// the given writer.
+var MarshalControlPlaneList = api_v1.MarshalControlPlaneList
+
+// WriteControlPlaneList writes a list of value of the 'control_plane' type to
+// the given stream.
+var WriteControlPlaneList = api_v1.WriteControlPlaneList
+
+// UnmarshalControlPlaneList reads a list of values of the 'control_plane' type
+// from the given source, which can be a slice of bytes, a string or a reader.
+var UnmarshalControlPlaneList = api_v1.UnmarshalControlPlaneList
+
+// ReadControlPlaneList reads list of values of the ”control_plane' type from
+// the given iterator.
+var ReadControlPlaneList = api_v1.ReadControlPlaneList

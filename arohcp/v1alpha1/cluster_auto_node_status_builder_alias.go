@@ -17,23 +17,16 @@ limitations under the License.
 // IMPORTANT: This file has been generated automatically, refrain from modifying it manually as all
 // your changes will be lost when the file is generated again.
 
-package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
+package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
-import "io"
+import (
+	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
+)
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
-func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
-func writeControlPlaneUpdateRequest(request *ControlPlaneUpdateRequest, writer io.Writer) error {
-	return MarshalControlPlane(request.body, writer)
-}
-func readControlPlaneUpdateResponse(response *ControlPlaneUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
+// ClusterAutoNodeStatusBuilder contains the data and logic needed to build 'cluster_auto_node_status' objects.
+//
+// Additional status information on the AutoNode configuration on this Cluster
+type ClusterAutoNodeStatusBuilder = api_v1alpha1.ClusterAutoNodeStatusBuilder
+
+// NewClusterAutoNodeStatus creates a new builder of 'cluster_auto_node_status' objects.
+var NewClusterAutoNodeStatus = api_v1alpha1.NewClusterAutoNodeStatus

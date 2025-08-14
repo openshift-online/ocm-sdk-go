@@ -23,18 +23,18 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// UpgradeType represents the values of the 'upgrade_type' enumerated type.
-type UpgradeType = api_v1.UpgradeType
+// MarshalClusterAutoNodeList writes a list of values of the 'cluster_auto_node' type to
+// the given writer.
+var MarshalClusterAutoNodeList = api_v1.MarshalClusterAutoNodeList
 
-const (
-	// Upgrade of OSD cluster, which will upgrade the cluster's control plane, and all the node pools.
-	UpgradeTypeOSD UpgradeType = api_v1.UpgradeTypeOSD
-	// Upgrade of an AddOn
-	UpgradeTypeAddOn UpgradeType = api_v1.UpgradeTypeAddOn
-	// Control plane upgrade, relevant only for hosted control plane clusters.
-	UpgradeTypeControlPlane UpgradeType = api_v1.UpgradeTypeControlPlane
-	// An upgrade required for security reasons.
-	UpgradeTypeControlPlaneCVE UpgradeType = api_v1.UpgradeTypeControlPlaneCVE
-	// Node pool upgrade, relevant only for hosted control plane clusters.
-	UpgradeTypeNodePool UpgradeType = api_v1.UpgradeTypeNodePool
-)
+// WriteClusterAutoNodeList writes a list of value of the 'cluster_auto_node' type to
+// the given stream.
+var WriteClusterAutoNodeList = api_v1.WriteClusterAutoNodeList
+
+// UnmarshalClusterAutoNodeList reads a list of values of the 'cluster_auto_node' type
+// from the given source, which can be a slice of bytes, a string or a reader.
+var UnmarshalClusterAutoNodeList = api_v1.UnmarshalClusterAutoNodeList
+
+// ReadClusterAutoNodeList reads list of values of the ”cluster_auto_node' type from
+// the given iterator.
+var ReadClusterAutoNodeList = api_v1.ReadClusterAutoNodeList

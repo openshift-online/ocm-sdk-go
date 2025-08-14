@@ -23,18 +23,19 @@ import (
 	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
 )
 
-// UpgradeType represents the values of the 'upgrade_type' enumerated type.
-type UpgradeType = api_v1.UpgradeType
+// CIDRBlockAllowAccess represents the values of the 'CIDR_block_allow_access' type.
+type CIDRBlockAllowAccess = api_v1.CIDRBlockAllowAccess
 
-const (
-	// Upgrade of OSD cluster, which will upgrade the cluster's control plane, and all the node pools.
-	UpgradeTypeOSD UpgradeType = api_v1.UpgradeTypeOSD
-	// Upgrade of an AddOn
-	UpgradeTypeAddOn UpgradeType = api_v1.UpgradeTypeAddOn
-	// Control plane upgrade, relevant only for hosted control plane clusters.
-	UpgradeTypeControlPlane UpgradeType = api_v1.UpgradeTypeControlPlane
-	// An upgrade required for security reasons.
-	UpgradeTypeControlPlaneCVE UpgradeType = api_v1.UpgradeTypeControlPlaneCVE
-	// Node pool upgrade, relevant only for hosted control plane clusters.
-	UpgradeTypeNodePool UpgradeType = api_v1.UpgradeTypeNodePool
-)
+// CIDRBlockAllowAccessListKind is the name of the type used to represent list of objects of
+// type 'CIDR_block_allow_access'.
+const CIDRBlockAllowAccessListKind = api_v1.CIDRBlockAllowAccessListKind
+
+// CIDRBlockAllowAccessListLinkKind is the name of the type used to represent links to list
+// of objects of type 'CIDR_block_allow_access'.
+const CIDRBlockAllowAccessListLinkKind = api_v1.CIDRBlockAllowAccessListLinkKind
+
+// CIDRBlockAllowAccessNilKind is the name of the type used to nil lists of objects of
+// type 'CIDR_block_allow_access'.
+const CIDRBlockAllowAccessListNilKind = api_v1.CIDRBlockAllowAccessListNilKind
+
+type CIDRBlockAllowAccessList = api_v1.CIDRBlockAllowAccessList

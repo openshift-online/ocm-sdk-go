@@ -19,21 +19,19 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-import "io"
+import (
+	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
+)
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
-func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
-func writeControlPlaneUpdateRequest(request *ControlPlaneUpdateRequest, writer io.Writer) error {
-	return MarshalControlPlane(request.body, writer)
-}
-func readControlPlaneUpdateResponse(response *ControlPlaneUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
+// MarshalCIDRBlockAccess writes a value of the 'CIDR_block_access' type to the given writer.
+var MarshalCIDRBlockAccess = api_v1.MarshalCIDRBlockAccess
+
+// WriteCIDRBlockAccess writes a value of the 'CIDR_block_access' type to the given stream.
+var WriteCIDRBlockAccess = api_v1.WriteCIDRBlockAccess
+
+// UnmarshalCIDRBlockAccess reads a value of the 'CIDR_block_access' type from the given
+// source, which can be an slice of bytes, a string or a reader.
+var UnmarshalCIDRBlockAccess = api_v1.UnmarshalCIDRBlockAccess
+
+// ReadCIDRBlockAccess reads a value of the 'CIDR_block_access' type from the given iterator.
+var ReadCIDRBlockAccess = api_v1.ReadCIDRBlockAccess

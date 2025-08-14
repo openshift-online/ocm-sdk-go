@@ -19,21 +19,25 @@ limitations under the License.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
-import "io"
+import (
+	api_v1 "github.com/openshift-online/ocm-api-model/clientapi/clustersmgmt/v1"
+)
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
-func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
-func writeControlPlaneUpdateRequest(request *ControlPlaneUpdateRequest, writer io.Writer) error {
-	return MarshalControlPlane(request.body, writer)
-}
-func readControlPlaneUpdateResponse(response *ControlPlaneUpdateResponse, reader io.Reader) error {
-	var err error
-	response.body, err = UnmarshalControlPlane(reader)
-	return err
-}
+// Backup represents the values of the 'backup' type.
+//
+// Representation of a Backup.
+type Backup = api_v1.Backup
+
+// BackupListKind is the name of the type used to represent list of objects of
+// type 'backup'.
+const BackupListKind = api_v1.BackupListKind
+
+// BackupListLinkKind is the name of the type used to represent links to list
+// of objects of type 'backup'.
+const BackupListLinkKind = api_v1.BackupListLinkKind
+
+// BackupNilKind is the name of the type used to nil lists of objects of
+// type 'backup'.
+const BackupListNilKind = api_v1.BackupListNilKind
+
+type BackupList = api_v1.BackupList
