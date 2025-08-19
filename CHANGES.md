@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.474
+- Update mode to version 0.0.429
+  - Add support for AutoNode for ROSA HCP 
+
 ## 0.1.473
 - Update model to version 0.0.426:
   - Restructure OS disk attributes for ARO-HCP NodePool
