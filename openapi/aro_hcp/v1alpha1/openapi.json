@@ -296,6 +296,87 @@
         }
       }
     },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/autoscaler": {
+      "get": {
+        "description": "Retrieves the details of the cluster autoscaler.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterAutoscaler"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the cluster autoscaler.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusterAutoscaler"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterAutoscaler"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/external_auth_config": {
       "get": {
         "parameters": [
@@ -1816,6 +1897,69 @@
           }
         }
       },
+      "AutoscalerResourceLimits": {
+        "properties": {
+          "gpus": {
+            "description": "Minimum and maximum number of different GPUs in cluster, in the format <gpu_type>:<min>:<max>.\nCluster autoscaler will not scale the cluster beyond these numbers. Can be passed multiple times.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AutoscalerResourceLimitsGPULimit"
+            }
+          },
+          "cores": {
+            "description": "Minimum and maximum number of cores in cluster, in the format <min>:<max>.\nCluster autoscaler will not scale the cluster beyond these numbers.",
+            "$ref": "#/components/schemas/ResourceRange"
+          },
+          "max_nodes_total": {
+            "description": "Maximum number of nodes in all node groups.\nCluster autoscaler will not grow the cluster beyond this number.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "memory": {
+            "description": "Minimum and maximum number of gigabytes of memory in cluster, in the format <min>:<max>.\nCluster autoscaler will not scale the cluster beyond these numbers.",
+            "$ref": "#/components/schemas/ResourceRange"
+          }
+        }
+      },
+      "AutoscalerResourceLimitsGPULimit": {
+        "properties": {
+          "range": {
+            "$ref": "#/components/schemas/ResourceRange"
+          },
+          "type": {
+            "description": "The type of GPU to associate with the minimum and maximum limits.\nThis value is used by the Cluster Autoscaler to identify Nodes that will have GPU capacity by searching\nfor it as a label value on the Node objects. For example, Nodes that carry the label key\n`cluster-api/accelerator` with the label value being the same as the Type field will be counted towards\nthe resource limits by the Cluster Autoscaler.",
+            "type": "string"
+          }
+        }
+      },
+      "AutoscalerScaleDownConfig": {
+        "properties": {
+          "delay_after_add": {
+            "description": "How long after scale up that scale down evaluation resumes.",
+            "type": "string"
+          },
+          "delay_after_delete": {
+            "description": "How long after node deletion that scale down evaluation resumes, defaults to scan-interval.",
+            "type": "string"
+          },
+          "delay_after_failure": {
+            "description": "How long after scale down failure that scale down evaluation resumes.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Should cluster-autoscaler scale down the cluster.",
+            "type": "boolean"
+          },
+          "unneeded_time": {
+            "description": "How long a node should be unneeded before it is eligible for scale down.",
+            "type": "string"
+          },
+          "utilization_threshold": {
+            "description": "Node utilization level, defined as sum of requested resources divided by capacity, below which a node can be considered for scale down.",
+            "type": "string"
+          }
+        }
+      },
       "AwsAutoNode": {
         "description": "AWS provider configuration settings when using AutoNode on a ROSA HCP Cluster",
         "properties": {
@@ -1969,15 +2113,6 @@
       "AzureNodePool": {
         "description": "Representation of azure node pool specific parameters.",
         "properties": {
-          "os_disk_size_gibibytes": {
-            "description": "The size in GiB to assign to the OS disks of the\nNodes in the Node Pool. The property\nis the number of bytes x 1024^3.\nIf not specified, OS disk size is 30 GiB.",
-            "type": "integer",
-            "format": "int32"
-          },
-          "os_disk_storage_account_type": {
-            "description": "The disk storage account type to use for the OS disks of the Nodes in the\nNode Pool. Valid values are:\n* Standard_LRS: HDD\n* StandardSSD_LRS: Standard SSD\n* Premium_LRS: Premium SDD\n* UltraSSD_LRS: Ultra SDD\n\nIf not specified, `Premium_LRS` is used.",
-            "type": "string"
-          },
           "vm_size": {
             "description": "The Azure Virtual Machine size identifier used for the\nNodes of the Node Pool.\nAvailability of VM sizes are dependent on the Azure Location\nof the parent Cluster.\nRequired during creation.",
             "type": "string"
@@ -1985,10 +2120,6 @@
           "encryption_at_host": {
             "description": "EncryptionAtHost contains Encryption At Host disk encryption configuration.\nWhen enabled, it enhances Azure Disk Storage Server-Side Encryption to ensure that all temporary disks\nand disk caches are encrypted at rest and flow encrypted to the Storage clusters.\nIf not specified, Encryption at Host is not enabled.\nImmutable.",
             "$ref": "#/components/schemas/AzureNodePoolEncryptionAtHost"
-          },
-          "ephemeral_os_disk_enabled": {
-            "description": "Enables Ephemeral OS Disks for the Nodes in the Node Pool.\nIf not specified, no Ephemeral OS Disks are used.",
-            "type": "boolean"
           },
           "os_disk": {
             "description": "The configuration for the OS disk used by the nodes in the Node Pool.",
@@ -2542,6 +2673,69 @@
           "message": {
             "description": "Messages relating to the status of the AutoNode installation on this Cluster",
             "type": "string"
+          }
+        }
+      },
+      "ClusterAutoscaler": {
+        "description": "Cluster-wide autoscaling configuration.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterAutoscaler' if this is a complete object or 'ClusterAutoscalerLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "balance_similar_node_groups": {
+            "description": "BalanceSimilarNodeGroups enables/disables the\n`--balance-similar-node-groups` cluster-autoscaler feature.\nThis feature will automatically identify node groups with\nthe same instance type and the same set of labels and try\nto keep the respective sizes of those node groups balanced.",
+            "type": "boolean"
+          },
+          "balancing_ignored_labels": {
+            "description": "This option specifies labels that cluster autoscaler should ignore when considering node group similarity.\nFor example, if you have nodes with \"topology.ebs.csi.aws.com/zone\" label, you can add name of this label here\nto prevent cluster autoscaler from splitting nodes into different node groups based on its value.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ignore_daemonsets_utilization": {
+            "description": "Should CA ignore DaemonSet pods when calculating resource utilization for scaling down. false by default.",
+            "type": "boolean"
+          },
+          "log_verbosity": {
+            "description": "Sets the autoscaler log level.\nDefault value is 1, level 4 is recommended for DEBUGGING and level 6 will enable almost everything.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "max_node_provision_time": {
+            "description": "Maximum time CA waits for node to be provisioned.",
+            "type": "string"
+          },
+          "max_pod_grace_period": {
+            "description": "Gives pods graceful termination time before scaling down.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "pod_priority_threshold": {
+            "description": "To allow users to schedule \"best-effort\" pods, which shouldn't trigger\nCluster Autoscaler actions, but only run when there are spare resources available,\nMore info: https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#how-does-cluster-autoscaler-work-with-pod-priority-and-preemption.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "resource_limits": {
+            "description": "Constraints of autoscaling resources.",
+            "$ref": "#/components/schemas/AutoscalerResourceLimits"
+          },
+          "scale_down": {
+            "description": "Configuration of scale down operation.",
+            "$ref": "#/components/schemas/AutoscalerScaleDownConfig"
+          },
+          "skip_nodes_with_local_storage": {
+            "description": "Enables/Disables `--skip-nodes-with-local-storage` CA feature flag. If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath. true by default at autoscaler.",
+            "type": "boolean"
           }
         }
       },
@@ -3345,8 +3539,8 @@
         "description": "Market type for AWS Capacity Reservations.",
         "type": "string",
         "enum": [
-          "capacity_blocks",
-          "on_demand"
+          "CapacityBlocks",
+          "OnDemand"
         ]
       },
       "Network": {
@@ -3880,6 +4074,18 @@
           "multi": {
             "description": "Multi will contain the reference for the multi image which will be used for cluster deployments",
             "$ref": "#/components/schemas/ReleaseImageDetails"
+          }
+        }
+      },
+      "ResourceRange": {
+        "properties": {
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "min": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
