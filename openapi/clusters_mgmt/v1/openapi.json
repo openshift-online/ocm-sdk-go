@@ -15192,15 +15192,6 @@
       "AzureNodePool": {
         "description": "Representation of azure node pool specific parameters.",
         "properties": {
-          "os_disk_size_gibibytes": {
-            "description": "The size in GiB to assign to the OS disks of the\nNodes in the Node Pool. The property\nis the number of bytes x 1024^3.\nIf not specified, OS disk size is 30 GiB.",
-            "type": "integer",
-            "format": "int32"
-          },
-          "os_disk_storage_account_type": {
-            "description": "The disk storage account type to use for the OS disks of the Nodes in the\nNode Pool. Valid values are:\n* Standard_LRS: HDD\n* StandardSSD_LRS: Standard SSD\n* Premium_LRS: Premium SDD\n* UltraSSD_LRS: Ultra SDD\n\nIf not specified, `Premium_LRS` is used.",
-            "type": "string"
-          },
           "vm_size": {
             "description": "The Azure Virtual Machine size identifier used for the\nNodes of the Node Pool.\nAvailability of VM sizes are dependent on the Azure Location\nof the parent Cluster.\nRequired during creation.",
             "type": "string"
@@ -15208,10 +15199,6 @@
           "encryption_at_host": {
             "description": "EncryptionAtHost contains Encryption At Host disk encryption configuration.\nWhen enabled, it enhances Azure Disk Storage Server-Side Encryption to ensure that all temporary disks\nand disk caches are encrypted at rest and flow encrypted to the Storage clusters.\nIf not specified, Encryption at Host is not enabled.\nImmutable.",
             "$ref": "#/components/schemas/AzureNodePoolEncryptionAtHost"
-          },
-          "ephemeral_os_disk_enabled": {
-            "description": "Enables Ephemeral OS Disks for the Nodes in the Node Pool.\nIf not specified, no Ephemeral OS Disks are used.",
-            "type": "boolean"
           },
           "os_disk": {
             "description": "The configuration for the OS disk used by the nodes in the Node Pool.",
@@ -17749,8 +17736,8 @@
         "description": "Market type for AWS Capacity Reservations.",
         "type": "string",
         "enum": [
-          "capacity_blocks",
-          "on_demand"
+          "CapacityBlocks",
+          "OnDemand"
         ]
       },
       "NamespaceOwnershipPolicy": {
