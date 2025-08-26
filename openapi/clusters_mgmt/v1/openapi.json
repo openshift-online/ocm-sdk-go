@@ -6574,6 +6574,278 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/image_mirrors": {
+      "post": {
+        "description": "Creates a new image mirror configuration for the cluster.\nCluster must be in ready state for this operation to succeed.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageMirror"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageMirror"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of image mirrors for the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "order",
+            "description": "Order criteria for sorting results.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria for filtering results.\nSearchable fields: id, name, cluster_id, source, type\nAll searchable fields can be ordered with asc/desc direction, default order by id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of image mirrors.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ImageMirror"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/image_mirrors/{image_mirror_id}": {
+      "delete": {
+        "description": "Deletes the image mirror configuration.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "image_mirror_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the image mirror.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "image_mirror_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageMirror"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the image mirror configuration.\nNote: Id and Source fields are immutable and cannot be updated.\nThe mirrors array is completely replaced, not merged.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "image_mirror_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageMirror"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageMirror"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/inflight_checks": {
       "get": {
         "description": "Retrieves the list of inflight checks.",
@@ -17130,6 +17402,48 @@
           "HTPasswdIdentityProvider",
           "OpenIDIdentityProvider"
         ]
+      },
+      "ImageMirror": {
+        "description": "ImageMirror represents a container image mirror configuration for a cluster.\nThis enables Day 2 image mirroring configuration for ROSA HCP clusters using\nHyperShift's native imageContentSources mechanism.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ImageMirror' if this is a complete object or 'ImageMirrorLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "CreationTimestamp indicates when the image mirror was created.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_update_timestamp": {
+            "description": "LastUpdateTimestamp indicates when the image mirror was last updated.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "mirrors": {
+            "description": "Mirrors is the list of mirror registries that will serve content for the source.\nMirrors array cannot be empty (must contain at least one mirror registry).\nEach mirror registry URL must conform to OpenShift's ImageDigestMirrorSet format specifications.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "description": "Source is the source registry that will be mirrored.\nSource registry must be unique per cluster and is immutable after creation.\nSource is used to identify mirror entries in HostedCluster imageContentSources.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type specifies the mirror type, currently only \"digest\" is supported.",
+            "type": "string"
+          }
+        }
       },
       "ImageOverrides": {
         "description": "ImageOverrides holds the lists of available images per cloud provider.",
