@@ -267,10 +267,10 @@ github.com/onsi/gomega v1.7.1/go.mod h1:XdKZgCCFLUoM/7CFJVPcG8C1xQ1AJ0vpAezJrB7J
 github.com/onsi/gomega v1.10.1/go.mod h1:iN09h71vgCQne3DLsj+A5owkum+a2tYe+TOCB1ybHNo=
 github.com/onsi/gomega v1.19.0 h1:4ieX6qQjPP/BfC3mpsAtIGGlxTWPeA3Inl/7DtXw1tw=
 github.com/onsi/gomega v1.19.0/go.mod h1:LY+I3pBVzYsTBU1AnDwOSxaYi9WoWiqgwooUqq9yPro=
-github.com/openshift-online/ocm-api-model/clientapi v0.0.431 h1:oGyJaX7ERZZVqVQBQD2OtmUcArsWl+97tXMcLTerbPo=
-github.com/openshift-online/ocm-api-model/clientapi v0.0.431/go.mod h1:fZwy5HY2URG9nrExvQeXrDU/08TGqZ16f8oymVEN5lo=
-github.com/openshift-online/ocm-api-model/model v0.0.431 h1:vIuELb0uH2AkN5LMQLYbLrdYIULMEK6ctQkbdoNbEZQ=
-github.com/openshift-online/ocm-api-model/model v0.0.431/go.mod h1:PQIoq6P8Vlb7goOdRMLK8nJY+B7HH0RTqYAa4kyidTE=
+github.com/openshift-online/ocm-api-model/clientapi v0.0.432-0.20250828221234-d914d24fd262 h1:k1bS+WU5oMQhwomJJuO3bL9kbFpbKhifI/qrryedllE=
+github.com/openshift-online/ocm-api-model/clientapi v0.0.432-0.20250828221234-d914d24fd262/go.mod h1:fZwy5HY2URG9nrExvQeXrDU/08TGqZ16f8oymVEN5lo=
+github.com/openshift-online/ocm-api-model/model v0.0.432-0.20250828221234-d914d24fd262 h1:UCNTJ3qoAt2iW/aUxma/+mUcpDLz3Yl2cbg5BRGLrsw=
+github.com/openshift-online/ocm-api-model/model v0.0.432-0.20250828221234-d914d24fd262/go.mod h1:PQIoq6P8Vlb7goOdRMLK8nJY+B7HH0RTqYAa4kyidTE=
 github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=

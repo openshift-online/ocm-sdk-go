@@ -19874,6 +19874,16 @@
           }
         }
       },
+      "WifResourceBinding": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
       "WifRole": {
         "properties": {
           "permissions": {
@@ -19884,6 +19894,12 @@
           },
           "predefined": {
             "type": "boolean"
+          },
+          "resource_bindings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifResourceBinding"
+            }
           },
           "role_id": {
             "type": "string"
