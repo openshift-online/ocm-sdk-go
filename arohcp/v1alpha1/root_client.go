@@ -26,7 +26,7 @@ import (
 
 // Client is the client of the 'root' resource.
 //
-// Root of the tree of resources of the aro_hcp service.
+// Root of the tree of resources of the clusters management service.
 type Client struct {
 	transport http.RoundTripper
 	path      string
@@ -51,6 +51,8 @@ func (c *Client) Get() *MetadataRequest {
 }
 
 // Clusters returns the target 'clusters' resource.
+//
+// Reference to the resource that manages the collection of clusters.
 func (c *Client) Clusters() *ClustersClient {
 	return NewClustersClient(
 		c.transport,
@@ -67,6 +69,8 @@ func (c *Client) ManagedIdentitiesRequirements() *ManagedIdentitiesRequirementsC
 }
 
 // Versions returns the target 'versions' resource.
+//
+// Reference to the resource that manage the collection of versions.
 func (c *Client) Versions() *VersionsClient {
 	return NewVersionsClient(
 		c.transport,

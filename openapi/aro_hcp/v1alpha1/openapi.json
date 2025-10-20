@@ -192,6 +192,14 @@
             }
           },
           {
+            "name": "deprovision",
+            "description": "If false it will only delete from OCM but not the actual cluster resources.\nfalse is only allowed for OCP clusters. true by default.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "dry_run",
             "description": "Dry run flag is used to check if the operation can be completed, but won't delete.",
             "in": "query",
@@ -298,7 +306,7 @@
     },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/autoscaler": {
       "get": {
-        "description": "Retrieves the details of the cluster autoscaler.",
+        "description": "Retrieves the autoscaler of a cluster.",
         "parameters": [
           {
             "name": "cluster_id",
@@ -415,7 +423,7 @@
     },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/external_auth_config/external_auths": {
       "post": {
-        "description": "Adds a new external authentication provider to the cluster.",
+        "description": "Adds a new authentication to the cluster.",
         "parameters": [
           {
             "name": "cluster_id",
@@ -496,7 +504,7 @@
                   "type": "object",
                   "properties": {
                     "items": {
-                      "description": "Retrieved list of external authentication providers.",
+                      "description": "Retrieved list of external authentications.",
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ExternalAuth"
@@ -537,7 +545,7 @@
     },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/external_auth_config/external_auths/{external_auth_id}": {
       "delete": {
-        "description": "Deletes the external authentication provider.",
+        "description": "Deletes the external authentication.",
         "parameters": [
           {
             "name": "cluster_id",
@@ -573,7 +581,7 @@
         }
       },
       "patch": {
-        "description": "Updates the external authentication provider.",
+        "description": "Updates the external authentication.",
         "parameters": [
           {
             "name": "cluster_id",
@@ -625,7 +633,7 @@
         }
       },
       "get": {
-        "description": "Retrieves the details of an external authentication provider.",
+        "description": "Retrieves the details of an external authentication.",
         "parameters": [
           {
             "name": "cluster_id",
@@ -1503,6 +1511,170 @@
           }
         }
       },
+      "AWSFlavour": {
+        "description": "Specification for different classes of nodes inside a flavour.",
+        "properties": {
+          "compute_instance_type": {
+            "description": "AWS default instance type for the worker volume.\n\nUser can be overridden specifying in the cluster itself a type for compute node.",
+            "type": "string"
+          },
+          "infra_instance_type": {
+            "description": "AWS default instance type for the infra volume.",
+            "type": "string"
+          },
+          "infra_volume": {
+            "description": "Infra volume specification.",
+            "$ref": "#/components/schemas/AWSVolume"
+          },
+          "master_instance_type": {
+            "description": "AWS default instance type for the master volume.",
+            "type": "string"
+          },
+          "master_volume": {
+            "description": "Master volume specification.",
+            "$ref": "#/components/schemas/AWSVolume"
+          },
+          "worker_volume": {
+            "description": "Worker volume specification.",
+            "$ref": "#/components/schemas/AWSVolume"
+          }
+        }
+      },
+      "AWSInfrastructureAccessRole": {
+        "description": "A set of acces permissions for AWS resources",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSInfrastructureAccessRole' if this is a complete object or 'AWSInfrastructureAccessRoleLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the role.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "Human friendly identifier of the role, for example `Read only`.",
+            "type": "string"
+          },
+          "state": {
+            "description": "State of the role.",
+            "$ref": "#/components/schemas/AWSInfrastructureAccessRoleState"
+          }
+        }
+      },
+      "AWSInfrastructureAccessRoleGrant": {
+        "description": "Representation of an AWS infrastructure access role grant.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSInfrastructureAccessRoleGrant' if this is a complete object or 'AWSInfrastructureAccessRoleGrantLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "console_url": {
+            "description": "URL to switch to the role in AWS console.",
+            "type": "string"
+          },
+          "role": {
+            "description": "Link to AWS infrastructure access role.\nGrant must use a 'valid' role. ",
+            "$ref": "#/components/schemas/AWSInfrastructureAccessRole"
+          },
+          "state": {
+            "description": "State of the grant.",
+            "$ref": "#/components/schemas/AWSInfrastructureAccessRoleGrantState"
+          },
+          "state_description": {
+            "description": "Description of the state.\nWill be empty unless state is 'Failed'.",
+            "type": "string"
+          },
+          "user_arn": {
+            "description": "The user AWS IAM ARN we want to grant the role.",
+            "type": "string"
+          }
+        }
+      },
+      "AWSInfrastructureAccessRoleGrantState": {
+        "description": "State of an AWS infrastructure access role grant.",
+        "type": "string",
+        "enum": [
+          "deleting",
+          "failed",
+          "pending",
+          "ready",
+          "removed"
+        ]
+      },
+      "AWSInfrastructureAccessRoleState": {
+        "description": "State of an AWS infrastructure access role.",
+        "type": "string",
+        "enum": [
+          "invalid",
+          "removed",
+          "valid"
+        ]
+      },
+      "AWSMachinePool": {
+        "description": "Representation of aws machine pool specific parameters.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSMachinePool' if this is a complete object or 'AWSMachinePoolLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "additional_security_group_ids": {
+            "description": "Additional AWS Security Groups to be added machine pool. Note that machine pools can only be worker node at the time.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "availability_zone_types": {
+            "description": "Associates nodepool availability zones with zone types (e.g. wavelength, local).",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "spot_market_options": {
+            "description": "Use spot instances on this machine pool to reduce cost.",
+            "$ref": "#/components/schemas/AWSSpotMarketOptions"
+          },
+          "subnet_outposts": {
+            "description": "Associates nodepool subnets with AWS Outposts.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "description": "Optional keys and values that the machine pool provisioner will add as AWS tags to all AWS resources it creates.\n\nAWS tags must conform to the following standards:\n- Each resource may have a maximum of 25 tags\n- Tags beginning with \"aws:\" are reserved for system use and may not be set\n- Tag keys may be between 1 and 128 characters in length\n- Tag values may be between 0 and 256 characters in length\n- Tags may only contain letters, numbers, spaces, and the following characters: [_ . : / = + - @]",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "AWSNodePool": {
         "description": "Representation of aws node pool specific parameters.",
         "properties": {
@@ -1587,6 +1759,28 @@
           }
         }
       },
+      "AWSSpotMarketOptions": {
+        "description": "Spot market options for AWS machine pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AWSSpotMarketOptions' if this is a complete object or 'AWSSpotMarketOptionsLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "max_price": {
+            "description": "The max price for spot instance. Optional.\nIf not set, use the on-demand price.",
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
       "AWSVolume": {
         "description": "Holds settings for an AWS storage volume.",
         "properties": {
@@ -1599,6 +1793,72 @@
             "description": "Volume size in Gib.",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "AWSSTSAccountRole": {
+        "description": "Representation of an sts account role for a rosa cluster",
+        "properties": {
+          "items": {
+            "description": "The list of STS Roles for this Account Role",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AWSSTSRole"
+            }
+          },
+          "prefix": {
+            "description": "The Prefix for this Account Role",
+            "type": "string"
+          }
+        }
+      },
+      "AWSSTSPolicy": {
+        "description": "Representation of an sts policies for rosa cluster",
+        "properties": {
+          "arn": {
+            "description": "The ARN of the managed policy",
+            "type": "string"
+          },
+          "id": {
+            "description": "Policy ID",
+            "type": "string"
+          },
+          "details": {
+            "description": "Policy Details",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of policy operator/account role",
+            "type": "string"
+          }
+        }
+      },
+      "AWSSTSRole": {
+        "description": "Representation of an sts role for a rosa cluster",
+        "properties": {
+          "hcpManagedPolicies": {
+            "description": "Does this Role have HCP Managed Policies?",
+            "type": "boolean"
+          },
+          "isAdmin": {
+            "description": "Does this role have Admin permission?",
+            "type": "boolean"
+          },
+          "managedPolicies": {
+            "description": "Does this Role have Managed Policies?",
+            "type": "boolean"
+          },
+          "arn": {
+            "description": "The AWS ARN for this Role",
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of this Role",
+            "type": "string"
+          },
+          "roleVersion": {
+            "description": "The Openshift Version for this Role",
+            "type": "string"
           }
         }
       },
@@ -1649,12 +1909,86 @@
           }
         }
       },
+      "CPUTotalNodeRoleOSMetricNode": {
+        "description": "Representation of information from telemetry about a the CPU capacity by node role and OS.",
+        "properties": {
+          "cpu_total": {
+            "description": "The total CPU capacity of nodes with this set of roles and operating system.",
+            "type": "number",
+            "format": "float"
+          },
+          "node_roles": {
+            "description": "Representation of the node role for a cluster.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "operating_system": {
+            "description": "The operating system.",
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CPUTotalsNodeRoleOSMetricNode": {
+        "description": "Representation of information from telemetry about the CPU capacity by node\nrole and OS of a cluster.",
+        "properties": {
+          "cpu_totals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CPUTotalNodeRoleOSMetricNode"
+            }
+          }
+        }
+      },
       "DNS": {
         "description": "DNS settings of the cluster.",
         "properties": {
           "base_domain": {
             "description": "Base DNS domain of the cluster.\n\nDuring the installation of the cluster it is necessary to create multiple DNS records.\nThey will be created as sub-domains of this domain. For example, if the domain_prefix of the\ncluster is `mycluster` and the base domain is `example.com` then the following DNS\nrecords will be created:\n\n```\nmycluster-api.example.com\nmycluster-etcd-0.example.com\nmycluster-etcd-1.example.com\nmycluster-etcd-3.example.com\n```\n\nThe exact number, type and names of the created DNS record depends on the characteristics\nof the cluster, and may be different for different versions of _OpenShift_. Please don't\nrely on them. For example, to find what is the URL of the Kubernetes API server of the\ncluster don't assume that it will be `mycluster-api.example.com`. Instead of that use\nthis API to retrieve the description of the cluster, and get it from the `api.url`\nattribute. For example, if the identifier of the cluster is `123` send a request like\nthis:\n\n```http\nGET /api/clusters_mgmt/v1/clusters/123 HTTP/1.1\n```\n\nThat will return a response like this, including the `api.url` attribute:\n\n```json\n{\n    \"kind\": \"Cluster\",\n    \"id\": \"123\",\n    \"href\": \"/api/clusters_mgmt/v1/clusters/123\",\n        \"api\": {\n        \"url\": \"https://mycluster-api.example.com:6443\"\n    },\n    ...\n}\n```\n\nWhen the cluster is created in Amazon Web Services it is necessary to create this base\nDNS domain in advance, using AWS Route53 (https://console.aws.amazon.com/route53).",
             "type": "string"
+          }
+        }
+      },
+      "DNSDomain": {
+        "description": "Contains the properties of a DNS domain.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'DNSDomain' if this is a complete object or 'DNSDomainLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster": {
+            "description": "Link to the cluster that is registered with the DNS domain (optional).",
+            "$ref": "#/components/schemas/ClusterLink"
+          },
+          "cluster_arch": {
+            "description": "Signals which cluster architecture the domain is ready for.",
+            "$ref": "#/components/schemas/ClusterArchitecture"
+          },
+          "organization": {
+            "description": "Link to the organization that reserved the DNS domain.",
+            "$ref": "#/components/schemas/OrganizationLink"
+          },
+          "reserved_at_timestamp": {
+            "description": "Date and time when the DNS domain was reserved.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "user_defined": {
+            "description": "Indicates if this dns domain is user defined.",
+            "type": "boolean"
           }
         }
       },
@@ -1736,6 +2070,35 @@
           }
         }
       },
+      "GCPFlavour": {
+        "description": "Specification for different classes of nodes inside a flavour.",
+        "properties": {
+          "compute_instance_type": {
+            "description": "GCP default instance type for the worker volume.\n\nUser can be overridden specifying in the cluster itself a type for compute node.",
+            "type": "string"
+          },
+          "infra_instance_type": {
+            "description": "GCP default instance type for the infra volume.",
+            "type": "string"
+          },
+          "infra_volume": {
+            "description": "Infra volume specification.",
+            "$ref": "#/components/schemas/GCPVolume"
+          },
+          "master_instance_type": {
+            "description": "GCP default instance type for the master volume.",
+            "type": "string"
+          },
+          "master_volume": {
+            "description": "Master volume specification.",
+            "$ref": "#/components/schemas/GCPVolume"
+          },
+          "worker_volume": {
+            "description": "Worker volume specification.",
+            "$ref": "#/components/schemas/GCPVolume"
+          }
+        }
+      },
       "GCPImageOverride": {
         "description": "GcpImageOverride specifies what a GCP VM Image should be used for a particular product and billing model",
         "properties": {
@@ -1766,6 +2129,15 @@
           "project_id": {
             "description": "ProjectID is the id of the Google Cloud Platform project that hosts the image.",
             "type": "string"
+          }
+        }
+      },
+      "GCPMachinePool": {
+        "description": "Representation of gcp machine pool specific parameters.",
+        "properties": {
+          "secure_boot": {
+            "description": "Determines whether the Shielded VM's SecureBoot feature should be\nenabled for the nodes of the machine pool. If SecureBoot is not\nspecified, the value of this attribute will remain unspecified and the\nSecureBoot's value specified in the `.gcp.security.secure_boot`\nattribute of the parent Cluster will be the one applied to the nodes of\nthe machine pool.\nImmutable.",
+            "type": "boolean"
           }
         }
       },
@@ -1820,6 +2192,26 @@
           }
         }
       },
+      "HTPasswdUser": {
+        "properties": {
+          "id": {
+            "description": "ID for a secondary user in the _HTPasswd_ data file.",
+            "type": "string"
+          },
+          "hashed_password": {
+            "description": "HTPasswd Hashed Password for a user in the _HTPasswd_ data file.\nThe value of this field is set as-is in the _HTPasswd_ data file for the HTPasswd IDP",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password in plain-text for a  user in the _HTPasswd_ data file.\nThe value of this field is hashed before setting it in the  _HTPasswd_ data file for the HTPasswd IDP",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username for a secondary user in the _HTPasswd_ data file.",
+            "type": "string"
+          }
+        }
+      },
       "K8sServiceAccountOperatorIdentityRequirement": {
         "properties": {
           "name": {
@@ -1829,6 +2221,68 @@
           "namespace": {
             "description": "The namespace of the service account to be leveraged by the operator",
             "type": "string"
+          }
+        }
+      },
+      "LDAPAttributes": {
+        "description": "LDAP attributes used to configure the LDAP identity provider.",
+        "properties": {
+          "id": {
+            "description": "List of attributes to use as the identity.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "email": {
+            "description": "List of attributes to use as the mail address.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "description": "List of attributes to use as the display name.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "preferred_username": {
+            "description": "List of attributes to use as the preferred user name when provisioning a user.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "LDAPIdentityProvider": {
+        "description": "Details for `ldap` identity providers.",
+        "properties": {
+          "ca": {
+            "description": "Certificate bundle to use to validate server certificates for the configured URL.",
+            "type": "string"
+          },
+          "url": {
+            "description": "An https://tools.ietf.org/html/rfc2255[RFC 2255] URL which specifies the LDAP host and\nsearch parameters to use.",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "LDAP attributes used to configure the provider.",
+            "$ref": "#/components/schemas/LDAPAttributes"
+          },
+          "bind_dn": {
+            "description": "Optional distinguished name to use to bind during the search phase.",
+            "type": "string"
+          },
+          "bind_password": {
+            "description": "Optional password to use to bind during the search phase.",
+            "type": "string"
+          },
+          "insecure": {
+            "description": "When `true` no TLS connection is made to the server. When `false` `ldaps://...` URLs\nconnect using TLS and `ldap://...` are upgraded to TLS.",
+            "type": "boolean"
           }
         }
       },
@@ -1885,6 +2339,787 @@
           "support_role_arn": {
             "description": "ARN of the AWS role used by SREs to access the cluster AWS account in order to provide support",
             "type": "string"
+          }
+        }
+      },
+      "STSCredentialRequest": {
+        "description": "Representation of an credRequest",
+        "properties": {
+          "name": {
+            "description": "Name of CredRequest",
+            "type": "string"
+          },
+          "operator": {
+            "description": "Operator Details",
+            "$ref": "#/components/schemas/STSOperator"
+          }
+        }
+      },
+      "STSOperator": {
+        "description": "Representation of an sts operator",
+        "properties": {
+          "max_version": {
+            "description": "Maximum ocp version supported",
+            "type": "string"
+          },
+          "min_version": {
+            "description": "Minimum ocp version supported",
+            "type": "string"
+          },
+          "name": {
+            "description": "Operator Name",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "Operator Namespace",
+            "type": "string"
+          },
+          "service_accounts": {
+            "description": "Service Accounts",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AddOn": {
+        "description": "Representation of an add-on that can be installed in a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOn' if this is a complete object or 'AddOnLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "common_annotations": {
+            "description": "Common annotations to be applied to all resources created by this addon.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "common_labels": {
+            "description": "Common labels to be applied to all resources created by this addon.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "description": "Additional configs to be used by the addon once its installed in the cluster.",
+            "$ref": "#/components/schemas/AddOnConfig"
+          },
+          "credentials_requests": {
+            "description": "List of credentials requests to authenticate operators to access cloud resources.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CredentialRequest"
+            }
+          },
+          "description": {
+            "description": "Description of the add-on.",
+            "type": "string"
+          },
+          "docs_link": {
+            "description": "Link to documentation about the add-on.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates if this add-on can be added to clusters.",
+            "type": "boolean"
+          },
+          "has_external_resources": {
+            "description": "Indicates if this add-on has external resources associated with it",
+            "type": "boolean"
+          },
+          "hidden": {
+            "description": "Indicates if this add-on is hidden.",
+            "type": "boolean"
+          },
+          "icon": {
+            "description": "Base64-encoded icon representing an add-on. The icon should be in PNG format.",
+            "type": "string"
+          },
+          "install_mode": {
+            "description": "The mode in which the addon is deployed.",
+            "$ref": "#/components/schemas/AddOnInstallMode"
+          },
+          "label": {
+            "description": "Label used to attach to a cluster deployment when add-on is installed.",
+            "type": "string"
+          },
+          "managed_service": {
+            "description": "Indicates if add-on is part of a managed service",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the add-on.",
+            "type": "string"
+          },
+          "namespaces": {
+            "description": "Namespaces which are required by this addon.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnNamespace"
+            }
+          },
+          "operator_name": {
+            "description": "The name of the operator installed by this add-on.",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "List of parameters for this add-on.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnParameter"
+            }
+          },
+          "requirements": {
+            "description": "List of requirements for this add-on.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnRequirement"
+            }
+          },
+          "resource_cost": {
+            "description": "Used to determine how many units of quota an add-on consumes per resource name.",
+            "type": "number",
+            "format": "float"
+          },
+          "resource_name": {
+            "description": "Used to determine from where to reserve quota for this add-on.",
+            "type": "string"
+          },
+          "sub_operators": {
+            "description": "List of sub operators for this add-on.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnSubOperator"
+            }
+          },
+          "target_namespace": {
+            "description": "The namespace in which the addon CRD exists.",
+            "type": "string"
+          },
+          "version": {
+            "description": "Link to the current default version of this add-on.",
+            "$ref": "#/components/schemas/AddOnVersion"
+          }
+        }
+      },
+      "AddOnConfig": {
+        "description": "Representation of an add-on config.\nThe attributes under it are to be used by the addon once its installed in the cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnConfig' if this is a complete object or 'AddOnConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "add_on_environment_variables": {
+            "description": "List of environment variables for the addon",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnEnvironmentVariable"
+            }
+          },
+          "secret_propagations": {
+            "description": "List of secret propagations for the addon",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnSecretPropagation"
+            }
+          }
+        }
+      },
+      "AddOnEnvironmentVariable": {
+        "description": "Representation of an add-on env object.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnEnvironmentVariable' if this is a complete object or 'AddOnEnvironmentVariableLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the env object.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the env object.",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnInstallMode": {
+        "description": "Representation of an add-on InstallMode field.",
+        "type": "string",
+        "enum": [
+          "all_namespaces",
+          "own_namespace"
+        ]
+      },
+      "AddOnInstallation": {
+        "description": "Representation of an add-on installation in a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnInstallation' if this is a complete object or 'AddOnInstallationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "addon": {
+            "description": "Link to add-on attached to this cluster.",
+            "$ref": "#/components/schemas/AddOn"
+          },
+          "addon_version": {
+            "description": "Link to the installed version of this add-on.",
+            "$ref": "#/components/schemas/AddOnVersion"
+          },
+          "billing": {
+            "description": "Billing details for add-on installation resource ",
+            "$ref": "#/components/schemas/AddOnInstallationBilling"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the add-on was initially installed in the cluster.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "operator_version": {
+            "description": "Version of the operator installed by the add-on.",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "List of add-on parameters for this add-on installation.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnInstallationParameter"
+            }
+          },
+          "state": {
+            "description": "Overall state of the add-on installation.",
+            "$ref": "#/components/schemas/AddOnInstallationState"
+          },
+          "state_description": {
+            "description": "Reason for the current State.",
+            "type": "string"
+          },
+          "updated_timestamp": {
+            "description": "Date and time when the add-on installation information was last updated.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AddOnInstallationBilling": {
+        "description": "Representation of an add-on installation billing.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnInstallationBilling' if this is a complete object or 'AddOnInstallationBillingLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "billing_marketplace_account": {
+            "description": "Account ID for billing market place",
+            "type": "string"
+          },
+          "billing_model": {
+            "description": "Billing Model for addon resources",
+            "$ref": "#/components/schemas/BillingModel"
+          }
+        }
+      },
+      "AddOnInstallationParameter": {
+        "description": "Representation of an add-on installation parameter.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnInstallationParameter' if this is a complete object or 'AddOnInstallationParameterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the parameter.",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnInstallationState": {
+        "description": "Representation of an add-on installation State field.",
+        "type": "string",
+        "enum": [
+          "deleting",
+          "failed",
+          "installing",
+          "pending",
+          "ready"
+        ]
+      },
+      "AddOnNamespace": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnNamespace' if this is a complete object or 'AddOnNamespaceLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "annotations": {
+            "description": "Annotations to be applied to this namespace.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "labels": {
+            "description": "Labels to be applied to this namespace.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "description": "Name of the namespace.",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnParameter": {
+        "description": "Representation of an add-on parameter.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnParameter' if this is a complete object or 'AddOnParameterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "addon": {
+            "description": "Link to add-on.",
+            "$ref": "#/components/schemas/AddOn"
+          },
+          "conditions": {
+            "description": "Conditions in which this parameter is valid for",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnRequirement"
+            }
+          },
+          "default_value": {
+            "description": "Indicates the value default for the add-on parameter.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the add-on parameter.",
+            "type": "string"
+          },
+          "editable": {
+            "description": "Indicates if this parameter can be edited after creation.",
+            "type": "boolean"
+          },
+          "editable_direction": {
+            "description": "Restricts if the parameter can be upscaled/downscaled\nExpected values are \"up\", \"down\", or \"\" (no restriction).",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates if this parameter is enabled for the add-on.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the add-on parameter.",
+            "type": "string"
+          },
+          "options": {
+            "description": "List of options for the add-on parameter value.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnParameterOption"
+            }
+          },
+          "required": {
+            "description": "Indicates if this parameter is required by the add-on.",
+            "type": "boolean"
+          },
+          "validation": {
+            "description": "Validation rule for the add-on parameter.",
+            "type": "string"
+          },
+          "validation_err_msg": {
+            "description": "Error message to return should the parameter be invalid.",
+            "type": "string"
+          },
+          "value_type": {
+            "description": "Type of value of the add-on parameter.",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnParameterOption": {
+        "description": "Representation of an add-on parameter option.",
+        "properties": {
+          "name": {
+            "description": "Name of the add-on parameter option.",
+            "type": "string"
+          },
+          "rank": {
+            "description": "Rank of option to be used in cases where editable direction should be restricted.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "requirements": {
+            "description": "List of add-on requirements for this parameter option.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnRequirement"
+            }
+          },
+          "value": {
+            "description": "Value of the add-on parameter option.",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnRequirement": {
+        "description": "Representation of an add-on requirement.",
+        "properties": {
+          "id": {
+            "description": "ID of the add-on requirement.",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data for the add-on requirement.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "enabled": {
+            "description": "Indicates if this requirement is enabled for the add-on.",
+            "type": "boolean"
+          },
+          "resource": {
+            "description": "Type of resource of the add-on requirement.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Optional cluster specific status for the add-on.",
+            "$ref": "#/components/schemas/AddOnRequirementStatus"
+          }
+        }
+      },
+      "AddOnRequirementStatus": {
+        "description": "Representation of an add-on requirement status.",
+        "properties": {
+          "error_msgs": {
+            "description": "Error messages detailing reasons for unfulfilled requirements.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fulfilled": {
+            "description": "Indicates if this requirement is fulfilled.",
+            "type": "boolean"
+          }
+        }
+      },
+      "AddOnSecretPropagation": {
+        "description": "Representation of an addon secret propagation",
+        "properties": {
+          "id": {
+            "description": "ID of the secret propagation",
+            "type": "string"
+          },
+          "destination_secret": {
+            "description": "DestinationSecret is location of the secret to be added",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates is this secret propagation is enabled for the addon",
+            "type": "boolean"
+          },
+          "source_secret": {
+            "description": "SourceSecret is location of the source secret",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnSubOperator": {
+        "description": "Representation of an add-on sub operator. A sub operator is an operator\nwho's life cycle is controlled by the add-on umbrella operator. ",
+        "properties": {
+          "enabled": {
+            "description": "Indicates if the sub operator is enabled for the add-on",
+            "type": "boolean"
+          },
+          "operator_name": {
+            "description": "Name of the add-on sub operator",
+            "type": "string"
+          },
+          "operator_namespace": {
+            "description": "Namespace of the add-on sub operator",
+            "type": "string"
+          }
+        }
+      },
+      "AddOnVersion": {
+        "description": "Representation of an add-on version.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddOnVersion' if this is a complete object or 'AddOnVersionLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "additional_catalog_sources": {
+            "description": "Additional catalog sources associated with this addon version",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalCatalogSource"
+            }
+          },
+          "available_upgrades": {
+            "description": "AvailableUpgrades is the list of versions this version can be upgraded to.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "channel": {
+            "description": "The specific addon catalog source channel of packages",
+            "type": "string"
+          },
+          "config": {
+            "description": "Additional configs to be used by the addon once its installed in the cluster.",
+            "$ref": "#/components/schemas/AddOnConfig"
+          },
+          "enabled": {
+            "description": "Indicates if this add-on version can be added to clusters.",
+            "type": "boolean"
+          },
+          "package_image": {
+            "description": "The package image for this addon version",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "List of parameters for this add-on version.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnParameter"
+            }
+          },
+          "pull_secret_name": {
+            "description": "The pull secret name used for this addon version.",
+            "type": "string"
+          },
+          "requirements": {
+            "description": "List of requirements for this add-on version.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnRequirement"
+            }
+          },
+          "source_image": {
+            "description": "The catalog source image for this add-on version.",
+            "type": "string"
+          },
+          "sub_operators": {
+            "description": "List of sub operators for this add-on version.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOnSubOperator"
+            }
+          }
+        }
+      },
+      "AdditionalCatalogSource": {
+        "description": "Representation of an addon catalog source object used by addon versions.",
+        "properties": {
+          "id": {
+            "description": "ID of the additional catalog source",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates is this additional catalog source is enabled for the addon",
+            "type": "boolean"
+          },
+          "image": {
+            "description": "Image of the additional catalog source.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the additional catalog source.",
+            "type": "string"
+          }
+        }
+      },
+      "AddonUpgradePolicy": {
+        "description": "Representation of an upgrade policy that can be set for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddonUpgradePolicy' if this is a complete object or 'AddonUpgradePolicyLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "addon_id": {
+            "description": "Addon ID this upgrade policy is defined for",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Cluster ID this upgrade policy is defined for.",
+            "type": "string"
+          },
+          "next_run": {
+            "description": "Next time the upgrade should run.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "schedule": {
+            "description": "Schedule cron expression that defines automatic upgrade scheduling.",
+            "type": "string"
+          },
+          "schedule_type": {
+            "description": "Schedule type can be either \"manual\" (single execution) or \"automatic\" (re-occurring).",
+            "type": "string"
+          },
+          "upgrade_type": {
+            "description": "Upgrade type specify the type of the upgrade. Must be \"ADDON\".",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version is the desired upgrade version.",
+            "type": "string"
+          }
+        }
+      },
+      "AddonUpgradePolicyState": {
+        "description": "Representation of an addon upgrade policy state that that is set for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AddonUpgradePolicyState' if this is a complete object or 'AddonUpgradePolicyStateLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the state.",
+            "type": "string"
+          },
+          "value": {
+            "description": "State value can be 'pending', 'scheduled', 'cancelled', 'started', 'delayed',\n'failed' or 'completed'.",
+            "$ref": "#/components/schemas/UpgradePolicyStateValue"
+          }
+        }
+      },
+      "AdminCredentials": {
+        "description": "Temporary administrator credentials generated during the installation of the\ncluster.",
+        "properties": {
+          "password": {
+            "description": "Cluster administrator password.",
+            "type": "string"
+          },
+          "user": {
+            "description": "Cluster administrator user name.",
+            "type": "string"
+          }
+        }
+      },
+      "AlertInfo": {
+        "description": "Provides information about a single alert firing on the cluster.",
+        "properties": {
+          "name": {
+            "description": "The alert name. Multiple alerts with same name are possible.",
+            "type": "string"
+          },
+          "severity": {
+            "description": "The alert severity.",
+            "$ref": "#/components/schemas/AlertSeverity"
+          }
+        }
+      },
+      "AlertSeverity": {
+        "description": "Severity of a cluster alert received via telemetry.",
+        "type": "string",
+        "enum": [
+          "critical",
+          "none",
+          "warning"
+        ]
+      },
+      "AlertsInfo": {
+        "description": "Provides information about the alerts firing on the cluster.",
+        "properties": {
+          "alerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlertInfo"
+            }
           }
         }
       },
@@ -2224,6 +3459,15 @@
           }
         }
       },
+      "Backup": {
+        "description": "Representation of a Backup.",
+        "properties": {
+          "state": {
+            "description": "Indicates the state of the backup.\nAccepted values are: \"enabled\", \"disabled\".",
+            "type": "string"
+          }
+        }
+      },
       "BillingModel": {
         "description": "Billing model for cluster resources.",
         "type": "string",
@@ -2234,6 +3478,90 @@
           "marketplace-rhm",
           "marketplace-azure",
           "standard"
+        ]
+      },
+      "BillingModelItem": {
+        "description": "BillingModelItem represents a billing model",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'BillingModelItem' if this is a complete object or 'BillingModelItemLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "billing_model_type": {
+            "description": "BillingModelType is the type of the BillingModel. e.g. standard, marketplace.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Single line description of the billing model.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "User friendly display name of the billing model.",
+            "type": "string"
+          },
+          "marketplace": {
+            "description": "Indicates the marketplace of the billing model. e.g. gcp, aws, etc.",
+            "type": "string"
+          }
+        }
+      },
+      "BreakGlassCredential": {
+        "description": "Representation of a break glass credential.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'BreakGlassCredential' if this is a complete object or 'BreakGlassCredentialLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "expiration_timestamp": {
+            "description": "ExpirationTimestamp is the date and time when the credential will expire.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "kubeconfig": {
+            "description": "Kubeconfig is the generated kubeconfig for this credential. It is only stored in memory",
+            "type": "string"
+          },
+          "revocation_timestamp": {
+            "description": "RevocationTimestamp is the date and time when the credential has been revoked.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "description": "Status is the status of this credential",
+            "$ref": "#/components/schemas/BreakGlassCredentialStatus"
+          },
+          "username": {
+            "description": "Username is the user which will be used for this credential.",
+            "type": "string"
+          }
+        }
+      },
+      "BreakGlassCredentialStatus": {
+        "description": "Status of the break glass credential.",
+        "type": "string",
+        "enum": [
+          "awaiting_revocation",
+          "created",
+          "expired",
+          "failed",
+          "issued",
+          "revoked"
         ]
       },
       "ByoOidc": {
@@ -2255,6 +3583,48 @@
           "namespace": {
             "description": "The namespace of the component.",
             "type": "string"
+          }
+        }
+      },
+      "CloudVPC": {
+        "description": "Description of a cloud provider virtual private cloud.",
+        "properties": {
+          "aws_security_groups": {
+            "description": "List of AWS security groups with details.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SecurityGroup"
+            }
+          },
+          "aws_subnets": {
+            "description": "List of AWS subnetworks with details.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Subnetwork"
+            }
+          },
+          "cidr_block": {
+            "description": "CIDR block of the virtual private cloud.",
+            "type": "string"
+          },
+          "id": {
+            "description": "ID of virtual private cloud.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of virtual private cloud according to its `Name` tag on AWS.",
+            "type": "string"
+          },
+          "red_hat_managed": {
+            "description": "If the resource is RH managed.",
+            "type": "boolean"
+          },
+          "subnets": {
+            "description": "List of subnets used by the virtual private cloud.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -2286,6 +3656,56 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CloudRegion"
+            }
+          }
+        }
+      },
+      "CloudProviderData": {
+        "description": "Description of a cloud provider data used for cloud provider inquiries.",
+        "properties": {
+          "aws": {
+            "description": "Amazon Web Services settings.",
+            "$ref": "#/components/schemas/AWS"
+          },
+          "gcp": {
+            "description": "Google cloud platform settings.",
+            "$ref": "#/components/schemas/GCP"
+          },
+          "availability_zones": {
+            "description": "Availability zone",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "key_location": {
+            "description": "Key location",
+            "type": "string"
+          },
+          "key_ring_name": {
+            "description": "Key ring name",
+            "type": "string"
+          },
+          "region": {
+            "description": "Region",
+            "$ref": "#/components/schemas/CloudRegion"
+          },
+          "subnets": {
+            "description": "Subnets",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "description": "Openshift version",
+            "$ref": "#/components/schemas/Version"
+          },
+          "vpc_ids": {
+            "description": "VPC ids",
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           }
         }
@@ -2655,6 +4075,14 @@
           }
         }
       },
+      "ClusterArchitecture": {
+        "description": "Possible cluster architectures.",
+        "type": "string",
+        "enum": [
+          "classic",
+          "hcp"
+        ]
+      },
       "ClusterAutoNode": {
         "description": "The AutoNode configuration for the Cluster.",
         "properties": {
@@ -2756,6 +4184,48 @@
           }
         }
       },
+      "ClusterCredentials": {
+        "description": "Credentials of the a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterCredentials' if this is a complete object or 'ClusterCredentialsLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "kubeconfig": {
+            "description": "Administrator _kubeconfig_ file for the cluster.",
+            "type": "string"
+          }
+        }
+      },
+      "ClusterDeployment": {
+        "description": "Representation of a clusterdeployment.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterDeployment' if this is a complete object or 'ClusterDeploymentLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "content": {
+            "description": "Content of the clusterdeployment.",
+            "type": "object"
+          }
+        }
+      },
       "ClusterHealthState": {
         "description": "ClusterHealthState indicates the health of a cluster.",
         "type": "string",
@@ -2773,6 +4243,91 @@
             "type": "string"
           }
         }
+      },
+      "ClusterLink": {
+        "description": "Definition of a cluster link.",
+        "properties": {
+          "href": {
+            "description": "HREF for the cluster, filled in response.",
+            "type": "string"
+          },
+          "id": {
+            "description": "The cluster's ID.",
+            "type": "string"
+          }
+        }
+      },
+      "ClusterMigration": {
+        "description": "Representation of a cluster migration.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterMigration' if this is a complete object or 'ClusterMigrationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Internal cluster ID.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the cluster migration was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "sdn_to_ovn": {
+            "description": "Details for `SdnToOvn` cluster migrations.",
+            "$ref": "#/components/schemas/SdnToOvnClusterMigration"
+          },
+          "state": {
+            "description": "The state of the cluster migration.",
+            "$ref": "#/components/schemas/ClusterMigrationState"
+          },
+          "type": {
+            "description": "Type of cluster migration. The rest of the attributes will be populated according to this\nvalue. For example, if the type is `sdnToOvn` then only the `SdnToOvn` attribute will be\npopulated.",
+            "$ref": "#/components/schemas/ClusterMigrationType"
+          },
+          "updated_timestamp": {
+            "description": "Date and time when the cluster migration was last updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ClusterMigrationState": {
+        "description": "Representation of a cluster migration state.",
+        "properties": {
+          "description": {
+            "description": "A longer description of the current state of the cluster migration.",
+            "type": "string"
+          },
+          "value": {
+            "description": "The current state of the cluster migration.",
+            "$ref": "#/components/schemas/ClusterMigrationStateValue"
+          }
+        }
+      },
+      "ClusterMigrationStateValue": {
+        "description": "The state of the cluster migration.",
+        "type": "string",
+        "enum": [
+          "completed",
+          "in progress",
+          "scheduled"
+        ]
+      },
+      "ClusterMigrationType": {
+        "description": "Type of cluster migration.",
+        "type": "string",
+        "enum": [
+          "sdnToOvn"
+        ]
       },
       "ClusterNodes": {
         "description": "Counts of different classes of nodes inside a cluster.",
@@ -2840,6 +4395,73 @@
           }
         }
       },
+      "ClusterOperatorInfo": {
+        "properties": {
+          "condition": {
+            "description": "Operator status.  Empty string if unknown.",
+            "$ref": "#/components/schemas/ClusterOperatorState"
+          },
+          "name": {
+            "description": "Name of the operator.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Extra detail on condition, if available.  Empty string if unknown.",
+            "type": "string"
+          },
+          "time": {
+            "description": "Time when the sample was obtained, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) format.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "description": "Current version of the operator.  Empty string if unknown.",
+            "type": "string"
+          }
+        }
+      },
+      "ClusterOperatorState": {
+        "description": "Overall state of a cluster operator.",
+        "type": "string",
+        "enum": [
+          "available",
+          "degraded",
+          "failing",
+          "upgrading"
+        ]
+      },
+      "ClusterOperatorsInfo": {
+        "description": "Provides detailed information about the operators installed on the cluster.",
+        "properties": {
+          "operators": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClusterOperatorInfo"
+            }
+          }
+        }
+      },
+      "ClusterRegistration": {
+        "description": "Registration of a new cluster to the service.\n\nFor example, to register a cluster that has been provisioned outside\nof this service, send a a request like this:\n\n```http\nPOST /api/clusters_mgmt/v1/register_cluster HTTP/1.1\n```\n\nWith a request body like this:\n\n```json\n{\n  \"external_id\": \"d656aecf-11a6-4782-ad86-8f72638449ba\",\n  \"subscription_id\": \"...\",\n  \"organization_id\": \"...\"\n}\n```",
+        "properties": {
+          "console_url": {
+            "description": "Optional Console URL of the cluster.",
+            "type": "string"
+          },
+          "external_id": {
+            "description": "Identifier of the cluster generated by the installer.",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "Organization identifier of the cluster generated by the\naccount manager.",
+            "type": "string"
+          },
+          "subscription_id": {
+            "description": "Subscription identifier of the cluster generated by the account\nmanager.",
+            "type": "string"
+          }
+        }
+      },
       "ClusterRegistryConfig": {
         "description": "ClusterRegistryConfig describes the configuration of registries for the cluster.\nIts format reflects the OpenShift Image Configuration, for which docs are available on\n[docs.openshift.com](https://docs.openshift.com/container-platform/4.16/openshift_images/image-configuration.html)\n```json\n{\n   \"registry_config\": {\n     \"registry_sources\": {\n       \"blocked_registries\": [\n         \"badregistry.io\",\n         \"badregistry8.io\"\n       ]\n     }\n   }\n}\n```\n",
         "properties": {
@@ -2864,6 +4486,39 @@
           "registry_sources": {
             "description": "RegistrySources contains configuration that determines how the container runtime\nshould treat individual registries when accessing images for builds+pods. (e.g.\nwhether or not to allow insecure access). It does not contain configuration for the\ninternal cluster registry.",
             "$ref": "#/components/schemas/RegistrySources"
+          }
+        }
+      },
+      "ClusterResources": {
+        "description": "Cluster Resource which belongs to a cluster, example Cluster Deployment.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ClusterResources' if this is a complete object or 'ClusterResourcesLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Cluster ID for the fetched resources",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the resources were fetched.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "resources": {
+            "description": "Returned map of cluster resources fetched.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -2940,6 +4595,49 @@
           }
         }
       },
+      "ComponentRoute": {
+        "description": "Representation of a Component Route.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ComponentRoute' if this is a complete object or 'ComponentRouteLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "hostname": {
+            "description": "Hostname of the route.",
+            "type": "string"
+          },
+          "tls_secret_ref": {
+            "description": "TLS Secret reference of the route.",
+            "type": "string"
+          }
+        }
+      },
+      "ComponentRouteType": {
+        "description": "Type of Component Route.",
+        "type": "string",
+        "enum": [
+          "console",
+          "downloads",
+          "oauth"
+        ]
+      },
+      "ControlPlane": {
+        "description": "Representation of a Control Plane",
+        "properties": {
+          "backup": {
+            "description": "Information about the backup of the control plane",
+            "$ref": "#/components/schemas/Backup"
+          }
+        }
+      },
       "ControlPlaneOperatorIdentityRequirement": {
         "properties": {
           "max_openshift_version": {
@@ -2964,6 +4662,90 @@
             "items": {
               "$ref": "#/components/schemas/RoleDefinitionOperatorIdentityRequirement"
             }
+          }
+        }
+      },
+      "ControlPlaneUpgradePolicy": {
+        "description": "Representation of an upgrade policy that can be set for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ControlPlaneUpgradePolicy' if this is a complete object or 'ControlPlaneUpgradePolicyLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Cluster ID this upgrade policy for control plane is defined for.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Timestamp for creation of resource.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "enable_minor_version_upgrades": {
+            "description": "Indicates if minor version upgrades are allowed for automatic upgrades (for manual it's always allowed).",
+            "type": "boolean"
+          },
+          "last_update_timestamp": {
+            "description": "Timestamp for last update that happened to resource.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "next_run": {
+            "description": "Next time the upgrade should run.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "schedule": {
+            "description": "Schedule cron expression that defines automatic upgrade scheduling.",
+            "type": "string"
+          },
+          "schedule_type": {
+            "description": "Schedule type of the control plane upgrade.",
+            "$ref": "#/components/schemas/ScheduleType"
+          },
+          "state": {
+            "description": "State of the upgrade policy for the hosted control plane.",
+            "$ref": "#/components/schemas/UpgradePolicyState"
+          },
+          "upgrade_type": {
+            "description": "Upgrade type of the control plane.",
+            "$ref": "#/components/schemas/UpgradeType"
+          },
+          "version": {
+            "description": "Version is the desired upgrade version.",
+            "type": "string"
+          }
+        }
+      },
+      "CredentialRequest": {
+        "description": "Contains the necessary attributes to allow each operator to access the necessary AWS resources",
+        "properties": {
+          "name": {
+            "description": "Name of the credentials secret used to access cloud resources",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "Namespace where the credentials secret lives in the cluster",
+            "type": "string"
+          },
+          "policy_permissions": {
+            "description": "List of policy permissions needed to access cloud resources",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "service_account": {
+            "description": "Service account name to use when authenticating",
+            "type": "string"
           }
         }
       },
@@ -3010,6 +4792,13 @@
           }
         }
       },
+      "DetectionType": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "manual"
+        ]
+      },
       "Ec2MetadataHttpTokens": {
         "description": "Which Ec2MetadataHttpTokens to use for metadata service interaction options for EC2 instances",
         "type": "string",
@@ -3017,6 +4806,66 @@
           "optional",
           "required"
         ]
+      },
+      "EncryptionKey": {
+        "description": "Description of a cloud provider encryption key.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'EncryptionKey' if this is a complete object or 'EncryptionKeyLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the encryption key.",
+            "type": "string"
+          }
+        }
+      },
+      "Environment": {
+        "description": "Description of an environment",
+        "properties": {
+          "backplane_url": {
+            "description": "the backplane url for the environment",
+            "type": "string"
+          },
+          "last_limited_support_check": {
+            "description": "last time that the worker checked for limited support clusters",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_upgrade_available_check": {
+            "description": "last time that the worker checked for available upgrades",
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "description": "environment name",
+            "type": "string"
+          }
+        }
+      },
+      "Event": {
+        "description": "Representation of a trackable event.",
+        "properties": {
+          "body": {
+            "description": "Body of the event to track the details of the tracking event as Key value pair",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "key": {
+            "description": "Key of the event to be tracked. This key should start with an\nuppercase letter followed by alphanumeric characters or\nunderscores. The entire key needs to be smaller than 64 characters.",
+            "type": "string"
+          }
+        }
       },
       "ExternalAuth": {
         "description": "Representation of an external authentication provider.",
@@ -3199,6 +5048,53 @@
           }
         }
       },
+      "Flavour": {
+        "description": "Set of predefined properties of a cluster. For example, a _huge_ flavour can be a cluster\nwith 10 infra nodes and 1000 compute nodes.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Flavour' if this is a complete object or 'FlavourLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "aws": {
+            "description": "Default _Amazon Web Services_ settings of the cluster.",
+            "$ref": "#/components/schemas/AWSFlavour"
+          },
+          "gcp": {
+            "description": "Default _Google Cloud Platform_ settings of the cluster.",
+            "$ref": "#/components/schemas/GCPFlavour"
+          },
+          "name": {
+            "description": "Human friendly identifier of the cluster, for example `4`.\n\nNOTE: Currently for all flavours the `id` and `name` attributes have exactly the\nsame values.",
+            "type": "string"
+          },
+          "network": {
+            "description": "Default network settings of the cluster.\n\nThese can be overridden specifying in the cluster itself a different set of settings.",
+            "$ref": "#/components/schemas/Network"
+          },
+          "nodes": {
+            "description": "Number of nodes that will be used by default when creating a cluster that uses\nthis flavour.\n\nThese can be overridden specifying in the cluster itself a different number of nodes.",
+            "$ref": "#/components/schemas/FlavourNodes"
+          }
+        }
+      },
+      "FlavourNodes": {
+        "description": "Counts of different classes of nodes inside a flavour.",
+        "properties": {
+          "master": {
+            "description": "Number of master nodes of the cluster.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GcpAuthentication": {
         "description": "Google cloud platform authentication method of a cluster.",
         "properties": {
@@ -3234,6 +5130,103 @@
           }
         }
       },
+      "GithubIdentityProvider": {
+        "description": "Details for `github` identity providers.",
+        "properties": {
+          "ca": {
+            "description": "Optional trusted certificate authority bundle to use when making requests tot he server.",
+            "type": "string"
+          },
+          "client_id": {
+            "description": "Client identifier of a registered _GitHub_ OAuth application.",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "Client secret of a registered _GitHub_ OAuth application.",
+            "type": "string"
+          },
+          "hostname": {
+            "description": "For _GitHub Enterprise_ you must provide the host name of your instance, such as\n`example.com`. This value must match the _GitHub Enterprise_ host name value in the\n`/setup/settings` file and cannot include a port number.\n\nFor plain _GitHub_ omit this parameter.",
+            "type": "string"
+          },
+          "organizations": {
+            "description": "Optional list of organizations. Cannot be used in combination with the Teams field.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "teams": {
+            "description": "Optional list of teams. Cannot be used in combination with the Organizations field.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GitlabIdentityProvider": {
+        "description": "Details for `gitlab` identity providers.",
+        "properties": {
+          "ca": {
+            "description": "Optional trusted certificate authority bundle to use when making requests tot he server.",
+            "type": "string"
+          },
+          "url": {
+            "description": "URL of the _GitLab_ instance.",
+            "type": "string"
+          },
+          "client_id": {
+            "description": "Client identifier of a registered _GitLab_ OAuth application.",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "Client secret issued by _GitLab_.",
+            "type": "string"
+          }
+        }
+      },
+      "GoogleIdentityProvider": {
+        "description": "Details for `google` identity providers.",
+        "properties": {
+          "client_id": {
+            "description": "Client identifier of a registered _Google_ project.",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "Client secret issued by _Google_.",
+            "type": "string"
+          },
+          "hosted_domain": {
+            "description": "Optional hosted domain to restrict sign-in accounts to.",
+            "type": "string"
+          }
+        }
+      },
+      "Group": {
+        "description": "Representation of a group of users.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Group' if this is a complete object or 'GroupLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "users": {
+            "description": "List of users of the group.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
       "GroupsClaim": {
         "properties": {
           "claim": {
@@ -3252,6 +5245,148 @@
           "enabled": {
             "description": "Boolean flag indicating if the cluster should be creating using _Hypershift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
             "type": "boolean"
+          }
+        }
+      },
+      "HypershiftConfig": {
+        "description": "Hypershift configuration.",
+        "properties": {
+          "hcp_namespace": {
+            "description": "Contains the name of the hcp namespace for this Hypershift cluster.\nEmpty for non Hypershift clusters.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster should be creating using _Hypershift_.\n\nBy default this is `false`.\n\nTo enable it the cluster needs to be ROSA cluster and the organization of the user needs\nto have the `hypershift` capability enabled.",
+            "type": "boolean"
+          },
+          "management_cluster": {
+            "description": "Contains the name of the current management cluster for this Hypershift cluster.\nEmpty for non Hypershift clusters.",
+            "type": "string"
+          }
+        }
+      },
+      "IdentityProvider": {
+        "description": "Representation of an identity provider.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'IdentityProvider' if this is a complete object or 'IdentityProviderLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "ldap": {
+            "description": "Details for `ldap` identity providers.",
+            "$ref": "#/components/schemas/LDAPIdentityProvider"
+          },
+          "challenge": {
+            "description": "When `true` unauthenticated token requests from non-web clients (like the CLI) are sent a\n`WWW-Authenticate` challenge header for this provider.",
+            "type": "boolean"
+          },
+          "github": {
+            "description": "Details for `github` identity providers.",
+            "$ref": "#/components/schemas/GithubIdentityProvider"
+          },
+          "gitlab": {
+            "description": "Details for `gitlab` identity providers.",
+            "$ref": "#/components/schemas/GitlabIdentityProvider"
+          },
+          "google": {
+            "description": "Details for `google` identity providers.",
+            "$ref": "#/components/schemas/GoogleIdentityProvider"
+          },
+          "htpasswd": {
+            "description": "Details for `htpasswd` identity providers.",
+            "$ref": "#/components/schemas/HTPasswdIdentityProvider"
+          },
+          "login": {
+            "description": "When `true` unauthenticated token requests from web clients (like the web console) are\nredirected to the authorize URL to log in.",
+            "type": "boolean"
+          },
+          "mapping_method": {
+            "description": "Controls how mappings are established between this provider's identities and user\nobjects.",
+            "$ref": "#/components/schemas/IdentityProviderMappingMethod"
+          },
+          "name": {
+            "description": "The name of the identity provider.",
+            "type": "string"
+          },
+          "open_id": {
+            "description": "Details for `openid` identity providers.",
+            "$ref": "#/components/schemas/OpenIDIdentityProvider"
+          },
+          "type": {
+            "description": "Type of identity provider. The rest of the attributes will be populated according to this\nvalue. For example, if the type is `github` then only the `github` attribute will be\npopulated.",
+            "$ref": "#/components/schemas/IdentityProviderType"
+          }
+        }
+      },
+      "IdentityProviderMappingMethod": {
+        "description": "Controls how mappings are established between provider identities and user objects.",
+        "type": "string",
+        "enum": [
+          "add",
+          "claim",
+          "generate",
+          "lookup"
+        ]
+      },
+      "IdentityProviderType": {
+        "description": "Type of identity provider.",
+        "type": "string",
+        "enum": [
+          "LDAPIdentityProvider",
+          "GithubIdentityProvider",
+          "GitlabIdentityProvider",
+          "GoogleIdentityProvider",
+          "HTPasswdIdentityProvider",
+          "OpenIDIdentityProvider"
+        ]
+      },
+      "ImageMirror": {
+        "description": "ImageMirror represents a container image mirror configuration for a cluster.\nThis enables Day 2 image mirroring configuration for ROSA HCP clusters using\nHyperShift's native imageContentSources mechanism.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ImageMirror' if this is a complete object or 'ImageMirrorLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "CreationTimestamp indicates when the image mirror was created.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_update_timestamp": {
+            "description": "LastUpdateTimestamp indicates when the image mirror was last updated.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "mirrors": {
+            "description": "Mirrors is the list of mirror registries that will serve content for the source.\nMirrors array cannot be empty (must contain at least one mirror registry).\nEach mirror registry URL must conform to OpenShift's ImageDigestMirrorSet format specifications.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "description": "Source is the source registry that will be mirrored.\nSource registry must be unique per cluster and is immutable after creation.\nSource is used to identify mirror entries in HostedCluster imageContentSources.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type specifies the mirror type, currently only \"digest\" is supported.",
+            "type": "string"
           }
         }
       },
@@ -3338,6 +5473,76 @@
           "running"
         ]
       },
+      "Ingress": {
+        "description": "Representation of an ingress.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Ingress' if this is a complete object or 'IngressLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "dns_name": {
+            "description": "DNS Name of the ingress.",
+            "type": "string"
+          },
+          "cluster_routes_hostname": {
+            "description": "Cluster routes hostname.",
+            "type": "string"
+          },
+          "cluster_routes_tls_secret_ref": {
+            "description": "Cluster routes TLS Secret reference.",
+            "type": "string"
+          },
+          "component_routes": {
+            "description": "Component Routes settings.",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ComponentRoute"
+            }
+          },
+          "default": {
+            "description": "Indicates if this is the default ingress.",
+            "type": "boolean"
+          },
+          "excluded_namespaces": {
+            "description": "A set of excluded namespaces for the ingress.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "listening": {
+            "description": "Listening method of the ingress",
+            "$ref": "#/components/schemas/ListeningMethod"
+          },
+          "load_balancer_type": {
+            "description": "Load Balancer type of the ingress",
+            "$ref": "#/components/schemas/LoadBalancerFlavor"
+          },
+          "route_namespace_ownership_policy": {
+            "description": "Namespace Ownership Policy for the ingress.",
+            "$ref": "#/components/schemas/NamespaceOwnershipPolicy"
+          },
+          "route_selectors": {
+            "description": "A set of labels for the ingress. ",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "route_wildcard_policy": {
+            "description": "Wildcard policy for the ingress.",
+            "$ref": "#/components/schemas/WildcardPolicy"
+          }
+        }
+      },
       "InstanceIAMRoles": {
         "description": "Contains the necessary attributes to support role-based authentication on AWS.",
         "properties": {
@@ -3347,6 +5552,27 @@
           },
           "worker_role_arn": {
             "description": "The IAM role ARN that will be attached to worker instances",
+            "type": "string"
+          }
+        }
+      },
+      "KeyRing": {
+        "description": "Description of a cloud provider key ring.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'KeyRing' if this is a complete object or 'KeyRingLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the key ring.",
             "type": "string"
           }
         }
@@ -3377,6 +5603,119 @@
           }
         }
       },
+      "Label": {
+        "description": "Representation of a label in clusterdeployment.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Label' if this is a complete object or 'LabelLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "key": {
+            "description": "the key of the label",
+            "type": "string"
+          },
+          "value": {
+            "description": "the value to set in the label",
+            "type": "string"
+          }
+        }
+      },
+      "LimitedSupportReason": {
+        "description": "A reason that a cluster is in limited support.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LimitedSupportReason' if this is a complete object or 'LimitedSupportReasonLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "The time the reason was detected.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "details": {
+            "description": "URL with a link to a detailed description of the reason.",
+            "type": "string"
+          },
+          "detection_type": {
+            "description": "Indicates if the reason was detected automatically or manually.\nWhen creating a new reason this field should be empty or \"manual\".",
+            "$ref": "#/components/schemas/DetectionType"
+          },
+          "override": {
+            "description": "Indicates if the override is enabled",
+            "$ref": "#/components/schemas/LimitedSupportReasonOverride"
+          },
+          "summary": {
+            "description": "Summary of the reason.",
+            "type": "string"
+          },
+          "template": {
+            "description": "Optional link to a template with summary and details.",
+            "$ref": "#/components/schemas/LimitedSupportReasonTemplate"
+          }
+        }
+      },
+      "LimitedSupportReasonOverride": {
+        "description": "Representation of the limited support reason override.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LimitedSupportReasonOverride' if this is a complete object or 'LimitedSupportReasonOverrideLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Indicates if the override is enabled",
+            "type": "boolean"
+          }
+        }
+      },
+      "LimitedSupportReasonTemplate": {
+        "description": "A template for cluster limited support reason.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LimitedSupportReasonTemplate' if this is a complete object or 'LimitedSupportReasonTemplateLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "details": {
+            "description": "A detailed description of the reason.",
+            "type": "string"
+          },
+          "summary": {
+            "description": "Summary of the reason.",
+            "type": "string"
+          }
+        }
+      },
       "ListeningMethod": {
         "description": "Cluster components listening method.",
         "type": "string",
@@ -3384,6 +5723,112 @@
           "external",
           "internal"
         ]
+      },
+      "LoadBalancerFlavor": {
+        "description": "Type of load balancer for AWS cloud provider parameters.",
+        "type": "string",
+        "enum": [
+          "classic",
+          "nlb"
+        ]
+      },
+      "Log": {
+        "description": "Log of the cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Log' if this is a complete object or 'LogLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "content": {
+            "description": "Content of the log.",
+            "type": "string"
+          }
+        }
+      },
+      "MachinePool": {
+        "description": "Representation of a machine pool in a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'MachinePool' if this is a complete object or 'MachinePoolLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "aws": {
+            "description": "AWS specific parameters (Optional).",
+            "$ref": "#/components/schemas/AWSMachinePool"
+          },
+          "gcp": {
+            "description": "GCP specific parameters (Optional).",
+            "$ref": "#/components/schemas/GCPMachinePool"
+          },
+          "autoscaling": {
+            "description": "Details for auto-scaling the machine pool.\nReplicas and autoscaling cannot be used together.",
+            "$ref": "#/components/schemas/MachinePoolAutoscaling"
+          },
+          "availability_zones": {
+            "description": "The availability zones upon which the nodes are created.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "instance_type": {
+            "description": "The instance type of Nodes to create.",
+            "type": "string"
+          },
+          "labels": {
+            "description": "The labels set on the Nodes created.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "replicas": {
+            "description": "The number of Machines (and Nodes) to create.\nReplicas and autoscaling cannot be used together.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "root_volume": {
+            "description": "The machine root volume capabilities.",
+            "$ref": "#/components/schemas/RootVolume"
+          },
+          "security_group_filters": {
+            "description": "List of security groups to be applied to MachinePool (Optional)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MachinePoolSecurityGroupFilter"
+            }
+          },
+          "subnets": {
+            "description": "The subnets upon which the nodes are created.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "taints": {
+            "description": "The taints set on the Nodes created.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Taint"
+            }
+          }
+        }
       },
       "MachinePoolAutoscaling": {
         "description": "Representation of a autoscaling in a machine pool.",
@@ -3535,12 +5980,62 @@
           }
         }
       },
+      "Manifest": {
+        "description": "Representation of a manifestwork.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Manifest' if this is a complete object or 'ManifestLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the manifest got created in OCM database.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "live_resource": {
+            "description": "Transient value to represent the underlying live resource.",
+            "type": "object"
+          },
+          "spec": {
+            "description": "Spec of Manifest Work object from open cluster management\nFor more info please check https://open-cluster-management.io/concepts/manifestwork.",
+            "type": "object"
+          },
+          "updated_timestamp": {
+            "description": "Date and time when the manifest got updated in OCM database.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "workloads": {
+            "description": "List of k8s objects to deploy on a hosted cluster.",
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
       "MarketType": {
         "description": "Market type for AWS Capacity Reservations.",
         "type": "string",
         "enum": [
           "CapacityBlocks",
           "OnDemand"
+        ]
+      },
+      "NamespaceOwnershipPolicy": {
+        "description": "Type of Namespace Ownership Policy.",
+        "type": "string",
+        "enum": [
+          "InterNamespaceAllowed",
+          "Strict"
         ]
       },
       "Network": {
@@ -3566,6 +6061,48 @@
           "type": {
             "description": "The main controller responsible for rendering the core networking components.",
             "type": "string"
+          }
+        }
+      },
+      "NetworkVerification": {
+        "properties": {
+          "cloud_provider_data": {
+            "description": "Cloud provider data to execute the network verification.",
+            "$ref": "#/components/schemas/CloudProviderData"
+          },
+          "cluster_id": {
+            "description": "Cluster ID needed to execute the network verification.",
+            "type": "string"
+          },
+          "items": {
+            "description": "Details about each subnet network verification.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubnetNetworkVerification"
+            }
+          },
+          "platform": {
+            "description": "Platform needed to execute the network verification.",
+            "$ref": "#/components/schemas/Platform"
+          },
+          "total": {
+            "description": "Amount of network verifier executions started.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "NodeInfo": {
+        "description": "Provides information about a node from specific type in the cluster.",
+        "properties": {
+          "amount": {
+            "description": "The amount of the nodes from this type.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "description": "The Node type.",
+            "$ref": "#/components/schemas/NodeType"
           }
         }
       },
@@ -3771,6 +6308,90 @@
           }
         }
       },
+      "NodePoolUpgradePolicy": {
+        "description": "Representation of an upgrade policy that can be set for a node pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'NodePoolUpgradePolicy' if this is a complete object or 'NodePoolUpgradePolicyLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Cluster ID this upgrade policy for node pool is defined for.",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "Timestamp for creation of resource.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "enable_minor_version_upgrades": {
+            "description": "Indicates if minor version upgrades are allowed for automatic upgrades (for manual it's always allowed).",
+            "type": "boolean"
+          },
+          "last_update_timestamp": {
+            "description": "Timestamp for last update that happened to resource.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "next_run": {
+            "description": "Next time the upgrade should run.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "node_pool_id": {
+            "description": "Node Pool ID this upgrade policy is defined for.",
+            "type": "string"
+          },
+          "schedule": {
+            "description": "Schedule cron expression that defines automatic upgrade scheduling.",
+            "type": "string"
+          },
+          "schedule_type": {
+            "description": "Schedule type of the upgrade.",
+            "$ref": "#/components/schemas/ScheduleType"
+          },
+          "state": {
+            "description": "State of the upgrade policy for the node pool.",
+            "$ref": "#/components/schemas/UpgradePolicyState"
+          },
+          "upgrade_type": {
+            "description": "Upgrade type of the node pool.",
+            "$ref": "#/components/schemas/UpgradeType"
+          },
+          "version": {
+            "description": "Version is the desired upgrade version.",
+            "type": "string"
+          }
+        }
+      },
+      "NodeType": {
+        "description": "Type of node received via telemetry.",
+        "type": "string",
+        "enum": [
+          "compute",
+          "infra",
+          "master"
+        ]
+      },
+      "NodesInfo": {
+        "description": "Provides information about the nodes in the cluster.",
+        "properties": {
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NodeInfo"
+            }
+          }
+        }
+      },
       "OidcConfig": {
         "description": "Contains the necessary attributes to support oidc configuration hosting under Red Hat or registering a Customer's byo oidc config.",
         "properties": {
@@ -3823,6 +6444,116 @@
           }
         }
       },
+      "OidcThumbprint": {
+        "description": "Contains the necessary attributes to support oidc configuration thumbprint operations such as fetching/creation of a thumbprint",
+        "properties": {
+          "href": {
+            "description": "HREF for the oidc config thumbprint, filled in response.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "ClusterId is the for the cluster used, filled in response.",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Kind is the resource type, filled in response.",
+            "type": "string"
+          },
+          "oidc_config_id": {
+            "description": "OidcConfigId is the ID for the oidc config used, filled in response.",
+            "type": "string"
+          },
+          "thumbprint": {
+            "description": "Thumbprint is the thumbprint itself, filled in response.",
+            "type": "string"
+          }
+        }
+      },
+      "OidcThumbprintInput": {
+        "description": "Contains the necessary attributes to fetch an OIDC Configuration thumbprint",
+        "properties": {
+          "cluster_id": {
+            "description": "ClusterId is the for the cluster used, exclusive from OidcConfigId.",
+            "type": "string"
+          },
+          "oidc_config_id": {
+            "description": "OidcConfigId is the ID for the oidc config used, exclusive from ClusterId.",
+            "type": "string"
+          }
+        }
+      },
+      "OpenIDClaims": {
+        "description": "_OpenID_ identity provider claims.",
+        "properties": {
+          "email": {
+            "description": "List of claims to use as the mail address.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groups": {
+            "description": "List of claims to use as the group name.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "description": "List of claims to use as the display name.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "preferred_username": {
+            "description": "List of claims to use as the preferred user name when provisioning a user.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "OpenIDIdentityProvider": {
+        "description": "Details for `openid` identity providers.",
+        "properties": {
+          "ca": {
+            "description": "Certificate bunde to use to validate server certificates for the configured URL.",
+            "type": "string"
+          },
+          "claims": {
+            "description": "Claims used to configure the provider.",
+            "$ref": "#/components/schemas/OpenIDClaims"
+          },
+          "client_id": {
+            "description": "Identifier of a client registered with the _OpenID_ provider.",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "Client secret.",
+            "type": "string"
+          },
+          "extra_authorize_parameters": {
+            "description": "Optional map of extra parameters to add to the authorization token request.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "extra_scopes": {
+            "description": "Optional list of scopes to request, in addition to the `openid` scope, during the\nauthorization token request.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "issuer": {
+            "description": "The URL that the OpenID Provider asserts as the Issuer Identifier",
+            "type": "string"
+          }
+        }
+      },
       "OperatorIAMRole": {
         "description": "Contains the necessary attributes to allow each operator to access the necessary AWS resources",
         "properties": {
@@ -3848,6 +6579,60 @@
           }
         }
       },
+      "OrganizationLink": {
+        "description": "Definition of an organization link.",
+        "properties": {
+          "href": {
+            "description": "HREF for the Organization, filled in response.",
+            "type": "string"
+          },
+          "id": {
+            "description": "The organization's ID.",
+            "type": "string"
+          }
+        }
+      },
+      "PendingDeleteCluster": {
+        "description": "Represents a pending delete entry for a specific cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'PendingDeleteCluster' if this is a complete object or 'PendingDeleteClusterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "best_effort": {
+            "description": "Flag indicating if the cluster deletion should be best-effort mode or not.",
+            "type": "boolean"
+          },
+          "cluster": {
+            "description": "Cluster is the details of the cluster that is pending deletion.",
+            "$ref": "#/components/schemas/Cluster"
+          },
+          "creation_timestamp": {
+            "description": "Date and time when the cluster was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Platform": {
+        "description": "Representation of an platform type field.",
+        "type": "string",
+        "enum": [
+          "aws",
+          "aws-classic",
+          "aws-hosted-cp",
+          "gcp",
+          "hostedcluster"
+        ]
+      },
       "PrivateLinkClusterConfiguration": {
         "description": "Manages the configuration for the Private Links.",
         "properties": {
@@ -3857,6 +6642,15 @@
             "items": {
               "$ref": "#/components/schemas/PrivateLinkPrincipal"
             }
+          }
+        }
+      },
+      "PrivateLinkConfiguration": {
+        "description": "Manages the configuration for the Private Links.",
+        "properties": {
+          "principals": {
+            "description": "List of additional principals for the Private Link",
+            "$ref": "#/components/schemas/PrivateLinkPrincipals"
           }
         }
       },
@@ -3880,6 +6674,30 @@
           }
         }
       },
+      "PrivateLinkPrincipals": {
+        "description": "Contains a list of principals for the Private Link.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'PrivateLinkPrincipals' if this is a complete object or 'PrivateLinkPrincipalsLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "principals": {
+            "description": "List of additional principals for the Private Link",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PrivateLinkPrincipal"
+            }
+          }
+        }
+      },
       "ProcessorType": {
         "description": "Processor type category.",
         "type": "string",
@@ -3887,6 +6705,84 @@
           "amd64",
           "arm64"
         ]
+      },
+      "Product": {
+        "description": "Representation of an product that can be selected as a cluster type.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Product' if this is a complete object or 'ProductLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the product.",
+            "type": "string"
+          }
+        }
+      },
+      "ProductMinimalVersion": {
+        "description": "Representation of a product minimal version.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ProductMinimalVersion' if this is a complete object or 'ProductMinimalVersionLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "rosa_cli": {
+            "description": "The ROSA CLI minimal version.",
+            "type": "string"
+          },
+          "start_date": {
+            "description": "The start date for this minimal version.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductTechnologyPreview": {
+        "description": "Representation of a product technology preview.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ProductTechnologyPreview' if this is a complete object or 'ProductTechnologyPreviewLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "additional_text": {
+            "description": "Message associated with this technology preview.",
+            "type": "string"
+          },
+          "end_date": {
+            "description": "The end date for this technology preview.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "start_date": {
+            "description": "The start date for this technology preview.",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
       },
       "ProvisionShard": {
         "description": "Contains the properties of the provision shard, including AWS and GCP related configurations",
@@ -4101,6 +6997,59 @@
           }
         }
       },
+      "RolePolicy": {
+        "properties": {
+          "arn": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "RolePolicyBinding": {
+        "properties": {
+          "arn": {
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_update_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "policies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RolePolicy"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/RolePolicyBindingStatus"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "RolePolicyBindingStatus": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
       "RootVolume": {
         "description": "Root volume capabilities.",
         "properties": {
@@ -4111,6 +7060,48 @@
           "gcp": {
             "description": "GCP Volume specification",
             "$ref": "#/components/schemas/GCPVolume"
+          }
+        }
+      },
+      "ScheduleType": {
+        "description": "ScheduleType defines which type of scheduling should be used for the upgrade policy.",
+        "type": "string",
+        "enum": [
+          "automatic",
+          "manual"
+        ]
+      },
+      "SdnToOvnClusterMigration": {
+        "description": "Details for `SdnToOvn` cluster migrations.",
+        "properties": {
+          "join_ipv4": {
+            "description": "The IP address range to use for the internalJoinSubnet parameter of OVN-Kubernetes\nupon migration.",
+            "type": "string"
+          },
+          "masquerade_ipv4": {
+            "description": "The IP address range to us for the internalMasqueradeSubnet parameter of OVN-Kubernetes\nupon migration.",
+            "type": "string"
+          },
+          "transit_ipv4": {
+            "description": "The IP address range to use for the internalTransSwitchSubnet parameter of OVN-Kubernetes\nupon migration.",
+            "type": "string"
+          }
+        }
+      },
+      "SecurityGroup": {
+        "description": "AWS security group object",
+        "properties": {
+          "id": {
+            "description": "The security group ID.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the security group according to its `Name` tag on AWS.",
+            "type": "string"
+          },
+          "red_hat_managed": {
+            "description": "If the resource is RH managed.",
+            "type": "boolean"
           }
         }
       },
@@ -4144,6 +7135,173 @@
           "topology": {
             "description": "The topology of a provision shard (Optional).",
             "$ref": "#/components/schemas/ProvisionShardTopology"
+          }
+        }
+      },
+      "SocketTotalNodeRoleOSMetricNode": {
+        "description": "Representation of information from telemetry about a the socket capacity\nby node role and OS.",
+        "properties": {
+          "node_roles": {
+            "description": "Representation of the node role for a cluster.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "operating_system": {
+            "description": "The operating system.",
+            "type": "string"
+          },
+          "socket_total": {
+            "description": "The total socket capacity of nodes with this set of roles and operating system.",
+            "type": "number",
+            "format": "float"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SocketTotalsNodeRoleOSMetricNode": {
+        "description": "Representation of information from telemetry about the socket capacity by node\nrole and OS of a cluster.",
+        "properties": {
+          "socket_totals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SocketTotalNodeRoleOSMetricNode"
+            }
+          }
+        }
+      },
+      "StorageQuota": {
+        "description": "Representation of a storage quota ",
+        "properties": {
+          "unit": {
+            "description": "Unit of storage",
+            "type": "string"
+          },
+          "value": {
+            "description": "Numerical value",
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "StsSupportJumpRole": {
+        "description": "Isolated STS support role created per organization.",
+        "properties": {
+          "role_arn": {
+            "description": "ARN of the support role created in the SRE jump account.",
+            "type": "string"
+          }
+        }
+      },
+      "SubnetNetworkVerification": {
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'SubnetNetworkVerification' if this is a complete object or 'SubnetNetworkVerificationLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "details": {
+            "description": "Slice of failures that happened during a subnet network verification.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "platform": {
+            "description": "Platform supplied to the network verifier for this subnet.",
+            "$ref": "#/components/schemas/Platform"
+          },
+          "state": {
+            "description": "State of the subnet network verification.",
+            "type": "string"
+          },
+          "tags": {
+            "description": "Tags supplied to the network verifier for this subnet.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Subnetwork": {
+        "description": "AWS subnetwork object to be used while installing a cluster",
+        "properties": {
+          "cidr_block": {
+            "description": "The CIDR Block of the subnet.",
+            "type": "string"
+          },
+          "availability_zone": {
+            "description": "The availability zone to which the subnet is related.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the subnet according to its `Name` tag on AWS.",
+            "type": "string"
+          },
+          "public": {
+            "description": "Whether or not it is a public subnet.",
+            "type": "boolean"
+          },
+          "red_hat_managed": {
+            "description": "If the resource is RH managed.",
+            "type": "boolean"
+          },
+          "subnet_id": {
+            "description": "The subnet ID to be used while installing a cluster.",
+            "type": "string"
+          }
+        }
+      },
+      "Subscription": {
+        "description": "Definition of a subscription.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Subscription' if this is a complete object or 'SubscriptionLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          }
+        }
+      },
+      "Syncset": {
+        "description": "Representation of a syncset.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'Syncset' if this is a complete object or 'SyncsetLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "resources": {
+            "description": "List of k8s objects to configure for the cluster.",
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
           }
         }
       },
@@ -4207,6 +7365,164 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "TrustedIp": {
+        "description": "Representation of a trusted ip address in clusterdeployment.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'TrustedIp' if this is a complete object or 'TrustedIpLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "The boolean set to show if the ip is enabled.",
+            "type": "boolean"
+          }
+        }
+      },
+      "TuningConfig": {
+        "description": "Representation of a tuning config.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'TuningConfig' if this is a complete object or 'TuningConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the tuning config.",
+            "type": "string"
+          },
+          "spec": {
+            "description": "Spec of the tuning config.",
+            "type": "object"
+          }
+        }
+      },
+      "UpgradePolicy": {
+        "description": "Representation of an upgrade policy that can be set for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'UpgradePolicy' if this is a complete object or 'UpgradePolicyLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Cluster ID this upgrade policy is defined for.",
+            "type": "string"
+          },
+          "enable_minor_version_upgrades": {
+            "description": "Indicates if minor version upgrades are allowed for automatic upgrades (for manual it's always allowed).",
+            "type": "boolean"
+          },
+          "next_run": {
+            "description": "Next time the upgrade should run.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "schedule": {
+            "description": "Schedule cron expression that defines automatic upgrade scheduling.",
+            "type": "string"
+          },
+          "schedule_type": {
+            "description": "Schedule type of the upgrade.",
+            "$ref": "#/components/schemas/ScheduleType"
+          },
+          "upgrade_type": {
+            "description": "Upgrade type specify the type of the upgrade.",
+            "$ref": "#/components/schemas/UpgradeType"
+          },
+          "version": {
+            "description": "Version is the desired upgrade version.",
+            "type": "string"
+          }
+        }
+      },
+      "UpgradePolicyState": {
+        "description": "Representation of an upgrade policy state that that is set for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'UpgradePolicyState' if this is a complete object or 'UpgradePolicyStateLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the state.",
+            "type": "string"
+          },
+          "value": {
+            "description": "State value can be 'pending', 'scheduled', 'cancelled', 'started', 'delayed', \n'failed' or 'completed'.",
+            "$ref": "#/components/schemas/UpgradePolicyStateValue"
+          }
+        }
+      },
+      "UpgradePolicyStateValue": {
+        "description": "Overall state of a cluster upgrade policy.",
+        "type": "string",
+        "enum": [
+          "cancelled",
+          "completed",
+          "delayed",
+          "failed",
+          "pending",
+          "scheduled",
+          "started"
+        ]
+      },
+      "UpgradeType": {
+        "description": "UpgradeType defines which type of upgrade should be used.",
+        "type": "string",
+        "enum": [
+          "OSD",
+          "ADDON",
+          "ControlPlane",
+          "ControlPlaneCVE",
+          "NodePool"
+        ]
+      },
+      "User": {
+        "description": "Representation of a user.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'User' if this is a complete object or 'UserLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
           }
         }
       },
@@ -4317,6 +7633,319 @@
             "type": "boolean"
           }
         }
+      },
+      "VersionGate": {
+        "description": "Representation of an _OpenShift_ version gate.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'VersionGate' if this is a complete object or 'VersionGateLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "sts_only": {
+            "description": "STSOnly indicates if this version gate is for STS clusters only,\ndeprecated: to be replaced with ClusterCondition",
+            "type": "boolean"
+          },
+          "cluster_condition": {
+            "description": "ClusterCondition aims at selecting the clusters targeted by this version gate,\nignored if STSOnly is true",
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "CreationTimestamp is the date and time when the version gate was created,\nformat defined in https://www.ietf.org/rfc/rfc3339.txt[RC3339].",
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "description": "Description of the version gate.",
+            "type": "string"
+          },
+          "documentation_url": {
+            "description": "DocumentationURL is the URL for the documentation of the version gate.",
+            "type": "string"
+          },
+          "label": {
+            "description": "Label representing the version gate in OpenShift.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value represents the required value of the label.",
+            "type": "string"
+          },
+          "version_raw_id_prefix": {
+            "description": "VersionRawIDPrefix represents the versions prefix that the gate applies to.",
+            "type": "string"
+          },
+          "warning_message": {
+            "description": "WarningMessage is a warning that will be displayed to the user before they acknowledge the gate",
+            "type": "string"
+          }
+        }
+      },
+      "VersionGateAgreement": {
+        "description": "VersionGateAgreement represents a version gate that the user agreed to for a specific cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'VersionGateAgreement' if this is a complete object or 'VersionGateAgreementLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "agreed_timestamp": {
+            "description": "The time the user agreed to the version gate",
+            "type": "string",
+            "format": "date-time"
+          },
+          "version_gate": {
+            "description": "link to the version gate that the user agreed to",
+            "$ref": "#/components/schemas/VersionGate"
+          }
+        }
+      },
+      "WifAccessMethod": {
+        "type": "string",
+        "enum": [
+          "impersonate",
+          "vm",
+          "wif"
+        ]
+      },
+      "WifConfig": {
+        "description": "Definition of an wif_config resource.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'WifConfig' if this is a complete object or 'WifConfigLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "The name OCM clients will display for this wif_config.",
+            "type": "string"
+          },
+          "gcp": {
+            "description": "Holds GCP related data.",
+            "$ref": "#/components/schemas/WifGcp"
+          },
+          "organization": {
+            "description": "The OCM organization that this wif_config resource belongs to.",
+            "$ref": "#/components/schemas/OrganizationLink"
+          },
+          "wif_templates": {
+            "description": "Wif template(s) used to configure IAM resources",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "WifConfigStatus": {
+        "description": "Configuration status of a WifConfig.",
+        "properties": {
+          "configured": {
+            "description": "Indicates the current status of the WifConfig resource configuration.\n- `false`: The WifConfig resource has a user configuration error.\n- `true`: The resources associated with the WifConfig object are properly configured and operational at the time of the check.",
+            "type": "boolean"
+          },
+          "description": {
+            "description": "Provides additional information about the WifConfig resource status.\n- When `Configured` is `false`, this field contains details about the user configuration error.\n- When `Configured` is `true`, this field may be empty or contain optional notes about the configuration.",
+            "type": "string"
+          }
+        }
+      },
+      "WifCredentialRequest": {
+        "properties": {
+          "secret_ref": {
+            "$ref": "#/components/schemas/WifSecretRef"
+          },
+          "service_account_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "WifGcp": {
+        "properties": {
+          "federated_project_id": {
+            "description": "This represents the GCP project ID in which, when specified,\nthe wif workload WorkloadIdentityPool resources will be configured.",
+            "type": "string"
+          },
+          "federated_project_number": {
+            "description": "This represents the GCP project number in which, when specified,\nthe wif workload WorkloadIdentityPool resources will be configured.",
+            "type": "string"
+          },
+          "impersonator_email": {
+            "description": "This is the service account email that OCM will use to access other SAs. ",
+            "type": "string"
+          },
+          "project_id": {
+            "description": "This represents the GCP project ID in which the wif resources will be configured.",
+            "type": "string"
+          },
+          "project_number": {
+            "description": "This represents the GCP project number in which the wif resources will be configured.",
+            "type": "string"
+          },
+          "role_prefix": {
+            "description": "Prefix for naming GCP custom roles configured.",
+            "type": "string"
+          },
+          "service_accounts": {
+            "description": "The list of service accounts and their associated roles that will need to be\nconfigured on the user's GCP project.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifServiceAccount"
+            }
+          },
+          "support": {
+            "description": "Defines the access configuration for support.",
+            "$ref": "#/components/schemas/WifSupport"
+          },
+          "workload_identity_pool": {
+            "description": "The workload identity configuration data that will be used to create the\nworkload identity pool on the user's account.",
+            "$ref": "#/components/schemas/WifPool"
+          }
+        }
+      },
+      "WifIdentityProvider": {
+        "properties": {
+          "allowed_audiences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "identity_provider_id": {
+            "type": "string"
+          },
+          "issuer_url": {
+            "type": "string"
+          },
+          "jwks": {
+            "type": "string"
+          }
+        }
+      },
+      "WifPool": {
+        "properties": {
+          "identity_provider": {
+            "description": "Identity provider configuration data that will be created as part of the\nworkload identity pool.",
+            "$ref": "#/components/schemas/WifIdentityProvider"
+          },
+          "pool_id": {
+            "description": "The Id of the workload identity pool.",
+            "type": "string"
+          },
+          "pool_name": {
+            "description": "The display name of the workload identity pool.",
+            "type": "string"
+          }
+        }
+      },
+      "WifResourceBinding": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "WifRole": {
+        "properties": {
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "predefined": {
+            "type": "boolean"
+          },
+          "resource_bindings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifResourceBinding"
+            }
+          },
+          "role_id": {
+            "type": "string"
+          }
+        }
+      },
+      "WifSecretRef": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          }
+        }
+      },
+      "WifServiceAccount": {
+        "properties": {
+          "access_method": {
+            "$ref": "#/components/schemas/WifAccessMethod"
+          },
+          "credential_request": {
+            "$ref": "#/components/schemas/WifCredentialRequest"
+          },
+          "osd_role": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifRole"
+            }
+          },
+          "service_account_id": {
+            "type": "string"
+          }
+        }
+      },
+      "WifSupport": {
+        "properties": {
+          "principal": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WifRole"
+            }
+          }
+        }
+      },
+      "WildcardPolicy": {
+        "description": "Type of wildcard policy.",
+        "type": "string",
+        "enum": [
+          "WildcardsAllowed",
+          "WildcardsDisallowed"
+        ]
       },
       "Error": {
         "type": "object",
