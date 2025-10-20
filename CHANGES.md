@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.479
+
+- Update to model 0.0.434:
+  - Split/Duplicate ARO-HCP models. From this point on, the ARO-HCP models
+    become independent from the clusters_mgmt model
+
 ## 0.1.478
 
 - Update to model 0.0.433:
