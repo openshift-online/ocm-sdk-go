@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.480
+
+- Update to model 0.0.435:
+  - Update deprecation message for DisableUserWorkloadMonitoring field in
+    model/clusters_mgmt
+  - update some code comments mentioning clusters_mgmt to aro_hcp in
+    model/aro_hcp
+
 ## 0.1.479
 
 - Update to model 0.0.434:
