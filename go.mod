@@ -19,8 +19,8 @@ require (
 	github.com/onsi/gomega v1.29.0
 	github.com/prometheus/client_golang v1.12.1
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
-	golang.org/x/crypto v0.20.0 // indirect
-	golang.org/x/net v0.21.0
+	golang.org/x/crypto v0.21.0 // indirect
+	golang.org/x/net v0.23.0
 	golang.org/x/oauth2 v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -64,8 +64,8 @@ require (
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
-	golang.org/x/sys v0.17.0 // indirect
-	golang.org/x/term v0.17.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/term v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.14.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
