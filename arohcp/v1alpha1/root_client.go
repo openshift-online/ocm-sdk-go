@@ -26,7 +26,7 @@ import (
 
 // Client is the client of the 'root' resource.
 //
-// Root of the tree of resources of the clusters management service.
+// Root of the tree of resources of the aro_hcp service.
 type Client struct {
 	transport http.RoundTripper
 	path      string
