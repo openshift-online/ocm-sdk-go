@@ -15986,7 +15986,7 @@
             "$ref": "#/components/schemas/DeleteProtection"
           },
           "disable_user_workload_monitoring": {
-            "description": "Indicates whether the User workload monitoring is enabled or not\nIt is enabled by default",
+            "description": "Indicates whether the User workload monitoring is enabled or not\nIt is enabled by default\nThis field is deprecated for ROSA Hosted Control Plane clusters and will be removed",
             "type": "boolean"
           },
           "domain_prefix": {
