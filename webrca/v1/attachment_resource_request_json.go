@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
 import "io"
 
-func writeAttachmentDeleteRequest(request *AttachmentDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readAttachmentDeleteResponse(response *AttachmentDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAttachmentGetRequest(request *AttachmentGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAttachmentGetResponse(response *AttachmentGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAttachment(reader)

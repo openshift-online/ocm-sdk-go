@@ -33,9 +33,6 @@ func readCloudResourcesAddResponse(response *CloudResourcesAddResponse, reader i
 	response.body, err = UnmarshalCloudResource(reader)
 	return err
 }
-func writeCloudResourcesListRequest(request *CloudResourcesListRequest, writer io.Writer) error {
-	return nil
-}
 func readCloudResourcesListResponse(response *CloudResourcesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

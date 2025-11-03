@@ -33,9 +33,6 @@ func readLimitedSupportReasonsAddResponse(response *LimitedSupportReasonsAddResp
 	response.body, err = UnmarshalLimitedSupportReason(reader)
 	return err
 }
-func writeLimitedSupportReasonsListRequest(request *LimitedSupportReasonsListRequest, writer io.Writer) error {
-	return nil
-}
 func readLimitedSupportReasonsListResponse(response *LimitedSupportReasonsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

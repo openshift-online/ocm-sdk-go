@@ -33,9 +33,6 @@ func readWifConfigsAddResponse(response *WifConfigsAddResponse, reader io.Reader
 	response.body, err = UnmarshalWifConfig(reader)
 	return err
 }
-func writeWifConfigsListRequest(request *WifConfigsListRequest, writer io.Writer) error {
-	return nil
-}
 func readWifConfigsListResponse(response *WifConfigsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

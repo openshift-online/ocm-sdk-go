@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeUsersListRequest(request *UsersListRequest, writer io.Writer) error {
-	return nil
-}
 func readUsersListResponse(response *UsersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

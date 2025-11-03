@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeEnvironmentGetRequest(request *EnvironmentGetRequest, writer io.Writer) error {
-	return nil
-}
 func readEnvironmentGetResponse(response *EnvironmentGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalEnvironment(reader)

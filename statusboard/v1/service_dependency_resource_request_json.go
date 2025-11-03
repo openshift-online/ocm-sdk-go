@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/statusboard/v1
 
 import "io"
 
-func writeServiceDependencyDeleteRequest(request *ServiceDependencyDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readServiceDependencyDeleteResponse(response *ServiceDependencyDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeServiceDependencyGetRequest(request *ServiceDependencyGetRequest, writer io.Writer) error {
-	return nil
-}
 func readServiceDependencyGetResponse(response *ServiceDependencyGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalServiceDependency(reader)

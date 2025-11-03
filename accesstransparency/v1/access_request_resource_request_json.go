@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accesstransparency/v1
 
 import "io"
 
-func writeAccessRequestGetRequest(request *AccessRequestGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAccessRequestGetResponse(response *AccessRequestGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAccessRequest(reader)

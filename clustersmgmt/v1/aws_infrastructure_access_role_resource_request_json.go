@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeAWSInfrastructureAccessRoleGetRequest(request *AWSInfrastructureAccessRoleGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAWSInfrastructureAccessRoleGetResponse(response *AWSInfrastructureAccessRoleGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAWSInfrastructureAccessRole(reader)

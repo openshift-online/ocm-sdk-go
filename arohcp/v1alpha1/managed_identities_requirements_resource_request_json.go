@@ -21,9 +21,6 @@ package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
 import "io"
 
-func writeManagedIdentitiesRequirementsGetRequest(request *ManagedIdentitiesRequirementsGetRequest, writer io.Writer) error {
-	return nil
-}
 func readManagedIdentitiesRequirementsGetResponse(response *ManagedIdentitiesRequirementsGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalManagedIdentitiesRequirements(reader)

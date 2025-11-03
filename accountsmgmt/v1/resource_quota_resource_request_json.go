@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeResourceQuotaDeleteRequest(request *ResourceQuotaDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readResourceQuotaDeleteResponse(response *ResourceQuotaDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeResourceQuotaGetRequest(request *ResourceQuotaGetRequest, writer io.Writer) error {
-	return nil
-}
 func readResourceQuotaGetResponse(response *ResourceQuotaGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalResourceQuota(reader)

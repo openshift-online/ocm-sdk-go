@@ -33,9 +33,6 @@ func readApplicationsAddResponse(response *ApplicationsAddResponse, reader io.Re
 	response.body, err = UnmarshalApplication(reader)
 	return err
 }
-func writeApplicationsListRequest(request *ApplicationsListRequest, writer io.Writer) error {
-	return nil
-}
 func readApplicationsListResponse(response *ApplicationsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

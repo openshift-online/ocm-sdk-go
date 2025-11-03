@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/servicelogs/v1
 
 import "io"
 
-func writeLogEntryDeleteRequest(request *LogEntryDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readLogEntryDeleteResponse(response *LogEntryDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeLogEntryGetRequest(request *LogEntryGetRequest, writer io.Writer) error {
-	return nil
-}
 func readLogEntryGetResponse(response *LogEntryGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalLogEntry(reader)

@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeMachineTypesListRequest(request *MachineTypesListRequest, writer io.Writer) error {
-	return nil
-}
 func readMachineTypesListResponse(response *MachineTypesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeBreakGlassCredentialGetRequest(request *BreakGlassCredentialGetRequest, writer io.Writer) error {
-	return nil
-}
 func readBreakGlassCredentialGetResponse(response *BreakGlassCredentialGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalBreakGlassCredential(reader)

@@ -21,12 +21,6 @@ package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
 import "io"
 
-func writeExternalAuthAsyncDeleteRequest(request *ExternalAuthDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readExternalAuthAsyncDeleteResponse(response *ExternalAuthDeleteResponse, reader io.Reader) error {
-	return nil
-}
 func writeExternalAuthAsyncUpdateRequest(request *ExternalAuthUpdateRequest, writer io.Writer) error {
 	return MarshalExternalAuth(request.body, writer)
 }
@@ -34,9 +28,6 @@ func readExternalAuthAsyncUpdateResponse(response *ExternalAuthUpdateResponse, r
 	var err error
 	response.body, err = UnmarshalExternalAuth(reader)
 	return err
-}
-func writeExternalAuthGetRequest(request *ExternalAuthGetRequest, writer io.Writer) error {
-	return nil
 }
 func readExternalAuthGetResponse(response *ExternalAuthGetResponse, reader io.Reader) error {
 	var err error

@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeWifConfigDeleteRequest(request *WifConfigDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readWifConfigDeleteResponse(response *WifConfigDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeWifConfigGetRequest(request *WifConfigGetRequest, writer io.Writer) error {
-	return nil
-}
 func readWifConfigGetResponse(response *WifConfigGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalWifConfig(reader)

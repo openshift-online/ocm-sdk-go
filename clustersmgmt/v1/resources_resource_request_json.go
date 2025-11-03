@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeResourcesGetRequest(request *ResourcesGetRequest, writer io.Writer) error {
-	return nil
-}
 func readResourcesGetResponse(response *ResourcesGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalClusterResources(reader)

@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeLimitedSupportReasonTemplateGetRequest(request *LimitedSupportReasonTemplateGetRequest, writer io.Writer) error {
-	return nil
-}
 func readLimitedSupportReasonTemplateGetResponse(response *LimitedSupportReasonTemplateGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalLimitedSupportReasonTemplate(reader)

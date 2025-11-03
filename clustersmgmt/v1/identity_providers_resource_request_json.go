@@ -33,9 +33,6 @@ func readIdentityProvidersAddResponse(response *IdentityProvidersAddResponse, re
 	response.body, err = UnmarshalIdentityProvider(reader)
 	return err
 }
-func writeIdentityProvidersListRequest(request *IdentityProvidersListRequest, writer io.Writer) error {
-	return nil
-}
 func readIdentityProvidersListResponse(response *IdentityProvidersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

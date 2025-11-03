@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeLoadBalancerQuotaValuesListRequest(request *LoadBalancerQuotaValuesListRequest, writer io.Writer) error {
-	return nil
-}
 func readLoadBalancerQuotaValuesListResponse(response *LoadBalancerQuotaValuesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

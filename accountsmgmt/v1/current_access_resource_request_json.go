@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeCurrentAccessListRequest(request *CurrentAccessListRequest, writer io.Writer) error {
-	return nil
-}
 func readCurrentAccessListResponse(response *CurrentAccessListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writePermissionDeleteRequest(request *PermissionDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readPermissionDeleteResponse(response *PermissionDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writePermissionGetRequest(request *PermissionGetRequest, writer io.Writer) error {
-	return nil
-}
 func readPermissionGetResponse(response *PermissionGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalPermission(reader)

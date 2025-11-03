@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeNetworkVerificationGetRequest(request *NetworkVerificationGetRequest, writer io.Writer) error {
-	return nil
-}
 func readNetworkVerificationGetResponse(response *NetworkVerificationGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalSubnetNetworkVerification(reader)

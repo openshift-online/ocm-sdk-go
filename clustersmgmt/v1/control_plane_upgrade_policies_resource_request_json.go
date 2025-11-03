@@ -33,9 +33,6 @@ func readControlPlaneUpgradePoliciesAddResponse(response *ControlPlaneUpgradePol
 	response.body, err = UnmarshalControlPlaneUpgradePolicy(reader)
 	return err
 }
-func writeControlPlaneUpgradePoliciesListRequest(request *ControlPlaneUpgradePoliciesListRequest, writer io.Writer) error {
-	return nil
-}
 func readControlPlaneUpgradePoliciesListResponse(response *ControlPlaneUpgradePoliciesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

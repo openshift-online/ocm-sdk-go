@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeInflightChecksListRequest(request *InflightChecksListRequest, writer io.Writer) error {
-	return nil
-}
 func readInflightChecksListResponse(response *InflightChecksListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

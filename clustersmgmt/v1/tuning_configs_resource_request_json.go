@@ -33,9 +33,6 @@ func readTuningConfigsAddResponse(response *TuningConfigsAddResponse, reader io.
 	response.body, err = UnmarshalTuningConfig(reader)
 	return err
 }
-func writeTuningConfigsListRequest(request *TuningConfigsListRequest, writer io.Writer) error {
-	return nil
-}
 func readTuningConfigsListResponse(response *TuningConfigsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

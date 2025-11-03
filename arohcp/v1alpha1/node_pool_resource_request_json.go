@@ -21,12 +21,6 @@ package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
 import "io"
 
-func writeNodePoolAsyncDeleteRequest(request *NodePoolDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readNodePoolAsyncDeleteResponse(response *NodePoolDeleteResponse, reader io.Reader) error {
-	return nil
-}
 func writeNodePoolAsyncUpdateRequest(request *NodePoolUpdateRequest, writer io.Writer) error {
 	return MarshalNodePool(request.body, writer)
 }
@@ -34,9 +28,6 @@ func readNodePoolAsyncUpdateResponse(response *NodePoolUpdateResponse, reader io
 	var err error
 	response.body, err = UnmarshalNodePool(reader)
 	return err
-}
-func writeNodePoolGetRequest(request *NodePoolGetRequest, writer io.Writer) error {
-	return nil
 }
 func readNodePoolGetResponse(response *NodePoolGetResponse, reader io.Reader) error {
 	var err error

@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeCloudResourceDeleteRequest(request *CloudResourceDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readCloudResourceDeleteResponse(response *CloudResourceDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeCloudResourceGetRequest(request *CloudResourceGetRequest, writer io.Writer) error {
-	return nil
-}
 func readCloudResourceGetResponse(response *CloudResourceGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalCloudResource(reader)

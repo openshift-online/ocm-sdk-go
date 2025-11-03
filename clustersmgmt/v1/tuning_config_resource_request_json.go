@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeTuningConfigDeleteRequest(request *TuningConfigDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readTuningConfigDeleteResponse(response *TuningConfigDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeTuningConfigGetRequest(request *TuningConfigGetRequest, writer io.Writer) error {
-	return nil
-}
 func readTuningConfigGetResponse(response *TuningConfigGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalTuningConfig(reader)

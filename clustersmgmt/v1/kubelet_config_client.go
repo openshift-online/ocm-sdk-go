@@ -269,7 +269,10 @@ func (r *KubeletConfigDeleteRequest) SendContext(ctx context.Context) (result *K
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -376,7 +379,10 @@ func (r *KubeletConfigGetRequest) SendContext(ctx context.Context) (result *Kube
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -519,7 +525,10 @@ func (r *KubeletConfigPostRequest) SendContext(ctx context.Context) (result *Kub
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -662,7 +671,10 @@ func (r *KubeletConfigUpdateRequest) SendContext(ctx context.Context) (result *K
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {

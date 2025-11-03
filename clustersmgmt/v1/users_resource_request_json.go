@@ -33,9 +33,6 @@ func readUsersAddResponse(response *UsersAddResponse, reader io.Reader) error {
 	response.body, err = UnmarshalUser(reader)
 	return err
 }
-func writeUsersListRequest(request *UsersListRequest, writer io.Writer) error {
-	return nil
-}
 func readUsersListResponse(response *UsersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

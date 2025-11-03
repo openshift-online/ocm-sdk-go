@@ -33,9 +33,6 @@ func readProvisionShardsAddResponse(response *ProvisionShardsAddResponse, reader
 	response.body, err = UnmarshalProvisionShard(reader)
 	return err
 }
-func writeProvisionShardsListRequest(request *ProvisionShardsListRequest, writer io.Writer) error {
-	return nil
-}
 func readProvisionShardsListResponse(response *ProvisionShardsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

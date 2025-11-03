@@ -33,9 +33,6 @@ func readExternalAuthsAsyncAddResponse(response *ExternalAuthsAddResponse, reade
 	response.body, err = UnmarshalExternalAuth(reader)
 	return err
 }
-func writeExternalAuthsListRequest(request *ExternalAuthsListRequest, writer io.Writer) error {
-	return nil
-}
 func readExternalAuthsListResponse(response *ExternalAuthsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

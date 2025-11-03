@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeProductMinimalVersionGetRequest(request *ProductMinimalVersionGetRequest, writer io.Writer) error {
-	return nil
-}
 func readProductMinimalVersionGetResponse(response *ProductMinimalVersionGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalProductMinimalVersion(reader)

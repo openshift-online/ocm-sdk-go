@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writePendingDeleteClusterGetRequest(request *PendingDeleteClusterGetRequest, writer io.Writer) error {
-	return nil
-}
 func readPendingDeleteClusterGetResponse(response *PendingDeleteClusterGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalPendingDeleteCluster(reader)

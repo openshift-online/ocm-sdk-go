@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeAlertsMetricQueryGetRequest(request *AlertsMetricQueryGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAlertsMetricQueryGetResponse(response *AlertsMetricQueryGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAlertsInfo(reader)

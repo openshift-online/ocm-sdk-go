@@ -33,9 +33,6 @@ func readResourceQuotasAddResponse(response *ResourceQuotasAddResponse, reader i
 	response.body, err = UnmarshalResourceQuota(reader)
 	return err
 }
-func writeResourceQuotasListRequest(request *ResourceQuotasListRequest, writer io.Writer) error {
-	return nil
-}
 func readResourceQuotasListResponse(response *ResourceQuotasListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

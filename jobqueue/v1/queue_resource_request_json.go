@@ -26,16 +26,10 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeQueueGetRequest(request *QueueGetRequest, writer io.Writer) error {
-	return nil
-}
 func readQueueGetResponse(response *QueueGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalQueue(reader)
 	return err
-}
-func writeQueuePopRequest(request *QueuePopRequest, writer io.Writer) error {
-	return nil
 }
 func readQueuePopResponse(response *QueuePopResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)

@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeManifestDeleteRequest(request *ManifestDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readManifestDeleteResponse(response *ManifestDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeManifestGetRequest(request *ManifestGetRequest, writer io.Writer) error {
-	return nil
-}
 func readManifestGetResponse(response *ManifestGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalManifest(reader)

@@ -33,9 +33,6 @@ func readAccountsAddResponse(response *AccountsAddResponse, reader io.Reader) er
 	response.body, err = UnmarshalAccount(reader)
 	return err
 }
-func writeAccountsListRequest(request *AccountsListRequest, writer io.Writer) error {
-	return nil
-}
 func readAccountsListResponse(response *AccountsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

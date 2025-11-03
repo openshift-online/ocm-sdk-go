@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeGroupGetRequest(request *GroupGetRequest, writer io.Writer) error {
-	return nil
-}
 func readGroupGetResponse(response *GroupGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalGroup(reader)

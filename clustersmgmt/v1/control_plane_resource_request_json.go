@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeControlPlaneGetRequest(request *ControlPlaneGetRequest, writer io.Writer) error {
-	return nil
-}
 func readControlPlaneGetResponse(response *ControlPlaneGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalControlPlane(reader)

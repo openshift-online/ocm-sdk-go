@@ -33,9 +33,6 @@ func readPermissionsAddResponse(response *PermissionsAddResponse, reader io.Read
 	response.body, err = UnmarshalPermission(reader)
 	return err
 }
-func writePermissionsListRequest(request *PermissionsListRequest, writer io.Writer) error {
-	return nil
-}
 func readPermissionsListResponse(response *PermissionsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

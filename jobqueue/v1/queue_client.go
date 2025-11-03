@@ -270,7 +270,10 @@ func (r *QueueGetRequest) SendContext(ctx context.Context) (result *QueueGetResp
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -400,7 +403,10 @@ func (r *QueuePopRequest) SendContext(ctx context.Context) (result *QueuePopResp
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -716,7 +722,10 @@ func (r *QueuePushRequest) SendContext(ctx context.Context) (result *QueuePushRe
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {

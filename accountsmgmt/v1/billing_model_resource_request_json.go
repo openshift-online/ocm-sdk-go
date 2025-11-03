@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeBillingModelGetRequest(request *BillingModelGetRequest, writer io.Writer) error {
-	return nil
-}
 func readBillingModelGetResponse(response *BillingModelGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalBillingModelItem(reader)

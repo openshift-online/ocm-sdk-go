@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeIdentityProviderDeleteRequest(request *IdentityProviderDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readIdentityProviderDeleteResponse(response *IdentityProviderDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeIdentityProviderGetRequest(request *IdentityProviderGetRequest, writer io.Writer) error {
-	return nil
-}
 func readIdentityProviderGetResponse(response *IdentityProviderGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalIdentityProvider(reader)

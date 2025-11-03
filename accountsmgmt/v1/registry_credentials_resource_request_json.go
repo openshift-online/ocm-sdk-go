@@ -33,9 +33,6 @@ func readRegistryCredentialsAddResponse(response *RegistryCredentialsAddResponse
 	response.body, err = UnmarshalRegistryCredential(reader)
 	return err
 }
-func writeRegistryCredentialsListRequest(request *RegistryCredentialsListRequest, writer io.Writer) error {
-	return nil
-}
 func readRegistryCredentialsListResponse(response *RegistryCredentialsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

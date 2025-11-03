@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeStorageQuotaValuesListRequest(request *StorageQuotaValuesListRequest, writer io.Writer) error {
-	return nil
-}
 func readStorageQuotaValuesListResponse(response *StorageQuotaValuesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

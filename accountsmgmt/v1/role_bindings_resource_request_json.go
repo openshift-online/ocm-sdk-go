@@ -33,9 +33,6 @@ func readRoleBindingsAddResponse(response *RoleBindingsAddResponse, reader io.Re
 	response.body, err = UnmarshalRoleBinding(reader)
 	return err
 }
-func writeRoleBindingsListRequest(request *RoleBindingsListRequest, writer io.Writer) error {
-	return nil
-}
 func readRoleBindingsListResponse(response *RoleBindingsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

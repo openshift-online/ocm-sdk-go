@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeSubscriptionReservedResourceGetRequest(request *SubscriptionReservedResourceGetRequest, writer io.Writer) error {
-	return nil
-}
 func readSubscriptionReservedResourceGetResponse(response *SubscriptionReservedResourceGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalReservedResource(reader)

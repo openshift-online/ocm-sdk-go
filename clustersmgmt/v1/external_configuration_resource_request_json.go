@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeExternalConfigurationGetRequest(request *ExternalConfigurationGetRequest, writer io.Writer) error {
-	return nil
-}
 func readExternalConfigurationGetResponse(response *ExternalConfigurationGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalExternalConfiguration(reader)

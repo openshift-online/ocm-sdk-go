@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/statusboard/v1
 
 import "io"
 
-func writeStatusDeleteRequest(request *StatusDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readStatusDeleteResponse(response *StatusDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeStatusGetRequest(request *StatusGetRequest, writer io.Writer) error {
-	return nil
-}
 func readStatusGetResponse(response *StatusGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalStatus(reader)

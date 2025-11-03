@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/addonsmgmt/v1
 
 import "io"
 
-func writeAddonDeleteRequest(request *AddonDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readAddonDeleteResponse(response *AddonDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAddonGetRequest(request *AddonGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAddonGetResponse(response *AddonGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAddon(reader)

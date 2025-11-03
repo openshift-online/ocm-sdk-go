@@ -18,12 +18,3 @@ limitations under the License.
 // your changes will be lost when the file is generated again.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
-
-import "io"
-
-func writeOperatorIAMRoleDeleteRequest(request *OperatorIAMRoleDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readOperatorIAMRoleDeleteResponse(response *OperatorIAMRoleDeleteResponse, reader io.Reader) error {
-	return nil
-}

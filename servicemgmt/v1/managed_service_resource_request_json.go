@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/servicemgmt/v1
 
 import "io"
 
-func writeManagedServiceDeleteRequest(request *ManagedServiceDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readManagedServiceDeleteResponse(response *ManagedServiceDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeManagedServiceGetRequest(request *ManagedServiceGetRequest, writer io.Writer) error {
-	return nil
-}
 func readManagedServiceGetResponse(response *ManagedServiceGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalManagedService(reader)

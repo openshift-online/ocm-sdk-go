@@ -33,9 +33,6 @@ func readPeerDependenciesAddResponse(response *PeerDependenciesAddResponse, read
 	response.body, err = UnmarshalPeerDependency(reader)
 	return err
 }
-func writePeerDependenciesListRequest(request *PeerDependenciesListRequest, writer io.Writer) error {
-	return nil
-}
 func readPeerDependenciesListResponse(response *PeerDependenciesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -21,9 +21,6 @@ package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
 import "io"
 
-func writeNodePoolStatusGetRequest(request *NodePoolStatusGetRequest, writer io.Writer) error {
-	return nil
-}
 func readNodePoolStatusGetResponse(response *NodePoolStatusGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalNodePoolStatus(reader)

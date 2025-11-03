@@ -52,9 +52,6 @@ func writeJobFailureRequest(request *JobFailureRequest, writer io.Writer) error 
 	}
 	return stream.Error
 }
-func readJobFailureResponse(response *JobFailureResponse, reader io.Reader) error {
-	return nil
-}
 func writeJobSuccessRequest(request *JobSuccessRequest, writer io.Writer) error {
 	count := 0
 	stream := helpers.NewStream(writer)
@@ -73,7 +70,4 @@ func writeJobSuccessRequest(request *JobSuccessRequest, writer io.Writer) error 
 		return err
 	}
 	return stream.Error
-}
-func readJobSuccessResponse(response *JobSuccessResponse, reader io.Reader) error {
-	return nil
 }

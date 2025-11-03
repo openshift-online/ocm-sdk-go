@@ -33,9 +33,6 @@ func readIncidentsAddResponse(response *IncidentsAddResponse, reader io.Reader) 
 	response.body, err = UnmarshalIncident(reader)
 	return err
 }
-func writeIncidentsListRequest(request *IncidentsListRequest, writer io.Writer) error {
-	return nil
-}
 func readIncidentsListResponse(response *IncidentsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 import "io"
 
-func writeLabelDeleteRequest(request *LabelDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readLabelDeleteResponse(response *LabelDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeLabelGetRequest(request *LabelGetRequest, writer io.Writer) error {
-	return nil
-}
 func readLabelGetResponse(response *LabelGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalLabel(reader)

@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeClusterMigrationGetRequest(request *ClusterMigrationGetRequest, writer io.Writer) error {
-	return nil
-}
 func readClusterMigrationGetResponse(response *ClusterMigrationGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalClusterMigration(reader)

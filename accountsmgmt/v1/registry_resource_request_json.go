@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeRegistryGetRequest(request *RegistryGetRequest, writer io.Writer) error {
-	return nil
-}
 func readRegistryGetResponse(response *RegistryGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalRegistry(reader)

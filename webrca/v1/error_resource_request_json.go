@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
 import "io"
 
-func writeErrorGetRequest(request *ErrorGetRequest, writer io.Writer) error {
-	return nil
-}
 func readErrorGetResponse(response *ErrorGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalError(reader)

@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeHcpKubeletConfigDeleteRequest(request *HcpKubeletConfigDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readHcpKubeletConfigDeleteResponse(response *HcpKubeletConfigDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeHcpKubeletConfigGetRequest(request *HcpKubeletConfigGetRequest, writer io.Writer) error {
-	return nil
-}
 func readHcpKubeletConfigGetResponse(response *HcpKubeletConfigGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalKubeletConfig(reader)

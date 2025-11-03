@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeTrustedIpGetRequest(request *TrustedIpGetRequest, writer io.Writer) error {
-	return nil
-}
 func readTrustedIpGetResponse(response *TrustedIpGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalTrustedIp(reader)

@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeCloudProvidersListRequest(request *CloudProvidersListRequest, writer io.Writer) error {
-	return nil
-}
 func readCloudProvidersListResponse(response *CloudProvidersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

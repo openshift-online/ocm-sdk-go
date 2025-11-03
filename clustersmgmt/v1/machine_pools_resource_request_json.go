@@ -33,9 +33,6 @@ func readMachinePoolsAddResponse(response *MachinePoolsAddResponse, reader io.Re
 	response.body, err = UnmarshalMachinePool(reader)
 	return err
 }
-func writeMachinePoolsListRequest(request *MachinePoolsListRequest, writer io.Writer) error {
-	return nil
-}
 func readMachinePoolsListResponse(response *MachinePoolsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

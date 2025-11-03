@@ -33,9 +33,6 @@ func readAddOnInstallationsAddResponse(response *AddOnInstallationsAddResponse, 
 	response.body, err = UnmarshalAddOnInstallation(reader)
 	return err
 }
-func writeAddOnInstallationsListRequest(request *AddOnInstallationsListRequest, writer io.Writer) error {
-	return nil
-}
 func readAddOnInstallationsListResponse(response *AddOnInstallationsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

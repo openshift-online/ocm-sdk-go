@@ -33,9 +33,6 @@ func readNodePoolsAsyncAddResponse(response *NodePoolsAddResponse, reader io.Rea
 	response.body, err = UnmarshalNodePool(reader)
 	return err
 }
-func writeNodePoolsListRequest(request *NodePoolsListRequest, writer io.Writer) error {
-	return nil
-}
 func readNodePoolsListResponse(response *NodePoolsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

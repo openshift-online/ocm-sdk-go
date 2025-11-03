@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeHypershiftGetRequest(request *HypershiftGetRequest, writer io.Writer) error {
-	return nil
-}
 func readHypershiftGetResponse(response *HypershiftGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalHypershiftConfig(reader)

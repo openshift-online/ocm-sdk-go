@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeAutoscalerDeleteRequest(request *AutoscalerDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readAutoscalerDeleteResponse(response *AutoscalerDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAutoscalerGetRequest(request *AutoscalerGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAutoscalerGetResponse(response *AutoscalerGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalClusterAutoscaler(reader)

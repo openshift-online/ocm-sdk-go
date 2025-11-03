@@ -33,9 +33,6 @@ func readVersionGateAgreementsAddResponse(response *VersionGateAgreementsAddResp
 	response.body, err = UnmarshalVersionGateAgreement(reader)
 	return err
 }
-func writeVersionGateAgreementsListRequest(request *VersionGateAgreementsListRequest, writer io.Writer) error {
-	return nil
-}
 func readVersionGateAgreementsListResponse(response *VersionGateAgreementsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -33,9 +33,6 @@ func readClusterLogsAddResponse(response *ClusterLogsAddResponse, reader io.Read
 	response.body, err = UnmarshalLogEntry(reader)
 	return err
 }
-func writeClusterLogsListRequest(request *ClusterLogsListRequest, writer io.Writer) error {
-	return nil
-}
 func readClusterLogsListResponse(response *ClusterLogsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

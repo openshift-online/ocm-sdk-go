@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeSocketTotalByNodeRolesOSMetricQueryGetRequest(request *SocketTotalByNodeRolesOSMetricQueryGetRequest, writer io.Writer) error {
-	return nil
-}
 func readSocketTotalByNodeRolesOSMetricQueryGetResponse(response *SocketTotalByNodeRolesOSMetricQueryGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalSocketTotalsNodeRoleOSMetricNode(reader)

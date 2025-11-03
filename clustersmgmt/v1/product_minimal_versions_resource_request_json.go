@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeProductMinimalVersionsListRequest(request *ProductMinimalVersionsListRequest, writer io.Writer) error {
-	return nil
-}
 func readProductMinimalVersionsListResponse(response *ProductMinimalVersionsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

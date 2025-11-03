@@ -33,9 +33,6 @@ func readCloudRegionsAddResponse(response *CloudRegionsAddResponse, reader io.Re
 	response.body, err = UnmarshalCloudRegion(reader)
 	return err
 }
-func writeCloudRegionsListRequest(request *CloudRegionsListRequest, writer io.Writer) error {
-	return nil
-}
 func readCloudRegionsListResponse(response *CloudRegionsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

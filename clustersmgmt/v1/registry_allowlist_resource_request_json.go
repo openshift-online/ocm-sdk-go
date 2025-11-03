@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeRegistryAllowlistDeleteRequest(request *RegistryAllowlistDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readRegistryAllowlistDeleteResponse(response *RegistryAllowlistDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeRegistryAllowlistGetRequest(request *RegistryAllowlistGetRequest, writer io.Writer) error {
-	return nil
-}
 func readRegistryAllowlistGetResponse(response *RegistryAllowlistGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalRegistryAllowlist(reader)

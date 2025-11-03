@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/osdfleetmgmt/v1
 
 import "io"
 
-func writeManagementClusterDeleteRequest(request *ManagementClusterDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readManagementClusterDeleteResponse(response *ManagementClusterDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeManagementClusterGetRequest(request *ManagementClusterGetRequest, writer io.Writer) error {
-	return nil
-}
 func readManagementClusterGetResponse(response *ManagementClusterGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalManagementCluster(reader)

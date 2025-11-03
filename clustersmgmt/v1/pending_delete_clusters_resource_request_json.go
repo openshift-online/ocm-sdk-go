@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writePendingDeleteClustersListRequest(request *PendingDeleteClustersListRequest, writer io.Writer) error {
-	return nil
-}
 func readPendingDeleteClustersListResponse(response *PendingDeleteClustersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

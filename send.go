@@ -20,7 +20,6 @@ limitations under the License.
 package sdk
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"path"
@@ -50,7 +49,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 	}
 
 	// Select the target server add the base URL to the request URL:
-	server, err := c.selectServer(ctx, request)
+	server, err := c.selectServer(request)
 	if err != nil {
 		return
 	}
@@ -109,7 +108,7 @@ func (c *Connection) RoundTrip(request *http.Request) (response *http.Response, 
 
 // selectServer selects the server that should be used for the given request, according its path and
 // the alternative URLs configured when the connection was created.
-func (c *Connection) selectServer(ctx context.Context,
+func (c *Connection) selectServer(
 	request *http.Request) (base *internal.ServerAddress, err error) {
 	// Select the server corresponding to the longest matching prefix. Note that it is enough to
 	// pick the first match because the entries have already been sorted by descending prefix
@@ -120,11 +119,9 @@ func (c *Connection) selectServer(ctx context.Context,
 			return
 		}
 	}
-	if base == nil {
-		err = fmt.Errorf(
-			"can't find any matching URL for request path '%s'",
-			request.URL.Path,
-		)
-	}
+	err = fmt.Errorf(
+		"can't find any matching URL for request path '%s'",
+		request.URL.Path,
+	)
 	return
 }

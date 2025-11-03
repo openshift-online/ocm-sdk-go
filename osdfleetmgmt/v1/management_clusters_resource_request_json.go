@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeManagementClustersListRequest(request *ManagementClustersListRequest, writer io.Writer) error {
-	return nil
-}
 func readManagementClustersListResponse(response *ManagementClustersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

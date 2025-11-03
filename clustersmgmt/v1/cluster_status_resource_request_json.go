@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeClusterStatusGetRequest(request *ClusterStatusGetRequest, writer io.Writer) error {
-	return nil
-}
 func readClusterStatusGetResponse(response *ClusterStatusGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalClusterStatus(reader)

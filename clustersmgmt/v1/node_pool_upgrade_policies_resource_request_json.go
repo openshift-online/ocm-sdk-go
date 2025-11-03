@@ -33,9 +33,6 @@ func readNodePoolUpgradePoliciesAddResponse(response *NodePoolUpgradePoliciesAdd
 	response.body, err = UnmarshalNodePoolUpgradePolicy(reader)
 	return err
 }
-func writeNodePoolUpgradePoliciesListRequest(request *NodePoolUpgradePoliciesListRequest, writer io.Writer) error {
-	return nil
-}
 func readNodePoolUpgradePoliciesListResponse(response *NodePoolUpgradePoliciesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

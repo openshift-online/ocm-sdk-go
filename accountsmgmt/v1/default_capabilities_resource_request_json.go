@@ -33,9 +33,6 @@ func readDefaultCapabilitiesAddResponse(response *DefaultCapabilitiesAddResponse
 	response.body, err = UnmarshalDefaultCapability(reader)
 	return err
 }
-func writeDefaultCapabilitiesListRequest(request *DefaultCapabilitiesListRequest, writer io.Writer) error {
-	return nil
-}
 func readDefaultCapabilitiesListResponse(response *DefaultCapabilitiesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

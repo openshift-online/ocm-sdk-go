@@ -257,7 +257,10 @@ func (r *ManagedServiceDeleteRequest) SendContext(ctx context.Context) (result *
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -364,7 +367,10 @@ func (r *ManagedServiceGetRequest) SendContext(ctx context.Context) (result *Man
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -507,7 +513,10 @@ func (r *ManagedServiceUpdateRequest) SendContext(ctx context.Context) (result *
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {

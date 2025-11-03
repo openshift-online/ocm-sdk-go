@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeSubscriptionDeleteRequest(request *SubscriptionDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readSubscriptionDeleteResponse(response *SubscriptionDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeSubscriptionGetRequest(request *SubscriptionGetRequest, writer io.Writer) error {
-	return nil
-}
 func readSubscriptionGetResponse(response *SubscriptionGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalSubscription(reader)

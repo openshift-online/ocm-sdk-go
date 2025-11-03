@@ -33,9 +33,6 @@ func readOidcConfigsAddResponse(response *OidcConfigsAddResponse, reader io.Read
 	response.body, err = UnmarshalOidcConfig(reader)
 	return err
 }
-func writeOidcConfigsListRequest(request *OidcConfigsListRequest, writer io.Writer) error {
-	return nil
-}
 func readOidcConfigsListResponse(response *OidcConfigsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

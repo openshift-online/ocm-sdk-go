@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/statusboard/v1
 
 import "io"
 
-func writePeerDependencyDeleteRequest(request *PeerDependencyDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readPeerDependencyDeleteResponse(response *PeerDependencyDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writePeerDependencyGetRequest(request *PeerDependencyGetRequest, writer io.Writer) error {
-	return nil
-}
 func readPeerDependencyGetResponse(response *PeerDependencyGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalService(reader)

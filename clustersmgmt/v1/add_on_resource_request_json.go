@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeAddOnDeleteRequest(request *AddOnDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readAddOnDeleteResponse(response *AddOnDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAddOnGetRequest(request *AddOnGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAddOnGetResponse(response *AddOnGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAddOn(reader)

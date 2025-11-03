@@ -33,9 +33,6 @@ func readAddonUpgradePoliciesAddResponse(response *AddonUpgradePoliciesAddRespon
 	response.body, err = UnmarshalAddonUpgradePolicy(reader)
 	return err
 }
-func writeAddonUpgradePoliciesListRequest(request *AddonUpgradePoliciesListRequest, writer io.Writer) error {
-	return nil
-}
 func readAddonUpgradePoliciesListResponse(response *AddonUpgradePoliciesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

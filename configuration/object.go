@@ -217,7 +217,7 @@ func (b *Builder) mergeNode(src, dst *yaml.Node) error {
 	}
 	switch src.Kind {
 	case 0:
-		return b.mergeEmpty(src, dst)
+		return nil
 	case yaml.DocumentNode:
 		return b.mergeDocument(src, dst)
 	case yaml.SequenceNode:
@@ -235,10 +235,6 @@ func (b *Builder) mergeNode(src, dst *yaml.Node) error {
 
 func (b *Builder) mergeDocument(src, dst *yaml.Node) error {
 	return b.mergeNode(src.Content[0], dst.Content[0])
-}
-
-func (b *Builder) mergeEmpty(src, dst *yaml.Node) error {
-	return nil
 }
 
 func (b *Builder) mergeSequence(src, dst *yaml.Node) error {

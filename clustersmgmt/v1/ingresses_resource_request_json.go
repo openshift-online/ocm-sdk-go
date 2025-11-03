@@ -33,9 +33,6 @@ func readIngressesAddResponse(response *IngressesAddResponse, reader io.Reader) 
 	response.body, err = UnmarshalIngress(reader)
 	return err
 }
-func writeIngressesListRequest(request *IngressesListRequest, writer io.Writer) error {
-	return nil
-}
 func readIngressesListResponse(response *IngressesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -33,9 +33,6 @@ func readImageMirrorsAddResponse(response *ImageMirrorsAddResponse, reader io.Re
 	response.body, err = UnmarshalImageMirror(reader)
 	return err
 }
-func writeImageMirrorsListRequest(request *ImageMirrorsListRequest, writer io.Writer) error {
-	return nil
-}
 func readImageMirrorsListResponse(response *ImageMirrorsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

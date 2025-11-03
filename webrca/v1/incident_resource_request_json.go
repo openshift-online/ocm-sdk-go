@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
 import "io"
 
-func writeIncidentDeleteRequest(request *IncidentDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readIncidentDeleteResponse(response *IncidentDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeIncidentGetRequest(request *IncidentGetRequest, writer io.Writer) error {
-	return nil
-}
 func readIncidentGetResponse(response *IncidentGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalIncident(reader)

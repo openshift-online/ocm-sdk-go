@@ -33,9 +33,6 @@ func readRegistryAllowlistsAddResponse(response *RegistryAllowlistsAddResponse, 
 	response.body, err = UnmarshalRegistryAllowlist(reader)
 	return err
 }
-func writeRegistryAllowlistsListRequest(request *RegistryAllowlistsListRequest, writer io.Writer) error {
-	return nil
-}
 func readRegistryAllowlistsListResponse(response *RegistryAllowlistsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

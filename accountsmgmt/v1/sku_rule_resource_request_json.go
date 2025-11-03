@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeSkuRuleGetRequest(request *SkuRuleGetRequest, writer io.Writer) error {
-	return nil
-}
 func readSkuRuleGetResponse(response *SkuRuleGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalSkuRule(reader)

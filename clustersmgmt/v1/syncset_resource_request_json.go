@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeSyncsetDeleteRequest(request *SyncsetDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readSyncsetDeleteResponse(response *SyncsetDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeSyncsetGetRequest(request *SyncsetGetRequest, writer io.Writer) error {
-	return nil
-}
 func readSyncsetGetResponse(response *SyncsetGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalSyncset(reader)

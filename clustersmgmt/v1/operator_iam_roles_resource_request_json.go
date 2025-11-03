@@ -33,9 +33,6 @@ func readOperatorIAMRolesAddResponse(response *OperatorIAMRolesAddResponse, read
 	response.body, err = UnmarshalOperatorIAMRole(reader)
 	return err
 }
-func writeOperatorIAMRolesListRequest(request *OperatorIAMRolesListRequest, writer io.Writer) error {
-	return nil
-}
 func readOperatorIAMRolesListResponse(response *OperatorIAMRolesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

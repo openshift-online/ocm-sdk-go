@@ -33,9 +33,6 @@ func readServicesAddResponse(response *ServicesAddResponse, reader io.Reader) er
 	response.body, err = UnmarshalManagedService(reader)
 	return err
 }
-func writeServicesListRequest(request *ServicesListRequest, writer io.Writer) error {
-	return nil
-}
 func readServicesListResponse(response *ServicesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

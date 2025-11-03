@@ -33,9 +33,6 @@ func readGenericLabelsAddResponse(response *GenericLabelsAddResponse, reader io.
 	response.body, err = UnmarshalLabel(reader)
 	return err
 }
-func writeGenericLabelsListRequest(request *GenericLabelsListRequest, writer io.Writer) error {
-	return nil
-}
 func readGenericLabelsListResponse(response *GenericLabelsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

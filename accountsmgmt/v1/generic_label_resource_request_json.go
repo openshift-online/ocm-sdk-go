@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeGenericLabelDeleteRequest(request *GenericLabelDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readGenericLabelDeleteResponse(response *GenericLabelDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeGenericLabelGetRequest(request *GenericLabelGetRequest, writer io.Writer) error {
-	return nil
-}
 func readGenericLabelGetResponse(response *GenericLabelGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalLabel(reader)

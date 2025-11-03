@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeAddonUpgradePolicyStateGetRequest(request *AddonUpgradePolicyStateGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAddonUpgradePolicyStateGetResponse(response *AddonUpgradePolicyStateGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAddonUpgradePolicyState(reader)

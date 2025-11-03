@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeRoleBindingDeleteRequest(request *RoleBindingDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readRoleBindingDeleteResponse(response *RoleBindingDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeRoleBindingGetRequest(request *RoleBindingGetRequest, writer io.Writer) error {
-	return nil
-}
 func readRoleBindingGetResponse(response *RoleBindingGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalRoleBinding(reader)

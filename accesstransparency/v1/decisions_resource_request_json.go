@@ -33,9 +33,6 @@ func readDecisionsAddResponse(response *DecisionsAddResponse, reader io.Reader) 
 	response.body, err = UnmarshalDecision(reader)
 	return err
 }
-func writeDecisionsListRequest(request *DecisionsListRequest, writer io.Writer) error {
-	return nil
-}
 func readDecisionsListResponse(response *DecisionsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

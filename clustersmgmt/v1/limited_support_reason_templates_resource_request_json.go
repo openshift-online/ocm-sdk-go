@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeLimitedSupportReasonTemplatesListRequest(request *LimitedSupportReasonTemplatesListRequest, writer io.Writer) error {
-	return nil
-}
 func readLimitedSupportReasonTemplatesListResponse(response *LimitedSupportReasonTemplatesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

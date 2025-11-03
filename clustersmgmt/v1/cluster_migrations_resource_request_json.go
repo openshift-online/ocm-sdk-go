@@ -33,9 +33,6 @@ func readClusterMigrationsAddResponse(response *ClusterMigrationsAddResponse, re
 	response.body, err = UnmarshalClusterMigration(reader)
 	return err
 }
-func writeClusterMigrationsListRequest(request *ClusterMigrationsListRequest, writer io.Writer) error {
-	return nil
-}
 func readClusterMigrationsListResponse(response *ClusterMigrationsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeLogGetRequest(request *LogGetRequest, writer io.Writer) error {
-	return nil
-}
 func readLogGetResponse(response *LogGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalLog(reader)

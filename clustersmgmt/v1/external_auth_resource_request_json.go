@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeExternalAuthDeleteRequest(request *ExternalAuthDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readExternalAuthDeleteResponse(response *ExternalAuthDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeExternalAuthGetRequest(request *ExternalAuthGetRequest, writer io.Writer) error {
-	return nil
-}
 func readExternalAuthGetResponse(response *ExternalAuthGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalExternalAuth(reader)

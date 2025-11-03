@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeIngressDeleteRequest(request *IngressDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readIngressDeleteResponse(response *IngressDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeIngressGetRequest(request *IngressGetRequest, writer io.Writer) error {
-	return nil
-}
 func readIngressGetResponse(response *IngressGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalIngress(reader)

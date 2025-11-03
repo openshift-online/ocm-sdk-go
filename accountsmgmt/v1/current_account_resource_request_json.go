@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeCurrentAccountGetRequest(request *CurrentAccountGetRequest, writer io.Writer) error {
-	return nil
-}
 func readCurrentAccountGetResponse(response *CurrentAccountGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAccount(reader)

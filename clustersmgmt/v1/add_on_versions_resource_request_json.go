@@ -33,9 +33,6 @@ func readAddOnVersionsAddResponse(response *AddOnVersionsAddResponse, reader io.
 	response.body, err = UnmarshalAddOnVersion(reader)
 	return err
 }
-func writeAddOnVersionsListRequest(request *AddOnVersionsListRequest, writer io.Writer) error {
-	return nil
-}
 func readAddOnVersionsListResponse(response *AddOnVersionsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

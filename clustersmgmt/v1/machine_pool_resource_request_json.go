@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeMachinePoolDeleteRequest(request *MachinePoolDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readMachinePoolDeleteResponse(response *MachinePoolDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeMachinePoolGetRequest(request *MachinePoolGetRequest, writer io.Writer) error {
-	return nil
-}
 func readMachinePoolGetResponse(response *MachinePoolGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalMachinePool(reader)

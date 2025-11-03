@@ -21,9 +21,6 @@ package v1alpha1 // github.com/openshift-online/ocm-sdk-go/arohcp/v1alpha1
 
 import "io"
 
-func writeAutoscalerGetRequest(request *AutoscalerGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAutoscalerGetResponse(response *AutoscalerGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalClusterAutoscaler(reader)

@@ -33,9 +33,6 @@ func readOrganizationsAddResponse(response *OrganizationsAddResponse, reader io.
 	response.body, err = UnmarshalOrganization(reader)
 	return err
 }
-func writeOrganizationsListRequest(request *OrganizationsListRequest, writer io.Writer) error {
-	return nil
-}
 func readOrganizationsListResponse(response *OrganizationsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

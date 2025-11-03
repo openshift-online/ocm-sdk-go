@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeRoleDeleteRequest(request *RoleDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readRoleDeleteResponse(response *RoleDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeRoleGetRequest(request *RoleGetRequest, writer io.Writer) error {
-	return nil
-}
 func readRoleGetResponse(response *RoleGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalRole(reader)

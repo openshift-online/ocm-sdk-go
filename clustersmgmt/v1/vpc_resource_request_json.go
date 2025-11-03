@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeVpcGetRequest(request *VpcGetRequest, writer io.Writer) error {
-	return nil
-}
 func readVpcGetResponse(response *VpcGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalCloudVPC(reader)

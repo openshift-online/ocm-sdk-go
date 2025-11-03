@@ -97,9 +97,6 @@ func readHTPasswdUsersImportResponse(response *HTPasswdUsersImportResponse, read
 	}
 	return iterator.Error
 }
-func writeHTPasswdUsersListRequest(request *HTPasswdUsersListRequest, writer io.Writer) error {
-	return nil
-}
 func readHTPasswdUsersListResponse(response *HTPasswdUsersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

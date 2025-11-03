@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeImageMirrorDeleteRequest(request *ImageMirrorDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readImageMirrorDeleteResponse(response *ImageMirrorDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeImageMirrorGetRequest(request *ImageMirrorGetRequest, writer io.Writer) error {
-	return nil
-}
 func readImageMirrorGetResponse(response *ImageMirrorGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalImageMirror(reader)

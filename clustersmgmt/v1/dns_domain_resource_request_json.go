@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeDNSDomainDeleteRequest(request *DNSDomainDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readDNSDomainDeleteResponse(response *DNSDomainDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeDNSDomainGetRequest(request *DNSDomainGetRequest, writer io.Writer) error {
-	return nil
-}
 func readDNSDomainGetResponse(response *DNSDomainGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalDNSDomain(reader)

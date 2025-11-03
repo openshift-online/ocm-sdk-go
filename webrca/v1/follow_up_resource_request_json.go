@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/webrca/v1
 
 import "io"
 
-func writeFollowUpDeleteRequest(request *FollowUpDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readFollowUpDeleteResponse(response *FollowUpDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeFollowUpGetRequest(request *FollowUpGetRequest, writer io.Writer) error {
-	return nil
-}
 func readFollowUpGetResponse(response *FollowUpGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalFollowUp(reader)

@@ -33,9 +33,6 @@ func readLabelsAddResponse(response *LabelsAddResponse, reader io.Reader) error 
 	response.body, err = UnmarshalLabel(reader)
 	return err
 }
-func writeLabelsListRequest(request *LabelsListRequest, writer io.Writer) error {
-	return nil
-}
 func readLabelsListResponse(response *LabelsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

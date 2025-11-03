@@ -21,9 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeAccessTokenPostRequest(request *AccessTokenPostRequest, writer io.Writer) error {
-	return nil
-}
 func readAccessTokenPostResponse(response *AccessTokenPostResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAccessToken(reader)

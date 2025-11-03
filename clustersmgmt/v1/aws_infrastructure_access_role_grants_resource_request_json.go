@@ -33,9 +33,6 @@ func readAWSInfrastructureAccessRoleGrantsAddResponse(response *AWSInfrastructur
 	response.body, err = UnmarshalAWSInfrastructureAccessRoleGrant(reader)
 	return err
 }
-func writeAWSInfrastructureAccessRoleGrantsListRequest(request *AWSInfrastructureAccessRoleGrantsListRequest, writer io.Writer) error {
-	return nil
-}
 func readAWSInfrastructureAccessRoleGrantsListResponse(response *AWSInfrastructureAccessRoleGrantsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

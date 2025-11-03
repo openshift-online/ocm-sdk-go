@@ -33,9 +33,6 @@ func readServiceDependenciesAddResponse(response *ServiceDependenciesAddResponse
 	response.body, err = UnmarshalServiceDependency(reader)
 	return err
 }
-func writeServiceDependenciesListRequest(request *ServiceDependenciesListRequest, writer io.Writer) error {
-	return nil
-}
 func readServiceDependenciesListResponse(response *ServiceDependenciesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

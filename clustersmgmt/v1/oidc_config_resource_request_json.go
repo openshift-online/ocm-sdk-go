@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeOidcConfigDeleteRequest(request *OidcConfigDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readOidcConfigDeleteResponse(response *OidcConfigDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeOidcConfigGetRequest(request *OidcConfigGetRequest, writer io.Writer) error {
-	return nil
-}
 func readOidcConfigGetResponse(response *OidcConfigGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalOidcConfig(reader)

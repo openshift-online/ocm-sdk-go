@@ -33,15 +33,6 @@ func readBreakGlassCredentialsAddResponse(response *BreakGlassCredentialsAddResp
 	response.body, err = UnmarshalBreakGlassCredential(reader)
 	return err
 }
-func writeBreakGlassCredentialsDeleteRequest(request *BreakGlassCredentialsDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readBreakGlassCredentialsDeleteResponse(response *BreakGlassCredentialsDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeBreakGlassCredentialsListRequest(request *BreakGlassCredentialsListRequest, writer io.Writer) error {
-	return nil
-}
 func readBreakGlassCredentialsListResponse(response *BreakGlassCredentialsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

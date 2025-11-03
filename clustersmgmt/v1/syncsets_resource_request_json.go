@@ -33,9 +33,6 @@ func readSyncsetsAddResponse(response *SyncsetsAddResponse, reader io.Reader) er
 	response.body, err = UnmarshalSyncset(reader)
 	return err
 }
-func writeSyncsetsListRequest(request *SyncsetsListRequest, writer io.Writer) error {
-	return nil
-}
 func readSyncsetsListResponse(response *SyncsetsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

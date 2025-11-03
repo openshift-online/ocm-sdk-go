@@ -33,9 +33,6 @@ func readDNSDomainsAddResponse(response *DNSDomainsAddResponse, reader io.Reader
 	response.body, err = UnmarshalDNSDomain(reader)
 	return err
 }
-func writeDNSDomainsListRequest(request *DNSDomainsListRequest, writer io.Writer) error {
-	return nil
-}
 func readDNSDomainsListResponse(response *DNSDomainsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

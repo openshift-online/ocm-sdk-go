@@ -18,12 +18,3 @@ limitations under the License.
 // your changes will be lost when the file is generated again.
 
 package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
-
-import "io"
-
-func writeSupportCaseDeleteRequest(request *SupportCaseDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readSupportCaseDeleteResponse(response *SupportCaseDeleteResponse, reader io.Reader) error {
-	return nil
-}

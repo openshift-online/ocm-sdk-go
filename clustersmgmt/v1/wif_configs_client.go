@@ -157,7 +157,10 @@ func (r *WifConfigsAddRequest) SendContext(ctx context.Context) (result *WifConf
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -364,7 +367,10 @@ func (r *WifConfigsListRequest) SendContext(ctx context.Context) (result *WifCon
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {

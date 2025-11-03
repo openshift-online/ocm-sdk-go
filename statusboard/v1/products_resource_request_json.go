@@ -33,9 +33,6 @@ func readProductsAddResponse(response *ProductsAddResponse, reader io.Reader) er
 	response.body, err = UnmarshalProduct(reader)
 	return err
 }
-func writeProductsListRequest(request *ProductsListRequest, writer io.Writer) error {
-	return nil
-}
 func readProductsListResponse(response *ProductsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

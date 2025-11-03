@@ -33,9 +33,6 @@ func readRolesAddResponse(response *RolesAddResponse, reader io.Reader) error {
 	response.body, err = UnmarshalRole(reader)
 	return err
 }
-func writeRolesListRequest(request *RolesListRequest, writer io.Writer) error {
-	return nil
-}
 func readRolesListResponse(response *RolesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

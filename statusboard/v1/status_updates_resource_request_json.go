@@ -33,9 +33,6 @@ func readStatusUpdatesAddResponse(response *StatusUpdatesAddResponse, reader io.
 	response.body, err = UnmarshalStatus(reader)
 	return err
 }
-func writeStatusUpdatesListRequest(request *StatusUpdatesListRequest, writer io.Writer) error {
-	return nil
-}
 func readStatusUpdatesListResponse(response *StatusUpdatesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

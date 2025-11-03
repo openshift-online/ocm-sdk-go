@@ -33,9 +33,6 @@ func readManifestsAddResponse(response *ManifestsAddResponse, reader io.Reader) 
 	response.body, err = UnmarshalManifest(reader)
 	return err
 }
-func writeManifestsListRequest(request *ManifestsListRequest, writer io.Writer) error {
-	return nil
-}
 func readManifestsListResponse(response *ManifestsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeCloudRegionDeleteRequest(request *CloudRegionDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readCloudRegionDeleteResponse(response *CloudRegionDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeCloudRegionGetRequest(request *CloudRegionGetRequest, writer io.Writer) error {
-	return nil
-}
 func readCloudRegionGetResponse(response *CloudRegionGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalCloudRegion(reader)

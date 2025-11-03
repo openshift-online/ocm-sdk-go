@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeDefaultCapabilityDeleteRequest(request *DefaultCapabilityDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readDefaultCapabilityDeleteResponse(response *DefaultCapabilityDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeDefaultCapabilityGetRequest(request *DefaultCapabilityGetRequest, writer io.Writer) error {
-	return nil
-}
 func readDefaultCapabilityGetResponse(response *DefaultCapabilityGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalDefaultCapability(reader)

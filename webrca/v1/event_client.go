@@ -262,7 +262,10 @@ func (r *EventDeleteRequest) SendContext(ctx context.Context) (result *EventDele
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -369,7 +372,10 @@ func (r *EventGetRequest) SendContext(ctx context.Context) (result *EventGetResp
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {
@@ -512,7 +518,10 @@ func (r *EventUpdateRequest) SendContext(ctx context.Context) (result *EventUpda
 	reader := bufio.NewReader(response.Body)
 	_, err = reader.Peek(1)
 	if err == io.EOF {
-		err = nil
+		if result.status >= 200 && result.status < 300 {
+			// For success status codes with empty body, return no error
+			err = nil
+		}
 		return
 	}
 	if result.status >= 400 {

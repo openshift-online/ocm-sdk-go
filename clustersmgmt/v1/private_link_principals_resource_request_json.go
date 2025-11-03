@@ -33,9 +33,6 @@ func readPrivateLinkPrincipalsAddResponse(response *PrivateLinkPrincipalsAddResp
 	response.body, err = UnmarshalPrivateLinkPrincipal(reader)
 	return err
 }
-func writePrivateLinkPrincipalsListRequest(request *PrivateLinkPrincipalsListRequest, writer io.Writer) error {
-	return nil
-}
 func readPrivateLinkPrincipalsListResponse(response *PrivateLinkPrincipalsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

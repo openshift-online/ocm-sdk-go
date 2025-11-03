@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeQuotaCostListRequest(request *QuotaCostListRequest, writer io.Writer) error {
-	return nil
-}
 func readQuotaCostListResponse(response *QuotaCostListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

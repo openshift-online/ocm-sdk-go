@@ -33,9 +33,6 @@ func readApplicationDependenciesAddResponse(response *ApplicationDependenciesAdd
 	response.body, err = UnmarshalApplicationDependency(reader)
 	return err
 }
-func writeApplicationDependenciesListRequest(request *ApplicationDependenciesListRequest, writer io.Writer) error {
-	return nil
-}
 func readApplicationDependenciesListResponse(response *ApplicationDependenciesListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

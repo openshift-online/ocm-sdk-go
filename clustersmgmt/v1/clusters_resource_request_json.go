@@ -33,9 +33,6 @@ func readClustersAddResponse(response *ClustersAddResponse, reader io.Reader) er
 	response.body, err = UnmarshalCluster(reader)
 	return err
 }
-func writeClustersListRequest(request *ClustersListRequest, writer io.Writer) error {
-	return nil
-}
 func readClustersListResponse(response *ClustersListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

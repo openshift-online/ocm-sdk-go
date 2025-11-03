@@ -33,9 +33,6 @@ func readKubeletConfigsAddResponse(response *KubeletConfigsAddResponse, reader i
 	response.body, err = UnmarshalKubeletConfig(reader)
 	return err
 }
-func writeKubeletConfigsListRequest(request *KubeletConfigsListRequest, writer io.Writer) error {
-	return nil
-}
 func readKubeletConfigsListResponse(response *KubeletConfigsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

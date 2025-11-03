@@ -33,9 +33,6 @@ func readAddonsAddResponse(response *AddonsAddResponse, reader io.Reader) error 
 	response.body, err = UnmarshalAddon(reader)
 	return err
 }
-func writeAddonsListRequest(request *AddonsListRequest, writer io.Writer) error {
-	return nil
-}
 func readAddonsListResponse(response *AddonsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

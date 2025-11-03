@@ -25,9 +25,6 @@ import (
 	"github.com/openshift-online/ocm-sdk-go/helpers"
 )
 
-func writeTrustedIpsListRequest(request *TrustedIpsListRequest, writer io.Writer) error {
-	return nil
-}
 func readTrustedIpsListResponse(response *TrustedIpsListResponse, reader io.Reader) error {
 	iterator, err := helpers.NewIterator(reader)
 	if err != nil {

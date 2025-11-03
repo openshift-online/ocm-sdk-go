@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/statusboard/v1
 
 import "io"
 
-func writeApplicationDependencyDeleteRequest(request *ApplicationDependencyDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readApplicationDependencyDeleteResponse(response *ApplicationDependencyDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeApplicationDependencyGetRequest(request *ApplicationDependencyGetRequest, writer io.Writer) error {
-	return nil
-}
 func readApplicationDependencyGetResponse(response *ApplicationDependencyGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalApplicationDependency(reader)

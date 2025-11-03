@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writePrivateLinkPrincipalDeleteRequest(request *PrivateLinkPrincipalDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readPrivateLinkPrincipalDeleteResponse(response *PrivateLinkPrincipalDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writePrivateLinkPrincipalGetRequest(request *PrivateLinkPrincipalGetRequest, writer io.Writer) error {
-	return nil
-}
 func readPrivateLinkPrincipalGetResponse(response *PrivateLinkPrincipalGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalPrivateLinkPrincipal(reader)

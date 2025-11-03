@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/clustersmgmt/v1
 
 import "io"
 
-func writeHTPasswdUserDeleteRequest(request *HTPasswdUserDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readHTPasswdUserDeleteResponse(response *HTPasswdUserDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeHTPasswdUserGetRequest(request *HTPasswdUserGetRequest, writer io.Writer) error {
-	return nil
-}
 func readHTPasswdUserGetResponse(response *HTPasswdUserGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalHTPasswdUser(reader)

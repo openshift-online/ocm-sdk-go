@@ -21,15 +21,6 @@ package v1 // github.com/openshift-online/ocm-sdk-go/accountsmgmt/v1
 
 import "io"
 
-func writeAccountGroupAssignmentDeleteRequest(request *AccountGroupAssignmentDeleteRequest, writer io.Writer) error {
-	return nil
-}
-func readAccountGroupAssignmentDeleteResponse(response *AccountGroupAssignmentDeleteResponse, reader io.Reader) error {
-	return nil
-}
-func writeAccountGroupAssignmentGetRequest(request *AccountGroupAssignmentGetRequest, writer io.Writer) error {
-	return nil
-}
 func readAccountGroupAssignmentGetResponse(response *AccountGroupAssignmentGetResponse, reader io.Reader) error {
 	var err error
 	response.body, err = UnmarshalAccountGroupAssignment(reader)
