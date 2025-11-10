@@ -3812,6 +3812,262 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/control_plane/log_forwarders": {
+      "post": {
+        "description": "Creates a new log forwarder.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogForwarder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogForwarder"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of log forwarders.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of log forwarders.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogForwarder"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/control_plane/log_forwarders/{log_forwarder_id}": {
+      "delete": {
+        "description": "Deletes the log forwarder.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "log_forwarder_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the log forwarder.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "log_forwarder_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogForwarder"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the log forwarder.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "log_forwarder_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogForwarder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogForwarder"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/control_plane/upgrade_policies": {
       "post": {
         "description": "Adds a new upgrade policy to the control plane of the cluster.",
@@ -11607,6 +11863,180 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/log_forwarding/applications": {
+      "get": {
+        "description": "Retrieves the list of available applications for log forwarding.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the log forwarder application\ninstead of the names of the columns of a table. For example, in order to sort the\napplications descending by id the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the log forwarder application\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the applications with an id starting with `kube` the value should be:\n\n```sql\nid like 'kube%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the log forwarder\napplications that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of log forwarder applications.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogForwarderApplication"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/log_forwarding/groups": {
+      "get": {
+        "description": "Retrieves the list of available log forwarder group versions.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_ clause of\na SQL statement, but using the names of the attributes of the log forwarder group\ninstead of the names of the columns of a table. For example, in order to sort the\ngroups descending by id the value should be:\n\n```sql\nid desc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the order of the\nresults is undefined.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement, but using the names of the attributes of the log forwarder group\ninstead of the names of the columns of a table. For example, in order to retrieve\nall the groups with an id starting with `auth` the value should be:\n\n```sql\nid like 'auth%'\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the log forwarder\ngroups that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of log forwarder group versions.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogForwarderGroupVersions"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/machine_types": {
       "get": {
         "description": "Retrieves the list of machine types.",
@@ -15989,6 +16419,10 @@
             "description": "Information about the console of the cluster.",
             "$ref": "#/components/schemas/ClusterConsole"
           },
+          "control_plane": {
+            "description": "Control plane configuration for the cluster.\nThis can be set during cluster creation to configure the control plane.",
+            "$ref": "#/components/schemas/ControlPlane"
+          },
           "creation_timestamp": {
             "description": "Date and time when the cluster was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
             "type": "string",
@@ -16764,6 +17198,13 @@
           "backup": {
             "description": "Information about the backup of the control plane",
             "$ref": "#/components/schemas/Backup"
+          },
+          "log_forwarders": {
+            "description": "Control plane log forwarders configuration.\nThis can be set during cluster creation to configure control plane log forwarders.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogForwarder"
+            }
           }
         }
       },
@@ -17825,6 +18266,161 @@
           },
           "content": {
             "description": "Content of the log.",
+            "type": "string"
+          }
+        }
+      },
+      "LogForwarder": {
+        "description": "Representation of a log forwarder configuration for a cluster.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'LogForwarder' if this is a complete object or 'LogForwarderLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "s3": {
+            "description": "S3 configuration for log forwarding destination.",
+            "$ref": "#/components/schemas/LogForwarderS3Config"
+          },
+          "applications": {
+            "description": "List of additional applications to forward logs for.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cloud_watch": {
+            "description": "CloudWatch configuration for log forwarding destination.",
+            "$ref": "#/components/schemas/LogForwarderCloudWatchConfig"
+          },
+          "cluster_id": {
+            "description": "Identifier of the cluster.",
+            "type": "string"
+          },
+          "groups": {
+            "description": "List of log forwarder groups.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogForwarderGroup"
+            }
+          },
+          "status": {
+            "description": "Status of the log forwarder.",
+            "$ref": "#/components/schemas/LogForwarderStatus"
+          }
+        }
+      },
+      "LogForwarderS3Config": {
+        "description": "S3 configuration for log forwarding.",
+        "properties": {
+          "bucket_name": {
+            "description": "The name of the S3 bucket.",
+            "type": "string"
+          },
+          "bucket_prefix": {
+            "description": "The prefix to use for objects stored in the S3 bucket.",
+            "type": "string"
+          }
+        }
+      },
+      "LogForwarderApplication": {
+        "description": "Represents an application that can be configured for log forwarding.",
+        "properties": {
+          "id": {
+            "description": "The identifier of the application.",
+            "type": "string"
+          },
+          "state": {
+            "description": "Indicates whether this application is available for use for log forwarding.",
+            "type": "string"
+          }
+        }
+      },
+      "LogForwarderCloudWatchConfig": {
+        "description": "CloudWatch configuration for log forwarding.",
+        "properties": {
+          "log_distribution_role_arn": {
+            "description": "The ARN of the IAM role for log distribution.",
+            "type": "string"
+          },
+          "log_group_name": {
+            "description": "The name of the CloudWatch log group.",
+            "type": "string"
+          }
+        }
+      },
+      "LogForwarderGroup": {
+        "description": "Represents a log forwarder group.",
+        "properties": {
+          "id": {
+            "description": "The identifier of the log forwarder group.",
+            "type": "string"
+          },
+          "version": {
+            "description": "The version of the log forwarder group.",
+            "type": "string"
+          }
+        }
+      },
+      "LogForwarderGroupVersion": {
+        "description": "Represents a version of a log forwarder group.",
+        "properties": {
+          "id": {
+            "description": "The version identifier.",
+            "type": "string"
+          },
+          "applications": {
+            "description": "List of applications included in this version of the group.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "LogForwarderGroupVersions": {
+        "description": "Represents a log forwarder group versions configuration.",
+        "properties": {
+          "id": {
+            "description": "The identifier of the log forwarder group.",
+            "type": "string"
+          },
+          "state": {
+            "description": "Indicates whether this group is available for use for log forwarding.",
+            "type": "string"
+          },
+          "versions": {
+            "description": "List of available versions for this group.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogForwarderGroupVersion"
+            }
+          }
+        }
+      },
+      "LogForwarderStatus": {
+        "description": "Represents the status of a log forwarder.",
+        "properties": {
+          "message": {
+            "description": "A descriptive message providing additional context about the current\nstate of the log forwarder.",
+            "type": "string"
+          },
+          "resolved_applications": {
+            "description": "The list of applications that are resolved for log forwarding,\nincluding the explicitly specified applications and any default applications.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "state": {
+            "description": "The current state of the log forwarder.",
             "type": "string"
           }
         }

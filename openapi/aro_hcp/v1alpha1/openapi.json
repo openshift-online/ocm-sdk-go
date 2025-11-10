@@ -3869,10 +3869,6 @@
             "description": "Delete protection",
             "$ref": "#/components/schemas/DeleteProtection"
           },
-          "disable_user_workload_monitoring": {
-            "description": "Indicates whether the User workload monitoring is enabled or not\nIt is enabled by default",
-            "type": "boolean"
-          },
           "domain_prefix": {
             "description": "DomainPrefix of the cluster. This prefix is optionally assigned by the user when the\ncluster is created. It will appear in the Cluster's domain when the cluster is provisioned.",
             "type": "string"
