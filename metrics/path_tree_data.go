@@ -258,6 +258,9 @@ var pathTreeData = `{
             },
             "clusterdeployment": null,
             "control_plane": {
+              "log_forwarders": {
+                "-": null
+              },
               "upgrade_policies": {
                 "-": null
               }
@@ -387,6 +390,10 @@ var pathTreeData = `{
           "-": null
         },
         "load_balancer_quota_values": null,
+        "log_forwarding": {
+          "applications": null,
+          "groups": null
+        },
         "machine_types": {
           "-": null
         },

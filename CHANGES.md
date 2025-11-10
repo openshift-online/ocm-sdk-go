@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.482
+
+- Update model to 0.0.437
+  - Add LogForwarders cluster resource to configure log forwarding
+  - Add endpoints to list log forwarding groups and versions
+
 ## 0.1.481
 
 - Update model to 0.0.436
