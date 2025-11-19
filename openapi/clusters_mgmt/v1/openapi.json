@@ -17344,8 +17344,23 @@
             "description": "the backplane url for the environment",
             "type": "string"
           },
+          "last_cluster_imageset_sync": {
+            "description": "last time that the cluster imageset sync worker checked for version updates",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_hibernation_check": {
+            "description": "last time that the hibernation worker checked for hibernating clusters",
+            "type": "string",
+            "format": "date-time"
+          },
           "last_limited_support_check": {
             "description": "last time that the worker checked for limited support clusters",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_limited_support_override_check": {
+            "description": "last time that the limited support override worker checked for clusters",
             "type": "string",
             "format": "date-time"
           },
