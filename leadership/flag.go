@@ -324,7 +324,7 @@ loop:
 				if err != nil {
 					f.logger.Error(
 						f.ctx,
-						"error running precheck: %v",
+						"error running precheck: process: %s flag-name: %s err: %v",
 						f.process, f.name, err,
 					)
 					f.schedule(ctx, f.retryInterval)
@@ -384,7 +384,7 @@ func (f *Flag) check(ctx context.Context) {
 		if err != nil {
 			f.logger.Error(
 				ctx,
-				"Process '%s' can't create initial state for flag: %v",
+				"Process '%s' can't create initial state for flag '%s': %v",
 				f.process, f.name, err,
 			)
 			f.lower(ctx)
@@ -466,7 +466,7 @@ func (f *Flag) check(ctx context.Context) {
 			f.logger.Error(
 				ctx,
 				"Process '%s' can't update holder for flag '%s': %v",
-				f.process, f.name,
+				f.process, f.name, err,
 			)
 			f.lower(ctx)
 			f.schedule(ctx, f.retryInterval)
