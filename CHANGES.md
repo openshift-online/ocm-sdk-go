@@ -3,6 +3,9 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.484
+- This change exposes a new OCM linter to be used by other project depending on ocm-sdk and enables it into ocm-sdk pipeline
+
 ## 0.1.483
 
 - Update model to 0.0.438
