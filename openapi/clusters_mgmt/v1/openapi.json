@@ -18355,7 +18355,7 @@
               "type": "string"
             }
           },
-          "cloud_watch": {
+          "cloudwatch": {
             "description": "CloudWatch configuration for log forwarding destination.",
             "$ref": "#/components/schemas/LogForwarderCloudWatchConfig"
           },
@@ -18392,12 +18392,12 @@
       "LogForwarderApplication": {
         "description": "Represents an application that can be configured for log forwarding.",
         "properties": {
-          "id": {
-            "description": "The identifier of the application.",
-            "type": "string"
-          },
-          "state": {
+          "enabled": {
             "description": "Indicates whether this application is available for use for log forwarding.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "The name of the application.",
             "type": "string"
           }
         }
@@ -18447,12 +18447,12 @@
       "LogForwarderGroupVersions": {
         "description": "Represents a log forwarder group versions configuration.",
         "properties": {
-          "id": {
-            "description": "The identifier of the log forwarder group.",
-            "type": "string"
-          },
-          "state": {
+          "enabled": {
             "description": "Indicates whether this group is available for use for log forwarding.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "The name of the log forwarder group.",
             "type": "string"
           },
           "versions": {
