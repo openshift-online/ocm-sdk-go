@@ -14575,6 +14575,10 @@
             "description": "Self link.",
             "type": "string"
           },
+          "cloud_provider": {
+            "description": "Signals which cloud provider the domain is ready for.",
+            "$ref": "#/components/schemas/DnsCloudProvider"
+          },
           "cluster": {
             "description": "Link to the cluster that is registered with the DNS domain (optional).",
             "$ref": "#/components/schemas/ClusterLink"
@@ -17350,6 +17354,13 @@
         "enum": [
           "auto",
           "manual"
+        ]
+      },
+      "DnsCloudProvider": {
+        "type": "string",
+        "enum": [
+          "aws",
+          "gcp"
         ]
       },
       "Ec2MetadataHttpTokens": {
