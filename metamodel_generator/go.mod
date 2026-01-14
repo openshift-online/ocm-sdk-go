@@ -1,6 +1,6 @@
 module github.com/openshift-online/ocm-sdk-go/model
 
-go 1.23.0
+go 1.24.0
 
 require github.com/openshift-online/ocm-api-model/metamodel_generator v0.0.441
 

@@ -130,8 +130,7 @@ var _ = Describe("Redirect Behavior", func() {
 		expectedResponseBody = "myServerDotComRedirect"
 
 		responseServer = httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			//nolint
-			fmt.Fprintf(w, expectedResponseBody)
+			fmt.Fprintf(w, "%s", expectedResponseBody)
 		}))
 
 		// simulate a redirect to a different domain by responding with a localhost url rather than a 127.0.0.1 url
