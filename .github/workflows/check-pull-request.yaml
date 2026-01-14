@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         go:
-        - "1.21"
+        - "1.24"
         platform:
         - ubuntu-latest
         - macos-latest
@@ -62,13 +62,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6.1.0
+        with:
+          node-version: '24'
       - uses: actions/setup-go@v5
         with:
           go-version: stable
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
-          version: v2.1
+          version: v2.8.0
           args: --timeout 10m
           skip-cache: 'true'
 
@@ -82,7 +85,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v2
       with:
-        go-version: '1.21'
+        go-version: '1.24'
 
     - name: Generate code
       run: make generate
