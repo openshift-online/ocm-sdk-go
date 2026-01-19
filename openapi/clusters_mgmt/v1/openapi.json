@@ -10568,6 +10568,130 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/deleted_clusters": {
+      "get": {
+        "description": "Retrieves a list of deleted clusters",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of clusters.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DeletedCluster"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/deleted_clusters/{deleted_cluster_id}": {
+      "get": {
+        "description": "Retrieves a specific deleted cluster",
+        "parameters": [
+          {
+            "name": "deleted_cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeletedCluster"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/dns_domains": {
       "post": {
         "description": "Adds a DNS domain.",
@@ -17346,6 +17470,32 @@
           "enabled": {
             "description": "Boolean flag indicating if the cluster should be be using _DeleteProtection_.\n\nBy default this is `false`.\n\nTo enable it a SREP needs to patch the value through OCM API",
             "type": "boolean"
+          }
+        }
+      },
+      "DeletedCluster": {
+        "description": "Representation of a deleted cluster with its deleted_timestamp and the entire cluster details",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'DeletedCluster' if this is a complete object or 'DeletedClusterLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster": {
+            "description": "Reference to the deleted cluster",
+            "$ref": "#/components/schemas/Cluster"
+          },
+          "deleted_timestamp": {
+            "description": "Date and time the cluster was effectively deleted",
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
