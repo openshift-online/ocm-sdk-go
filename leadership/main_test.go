@@ -37,7 +37,7 @@ func TestLeadership(t *testing.T) {
 // logger is the logger that will be used by the tests.
 var logger logging.Logger
 
-// dbServer is the database dbServer that will be used to create the databases used by the tests.
+// dbServer is the database server that will be used to create the databases used by the tests.
 var dbServer *DatabaseServer
 
 var _ = BeforeSuite(func() {
