@@ -18252,6 +18252,13 @@
             "description": "Indicates if this is the default ingress.",
             "type": "boolean"
           },
+          "excluded_namespace_selectors": {
+            "description": "A set of excluded exclude namespaces via labels for ingress.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NamespaceSelector"
+            }
+          },
           "excluded_namespaces": {
             "description": "A set of excluded namespaces for the ingress.",
             "type": "array",
@@ -18914,6 +18921,22 @@
           "InterNamespaceAllowed",
           "Strict"
         ]
+      },
+      "NamespaceSelector": {
+        "description": "Representation of a NamespaceSelector",
+        "properties": {
+          "key": {
+            "description": "Key value",
+            "type": "string"
+          },
+          "values": {
+            "description": "One or more values associated to the Key",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
       },
       "Network": {
         "description": "Network configuration of a cluster.",
