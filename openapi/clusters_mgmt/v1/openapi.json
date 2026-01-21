@@ -16583,6 +16583,10 @@
             "description": "Contains information about BYO OIDC.",
             "$ref": "#/components/schemas/ByoOidc"
           },
+          "channel": {
+            "description": "Channel is the Y-stream update channel for the cluster (e.g., \"stable-4.16\", \"eus-4.16\").\nThis field allows specifying the update channel independently from the version.",
+            "type": "string"
+          },
           "cloud_provider": {
             "description": "Link to the cloud provider where the cluster is installed.",
             "$ref": "#/components/schemas/CloudProvider"
