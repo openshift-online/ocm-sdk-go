@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.490
+- Update model to 0.0.444
+  - Add `ExcludedNamespaceSelectors` to ingress type
+
 ## 0.1.489
 - Update model to 0.0.443
   - Add `Channel` field to `Cluster` type for Y-stream update channel management
