@@ -23,10 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ProvisionShardBuilder contains the data and logic needed to build 'provision_shard' objects.
-//
-// Contains the properties of the provision shard
-type ProvisionShardBuilder = api_v1alpha1.ProvisionShardBuilder
+// ProvisionShardMaestroGrpcApiConfigListBuilder contains the data and logic needed to build
+// 'provision_shard_maestro_grpc_api_config' objects.
+type ProvisionShardMaestroGrpcApiConfigListBuilder = api_v1alpha1.ProvisionShardMaestroGrpcApiConfigListBuilder
 
-// NewProvisionShard creates a new builder of 'provision_shard' objects.
-var NewProvisionShard = api_v1alpha1.NewProvisionShard
+// NewProvisionShardMaestroGrpcApiConfigList creates a new builder of 'provision_shard_maestro_grpc_api_config' objects.
+var NewProvisionShardMaestroGrpcApiConfigList = api_v1alpha1.NewProvisionShardMaestroGrpcApiConfigList

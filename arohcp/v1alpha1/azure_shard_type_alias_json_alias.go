@@ -23,10 +23,15 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ProvisionShardBuilder contains the data and logic needed to build 'provision_shard' objects.
-//
-// Contains the properties of the provision shard
-type ProvisionShardBuilder = api_v1alpha1.ProvisionShardBuilder
+// MarshalAzureShard writes a value of the 'azure_shard' type to the given writer.
+var MarshalAzureShard = api_v1alpha1.MarshalAzureShard
 
-// NewProvisionShard creates a new builder of 'provision_shard' objects.
-var NewProvisionShard = api_v1alpha1.NewProvisionShard
+// WriteAzureShard writes a value of the 'azure_shard' type to the given stream.
+var WriteAzureShard = api_v1alpha1.WriteAzureShard
+
+// UnmarshalAzureShard reads a value of the 'azure_shard' type from the given
+// source, which can be an slice of bytes, a string or a reader.
+var UnmarshalAzureShard = api_v1alpha1.UnmarshalAzureShard
+
+// ReadAzureShard reads a value of the 'azure_shard' type from the given iterator.
+var ReadAzureShard = api_v1alpha1.ReadAzureShard

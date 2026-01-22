@@ -23,10 +23,21 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ServerConfigBuilder contains the data and logic needed to build 'server_config' objects.
+// AzureShard represents the values of the 'azure_shard' type.
 //
-// Representation of a server config
-type ServerConfigBuilder = api_v1alpha1.ServerConfigBuilder
+// The Azure related configuration of the Provision Shard
+type AzureShard = api_v1alpha1.AzureShard
 
-// NewServerConfig creates a new builder of 'server_config' objects.
-var NewServerConfig = api_v1alpha1.NewServerConfig
+// AzureShardListKind is the name of the type used to represent list of objects of
+// type 'azure_shard'.
+const AzureShardListKind = api_v1alpha1.AzureShardListKind
+
+// AzureShardListLinkKind is the name of the type used to represent links to list
+// of objects of type 'azure_shard'.
+const AzureShardListLinkKind = api_v1alpha1.AzureShardListLinkKind
+
+// AzureShardNilKind is the name of the type used to nil lists of objects of
+// type 'azure_shard'.
+const AzureShardListNilKind = api_v1alpha1.AzureShardListNilKind
+
+type AzureShardList = api_v1alpha1.AzureShardList
