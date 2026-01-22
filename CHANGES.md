@@ -3,6 +3,14 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.491
+- Update model to 0.0.446
+  - Add `AzureShard` and `ProvisionShardMaestroConfig` to ARO-HCP `ProvisionShard`
+    type
+  - Remove `HypershiftConfig`, `ManagementCluster`, `HiveConfig`,
+    `AWSAccountOperatorConfig`, `GCPProjectOperator`, `AWSBaseDomain`, `AWSBaseDomain`
+    from ARO-HCP `ProvisionShard` type
+
 ## 0.1.490
 - Update model to 0.0.444
   - Add `ExcludedNamespaceSelectors` to ingress type
