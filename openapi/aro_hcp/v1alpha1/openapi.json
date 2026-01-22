@@ -3459,6 +3459,31 @@
           }
         }
       },
+      "AzureShard": {
+        "description": "The Azure related configuration of the Provision Shard",
+        "properties": {
+          "aks_management_cluster_resource_id": {
+            "description": "The Azure Resource ID of the AKS Management Cluster associated\nto the provision shard.\nIt is the Azure Resource ID of a pre-existing Azure Kubernetes\nService (AKS) Managed Cluster.\n`aks_management_cluster_resource_id` must be located in the same\nAzure Tenant as the Clusters Service's Azure infrastructure.\nThe Azure Resource Group Name specified as part of `aks_management_cluster_resource_id`\nmust be in the same Azure location to where Clusters Service is deployed.\nIt must be unique across Azure based provision shards.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "cx_managed_identities_key_vault_url": {
+            "description": "The Azure Key Vault URL used to store the certificates associated to the\nmanaged identities of the aro-hcp clusters control plane operators.\nThe Azure Key Vault associated to the URL must pre-exist and be in the same Azure location\nto where Clusters Service is deployed.\nThe URL must be a well-formed absolute URL.\nThe URL must have an HTTPS scheme.\nThe URL cannot contain HTTP query parameters.\nThe URL path must be '/'.\nThe expected url format naming scheme is: https://<name>.<known-host-domain>/\nwhere both <name> and <known-host-domain> must be specified. The <name> part\ncannot contain '.' characters. <known-host-domain> must be one of the\nknown domain names for Key Vault. See https://aka.ms/azsdk/blog/vault-uri#recommended-actions\nfor more information.\nExample of a URL: https://mykeyvault.vault.azure.net/\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "cx_secrets_key_vault_managed_identity_client_id": {
+            "description": "The Client ID of an Azure User-Assigned Managed Identity\nthat would give access to the CX Secrets Key Vault.\nThe Azure User-Assigned Managed Identity associated to the Client ID\nmust be pre-exist and be in the same Azure location to where Clusters\nService is deployed.\nThe Azure Resource Group of the Azure User-Assigned Managed Identity\nmust be in the same Azure location to where Clusters Service is\ndeployed.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "cx_secrets_key_vault_url": {
+            "description": "The Azure Key Vault URL used to store different types of secrets\nlike k8s api certificates, image pull secrets, ...\nThe Azure Key Vault associated to the URL must pre-exist and be in the same Azure location\nto where Clusters Service is deployed.\nThe URL must be a well-formed absolute URL.\nThe URL must have an HTTPS scheme.\nThe URL cannot contain HTTP query parameters.\nThe URL path must be '/'.\nThe expected url format naming scheme is: https://<name>.<known-host-domain>/\nwhere both <name> and <known-host-domain> must be specified. The <name> part\ncannot contain '.' characters. <known-host-domain> must be one of the\nknown domain names for Key Vault. See https://aka.ms/azsdk/blog/vault-uri#recommended-actions\nfor more information.\nExample of a URL: https://mykeyvault.vault.azure.net/\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "public_dns_zone_resource_id": {
+            "description": "The Azure Public DNS Zone associated to the provision shard.\nIt is the Azure Resource ID of a pre-existing Public DNS Zone.\n`public_dns_zone_resource_id` must be located in the same\nAzure Tenant as the Clusters Service's Azure infrastructure\nThe Azure Resource Group Name specified as part of `public_dns_zone_resource_id`\nmust be in the same Azure location to where Clusters Service is deployed.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
       "Backup": {
         "description": "Representation of a Backup.",
         "properties": {
@@ -6781,7 +6806,7 @@
         }
       },
       "ProvisionShard": {
-        "description": "Contains the properties of the provision shard, including AWS and GCP related configurations",
+        "description": "Contains the properties of the provision shard",
         "properties": {
           "kind": {
             "description": "Indicates the type of this object. Will be 'ProvisionShard' if this is a complete object or 'ProvisionShardLink' if it is just a link.",
@@ -6795,54 +6820,73 @@
             "description": "Self link.",
             "type": "string"
           },
-          "aws_account_operator_config": {
-            "description": "Contains the configuration for the AWS account operator.",
-            "$ref": "#/components/schemas/ServerConfig"
-          },
-          "aws_base_domain": {
-            "description": "Contains the AWS base domain.",
-            "type": "string"
-          },
-          "gcp_base_domain": {
-            "description": "Contains the GCP base domain.",
-            "type": "string"
-          },
-          "gcp_project_operator": {
-            "description": "Contains the configuration for the GCP project operator.",
-            "$ref": "#/components/schemas/ServerConfig"
+          "azure_shard": {
+            "description": "The Azure related configuration of the Provision Shard.\nRequired during creation.",
+            "$ref": "#/components/schemas/AzureShard"
           },
           "cloud_provider": {
-            "description": "Contains the cloud provider name.",
+            "description": "Contains the cloud provider name.\nRequired during creation.\nImmutable.",
             "$ref": "#/components/schemas/CloudProvider"
           },
           "creation_timestamp": {
-            "description": "Date and time when the provision shard was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "description": "Date and time when the provision shard was initially created, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).\nReadonly.",
             "type": "string",
             "format": "date-time"
-          },
-          "hive_config": {
-            "description": "Contains the configuration for Hive.",
-            "$ref": "#/components/schemas/ServerConfig"
-          },
-          "hypershift_config": {
-            "description": "Contains the configuration for Hypershift.",
-            "$ref": "#/components/schemas/ServerConfig"
           },
           "last_update_timestamp": {
-            "description": "Date and time when the provision shard was last updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).",
+            "description": "Date and time when the provision shard was last updated, using the\nformat defined in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt).\nReadonly.",
             "type": "string",
             "format": "date-time"
           },
-          "management_cluster": {
-            "description": "Contains the name of the management cluster for Hypershift clusters that are assigned to this shard.\nThis field is populated by OCM, and must not be overwritten via API.",
-            "type": "string"
+          "maestro_config": {
+            "description": "The Maestro related configuration of the Provision Shard.\nRequired during creation.",
+            "$ref": "#/components/schemas/ProvisionShardMaestroConfig"
           },
           "region": {
-            "description": "Contains the cloud-provider region in which the provisioner spins up the cluster.",
+            "description": "Contains the cloud-provider region in which the provisioner spins up the cluster.\nRequired during creation.\nImmutable.",
             "$ref": "#/components/schemas/CloudRegion"
           },
           "status": {
-            "description": "Status of the provision shard. Possible values: active/maintenance/offline.",
+            "description": "Status of the provision shard.\nOptional. By default it is set to `maintenance`.\nDuring creation the possible values are: `maintenance`.\nDuring update the possible values are: `active`, `maintenance`, `offline`.\nAdding a new shard and activating it requires creating it\nin `maintenance` status and then perform an aditional update call setting it\nto `active` status.\nA shard in `active` status is available for selection when a Cluster needs\nto be allocated to a shard.\nA shard in `maintenance` status is not available for selection when a Cluster\nneeds to be allocated to a shard.\nA shard in `offline` status is not available for selection when a Cluster\nneeds to be allocated to a shard.",
+            "type": "string"
+          },
+          "topology": {
+            "description": "The topology of a provision shard.\nAs of now a shared topology is used by default when not specified. However,\nat the moment of writing this (2025-12-11) in ARO-HCP our provision shards have\na topology value set to Dedicated. There is a task to reevaluate if\nDedicated is appropriate/accurate for our existing provision shards in ARO-HCP\nand its implications: ARO-22019. Work from that might change what the topology\nvalue we specify for provision shards and even the default at API level.\nIn the meantime, set explicitly the topology to the value that our provision\nshards have.\nOptional.",
+            "type": "string"
+          }
+        }
+      },
+      "ProvisionShardMaestroConfig": {
+        "description": "The Maestro related configuration of the Provision Shard.\nThe combination of `consumer_name` and `rest_api_config.url`\nmust be unique across shards.\nThe combination of `consumer_name` and `grpc_api_config.url`\nmust be unique across shards.",
+        "properties": {
+          "consumer_name": {
+            "description": "The name of the Maestro Consumer used by the shard.\nA Maestro Consumer with the provided name must pre-exist\nand be pre-registered in the Maestro Server associated\nto the REST and GRPC Maestro URLs specified in `rest_api_config.url`\nand `grpc_api_config.url`.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          },
+          "grpc_api_config": {
+            "description": "The Maestro Server GRPC API configuration used by the shard.\nRequired during creation.",
+            "$ref": "#/components/schemas/ProvisionShardMaestroGrpcApiConfig"
+          },
+          "rest_api_config": {
+            "description": "The Maestro Server REST API configuration used by the shard.\nRequired during creation.",
+            "$ref": "#/components/schemas/ProvisionShardMaestroRestApiConfig"
+          }
+        }
+      },
+      "ProvisionShardMaestroGrpcApiConfig": {
+        "description": "The Maestro GRPC API configuration of the provision shard.",
+        "properties": {
+          "url": {
+            "description": "A GRPC endpoint to the Maestro Server GRPC API used by the shard.\nThe GRPC endpoint must point to the same Maestro Server as\nthe Maestro Server associated to the Maestro Server REST API URL\nspecified in `rest_api_config.url`.\nThe URL must be a well-formed absolute URL.\nThe expected url format naming scheme is: <host>:<port>.\nwhere both <host> and <port> must be specified and they cannot\nbe empty. No whitespace characters are allowed. No URI scheme\nis allowed as part of the URL.\nThe <host>:<port> combination cannot be the same as in\n`rest_api_config.url`. This includes different DNS names\npointing to the same underlying server.\nExample of a URL: maestro.example.com:50051\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "ProvisionShardMaestroRestApiConfig": {
+        "description": "The Maestro REST API configuration of the provision shard.",
+        "properties": {
+          "url": {
+            "description": "A URL to the Maestro Server REST API used by the shard.\nThe URL must point to the same Maestro Server as the\nMaestro Server associated to the Maestro Server GRPC API\nendpoint specified in `grpc_api_config.url`\nThe URL must be a well-formed absolute URL.\nThe expected url format naming scheme is: <scheme>://<host>:<port>\nwhere both <scheme>, <host> and <port> must be specified.\nThe <host>:<port> combination cannot be the same as in\n`grpc_api_config.url`. This includes different DNS names\npointing to the same underlying server.\nExample of URL: https://maestro.example.com:50052\nRequired during creation.\nImmutable.",
             "type": "string"
           }
         }
@@ -7098,39 +7142,6 @@
           "red_hat_managed": {
             "description": "If the resource is RH managed.",
             "type": "boolean"
-          }
-        }
-      },
-      "ServerConfig": {
-        "description": "Representation of a server config",
-        "properties": {
-          "kind": {
-            "description": "Indicates the type of this object. Will be 'ServerConfig' if this is a complete object or 'ServerConfigLink' if it is just a link.",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique identifier of the object.",
-            "type": "string"
-          },
-          "href": {
-            "description": "Self link.",
-            "type": "string"
-          },
-          "aws_shard": {
-            "description": "Config for AWS provision shards",
-            "$ref": "#/components/schemas/AWSShard"
-          },
-          "kubeconfig": {
-            "description": "The kubeconfig of the server.",
-            "type": "string"
-          },
-          "server": {
-            "description": "The URL of the server.",
-            "type": "string"
-          },
-          "topology": {
-            "description": "The topology of a provision shard (Optional).",
-            "$ref": "#/components/schemas/ProvisionShardTopology"
           }
         }
       },

@@ -23,9 +23,9 @@ import (
 	api_v1alpha1 "github.com/openshift-online/ocm-api-model/clientapi/arohcp/v1alpha1"
 )
 
-// ServerConfigListBuilder contains the data and logic needed to build
-// 'server_config' objects.
-type ServerConfigListBuilder = api_v1alpha1.ServerConfigListBuilder
+// ProvisionShardMaestroConfigListBuilder contains the data and logic needed to build
+// 'provision_shard_maestro_config' objects.
+type ProvisionShardMaestroConfigListBuilder = api_v1alpha1.ProvisionShardMaestroConfigListBuilder
 
-// NewServerConfigList creates a new builder of 'server_config' objects.
-var NewServerConfigList = api_v1alpha1.NewServerConfigList
+// NewProvisionShardMaestroConfigList creates a new builder of 'provision_shard_maestro_config' objects.
+var NewProvisionShardMaestroConfigList = api_v1alpha1.NewProvisionShardMaestroConfigList
