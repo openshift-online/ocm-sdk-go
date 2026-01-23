@@ -6851,7 +6851,7 @@
             "type": "string"
           },
           "topology": {
-            "description": "The topology of a provision shard.\nAs of now a shared topology is used by default when not specified. However,\nat the moment of writing this (2025-12-11) in ARO-HCP our provision shards have\na topology value set to Dedicated. There is a task to reevaluate if\nDedicated is appropriate/accurate for our existing provision shards in ARO-HCP\nand its implications: ARO-22019. Work from that might change what the topology\nvalue we specify for provision shards and even the default at API level.\nIn the meantime, set explicitly the topology to the value that our provision\nshards have.\nOptional.",
+            "description": "Topology sets how the control plane workloads that are request serving\n(those receiving communication from outside the control plane)\nare mapped to Nodes in the control plane K8s Cluster.\nRequired during creation.",
             "type": "string"
           }
         }
@@ -6894,7 +6894,7 @@
       "ProvisionShardTopology": {
         "type": "string",
         "enum": [
-          "dedicated"
+          "shared"
         ]
       },
       "Proxy": {
