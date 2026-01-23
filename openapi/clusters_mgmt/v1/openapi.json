@@ -16617,7 +16617,7 @@
             "type": "string"
           },
           "etcd_encryption": {
-            "description": "Indicates whether that etcd is encrypted or not.\nThis is set only during cluster creation.\nFor ARO-HCP Clusters, this is a readonly attribute, always set to true.",
+            "description": "Indicates whether that etcd is encrypted or not.\nThis is set only during cluster creation.\nFor ROSA-HCP Clusters, etcd is always encrypted, if not set/false, or kms user's key not set, \ndefaults true indicates 'encrypted by internal key'.\nFor ARO-HCP Clusters, this is a readonly attribute, always set to true.",
             "type": "boolean"
           },
           "expiration_timestamp": {
