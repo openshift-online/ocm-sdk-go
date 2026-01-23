@@ -3,6 +3,12 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.492
+- Update model to 0.0.447
+  - Make `Topology` attribute of ARO-HCP `ProvisionShard` required and restrict
+    its allowed value to `shared`
+  - Expand `EtcdEncryption` attribute description for ROSA-HCP Clusters
+
 ## 0.1.491
 - Update model to 0.0.446
   - Add `AzureShard` and `ProvisionShardMaestroConfig` to ARO-HCP `ProvisionShard`
