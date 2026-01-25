@@ -3,6 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.493
+- Update model to 0.0.448
+  - Add `VnetIntegrationSubnetResourceID` field to ARO-HCP Azure type for SWIFT
+    networking (Azure Container Networking Interface) support
+  - Expose ARO-HCP cluster's provision shard subresource GET endpoint
+  - Expose ARO-HCP provision shard global endpoints
+
 ## 0.1.492
 - Update model to 0.0.447
   - Make `Topology` attribute of ARO-HCP `ProvisionShard` required and restrict
