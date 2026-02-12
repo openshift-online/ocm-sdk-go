@@ -385,6 +385,262 @@
         }
       }
     },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/control_plane_upgrade_policies": {
+      "post": {
+        "description": "Adds a new upgrade policy to the control plane of the cluster.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ControlPlaneUpgradePolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlPlaneUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of upgrade policies for the control plane.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of upgrade policy.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ControlPlaneUpgradePolicy"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/control_plane_upgrade_policies/{control_plane_upgrade_policy_id}": {
+      "delete": {
+        "description": "Deletes the upgrade policy for the control plane.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "control_plane_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the upgrade policy for the control plane.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "control_plane_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlPlaneUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update the upgrade policy for the control plane.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "control_plane_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ControlPlaneUpgradePolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlPlaneUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/external_auth_config": {
       "get": {
         "parameters": [
@@ -1099,6 +1355,302 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NodePoolStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/node_pools/{node_pool_id}/upgrade_policies": {
+      "post": {
+        "description": "Adds a new upgrade policy to the node pool.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NodePoolUpgradePolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodePoolUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the list of upgrade policies for the node pool.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Number of items contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of upgrade policy.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/NodePoolUpgradePolicy"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Number of items contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/node_pools/{node_pool_id}/upgrade_policies/{node_pool_upgrade_policy_id}": {
+      "delete": {
+        "description": "Deletes the upgrade policy for the node pool.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the upgrade policy for the node pool.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodePoolUpgradePolicy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update the upgrade policy for the node pool.",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "node_pool_upgrade_policy_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NodePoolUpgradePolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodePoolUpgradePolicy"
                 }
               }
             }
@@ -4972,35 +5524,14 @@
             "type": "string",
             "format": "date-time"
           },
-          "enable_minor_version_upgrades": {
-            "description": "Indicates if minor version upgrades are allowed for automatic upgrades (for manual it's always allowed).",
-            "type": "boolean"
-          },
           "last_update_timestamp": {
             "description": "Timestamp for last update that happened to resource.",
             "type": "string",
             "format": "date-time"
           },
-          "next_run": {
-            "description": "Next time the upgrade should run.",
-            "type": "string",
-            "format": "date-time"
-          },
-          "schedule": {
-            "description": "Schedule cron expression that defines automatic upgrade scheduling.",
-            "type": "string"
-          },
-          "schedule_type": {
-            "description": "Schedule type of the control plane upgrade.",
-            "$ref": "#/components/schemas/ScheduleType"
-          },
           "state": {
             "description": "State of the upgrade policy for the hosted control plane.",
             "$ref": "#/components/schemas/UpgradePolicyState"
-          },
-          "upgrade_type": {
-            "description": "Upgrade type of the control plane.",
-            "$ref": "#/components/schemas/UpgradeType"
           },
           "version": {
             "description": "Version is the desired upgrade version.",
@@ -6615,17 +7146,8 @@
             "type": "string",
             "format": "date-time"
           },
-          "enable_minor_version_upgrades": {
-            "description": "Indicates if minor version upgrades are allowed for automatic upgrades (for manual it's always allowed).",
-            "type": "boolean"
-          },
           "last_update_timestamp": {
             "description": "Timestamp for last update that happened to resource.",
-            "type": "string",
-            "format": "date-time"
-          },
-          "next_run": {
-            "description": "Next time the upgrade should run.",
             "type": "string",
             "format": "date-time"
           },
@@ -6633,21 +7155,9 @@
             "description": "Node Pool ID this upgrade policy is defined for.",
             "type": "string"
           },
-          "schedule": {
-            "description": "Schedule cron expression that defines automatic upgrade scheduling.",
-            "type": "string"
-          },
-          "schedule_type": {
-            "description": "Schedule type of the upgrade.",
-            "$ref": "#/components/schemas/ScheduleType"
-          },
           "state": {
             "description": "State of the upgrade policy for the node pool.",
             "$ref": "#/components/schemas/UpgradePolicyState"
-          },
-          "upgrade_type": {
-            "description": "Upgrade type of the node pool.",
-            "$ref": "#/components/schemas/UpgradeType"
           },
           "version": {
             "description": "Version is the desired upgrade version.",
