@@ -3,7 +3,13 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-## 0.1.493
+## 0.1.494 Feb 12 2026
+- Update model to 0.0.449
+  - Add ARO-HCP `ControlPlaneUpgradePolicies` resource to manage control plane upgrade policies
+  - Add ARO-HCP `NodePoolUpgradePolicies` resource to manage node pool upgrade policies
+  - Simplify ARO-HCP upgrade policy types by removing scheduling-related fields (`Schedule`, `ScheduleType`, `UpgradeType`, `NextRun`, `EnableMinorVersionUpgrades`)
+
+## 0.1.493 Jan 25 2026
 - Update model to 0.0.448
   - Add `VnetIntegrationSubnetResourceID` field to ARO-HCP Azure type for SWIFT
     networking (Azure Container Networking Interface) support
