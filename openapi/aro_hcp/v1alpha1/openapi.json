@@ -5314,6 +5314,13 @@
               "$ref": "#/components/schemas/RegistryLocation"
             }
           },
+          "image_digest_mirrors": {
+            "description": "ImageDigestMirrors contains the configuration for the image mirroring based on digest.\nThis field is optional and mutable. The default value is nil. The maximum number of image mirror entries is 252.\nThis fields contents is used to create the ImageDigestMirrorSet on the cluster nodes by Hypershift.\nEach image mirror specified here is propogated to the entries in the ImageDigestMirrorSet by Hypershift.\nSee for more information: https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/config_apis/imagedigestmirrorset-config-openshift-io-v1#imagedigestmirrorset-config-openshift-io-v1.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageMirror"
+            }
+          },
           "platform_allowlist": {
             "description": "PlatformAllowlist contains a reference to a RegistryAllowlist which is a list of internal registries\nwhich needs to be whitelisted for the platform to work. It can be omitted at creation and \nupdating and its lifecycle can be managed separately if needed.",
             "$ref": "#/components/schemas/RegistryAllowlist"
