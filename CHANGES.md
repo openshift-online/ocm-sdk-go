@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.495 Feb 23 2026
+- Update model to 0.0.450
+  - Add `ImageDigestMirrors` field to `ClusterRegistryConfig` for ARO-HCP.
+
 ## 0.1.494 Feb 12 2026
 - Update model to 0.0.449
   - Add ARO-HCP `ControlPlaneUpgradePolicies` resource to manage control plane upgrade policies
