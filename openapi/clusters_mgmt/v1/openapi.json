@@ -14711,6 +14711,10 @@
             "description": "Signals which cluster architecture the domain is ready for.",
             "$ref": "#/components/schemas/ClusterArchitecture"
           },
+          "gcp": {
+            "description": "Gcp contains Google Cloud Platform-specific DNS domain configuration.",
+            "$ref": "#/components/schemas/GcpDnsDomain"
+          },
           "organization": {
             "description": "Link to the organization that reserved the DNS domain.",
             "$ref": "#/components/schemas/OrganizationLink"
@@ -17841,6 +17845,23 @@
           },
           "kind": {
             "description": "Indicates the type of this object",
+            "type": "string"
+          }
+        }
+      },
+      "GcpDnsDomain": {
+        "description": "GcpDnsDomain represents configuration for Google Cloud Platform DNS domain settings\nused in cluster DNS configuration for GCP-hosted clusters.",
+        "properties": {
+          "domain_prefix": {
+            "description": "DomainPrefix specifies the DNS domain prefix that will be used for cluster DNS resolution.\nThis prefix is combined with the base domain to form the full DNS domain for the cluster.",
+            "type": "string"
+          },
+          "network_id": {
+            "description": "NetworkId is the GCP VPC Network identifier where the DNS configuration will be applied.",
+            "type": "string"
+          },
+          "project_id": {
+            "description": "ProjectId is the Google Cloud Platform project identifier where the DNS zone is hosted.",
             "type": "string"
           }
         }
