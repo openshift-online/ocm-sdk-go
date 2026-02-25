@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.497 Feb 25 2026
+
+- Update model to 0.0.452
+  - Add the `AvailableChannels` method to the Version resource
+
 ## 0.1.496 Feb 24 2026
 - Update model to 0.0.451
   - Add the `GcpDnsDomain` type and include in the `DNSDomain` as a field.
