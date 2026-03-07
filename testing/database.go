@@ -29,7 +29,7 @@ import (
 	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
 	. "github.com/onsi/gomega"             // nolint
 
-	_ "github.com/jackc/pgx/v4/stdlib" // nolint
+	_ "github.com/jackc/pgx/v5/stdlib" // nolint
 )
 
 // DatabaseServer knows how to start a PostgreSQL database server inside a container, and how to
