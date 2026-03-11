@@ -4042,6 +4042,10 @@
             "description": "NodesOutboundConnectivity defines how the network outbound\nconfiguration of the Cluster's Node Pool's Nodes is performed.\nBy default this is configured as Azure Load Balancer. This value is immutable.",
             "$ref": "#/components/schemas/AzureNodesOutboundConnectivity"
           },
+          "oidc_issuer_url": {
+            "description": "The OIDC issuer URL for workload identity federation\nThis URL is used by Azure managed identities to establish trust with cluster.\nReadonly",
+            "type": "string"
+          },
           "operators_authentication": {
             "description": "Defines how the operators of the cluster authenticate to Azure.\nRequired during creation.\nImmutable.",
             "$ref": "#/components/schemas/AzureOperatorsAuthentication"
@@ -4139,8 +4143,20 @@
           "active_key": {
             "description": "The details of the active key\nRequired during creation.",
             "$ref": "#/components/schemas/AzureKmsKey"
+          },
+          "visibility": {
+            "description": "visibility defines the visibility of the Azure Key Vault.\nAccepted values are `public` and `private`.\nDefaults to `public` if not set.",
+            "$ref": "#/components/schemas/AzureKmsEncryptionVisibility"
           }
         }
+      },
+      "AzureKmsEncryptionVisibility": {
+        "description": "AzureKmsEncryptionVisibility defines the visibility of the Azure KMS key vault.",
+        "type": "string",
+        "enum": [
+          "private",
+          "public"
+        ]
       },
       "AzureKmsKey": {
         "description": "Contains the necessary attributes to support KMS encryption key for Azure based clusters",
