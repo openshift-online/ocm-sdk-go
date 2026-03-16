@@ -19,11 +19,39 @@ package database
 import (
 	"testing"
 
-	. "github.com/onsi/ginkgo/v2/dsl/core" // nolint
-	. "github.com/onsi/gomega"             // nolint
+	. "github.com/onsi/ginkgo/v2/dsl/core"             // nolint
+	. "github.com/onsi/gomega"                         // nolint
+	. "github.com/openshift-online/ocm-sdk-go/testing" // nolint
+
+	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
 func TestDatabase(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Database")
 }
+
+// logger is the logger that will be used by the tests.
+var logger logging.Logger
+
+// dbServer is the database dbServer that will be used to create the databases used by the tests.
+var dbServer *DatabaseServer
+
+var _ = BeforeSuite(func() {
+	var err error
+
+	// Create a logger that writes to the Ginkgo stream:
+	logger, err = logging.NewStdLoggerBuilder().
+		Streams(GinkgoWriter, GinkgoWriter).
+		Debug(true).
+		Build()
+	Expect(err).ToNot(HaveOccurred())
+
+	// Start the database server:
+	dbServer = MakeDatabaseServer()
+})
+
+var _ = AfterSuite(func() {
+	// Stop the database server:
+	dbServer.Close()
+})
