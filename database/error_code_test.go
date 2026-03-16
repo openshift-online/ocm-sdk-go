@@ -22,7 +22,7 @@ import (
 	. "github.com/onsi/ginkgo/v2/dsl/table" // nolint
 	. "github.com/onsi/gomega"              // nolint
 
-	"github.com/jackc/pgconn"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/lib/pq"
 )
 
