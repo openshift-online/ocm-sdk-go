@@ -18,7 +18,6 @@ require (
 	github.com/onsi/ginkgo/v2 v2.13.2
 	github.com/onsi/gomega v1.29.0
 	github.com/prometheus/client_golang v1.12.1
-	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	golang.org/x/crypto v0.37.0 // indirect
 	golang.org/x/net v0.39.0
 	golang.org/x/oauth2 v0.15.0
@@ -26,6 +25,7 @@ require (
 )
 
 require (
+	github.com/cli/browser v1.3.0
 	github.com/golangci/plugin-module-register v0.1.2
 	github.com/openshift-online/ocm-api-model/clientapi v0.0.453
 	github.com/openshift-online/ocm-api-model/model v0.0.453

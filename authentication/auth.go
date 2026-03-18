@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/skratchdot/open-golang/open"
+	"github.com/cli/browser"
 	"golang.org/x/oauth2"
 )
 
@@ -103,9 +103,9 @@ func InitiateAuthCode(clientID string) (string, error) {
 	httpServerExitDone.Add(1)
 	server := serve(httpServerExitDone)
 
-	err := open.Run(url)
-	if err != nil {
-		return authToken, err
+	if err := browser.OpenURL(url); err != nil {
+		log.Printf("Unable to open browser automatically: %v", err)
+		log.Printf("Open this URL manually to continue authentication:\n%s", url)
 	}
 	fiveMinTimer := time.Now().Local().Add(time.Minute * 5)
 
