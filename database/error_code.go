@@ -22,7 +22,7 @@ import (
 
 // ErrorCode extracts the error code from the given error returned by a database operation. It uses
 // reflection to get the value of the `Code` field in order to avoid having to import the `lib/pq`
-// and `pgx` packages. It returns an empty string if the passed error is nil or it hasn't the `Code`
+// and `pgx/v5` packages. It returns an empty string if the passed error is nil or it hasn't the `Code`
 // field.
 func ErrorCode(err error) string {
 	if err == nil {
