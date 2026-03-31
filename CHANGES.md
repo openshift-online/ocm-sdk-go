@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.499 Mar 31 2026
+
+- Replace github.com/jackc/pgx/v4/stdlib driver with github.com/lib/pq
+- Update sql.Open() calls to use "postgres" driver name instead of "pgx"
+
 ## 0.1.498 Mar 11 2026
 
 - Update model to 0.0.453
