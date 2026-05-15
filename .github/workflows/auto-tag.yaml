@@ -1,0 +1,65 @@
+#
+# Copyright (c) 2026 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Auto-tag on merge
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: auto-tag-main
+  cancel-in-progress: false
+
+jobs:
+  auto-tag:
+    name: Create release tag
+    runs-on: ubuntu-latest
+    # Skip if the commit is a release commit (avoid infinite loop)
+    if: "!startsWith(github.event.head_commit.message, 'Release v')"
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Determine next version
+        id: version
+        run: |
+          LATEST=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
+          if [ -z "$LATEST" ]; then
+            echo "next=v0.1.1" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          PATCH=$(echo "$LATEST" | sed 's/v0\.1\.//')
+          NEXT=$((PATCH + 1))
+          echo "next=v0.1.${NEXT}" >> "$GITHUB_OUTPUT"
+          echo "Latest tag: ${LATEST}, next: v0.1.${NEXT}"
+
+      - name: Create tag
+        env:
+          VERSION: ${{ steps.version.outputs.next }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Single tag (no sub-modules in ocm-sdk-go)
+          git tag "${VERSION}"
+          git push origin "${VERSION}"

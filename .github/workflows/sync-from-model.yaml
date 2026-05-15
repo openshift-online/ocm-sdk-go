@@ -1,0 +1,115 @@
+#
+# Copyright (c) 2026 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Sync from model
+
+on:
+  repository_dispatch:
+    types:
+      - model-updated
+
+concurrency:
+  group: sync-from-model
+  cancel-in-progress: false
+
+jobs:
+  sync-from-model:
+    name: Bump model and regenerate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Validate payload
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+          RELEASE_URL: ${{ github.event.client_payload.release_url }}
+        run: |
+          if ! echo "$VERSION" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Error: Invalid version format: $VERSION"
+            exit 1
+          fi
+          if ! echo "$RELEASE_URL" | grep -qE '^https://github\.com/[^/]+/[^/]+/releases/'; then
+            echo "Error: Invalid release URL format: $RELEASE_URL"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "RELEASE_URL=$RELEASE_URL" >> "$GITHUB_ENV"
+
+      - name: Bump ocm-api-model dependency
+        run: |
+          echo "Bumping ocm-api-model to ${VERSION}"
+          ./hack/update-model.sh "${VERSION}"
+
+      - name: Regenerate SDK
+        run: make update
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No SDK changes from this model update."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "SDK changes detected:"
+            git diff --stat
+          fi
+
+      - name: Create PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="sync-model/${VERSION}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "${BRANCH}"
+          git add -A
+          git commit -m "chore: bump ocm-api-model to ${VERSION}
+
+          Auto-generated from ocm-api-model release ${VERSION}.
+          Release: ${RELEASE_URL}"
+
+          # Delete stale remote branch if it exists from a previous run
+          git push origin --delete "${BRANCH}" 2>/dev/null || true
+          git push origin "${BRANCH}"
+
+          gh pr create \
+            --title "chore: bump ocm-api-model to ${VERSION}" \
+            --body "## Auto-generated SDK update
+
+          Triggered by ocm-api-model release [${VERSION}](${RELEASE_URL}).
+
+          The ocm-api-model dependency was bumped and the SDK was regenerated
+          using \`make update\`.
+
+          ### Review
+          This PR contains only auto-generated code. If CI passes, it is safe to merge." \
+            --base main \
+            --head "${BRANCH}"
