@@ -14246,6 +14246,10 @@
             "description": "Name of the S3 bucket used to save the backup",
             "type": "string"
           },
+          "access_shared_role_arn": {
+            "description": "ARN of the role used in the Disaster Recovery (DR) account to manipulate backups for deleted clusters",
+            "type": "string"
+          },
           "account_id": {
             "description": "ID of the AWS Disaster Recovery (DR) account",
             "type": "string"
@@ -16884,6 +16888,11 @@
           "message": {
             "description": "Messages relating to the status of the AutoNode installation on this Cluster",
             "type": "string"
+          },
+          "node_count": {
+            "description": "The number of Nodes AutoNode has provisioned in the cluster",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
