@@ -4026,6 +4026,10 @@
       "Azure": {
         "description": "Microsoft Azure settings of a cluster.",
         "properties": {
+          "container_registry": {
+            "description": "Configures authentication for container image pulls from Azure\nContainer Registry (ACR) on Data Plane worker nodes. Only ACR\nregistries (*.azurecr.io, *.azurecr.cn, *.azurecr.de, *.azurecr.us) are\nsupported; non-ACR registries are not affected by this\nconfiguration. The identity is not bound to a specific ACR\ninstance — it authenticates to any ACR the identity has the\nAcrPull role assigned on. The customer controls which ACR\ninstances the identity can pull from via Azure RBAC.\nWhen set, the managed identity is attached to worker virtual\nmachines and its resource ID is written into the worker cloud\nprovider config so kubelet's ACR credential provider can\nauthenticate without image pull secrets.\nWhen not set, no managed identity is attached to worker virtual\nmachines for ACR and no identity is written into the worker\ncloud provider config. The ACR credential provider on worker\nnodes has no identity to authenticate with, so image pulls from\nprivate ACR registries will fail unless the workload provides\nimage pull secrets or another authentication mechanism. Public\nACR images (anonymous pull enabled) are not affected.\nChanging this value will trigger a rollout for all existing\nNodePools in the cluster.\nOptional.\nMutable.",
+            "$ref": "#/components/schemas/AzureContainerRegistry"
+          },
           "etcd_encryption": {
             "description": "Etcd encryption configuration.\nIf not specified, etcd data is encrypted with platform managed keys.\nCurrently etcd data encryption is only supported with customer managed keys.\nCreating a cluster with platform managed keys will result in a failure creating the cluster.",
             "$ref": "#/components/schemas/AzureEtcdEncryption"
@@ -4073,6 +4077,35 @@
           "vnet_integration_subnet_resource_id": {
             "description": "Vnet Integration Subnet Resource ID is the Azure Resource ID of a pre-existing Azure\nSubnet used for SWIFT networking (Azure Container Networking Interface).\nThis subnet is delegated to Microsoft.RedHatOpenShift/hcpOpenShiftClusters\nvia a Service Association Link and is used for pod networking in the cluster.\nVnet Integration Subnet Resource ID must be located in the same Azure location as the\ncluster's region and in the same VNet as Subnet Resource ID.\nThe Azure Subscription specified as part of the Vnet Integration Subnet Resource ID must\nbe located in the same Azure Subscription as Subscription ID.\nThis field is optional - if not specified, SWIFT networking will not be enabled.\nImmutable.",
             "type": "string"
+          }
+        }
+      },
+      "AzureContainerRegistry": {
+        "description": "Azure Container Registry configuration for an ARO HCP Cluster.\nConfigures how Data Plane worker nodes authenticate container image\npulls from Azure Container Registry (ACR).",
+        "properties": {
+          "credentials": {
+            "description": "Credentials for authenticating container image pulls from\nAzure Container Registry (ACR) on Data Plane worker nodes.\nRequired.",
+            "$ref": "#/components/schemas/AzureContainerRegistryCredentials"
+          }
+        }
+      },
+      "AzureContainerRegistryCredentialType": {
+        "description": "The type of credential used for Azure Container Registry image pulls.",
+        "type": "string",
+        "enum": [
+          "ManagedIdentity"
+        ]
+      },
+      "AzureContainerRegistryCredentials": {
+        "description": "Azure Container Registry credentials configuration for an ARO HCP Cluster.\nConfigures authentication for container image pulls from Azure Container\nRegistry (ACR) on Data Plane worker nodes.",
+        "properties": {
+          "managed_identity": {
+            "description": "The user-assigned managed identity used for ACR image pulls\non Data Plane worker nodes.\nRequired when type is ManagedIdentity.",
+            "$ref": "#/components/schemas/AzureUserAssignedManagedIdentity"
+          },
+          "type": {
+            "description": "The credential type used for ACR image pulls on Data Plane worker nodes.\nRequired.",
+            "$ref": "#/components/schemas/AzureContainerRegistryCredentialType"
           }
         }
       },
@@ -4310,6 +4343,15 @@
           },
           "public_dns_zone_resource_id": {
             "description": "The Azure Public DNS Zone associated to the provision shard.\nIt is the Azure Resource ID of a pre-existing Public DNS Zone.\n`public_dns_zone_resource_id` must be located in the same\nAzure Tenant as the Clusters Service's Azure infrastructure\nThe Azure Resource Group Name specified as part of `public_dns_zone_resource_id`\nmust be in the same Azure location to where Clusters Service is deployed.\nRequired during creation.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureUserAssignedManagedIdentity": {
+        "description": "Identifies a user-assigned managed identity by its ARM resource ID.",
+        "properties": {
+          "resource_id": {
+            "description": "The Azure Resource ID of the Azure User-Assigned Managed Identity.\nThe managed identity represented must exist before creating or\nupdating the cluster.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust belong to the Azure Subscription specified in `.azure.subscription_id`,\nand in the same Azure location as the cluster's region.\nThe Azure Resource Group Name specified as part of the Resource ID\nmust be a different Resource Group Name than the one specified in\n`.azure.managed_resource_group_name`.\nThe Azure Resource Group Name specified as part of the Resource ID\ncan be the same, or a different one than the one specified in\n`.azure.resource_group_name`.\nRequired.",
             "type": "string"
           }
         }
