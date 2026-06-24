@@ -3,6 +3,19 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+
+## 0.1.502
+
+- Update model to 0.0.459
+  - Add Resources subresource to Cluster resource
+  
+- Update model to 0.0.458
+  - Fix: relax subscription and location constraints on ACR pull managed identity
+  
+- Update model to 0.0.457
+  - Add Azure Container Registry credentials model to ARO HCP API
+  - Add automated release pipeline
+
 ## 0.1.501
 
 - Update model to 0.0.456
