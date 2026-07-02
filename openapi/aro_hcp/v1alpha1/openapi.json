@@ -1707,7 +1707,7 @@
     },
     "/api/aro_hcp/v1alpha1/clusters/{cluster_id}/resources": {
       "get": {
-        "description": "Retrieves a list of resources for a cluster in error state",
+        "description": "Retrieves a list of resources for a cluster",
         "parameters": [
           {
             "name": "cluster_id",

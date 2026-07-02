@@ -540,10 +540,15 @@
       "Severity": {
         "type": "string",
         "enum": [
+          "Critical",
           "Debug",
           "Error",
           "Fatal",
+          "Important",
           "Info",
+          "Low",
+          "Major",
+          "Moderate",
           "Warning"
         ]
       },
