@@ -14229,6 +14229,10 @@
               "type": "string"
             }
           },
+          "termination_handler_queue_url": {
+            "description": "URL of the SQS queue used for graceful Spot instance interruption handling.\nWhen set, HyperShift deploys the AWS Node Termination Handler in the hosted\ncontrol plane. Queue must be in the same region as the cluster.",
+            "type": "string"
+          },
           "vpc_endpoint_role_arn": {
             "description": "Role ARN for VPC Endpoint Service cross account role.",
             "type": "string"
@@ -14497,6 +14501,10 @@
           "root_volume": {
             "description": "AWS Volume specification to be used to set custom worker disk size",
             "$ref": "#/components/schemas/AWSVolume"
+          },
+          "spot_market_options": {
+            "description": "Use spot instances on this node pool to reduce cost.",
+            "$ref": "#/components/schemas/AwsNodePoolSpotMarketOptions"
           },
           "subnet_outposts": {
             "description": "Associates nodepool subnets with AWS Outposts.",
@@ -15979,6 +15987,27 @@
         "properties": {
           "kms_key_arn": {
             "description": "ARN of the KMS to be used for the etcd encryption",
+            "type": "string"
+          }
+        }
+      },
+      "AwsNodePoolSpotMarketOptions": {
+        "description": "Spot market options for AWS node pool.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'AwsNodePoolSpotMarketOptions' if this is a complete object or 'AwsNodePoolSpotMarketOptionsLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "max_price": {
+            "description": "The max price for spot instance. Optional.\nIf not set, use the on-demand price.",
             "type": "string"
           }
         }
