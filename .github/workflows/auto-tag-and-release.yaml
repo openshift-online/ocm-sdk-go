@@ -1,0 +1,161 @@
+#
+# Copyright (c) 2026 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Auto-tag and release on merge
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: auto-tag-main
+  cancel-in-progress: false
+
+jobs:
+  auto-tag-and-release:
+    name: Create release tag and publish release
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, 'Release v')"
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Determine next version
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
+          if [ -z "$LATEST" ]; then
+            echo "next=v0.1.1" >> "$GITHUB_OUTPUT"
+            echo "tag_exists=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Check if the latest tag already has a GitHub release
+          if ! gh release view "$LATEST" > /dev/null 2>&1; then
+            echo "Tag ${LATEST} exists without a release, resuming"
+            echo "next=${LATEST}" >> "$GITHUB_OUTPUT"
+            echo "tag_exists=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PATCH=$(echo "$LATEST" | sed 's/v0\.1\.//')
+          NEXT=$((PATCH + 1))
+          echo "next=v0.1.${NEXT}" >> "$GITHUB_OUTPUT"
+          echo "tag_exists=false" >> "$GITHUB_OUTPUT"
+          echo "Latest tag: ${LATEST}, next: v0.1.${NEXT}"
+
+      - name: Update version.go, CHANGES.md, and create tag
+        if: steps.version.outputs.tag_exists != 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.next }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          SEMVER="${VERSION#v}"
+          DATE=$(date '+%b %d %Y')
+
+          # Update version.go
+          sed -i "s/const Version = \".*\"/const Version = \"${SEMVER}\"/" version.go
+
+          # Build changelog entry from commits since last tag
+          LATEST_TAG=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
+          if [ -n "$LATEST_TAG" ]; then
+            CHANGES=$(git log "${LATEST_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
+          else
+            CHANGES=$(git log --pretty=format:"- %s" --no-merges)
+          fi
+
+          # Write changelog entry to a temp file
+          {
+            echo "## ${SEMVER} ${DATE}"
+            echo ""
+            echo "${CHANGES}"
+            echo ""
+          } > /tmp/changelog-entry.txt
+
+          # Insert before the first existing ## entry
+          awk 'NR==FNR{entry=entry $0 ORS; next} !inserted && /^## /{print entry; inserted=1} {print}' /tmp/changelog-entry.txt CHANGES.md > /tmp/CHANGES.md
+          mv /tmp/CHANGES.md CHANGES.md
+
+          git add version.go CHANGES.md
+          git commit -m "Release ${VERSION}"
+          git tag "${VERSION}"
+          git push origin main "${VERSION}"
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Python modules
+        run: pip install -r .github/workflows/requirements.txt
+
+      - name: Create release
+        shell: python
+        env:
+          VERSION: ${{ steps.version.outputs.next }}
+          REPOSITORY: ${{ github.repository }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          import os
+          import requests
+
+          version_tag = os.environ["VERSION"]
+          repository = os.environ["REPOSITORY"]
+          token = os.environ["TOKEN"]
+
+          version = version_tag.lstrip("v")
+
+          body = ""
+          with open("CHANGES.md", "r") as stream:
+              while True:
+                  line = stream.readline()
+                  if line == "" or line.startswith("## " + version):
+                      break
+              while True:
+                  line = stream.readline()
+                  if line == "" or line.startswith("## "):
+                      break
+                  body += line
+
+          response = requests.post(
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+              },
+              json={
+                  "tag_name": version_tag,
+                  "name": f"Release {version}",
+                  "body": body,
+              },
+              url=(
+                  "https://api.github.com"
+                  f"/repos/{repository}/releases"
+              ),
+              timeout=(10, 30),
+          )
+          response.raise_for_status()

@@ -3,7 +3,24 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
-## 0.1.501
+## 0.1.505 Jul 06 2026
+
+- ROSAENG-59819 | feat: add HCC severity constants
+
+## 0.1.504 Jun 23 2026
+
+- chore: bump ocm-api-model to v0.0.459
+
+## 0.1.503 Jun 11 2026
+
+- chore: bump ocm-api-model to v0.0.457
+
+## 0.1.502 Jun 01 2026
+
+- Add two GitHub Actions workflows:
+  - auto-tag.yaml, sync-from-model.yaml
+
+## 0.1.501 May 19 2026
 
 - Update model to 0.0.456
   - Add `access_shared_role_arn` field to AWS Disaster Recovery backup config
