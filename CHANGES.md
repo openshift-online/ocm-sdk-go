@@ -5,6 +5,16 @@ SDK.
 
 ## 0.1.506 Jul 23 2026
 
+- ROSAENG-61032 | feat: changes to support SpotMarketOptions for ROSA HCP
+- ROSAENG-62396 | fix: automated release github workflow
+- Revert "Release 0.1.502"
+- ROSAENG-61032 | task: Release 0.1.502
+- ROSAENG-61032 | task: ocm-api/sdk changes to support SpotMarketOptions for ROSA HCP
+- chore: bump ocm-api-model to v0.0.462
+
+
+## 0.1.506 Jul 23 2026
+
 - ROSAENG-61032 | feat: changes to support SpotMarketOptions for ROSA HCP 
 
 ## 0.1.505 Jul 06 2026
