@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.506 Jul 23 2026
+
+- ROSAENG-61032 | feat: changes to support SpotMarketOptions for ROSA HCP 
+
 ## 0.1.505 Jul 06 2026
 
 - ROSAENG-59819 | feat: add HCC severity constants
