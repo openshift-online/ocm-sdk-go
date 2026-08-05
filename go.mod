@@ -24,8 +24,8 @@ require (
 
 require (
 	github.com/golangci/plugin-module-register v0.1.2
-	github.com/openshift-online/ocm-api-model/clientapi v0.0.462
-	github.com/openshift-online/ocm-api-model/model v0.0.462
+	github.com/openshift-online/ocm-api-model/clientapi v0.0.463
+	github.com/openshift-online/ocm-api-model/model v0.0.463
 	github.com/zalando/go-keyring v0.2.3
 	golang.org/x/tools v0.32.0
 )
