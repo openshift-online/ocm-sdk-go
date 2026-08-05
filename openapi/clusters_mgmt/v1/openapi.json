@@ -11133,6 +11133,292 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/gcp/firewall_rule_templates": {
+      "get": {
+        "description": "Lists all available firewall rule templates.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of firewall rule templates.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GcpFirewallRuleTemplate"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/gcp/firewall_rule_templates/{gcp_firewall_rule_template_version_id}/profiles/{gcp_firewall_rule_template_id}": {
+      "get": {
+        "description": "Retrieves the details of the firewall rule template.",
+        "parameters": [
+          {
+            "name": "gcp_firewall_rule_template_version_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "gcp_firewall_rule_template_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GcpFirewallRuleTemplate"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/gcp/firewall_rules": {
+      "post": {
+        "description": "Creates a new GCP firewall rule.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GcpFirewallRule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GcpFirewallRule"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Lists the GCP firewall rules.",
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of GCP firewall rules.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GcpFirewallRule"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clusters_mgmt/v1/gcp/firewall_rules/{gcp_firewall_rule_id}": {
+      "delete": {
+        "description": "Deletes the firewall rule.",
+        "parameters": [
+          {
+            "name": "gcp_firewall_rule_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieves the details of the firewall rule.",
+        "parameters": [
+          {
+            "name": "gcp_firewall_rule_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GcpFirewallRule"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/gcp/wif_configs": {
       "post": {
         "description": "Provision a new wif_config resource and add it to the collection of wif_configs.",
@@ -14949,6 +15235,10 @@
           "control_plane_subnet": {
             "description": "Control plane subnet used by the cluster.",
             "type": "string"
+          },
+          "firewall_rules_id": {
+            "description": "ID of the GCP firewall rule set associated with this cluster.",
+            "type": "string"
           }
         }
       },
@@ -17940,6 +18230,180 @@
           },
           "project_id": {
             "description": "ProjectId is the Google Cloud Platform project identifier where the DNS zone is hosted.",
+            "type": "string"
+          }
+        }
+      },
+      "GcpFirewallRule": {
+        "description": "GCP firewall rule configuration for BYO (Bring Your Own) firewall workflow.\nThese are organization-level resources that can be created before cluster\nprovisioning and reused after cluster deletion.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'GcpFirewallRule' if this is a complete object or 'GcpFirewallRuleLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "gcp_network": {
+            "description": "GCP network configuration.",
+            "$ref": "#/components/schemas/GcpFirewallRuleGcpNetwork"
+          },
+          "name": {
+            "description": "Firewall rule name (unique per organization).",
+            "type": "string"
+          },
+          "organization": {
+            "description": "Link to the organization that owns this firewall rule.",
+            "$ref": "#/components/schemas/OrganizationLink"
+          },
+          "profile": {
+            "description": "Profile type (e.g. \"public\", \"private\").",
+            "type": "string"
+          },
+          "status": {
+            "description": "Status containing the rendered firewall rules.",
+            "$ref": "#/components/schemas/GcpFirewallRuleStatus"
+          },
+          "template": {
+            "description": "Template version and profile reference.",
+            "$ref": "#/components/schemas/GcpFirewallRuleTemplateRef"
+          },
+          "wif_config": {
+            "description": "Link to the WIF config used by this firewall rule.",
+            "$ref": "#/components/schemas/WifConfig"
+          }
+        }
+      },
+      "GcpFirewallRuleAllowed": {
+        "description": "Allowed protocol and ports for a GCP firewall rule.",
+        "properties": {
+          "ip_protocol": {
+            "description": "IP protocol (e.g. \"tcp\", \"udp\", \"icmp\").",
+            "type": "string"
+          },
+          "ports": {
+            "description": "Ports to allow (e.g. \"6443\", \"10250\").",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GcpFirewallRuleGcpNetwork": {
+        "description": "GCP network configuration for a firewall rule.",
+        "properties": {
+          "machine_cidr": {
+            "description": "Machine CIDR block.",
+            "type": "string"
+          },
+          "project_id": {
+            "description": "GCP project ID.",
+            "type": "string"
+          },
+          "vpc_name": {
+            "description": "VPC network name.",
+            "type": "string"
+          }
+        }
+      },
+      "GcpFirewallRuleSpec": {
+        "description": "A single rendered GCP firewall rule specification.",
+        "properties": {
+          "allowed": {
+            "description": "Allowed protocols and ports.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GcpFirewallRuleAllowed"
+            }
+          },
+          "direction": {
+            "description": "Direction of traffic (INGRESS or EGRESS).",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the firewall rule.",
+            "type": "string"
+          },
+          "network": {
+            "description": "GCP network URL.",
+            "type": "string"
+          },
+          "priority": {
+            "description": "Priority of the rule (0-65535).",
+            "type": "integer",
+            "format": "int32"
+          },
+          "source_ranges": {
+            "description": "Source IP CIDR ranges.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_service_accounts": {
+            "description": "Source service accounts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "target_service_accounts": {
+            "description": "Target service accounts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GcpFirewallRuleStatus": {
+        "description": "Status of a GCP firewall rule set, containing the rendered rules.",
+        "properties": {
+          "rules": {
+            "description": "Rendered firewall rule specifications.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GcpFirewallRuleSpec"
+            }
+          }
+        }
+      },
+      "GcpFirewallRuleTemplate": {
+        "description": "GCP firewall rule template definition.\nTemplates define the set of firewall rules that will be created for a cluster.\nEach template has a version and one or more profiles (e.g. \"public\", \"private\").",
+        "properties": {
+          "description": {
+            "description": "Human-readable description of this template profile.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link to the template resource.",
+            "type": "string"
+          },
+          "profile": {
+            "description": "Profile name (e.g. \"public\", \"private\").",
+            "type": "string"
+          },
+          "version": {
+            "description": "Template version identifier (e.g. \"v1\").",
+            "type": "string"
+          }
+        }
+      },
+      "GcpFirewallRuleTemplateRef": {
+        "description": "Template version and profile reference for a firewall rule.",
+        "properties": {
+          "href": {
+            "description": "Self link to the template resource.",
+            "type": "string"
+          },
+          "version": {
+            "description": "Template version identifier.",
             "type": "string"
           }
         }
