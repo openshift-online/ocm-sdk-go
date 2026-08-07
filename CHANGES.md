@@ -3,6 +3,10 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.508 Aug 7 2026
+
+- chore: version bump to v0.1.508 (skip v0.1.507 due to duplicate tag on proxy.golang.org)
+
 ## 0.1.507 Aug 5 2026
 
 - ROSAENG-61162 | feat: changes to support BYO firewall for OSD-GCP deployments
