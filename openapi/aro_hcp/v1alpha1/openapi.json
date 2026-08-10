@@ -4950,9 +4950,9 @@
               "type": "string"
             }
           },
-          "provision_shard": {
-            "description": "ProvisionShard contains the properties of the provision shard, including AWS and GCP related configurations",
-            "$ref": "#/components/schemas/ProvisionShard"
+          "provision_shard_id": {
+            "description": "ProvisionShardID is the CS Provision Shard identifier where the cluster\nis allocated. It is not the full HREF.\nOptional.\nWhen provided during creation, the Cluster is allocated to the\nCS Provision Shard identified by ProvisionShardID. Additionally, all\nthe capacity checks and provision shard state checks are bypassed.\nWhen not provided during creation, selection of a suitable CS provision shard\nis automatically performed by CS.\nImmutable.",
+            "type": "string"
           },
           "proxy": {
             "description": "Proxy.",
