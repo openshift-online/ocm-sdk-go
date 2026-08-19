@@ -11419,6 +11419,43 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/gcp/firewall_rules/{gcp_firewall_rule_id}/status": {
+      "get": {
+        "description": "Retrieves the status of the firewall rules.",
+        "parameters": [
+          {
+            "name": "gcp_firewall_rule_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GcpFirewallRulesStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/gcp/wif_configs": {
       "post": {
         "description": "Provision a new wif_config resource and add it to the collection of wif_configs.",
@@ -18404,6 +18441,51 @@
           },
           "version": {
             "description": "Template version identifier.",
+            "type": "string"
+          }
+        }
+      },
+      "GcpFirewallRulesStatus": {
+        "description": "Status of GCP firewall rules verification.",
+        "properties": {
+          "description": {
+            "description": "Description of the current status.",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Kind is the resource type identifier.",
+            "type": "string"
+          },
+          "rules": {
+            "description": "Individual firewall rule status entries.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GcpFirewallRulesStatusEntry"
+            }
+          },
+          "state": {
+            "description": "Overall state of the firewall rules (e.g. \"ready\", \"incomplete\", \"not_found\").",
+            "type": "string"
+          }
+        }
+      },
+      "GcpFirewallRulesStatusEntry": {
+        "description": "Status of an individual GCP firewall rule.",
+        "properties": {
+          "configured_correctly": {
+            "description": "Whether the firewall rule is configured correctly.",
+            "type": "boolean"
+          },
+          "description": {
+            "description": "Description of each firewall rule",
+            "type": "string"
+          },
+          "exists": {
+            "description": "Whether the firewall rule exists in GCP.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the firewall rule in GCP.",
             "type": "string"
           }
         }
