@@ -7,7 +7,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.1.3
 	github.com/evanphx/json-patch/v5 v5.6.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
-	github.com/golang/glog v1.0.0
+	github.com/golang/glog v1.2.5
 	github.com/google/uuid v1.3.0
 	github.com/itchyny/gojq v0.12.7
 	github.com/json-iterator/go v1.1.12
