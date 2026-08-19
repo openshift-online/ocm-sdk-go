@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/99designs/keyring v1.2.2
-	github.com/cenkalti/backoff/v4 v4.1.3
+	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/evanphx/json-patch/v5 v5.6.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/golang/glog v1.0.0
