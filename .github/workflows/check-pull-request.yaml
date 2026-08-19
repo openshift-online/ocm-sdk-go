@@ -36,7 +36,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
     - name: Checkout the source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
 
     - name: Install Keyrings (macOS-only)
       if: ${{ contains(fromJSON('["macos-latest"]'), matrix.platform) }}
@@ -61,7 +61,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6.1.0
         with:
           node-version: '24'
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
 
     - name: Setup Go
       uses: actions/setup-go@v2
