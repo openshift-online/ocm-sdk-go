@@ -4256,6 +4256,10 @@
             "description": "EncryptionAtHost contains Encryption At Host disk encryption configuration.\nWhen enabled, it enhances Azure Disk Storage Server-Side Encryption to ensure that all temporary disks\nand disk caches are encrypted at rest and flow encrypted to the Storage clusters.\nIf not specified, Encryption at Host is not enabled.\nImmutable.",
             "$ref": "#/components/schemas/AzureNodePoolEncryptionAtHost"
           },
+          "image": {
+            "description": "Specifies the Azure Marketplace image to use for the Nodes of the Node Pool.\nWhen specified, the provided image is used instead of the default RHCOS image.\nOptional during creation. Immutable.",
+            "$ref": "#/components/schemas/AzureNodePoolImage"
+          },
           "os_disk": {
             "description": "The configuration for the OS disk used by the nodes in the Node Pool.",
             "$ref": "#/components/schemas/AzureNodePoolOsDisk"
@@ -4271,6 +4275,27 @@
         "properties": {
           "state": {
             "description": "State indicates whether Encryption At Host is enabled.\nWhen enabled, it enhances Azure Disk Storage Server-Side Encryption to ensure that all temporary disks\nand disk caches are encrypted at rest and flow encrypted to the Storage clusters.\nAccepted values are: \"disabled\" or \"enabled\".\nIf not specified, its value is \"disabled\", which indicates Encryption At Host is disabled.\nImmutable.",
+            "type": "string"
+          }
+        }
+      },
+      "AzureNodePoolImage": {
+        "description": "Specifies the Azure Marketplace image to use for the Nodes of the Node Pool.\nWhen specified, the provided image is used instead of the default RHCOS image.\nAll four fields must be provided together.\nOptional during creation. Immutable.",
+        "properties": {
+          "sku": {
+            "description": "SKU specifies an instance of an offer, such as a major release of a distribution.",
+            "type": "string"
+          },
+          "offer": {
+            "description": "Offer specifies the name of a group of related images created by the publisher.",
+            "type": "string"
+          },
+          "publisher": {
+            "description": "Publisher is the name of the organization that created the image.",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version specifies the version of an image SKU.",
             "type": "string"
           }
         }
