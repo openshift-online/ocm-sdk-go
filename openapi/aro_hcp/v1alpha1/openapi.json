@@ -4796,7 +4796,7 @@
             "$ref": "#/components/schemas/ClusterAutoNode"
           },
           "autoscaler": {
-            "description": "Link to an optional _ClusterAutoscaler_ that is coupled with the cluster.",
+            "description": "The optional _ClusterAutoscaler_ that is coupled with the cluster.",
             "$ref": "#/components/schemas/ClusterAutoscaler"
           },
           "azure": {
