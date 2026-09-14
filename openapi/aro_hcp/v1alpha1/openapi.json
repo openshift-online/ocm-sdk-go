@@ -4214,11 +4214,23 @@
             "description": "The details of the active key\nRequired during creation.",
             "$ref": "#/components/schemas/AzureKmsKey"
           },
+          "key_vault_type": {
+            "description": "key_vault_type defines the Azure service that hosts the KMS key.\nAccepted values are `key_vault` and `managed_hsm`.\nDefaults to `key_vault` if not set.\nApplies to the whole KMS configuration rather than to an individual key,\nand is immutable once the cluster has been created.",
+            "$ref": "#/components/schemas/AzureKmsEncryptionKeyVaultType"
+          },
           "visibility": {
             "description": "visibility defines the visibility of the Azure Key Vault.\nAccepted values are `public` and `private`.\nDefaults to `public` if not set.",
             "$ref": "#/components/schemas/AzureKmsEncryptionVisibility"
           }
         }
+      },
+      "AzureKmsEncryptionKeyVaultType": {
+        "description": "AzureKmsEncryptionKeyVaultType defines the Azure service that hosts the KMS key.",
+        "type": "string",
+        "enum": [
+          "key_vault",
+          "managed_hsm"
+        ]
       },
       "AzureKmsEncryptionVisibility": {
         "description": "AzureKmsEncryptionVisibility defines the visibility of the Azure KMS key vault.",
@@ -4796,7 +4808,7 @@
             "$ref": "#/components/schemas/ClusterAutoNode"
           },
           "autoscaler": {
-            "description": "Link to an optional _ClusterAutoscaler_ that is coupled with the cluster.",
+            "description": "The optional _ClusterAutoscaler_ that is coupled with the cluster.",
             "$ref": "#/components/schemas/ClusterAutoscaler"
           },
           "azure": {
