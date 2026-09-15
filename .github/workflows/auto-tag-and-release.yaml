@@ -59,8 +59,8 @@ jobs:
             exit 0
           fi
 
-          # Validate version format (v0.1.XXX or v0.1.XXX-test)
-          if ! echo "${VERSION}" | grep -qE '^v0\.1\.[0-9]+(-test)?$'; then
+          # Validate version format (v0.1.XXX)
+          if ! echo "${VERSION}" | grep -qE '^v0\.1\.[0-9]+$'; then
             echo "is_new=false" >> "$GITHUB_OUTPUT"
             echo "Invalid version format: ${VERSION}"
             exit 0

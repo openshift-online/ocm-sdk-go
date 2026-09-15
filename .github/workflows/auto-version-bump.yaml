@@ -49,14 +49,14 @@ jobs:
         run: |
           LATEST=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
           if [ -z "$LATEST" ]; then
-            echo "next=v0.1.1-test" >> "$GITHUB_OUTPUT"
+            echo "next=v0.1.1" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          PATCH=$(echo "$LATEST" | sed 's/v0\.1\.//' | sed 's/-test//')
+          PATCH=$(echo "$LATEST" | sed 's/v0\.1\.//')
           NEXT=$((PATCH + 1))
-          echo "next=v0.1.${NEXT}-test" >> "$GITHUB_OUTPUT"
-          echo "Latest tag: ${LATEST}, next: v0.1.${NEXT}-test"
+          echo "next=v0.1.${NEXT}" >> "$GITHUB_OUTPUT"
+          echo "Latest tag: ${LATEST}, next: v0.1.${NEXT}"
 
       - name: Update version.go and CHANGES.md
         env:
