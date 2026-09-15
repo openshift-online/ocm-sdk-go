@@ -14,12 +14,14 @@
 # limitations under the License.
 #
 
-name: Auto-tag and release on merge
+name: Auto-tag and release on version bump
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'version.go'
 
 concurrency:
   group: auto-tag-main
@@ -29,7 +31,8 @@ jobs:
   auto-tag-and-release:
     name: Create release tag and publish release
     runs-on: ubuntu-latest
-    if: "!startsWith(github.event.head_commit.message, 'Release v')"
+    # Only run if this is a version bump commit
+    if: "startsWith(github.event.head_commit.message, 'chore: bump version to')"
     permissions:
       contents: write
     steps:
@@ -39,70 +42,36 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Determine next version
+      - name: Extract version from version.go
         id: version
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LATEST=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
-          if [ -z "$LATEST" ]; then
-            echo "next=v0.1.1" >> "$GITHUB_OUTPUT"
-            echo "tag_exists=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+          VERSION=$(grep 'const Version = ' version.go | sed 's/.*"\(.*\)".*/\1/')
+          echo "version=v${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Extracted version: v${VERSION}"
 
-          # Check if the latest tag already has a GitHub release
-          if ! gh release view "$LATEST" > /dev/null 2>&1; then
-            echo "Tag ${LATEST} exists without a release, resuming"
-            echo "next=${LATEST}" >> "$GITHUB_OUTPUT"
-            echo "tag_exists=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          PATCH=$(echo "$LATEST" | sed 's/v0\.1\.//')
-          NEXT=$((PATCH + 1))
-          echo "next=v0.1.${NEXT}" >> "$GITHUB_OUTPUT"
-          echo "tag_exists=false" >> "$GITHUB_OUTPUT"
-          echo "Latest tag: ${LATEST}, next: v0.1.${NEXT}"
-
-      - name: Update version.go, CHANGES.md, and create tag
-        if: steps.version.outputs.tag_exists != 'true'
+      - name: Check if tag already exists
+        id: tag_check
         env:
-          VERSION: ${{ steps.version.outputs.next }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if git rev-parse "${VERSION}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Tag ${VERSION} already exists"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Tag ${VERSION} does not exist, will create"
+          fi
+
+      - name: Create tag
+        if: steps.tag_check.outputs.exists != 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          SEMVER="${VERSION#v}"
-          DATE=$(date '+%b %d %Y')
-
-          # Update version.go
-          sed -i "s/const Version = \".*\"/const Version = \"${SEMVER}\"/" version.go
-
-          # Build changelog entry from commits since last tag
-          LATEST_TAG=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
-          if [ -n "$LATEST_TAG" ]; then
-            CHANGES=$(git log "${LATEST_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
-          else
-            CHANGES=$(git log --pretty=format:"- %s" --no-merges)
-          fi
-
-          # Write changelog entry to a temp file
-          {
-            echo "## ${SEMVER} ${DATE}"
-            echo ""
-            echo "${CHANGES}"
-            echo ""
-          } > /tmp/changelog-entry.txt
-
-          # Insert before the first existing ## entry
-          awk 'NR==FNR{entry=entry $0 ORS; next} !inserted && /^## /{print entry; inserted=1} {print}' /tmp/changelog-entry.txt CHANGES.md > /tmp/CHANGES.md
-          mv /tmp/CHANGES.md CHANGES.md
-
-          git add version.go CHANGES.md
-          git commit -m "Release ${VERSION}"
           git tag "${VERSION}"
-          git push origin main "${VERSION}"
+          git push origin "${VERSION}"
 
       - name: Setup Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
@@ -116,7 +85,7 @@ jobs:
       - name: Create release
         shell: python
         env:
-          VERSION: ${{ steps.version.outputs.next }}
+          VERSION: ${{ steps.version.outputs.version }}
           REPOSITORY: ${{ github.repository }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
