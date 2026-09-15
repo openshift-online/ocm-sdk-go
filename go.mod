@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/99designs/keyring v1.2.2
 	github.com/cenkalti/backoff/v4 v4.1.3
-	github.com/evanphx/json-patch/v5 v5.6.0
+	github.com/evanphx/json-patch/v5 v5.9.11
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/golang/glog v1.0.0
 	github.com/google/uuid v1.3.0
@@ -52,7 +52,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
