@@ -24,6 +24,7 @@ on:
       - '**/*.go'
       - 'go.mod'
       - 'go.sum'
+      - '!version.go'
 
 concurrency:
   group: auto-version-bump
@@ -33,8 +34,6 @@ jobs:
   create-version-bump-pr:
     name: Create version bump PR
     runs-on: ubuntu-latest
-    # Skip if commit is already a version bump
-    if: "!startsWith(github.event.head_commit.message, 'chore: bump version to')"
     permissions:
       contents: write
       pull-requests: write
@@ -101,7 +100,7 @@ jobs:
             git diff --stat
           fi
 
-      - name: Create PR
+      - name: Create or update PR
         if: steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -112,17 +111,39 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git checkout -b "${BRANCH}"
-          git add version.go CHANGES.md
-          git commit -m "chore: bump version to ${VERSION}"
+          # Check if an open PR already exists for this branch
+          EXISTING_PR=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number' || echo "")
 
-          # Delete stale remote branch if it exists from a previous run
-          git push origin --delete "${BRANCH}" 2>/dev/null || true
-          git push origin "${BRANCH}"
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Found existing PR #${EXISTING_PR} for branch ${BRANCH}, updating it"
 
-          gh pr create \
-            --title "chore: bump version to ${VERSION}" \
-            --body "## Auto-generated version bump
+            # Update existing branch
+            git fetch origin "${BRANCH}"
+            git checkout "${BRANCH}"
+            git reset --hard origin/main
+            git add version.go CHANGES.md
+            git commit -m "chore: bump version to ${VERSION}"
+            git push --force-with-lease origin "${BRANCH}"
+
+            echo "Updated existing PR #${EXISTING_PR}"
+          else
+            echo "No existing PR found, creating new one"
+
+            # Check if branch exists remotely without a PR
+            if git ls-remote --heads origin "${BRANCH}" | grep -q "${BRANCH}"; then
+              echo "Stale branch ${BRANCH} exists without PR, deleting"
+              git push origin --delete "${BRANCH}"
+            fi
+
+            # Create new branch and PR
+            git checkout -b "${BRANCH}"
+            git add version.go CHANGES.md
+            git commit -m "chore: bump version to ${VERSION}"
+            git push origin "${BRANCH}"
+
+            gh pr create \
+              --title "chore: bump version to ${VERSION}" \
+              --body "## Auto-generated version bump
 
           This PR bumps the SDK version to ${VERSION} and updates the changelog.
 
@@ -132,5 +153,6 @@ jobs:
 
           ### Review
           Once merged, the auto-tag-and-release workflow will create the git tag and GitHub release." \
-            --base main \
-            --head "${BRANCH}"
+              --base main \
+              --head "${BRANCH}"
+          fi

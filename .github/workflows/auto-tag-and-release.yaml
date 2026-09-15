@@ -31,8 +31,6 @@ jobs:
   auto-tag-and-release:
     name: Create release tag and publish release
     runs-on: ubuntu-latest
-    # Only run if this is a version bump commit
-    if: "startsWith(github.event.head_commit.message, 'chore: bump version to')"
     permissions:
       contents: write
     steps:
@@ -49,21 +47,30 @@ jobs:
           echo "version=v${VERSION}" >> "$GITHUB_OUTPUT"
           echo "Extracted version: v${VERSION}"
 
-      - name: Check if tag already exists
-        id: tag_check
+      - name: Validate version is new
+        id: validate
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
+          # Check if tag already exists
           if git rev-parse "${VERSION}" >/dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "Tag ${VERSION} already exists"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "Tag ${VERSION} does not exist, will create"
+            echo "is_new=false" >> "$GITHUB_OUTPUT"
+            echo "Tag ${VERSION} already exists, skipping release"
+            exit 0
           fi
 
+          # Validate version format (v0.1.XXX or v0.1.XXX-test)
+          if ! echo "${VERSION}" | grep -qE '^v0\.1\.[0-9]+(-test)?$'; then
+            echo "is_new=false" >> "$GITHUB_OUTPUT"
+            echo "Invalid version format: ${VERSION}"
+            exit 0
+          fi
+
+          echo "is_new=true" >> "$GITHUB_OUTPUT"
+          echo "Version ${VERSION} is valid and new"
+
       - name: Create tag
-        if: steps.tag_check.outputs.exists != 'true'
+        if: steps.validate.outputs.is_new == 'true'
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
@@ -74,15 +81,18 @@ jobs:
           git push origin "${VERSION}"
 
       - name: Setup Python
+        if: steps.validate.outputs.is_new == 'true'
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.10'
           cache: 'pip'
 
       - name: Install Python modules
+        if: steps.validate.outputs.is_new == 'true'
         run: pip install -r .github/workflows/requirements.txt
 
       - name: Create release
+        if: steps.validate.outputs.is_new == 'true'
         shell: python
         env:
           VERSION: ${{ steps.version.outputs.version }}
