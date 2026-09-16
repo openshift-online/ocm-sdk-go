@@ -1,0 +1,158 @@
+#
+# Copyright (c) 2026 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Auto version bump PR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '!version.go'
+
+concurrency:
+  group: auto-version-bump
+  cancel-in-progress: false
+
+jobs:
+  create-version-bump-pr:
+    name: Create version bump PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Determine next version
+        id: version
+        run: |
+          LATEST=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
+          if [ -z "$LATEST" ]; then
+            echo "next=v0.1.1" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PATCH=$(echo "$LATEST" | sed 's/v0\.1\.//')
+          NEXT=$((PATCH + 1))
+          echo "next=v0.1.${NEXT}" >> "$GITHUB_OUTPUT"
+          echo "Latest tag: ${LATEST}, next: v0.1.${NEXT}"
+
+      - name: Update version.go and CHANGES.md
+        env:
+          VERSION: ${{ steps.version.outputs.next }}
+        run: |
+          SEMVER="${VERSION#v}"
+          DATE=$(date '+%b %d %Y')
+
+          # Update version.go
+          sed -i "s/const Version = \".*\"/const Version = \"${SEMVER}\"/" version.go
+
+          # Build changelog entry from commits since last tag
+          LATEST_TAG=$(git tag -l 'v0.1.*' --sort=-version:refname | head -1)
+          if [ -n "$LATEST_TAG" ]; then
+            CHANGES=$(git log "${LATEST_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
+          else
+            CHANGES=$(git log --pretty=format:"- %s" --no-merges)
+          fi
+
+          # Write changelog entry to a temp file
+          {
+            echo "## ${SEMVER} ${DATE}"
+            echo ""
+            echo "${CHANGES}"
+            echo ""
+          } > /tmp/changelog-entry.txt
+
+          # Insert before the first existing ## entry
+          awk 'NR==FNR{entry=entry $0 ORS; next} !inserted && /^## /{print entry; inserted=1} {print}' /tmp/changelog-entry.txt CHANGES.md > /tmp/CHANGES.md
+          mv /tmp/CHANGES.md CHANGES.md
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No version changes needed."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Version changes detected:"
+            git diff --stat
+          fi
+
+      - name: Create or update PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.next }}
+        run: |
+          BRANCH="release-${VERSION}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if an open PR already exists for this branch
+          EXISTING_PR=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number' || echo "")
+
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Found existing PR #${EXISTING_PR} for branch ${BRANCH}, updating it"
+
+            # Update existing branch
+            git fetch origin "${BRANCH}"
+            git checkout "${BRANCH}"
+            git reset --hard origin/main
+            git add version.go CHANGES.md
+            git commit -m "chore: bump version to ${VERSION}"
+            git push --force-with-lease origin "${BRANCH}"
+
+            echo "Updated existing PR #${EXISTING_PR}"
+          else
+            echo "No existing PR found, creating new one"
+
+            # Check if branch exists remotely without a PR
+            if git ls-remote --heads origin "${BRANCH}" | grep -q "${BRANCH}"; then
+              echo "Stale branch ${BRANCH} exists without PR, deleting"
+              git push origin --delete "${BRANCH}"
+            fi
+
+            # Create new branch and PR
+            git checkout -b "${BRANCH}"
+            git add version.go CHANGES.md
+            git commit -m "chore: bump version to ${VERSION}"
+            git push origin "${BRANCH}"
+
+            gh pr create \
+              --title "chore: bump version to ${VERSION}" \
+              --body "## Auto-generated version bump
+
+          This PR bumps the SDK version to ${VERSION} and updates the changelog.
+
+          ### Changes
+          - Updated \`version.go\` to ${VERSION}
+          - Updated \`CHANGES.md\` with commits since last release
+
+          ### Review
+          Once merged, the auto-tag-and-release workflow will create the git tag and GitHub release." \
+              --base main \
+              --head "${BRANCH}"
+          fi
