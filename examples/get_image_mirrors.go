@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Test: trigger workflow for auto-release - TEMPORARY COMMENT
 package main
 
 import (
