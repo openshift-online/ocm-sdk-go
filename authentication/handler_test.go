@@ -22,6 +22,8 @@ limitations under the License.
 package authentication
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -249,6 +251,186 @@ var _ = Describe("Handler", func() {
 			"code": "CLUSTERS-MGMT-401",
 			"reason": "Bearer token is malformed"
 		}`))
+	})
+
+	It("Rejects bearer token with alg none", func() {
+		// Prepare the next handler, which should not be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Craft a token with alg=none (unsigned) using otherwise valid claims:
+		claims := MakeClaims()
+		claims["typ"] = "Bearer"
+		headerJSON, err := json.Marshal(map[string]string{
+			"alg": "none",
+			"typ": "JWT",
+			"kid": "123",
+		})
+		Expect(err).ToNot(HaveOccurred())
+		payloadJSON, err := json.Marshal(claims)
+		Expect(err).ToNot(HaveOccurred())
+		bearer := base64.RawURLEncoding.EncodeToString(headerJSON) + "." +
+			base64.RawURLEncoding.EncodeToString(payloadJSON) + "."
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify that the disallowed algorithm is rejected:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Signature of bearer token isn't valid"
+		}`))
+	})
+
+	It("Rejects bearer token signed with HS256", func() {
+		// Prepare the next handler, which should not be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// Create an HS256-signed token (HMAC/RSA algorithm confusion attempt):
+		claims := MakeClaims()
+		claims["typ"] = "Bearer"
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		token.Header["kid"] = "123"
+		bearer, err := token.SignedString([]byte("hmac-secret"))
+		Expect(err).ToNot(HaveOccurred())
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		// Verify that the disallowed algorithm is rejected:
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Signature of bearer token isn't valid"
+		}`))
+	})
+
+	It("Rejects bearer token signed with RS384", func() {
+		// Prepare the next handler, which should not be called:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(true).To(BeFalse())
+			w.WriteHeader(http.StatusBadRequest)
+		})
+
+		// RS384 is an RSA signing method but not on the ValidMethods allow-list:
+		bearer := MakeTokenObjectWithMethod(jwt.SigningMethodRS384, jwt.MapClaims{
+			"typ": "Bearer",
+		}).Raw
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+		Expect(recorder.Body).To(MatchJSON(`{
+			"kind": "Error",
+			"id": "401",
+			"href": "/api/clusters_mgmt/v1/errors/401",
+			"code": "CLUSTERS-MGMT-401",
+			"reason": "Signature of bearer token isn't valid"
+		}`))
+	})
+
+	It("Accepts bearer token signed with RS256", func() {
+		// Prepare the next handler with a non-default status so a no-op auth
+		// path (recorder defaults to 200) cannot falsely pass:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusNoContent)
+		})
+
+		// Sign with RS256 (primary use=sig algorithm in SSO JWKS):
+		bearer := MakeTokenObjectWithMethod(jwt.SigningMethodRS256, jwt.MapClaims{
+			"typ": "Bearer",
+		}).Raw
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		Expect(recorder.Code).To(Equal(http.StatusNoContent))
+	})
+
+	It("Accepts bearer token signed with RS512", func() {
+		// Prepare the next handler with a non-default status so a no-op auth
+		// path (recorder defaults to 200) cannot falsely pass:
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusNoContent)
+		})
+
+		// Sign with RS512 (published as use=sig in production SSO JWKS):
+		bearer := MakeTokenObjectWithMethod(jwt.SigningMethodRS512, jwt.MapClaims{
+			"typ": "Bearer",
+		}).Raw
+
+		// Prepare the handler:
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		// Send the request:
+		request := httptest.NewRequest(http.MethodGet, "/api/clusters_mgmt/v1/private", nil)
+		request.Header.Set("Authorization", "Bearer "+bearer)
+		recorder := httptest.NewRecorder()
+		handler.ServeHTTP(recorder, request)
+
+		Expect(recorder.Code).To(Equal(http.StatusNoContent))
 	})
 
 	It("Rejects expired bearer token", func() {
