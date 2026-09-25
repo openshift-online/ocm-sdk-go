@@ -1,6 +1,6 @@
 module github.com/openshift-online/ocm-sdk-go
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/99designs/keyring v1.2.2
@@ -14,10 +14,10 @@ require (
 	github.com/lib/pq v1.10.5
 	github.com/microcosm-cc/bluemonday v1.0.18
 	github.com/onsi/ginkgo/v2 v2.13.2
-	github.com/onsi/gomega v1.29.0
+	github.com/onsi/gomega v1.43.1
 	github.com/prometheus/client_golang v1.12.1
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
-	golang.org/x/net v0.39.0
+	golang.org/x/net v0.56.0
 	golang.org/x/oauth2 v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -27,7 +27,7 @@ require (
 	github.com/openshift-online/ocm-api-model/clientapi v0.0.469
 	github.com/openshift-online/ocm-api-model/model v0.0.469
 	github.com/zalando/go-keyring v0.2.3
-	golang.org/x/tools v0.32.0
+	golang.org/x/tools v0.45.0
 )
 
 require (
@@ -43,7 +43,7 @@ require (
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
@@ -57,11 +57,12 @@ require (
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
-	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/term v0.31.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
+	golang.org/x/mod v0.36.0 // indirect
+	golang.org/x/sync v0.21.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/term v0.44.0 // indirect
+	golang.org/x/text v0.38.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/protobuf v1.36.7 // indirect
 )
