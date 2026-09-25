@@ -8590,6 +8590,85 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/clusters/{cluster_id}/maintenance": {
+      "get": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maintenance"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maintenance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maintenance"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/clusters/{cluster_id}/metric_queries/alerts": {
       "get": {
         "parameters": [
@@ -17134,6 +17213,10 @@
               "$ref": "#/components/schemas/MachinePool"
             }
           },
+          "maintenance": {
+            "description": "Maintenance configuration",
+            "$ref": "#/components/schemas/Maintenance"
+          },
           "managed": {
             "description": "Flag indicating if the cluster is managed (by Red Hat) or\nself-managed by the user.",
             "type": "boolean"
@@ -19524,6 +19607,15 @@
           "medium",
           "small"
         ]
+      },
+      "Maintenance": {
+        "description": "Maintenance configuration.",
+        "properties": {
+          "enabled": {
+            "description": "Boolean flag indicating if the cluster is set into maintenance mode.\nClusters on maintenance mode are not allowed to perform any operation.\n\nBy default this is `false`.\n\nTo enable it a SREP needs to patch the value through OCM API",
+            "type": "boolean"
+          }
+        }
       },
       "ManagedService": {
         "description": "Contains the necessary attributes to support role-based authentication on AWS.",
