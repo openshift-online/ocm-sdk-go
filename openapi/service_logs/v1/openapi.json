@@ -545,11 +545,8 @@
           "Error",
           "Fatal",
           "Important",
-          "Info",
           "Low",
-          "Major",
-          "Moderate",
-          "Warning"
+          "Moderate"
         ]
       },
       "Error": {
