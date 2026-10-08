@@ -22,6 +22,7 @@ limitations under the License.
 package authentication
 
 import (
+	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
 	"net/http"
@@ -1862,5 +1863,41 @@ var _ = Describe("Handler", func() {
 
 		// Verify the response:
 		Expect(recorder.Code).To(Equal(http.StatusUnauthorized))
+	})
+
+	Describe("JWKS parseKey", func() {
+		var handler *Handler
+
+		BeforeEach(func() {
+			handler = &Handler{}
+		})
+
+		It("Parses RSA keys as crypto.PublicKey", func() {
+			var set setData
+			err := json.Unmarshal(DefaultJWKS(), &set)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(set.Keys).To(HaveLen(1))
+
+			key, err := handler.parseKey(set.Keys[0])
+			Expect(err).ToNot(HaveOccurred())
+
+			rsaKey, ok := key.(*rsa.PublicKey)
+			Expect(ok).To(BeTrue())
+			Expect(rsaKey.N).ToNot(BeNil())
+			Expect(rsaKey.E).ToNot(BeZero())
+		})
+
+		It("Returns an error for unsupported key types", func() {
+			_, err := handler.parseKey(keyData{
+				Kid: "456",
+				Kty: "EC",
+				Alg: "ES256",
+				Crv: "P-256",
+				X:   "abc",
+			})
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("EC"))
+			Expect(err.Error()).To(ContainSubstring("isn't supported"))
+		})
 	})
 })

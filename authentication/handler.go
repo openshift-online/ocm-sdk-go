@@ -18,6 +18,7 @@ package authentication
 
 import (
 	"context"
+	"crypto"
 	"crypto/rsa"
 	"crypto/tls"
 	"crypto/x509"
@@ -564,6 +565,8 @@ type keyData struct {
 	Use string `json:"use"`
 	N   string `json:"n"`
 	E   string `json:"e"`
+	Crv string `json:"crv"`
+	X   string `json:"x"`
 }
 
 // setData is the type used to read a collection of keys from a JSON document.
@@ -672,23 +675,26 @@ func (h *Handler) readKeys(ctx context.Context, reader io.Reader) error {
 			)
 			continue
 		}
-		if keyData.E == "" {
-			h.logger.Error(
-				ctx,
-				"Can't read key '%s' because 'e' is empty",
-				keyData.Kid,
-			)
-			continue
+		switch keyData.Kty {
+		case "RSA":
+			if keyData.N == "" {
+				h.logger.Error(
+					ctx,
+					"Can't read key '%s' because 'n' is empty",
+					keyData.Kid,
+				)
+				continue
+			}
+			if keyData.E == "" {
+				h.logger.Error(
+					ctx,
+					"Can't read key '%s' because 'e' is empty",
+					keyData.Kid,
+				)
+				continue
+			}
 		}
-		if keyData.E == "" {
-			h.logger.Error(
-				ctx,
-				"Can't read key '%s' because 'n' is empty",
-				keyData.Kid,
-			)
-			continue
-		}
-		var key interface{}
+		var key crypto.PublicKey
 		key, err = h.parseKey(keyData)
 		if err != nil {
 			h.logger.Error(
@@ -707,30 +713,29 @@ func (h *Handler) readKeys(ctx context.Context, reader io.Reader) error {
 
 // parseKey converts the key data loaded from the JSON document to an actual key that can be used
 // to verify the signatures of tokens.
-func (h *Handler) parseKey(data keyData) (key interface{}, err error) {
-	// Check key type:
-	if data.Kty != "RSA" {
+func (h *Handler) parseKey(data keyData) (key crypto.PublicKey, err error) {
+	switch data.Kty {
+	case "RSA":
+		key, err = parseRSAKey(data)
+	default:
 		err = fmt.Errorf("key type '%s' isn't supported", data.Kty)
-		return
 	}
+	return
+}
 
-	// Decode the e and n values:
+func parseRSAKey(data keyData) (crypto.PublicKey, error) {
 	nb, err := base64.RawURLEncoding.DecodeString(data.N)
 	if err != nil {
-		return
+		return nil, err
 	}
 	eb, err := base64.RawURLEncoding.DecodeString(data.E)
 	if err != nil {
-		return
+		return nil, err
 	}
-
-	// Create the key:
-	key = &rsa.PublicKey{
+	return &rsa.PublicKey{
 		N: new(big.Int).SetBytes(nb),
 		E: int(new(big.Int).SetBytes(eb).Int64()),
-	}
-
-	return
+	}, nil
 }
 
 // checkToken checks if the token is valid. If it is valid it returns the parsed token, the
