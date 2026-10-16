@@ -450,6 +450,7 @@ var pathTreeData = `{
         "registry_allowlists": {
           "-": null
         },
+        "scheduled_upgrades": null,
         "storage_quota_values": null,
         "trusted_ip_addresses": null,
         "version_gates": {

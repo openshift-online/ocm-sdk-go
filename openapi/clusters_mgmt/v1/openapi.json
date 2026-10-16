@@ -13989,6 +13989,93 @@
         }
       }
     },
+    "/api/clusters_mgmt/v1/scheduled_upgrades": {
+      "get": {
+        "description": "Retrieves the list of scheduled upgrades.",
+        "parameters": [
+          {
+            "name": "order",
+            "description": "Order criteria.\n\nThe syntax of this parameter is similar to the syntax of the _order by_\nclause of a SQL statement, but using the names of the attributes of the\nscheduled upgrade instead of the names of the columns of a table. For\nexample, in order to sort by next run ascending the value should be:\n\n```sql\nnext_run asc\n```\n\nIf the parameter isn't provided, or if the value is empty, then the service\ndefault is next_run ascending.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "description": "Index of the requested page, where one corresponds to the first page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "search",
+            "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause\nof a SQL statement, but using the names of the attributes of the scheduled\nupgrade instead of the names of the columns of a table. For example, in order\nto retrieve all control plane upgrades (including CVE) the value should be:\n\n```sql\ntype like 'ControlPlane%'\n```\n\nSearchable fields include: type, version, next_run, schedule_type,\nstate.value, cluster.id, cluster.name, cluster.external_id,\ncluster.region.id, cluster.product.id, created_at, updated_at.\n\nIf the parameter isn't provided, or if the value is empty, then all the\nscheduled upgrades that the user has permission to see will be returned.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "description": "Maximum number of items that will be contained in the returned page.\nDefault is 100; the service enforces a maximum of 1000.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "description": "Retrieved list of scheduled upgrades.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ScheduledUpgrade"
+                      }
+                    },
+                    "page": {
+                      "description": "Index of the requested page, where one corresponds to the first page.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "size": {
+                      "description": "Maximum number of items that will be contained in the returned page.\nDefault is 100; the service enforces a maximum of 1000.",
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "total": {
+                      "description": "Total number of items of the collection that match the search criteria,\nregardless of the size of the page.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/clusters_mgmt/v1/storage_quota_values": {
       "get": {
         "description": "Retrieves the list of Storage Quota Values.",
@@ -20724,6 +20811,83 @@
           "automatic",
           "manual"
         ]
+      },
+      "ScheduledUpgrade": {
+        "description": "Representation of one upgrade scheduled somewhere in the fleet, regardless of\nwhich kind of upgrade policy scheduled it. Read-only; the authoritative\nresource is linked from 'policy'.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ScheduledUpgrade' if this is a complete object or 'ScheduledUpgradeLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          },
+          "cluster": {
+            "description": "Cluster this upgrade is scheduled for (enriched link).",
+            "$ref": "#/components/schemas/Cluster"
+          },
+          "created_at": {
+            "description": "Creation timestamp. Not tracked for 'OSD' upgrades (null for those).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "next_run": {
+            "description": "Next time the upgrade should run.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "node_pool": {
+            "description": "Node pool being upgraded. Only set for 'NodePool' upgrades.",
+            "$ref": "#/components/schemas/NodePool"
+          },
+          "policy": {
+            "description": "Link to the upgrade policy that scheduled this upgrade.",
+            "$ref": "#/components/schemas/ScheduledUpgradePolicyLink"
+          },
+          "schedule_type": {
+            "description": "Schedule type of the upgrade.",
+            "$ref": "#/components/schemas/ScheduleType"
+          },
+          "state": {
+            "description": "Current state of the upgrade.",
+            "$ref": "#/components/schemas/UpgradePolicyState"
+          },
+          "type": {
+            "description": "Kind of upgrade: 'OSD', 'ControlPlane', 'ControlPlaneCVE', or 'NodePool'.\nBoth control plane types are scheduled by a control plane upgrade policy,\nso \"type like 'ControlPlane%'\" searches for all of them.",
+            "$ref": "#/components/schemas/UpgradeType"
+          },
+          "updated_at": {
+            "description": "Last update timestamp. Not tracked for 'OSD' upgrades (null for those).",
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "description": "Desired upgrade version.",
+            "type": "string"
+          }
+        }
+      },
+      "ScheduledUpgradePolicyLink": {
+        "description": "Reference to one of the three kinds of upgrade policy resource. Kind\nidentifies which policy type it is; id and href come from the standard\nmetadata added by the generator.",
+        "properties": {
+          "kind": {
+            "description": "Indicates the type of this object. Will be 'ScheduledUpgradePolicyLink' if this is a complete object or 'ScheduledUpgradePolicyLinkLink' if it is just a link.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier of the object.",
+            "type": "string"
+          },
+          "href": {
+            "description": "Self link.",
+            "type": "string"
+          }
+        }
       },
       "SdnToOvnClusterMigration": {
         "description": "Details for `SdnToOvn` cluster migrations.",
