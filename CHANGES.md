@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.518 Oct 08 2026
+
+- ROSAENG-65575 | fix: Make JWKS parseKey() algorithm-agile
+
+
 ## 0.1.517 Sep 30 2026
 
 - ROSAENG-65574 | fix: change hardcoded InsecureSkipVerify in OAuth2 auth code flow
