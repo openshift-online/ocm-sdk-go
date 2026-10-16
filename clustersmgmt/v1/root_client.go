@@ -281,6 +281,16 @@ func (c *Client) RegistryAllowlists() *RegistryAllowlistsClient {
 	)
 }
 
+// ScheduledUpgrades returns the target 'scheduled_upgrades' resource.
+//
+// Reference to the resource that manages the collection of scheduled upgrades.
+func (c *Client) ScheduledUpgrades() *ScheduledUpgradesClient {
+	return NewScheduledUpgradesClient(
+		c.transport,
+		path.Join(c.path, "scheduled_upgrades"),
+	)
+}
+
 // StorageQuotaValues returns the target 'storage_quota_values' resource.
 //
 // Reference to the resource that manages the storage quota values.
