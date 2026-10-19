@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.519 Oct 19 2026
+
+- ROSAENG-65577 | fix: PQC: Enforce MinVersion TLS 1.3 with opt-out (Phase 4)
+
+
 ## 0.1.518 Oct 08 2026
 
 - ROSAENG-65575 | fix: Make JWKS parseKey() algorithm-agile
