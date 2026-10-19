@@ -74,6 +74,7 @@ type ConnectionBuilder struct {
 	logger            logging.Logger
 	trustedCAs        []interface{}
 	insecure          bool
+	allowTLS12        bool
 	disableKeepAlives bool
 	tokenURL          string
 	clientID          string
@@ -400,6 +401,18 @@ func (b *ConnectionBuilder) Insecure(flag bool) *ConnectionBuilder {
 	return b
 }
 
+// AllowTLS12 lowers the minimum accepted TLS version from 1.3 to 1.2. This is intended only for
+// compatibility with legacy middleboxes or proxies that can't negotiate TLS 1.3. It only lowers the
+// floor: TLS 1.3-capable servers still negotiate 1.3, but any connection negotiated at TLS 1.2 won't
+// have post-quantum (ML-KEM) key exchange, so it isn't recommended for a production environment.
+func (b *ConnectionBuilder) AllowTLS12(flag bool) *ConnectionBuilder {
+	if b.err != nil {
+		return b
+	}
+	b.allowTLS12 = flag
+	return b
+}
+
 // DisableKeepAlives disables HTTP keep-alives with the server. This is unrelated to similarly
 // named TCP keep-alives.
 func (b *ConnectionBuilder) DisableKeepAlives(flag bool) *ConnectionBuilder {
@@ -552,6 +565,7 @@ func (b *ConnectionBuilder) Metrics(value string) *ConnectionBuilder {
 //	scopes:
 //	- openid
 //	insecure: false
+//	allow_tls12: false
 //	trusted_cas:
 //	- /my/ca.pem
 //	- /your/ca.pem
@@ -586,6 +600,7 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 		ClientSecret     *string           `yaml:"client_secret"`
 		Tokens           []string          `yaml:"tokens"`
 		Insecure         *bool             `yaml:"insecure"`
+		AllowTLS12       *bool             `yaml:"allow_tls12"`
 		TrustedCAs       []string          `yaml:"trusted_cas"`
 		Scopes           []string          `yaml:"scopes"`
 		Agent            *string           `yaml:"agent"`
@@ -652,6 +667,11 @@ func (b *ConnectionBuilder) Load(source interface{}) *ConnectionBuilder {
 	// Insecure:
 	if view.Insecure != nil {
 		b.Insecure(*view.Insecure)
+	}
+
+	// Allow TLS 1.2:
+	if view.AllowTLS12 != nil {
+		b.AllowTLS12(*view.AllowTLS12)
 	}
 
 	// Trusted CAs:
@@ -757,7 +777,8 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 	clientSelectorBuilder := internal.NewClientSelector().
 		Logger(b.logger).
 		TrustedCAs(b.trustedCAs...).
-		Insecure(b.insecure)
+		Insecure(b.insecure).
+		AllowTLS12(b.allowTLS12)
 
 	var authnWrapper *authentication.TransportWrapper
 	if b.includeDefaultAuthnTransportWrapper {
@@ -771,6 +792,7 @@ func (b *ConnectionBuilder) BuildContext(ctx context.Context) (connection *Conne
 			Scopes(b.scopes...).
 			TrustedCAs(b.trustedCAs...).
 			Insecure(b.insecure).
+			AllowTLS12(b.allowTLS12).
 			TransportWrapper(metricsWrapper).
 			TransportWrapper(loggingWrapper).
 			TransportWrappers(b.transportWrappers...).
@@ -957,6 +979,11 @@ func (c *Connection) TrustedCAs() *x509.CertPool {
 // Insecure returns the flag that indicates if insecure communication with the server is enabled.
 func (c *Connection) Insecure() bool {
 	return c.clientSelector.Insecure()
+}
+
+// AllowTLS12 returns the flag that indicates if the minimum TLS version has been lowered to 1.2.
+func (c *Connection) AllowTLS12() bool {
+	return c.clientSelector.AllowTLS12()
 }
 
 // DisableKeepAlives returns the flag that indicates if HTTP keep alive is disabled.

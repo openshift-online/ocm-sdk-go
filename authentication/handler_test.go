@@ -23,6 +23,7 @@ package authentication
 
 import (
 	"crypto/rsa"
+	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
 	"net/http"
@@ -67,6 +68,41 @@ var _ = Describe("Handler", func() {
 			Next(next).
 			Build()
 		Expect(err).To(HaveOccurred())
+	})
+
+	It("Requires TLS 1.3 for the keys client by default", func() {
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		transport, ok := handler.keysClient.Transport.(*http.Transport)
+		Expect(ok).To(BeTrue())
+		Expect(transport.TLSClientConfig.MinVersion).To(Equal(uint16(tls.VersionTLS13)))
+	})
+
+	It("Lowers the keys client floor to TLS 1.2 when KeysAllowTLS12 is enabled", func() {
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		handler, err := NewHandler().
+			Logger(logger).
+			KeysFile(keysFile).
+			KeysAllowTLS12(true).
+			Next(next).
+			Build()
+		Expect(err).ToNot(HaveOccurred())
+
+		transport, ok := handler.keysClient.Transport.(*http.Transport)
+		Expect(ok).To(BeTrue())
+		Expect(transport.TLSClientConfig.MinVersion).To(Equal(uint16(tls.VersionTLS12)))
 	})
 
 	It("Can't be built with a keys file that doesn't exist", func() {
