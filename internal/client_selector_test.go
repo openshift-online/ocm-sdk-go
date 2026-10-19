@@ -18,6 +18,7 @@ package internal
 
 import (
 	"context"
+	"crypto/tls"
 	"crypto/x509"
 	"fmt"
 	"net/http"
@@ -109,6 +110,53 @@ var _ = Describe("Select client", func() {
 		secondClient, err := selector.Select(ctx, secondAddress)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(secondClient == firstClient).To(BeFalse())
+	})
+})
+
+var _ = Describe("Minimum TLS version", func() {
+	var ctx context.Context
+
+	BeforeEach(func() {
+		ctx = context.Background()
+	})
+
+	It("Defaults to TLS 1.3", func() {
+		selector, err := NewClientSelector().
+			Logger(logger).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		defer func() {
+			Expect(selector.Close()).To(Succeed())
+		}()
+
+		address, err := ParseServerAddress(ctx, "https://my.server.com")
+		Expect(err).ToNot(HaveOccurred())
+
+		transport, err := selector.createTransport(ctx, address)
+		Expect(err).ToNot(HaveOccurred())
+		httpTransport, ok := transport.(*http.Transport)
+		Expect(ok).To(BeTrue())
+		Expect(httpTransport.TLSClientConfig.MinVersion).To(Equal(uint16(tls.VersionTLS13)))
+	})
+
+	It("Can be lowered to TLS 1.2 with AllowTLS12", func() {
+		selector, err := NewClientSelector().
+			Logger(logger).
+			AllowTLS12(true).
+			Build(ctx)
+		Expect(err).ToNot(HaveOccurred())
+		defer func() {
+			Expect(selector.Close()).To(Succeed())
+		}()
+
+		address, err := ParseServerAddress(ctx, "https://my.server.com")
+		Expect(err).ToNot(HaveOccurred())
+
+		transport, err := selector.createTransport(ctx, address)
+		Expect(err).ToNot(HaveOccurred())
+		httpTransport, ok := transport.(*http.Transport)
+		Expect(ok).To(BeTrue())
+		Expect(httpTransport.TLSClientConfig.MinVersion).To(Equal(uint16(tls.VersionTLS12)))
 	})
 })
 

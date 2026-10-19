@@ -39,25 +39,27 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/openshift-online/ocm-sdk-go/errors"
+	"github.com/openshift-online/ocm-sdk-go/internal"
 	"github.com/openshift-online/ocm-sdk-go/logging"
 )
 
 // HandlerBuilder contains the data and logic needed to create a new authentication handler. Don't
 // create objects of this type directly, use the NewHandler function instead.
 type HandlerBuilder struct {
-	logger       logging.Logger
-	publicPaths  []string
-	keysFiles    []string
-	keysURLs     []string
-	keysCAs      *x509.CertPool
-	keysInsecure bool
-	aclFiles     []string
-	service      string
-	error        string
-	operationID  func(*http.Request) string
-	tolerance    time.Duration
-	cookie       string
-	next         http.Handler
+	logger         logging.Logger
+	publicPaths    []string
+	keysFiles      []string
+	keysURLs       []string
+	keysCAs        *x509.CertPool
+	keysInsecure   bool
+	keysAllowTLS12 bool
+	aclFiles       []string
+	service        string
+	error          string
+	operationID    func(*http.Request) string
+	tolerance      time.Duration
+	cookie         string
+	next           http.Handler
 }
 
 // Handler is an HTTP handler that checks authentication using the JWT tokens from the authorization
@@ -147,6 +149,16 @@ func (b *HandlerBuilder) KeysCAs(value *x509.CertPool) *HandlerBuilder {
 // token verification insecure, so refrain from doing that in security sensitive environments.
 func (b *HandlerBuilder) KeysInsecure(value bool) *HandlerBuilder {
 	b.keysInsecure = value
+	return b
+}
+
+// KeysAllowTLS12 lowers the minimum accepted TLS version from 1.3 to 1.2 for the HTTP client that
+// loads the keys. This is intended only for compatibility with legacy middleboxes that can't
+// negotiate TLS 1.3. It only lowers the floor: TLS 1.3-capable servers still negotiate 1.3, but any
+// connection negotiated at TLS 1.2 won't have post-quantum (ML-KEM) key exchange, so it isn't
+// recommended for a security sensitive environment.
+func (b *HandlerBuilder) KeysAllowTLS12(value bool) *HandlerBuilder {
+	b.keysAllowTLS12 = value
 	return b
 }
 
@@ -336,8 +348,9 @@ func (b *HandlerBuilder) Build() (handler *Handler, err error) {
 	keysClient := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
+				MinVersion:         internal.MinTLSVersion(b.keysAllowTLS12),
 				RootCAs:            b.keysCAs,
-				InsecureSkipVerify: b.keysInsecure, // nolint
+				InsecureSkipVerify: b.keysInsecure, // #nosec G402 -- off by default; opt-in via KeysInsecure
 			},
 		},
 	}
