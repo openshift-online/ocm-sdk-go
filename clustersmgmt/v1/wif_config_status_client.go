@@ -77,6 +77,15 @@ func (r *WifConfigStatusPollRequest) Header(name string, value interface{}) *Wif
 	return r
 }
 
+// CheckSupportAccess sets the value of the 'check_support_access' parameter for all the requests that
+// will be used to retrieve the object.
+//
+// Whether to include support access validation in WIF config status verification.
+func (r *WifConfigStatusPollRequest) CheckSupportAccess(value bool) *WifConfigStatusPollRequest {
+	r.request.CheckSupportAccess(value)
+	return r
+}
+
 // Interval sets the polling interval. This parameter is mandatory and must be greater than zero.
 func (r *WifConfigStatusPollRequest) Interval(value time.Duration) *WifConfigStatusPollRequest {
 	r.interval = value
@@ -176,10 +185,11 @@ func (c *WifConfigStatusClient) Poll() *WifConfigStatusPollRequest {
 
 // WifConfigStatusGetRequest is the request for the 'get' method.
 type WifConfigStatusGetRequest struct {
-	transport http.RoundTripper
-	path      string
-	query     url.Values
-	header    http.Header
+	transport          http.RoundTripper
+	path               string
+	query              url.Values
+	header             http.Header
+	checkSupportAccess *bool
 }
 
 // Parameter adds a query parameter.
@@ -201,6 +211,14 @@ func (r *WifConfigStatusGetRequest) Impersonate(user string) *WifConfigStatusGet
 	return r
 }
 
+// CheckSupportAccess sets the value of the 'check_support_access' parameter.
+//
+// Whether to include support access validation in WIF config status verification.
+func (r *WifConfigStatusGetRequest) CheckSupportAccess(value bool) *WifConfigStatusGetRequest {
+	r.checkSupportAccess = &value
+	return r
+}
+
 // Send sends this request, waits for the response, and returns it.
 //
 // This is a potentially lengthy operation, as it requires network communication.
@@ -212,6 +230,9 @@ func (r *WifConfigStatusGetRequest) Send() (result *WifConfigStatusGetResponse, 
 // SendContext sends this request, waits for the response, and returns it.
 func (r *WifConfigStatusGetRequest) SendContext(ctx context.Context) (result *WifConfigStatusGetResponse, err error) {
 	query := helpers.CopyQuery(r.query)
+	if r.checkSupportAccess != nil {
+		helpers.AddValue(&query, "check_support_access", *r.checkSupportAccess)
+	}
 	header := helpers.CopyHeader(r.header)
 	uri := &url.URL{
 		Path:     r.path,

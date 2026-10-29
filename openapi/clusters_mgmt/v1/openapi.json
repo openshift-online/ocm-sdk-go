@@ -11783,6 +11783,14 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "name": "check_support_access",
+            "description": "Whether to include support access validation in WIF config status verification.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
