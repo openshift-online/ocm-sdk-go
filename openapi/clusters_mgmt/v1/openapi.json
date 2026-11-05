@@ -17481,6 +17481,13 @@
               "type": "string"
             }
           },
+          "expanders": {
+            "description": "Ordered list of strategies used to select which node group to grow when scaling up.\nThe strategies are applied in the given order, and each one only breaks the ties left\nby the previous one, so the order is significant.\nAccepted values are `LeastWaste`, `Priority` and `Random`. One to three entries are\nallowed, and duplicates are not accepted. `Random` always resolves to a single node\ngroup, so when more than one strategy is given it must be the last entry.\nOnly supported on ROSA HCP clusters.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "ignore_daemonsets_utilization": {
             "description": "Should CA ignore DaemonSet pods when calculating resource utilization for scaling down. false by default.",
             "type": "boolean"
@@ -17489,6 +17496,10 @@
             "description": "Sets the autoscaler log level.\nDefault value is 1, level 4 is recommended for DEBUGGING and level 6 will enable almost everything.",
             "type": "integer",
             "format": "int32"
+          },
+          "max_free_difference_ratio": {
+            "description": "Maximum difference in free resources tolerated between two node groups for them to still\nbe considered similar, and therefore eligible to be balanced against each other.\nExpressed as a ratio of the smaller node group's free resource, a decimal string between \"0.0\" and \"1.0\", where \"0.1\" means 10%.\nValues outside that range, and values with more than two decimal places, are not accepted.\nOnly supported on ROSA HCP clusters.",
+            "type": "string"
           },
           "max_node_provision_time": {
             "description": "Maximum time CA waits for node to be provisioned.",
