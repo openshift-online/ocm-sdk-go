@@ -70,6 +70,21 @@ One can add an optional commit SHA or version to the `./update-model.sh <vX.Y.Z>
 Whenever an update is made, ensure that the corresponding example in [examples](examples) is also updated where
 necessary. It is *highly recommended* that new endpoints have a new example created.
 
+## Breaking changes
+
+Changes to runtime behavior or defaults (such as TLS requirements) can
+break consumers even when Go APIs remain unchanged. This also applies
+to security fixes.
+
+- Use `!` before the commit subject's colon (for example `fix!:`),
+  preserving the issue prefix and the marker when squashing.
+- Add a `BREAKING CHANGE:` commit footer explaining what changed,
+  who is affected, and how to migrate, including any supported opt-out.
+- Add regression tests for the changed behavior.
+- Before merging the release PR, ensure `CHANGES.md` clearly flags the
+  breaking change and includes migration guidance. Release automation
+  currently copies commit subjects only, not footers.
+
 ## Releasing a new OCM SDK Version
 
 ### Automated (recommended)
