@@ -47,3 +47,7 @@ The SDK is organized by OCM API service area, each in its own top-level package:
 - Uses builder pattern for constructing API requests
 - Ginkgo/Gomega for testing
 - Generated files can be identified by their header comments
+- Follow [Breaking changes](CONTRIBUTING.md#breaking-changes), including
+  runtime/default changes and security fixes. Preserve the `!` marker
+  and `BREAKING CHANGE:` footer when squashing; verify migration guidance
+  is included in `CHANGES.md` when reviewing a release PR.
