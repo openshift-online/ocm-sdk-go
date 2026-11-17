@@ -17492,6 +17492,16 @@
             "description": "Should CA ignore DaemonSet pods when calculating resource utilization for scaling down. false by default.",
             "type": "boolean"
           },
+          "kube_client_qps": {
+            "description": "Maximum number of queries per second the cluster autoscaler is allowed to send to the\nKubernetes API server.\nAccepted values are between -1 and 1000. `-1` disables client side rate limiting, and\n`0` leaves the client-go default of 5 queries per second in place.\nWhen not set the autoscaler applies its own default of 200.\nOnly supported on ROSA HCP clusters.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "kube_client_burst": {
+            "description": "Maximum number of queries the cluster autoscaler is allowed to send to the Kubernetes\nAPI server in a single burst, on top of the sustained rate given by `kube_client_qps`.\nAccepted values are between 1 and 2000.\nWhen not set the autoscaler applies its own default of 300.\nOnly supported on ROSA HCP clusters.",
+            "type": "integer",
+            "format": "int32"
+          },
           "log_verbosity": {
             "description": "Sets the autoscaler log level.\nDefault value is 1, level 4 is recommended for DEBUGGING and level 6 will enable almost everything.",
             "type": "integer",
