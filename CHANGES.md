@@ -3,6 +3,11 @@
 This document describes the relevant changes between releases of the OCM API
 SDK.
 
+## 0.1.522 Nov 17 2026
+
+- chore: bump ocm-api-model to v0.0.474
+
+
 ## 0.1.521 Nov 06 2026
 
 - ROSAENG-74988 | feat: regenerate and release Phase-2 cluster autoscaler configurations
