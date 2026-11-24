@@ -1,11 +1,10 @@
-# DO NOT EDIT; this file is auto-generated using https://github.com/openshift/ci-tools.
-# Fetched from https://github.com/openshift-online/ocm-service-common root OWNERS
-# If the repo had OWNERS_ALIASES then the aliases were expanded
-# Logins who are not members of 'openshift' organization were filtered out
 # See the OWNERS docs: https://git.k8s.io/community/contributors/guide/owners.md
+# This policy is maintained in this repository. Shared pod aliases are
+# provided by the openshift/rosa-services boilerplate convention.
 
 # to be significantly reduced once top-level architects decide API review shape
 approvers:
+- rosa-services-focaccia
 - ciaranRoche
 - davidleerh
 - gdbranco
@@ -21,6 +20,7 @@ approvers:
 - robpblake
 - lucasponce
 reviewers:
+- rosa-services-focaccia
 - ciaranRoche
 - davidleerh
 - gdbranco

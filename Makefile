@@ -131,3 +131,9 @@ clean:
 		$(PROJECT_PATH)/metamodel_generator/metamodel \
 		model \
 		$(NULL)
+
+.PHONY: boilerplate-update
+boilerplate-update:
+	@boilerplate/update
+
+include boilerplate/generated-includes.mk
