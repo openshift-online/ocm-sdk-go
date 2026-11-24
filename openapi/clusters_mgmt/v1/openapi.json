@@ -21261,6 +21261,13 @@
           }
         }
       },
+      "UpgradeArchitecture": {
+        "description": "Target architecture for a cluster upgrade policy.",
+        "type": "string",
+        "enum": [
+          "Multi"
+        ]
+      },
       "UpgradePolicy": {
         "description": "Representation of an upgrade policy that can be set for a cluster.",
         "properties": {
@@ -21275,6 +21282,10 @@
           "href": {
             "description": "Self link.",
             "type": "string"
+          },
+          "architecture": {
+            "description": "Optional architecture migration target for a manual upgrade on a non-HCP cluster.\nThe only supported value is Multi. Omit this field for an ordinary version upgrade.\nArchitecture migrations must be enabled for the cluster's organization.\nThis field cannot be changed after the policy is created.",
+            "$ref": "#/components/schemas/UpgradeArchitecture"
           },
           "cluster_id": {
             "description": "Cluster ID this upgrade policy is defined for.",
