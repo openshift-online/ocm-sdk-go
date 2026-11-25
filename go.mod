@@ -12,7 +12,7 @@ require (
 	github.com/itchyny/gojq v0.12.7
 	github.com/json-iterator/go v1.1.12
 	github.com/lib/pq v1.10.5
-	github.com/microcosm-cc/bluemonday v1.0.18
+	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/onsi/ginkgo/v2 v2.13.2
 	github.com/onsi/gomega v1.29.0
 	github.com/prometheus/client_golang v1.12.1
@@ -45,7 +45,7 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
-	github.com/gorilla/css v1.0.0 // indirect
+	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
 	github.com/itchyny/timefmt-go v0.1.3 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
